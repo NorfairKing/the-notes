@@ -2,18 +2,25 @@ module Notes (
     module Types
   , module Notes
   , module Text.LaTeX
+  , module Text.LaTeX.Base.Class
   , module Text.LaTeX.Packages.AMSMath
   , module Text.LaTeX.Base.Pretty
+  , module Text.LaTeX.Packages.Fancyhdr
+  , module Text.LaTeX.Packages.AMSMath
+  , module Text.LaTeX.Packages.AMSThm
+  , module Text.LaTeX.Packages.AMSFonts
   ) where
 
 import           Text.LaTeX
 import           Text.LaTeX.Base.Class
 import           Text.LaTeX.Base.Pretty
 import           Text.LaTeX.Base.Syntax
+import           Text.LaTeX.Packages.AMSFonts
 import           Text.LaTeX.Packages.AMSMath
-import           Text.LaTeX.Packages.AMSThm
+import           Text.LaTeX.Packages.AMSThm   hiding (proof)
+import           Text.LaTeX.Packages.Fancyhdr
 
-import qualified Data.Text                   as T
+import qualified Data.Text                    as T
 
 import           Types
 
@@ -42,43 +49,12 @@ renderParts ps = do
     liftIO $ putStrLn ""
 
 
-    generalPreamble
+    documentclass [] book
     sequence_ $ map part_preamble ps
     document $ sequence_ $ map part_body ps
 
 
-generalPreamble :: Note
-generalPreamble = do
-    documentclass [] book
-    author "Tom Sydney Kerckhove"
-    title "The Notes"
 
-    packages
-    referencesPreamble
-
-packages :: Note
-packages = do
-    usepackage [] "amsmath"
-    usepackage [] "mdframed"
-
-
-referencesPreamble :: Note
-referencesPreamble = do
-    raw "\\newtheorem{thm}{Theorem}[chapter]"
-    raw "\\let\\th\\undefined\n"
-    newmdtheoremenv "de" "Definition"
-    newmdtheoremenv "alg" "Algorithm"
-    newtheorem "th" "Theorem"
-    newtheorem "prop" "Property"
-    newtheorem "pro" "Proposition"
-    newtheorem "nte" "Note"
-    newtheorem "exm" "Example"
-    newtheorem "cex" "Counterexample"
-    newtheorem "con" "Concequence"
-    newtheorem "lem" "Lemma"
-
-newmdtheoremenv :: LaTeXC l => String -> l -> l
-newmdtheoremenv str = liftL $ \l -> TeXComm "newmdtheoremenv" [ FixArg $ fromString str , FixArg l ]
 
 notesChapter :: Text -> Note
 notesChapter title = do
@@ -92,6 +68,12 @@ notesSection title = do
 
 de :: Note -> Note
 de = theorem "de"
+
+thm :: Note -> Note
+thm = theorem "thm"
+
+index :: Note -> Note
+index = comm1 "index"
 
 environment :: String -> (Note -> Note)
 environment name = liftL $ TeXEnv name []
@@ -110,5 +92,204 @@ term text = do
   where
     rt = raw text
 
-index :: Note -> Note
-index = liftL $ \l -> TeXComm "index" [FixArg l]
+
+newtheorem' :: LaTeXC l => String -> l -> l
+newtheorem' name = liftL $ \l -> TeXComm "newtheorem" [ FixArg $ fromString name , OptArg "thm", FixArg l ]
+
+newmdtheoremenv :: LaTeXC l => String -> l -> l
+newmdtheoremenv name = liftL $ \l -> TeXComm "newmdtheoremenv" [ FixArg $ fromString name , OptArg "thm", FixArg l ]
+
+comm2 :: LaTeXC l => String -> l -> l -> l
+comm2 name = liftL2 $ (\l1 l2 -> TeXComm name [FixArg l1, FixArg l2])
+
+comm3 :: LaTeXC l => String -> l -> l -> l -> l
+comm3 name = liftL3 $ (\l1 l2 l3 -> TeXComm name [FixArg l1, FixArg l2, FixArg l3])
+
+renewcommand :: LaTeXC l => l -> l -> l
+renewcommand l = comm2 "renewcommand" (raw "\\" <> l)
+
+renewcommand1 :: LaTeXC l => l -> l -> l
+renewcommand1 = liftL2 $ (\l1 l2 -> TeXComm "renewcommand" [FixArg $ raw "\\" <> l1, OptArg "1", FixArg l2])
+
+boxed :: Note -> Note
+boxed n = raw "\\text{\\fboxsep=.2em\\fbox{\\m@th$\\displaystyle" <> n <> "$}}"
+
+bla :: Note
+bla = boxed leftArrow
+
+bra :: Note
+bra = boxed rightArrow
+
+leftRightarrow :: Note
+leftRightarrow = comm0 "Leftrightarrow"
+
+leftrightarrow :: Note
+leftrightarrow = comm0 "leftrightarrow"
+
+leftarrow :: Note
+leftarrow = comm0 "leftarrow"
+
+leftArrow :: Note
+leftArrow = comm0 "Leftarrow"
+
+rightarrow :: Note
+rightarrow = comm0 "rightarrow"
+
+rightArrow :: Note
+rightArrow = comm0 "Rightarrow"
+
+m :: Note -> Note
+m = math
+
+ma :: Note -> Note
+ma = mathDisplay
+
+pars :: Note -> Note
+pars = autoParens
+
+brac :: Note -> Note
+brac = autoBraces
+
+sqbrac :: Note -> Note
+sqbrac = autoSquareBrackets
+
+setof :: Note -> Note
+setof = brac
+
+mid :: Note
+mid = raw "\\mid "
+
+setcmpr :: Note -> Note -> Note
+setcmpr n m = setof $ n <> mid <> m
+
+
+divSign :: Note
+divSign = mid
+
+mdiv :: Note -> Note -> Note
+mdiv n m = n <> divSign <> m
+
+defineasSign :: Note
+defineasSign = comm0 "quad" <> commS "equiv" <> comm0 "quad"
+
+defineas :: Note -> Note -> Note
+defineas n m = n <> defineasSign <> m
+
+(===) :: Note -> Note -> Note
+(===) = defineas
+
+forallSign :: Note
+forallSign = comm0 "forall"
+
+mfa :: Note -> Note -> Note
+mfa n m = forallSign <> n <> ":" <> raw "\\ " <> m
+
+setlst :: Note -> Note -> Note
+setlst n m = setof $ n <> ", " <> dotsc <> ", " <> m
+
+setlist :: Note -> Note -> Note -> Note
+setlist m n o = setof $ m <> ", " <> n <> ", " <> dotsc <> ", " <> o
+
+dotsc :: Note
+dotsc = comm0 "dotsc"
+
+fun :: Note -> Note -> Note -> Note
+fun m n o = m <> ":" <> raw "\\ " <> n <> rightarrow <> o
+
+func :: Note -> Note -> Note -> Note -> Note -> Note
+func m n o p q = fun m n o <> ":" <> raw "\\ " <> p <> commS "mapsto" <> q
+
+-- Functions
+funinv :: Note -> Note
+funinv n = n ^: (-1)
+
+funapp :: Note -> Note -> Note
+funapp n m = n <> pars m
+
+-- Intervals
+ooint :: LaTeXC l => l -> l -> l
+ooint = liftL2 $ (\l1 l2 -> TeXComm "interval" [OptArg "open", FixArg l1, FixArg l2])
+
+ocint :: LaTeXC l => l -> l -> l
+ocint = liftL2 $ (\l1 l2 -> TeXComm "interval" [OptArg "open left", FixArg l1, FixArg l2])
+
+coint :: LaTeXC l => l -> l -> l
+coint = liftL2 $ (\l1 l2 -> TeXComm "interval" [OptArg "open right", FixArg l1, FixArg l2])
+
+ccint :: LaTeXC l => l -> l -> l
+ccint = liftL2 $ (\l1 l2 -> TeXComm "interval" [FixArg l1, FixArg l2])
+
+
+-- Nicer equality symbol
+ge :: Note
+ge = comm0 "geqslant"
+
+le :: Note
+le = comm0 "leqslant"
+
+seq :: Note -> Note -> Note
+seq m n = brac m !: n
+
+overset :: Note -> Note -> Note
+overset = comm2 "overset"
+
+underset :: Note -> Note -> Note
+underset = comm2 "underset"
+
+seteqsign :: Note
+seteqsign = underset "set" "="
+
+(=§=) :: Note -> Note -> Note
+m =§= n = m <> seteqsign <> n
+
+mand :: Note -> Note -> Note
+mand = wedge
+
+(&:) :: Note -> Note -> Note
+(&:) = mand
+
+mor :: Note -> Note -> Note
+mor = vee
+
+(|:) :: Note -> Note -> Note
+(|:) = mor
+
+-- C-k (-
+(∈) :: Note -> Note -> Note
+(∈) = in_
+
+quoted :: Note -> Note
+quoted n = "`" <> n <> "'"
+
+iffsign :: Note
+iffsign = leftRightarrow
+
+iff :: Note -> Note -> Note
+iff m n = m <> iffsign <> n
+
+-- C-k ==
+(⇔) :: Note -> Note -> Note
+(⇔) = iff
+
+impliessign :: Note
+impliessign = rightArrow
+
+mimplies :: Note -> Note -> Note
+mimplies m n = m <> impliessign <> n
+
+-- C-k =>
+(⇒) :: Note -> Note -> Note
+(⇒) = mimplies
+
+proof :: Note -> Note
+proof = liftL $ TeXEnv "proof" []
+
+subseteqsign :: Note
+subseteqsign = comm0 "subseteq"
+
+subseteq :: Note -> Note -> Note
+subseteq m n = m <> subseteqsign <> n
+
+-- C-k (_
+(⊆) :: Note -> Note -> Note
+(⊆) = subseteq
