@@ -3,10 +3,7 @@ module Sets.Basics (basics) where
 import           Notes
 
 basics :: Notes
-basics = notesPart "basics" preamble body
-
-preamble :: Note
-preamble = return ()
+basics = notesPart "basics" body
 
 body :: Note
 body = do
@@ -70,7 +67,7 @@ setEqualityDefinition :: Note
 setEqualityDefinition = de $ do
   label setEqualityDefinitionLabel
   s ["Two sets ", m "A", " and ", m "B", " are ", term "equal", " if and only if they contain the same elements."]
-  ma $ ("A" =§= "B") === (mfa "x" $ ("x" ∈ "A") &: ("x" ∈ "B"))
+  ma $ ("A" =§= "B") === (fa "x" $ ("x" ∈ "A") &: ("x" ∈ "B"))
 
 setEqTransitivity :: Note
 setEqTransitivity = thm $ do
@@ -97,15 +94,15 @@ setEqTransitivity = thm $ do
         &
         (
           iffsign <>
-          (pars $ mfa "x" ("x" ∈ "A" ⇔ "x" ∈ "B"))
+          (pars $ fa "x" ("x" ∈ "A" ⇔ "x" ∈ "B"))
             &:
-          (pars $ mfa "x" ("x" ∈ "B" ⇔ "x" ∈ "C"))
+          (pars $ fa "x" ("x" ∈ "B" ⇔ "x" ∈ "C"))
         )
         ,
         "" &
         (
           impliessign <>
-          mfa "x"
+          fa "x"
             (pars $ "x" ∈ "A" ⇔ "x" ∈ "B")
             &:
             (pars $ "x" ∈ "B" ⇔ "x" ∈ "C")
@@ -114,7 +111,7 @@ setEqTransitivity = thm $ do
         "" &
         (
           iffsign <>
-          mfa "x" ("x" ∈ "A" ⇔ "x" ∈ "C")
+          fa "x" ("x" ∈ "A" ⇔ "x" ∈ "C")
         )
       ]
 
@@ -122,7 +119,7 @@ setEqTransitivity = thm $ do
 subsetDefinition :: Note
 subsetDefinition = de $ do
   s ["A ", ix "set", " ", m "A", " is a ", term "subset", " of a set ", m "B", " if and only if ", m "B", " contains all elements of ", m "A", "."]
-  ma $ ("A" ⊆ "B") === (mfa "x" $ "x" ∈ "A" ⇒ "x" ∈ "B")
+  ma $ ("A" ⊆ "B") === (fa "x" $ "x" ∈ "A" ⇒ "x" ∈ "B")
 
 
 subsetAntiSymmetry :: Note
@@ -137,14 +134,14 @@ subsetAntiSymmetry = thm $ do
       ("A" ⊆ "B" &: "B" ⊆ "A")
       &
       iffsign <>
-      (pars $ mfa "x" $ "x" ∈ "A" ⇒ "x" ∈ "B")
+      (pars $ fa "x" $ "x" ∈ "A" ⇒ "x" ∈ "B")
       &:
-      (pars $ mfa "x" $ "x" ∈ "B" ⇒ "x" ∈ "A")
+      (pars $ fa "x" $ "x" ∈ "B" ⇒ "x" ∈ "A")
       ,
       "" &
       iffsign <>
       (
-        mfa "x" (
+        fa "x" (
           (pars $ "x" ∈ "A" ⇒ "x" ∈ "B")
           &:
           (pars $ "x" ∈ "B" ⇒ "x" ∈ "A")
@@ -152,7 +149,7 @@ subsetAntiSymmetry = thm $ do
       )
       ,
       "" &
-      iffsign <> (mfa "x" ("x" ∈ "A" ⇔ "x" ∈ "B"))
+      iffsign <> (fa "x" ("x" ∈ "A" ⇔ "x" ∈ "B"))
       &
       "A" =§= "B"
       ]
@@ -171,15 +168,15 @@ subsetTransitivity = thm $ do
         ("A" ⊆ "B") &: ("B" ⊆ "C")
         &
         iffsign <>
-        (pars $ mfa "x" $ "x" ∈ "A" ⇒ "x" ∈ "B") &: (pars $ mfa "x" $ "x" ∈ "A" ⇒ "x" ∈ "B")
+        (pars $ fa "x" $ "x" ∈ "A" ⇒ "x" ∈ "B") &: (pars $ fa "x" $ "x" ∈ "A" ⇒ "x" ∈ "B")
         ,
         "" &
         impliessign <>
-        (mfa "x" ((pars $ "x" ∈ "A" ⇒ "x" ∈ "B") &: (pars $ "x" ∈ "B" ⇒ "x" ∈ "C")))
+        (fa "x" ((pars $ "x" ∈ "A" ⇒ "x" ∈ "B") &: (pars $ "x" ∈ "B" ⇒ "x" ∈ "C")))
         ,
         "" &
         iffsign <>
-        (mfa "x" $ "x" ∈ "A" ⇒ "x" ∈ "C")
+        (fa "x" $ "x" ∈ "A" ⇒ "x" ∈ "C")
         &
         iffsign <>
         ("A" ⊆ "C")
@@ -207,26 +204,26 @@ universalSetSupsetOfAllSets :: Note
 universalSetSupsetOfAllSets = thm $ do
   label universalSetSupsetOfAllSetsLabel
   s ["Every set ", m "A", " is a ", ix "subset", " of the ", ix "universal set", " ", m "setuniverse", "."]
-  ma $ mfa "A" $ "A" ⊆ setuniverse
+  ma $ fa "A" $ "A" ⊆ setuniverse
 
   proof $ do
     s ["Let ", m "A", " be a set."]
     s ["Every element of ", m "A", " is contained in ", m setuniverse, "."]
-    ma $ mfa "x" $ (pars $ "x" ∈ "A") ⇒ (pars $ "x" ∈ setuniverse)
+    ma $ fa "x" $ (pars $ "x" ∈ "A") ⇒ (pars $ "x" ∈ setuniverse)
 
 
 emptySetDefinition :: Note
 emptySetDefinition = de $ do
-  sequence_ ["The ", term "empty set", " is the ", ix "set", " that contains no elements."]
+  sequence_ ["The ", term "empty set", " ", m emptyset, " is the ", ix "set", " that contains no elements."]
   ma $ emptyset === setcmpr "x" "false"
 
 emptySetSubsetOfAllSets :: Note
 emptySetSubsetOfAllSets = thm $ do
-  sequence_ ["The ", ix "empty set", m emptyset, " is a ", ix "subset", " of all sets."]
+  sequence_ ["The ", ix "empty set", " ", m emptyset, " is a ", ix "subset", " of all sets."]
   proof $ do
     sequence_ ["Let ", m "A", " be a set. "]
     sequence_ ["Every element of ", m emptyset, " is also an element of ", m "A", "."]
 
-    ma $ mfa "x" $ ("x" ∈ "emptyset") ⇒ ("x" ∈ "A")
+    ma $ fa "x" $ ("x" ∈ emptyset) ⇒ ("x" ∈ "A")
 
     "This is vacuously true."

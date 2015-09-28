@@ -18,4 +18,4 @@ sets = notes "sets" $
   ]
 
 header :: Notes
-header = notesPart "header" (return ()) (notesChapter "Sets")
+header = notesPart "header" (notesChapter "Sets")

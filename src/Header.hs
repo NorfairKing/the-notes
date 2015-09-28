@@ -2,11 +2,8 @@ module Header (header) where
 
 import           Notes
 
-header :: Notes
-header = notesPart "header" preamble mempty
-
-preamble :: Note
-preamble = do
+header :: Note
+header = do
   theoremDefinitions
   mathHeader
 

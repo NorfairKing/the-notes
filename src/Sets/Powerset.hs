@@ -3,10 +3,7 @@ module Sets.Powerset (powerset) where
 import           Notes
 
 powerset :: Notes
-powerset = notesPart "powerset" preamble body
-
-preamble :: Note
-preamble = return ()
+powerset = notesPart "powerset" body
 
 body :: Note
 body = return ()

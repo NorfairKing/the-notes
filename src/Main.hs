@@ -8,7 +8,7 @@ import           Sets.Main
 
 main :: IO ()
 main = do
-    t <- execLaTeXT $ renderNotes mainDocument
+    t <- execLaTeXT $ renderNotes (packages <> header) mainDocument
 
     renderFile "main.tex" t
     --let s = prettyLaTeX t
@@ -18,9 +18,7 @@ main = do
 mainDocument :: Notes
 mainDocument = notes "notes" $
   [
-      packages
-    , header
-    , logic
+      logic
     , sets
   ]
 

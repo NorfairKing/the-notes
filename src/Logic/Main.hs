@@ -10,10 +10,7 @@ logic = notes "logic" $
   ]
 
 logicBasics :: Notes
-logicBasics = notesPart "basics" logicPreamble logicBody
-
-logicPreamble :: Note
-logicPreamble = return ()
+logicBasics = notesPart "basics" logicBody
 
 logicBody :: Note
 logicBody = return ()

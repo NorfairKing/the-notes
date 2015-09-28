@@ -2,12 +2,8 @@ module Packages (packages) where
 
 import           Notes
 
-packages :: Notes
-packages = notesPart "packages" preamble mempty
-
-
-preamble :: Note
-preamble = do
+packages :: Note
+packages = do
   -- For frames
   usepackage [] "mdframed"
 
