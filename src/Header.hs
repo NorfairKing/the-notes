@@ -15,6 +15,8 @@ preamble = do
 
 theoremDefinitions :: Note
 theoremDefinitions = do
+  theoremstyle Definition
+
   raw "\\newtheorem{thm}{Theorem}[chapter]"
 
   newtheorem' "prop" "Property"

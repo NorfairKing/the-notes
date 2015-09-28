@@ -72,6 +72,9 @@ de = theorem "de"
 thm :: Note -> Note
 thm = theorem "thm"
 
+nte :: Note -> Note
+nte = theorem "nte"
+
 index :: Note -> Note
 index = comm1 "index"
 
@@ -162,18 +165,17 @@ mid = raw "\\mid "
 setcmpr :: Note -> Note -> Note
 setcmpr n m = setof $ n <> mid <> m
 
-
 divSign :: Note
 divSign = mid
 
 mdiv :: Note -> Note -> Note
-mdiv n m = n <> divSign <> m
+mdiv = binop divSign
 
 defineasSign :: Note
-defineasSign = comm0 "quad" <> commS "equiv" <> comm0 "quad"
+defineasSign = comm0 "quad" <> comm0 "equiv" <> comm0 "quad"
 
 defineas :: Note -> Note -> Note
-defineas n m = n <> defineasSign <> m
+defineas = binop defineasSign
 
 (===) :: Note -> Note -> Note
 (===) = defineas
@@ -197,7 +199,7 @@ fun :: Note -> Note -> Note -> Note
 fun m n o = m <> ":" <> raw "\\ " <> n <> rightarrow <> o
 
 func :: Note -> Note -> Note -> Note -> Note -> Note
-func m n o p q = fun m n o <> ":" <> raw "\\ " <> p <> commS "mapsto" <> q
+func m n o p q = fun m n o <> ":" <> raw "\\ " <> p <> comm0 "mapsto" <> q
 
 -- Functions
 funinv :: Note -> Note
@@ -240,7 +242,10 @@ seteqsign :: Note
 seteqsign = underset "set" "="
 
 (=§=) :: Note -> Note -> Note
-m =§= n = m <> seteqsign <> n
+(=§=) = binop seteqsign
+
+setneqsign :: Note
+setneqsign = underset "set" $ comm0 "neq"
 
 mand :: Note -> Note -> Note
 mand = wedge
@@ -290,6 +295,28 @@ subseteqsign = comm0 "subseteq"
 subseteq :: Note -> Note -> Note
 subseteq m n = m <> subseteqsign <> n
 
+binop :: Note -> Note -> Note -> Note
+binop = between
+
 -- C-k (_
 (⊆) :: Note -> Note -> Note
 (⊆) = subseteq
+
+subsetneqsign :: Note
+subsetneqsign = comm0 "subsetneq"
+
+subsetneq :: Note -> Note -> Note
+subsetneq = binop subsetneqsign
+
+setneq :: Note -> Note -> Note
+setneq = binop setneqsign
+
+setuniverse :: Note
+setuniverse = comm0 "Omega"
+
+emptyset :: Note
+emptyset = comm0 "emptyset"
+
+-- Shorter than sequence_
+s :: [Note] -> Note
+s = sequence_
