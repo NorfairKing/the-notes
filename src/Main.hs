@@ -4,6 +4,7 @@ import           Header
 import           Logic.Main
 import           Notes
 import           Packages
+import           Probability.Main
 import           Sets.Main
 import           Titlepage
 
@@ -28,13 +29,19 @@ entireDocument = do
     tableofcontents
     renderNotes allNotes
 
+    comm1 "bibliographystyle" "plain"
+    comm1 "bibliography" "main"
+
+    comm0 "printindex"
+    comm0 "listoftodos"
 
 
 
 allNotes :: Notes
-allNotes = notes "notes" $
+allNotes = notes "notes"
   [
       logic
     , sets
+    , probability
   ]
 
