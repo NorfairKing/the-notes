@@ -158,3 +158,9 @@ seq :: Note -> Note -> Note
 seq m n = brac m !: n
 
 
+-- Comprehensions
+compr :: Note -> Note -> Note -> Note -> Note
+compr sign lower upper content = sign !: lower ^: upper <> braces content
+
+comp :: Note -> Note -> Note -> Note
+comp sign lower content = sign !: lower <> braces content
