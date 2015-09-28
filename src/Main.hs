@@ -9,18 +9,32 @@ import           Titlepage
 
 main :: IO ()
 main = do
-    t <- execLaTeXT $ renderNotes (packages <> header) mainDocument
+    t <- execLaTeXT $ entireDocument
 
     renderFile "main.tex" t
     --let s = prettyLaTeX t
     --writeFile "main.tex" s
 
+entireDocument :: Note
+entireDocument = do
 
-mainDocument :: Notes
-mainDocument = notes "notes" $
+  documentclass [oneside, FontSize (Pt 12), a4paper] book
+
+  packages
+  header
+
+  document $ do
+    myTitlePage
+    tableofcontents
+    renderNotes allNotes
+
+
+
+
+allNotes :: Notes
+allNotes = notes "notes" $
   [
-      myTitlePage
-    , logic
+      logic
     , sets
   ]
 

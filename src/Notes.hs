@@ -7,8 +7,8 @@ module Notes (
 import           Macro
 import           Types
 
-renderNotes :: Note -> Notes -> LaTeXT_ IO
-renderNotes preamble notes = renderParts preamble $ flattenNotes notes
+renderNotes :: Notes -> LaTeXT_ IO
+renderNotes notes = renderParts $ flattenNotes notes
 
 flattenNotes :: Notes -> [Part]
 flattenNotes = go ""
@@ -19,16 +19,14 @@ flattenNotes = go ""
     (<.>) :: String -> String -> String
     s1 <.> s2 = s1 ++ "." ++ s2
 
-renderParts :: Note -> [Part] -> LaTeXT_ IO
-renderParts preamble ps = do
+renderParts :: [Part] -> LaTeXT_ IO
+renderParts ps = do
     liftIO $ putStrLn "\nBuilding parts:"
     liftIO $ mapM_ putStrLn $ map (\(Part name _) -> name) ps
     liftIO $ putStrLn ""
 
 
-    documentclass [] book
-    preamble
-    document $ sequence_ $ map (\(Part _ body) -> body) ps
+    sequence_ $ map (\(Part _ body) -> body) ps
 
 
 boxed :: Note -> Note

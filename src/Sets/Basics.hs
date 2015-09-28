@@ -7,6 +7,7 @@ basics = notesPart "basics" body
 
 body :: Note
 body = do
+  notesSection "Set Basics"
   sets
   subsets
   universalSet
