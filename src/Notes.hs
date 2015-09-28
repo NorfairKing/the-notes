@@ -318,5 +318,8 @@ emptyset :: Note
 emptyset = comm0 "emptyset"
 
 -- Shorter than sequence_
+-- To model a sentence.
 s :: [Note] -> Note
-s = sequence_
+s ns = do
+  sequence_ ns
+  " "
