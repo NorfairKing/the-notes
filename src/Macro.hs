@@ -1,12 +1,12 @@
 module Macro (
-    module Macro
-  , module Macro.Index
+    module Macro.Index
   , module Macro.Math
   , module Macro.MetaMacro
   , module Macro.Section
   , module Macro.Text
   , module Macro.Theorem
   , module Sets.Macro
+  , module Probability.Macro
   ) where
 
 import           Macro.Index
@@ -15,9 +15,5 @@ import           Macro.MetaMacro
 import           Macro.Section
 import           Macro.Text
 import           Macro.Theorem
+import           Probability.Macro
 import           Sets.Macro
-import           Types
-
-quoted :: Note -> Note
-quoted n = "`" <> n <> "'"
-

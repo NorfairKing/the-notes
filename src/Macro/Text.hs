@@ -9,5 +9,6 @@ s ns = do
   sequence_ ns
   " "
 
-
+quoted :: Note -> Note
+quoted n = "`" <> n <> "'"
 
