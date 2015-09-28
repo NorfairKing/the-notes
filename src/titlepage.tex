@@ -1,0 +1,31 @@
+\begin{titlepage}
+  \thispagestyle{empty}
+  \hbox{
+    \foreach \i in {1,...,7} {
+      \rule{\i pt}{\textheight}
+      \hspace{\i pt}
+    }
+    \hspace*{0.05\textwidth}
+    \parbox[b]{0.75\textwidth}{
+
+      \textsc{\LARGE ETH Zürich}\\[1.5cm] 
+
+      {\noindent\Huge\bfseries The Notes \\[0.5\baselineskip]}\\
+      [2\baselineskip] % Title
+      {\Large \textsc{Tom Sydney Kerckhove}}\\[4\baselineskip]
+
+
+      \begin{large}
+        \begin{tabular}{l l}
+          Started & Februari 1, 2015\\
+          Compiled & \today\\
+          Commit & \input{commit.tex}\\
+        \end{tabular}
+      \end{large}
+
+      \vspace{0.3\textheight}
+
+      \vspace{0.2\textheight}
+    }
+  }
+\end{titlepage}

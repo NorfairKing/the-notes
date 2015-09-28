@@ -5,6 +5,7 @@ import           Logic.Main
 import           Notes
 import           Packages
 import           Sets.Main
+import           Titlepage
 
 main :: IO ()
 main = do
@@ -18,7 +19,8 @@ main = do
 mainDocument :: Notes
 mainDocument = notes "notes" $
   [
-      logic
+      myTitlePage
+    , logic
     , sets
   ]
 
