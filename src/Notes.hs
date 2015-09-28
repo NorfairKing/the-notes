@@ -37,3 +37,6 @@ bla = boxed leftArrow
 
 bra :: Note
 bra = boxed rightArrow
+
+item :: Note -> Note
+item n = comm0 "item" <> n

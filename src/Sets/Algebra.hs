@@ -1,4 +1,9 @@
-module Sets.Algebra (algebra) where
+module Sets.Algebra (
+    algebra
+
+  , secondLawOfDeMorganLabel
+  , symmetricDifferenceITOUnionAndIntersectionLabel
+  ) where
 
 import           Notes
 
@@ -29,3 +34,9 @@ unionDefinition :: Note
 unionDefinition = do
   s ["The ", term "union", " ", m ("A" `setun` "B"), " of two sets ", m "A", " and ", m "B", " is the set of all elements of both ", m "A", " and ", m "B", "."]
   ma $ "A" `setun` "B" =§= setcmpr "x" (("x" ∈ "A") |: ("x" ∈ "B"))
+
+secondLawOfDeMorganLabel :: Note
+secondLawOfDeMorganLabel = "thm:second-law-of-de-morgan"
+
+symmetricDifferenceITOUnionAndIntersectionLabel :: Note
+symmetricDifferenceITOUnionAndIntersectionLabel = "thm:sets-symmetric-difference-in-terms-of-union-and-intersection"

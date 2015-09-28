@@ -1,5 +1,6 @@
 module Probability.Macro where
 
+import           Macro.Index
 import           Macro.Math
 import           Sets.Macro
 import           Types
@@ -110,3 +111,21 @@ prev n = "E" <> sqbrac n
 
 prvar :: Note -> Note
 prvar n = "Var" <> sqbrac n
+
+
+
+--[ Text
+universe :: Note
+universe = ix "universe"
+
+universe_ :: Note
+universe_ = universe <> " " <> m pruniv
+
+salgebra :: Note
+salgebra = m (comm0 "sigma") <> "-algebra"
+
+sa :: Note
+sa = ix salgebra
+
+--sa_ :: Note
+-- sa_ = sa <> " " <> m prsa

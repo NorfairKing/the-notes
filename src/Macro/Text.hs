@@ -11,4 +11,3 @@ s ns = do
 
 quoted :: Note -> Note
 quoted n = "`" <> n <> "'"
-

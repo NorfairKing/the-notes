@@ -1,5 +1,6 @@
 module Sets.Macro where
 
+import           Macro.Index
 import           Macro.Math
 import           Macro.MetaMacro
 import           Types
@@ -89,7 +90,7 @@ setun = binop setunsign
 
 --[ set union comprehension
 setuncmprsign :: Note
-setuncmprsign = comm0 "bigcup"
+setuncmprsign = commS "bigcup"
 
 setuncmpr :: Note -> Note -> Note -> Note
 setuncmpr = compr setuncmprsign
@@ -112,7 +113,7 @@ setin = binop setinsign
 
 --[ set intersectino comprehension
 setincmprsign :: Note
-setincmprsign = comm0 "bigcap"
+setincmprsign = commS "bigcap"
 
 setincmpr :: Note -> Note -> Note -> Note
 setincmpr = compr setincmprsign
@@ -168,5 +169,8 @@ setsize = autoBrackets "|" "|"
 
 
 
+--[ Text
 
+set :: Note
+set = ix "set"
 

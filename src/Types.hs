@@ -10,7 +10,7 @@ module Types (
   , module Text.LaTeX.Packages.Fancyhdr
   ) where
 
-import           Text.LaTeX
+import           Text.LaTeX                   hiding (item)
 import           Text.LaTeX.Base.Class
 import           Text.LaTeX.Base.Pretty
 import           Text.LaTeX.Base.Syntax

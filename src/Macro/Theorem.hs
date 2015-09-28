@@ -11,6 +11,9 @@ thm = theorem "thm"
 nte :: Note -> Note
 nte = theorem "nte"
 
+cex :: Note -> Note
+cex = theorem "cex"
+
 
 newtheorem' :: LaTeXC l => String -> l -> l
 newtheorem' name = liftL $ \l -> TeXComm "newtheorem" [ FixArg $ fromString name , OptArg "thm", FixArg l ]
