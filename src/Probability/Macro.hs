@@ -10,6 +10,14 @@ pruniv :: Note
 pruniv = setuniverse
 
 
+--[ Measurable space
+prmspace :: Note -> Note -> Note
+prmspace m n = m <> ", " <> n
+
+prms :: Note
+prms = prmspace pruniv prsa
+
+
 --[ Probability space
 prspace :: Note -> Note -> Note -> Note
 prspace m n o = m <> ", " <> n <> ", " <> o

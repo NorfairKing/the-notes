@@ -154,8 +154,8 @@ le = comm0 "leqslant"
 
 
 -- Sequences
-seq :: Note -> Note -> Note
-seq m n = brac m !: n
+sequ :: Note -> Note -> Note
+sequ m n = pars m !: n
 
 
 -- Comprehensions
@@ -176,3 +176,13 @@ examq m n = do
 --[ Text
 text :: Note -> Note
 text = comm1 "text"
+
+
+sumsign :: Note
+sumsign = commS "sum"
+
+sumcmp :: Note -> Note -> Note
+sumcmp = comp sumsign
+
+sumcmpr :: Note -> Note -> Note -> Note
+sumcmpr = compr sumsign
