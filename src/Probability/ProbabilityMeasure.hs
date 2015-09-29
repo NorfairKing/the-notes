@@ -10,6 +10,7 @@ body = do
   section "Probability Measures"
   probabilityMeasureDefinition
   measurablespaceDefinition
+  probabilityMeasureFiniteAdditivity
 
 
 msDec :: Note
@@ -44,3 +45,20 @@ measurablespaceDefinition = de $ do
   m prsp
   " is called a "
   term "probability space"
+
+probabilityMeasureFiniteAdditivityLabel :: Note
+probabilityMeasureFiniteAdditivityLabel = "th:probability-measure-finite-additivity"
+
+probabilityMeasureFiniteAdditivity :: Note
+probabilityMeasureFiniteAdditivity = thm $ do
+  s ["Let ", m prsp, " be a ", ix "probability space", " and let ", m (setcmpr an $ "n" ∈ setlst "1" "N"), " be ", m "N", " pairwise disjunct events of ", m prsa, "."]
+  ma $ prob (setuncmpr (n =: 1) "N" an) =: sumcmpr (n =: 1) "N" (prob an)
+
+  proof $ s ["Use the ", ix "countable additivity", " property of probability measures", deref probabilityMeasureDefinitionLabel, " where only ", m n, " sets are non-empty."]
+  where
+    n = "n"
+    an = "A" !: n
+
+
+
+
