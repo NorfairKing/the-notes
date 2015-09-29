@@ -136,7 +136,7 @@ setdiffsign :: Note
 setdiffsign = comm0 "setminus"
 
 setdiff :: Note -> Note -> Note
-setdiff = binop setsdiffsign
+setdiff = binop setdiffsign
 
 
 --[ Symmetric set difference

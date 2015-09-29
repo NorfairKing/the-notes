@@ -11,3 +11,5 @@ deref = reference "definition"
 thmref :: Note -> Note
 thmref = reference "theorem"
 
+propref :: Note -> Note
+propref = reference "property"

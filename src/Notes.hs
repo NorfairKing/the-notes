@@ -56,3 +56,9 @@ bra = boxed rightArrow
 
 item :: Note -> Note
 item n = comm0 "item" <> n
+
+(-:) :: Note -> Note -> Note
+(-:) = binop "-"
+
+(+:) :: Note -> Note -> Note
+(+:) = binop "+"

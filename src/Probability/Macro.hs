@@ -23,7 +23,7 @@ prspace :: Note -> Note -> Note -> Note
 prspace m n o = m <> ", " <> n <> ", " <> o
 
 prsp :: Note
-prsp = prspace pruniv reals prpm
+prsp = prspace pruniv prsa prpm
 
 prbsp :: Note
 prbsp = prspace reals boreals prpm

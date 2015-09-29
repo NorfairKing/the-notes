@@ -2,6 +2,7 @@ module Sets.Basics (
   basics
 
   , setEqualityDefinitionLabel
+  , universalSetSupsetOfAllSetsLabel
   ) where
 
 import           Notes

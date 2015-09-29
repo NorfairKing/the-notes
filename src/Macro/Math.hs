@@ -145,14 +145,6 @@ coint = interval [OptArg "open right"]
 ccint :: LaTeXC l => l -> l -> l
 ccint = interval []
 
--- Inequality
-ge :: Note
-ge = comm0 "geqslant"
-
-le :: Note
-le = comm0 "leqslant"
-
-
 -- Sequences
 sequ :: Note -> Note -> Note
 sequ m n = pars m !: n
