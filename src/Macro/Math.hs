@@ -178,3 +178,7 @@ sumcmp = comp sumsign
 
 sumcmpr :: Note -> Note -> Note -> Note
 sumcmpr = compr sumsign
+
+-- Fraction
+(/:) :: Note -> Note -> Note
+(/:) = frac

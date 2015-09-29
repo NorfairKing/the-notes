@@ -24,6 +24,14 @@ body = do
   probabilitySubsetImpliesSmaller
   probabilityAtMostOne
 
+  traditionalProbabilityMeasures
+
+traditionalProbabilityMeasures :: Note
+traditionalProbabilityMeasures = do
+  subsection "Traditional Probability Measures"
+  uniformeProbabilityMeasure
+  discreteProbabilityMeasure
+
 
 msDec :: Note
 msDec = s ["Let ", m prms, " be a ", ix "measurable space", "."]
@@ -182,6 +190,7 @@ probabilitySubsetImpliesSmaller = prop $ do
     a = "A"
     b = "B"
 
+
 probabilityAtMostOne :: Note
 probabilityAtMostOne = prop $ do
   psDec
@@ -190,5 +199,16 @@ probabilityAtMostOne = prop $ do
   proof $ do
     s ["Every set ", m a, " is a subset of ", m pruniv, thmref universalSetSupsetOfAllSetsLabel]
     s [" so ", m (prob a), " must be smaller than ", m (prob pruniv =: 1), deref probabilityMeasureDefinitionLabel, propref probabilitySubsetImpliesSmallerLabel]
-
   where a = "A"
+
+
+uniformeProbabilityMeasure :: Note
+uniformeProbabilityMeasure = de $ do
+  s ["The ", term "uniforme probability measure", " is a ", ix "probability measure", " that is only defined for measurable spaces with a finite ", universe, "."]
+  ma $ func prpm prsa (ccint 0 1 ⊆ reals) "A" (setsize "A" /: setsize pruniv)
+
+
+discreteProbabilityMeasure :: Note
+discreteProbabilityMeasure = de $ do
+  s ["The ", term "discrete probability measure", " is a ", ix "probability measure", " that is only defined for measure spaces with a countable ", universe, "."]
+  ma $ func prpm prsa (ccint 0 1 ⊆ reals) ("A" !: "i") ("p" !: "i")
