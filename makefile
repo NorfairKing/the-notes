@@ -1,10 +1,8 @@
-NAME = notes
+NAME = the-notes
 
 SRC_EXT = hs
-BIN_EXT = bin
 
-BIN_NAME = $(NAME)
-BIN = $(BIN_NAME).$(BIN_EXT)
+BIN = $(NAME)
 
 SRC_DIR = src
 MAIN_SRC_NAME = Main

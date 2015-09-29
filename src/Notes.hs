@@ -15,6 +15,7 @@ renderNotes notes = do
   renderParts $ selectParts selection $ flattenNotes notes
 
 selectParts :: [Selection] -> [Part] -> [Part]
+selectParts [] ps = ps
 selectParts ss ps = un $ map (applySelection ps) ss
 
 un :: Eq a => [[a]] -> [a]
