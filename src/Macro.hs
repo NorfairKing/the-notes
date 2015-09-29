@@ -3,7 +3,6 @@ module Macro (
   , module Macro.Math
   , module Macro.MetaMacro
   , module Macro.Reference
-  , module Macro.Section
   , module Macro.Text
   , module Macro.Theorem
 
@@ -16,7 +15,6 @@ import           Macro.Index
 import           Macro.Math
 import           Macro.MetaMacro
 import           Macro.Reference
-import           Macro.Section
 import           Macro.Text
 import           Macro.Theorem
 

@@ -1,4 +1,8 @@
-module Sets.Basics (basics) where
+module Sets.Basics (
+  basics
+
+  , setEqualityDefinitionLabel
+  ) where
 
 import           Notes
 
@@ -7,7 +11,7 @@ basics = notesPart "basics" body
 
 body :: Note
 body = do
-  notesSection "Set Basics"
+  section "Set Basics"
   sets
   subsets
   universalSet

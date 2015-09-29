@@ -17,7 +17,7 @@ probability = notes "probability" $
   ]
 
 header :: Notes
-header = notesPart "header" (notesChapter "Probability")
+header = notesPart "header" (chapter "Probability")
 
 intro :: Notes
 intro = notesPart "intro" introBody
