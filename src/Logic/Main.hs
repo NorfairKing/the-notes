@@ -1,13 +1,21 @@
 module Logic.Main (logic) where
 
+import           Logic.AbstractLogic
+import           Logic.PropositionalLogic
 import           Notes
 
 
 logic :: Notes
-logic = notes "logic" $
+logic = notes "logic"
   [
-    logicBasics
+    logicHeader
+  , logicBasics
+  , abstractLogic
+  , propositionalLogic
   ]
+
+logicHeader :: Notes
+logicHeader = notesPart "header" (chapter "Logic")
 
 logicBasics :: Notes
 logicBasics = notesPart "basics" logicBody

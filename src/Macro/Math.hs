@@ -182,3 +182,20 @@ sumcmpr = compr sumsign
 -- Fraction
 (/:) :: Note -> Note -> Note
 (/:) = frac
+
+-- Equality
+eq :: Note -> Note -> Note
+eq = between "="
+
+-- Inequality
+lt :: Note -> Note -> Note
+lt = between "<"
+
+mnotsign :: Note
+mnotsign = comm0 "neg"
+
+mnot :: Note -> Note
+mnot n = mnotsign <> n
+
+(¬) :: Note -> Note
+(¬) = mnot
