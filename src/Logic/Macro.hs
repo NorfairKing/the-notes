@@ -13,6 +13,10 @@ logict = mathbb "T"
 logicf :: Note
 logicf = "f"
 
+-- Logic inference rule
+logicir :: Note
+logicir = "i"
+
 -- Logic provable
 lpvsign :: Note
 lpvsign = comm0 "vdash"
@@ -45,3 +49,22 @@ lkb = "KB"
 -- Logical models of
 lmo :: Note -> Note
 lmo = funapp "M"
+
+-- Logical negation
+neg :: Note -> Note
+neg = mnot
+
+-- Logical and
+land :: Note -> Note -> Note
+land = between $ comm0 "wedge"
+
+(∧) :: Note -> Note -> Note
+(∧) = land
+
+-- Logical or
+lor :: Note -> Note -> Note
+lor = between $ comm0 "vee"
+
+-- Logical or
+(∨) :: Note -> Note -> Note
+(∨) = lor

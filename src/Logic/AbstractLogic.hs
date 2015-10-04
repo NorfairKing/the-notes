@@ -1,4 +1,9 @@
-module Logic.AbstractLogic (abstractLogic) where
+module Logic.AbstractLogic (
+    abstractLogic
+
+  , grammar
+  , inference
+  ) where
 
 import           Notes
 
@@ -12,18 +17,19 @@ body = do
   formulaDefinition
   theoryDefinition
   worldDefinition
+  axiomSchemaDefinition
   knowledgeBaseDefinition
   theoremNotation
-  inferenceNotation
   entailmentDefinition
   modelDefinition
   modelsOfDefinition
   equivalentDefinitionEntailment
+  inferenceDefinition
+  inferenceNotation
   soundDefinition
   completeDefinition
-  modusPonensDefinition
-  axiomSchemaDefinition
   exampleTheoryIntegers
+  exampleModusPonens
 
 
 
@@ -48,27 +54,23 @@ grammar = ix "grammar"
 axiom :: Note
 axiom = ix "axiom"
 
-inference :: Note
-inference = ix "inference"
-
 theoryDefinition :: Note
 theoryDefinition = de $ do
   s ["A ", term "theory", " or ", term "logic",  " is a mathematical framework for proving properties about a certain object domain."]
   s ["Those properties are called ", term "theorem", "s."]
-  s ["A ", theory, " consists of a ", term "grammar", ", a set of ", term "axiom", "s and a set of ", term "inference rules."]
+  s ["A ", theory, " consists of a ", term "grammar", " and a set of ", term "axiom", "s."]
   enumerate $ do
     item $ do
       s ["A ", term "grammar", " defines well-formed formulae."]
+      s ["A well-formed formula is also called a ", term "sentence", "."]
       s ["A ", term "formula", " represents an ", expression, " if it adheres to the grammar."]
-    item $ do
-      s ["An ", term "inference rule", " describes how a new theorem can be obtained from previously obtained theorems."]
-      s ["A set of inference rules is called an ", term "inference", "."]
     item $ do
       s ["An ", term "axiom", " is a theorem that can be asserted without inference."]
 
+
 worldDefinition :: Note
 worldDefinition = de $ do
-  s ["A logical ", term "world", " or ", term "model", " is a set of boolean expressions that are asserted within the framework of certain theory."]
+  s ["A logical ", term "world", " or ", term "model", " is a set of boolean expressions that are true within the framework of certain theory."]
 
 
 knowledgeBase :: Note
@@ -83,15 +85,6 @@ theoremNotation :: Note
 theoremNotation = de $ do
   s ["Let ", m logicf, " be a well-formed formula in a theory ", m logict, "."]
   s ["This is denoted as ", m (la logicf), "."]
-
-inferenceNotation :: Note
-inferenceNotation = de $ do
-  s ["An inference rule is written as follows."]
-  s ["It means that if theorems ", m (commaSeparated fs), " can be asserted, we may assert ", m (f 0), " as a theorem."]
-  ma $ linf fs (f 0)
-  where
-    fs = [f 1, f 2, dotsc, f "n"]
-    f n = logicf !: n
 
 entailmentDefinition :: Note
 entailmentDefinition = de $ do
@@ -116,6 +109,24 @@ equivalentDefinitionEntailment = de $ do
   s ["Another way of expressing the fact that an expression ", m alpha, " is entailed by a ", knowledgeBase, " ", m lkb, ": ", m (lkb `lent` alpha), " is using models: "]
   ma $ lmo lkb ⊆ lmo alpha
 
+inference :: Note
+inference = ix "inference"
+
+inferenceDefinition :: Note
+inferenceDefinition = de $ do
+  s ["An ", term "inference", " ", m logicir, " in a theory ", m logict, " is a procedure for proving sentences from a ", knowledgeBase, "."]
+
+
+inferenceNotation :: Note
+inferenceNotation = de $ do
+  s ["An inference rule is written as follows."]
+  s ["It means that if theorems ", m (commaSeparated fs), " can be asserted, we may assert ", m (f 0), " as a theorem."]
+  ma $ linf fs (f 0)
+  where
+    fs = [f 1, f 2, dotsc, f "n"]
+    f n = logicf !: n
+
+
 soundDefinition :: Note
 soundDefinition = de $ do
   s ["An ", inference, " ", m "i", " is called ", term "sound", " if every theorem is a true formula:"]
@@ -126,8 +137,8 @@ completeDefinition = de $ do
   s ["An ", inference, " ", m "i", " is called ", term "complete", " if every true formula can be established as a theorem."]
   ma $ fa (commaSeparated [alpha, lkb]) (lkb `lent` alpha ⇒ lpvm "i" lkb alpha)
 
-modusPonensDefinition :: Note
-modusPonensDefinition = de $ do
+exampleModusPonens :: Note
+exampleModusPonens = de $ do
   s ["The ", term "modus ponens", " inference rule is common to many theories."]
   ma $ linf ["p", "p" ⇒ "q"] "q"
 
@@ -137,7 +148,7 @@ axiomSchemaDefinition = de $ do
 
 exampleTheoryIntegers :: Note
 exampleTheoryIntegers = ex $ do
-  s ["Let ", m (mathbb "I"), " be a theory with a grammar ", m g, " a set ", m i, " of inference rules and a set ", m a , " of axioms."]
+  s ["Let ", m (mathbb "I"), " be a theory with a ", grammar , " ", m g, " a set ", m i, " of inference rules and a set ", m a , " of axioms."]
   enumerate $ do
     item $ do
       m g
@@ -165,11 +176,9 @@ exampleTheoryIntegers = ex $ do
       m (la $ 0 <: su 0)
       " and the axioms defined by the following axiom schema:"
       ma $ la $ "f" <: "g" ⇒ su "f" <: su "g"
-    item $ do
-      m i
-      " contains only one inference rule: "
-      ma $ linf [su 0, p "f" ⇒ p (su "f")] (p "f")
-
+  "In this example theory, the following could be a sound, but not complete, inference rule:"
+  " contains only one inference rule: "
+  ma $ linf [su 0, p "f" ⇒ p (su "f")] (p "f")
 
   where
     p = funapp "P"
