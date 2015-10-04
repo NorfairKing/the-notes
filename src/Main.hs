@@ -1,5 +1,6 @@
 module Main where
 
+import           Functions.Main
 import           Header
 import           Logic.Main
 import           Notes
@@ -67,5 +68,6 @@ allNotes = notes ""
       logic
     , sets
     , probability
+    , functions
   ]
 

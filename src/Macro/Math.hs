@@ -129,6 +129,9 @@ funinv n = n ^: (-1)
 funapp :: Note -> Note -> Note
 funapp n m = n <> pars m
 
+fn :: Note -> Note -> Note
+fn = funapp
+
 -- Intervals
 interval :: LaTeXC l => [TeXArg] -> l -> l -> l
 interval args = liftL2 $ (\l1 l2 -> TeXComm "interval" (args ++ [FixArg l1, FixArg l2]))

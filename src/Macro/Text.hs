@@ -19,3 +19,6 @@ commaSeparated :: [Note] -> Note
 commaSeparated [] = ""
 commaSeparated [n] = n
 commaSeparated (n:ns) = n <> ", " <> commaSeparated ns
+
+cs :: [Note] -> Note
+cs = commaSeparated
