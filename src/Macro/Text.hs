@@ -12,6 +12,8 @@ s ns = do
 quoted :: Note -> Note
 quoted n = "`" <> n <> "'"
 
+dquoted :: Note -> Note
+dquoted n = "``" <> n <> "''"
 
 commaSeparated :: [Note] -> Note
 commaSeparated [] = ""

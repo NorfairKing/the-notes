@@ -9,12 +9,18 @@ body :: Note
 body = do
   section "Abstract Logic"
   "It is hard to speak about logic in a pure mathematical fashion as it originated, and still borders on, philosophy."
-  expressionDefinition
+  formulaDefinition
   theoryDefinition
-  soundDefinition
-  completeDefinition
+  worldDefinition
+  knowledgeBaseDefinition
   theoremNotation
   inferenceNotation
+  entailmentDefinition
+  modelDefinition
+  modelsOfDefinition
+  equivalentDefinitionEntailment
+  soundDefinition
+  completeDefinition
   modusPonensDefinition
   axiomSchemaDefinition
   exampleTheoryIntegers
@@ -24,18 +30,14 @@ body = do
 expression :: Note
 expression = ix "expression"
 
-expressionDefinition :: Note
-expressionDefinition = de $ do
-  s ["A ", term "expression", " in logic is either true of false."]
-
 formula :: Note
 formula = ix "formula"
 
-{-
 formulaDefinition :: Note
 formulaDefinition = de $ do
-  s ["A ", term "formula", " is a string of character."]
--}
+  s ["A ", term "formula", " is a string of characters."]
+  nte $ "In fact a formula can be equivalently be defined in other ways but this definition suffices."
+
 
 theory :: Note
 theory = ix "theory"
@@ -46,9 +48,12 @@ grammar = ix "grammar"
 axiom :: Note
 axiom = ix "axiom"
 
+inference :: Note
+inference = ix "inference"
+
 theoryDefinition :: Note
 theoryDefinition = de $ do
-  s ["A ", term "theory", " is a mathematical framework for proving properties about a certain object domain."]
+  s ["A ", term "theory", " or ", term "logic",  " is a mathematical framework for proving properties about a certain object domain."]
   s ["Those properties are called ", term "theorem", "s."]
   s ["A ", theory, " consists of a ", term "grammar", ", a set of ", term "axiom", "s and a set of ", term "inference rules."]
   enumerate $ do
@@ -57,21 +62,27 @@ theoryDefinition = de $ do
       s ["A ", term "formula", " represents an ", expression, " if it adheres to the grammar."]
     item $ do
       s ["An ", term "inference rule", " describes how a new theorem can be obtained from previously obtained theorems."]
+      s ["A set of inference rules is called an ", term "inference", "."]
     item $ do
       s ["An ", term "axiom", " is a theorem that can be asserted without inference."]
 
-  todo "Should this be more rigorous?"
+worldDefinition :: Note
+worldDefinition = de $ do
+  s ["A logical ", term "world", " or ", term "model", " is a set of boolean expressions that are asserted within the framework of certain theory."]
 
-soundDefinition :: Note
-soundDefinition = de $ s ["A ", theory, " is called ", term "sound", " if every theorem is a true formula."]
 
-completeDefinition :: Note
-completeDefinition = de $ s ["A ", theory, " is called ", term "complete", " if every true formula can be established as a theorem."]
+knowledgeBase :: Note
+knowledgeBase = ix "knowledge base"
+
+knowledgeBaseDefinition :: Note
+knowledgeBaseDefinition = de $ do
+  s ["A ", term "knowledge base", " is a set of boolean expressions in the context of a certain logical world."]
+  s ["In a given world, a valid knowledge base is a subset of that world."]
 
 theoremNotation :: Note
 theoremNotation = de $ do
   s ["Let ", m logicf, " be a well-formed formula in a theory ", m logict, "."]
-  s ["This is denoted as ", m (logict <> lpv logicf), "."]
+  s ["This is denoted as ", m (la logicf), "."]
 
 inferenceNotation :: Note
 inferenceNotation = de $ do
@@ -81,6 +92,39 @@ inferenceNotation = de $ do
   where
     fs = [f 1, f 2, dotsc, f "n"]
     f n = logicf !: n
+
+entailmentDefinition :: Note
+entailmentDefinition = de $ do
+  s ["Let ", m logict , " be a theory and ", m lkb, " a knowledge base."]
+  s ["We say that a ", knowledgeBase, " ", m lkb, " ", term "entails", " a boolean expression ", m alpha, " if ", m alpha, " is true in all worlds where ", m lkb, " is a valid knowledge base."]
+
+modelDefinition :: Note
+modelDefinition = de $ do
+  s ["We say a world ", m "m", " is a ", term "model", " of an expression ", m alpha, " if ", m alpha, " is true in ", m "m"]
+
+modelsOfDefinition :: Note
+modelsOfDefinition = do
+  de $ s ["The set of all models of an expression ", m alpha, " is denoted as ", m (lmo alpha), "."]
+
+  nte $ do
+    s ["With a little notation overloading we also denote ", dquoted (s ["The intersection of the set of all models of the expressions in a set ", m "S"]), " as ", m (lmo "S")]
+    ma $ lmo "S" `eq` setincmp ("s" ∈ "S") (lmo "s")
+
+
+equivalentDefinitionEntailment :: Note
+equivalentDefinitionEntailment = de $ do
+  s ["Another way of expressing the fact that an expression ", m alpha, " is entailed by a ", knowledgeBase, " ", m lkb, ": ", m (lkb `lent` alpha), " is using models: "]
+  ma $ lmo lkb ⊆ lmo alpha
+
+soundDefinition :: Note
+soundDefinition = de $ do
+  s ["An ", inference, " ", m "i", " is called ", term "sound", " if every theorem is a true formula:"]
+  ma $ fa (commaSeparated [alpha, lkb]) (lpvm "i" lkb alpha ⇒ lkb `lent` alpha)
+
+completeDefinition :: Note
+completeDefinition = de $ do
+  s ["An ", inference, " ", m "i", " is called ", term "complete", " if every true formula can be established as a theorem."]
+  ma $ fa (commaSeparated [alpha, lkb]) (lkb `lent` alpha ⇒ lpvm "i" lkb alpha)
 
 modusPonensDefinition :: Note
 modusPonensDefinition = de $ do
@@ -118,9 +162,9 @@ exampleTheoryIntegers = ex $ do
         item $ s [m (su "n"), " Where ", m "n", " is an integer expression."]
     item $ do
       "The axioms are "
-      m (lpv $ 0 <: su 0)
+      m (la $ 0 <: su 0)
       " and the axioms defined by the following axiom schema:"
-      ma $ lpv $ "f" <: "g" ⇒ su "f" <: su "g"
+      ma $ la $ "f" <: "g" ⇒ su "f" <: su "g"
     item $ do
       m i
       " contains only one inference rule: "
