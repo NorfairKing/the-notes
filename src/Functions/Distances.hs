@@ -9,6 +9,7 @@ body :: Note
 body = do
   distanceDefinition
   jaccardSimilarity
+  jaccardSimilarityEquivalentDefinition
 
 distanceDefinition :: Note
 distanceDefinition = de $ do
@@ -52,3 +53,15 @@ jaccardSimilarity = do
     a = "A"
     b = "B"
     dj = "d" !: "J"
+
+jaccardSimilarityEquivalentDefinition :: Note
+jaccardSimilarityEquivalentDefinition = thm $ do
+  s ["Let ", m a, " and ", m b, " be sets."]
+  s ["The ", ix "Jaccard similarity", " of ", m a, " and ", m b, " is equal to the following expression:"]
+
+  ma $ setsize (a ∩ b) /: ((setsize $ a `setdiff` b) + (setsize $ b `setdiff` a) + (setsize $ a ∩ b))
+
+  toprove
+  where
+    a = "A"
+    b = "B"
