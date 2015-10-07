@@ -1,15 +1,19 @@
 module Main where
 
-import           Functions.Main
-import           Header
-import           Logic.Main
-import           Notes
-import           Packages
-import           Probability.Main
-import           Sets.Main
 import           System.Environment (getArgs)
 import           System.Process     (system)
+
+import           Notes
+
+import           Header
+import           Packages
 import           Titlepage
+
+import           Functions.Main
+import           Logic.Main
+import           Probability.Main
+import           Relations.Main
+import           Sets.Main
 
 main :: IO ()
 main = do
@@ -67,7 +71,8 @@ allNotes = notes ""
   [
       logic
     , sets
-    , probability
+    , relations
     , functions
+    , probability
   ]
 
