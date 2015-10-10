@@ -24,7 +24,8 @@ union = do
   unionDefinition
 
 intersection :: Note
-intersection = return ()
+intersection = do
+  intersectionDefinition
 
 complement :: Note
 complement = return ()
@@ -32,10 +33,21 @@ complement = return ()
 difference :: Note
 difference = return ()
 
+a, b, x, y :: Note
+a = "A"
+b = "B"
+x = "x"
+y = "y"
+
 unionDefinition :: Note
-unionDefinition = do
-  s ["The ", term "union", " ", m ("A" `setun` "B"), " of two sets ", m "A", " and ", m "B", " is the set of all elements of both ", m "A", " and ", m "B", "."]
-  ma $ "A" `setun` "B" =§= setcmpr "x" (("x" ∈ "A") |: ("x" ∈ "B"))
+unionDefinition = de $ do
+  s ["The ", term "union", " ", m (a `setun` b), " of two sets ", m a, " and ", m b, " is the set of all elements of both ", m a, " and ", m b, "."]
+  ma $ a `setun` b =§= setcmpr x ((x ∈ a) |: (x ∈ b))
+
+intersectionDefinition :: Note
+intersectionDefinition = de $ do
+  s ["The ", term "intersection", " ", m (a ∪ b), " of two sets ", m a, " and ", m b, " is the set of all elements of both ", m a, " and ", m b, "."]
+  ma $ a ∪ b =§= setcmpr x ((x ∈ a) &: (x ∈ b))
 
 secondLawOfDeMorganLabel :: Note
 secondLawOfDeMorganLabel = "thm:second-law-of-de-morgan"
