@@ -16,7 +16,7 @@ body :: Note
 body = do
   section "The algebra of sets"
   setUnion
-  intersection
+  setIntersection
   complement
   difference
 
@@ -25,11 +25,14 @@ setUnion = do
   subsection "Set union"
   unionDefinition
   unionCommutative
+  unionIdempotent
 
-intersection :: Note
-intersection = do
+setIntersection :: Note
+setIntersection = do
   subsection "Set intersection"
   intersectionDefinition
+  intersectionCommutative
+  intersectionIdempotent
 
 complement :: Note
 complement = do
@@ -55,7 +58,7 @@ unionDefinition = de $ do
 
 unionCommutative :: Note
 unionCommutative = prop $ do
-  s ["The set ", union, " is commutative."]
+  s ["The set ", union, " is ", "commutative", "."]
   ma $ a ∪ b =§= b ∪ a
 
   proof $ do
@@ -64,11 +67,47 @@ unionCommutative = prop $ do
         =§= setcmpr x ((x ∈ b) |: (x ∈ a))
         =§= b ∪ a
 
+unionIdempotent :: Note
+unionIdempotent = prop $ do
+  s ["The set ", union, " is ", ix "idempotent" ,"."]
+  ma $ a ∪ a =§= a
+
+  proof $ do
+    m $ a ∪ a
+        =§= setcmpr x ((x ∈ a) |: (x ∈ a))
+        =§= setcmpr x (x ∈ a)
+        =§= a
+
 
 intersectionDefinition :: Note
 intersectionDefinition = de $ do
   s ["The ", term "intersection", " ", m (a ∪ b), " of two sets ", m a, " and ", m b, " is the set of all elements of both ", m a, " and ", m b, "."]
   ma $ a ∪ b =§= setcmpr x ((x ∈ a) &: (x ∈ b))
+
+intersection :: Note
+intersection = ix "intersection"
+
+intersectionCommutative :: Note
+intersectionCommutative = prop $ do
+  s ["The set ", intersection, " is ", ix "commutative", "."]
+  ma $ a ∩ b =§= b ∩ a
+
+  proof $ do
+    m $ a ∩ b
+        =§= setcmpr x ((x ∈ a) &: (x ∈ b))
+        =§= setcmpr x ((x ∈ b) &: (x ∈ a))
+        =§= b ∩ a
+
+intersectionIdempotent :: Note
+intersectionIdempotent = prop $ do
+  s ["The set ", intersection, " is ", ix "idempotent" ,"."]
+  ma $ a ∩ a =§= a
+
+  proof $ do
+    m $ a ∩ a
+        =§= setcmpr x ((x ∈ a) &: (x ∈ a))
+        =§= setcmpr x (x ∈ a)
+        =§= a
 
 secondLawOfDeMorganLabel :: Note
 secondLawOfDeMorganLabel = "thm:second-law-of-de-morgan"
