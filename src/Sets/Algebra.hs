@@ -14,24 +14,30 @@ algebra = notesPart "algebra" body
 
 body :: Note
 body = do
-  union
+  section "The algebra of sets"
+  setUnion
   intersection
   complement
   difference
 
-union :: Note
-union = do
+setUnion :: Note
+setUnion = do
+  subsection "Set union"
   unionDefinition
+  unionCommutative
 
 intersection :: Note
 intersection = do
+  subsection "Set intersection"
   intersectionDefinition
 
 complement :: Note
-complement = return ()
+complement = do
+  subsection "Set complement"
 
 difference :: Note
-difference = return ()
+difference = do
+  subsection "Set difference"
 
 a, b, x, y :: Note
 a = "A"
@@ -39,10 +45,25 @@ b = "B"
 x = "x"
 y = "y"
 
+union :: Note
+union = ix "union"
+
 unionDefinition :: Note
 unionDefinition = de $ do
   s ["The ", term "union", " ", m (a `setun` b), " of two sets ", m a, " and ", m b, " is the set of all elements of both ", m a, " and ", m b, "."]
-  ma $ a `setun` b =§= setcmpr x ((x ∈ a) |: (x ∈ b))
+  ma $ a ∪ b =§= setcmpr x ((x ∈ a) |: (x ∈ b))
+
+unionCommutative :: Note
+unionCommutative = prop $ do
+  s ["The set ", union, " is commutative."]
+  ma $ a ∪ b =§= b ∪ a
+
+  proof $ do
+    m $ a ∪ b
+        =§= setcmpr x ((x ∈ a) |: (x ∈ b))
+        =§= setcmpr x ((x ∈ b) |: (x ∈ a))
+        =§= b ∪ a
+
 
 intersectionDefinition :: Note
 intersectionDefinition = de $ do
