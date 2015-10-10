@@ -11,3 +11,14 @@ s ns = do
 
 quoted :: Note -> Note
 quoted n = "`" <> n <> "'"
+
+dquoted :: Note -> Note
+dquoted n = "``" <> n <> "''"
+
+commaSeparated :: [Note] -> Note
+commaSeparated [] = ""
+commaSeparated [n] = n
+commaSeparated (n:ns) = n <> ", " <> commaSeparated ns
+
+cs :: [Note] -> Note
+cs = commaSeparated

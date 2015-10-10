@@ -13,6 +13,9 @@ packages = do
   usepackage [] "amssymb"
   usepackage [] "amsthm"
 
+  -- For logical inference
+  usepackage [] "proof"
+
   -- For todo's
   usepackage ["colorinlistoftodos", "obeyFinal"] "todonotes"
 

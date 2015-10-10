@@ -19,7 +19,7 @@ theoremDefinitions = do
   newtheorem' "prop" "Property"
   newtheorem' "pro" "Proposition"
   newtheorem' "nte" "Note"
-  newtheorem' "exm" "Example"
+  newtheorem' "ex" "Example"
   newtheorem' "cex" "Counterexample"
   newtheorem' "con" "Concequence"
   newtheorem' "lem" "Lemma"

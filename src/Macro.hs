@@ -5,7 +5,9 @@ module Macro (
   , module Macro.Reference
   , module Macro.Text
   , module Macro.Theorem
+  , module Macro.Todo
 
+  , module Logic.Macro
   , module Sets.Macro
   , module Probability.Macro
   , module Numbers.Macro
@@ -17,7 +19,9 @@ import           Macro.MetaMacro
 import           Macro.Reference
 import           Macro.Text
 import           Macro.Theorem
+import           Macro.Todo
 
+import           Logic.Macro
 import           Numbers.Macro
 import           Probability.Macro
 import           Sets.Macro

@@ -11,6 +11,9 @@ thm = theorem "thm"
 nte :: Note -> Note
 nte = theorem "nte"
 
+ex :: Note -> Note
+ex = theorem "ex"
+
 cex :: Note -> Note
 cex = theorem "cex"
 

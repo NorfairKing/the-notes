@@ -129,6 +129,9 @@ funinv n = n ^: (-1)
 funapp :: Note -> Note -> Note
 funapp n m = n <> pars m
 
+fn :: Note -> Note -> Note
+fn = funapp
+
 -- Intervals
 interval :: LaTeXC l => [TeXArg] -> l -> l -> l
 interval args = liftL2 $ (\l1 l2 -> TeXComm "interval" (args ++ [FixArg l1, FixArg l2]))
@@ -178,3 +181,24 @@ sumcmp = comp sumsign
 
 sumcmpr :: Note -> Note -> Note -> Note
 sumcmpr = compr sumsign
+
+-- Fraction
+(/:) :: Note -> Note -> Note
+(/:) = frac
+
+-- Equality
+eq :: Note -> Note -> Note
+eq = between "="
+
+-- Inequality
+lt :: Note -> Note -> Note
+lt = between "<"
+
+mnotsign :: Note
+mnotsign = comm0 "neg"
+
+mnot :: Note -> Note
+mnot n = mnotsign <> n
+
+(¬) :: Note -> Note
+(¬) = mnot
