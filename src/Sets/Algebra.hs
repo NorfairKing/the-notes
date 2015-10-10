@@ -26,6 +26,8 @@ setUnion = do
   unionDefinition
   unionCommutative
   unionIdempotent
+  unionSupset
+  unionSubsetDefinition
 
 setIntersection :: Note
 setIntersection = do
@@ -33,6 +35,8 @@ setIntersection = do
   intersectionDefinition
   intersectionCommutative
   intersectionIdempotent
+  intersectionSubset
+  intersectionSubsetDefinition
 
 complement :: Note
 complement = do
@@ -78,6 +82,28 @@ unionIdempotent = prop $ do
         =§= setcmpr x (x ∈ a)
         =§= a
 
+unionSupset :: Note
+unionSupset = thm $ do
+  s ["The set ", union, " of two sets ", m a, " and ", m b, " is a superset of ", m a, "."]
+  
+  ma $ a ⊆ a ∪ b
+
+  proof $ do 
+    m $ a
+        =§= setcmpr x (x ∈ a)
+        ⊆ setcmpr x ((x ∈ a) |: (x ∈ b))
+        =§= a ∪ b
+
+unionSubsetDefinition :: Note
+unionSubsetDefinition = thm $ do
+  ma $ a ⊆ b ⇔ (a ∪ b =§= a)
+
+  proof $ do
+    s ["Let ", m b, " be a set and ", m a, " a subset of ", m b, "."]
+    ma $ a ∪ b
+        =§= setcmpr x ((x ∈ a) |: (x ∈ b))
+        =§= setcmpr x (x ∈ a)
+
 
 intersectionDefinition :: Note
 intersectionDefinition = de $ do
@@ -108,6 +134,31 @@ intersectionIdempotent = prop $ do
         =§= setcmpr x ((x ∈ a) &: (x ∈ a))
         =§= setcmpr x (x ∈ a)
         =§= a
+
+intersectionSubset :: Note
+intersectionSubset = thm $ do
+  s ["The set ", intersection, " of two sets ", m a, " and ", m b, " is a subset of ", m a, "."]
+  ma $ a ∩ b ⊆ a
+
+  proof $ do 
+    m $ a ∩ b
+        =§= setcmpr x ((x ∈ a) &: (x ∈ b))
+        ⊆ setcmpr x (x ∈ a)
+        =§= a
+
+intersectionSubsetDefinition :: Note
+intersectionSubsetDefinition = thm $ do
+  ma $ a ⊆ b ⇔ (a ∩ b =§= b)
+
+  proof $ do
+    s ["Let ", m b, " be a set and ", m a, " a subset of ", m b, "."]
+
+    ma $ a ∩ b
+        =§= setcmpr x ((x ∈ a) &: (x ∈ b))
+        =§= setcmpr x (x ∈ b)
+        =§= b
+        
+
 
 secondLawOfDeMorganLabel :: Note
 secondLawOfDeMorganLabel = "thm:second-law-of-de-morgan"
