@@ -25,9 +25,3 @@ algebra = notes "algebra" $
   , setDifference
   , setComplement
   ]
-
-symmetricDifferenceITOUnionAndIntersectionLabel :: Label
-symmetricDifferenceITOUnionAndIntersectionLabel = thmlab "sets-symmetric-difference-in-terms-of-union-and-intersection"
-
-setDifferenceEquivalentDefinitionLabel :: Label
-setDifferenceEquivalentDefinitionLabel = thmlab "set-difference-equivalent-definition"

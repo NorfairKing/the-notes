@@ -5,10 +5,12 @@ module Sets.Algebra.Complement (
   , unionComplementaryLawLabel
   , firstLawOfDeMorganLabel
   , secondLawOfDeMorganLabel
+  , setDifferenceEquivalentDefinitionLabel
   ) where
 
 import           Notes
 
+import           Sets.Algebra.Difference   (intersectionOverDifferenceLabel)
 import           Sets.Algebra.Intersection (intersection)
 import           Sets.Algebra.Union        (union)
 
@@ -27,6 +29,7 @@ body = do
   complementaryLawIntersection
   firstLawOfDeMorgan
   secondLawOfDeMorgan
+  setDifferenceEquivalentDefinition
 
 a, b, x, y :: Note
 a = "A"
@@ -154,3 +157,18 @@ secondLawOfDeMorgan = thm $ do
       , "" & "" =§= setcmpr x (x ∈ setc a |: x ∈ setc b)
       , "" & "" =§= setc a ∪ setc b
       ]
+
+
+setDifferenceEquivalentDefinitionLabel :: Label
+setDifferenceEquivalentDefinitionLabel = thmlab "set-difference-equivalent-definition"
+
+setDifferenceEquivalentDefinition :: Note
+setDifferenceEquivalentDefinition = thm $ do
+  lab setDifferenceEquivalentDefinitionLabel
+  setsDec
+
+  ma $ a \\ b =§= a ∩ setc b
+
+  proof $ do
+    m $ a \\ b =§= a ∩ (setuniv \\ b) =§= a \\ b
+    ref intersectionOverDifferenceLabel

@@ -1,4 +1,11 @@
-module Sets.Algebra.Difference (setDifference, difference) where
+module Sets.Algebra.Difference (
+    setDifference
+
+  , difference
+
+  , intersectionOverDifferenceLabel
+  , symmetricDifferenceITOUnionAndIntersectionLabel
+  ) where
 
 import           Notes
 
@@ -18,10 +25,14 @@ body = do
 
   symmetricDifferenceDefinition
   symmetricDifferenceEquivalentDefinition
+  symmetricDifferenceITOUnionAndIntersection
+
+  intersectionOverDifference
 
 a, b, x, y :: Note
 a = "A"
 b = "B"
+c = "C"
 x = "x"
 y = "y"
 
@@ -32,6 +43,9 @@ differenceDefinition = de $ do
 
 setsDec :: Note
 setsDec = s ["Let ", m a, and, m b, " be sets."]
+
+setssDec :: Note
+setssDec = s ["Let ", m a, ", ", m b, and, m c, " be sets."]
 
 intersectionAndDifferenceDisjunct :: Note
 intersectionAndDifferenceDisjunct = thm $ do
@@ -90,4 +104,43 @@ symmetricDifferenceEquivalentDefinition = de $ do
         , "" & "" =§= a △ b
       ]
 
+symmetricDifferenceITOUnionAndIntersectionLabel :: Label
+symmetricDifferenceITOUnionAndIntersectionLabel = thmlab "sets-symmetric-difference-in-terms-of-union-and-intersection"
 
+symmetricDifferenceITOUnionAndIntersection :: Note
+symmetricDifferenceITOUnionAndIntersection = thm $ do
+  setsDec
+  ma $ a △ b =§= (pars $ a ∪ b) \\ (pars $ a ∩ b)
+
+  proof $ do
+    align_ $
+      [
+        (pars $ a ∪ b) \\ (pars $ a ∩ b)
+        & "" =§= (setcmpr x ((x ∈ a) |: (x ∈ b))) \\ (setcmpr x ((x ∈ a) &: (x ∈ b)))
+        , "" & "" =§= setcmpr x (x ∈ (setcmpr y ((y ∈ a) |: (y ∈ b))) &: x `nin` (setcmpr y ((y ∈ a) &: (y ∈ b))))
+        , "" & "" =§= setcmpr x ((pars $ (x ∈ a) |: (x ∈ b)) &: (not . pars $ ((x ∈ a) &: (x ∈ b))))
+        , "" & "" =§= setcmpr x ((pars $ (x ∈ a) |: (x ∈ b)) &: (pars $ ((x `nin` a) |: (x `nin` b))))
+        , "" & "" =§= setcmpr x ((pars $ (x ∈ a) &: (x `nin` b)) |: (pars $ (x ∈ b) &: (x `nin` a)))
+        , "" & "" =§= a △ b
+      ]
+
+intersectionOverDifferenceLabel :: Label
+intersectionOverDifferenceLabel = thmlab "intersection-over-difference"
+
+intersectionOverDifference :: Note
+intersectionOverDifference = thm $ do
+  lab intersectionOverDifferenceLabel
+  setssDec
+  ma $ a ∩ (pars $ b \\ c) =§= (pars $ a ∩ b) \\ c
+
+  proof $ do
+    align_ $
+      [
+        a ∩ (pars $ b \\ c)
+        & "" =§= setcmpr x ((x ∈ a) &: x ∈ (b \\ c))
+        , "" & "" =§= setcmpr x ((x ∈ a) &: x ∈ setcmpr y ((y ∈ b) &: (y `nin` c)))
+        , "" & "" =§= setcmpr x ((x ∈ a) &: (x ∈ b) &: (x `nin` c))
+        , "" & "" =§= setcmpr x (x ∈ (setcmpr y ((y ∈ a) &: (y ∈ b))) &: (x `nin` c))
+        , "" & "" =§= setcmpr x (x ∈ (pars $ a ∩ b) &: (x `nin` c))
+        , "" & "" =§= (pars $ a ∩ b) \\ c
+      ]
