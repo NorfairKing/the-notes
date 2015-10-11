@@ -1,5 +1,6 @@
 module Macro.Math where
 
+import           Macro.Index
 import           Macro.MetaMacro
 import           Types
 
@@ -168,10 +169,7 @@ examq m n = do
   newline
 
 
---[ Text
-text :: Note -> Note
-text = comm1 "text"
-
+--[ Sums
 
 sumsign :: Note
 sumsign = commS "sum"
@@ -202,3 +200,16 @@ mnot n = mnotsign <> n
 
 (¬) :: Note -> Note
 (¬) = mnot
+
+--[ Text
+text :: Note -> Note
+text = comm1 "text"
+
+associative :: Note
+associative = ix "associative"
+
+commutative :: Note
+commutative = ix "commutative"
+
+idempotent :: Note
+idempotent = ix "idempotent"

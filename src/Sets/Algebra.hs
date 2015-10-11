@@ -17,13 +17,14 @@ body = do
   section "The algebra of sets"
   setUnion
   setIntersection
-  complement
   difference
+  complement
 
 setUnion :: Note
 setUnion = do
   subsection "Set union"
   unionDefinition
+  unionAssociative
   unionCommutative
   unionIdempotent
   unionSupset
@@ -33,6 +34,7 @@ setIntersection :: Note
 setIntersection = do
   subsection "Set intersection"
   intersectionDefinition
+  intersectionAssociative
   intersectionCommutative
   intersectionIdempotent
   intersectionSubset
@@ -41,14 +43,17 @@ setIntersection = do
 complement :: Note
 complement = do
   subsection "Set complement"
+  complementDefinition
 
 difference :: Note
 difference = do
   subsection "Set difference"
 
+
 a, b, x, y :: Note
 a = "A"
 b = "B"
+c = "C"
 x = "x"
 y = "y"
 
@@ -60,9 +65,26 @@ unionDefinition = de $ do
   s ["The ", term "union", " ", m (a `setun` b), " of two sets ", m a, " and ", m b, " is the set of all elements of both ", m a, " and ", m b, "."]
   ma $ a ∪ b =§= setcmpr x ((x ∈ a) |: (x ∈ b))
 
+unionAssociative :: Note
+unionAssociative = prop $ do
+  s ["The set ", union, " is ", associative, "."]
+  ma $ a ∪ (pars $ b ∪ c) =§= (pars $ a ∪ b) ∪ c
+
+  proof $ do
+    align_ $
+      [
+        a ∪ (pars $ b ∪ c)
+        & "" =§= setcmpr x ((x ∈ a) |: (x ∈ (pars $ b ∪ c)))
+        , "" & "" =§= setcmpr x ((x ∈ a) |: (x ∈ (setcmpr y ((y ∈ b) |: (y ∈ c)))))
+        , "" & "" =§= setcmpr x ((x ∈ a) |: (x ∈ b) |: (y ∈ c))
+        , "" & "" =§= setcmpr x ((x ∈ (setcmpr y ((y ∈ a) |: (y ∈ b)))) |: (x ∈ c))
+        , "" & "" =§= setcmpr x ((x ∈ (pars $ a ∪ b)) |: (x ∈ c))
+        , "" & "" =§= (pars $ a ∪ b) ∪ c
+      ]
+
 unionCommutative :: Note
 unionCommutative = prop $ do
-  s ["The set ", union, " is ", "commutative", "."]
+  s ["The set ", union, " is ", commutative, "."]
   ma $ a ∪ b =§= b ∪ a
 
   proof $ do
@@ -85,10 +107,10 @@ unionIdempotent = prop $ do
 unionSupset :: Note
 unionSupset = thm $ do
   s ["The set ", union, " of two sets ", m a, " and ", m b, " is a superset of ", m a, "."]
-  
+
   ma $ a ⊆ a ∪ b
 
-  proof $ do 
+  proof $ do
     m $ a
         =§= setcmpr x (x ∈ a)
         ⊆ setcmpr x ((x ∈ a) |: (x ∈ b))
@@ -113,9 +135,26 @@ intersectionDefinition = de $ do
 intersection :: Note
 intersection = ix "intersection"
 
+intersectionAssociative :: Note
+intersectionAssociative = prop $ do
+  s ["The set ", intersection, " is ", associative, "."]
+  ma $ a ∩ (pars $ b ∩ c) =§= (pars $ a ∩ b) ∩ c
+
+  proof $ do
+    align_ $
+      [
+        a ∩ (pars $ b ∩ c)
+        & "" =§= setcmpr x ((x ∈ a) &: (x ∈ (pars $ b ∩ c)))
+        , "" & "" =§= setcmpr x ((x ∈ a) &: (x ∈ (setcmpr y ((y ∈ b) &: (y ∈ c)))))
+        , "" & "" =§= setcmpr x ((x ∈ a) &: (x ∈ b) &: (y ∈ c))
+        , "" & "" =§= setcmpr x ((x ∈ (setcmpr y ((y ∈ a) &: (y ∈ b)))) &: (x ∈ c))
+        , "" & "" =§= setcmpr x ((x ∈ (pars $ a ∩ b)) &: (x ∈ c))
+        , "" & "" =§= (pars $ a ∩ b) ∩ c
+      ]
+
 intersectionCommutative :: Note
 intersectionCommutative = prop $ do
-  s ["The set ", intersection, " is ", ix "commutative", "."]
+  s ["The set ", intersection, " is ", commutative, "."]
   ma $ a ∩ b =§= b ∩ a
 
   proof $ do
@@ -140,7 +179,7 @@ intersectionSubset = thm $ do
   s ["The set ", intersection, " of two sets ", m a, " and ", m b, " is a subset of ", m a, "."]
   ma $ a ∩ b ⊆ a
 
-  proof $ do 
+  proof $ do
     m $ a ∩ b
         =§= setcmpr x ((x ∈ a) &: (x ∈ b))
         ⊆ setcmpr x (x ∈ a)
@@ -157,7 +196,10 @@ intersectionSubsetDefinition = thm $ do
         =§= setcmpr x ((x ∈ a) &: (x ∈ b))
         =§= setcmpr x (x ∈ b)
         =§= b
-        
+
+complementDefinition :: Note
+complementDefinition = de $ do
+  s ["The ", term "comlement", " of a set ", m a, " relative to a set ", m b, " is the set of all elements of ", m b, " that are not in ", m a, "."]
 
 
 secondLawOfDeMorganLabel :: Note
