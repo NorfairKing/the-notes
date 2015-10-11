@@ -59,7 +59,7 @@ lmo = funapp "M"
 
 -- Logical negation
 neg :: Note -> Note
-neg = mnot
+neg = not
 
 -- Logical and
 land :: Note -> Note -> Note

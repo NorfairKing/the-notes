@@ -128,7 +128,7 @@ setc n = braces n ^: "C"
 
 -- Relative set complement
 setrelc :: Note -> Note -> Note
-setrelc n m = setc n !: m
+setrelc m n = setc n !: m
 
 
 --[ Set difference
