@@ -75,3 +75,8 @@ lor = between $ comm0 "vee"
 -- Logical or
 (∨) :: Note -> Note -> Note
 (∨) = lor
+
+
+-- Hoare Triple
+htrip :: Note -> Note -> Note -> Note
+htrip p a q = brac p <> quad <> a <> quad <> brac q

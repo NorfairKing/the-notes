@@ -1,7 +1,11 @@
 module Logic.AbstractLogic (
     abstractLogic
 
+  , expression
+  , formula
+  , theory
   , grammar
+  , knowledgeBase
   , inference
   ) where
 
@@ -40,8 +44,8 @@ formula :: Note
 formula = ix "formula"
 
 formulaDefinition :: Note
-formulaDefinition = de $ do
-  s ["A ", term "formula", " is a string of characters."]
+formulaDefinition = do
+  de $ s ["A ", term "formula", " is a string of characters."]
   nte $ "In fact a formula can be equivalently be defined in other ways but this definition suffices."
 
 
@@ -83,7 +87,7 @@ knowledgeBaseDefinition = de $ do
 
 theoremNotation :: Note
 theoremNotation = de $ do
-  s ["Let ", m logicf, " be a well-formed formula in a theory ", m logict, "."]
+  s ["A theorem ", m logicf, " is a well-formed formula that is provable in a theory ", m logict, "."]
   s ["This is denoted as ", m (la logicf), "."]
 
 entailmentDefinition :: Note
@@ -115,6 +119,7 @@ inference = ix "inference"
 inferenceDefinition :: Note
 inferenceDefinition = de $ do
   s ["An ", term "inference", " ", m logicir, " in a theory ", m logict, " is a procedure for proving sentences from a ", knowledgeBase, "."]
+  s ["If a theorem ", m logict, " can be proven using ", m logicir, " we denote this as ", m (lpvm logicir "" logicf), "."]
 
 
 inferenceNotation :: Note
