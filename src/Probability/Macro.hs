@@ -7,7 +7,7 @@ import           Types
 
 --[ Probability universe
 pruniv :: Note
-pruniv = setuniverse
+pruniv = setuniv
 
 
 --[ Measurable space

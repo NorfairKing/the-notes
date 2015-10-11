@@ -5,6 +5,8 @@ import           System.Process     (system)
 
 import           Notes
 
+import           Prelude            (Maybe (..), error, map, print, return)
+
 import           Header
 import           Packages
 import           Titlepage

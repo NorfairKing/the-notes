@@ -199,7 +199,7 @@ universalSetDefinition :: Note
 universalSetDefinition = do
   de $ do
     s ["The ", term "universal set", " is the ", ix "set", " of all objects."]
-    ma $ setuniverse === setcmpr "x" "true"
+    ma $ setuniv === setcmpr "x" "true"
   nte $ do
     s ["Note that this is well defined as this ", ix "set", " would have to include itself.", " We will ignore this for now as the ", ix "universal set ", " is usually restricted to a domain that will be clear from the context."]
 
@@ -209,26 +209,26 @@ universalSetSupsetOfAllSetsLabel = "thm:sets-every-set-is-a-subset-of-the-univer
 universalSetSupsetOfAllSets :: Note
 universalSetSupsetOfAllSets = thm $ do
   label universalSetSupsetOfAllSetsLabel
-  s ["Every set ", m "A", " is a ", ix "subset", " of the ", ix "universal set", " ", m "setuniverse", "."]
-  ma $ fa "A" $ "A" ⊆ setuniverse
+  s ["Every set ", m "A", " is a ", ix "subset", " of the ", ix "universal set", " ", m "setuniv", "."]
+  ma $ fa "A" $ "A" ⊆ setuniv
 
   proof $ do
     s ["Let ", m "A", " be a set."]
-    s ["Every element of ", m "A", " is contained in ", m setuniverse, "."]
-    ma $ fa "x" $ (pars $ "x" ∈ "A") ⇒ (pars $ "x" ∈ setuniverse)
+    s ["Every element of ", m "A", " is contained in ", m setuniv, "."]
+    ma $ fa "x" $ (pars $ "x" ∈ "A") ⇒ (pars $ "x" ∈ setuniv)
 
 
 emptySetDefinition :: Note
 emptySetDefinition = de $ do
-  sequence_ ["The ", term "empty set", " ", m emptyset, " is the ", ix "set", " that contains no elements."]
+  s ["The ", term "empty set", " ", m emptyset, " is the ", ix "set", " that contains no elements."]
   ma $ emptyset === setcmpr "x" "false"
 
 emptySetSubsetOfAllSets :: Note
 emptySetSubsetOfAllSets = thm $ do
-  sequence_ ["The ", ix "empty set", " ", m emptyset, " is a ", ix "subset", " of all sets."]
+  s ["The ", ix "empty set", " ", m emptyset, " is a ", ix "subset", " of all sets."]
   proof $ do
-    sequence_ ["Let ", m "A", " be a set. "]
-    sequence_ ["Every element of ", m emptyset, " is also an element of ", m "A", "."]
+    s ["Let ", m "A", " be a set. "]
+    s ["Every element of ", m emptyset, " is also an element of ", m "A", "."]
 
     ma $ fa "x" $ ("x" ∈ emptyset) ⇒ ("x" ∈ "A")
 

@@ -6,4 +6,4 @@ carthesianProduct :: Notes
 carthesianProduct = notesPart "carthesianproduct" body
 
 body :: Note
-body = return ()
+body = mempty

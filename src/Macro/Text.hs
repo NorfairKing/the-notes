@@ -2,6 +2,8 @@ module Macro.Text where
 
 import           Types
 
+import           Prelude (sequence_)
+
 -- Shorter than sequence_
 -- To model a sentence.
 s :: [Note] -> Note

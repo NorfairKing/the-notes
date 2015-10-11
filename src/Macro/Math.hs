@@ -213,3 +213,5 @@ commutative = ix "commutative"
 
 idempotent :: Note
 idempotent = ix "idempotent"
+
+

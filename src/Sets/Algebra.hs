@@ -29,6 +29,7 @@ setUnion = do
   unionIdempotent
   unionSupset
   unionSubsetDefinition
+  unionIdentityLaw
 
 setIntersection :: Note
 setIntersection = do
@@ -39,6 +40,7 @@ setIntersection = do
   intersectionIdempotent
   intersectionSubset
   intersectionSubsetDefinition
+  intersectionIdentityLaw
 
 complement :: Note
 complement = do
@@ -126,6 +128,19 @@ unionSubsetDefinition = thm $ do
         =§= setcmpr x ((x ∈ a) |: (x ∈ b))
         =§= setcmpr x (x ∈ a)
 
+unionIdentityLaw :: Note
+unionIdentityLaw = thm $ do
+  s ["The ", term "identity law", " for the set union."]
+  ma $ a ∪ emptyset =§= a
+
+  proof $ do
+    m $ a ∪ emptyset
+        =§= setcmpr x ((x ∈ a) |: (x ∈ emptyset))
+        =§= setcmpr x ((x ∈ a) |: false)
+        =§= setcmpr x (x ∈ a)
+        =§= a
+
+
 
 intersectionDefinition :: Note
 intersectionDefinition = de $ do
@@ -196,6 +211,18 @@ intersectionSubsetDefinition = thm $ do
         =§= setcmpr x ((x ∈ a) &: (x ∈ b))
         =§= setcmpr x (x ∈ b)
         =§= b
+
+intersectionIdentityLaw :: Note
+intersectionIdentityLaw = thm $ do
+  s ["The ", term "identity law", " for the set ", intersection, "."]
+  ma $ a ∩ setuniv =§= a
+
+  proof $ do
+    m $ a ∩ emptyset
+        =§= setcmpr x ((x ∈ a) &: (x ∈ setuniv))
+        =§= setcmpr x ((x ∈ a) &: true)
+        =§= setcmpr x (x ∈ a)
+        =§= a
 
 complementDefinition :: Note
 complementDefinition = de $ do

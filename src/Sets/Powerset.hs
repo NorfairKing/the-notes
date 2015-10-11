@@ -6,4 +6,4 @@ powerset :: Notes
 powerset = notesPart "powerset" body
 
 body :: Note
-body = return ()
+body = mempty

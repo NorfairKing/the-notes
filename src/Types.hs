@@ -3,6 +3,9 @@
 {-# LANGUAGE UndecidableInstances  #-}
 module Types (
     module Types
+
+  , module Prelude
+
   , module Text.LaTeX
   , module Text.LaTeX.Base.Class
   , module Text.LaTeX.Base.Pretty
@@ -15,6 +18,10 @@ module Types (
   , module Control.Monad.Reader
   ) where
 
+import           Prelude                      (Eq (..), Fractional (..), IO,
+                                               Num (..), Show (..), mempty, ($),
+                                               (++), (.))
+
 import           Text.LaTeX                   hiding (item)
 import           Text.LaTeX.Base.Class
 import           Text.LaTeX.Base.Pretty
@@ -26,6 +33,7 @@ import           Text.LaTeX.Packages.Fancyhdr
 
 import           Control.Monad.Reader         (MonadReader (..), ReaderT, ask,
                                                asks, runReaderT)
+
 
 type Note = LaTeXT_ (ReaderT Config IO)
 
