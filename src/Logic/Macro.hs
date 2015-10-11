@@ -5,6 +5,13 @@ import           Macro.MetaMacro
 import           Macro.Text
 import           Types
 
+-- Truth values
+true :: Note
+true = "true"
+
+false :: Note
+false = "false"
+
 -- Logic theory
 logict :: Note
 logict = mathbb "T"

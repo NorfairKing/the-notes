@@ -9,16 +9,9 @@ logic :: Notes
 logic = notes "logic"
   [
     logicHeader
-  , logicBasics
   , abstractLogic
   , propositionalLogic
   ]
 
 logicHeader :: Notes
 logicHeader = notesPart "header" (chapter "Logic")
-
-logicBasics :: Notes
-logicBasics = notesPart "basics" logicBody
-
-logicBody :: Note
-logicBody = return ()

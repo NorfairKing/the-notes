@@ -2,7 +2,7 @@ module Sets.Main (sets) where
 
 import           Notes
 
-import           Sets.Algebra
+import           Sets.Algebra.Main
 import           Sets.Basics
 import           Sets.CarthesianProduct
 import           Sets.Powerset

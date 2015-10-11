@@ -2,6 +2,8 @@ module Macro.Text where
 
 import           Types
 
+import           Prelude (sequence_)
+
 -- Shorter than sequence_
 -- To model a sentence.
 s :: [Note] -> Note
@@ -22,3 +24,12 @@ commaSeparated (n:ns) = n <> ", " <> commaSeparated ns
 
 cs :: [Note] -> Note
 cs = commaSeparated
+
+and :: Note
+and = " and "
+
+or :: Note
+or = " or "
+
+is :: Note
+is = " is "

@@ -7,6 +7,9 @@ module Notes (
 import           Macro
 import           Types
 
+import           Prelude   (concatMap, filter, foldl, map, mapM_, putStrLn,
+                            sequence_)
+
 import           Data.List (isPrefixOf, union)
 
 renderNotes :: Notes -> Note
@@ -57,8 +60,6 @@ bra = boxed rightArrow
 item :: Note -> Note
 item n = comm0 "item" <> n
 
-(-:) :: Note -> Note -> Note
-(-:) = binop "-"
 
-(+:) :: Note -> Note -> Note
-(+:) = binop "+"
+(<=) :: Note -> Note -> Note
+(<=) = (<=:)

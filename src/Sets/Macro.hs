@@ -67,8 +67,8 @@ subsetneq = binop subsetneqsign
 
 
 --[ Universal set
-setuniverse :: Note
-setuniverse = comm0 "Omega"
+setuniv :: Note
+setuniv = comm0 "Omega"
 
 
 --[ Empty set

@@ -20,7 +20,7 @@ distanceDefinition = de $ do
     item $ m $ fa rxy $ dxy =: dyx
     item $ do
       s ["The ", term "triangle inequality"]
-      ma $ fa (cs [x, y, z] ∈ reals) $ (d `fn` xy +: d `fn` yz) <=: (d `fn` xz)
+      ma $ fa (cs [x, y, z] ∈ reals) $ (d `fn` xy + d `fn` yz) <= (d `fn` xz)
 
   where
     x = "x"
@@ -44,10 +44,10 @@ jaccardSimilarity :: Note
 jaccardSimilarity = do
   de $ do
     s ["The ", term "Jaccard similarity", " of two sets ", m a, " and ", m b, " is defined as ", m (jaccard a b), "."]
-    ma $ jaccard a b === (setsize (a ∩ b) /: setsize (a ∪ b))
+    ma $ jaccard a b === (setsize (a ∩ b) / setsize (a ∪ b))
   de $ do
-    s ["The ", ix "Jaccard distance", " ", m dj, " between two sets ", m a, " and ", m b, " is defined as ", m (jaccard a b -: 1), "."]
-    ma $ dj `fn` cs [a, b] === (jaccard a b -: 1)
+    s ["The ", ix "Jaccard distance", " ", m dj, " between two sets ", m a, " and ", m b, " is defined as ", m (jaccard a b - 1), "."]
+    ma $ dj `fn` cs [a, b] === (jaccard a b - 1)
 
   where
     a = "A"
@@ -59,7 +59,7 @@ jaccardSimilarityEquivalentDefinition = thm $ do
   s ["Let ", m a, " and ", m b, " be sets."]
   s ["The ", ix "Jaccard similarity", " of ", m a, " and ", m b, " is equal to the following expression:"]
 
-  ma $ setsize (a ∩ b) /: ((setsize $ a `setdiff` b) + (setsize $ b `setdiff` a) + (setsize $ a ∩ b))
+  ma $ setsize (a ∩ b) / ((setsize $ a `setdiff` b) + (setsize $ b `setdiff` a) + (setsize $ a ∩ b))
 
   toprove
   where

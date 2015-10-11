@@ -1,6 +1,7 @@
 module Titlepage (myTitlePage) where
 
 import           Notes
+import           Prelude        (return, (>>))
 import           System.Process (system)
 
 myTitlePage :: Note

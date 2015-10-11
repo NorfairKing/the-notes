@@ -4,9 +4,9 @@ module Probability.ProbabilityMeasure (
   ) where
 
 import           Notes
-import           Sets.Algebra (setDifferenceEquivalentDefinitionLabel,
-                               unionComplementaryLawLabel)
-import           Sets.Basics  (universalSetSupsetOfAllSetsLabel)
+import           Sets.Algebra.Main (setDifferenceEquivalentDefinitionLabel,
+                                    unionComplementaryLawLabel)
+import           Sets.Basics       (universalSetSupsetOfAllSetsLabel)
 
 probabilityMeasure :: Notes
 probabilityMeasure = notesPart "probability-measure" body
@@ -89,7 +89,7 @@ psDec = s ["Let ", m prsp, " be a ", ix "probability space", "."]
 probabilitySpaceProbabilityOfComplement :: Note
 probabilitySpaceProbabilityOfComplement = thm $ do
   psDec
-  ma $ fa (a ∈ prsa) (prob (setc a) =: (1 -: prob a))
+  ma $ fa (a ∈ prsa) (prob (setc a) =: (1 - prob a))
 
   proof $ do
     s ["Let ", m a, " be an event in ", m prsa, "."]
@@ -98,8 +98,8 @@ probabilitySpaceProbabilityOfComplement = thm $ do
       [
         pruniv & seteqsign <> (a ∪ setc a)
       , prob pruniv & "" =: prob (a ∪ setc a)
-      , 1 & "" =: prob a +: prob (setc a)
-      , prob (setc a) & "" =: 1 -: prob a
+      , 1 & "" =: prob a + prob (setc a)
+      , prob (setc a) & "" =: 1 - prob a
       ]
 
     "Notice that the second equivalence only holds because of the finite additivity propertiy of probability measures."
@@ -117,7 +117,7 @@ probabilityPartitionByIntersection = prop $ do
   label probabilityPartitionByIntersectionLabel
 
   psDec
-  ma $ fa (a <> ", " <> b ∈ prsa) (prob b =: prob (b ∩ a) +: prob (b ∩ setc a))
+  ma $ fa (a <> ", " <> b ∈ prsa) (prob b =: prob (b ∩ a) + prob (b ∩ setc a))
 
   proof $ do
     s ["Because ", m (b ∩ a), " and ", m (b ∩ setc a), " are disjunct, the theorem follows from the finite additivity property of probability measures."]
@@ -135,17 +135,17 @@ probabilityOfUnion = prop $ do
   label probabilityOfUnionLabel
 
   psDec
-  ma $ fa (a <> ", " <> b ∈ prsa) (prob (a ∪ b) =: prob a +: prob b -: prob (a ∩ b))
+  ma $ fa (a <> ", " <> b ∈ prsa) (prob (a ∪ b) =: prob a + prob b - prob (a ∩ b))
 
   proof $ do
     s ["Let ", m a, " and ", m b, " be events in ", m prsa, "."]
     align_
       [
         prob (a ∪ b) & "" =: prob (pars (a ∩ setc b) ∪ pars (a ∩ b) ∪ pars (setc a ∩ b))
-      ,           "" & "" =: prob (a ∩ setc b) +: prob (a ∩ b) +: prob (setc a ∩ b)
-      ,           "" & "" =: prob (a ∩ setc b) +: prob (a ∩ b) +: prob (setc a ∩ b) +: pars (prob (a ∩ b) - prob (a ∩ b))
-      ,           "" & "" =: pars (prob (a ∩ setc b) +: prob (a ∩ b)) +: pars (prob (setc a ∩ b) +: prob (a ∩ b)) -: prob (a ∩ b)
-      ,           "" & "" =: prob a +: prob b -: prob (a ∩ b)
+      ,           "" & "" =: prob (a ∩ setc b) + prob (a ∩ b) + prob (setc a ∩ b)
+      ,           "" & "" =: prob (a ∩ setc b) + prob (a ∩ b) + prob (setc a ∩ b) + pars (prob (a ∩ b) - prob (a ∩ b))
+      ,           "" & "" =: pars (prob (a ∩ setc b) + prob (a ∩ b)) + pars (prob (setc a ∩ b) + prob (a ∩ b)) - prob (a ∩ b)
+      ,           "" & "" =: prob a + prob b - prob (a ∩ b)
       ]
     "Note that we used the previous property in the last equation."
     propref probabilityPartitionByIntersectionLabel
@@ -165,7 +165,7 @@ probabilityOfDifference = prop $ do
 
   proof $ do
     s ["Let ", m a, " and ", m b, " be events in ", m prsa, "."]
-    ma $ prob (a ∪ b) =: prob (b `setdiff` pars (b ∩ setc a)) =: prob b +: prob (a `setdiff` b)
+    ma $ prob (a ∪ b) =: prob (b `setdiff` pars (b ∩ setc a)) =: prob b + prob (a `setdiff` b)
     "Note that we used the equivalent definition of set difference in the first equation."
     thmref setDifferenceEquivalentDefinitionLabel
   where
@@ -179,10 +179,10 @@ probabilitySubsetImpliesSmaller = prop $ do
   label probabilitySubsetImpliesSmallerLabel
 
   psDec
-  ma $ fa (a <> ", " <> b ∈ prsa) ((a ⊆ b) ⇒ (prob a <=: prob b))
+  ma $ fa (a <> ", " <> b ∈ prsa) ((a ⊆ b) ⇒ (prob a <= prob b))
 
   proof $ do
-    ma $ prob a =: prob (b `setdiff` pars (b ∩ a)) =: prob b -: prob (b ∩ a) <=: prob b
+    ma $ prob a =: prob (b `setdiff` pars (b ∩ a)) =: prob b - prob (b ∩ a) <= prob b
 
     s ["Note that in the first equation we used that ", m a, " is a subset of ", m b, " and in the second equation, we used the previous property."]
     propref probabilityOfDifferenceLabel
@@ -195,7 +195,7 @@ probabilityAtMostOne :: Note
 probabilityAtMostOne = prop $ do
   psDec
 
-  ma $ fa (a ∈ prsa) (prob a <=: 1)
+  ma $ fa (a ∈ prsa) (prob a <= 1)
   proof $ do
     s ["Every set ", m a, " is a subset of ", m pruniv, thmref universalSetSupsetOfAllSetsLabel]
     s [" so ", m (prob a), " must be smaller than ", m (prob pruniv =: 1), deref probabilityMeasureDefinitionLabel, propref probabilitySubsetImpliesSmallerLabel]
@@ -205,7 +205,7 @@ probabilityAtMostOne = prop $ do
 uniformeProbabilityMeasure :: Note
 uniformeProbabilityMeasure = de $ do
   s ["The ", term "uniforme probability measure", " is a ", ix "probability measure", " that is only defined for measurable spaces with a finite ", universe, "."]
-  ma $ func prpm prsa (ccint 0 1 ⊆ reals) "A" (setsize "A" /: setsize pruniv)
+  ma $ func prpm prsa (ccint 0 1 ⊆ reals) "A" (setsize "A" / setsize pruniv)
 
 
 discreteProbabilityMeasure :: Note
