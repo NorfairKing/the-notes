@@ -1,10 +1,11 @@
 module Sets.Algebra.Main (
     algebra
 
-  , secondLawOfDeMorganLabel
   , symmetricDifferenceITOUnionAndIntersectionLabel
   , unionComplementaryLawLabel
   , setDifferenceEquivalentDefinitionLabel
+  , firstLawOfDeMorganLabel
+  , secondLawOfDeMorganLabel
   ) where
 
 import           Notes
@@ -24,9 +25,6 @@ algebra = notes "algebra" $
   , setDifference
   , setComplement
   ]
-
-secondLawOfDeMorganLabel :: Label
-secondLawOfDeMorganLabel = thmlab "second-law-of-de-morgan"
 
 symmetricDifferenceITOUnionAndIntersectionLabel :: Label
 symmetricDifferenceITOUnionAndIntersectionLabel = thmlab "sets-symmetric-difference-in-terms-of-union-and-intersection"
