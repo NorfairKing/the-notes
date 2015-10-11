@@ -25,14 +25,11 @@ algebra = notes "algebra" $
   , setComplement
   ]
 
-secondLawOfDeMorganLabel :: Note
-secondLawOfDeMorganLabel = "thm:second-law-of-de-morgan"
+secondLawOfDeMorganLabel :: Label
+secondLawOfDeMorganLabel = thmlab "second-law-of-de-morgan"
 
-symmetricDifferenceITOUnionAndIntersectionLabel :: Note
-symmetricDifferenceITOUnionAndIntersectionLabel = "thm:sets-symmetric-difference-in-terms-of-union-and-intersection"
+symmetricDifferenceITOUnionAndIntersectionLabel :: Label
+symmetricDifferenceITOUnionAndIntersectionLabel = thmlab "sets-symmetric-difference-in-terms-of-union-and-intersection"
 
-unionComplementaryLawLabel :: Note
-unionComplementaryLawLabel = "thm:complementary-law-union"
-
-setDifferenceEquivalentDefinitionLabel :: Note
-setDifferenceEquivalentDefinitionLabel = "thm:set-difference-equivalent-definition"
+setDifferenceEquivalentDefinitionLabel :: Label
+setDifferenceEquivalentDefinitionLabel = thmlab "set-difference-equivalent-definition"

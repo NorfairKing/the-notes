@@ -15,8 +15,8 @@ body = do
   conditionalProbabilityEventGivenItself
   conditionalProbabilityEventGivenUniverse
 
-conditionalProbabilityDefinitionLabel :: Note
-conditionalProbabilityDefinitionLabel = "de:conditional-probability"
+conditionalProbabilityDefinitionLabel :: Label
+conditionalProbabilityDefinitionLabel = delab "conditional-probability"
 
 event :: Note
 event = ix "event"
@@ -28,7 +28,7 @@ ai = a ∈ prsa
 
 conditionalProbabilityDefinition :: Note
 conditionalProbabilityDefinition = de $ do
-  label conditionalProbabilityDefinitionLabel
+  lab conditionalProbabilityDefinitionLabel
 
   s ["The", term "conditional probability", " of an ", event, m (a ∈ prsa), " given an ", event, m (b ∈ prsa), " with ", m (prob b /=: 0), " is denoted as ", m (cprob a b), "."]
   ma $ cprob a b === (prob (a ∩ b) /: prob b)

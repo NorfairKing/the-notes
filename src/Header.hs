@@ -2,6 +2,8 @@ module Header (header) where
 
 import           Notes
 
+import           Text.LaTeX.Packages.AMSThm as T (TheoremStyle (Definition))
+
 header :: Note
 header = do
   theoremDefinitions
@@ -12,7 +14,7 @@ header = do
 
 theoremDefinitions :: Note
 theoremDefinitions = do
-  theoremstyle Definition
+  theoremstyle T.Definition
 
   raw "\\newtheorem{thm}{Theorem}[chapter]"
 

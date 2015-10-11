@@ -17,18 +17,17 @@ module Types (
 
   , module Control.Monad.Reader
   ) where
-
 import           Prelude                      (Eq (..), Fractional (..), IO,
                                                Num (..), Show (..), mempty, ($),
                                                (++), (.))
 
-import           Text.LaTeX                   hiding (item)
+import           Text.LaTeX                   hiding (Label (..), item, ref)
 import           Text.LaTeX.Base.Class
 import           Text.LaTeX.Base.Pretty
 import           Text.LaTeX.Base.Syntax
 import           Text.LaTeX.Packages.AMSFonts
 import           Text.LaTeX.Packages.AMSMath
-import           Text.LaTeX.Packages.AMSThm   hiding (proof)
+import           Text.LaTeX.Packages.AMSThm   hiding (TheoremStyle (..), proof)
 import           Text.LaTeX.Packages.Fancyhdr
 
 import           Control.Monad.Reader         (MonadReader (..), ReaderT, ask,
@@ -64,3 +63,11 @@ instance MonadReader r m => MonadReader r (LaTeXT m) where
   local = local
   reader = lift . reader
 
+data Label = Label RefKind Note
+  deriving (Show, Eq)
+
+data RefKind = Definition
+             | Theorem
+             | Proposition
+             | Property
+  deriving (Show, Eq)

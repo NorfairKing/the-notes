@@ -2,14 +2,42 @@ module Macro.Reference where
 
 import           Types
 
-reference :: Note -> Note -> Note
-reference thkind label = footnote $ "See " <> thkind <> " " <> ref label <> " on page " <> pageref label <> "."
+import qualified Text.LaTeX.Base.Commands as T (pageref, ref)
 
-deref :: Note -> Note
-deref = reference "definition"
 
-thmref :: Note -> Note
-thmref = reference "theorem"
+wordOf :: RefKind -> Note
+wordOf Definition     = "Definition"
+wordOf Theorem        = "theorem"
+wordOf Property       = "property"
+wordOf Proposition    = "proposition"
 
-propref :: Note -> Note
-propref = reference "property"
+refKind :: Label -> RefKind
+refKind (Label kind _) = kind
+
+wordFor :: Label -> Note
+wordFor = wordOf . refKind
+
+labelOf :: Label -> Note
+labelOf (Label _ n) = n
+
+labelFor :: Label -> Note
+labelFor l = wordFor l <> ":" <> labelOf l
+
+ref :: Label -> Note
+ref l = footnote $ "See " <> wordFor l <> " " <> T.ref (labelFor l) <> " on page " <> T.pageref (labelFor l) <> "."
+
+lab :: Label -> Note
+lab l = label $ labelFor l
+
+delab :: Note -> Label
+delab = Label Definition
+
+thmlab :: Note -> Label
+thmlab = Label Theorem
+
+proplab :: Note -> Label
+proplab = Label Property
+
+prolab :: Note -> Label
+prolab = Label Proposition
+

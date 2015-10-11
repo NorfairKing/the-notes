@@ -1,4 +1,9 @@
-module Sets.Algebra.Complement (setComplement, complement) where
+module Sets.Algebra.Complement (
+    setComplement
+  , complement
+
+  , unionComplementaryLawLabel
+  ) where
 
 import           Notes
 
@@ -58,8 +63,12 @@ doubleComplement = thm $ do
       , "" & "" =§= a
       ]
 
+unionComplementaryLawLabel :: Label
+unionComplementaryLawLabel = thmlab "complementary-law-union"
+
 complementaryLawUnion :: Note
 complementaryLawUnion = thm $ do
+  lab unionComplementaryLawLabel
   s ["The ", term "complementary law", " for the set ", union, "."]
   setsDec
   ma $ a ∪ (setc a) =§= setuniv

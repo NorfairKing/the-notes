@@ -36,12 +36,12 @@ traditionalProbabilityMeasures = do
 msDec :: Note
 msDec = s ["Let ", m prms, " be a ", ix "measurable space", "."]
 
-probabilityMeasureDefinitionLabel :: Note
-probabilityMeasureDefinitionLabel = "de:probability-measure"
+probabilityMeasureDefinitionLabel :: Label
+probabilityMeasureDefinitionLabel = delab "probability-measure"
 
 probabilityMeasureDefinition :: Note
 probabilityMeasureDefinition = de $ do
-  label probabilityMeasureDefinitionLabel
+  lab probabilityMeasureDefinitionLabel
 
   msDec
   s ["A ", term "probability measure", " is a function ", m prpm, " with the following three properties: "]
@@ -68,17 +68,17 @@ measurablespaceDefinition = de $ do
   " is called a "
   term "probability space"
 
-probabilityMeasureFiniteAdditivityLabel :: Note
-probabilityMeasureFiniteAdditivityLabel = "th:probability-measure-finite-additivity"
+probabilityMeasureFiniteAdditivityLabel :: Label
+probabilityMeasureFiniteAdditivityLabel = thmlab "probability-measure-finite-additivity"
 
 probabilityMeasureFiniteAdditivity :: Note
 probabilityMeasureFiniteAdditivity = thm $ do
-  label probabilityMeasureFiniteAdditivityLabel
+  lab probabilityMeasureFiniteAdditivityLabel
 
   s ["Let ", m prsp, " be a ", ix "probability space", " and let ", m (setcmpr an $ "n" ∈ setlst "1" "N"), " be ", m "N", " pairwise disjunct events of ", m prsa, "."]
   ma $ prob (setuncmpr (n =: 1) "N" an) =: sumcmpr (n =: 1) "N" (prob an)
 
-  proof $ s ["Use the ", ix "countable additivity", " property of probability measures", deref probabilityMeasureDefinitionLabel, " where only ", m n, " sets are non-empty."]
+  proof $ s ["Use the ", ix "countable additivity", " property of probability measures", ref probabilityMeasureDefinitionLabel, " where only ", m n, " sets are non-empty."]
   where
     n = "n"
     an = "A" !: n
@@ -93,7 +93,7 @@ probabilitySpaceProbabilityOfComplement = thm $ do
 
   proof $ do
     s ["Let ", m a, " be an event in ", m prsa, "."]
-    s ["The union of ", m a, " and its complement is ", m pruniv, ".", thmref unionComplementaryLawLabel]
+    s ["The union of ", m a, " and its complement is ", m pruniv, ".", ref unionComplementaryLawLabel]
     align_
       [
         pruniv & seteqsign <> (a ∪ setc a)
@@ -103,36 +103,36 @@ probabilitySpaceProbabilityOfComplement = thm $ do
       ]
 
     "Notice that the second equivalence only holds because of the finite additivity propertiy of probability measures."
-    thmref probabilityMeasureFiniteAdditivityLabel
+    ref probabilityMeasureFiniteAdditivityLabel
 
   con $ m $ prob emptyset =: 0
 
   where a = "A"
 
-probabilityPartitionByIntersectionLabel :: Note
-probabilityPartitionByIntersectionLabel = "prop:probability-partion-by-intersection"
+probabilityPartitionByIntersectionLabel :: Label
+probabilityPartitionByIntersectionLabel = proplab "probability-partion-by-intersection"
 
 probabilityPartitionByIntersection :: Note
 probabilityPartitionByIntersection = prop $ do
-  label probabilityPartitionByIntersectionLabel
+  lab probabilityPartitionByIntersectionLabel
 
   psDec
   ma $ fa (a <> ", " <> b ∈ prsa) (prob b =: prob (b ∩ a) + prob (b ∩ setc a))
 
   proof $ do
     s ["Because ", m (b ∩ a), " and ", m (b ∩ setc a), " are disjunct, the theorem follows from the finite additivity property of probability measures."]
-    thmref probabilityMeasureFiniteAdditivityLabel
+    ref probabilityMeasureFiniteAdditivityLabel
 
   where
     a = "A"
     b = "B"
 
-probabilityOfUnionLabel :: Note
-probabilityOfUnionLabel = "prop:probability-set-union"
+probabilityOfUnionLabel :: Label
+probabilityOfUnionLabel = proplab "probability-set-union"
 
 probabilityOfUnion :: Note
 probabilityOfUnion = prop $ do
-  label probabilityOfUnionLabel
+  lab probabilityOfUnionLabel
 
   psDec
   ma $ fa (a <> ", " <> b ∈ prsa) (prob (a ∪ b) =: prob a + prob b - prob (a ∩ b))
@@ -148,17 +148,17 @@ probabilityOfUnion = prop $ do
       ,           "" & "" =: prob a + prob b - prob (a ∩ b)
       ]
     "Note that we used the previous property in the last equation."
-    propref probabilityPartitionByIntersectionLabel
+    ref probabilityPartitionByIntersectionLabel
   where
     a = "A"
     b = "B"
 
-probabilityOfDifferenceLabel :: Note
-probabilityOfDifferenceLabel = "prop:probability-set-difference"
+probabilityOfDifferenceLabel :: Label
+probabilityOfDifferenceLabel = proplab "probability-set-difference"
 
 probabilityOfDifference :: Note
 probabilityOfDifference = prop $ do
-  label probabilityOfDifferenceLabel
+  lab probabilityOfDifferenceLabel
 
   psDec
   ma $ fa (a <> ", " <> b ∈ prsa) (prob (a `setdiff` b) =: prob (a ∪ b) - prob b)
@@ -167,16 +167,17 @@ probabilityOfDifference = prop $ do
     s ["Let ", m a, " and ", m b, " be events in ", m prsa, "."]
     ma $ prob (a ∪ b) =: prob (b `setdiff` pars (b ∩ setc a)) =: prob b + prob (a `setdiff` b)
     "Note that we used the equivalent definition of set difference in the first equation."
-    thmref setDifferenceEquivalentDefinitionLabel
+    ref setDifferenceEquivalentDefinitionLabel
   where
     a = "A"
     b = "B"
 
-probabilitySubsetImpliesSmallerLabel :: Note
-probabilitySubsetImpliesSmallerLabel = "prop:probability-subset-implies-smaller-probability"
+probabilitySubsetImpliesSmallerLabel :: Label
+probabilitySubsetImpliesSmallerLabel = proplab "probability-subset-implies-smaller-probability"
+
 probabilitySubsetImpliesSmaller :: Note
 probabilitySubsetImpliesSmaller = prop $ do
-  label probabilitySubsetImpliesSmallerLabel
+  lab probabilitySubsetImpliesSmallerLabel
 
   psDec
   ma $ fa (a <> ", " <> b ∈ prsa) ((a ⊆ b) ⇒ (prob a <= prob b))
@@ -185,7 +186,7 @@ probabilitySubsetImpliesSmaller = prop $ do
     ma $ prob a =: prob (b `setdiff` pars (b ∩ a)) =: prob b - prob (b ∩ a) <= prob b
 
     s ["Note that in the first equation we used that ", m a, " is a subset of ", m b, " and in the second equation, we used the previous property."]
-    propref probabilityOfDifferenceLabel
+    ref probabilityOfDifferenceLabel
   where
     a = "A"
     b = "B"
@@ -197,8 +198,8 @@ probabilityAtMostOne = prop $ do
 
   ma $ fa (a ∈ prsa) (prob a <= 1)
   proof $ do
-    s ["Every set ", m a, " is a subset of ", m pruniv, thmref universalSetSupsetOfAllSetsLabel]
-    s [" so ", m (prob a), " must be smaller than ", m (prob pruniv =: 1), deref probabilityMeasureDefinitionLabel, propref probabilitySubsetImpliesSmallerLabel]
+    s ["Every set ", m a, " is a subset of ", m pruniv, ref universalSetSupsetOfAllSetsLabel]
+    s [" so ", m (prob a), " must be smaller than ", m (prob pruniv =: 1), ref probabilityMeasureDefinitionLabel, ref probabilitySubsetImpliesSmallerLabel]
   where a = "A"
 
 
