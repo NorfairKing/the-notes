@@ -147,8 +147,10 @@ setsdiffsign :: Note
 setsdiffsign = comm0 "Delta"
 
 setsdiff :: Note -> Note -> Note
-setsdiff = binop setsdiffsign
+setsdiff = binop $ commS " " <> setsdiffsign <> commS " "
 
+(△) :: Note -> Note -> Note
+(△) = setsdiff
 
 --[ Set product
 setprodsign :: Note

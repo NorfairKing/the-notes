@@ -11,9 +11,13 @@ setDifference = notesPart "difference" body
 body :: Note
 body = do
   subsection "Set difference"
+
   differenceDefinition
   intersectionAndDifferenceDisjunct
   symmetricSetDifferencesDisjunct
+
+  symmetricDifferenceDefinition
+  symmetricDifferenceEquivalentDefinition
 
 a, b, x, y :: Note
 a = "A"
@@ -66,5 +70,24 @@ symmetricSetDifferencesDisjunct = thm $ do
       ]
 
 
+symmetricDifferenceDefinition :: Note
+symmetricDifferenceDefinition = de $ do
+  s ["The ", term "symmetric difference", " of two sets ", m a, and, m b, " is the set of all element that are in either ", m a, or, m b, " but not both."]
+  ma $ a △ b === setcmpr x ((pars $ (x ∈ a) &: (x `nin` b)) |: (pars $ (x `nin` a) &: (x ∈ b)))
+
+symmetricDifferenceEquivalentDefinition :: Note
+symmetricDifferenceEquivalentDefinition = de $ do
+  setsDec
+  ma $ a △ b =§= (pars $ a \\ b) ∪ (pars $ b \\ a)
+
+  proof $ do
+    align_ $
+      [
+        (pars $ a \\ b) ∪ (pars $ b \\ a)
+        & "" =§= setcmpr x ((x ∈ a) &: (x `nin` b)) ∪ setcmpr x ((x ∈ b) &: (x `nin` a))
+        , "" & "" =§= setcmpr x ((x ∈ setcmpr y ((y ∈ a) &: (y `nin` b))) |: (x ∈ setcmpr y ((y ∈ b) &: (y `nin` a))))
+        , "" & "" =§= setcmpr x ((pars $ (x ∈ a) &: (x `nin` b)) |: (pars $ (x ∈ b) &: (x `nin` a)))
+        , "" & "" =§= a △ b
+      ]
 
 
