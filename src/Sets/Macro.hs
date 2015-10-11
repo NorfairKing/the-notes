@@ -128,7 +128,7 @@ setc n = braces n ^: "C"
 
 -- Relative set complement
 setrelc :: Note -> Note -> Note
-setrelc n m = setc n !: m
+setrelc m n = setc n !: m
 
 
 --[ Set difference
@@ -138,14 +138,19 @@ setdiffsign = comm0 "setminus"
 setdiff :: Note -> Note -> Note
 setdiff = binop setdiffsign
 
+(\\) :: Note -> Note -> Note
+(\\) = setdiff
+
 
 --[ Symmetric set difference
 setsdiffsign :: Note
 setsdiffsign = comm0 "Delta"
 
 setsdiff :: Note -> Note -> Note
-setsdiff = binop setsdiffsign
+setsdiff = binop $ commS " " <> setsdiffsign <> commS " "
 
+(△) :: Note -> Note -> Note
+(△) = setsdiff
 
 --[ Set product
 setprodsign :: Note

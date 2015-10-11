@@ -47,12 +47,12 @@ emptySet = do
 singleton :: Note
 singleton = de $ s ["A ", ix "set", " with exactly one element is called a ", term "singleton", "."]
 
-setDefinitionLabel :: Note
-setDefinitionLabel = "de:set"
+setDefinitionLabel :: Label
+setDefinitionLabel = delab "set"
 
 setDefinition :: Note
 setDefinition = de $ do
-  label setDefinitionLabel
+  lab setDefinitionLabel
   s ["A ", term "set", " is a ", ix "collection", " of distinct objects, considered as an object in its own right."]
   s ["These objects are called the ", term "elements", " of the set."]
 
@@ -66,12 +66,12 @@ setComprehensionDefinition = de $ do
   ma $ setcmpr "x" $ funapp "p" "x"
   s ["This is the ", ix "set", " of all objects that have the ", ix "property", " ", m "p", "."]
 
-setEqualityDefinitionLabel :: Note
-setEqualityDefinitionLabel = "de:sets-equality"
+setEqualityDefinitionLabel :: Label
+setEqualityDefinitionLabel = delab "sets-equality"
 
 setEqualityDefinition :: Note
 setEqualityDefinition = de $ do
-  label setEqualityDefinitionLabel
+  lab setEqualityDefinitionLabel
   s ["Two sets ", m "A", " and ", m "B", " are ", term "equal", " if and only if they contain the same elements."]
   ma $ ("A" =§= "B") === (fa "x" $ ("x" ∈ "A") &: ("x" ∈ "B"))
 
@@ -203,12 +203,12 @@ universalSetDefinition = do
   nte $ do
     s ["Note that this is well defined as this ", ix "set", " would have to include itself.", " We will ignore this for now as the ", ix "universal set ", " is usually restricted to a domain that will be clear from the context."]
 
-universalSetSupsetOfAllSetsLabel :: Note
-universalSetSupsetOfAllSetsLabel = "thm:sets-every-set-is-a-subset-of-the-universe"
+universalSetSupsetOfAllSetsLabel :: Label
+universalSetSupsetOfAllSetsLabel = thmlab "sets-every-set-is-a-subset-of-the-universe"
 
 universalSetSupsetOfAllSets :: Note
 universalSetSupsetOfAllSets = thm $ do
-  label universalSetSupsetOfAllSetsLabel
+  lab universalSetSupsetOfAllSetsLabel
   s ["Every set ", m "A", " is a ", ix "subset", " of the ", ix "universal set", " ", m "setuniv", "."]
   ma $ fa "A" $ "A" ⊆ setuniv
 

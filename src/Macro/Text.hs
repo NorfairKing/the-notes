@@ -33,3 +33,8 @@ or = " or "
 
 is :: Note
 is = " is "
+
+the :: Note
+the = "The "
+
+

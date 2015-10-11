@@ -192,14 +192,14 @@ eq = between "="
 lt :: Note -> Note -> Note
 lt = between "<"
 
-mnotsign :: Note
-mnotsign = comm0 "neg"
+notsign :: Note
+notsign = comm0 "neg"
 
-mnot :: Note -> Note
-mnot n = mnotsign <> n
+not :: Note -> Note
+not n = notsign <> n
 
 (¬) :: Note -> Note
-(¬) = mnot
+(¬) = not
 
 --[ Text
 text :: Note -> Note
