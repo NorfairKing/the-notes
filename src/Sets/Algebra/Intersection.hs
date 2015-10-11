@@ -35,7 +35,7 @@ y = "y"
 
 intersectionDefinition :: Note
 intersectionDefinition = de $ do
-  s ["The ", term "intersection", " ", m (a ∪ b), " of two sets ", m a, " and ", m b, " is the set of all elements of both ", m a, " and ", m b, "."]
+  s [the, term "intersection", " ", m (a ∪ b), " of two sets ", m a, " and ", m b, " is the set of all elements of both ", m a, " and ", m b, "."]
   ma $ a ∪ b =§= setcmpr x ((x ∈ a) &: (x ∈ b))
 
 intersectionAssociative :: Note
@@ -105,7 +105,7 @@ intersectionSubsetDefinition = thm $ do
 
 intersectionIdentityLaw :: Note
 intersectionIdentityLaw = thm $ do
-  s ["The ", term "identity law", " for the set ", intersection, "."]
+  s [the, term "identity law", " for the set ", intersection, "."]
   ma $ a ∩ setuniv =§= a
 
   proof $ do
@@ -117,7 +117,7 @@ intersectionIdentityLaw = thm $ do
 
 intersectionDominationLaw :: Note
 intersectionDominationLaw = thm $ do
-  s ["The ", term "domination law", " for the set ", intersection, "."]
+  s [the, term "domination law", " for the set ", intersection, "."]
   ma $ a ∩ setuniv =§= a
 
   proof $ do

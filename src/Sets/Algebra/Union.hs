@@ -29,7 +29,7 @@ y = "y"
 
 unionDefinition :: Note
 unionDefinition = de $ do
-  s ["The ", term "union", " ", m (a `setun` b), " of two sets ", m a, " and ", m b, " is the set of all elements of both ", m a, " and ", m b, "."]
+  s [the, term "union", " ", m (a `setun` b), " of two sets ", m a, " and ", m b, " is the set of all elements of both ", m a, " and ", m b, "."]
   ma $ a ∪ b =§= setcmpr x ((x ∈ a) |: (x ∈ b))
 
 unionAssociative :: Note
@@ -96,7 +96,7 @@ unionSubsetDefinition = thm $ do
 
 unionIdentityLaw :: Note
 unionIdentityLaw = thm $ do
-  s ["The ", term "identity law", " for the set ", union, "."]
+  s [the, term "identity law", " for the set ", union, "."]
   ma $ a ∪ emptyset =§= a
 
   proof $ do
@@ -108,7 +108,7 @@ unionIdentityLaw = thm $ do
 
 unionDominationLaw :: Note
 unionDominationLaw = thm $ do
-  s ["The ", term "domination law", " for the set ", union, "."]
+  s [the, term "domination law", " for the set ", union, "."]
   ma $ a ∪ setuniv =§= setuniv
 
   proof $ do
