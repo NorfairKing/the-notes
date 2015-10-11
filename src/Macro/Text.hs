@@ -24,3 +24,12 @@ commaSeparated (n:ns) = n <> ", " <> commaSeparated ns
 
 cs :: [Note] -> Note
 cs = commaSeparated
+
+and :: Note
+and = " and "
+
+or :: Note
+or = " or "
+
+is :: Note
+is = " is "

@@ -2,6 +2,8 @@ module Sets.Algebra.Intersection (setIntersection, intersection) where
 
 import           Notes
 
+import           Sets.Algebra.Union (union)
+
 intersection :: Note
 intersection = ix "intersection"
 
@@ -19,6 +21,9 @@ body = do
   intersectionSubsetDefinition
   intersectionIdentityLaw
   intersectionDominationLaw
+  disjunctDefinition
+  absorptionLaws
+  distributionLaws
 
 
 a, b, c, x, y :: Note
@@ -122,3 +127,90 @@ intersectionDominationLaw = thm $ do
         =§= setcmpr x (x ∈ a)
         =§= a
 
+
+disjunctDefinition :: Note
+disjunctDefinition = de $ do
+  s ["Two sets ", m a, and, m b, " are ", term "disjunct", " if they have no elements in common."]
+  ma $ a ∩ b =§= emptyset
+
+
+absorptionLaws :: Note
+absorptionLaws = do
+  absorptionLaw1
+  absorptionLaw2
+
+absorptionLaw1 :: Note
+absorptionLaw1 = thm $ do
+  s ["The first ", term "absorption law", "."]
+  ma $ a ∪ (pars $ a ∩ b) =§= a
+
+  proof $ do
+    align_ $
+      [
+        a ∪ (pars $ a ∩ b)
+        & "" =§= setcmpr x ((x ∈ a) |: (x ∈ a ∩ b))
+        , "" & "" =§= setcmpr x ((x ∈ a) |: (x ∈ setcmpr y ((y ∈ a) &: (y ∈ b))))
+        , "" & "" =§= setcmpr x ((pars $ (x ∈ a) &: (x ∈ a)) |: (pars $ (x ∈ a) &: (x ∈ b)))
+        , "" & "" =§= setcmpr x ((x ∈ a) |: (pars $ (x ∈ a) &: (x ∈ b)))
+        , "" & "" =§= setcmpr x (x ∈ a)
+        , "" & "" =§= a
+      ]
+
+
+absorptionLaw2 :: Note
+absorptionLaw2 = thm $ do
+  s ["The second ", term "absorption law", "."]
+  ma $ a ∩ (pars $ a ∪ b) =§= a
+
+  proof $ do
+    align_ $
+      [
+        a ∩ (pars $ a ∪ b)
+        & "" =§= setcmpr x ((x ∈ a) &: (x ∈ a ∪ b))
+        , "" & "" =§= setcmpr x ((x ∈ a) &: (x ∈ setcmpr y ((y ∈ a) |: (y ∈ b))))
+        , "" & "" =§= setcmpr x ((pars $ (x ∈ a) |: (x ∈ a)) &: (pars $ (x ∈ a) |: (x ∈ b)))
+        , "" & "" =§= setcmpr x ((x ∈ a) &: (pars $ (x ∈ a) |: (x ∈ b)))
+        , "" & "" =§= setcmpr x (x ∈ a)
+        , "" & "" =§= a
+      ]
+
+distributionLaws :: Note
+distributionLaws = do
+  distributionLaw1
+  distributionLaw2
+
+distributionLaw1 :: Note
+distributionLaw1 = thm $ do
+  s ["The set ", intersection, is, distributive, " with respect to the set ", union, "."]
+  ma $ a ∩ (pars $ b ∪ c) =§= (pars $ a ∪ b) ∩ (pars $ a ∪ c)
+
+  proof $ do
+    align_ $
+      [
+        a ∩ (pars $ b ∪ c)
+        & "" =§= setcmpr x ((x ∈ a) &: (x ∈ b ∪ c))
+        , "" & "" =§= setcmpr x ((x ∈ a) &: (setcmpr y ((y ∈ b) |: (y ∈ c))))
+        , "" & "" =§= setcmpr x ((pars $ (x ∈ a) |: (x ∈ b)) &: (pars $ (x ∈ a) |: (x ∈ c)))
+        , "" & "" =§= setcmpr x ((pars $ (x ∈ a) |: (x ∈ b)) &: (pars $ (x ∈ a) |: (x ∈ c)))
+        , "" & "" =§= setcmpr x (x ∈ setcmpr y (pars $ (y ∈ a) |: (y ∈ b)) &: (x ∈ setcmpr y (pars $ (y ∈ a) |: (y ∈ c))))
+        , "" & "" =§= (setcmpr x (pars $ (x ∈ a) |: (x ∈ b)) ∩ (setcmpr x (pars $ (x ∈ a) |: (x ∈ c))))
+        , "" & "" =§= (pars $ a ∪ b) ∩ (pars $ a ∪ c)
+      ]
+
+distributionLaw2 :: Note
+distributionLaw2 = thm $ do
+  s ["The set ", union, is, distributive, " with respect to the set ", intersection, "."]
+  ma $ a ∪ (pars $ b ∩ c) =§= (pars $ a ∩ b) ∪ (pars $ a ∩ c)
+
+  proof $ do
+    align_ $
+      [
+        a ∪ (pars $ b ∩ c)
+        & "" =§= setcmpr x ((x ∈ a) |: (x ∈ b ∩ c))
+        , "" & "" =§= setcmpr x ((x ∈ a) |: (setcmpr y ((y ∈ b) &: (y ∈ c))))
+        , "" & "" =§= setcmpr x ((pars $ (x ∈ a) &: (x ∈ b)) |: (pars $ (x ∈ a) &: (x ∈ c)))
+        , "" & "" =§= setcmpr x ((pars $ (x ∈ a) &: (x ∈ b)) |: (pars $ (x ∈ a) &: (x ∈ c)))
+        , "" & "" =§= setcmpr x (x ∈ setcmpr y (pars $ (y ∈ a) &: (y ∈ b)) |: (x ∈ setcmpr y (pars $ (y ∈ a) &: (y ∈ c))))
+        , "" & "" =§= (setcmpr x (pars $ (x ∈ a) &: (x ∈ b)) ∪ (setcmpr x (pars $ (x ∈ a) &: (x ∈ c))))
+        , "" & "" =§= (pars $ a ∩ b) ∪ (pars $ a ∩ c)
+      ]

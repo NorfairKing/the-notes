@@ -214,4 +214,5 @@ commutative = ix "commutative"
 idempotent :: Note
 idempotent = ix "idempotent"
 
-
+distributive :: Note
+distributive = ix "distributive"
