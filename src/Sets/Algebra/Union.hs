@@ -62,7 +62,7 @@ unionCommutative = prop $ do
 
 unionIdempotent :: Note
 unionIdempotent = prop $ do
-  s ["The set ", union, " is ", ix "idempotent" ,"."]
+  s ["The set ", union, " is ", idempotent ,"."]
   ma $ a ∪ a =§= a
 
   proof $ do
@@ -96,7 +96,7 @@ unionSubsetDefinition = thm $ do
 
 unionIdentityLaw :: Note
 unionIdentityLaw = thm $ do
-  s ["The ", term "identity law", " for the set union."]
+  s ["The ", term "identity law", " for the set ", union, "."]
   ma $ a ∪ emptyset =§= a
 
   proof $ do
@@ -108,4 +108,12 @@ unionIdentityLaw = thm $ do
 
 unionDominationLaw :: Note
 unionDominationLaw = thm $ do
-  mempty
+  s ["The ", term "domination law", " for the set ", union, "."]
+  ma $ a ∪ setuniv =§= setuniv
+
+  proof $ do
+    m $ a ∪ setuniv
+        =§= setcmpr x ((x ∈ a) |: (x ∈ setuniv))
+        =§= setcmpr x ((x ∈ a) |: true)
+        =§= setcmpr x true
+        =§= setuniv

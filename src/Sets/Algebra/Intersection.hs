@@ -18,6 +18,7 @@ body = do
   intersectionSubset
   intersectionSubsetDefinition
   intersectionIdentityLaw
+  intersectionDominationLaw
 
 
 a, b, c, x, y :: Note
@@ -64,7 +65,7 @@ intersectionCommutative = prop $ do
 
 intersectionIdempotent :: Note
 intersectionIdempotent = prop $ do
-  s ["The set ", intersection, " is ", ix "idempotent" ,"."]
+  s ["The set ", intersection, " is ", idempotent ,"."]
   ma $ a ∩ a =§= a
 
   proof $ do
@@ -109,4 +110,15 @@ intersectionIdentityLaw = thm $ do
         =§= setcmpr x (x ∈ a)
         =§= a
 
+intersectionDominationLaw :: Note
+intersectionDominationLaw = thm $ do
+  s ["The ", term "domination law", " for the set ", intersection, "."]
+  ma $ a ∩ setuniv =§= a
+
+  proof $ do
+    m $ a ∩ setuniv
+        =§= setcmpr x ((x ∈ a) &: (x ∈ setuniv))
+        =§= setcmpr x ((x ∈ a) &: true)
+        =§= setcmpr x (x ∈ a)
+        =§= a
 
