@@ -4,9 +4,11 @@ import           System.Environment (getArgs)
 import           System.Process     (system)
 
 import           Notes
+import           Utils
 
 import           Prelude            (Maybe (..), error, map, print, return)
 
+import           Constants
 import           Header
 import           Packages
 import           Titlepage
@@ -17,6 +19,8 @@ import           Probability.Main
 import           Relations.Main
 import           Sets.Main
 
+
+
 main :: IO ()
 main = do
     args <- getArgs
@@ -25,13 +29,12 @@ main = do
     case mc of
       Nothing -> error "Couldn't parse arguments."
       Just cf -> do
+        removeIfExists mainBibFile
         t <- runNote entireDocument cf
 
-        renderFile "main.tex" t
-        --let s = prettyLaTeX t
-        --writeFile "main.tex" s
+        renderFile mainTexFile t
 
-        liftIO $ system $ "latexmk -pdf -pdflatex=\"pdflatex -shell-escape -halt-on-error -enable-write18\" main.tex -jobname=notes"
+        liftIO $ system $ "latexmk -pdf -pdflatex=\"pdflatex -shell-escape -halt-on-error -enable-write18\" " ++ mainTexFile ++ " -jobname=" ++ outName
         return ()
 
 

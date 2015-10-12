@@ -201,6 +201,10 @@ not n = notsign <> n
 (¬) :: Note -> Note
 (¬) = not
 
+--[ Symbols
+bot :: Note
+bot = comm0 "bot"
+
 --[ Text
 text :: Note -> Note
 text = comm1 "text"
@@ -216,3 +220,4 @@ idempotent = ix "idempotent"
 
 distributive :: Note
 distributive = ix "distributive"
+

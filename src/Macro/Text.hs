@@ -17,10 +17,13 @@ quoted n = "`" <> n <> "'"
 dquoted :: Note -> Note
 dquoted n = "``" <> n <> "''"
 
+separated :: Note -> [Note] -> Note
+separated _ [] = ""
+separated _ [n] = n
+separated delim (n:ns) = n <> delim <> separated delim ns
+
 commaSeparated :: [Note] -> Note
-commaSeparated [] = ""
-commaSeparated [n] = n
-commaSeparated (n:ns) = n <> ", " <> commaSeparated ns
+commaSeparated = separated ", "
 
 cs :: [Note] -> Note
 cs = commaSeparated
@@ -37,4 +40,5 @@ is = " is "
 the :: Note
 the = "The "
 
-
+by :: Note
+by = " by "

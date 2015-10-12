@@ -1,5 +1,6 @@
 module Macro.Reference where
 
+import           Reference
 import           Types
 
 import qualified Text.LaTeX.Base.Commands as T (pageref, ref)
@@ -41,3 +42,9 @@ proplab = Label Property
 prolab :: Note -> Label
 prolab = Label Proposition
 
+
+cite :: Reference -> Note
+cite = comm1 "cite" . refName
+
+nocite :: Reference -> Note
+nocite = comm1 "nocite" . refName

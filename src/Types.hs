@@ -17,11 +17,12 @@ module Types (
 
   , module Control.Monad.Reader
   ) where
-import           Prelude                      (Eq (..), Fractional (..), IO,
-                                               Num (..), Show (..), mempty, ($),
+import           Prelude                      (Eq (..), FilePath,
+                                               Fractional (..), IO, Num (..),
+                                               Show (..), mempty, ($), (&&),
                                                (++), (.))
 
-import           Text.LaTeX                   hiding (Label (..), item, ref)
+import           Text.LaTeX                   hiding (Label, cite, item, ref)
 import           Text.LaTeX.Base.Class
 import           Text.LaTeX.Base.Pretty
 import           Text.LaTeX.Base.Syntax
@@ -44,19 +45,22 @@ data Selection = All
                | Match String
   deriving (Show, Eq)
 
-data Notes = NotesPart String Note
+data Notes = NotesPart String Note [Reference]
            | NotesPartList String [Notes]
 
 notes :: String -> [Notes] -> Notes
 notes = NotesPartList
 
 notesPart :: String -> Note -> Notes
-notesPart = NotesPart
+notesPart name body = NotesPart name body []
 
-data Part = Part String Note
+notesPartRef :: String -> Note -> [Reference] -> Notes
+notesPartRef = NotesPart
+
+data Part = Part String Note [Reference]
 
 instance Eq Part where
-  (Part n1 _) == (Part n2 _) = n1 == n2
+  (Part n1 _ rfs1) == (Part n2 _ rfs2) = n1 == n2 && rfs1 == rfs2
 
 instance MonadReader r m => MonadReader r (LaTeXT m) where
   ask   = lift ask
@@ -71,3 +75,9 @@ data RefKind = Definition
              | Proposition
              | Property
   deriving (Show, Eq)
+
+type ReferenceType = String
+
+data Reference = Reference ReferenceType String [(String, String)] -- Type Label
+  deriving (Show, Eq)
+

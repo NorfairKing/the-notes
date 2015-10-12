@@ -47,7 +47,7 @@ lent = between lentsign
 
 -- Logical inference
 linf :: [Note] -> Note -> Note
-linf n m = comm2 "infer" m $ commaSeparated n
+linf n m = comm2 "infer" m $ separated ("," <> quad) n
 
 -- Logic knowledge base
 lkb :: Note
@@ -65,6 +65,7 @@ neg = not
 land :: Note -> Note -> Note
 land = between $ comm0 "wedge"
 
+-- C-k AN
 (∧) :: Note -> Note -> Note
 (∧) = land
 
@@ -72,11 +73,35 @@ land = between $ comm0 "wedge"
 lor :: Note -> Note -> Note
 lor = between $ comm0 "vee"
 
--- Logical or
+-- C-k OR
 (∨) :: Note -> Note -> Note
 (∨) = lor
 
 
 -- Hoare Triple
 htrip :: Note -> Note -> Note -> Note
-htrip p a q = brac p <> quad <> a <> quad <> brac q
+htrip p a q = brac p <> commS "," <> a <> commS "," <> brac q
+
+-- Sequence C-k ;+
+(؛) :: Note -> Note -> Note
+(؛) = between (";" <> commS " ")
+
+-- Assignment
+ass :: Note -> Note -> Note -> Note
+ass p e x = p <> sqbrac (e <> " / " <> x)
+
+(=:=) :: Note -> Note -> Note
+(=:=) = between ":="
+
+freevars :: Note ->  Note
+freevars = funapp "FV"
+
+modifies :: Note -> Note
+modifies = funapp "modifies"
+
+-- If then else
+ifThenElse :: Note -> Note -> Note -> Note
+ifThenElse c i e = text "if " <> c <> text " then " <> i <> text " else " <> e <> text " end"
+
+fromUntilLoop :: Note -> Note -> Note -> Note
+fromUntilLoop a c b = text "from " <> a <> text " until " <> c <> text " loop " <> b <> text " end"
