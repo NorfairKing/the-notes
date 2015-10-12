@@ -12,6 +12,7 @@ body :: Note
 body = do
   section "Hoare Logic"
   hoareLogicDefinition
+  hoareTripleNote
   ruleOfConsequence
   ruleOfConjunction
   sequentialComposition
@@ -50,15 +51,30 @@ hoareLogicDefinition = do
     s ["In Hoare Logic, well-formed formulae are ", term "Hoare triple", "s."]
     ma $ htrip p a q
     s ["Here, ", m p, and, m q, " are assertions and ", m a, " is a sequence of instructions for an abstract machine."]
+    s [m p, " is called the ", term "precondition", and, m q, " is called the ", term "postcondition", "."]
     s ["An assertion is a Boolean-valued function from the set of states."]
     s ["A true sencence in Hoare Logic describes the fact that the program ", m a, " will, started in any machine state satisfying ", m p, " will, if it terminates, yield a state satisfying ", m q, "."]
     s ["This is called ", term "partial correctness", "."]
     s ["If a Hoare triple is partially correct and ", m a, " is guaranteed to ", textbf "terminate", " as well, it is called ", term "totally correct", "."]
 
+hoareTripleNote :: Note
+hoareTripleNote = nte $ do
+  s ["An employee that needs to implement correct programs for given pre- and postconditions should look for the strongest preconditions and the weakest postconditions."]
+  s ["Specifications as such will leave him with the least amount of work."]
+  s ["This Hoare specification woul give him the best job in the world:"]
+  ma $ htrip false a mempty
+  s ["Any program ", m a, " is totally correct with respect to this specification."]
+  newline
+  s ["The second best job in the world would be the following specification:"]
+  ma $ htrip mempty a true
+  s ["Any program ", m a, " is partially with respect to this specification."]
+  s ["The only thing the programmer would have to do is to make sure that the program terminates as well."]
+
 ruleOfConsequence :: Note
 ruleOfConsequence = de $ do
   s [the, term "rule of conjunction", " is an ", inference, " in Hoare Logic."]
   ma $ linf [htrip p a q, p' ⇒ p, q ⇒ q'] (htrip p' a q')
+  s ["A precondition can be replaced with a stronger precondition and a postcondition can be replaced by a weaker postcondition."]
   where
     p' = "P'"
     q' = "Q'"
