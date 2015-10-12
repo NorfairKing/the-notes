@@ -153,7 +153,7 @@ termination = do
 loopTermination :: Note
 loopTermination = de $ do
   s ["To prove the total correctness of a loop triple, we must first prove partial correctness and then loop termination as follows."]
-  s ["There must exist a set ", m ss, " with a total ordering ", m "<", " such that ", m ss, " has a least element ", m bot, " with respect to ", m "<", "."]
+  s ["There must exist a set ", m ss, " with a total ordering ", m ("" <= ""), " such that ", m ss, " has a least element ", m bot, " with respect to ", m ("" <= ""), "."]
   s ["Three more conditions must hold:"]
 
   enumerate $ do
