@@ -62,16 +62,22 @@ neg :: Note -> Note
 neg = not
 
 -- Logical and
+landsign :: Note
+landsign = comm0 "wedge"
+
 land :: Note -> Note -> Note
-land = between $ comm0 "wedge"
+land = between landsign
 
 -- C-k AN
 (∧) :: Note -> Note -> Note
 (∧) = land
 
 -- Logical or
+lorsign :: Note
+lorsign = comm0 "vee"
+
 lor :: Note -> Note -> Note
-lor = between $ comm0 "vee"
+lor = between lorsign
 
 -- C-k OR
 (∨) :: Note -> Note -> Note

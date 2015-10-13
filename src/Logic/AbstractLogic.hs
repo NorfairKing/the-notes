@@ -8,6 +8,8 @@ module Logic.AbstractLogic (
   , inference
   , knowledgeBase
   , theory
+  , sound
+  , complete
   ) where
 
 import           Notes
@@ -133,11 +135,16 @@ inferenceNotation = de $ do
     fs = [f 1, f 2, dotsc, f "n"]
     f n = logicf !: n
 
+sound :: Note
+sound = ix "sound"
 
 soundDefinition :: Note
 soundDefinition = de $ do
   s ["An ", inference, " ", m "i", " is called ", term "sound", " if every theorem is a true formula:"]
   ma $ fa (commaSeparated [alpha, lkb]) (lpvm "i" lkb alpha ⇒ lkb `lent` alpha)
+
+complete :: Note
+complete = ix "complete"
 
 completeDefinition :: Note
 completeDefinition = de $ do

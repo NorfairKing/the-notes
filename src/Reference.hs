@@ -22,7 +22,7 @@ showReferences rs = (++ "\n\n") . intercalate ",\n\n" $ map showRef rs
         ++ "\n}"
 
     showField :: (String, String) -> String
-    showField (a, b) = "  " ++ a ++ " = \"" ++ b ++ "\""
+    showField (a, b) = "  " ++ a ++ " = {" ++ b ++ "}"
 
 
 refName :: LaTeXC l => Reference -> l

@@ -21,3 +21,6 @@ exneeded = todo $ do
   "There is an example missing here. "
   "You can help improve these notes by sending an example to the author."
 
+citneeded :: Note
+citneeded = todo $ do
+  "[Citation needed]"

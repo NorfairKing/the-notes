@@ -4,6 +4,7 @@ current
 
 # Temporary source files
 *.tex
+*.bib
 
 ### Haskell output files
 *.hi

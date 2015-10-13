@@ -221,3 +221,9 @@ idempotent = ix "idempotent"
 distributive :: Note
 distributive = ix "distributive"
 
+-- Proofs
+np :: Note
+np = do
+  newline
+  textit "no proof"
+  newline
