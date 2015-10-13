@@ -55,7 +55,7 @@ array (Just p) ts = liftL $ TeXEnv "array" [ OptArg $ TeXRaw $ render p , FixArg
 
 
 linedTable :: [Note] -> [[Note]] -> Note
-linedTable header notes = ma $ do
+linedTable header notes = m $ do
   array (Just Center) specs $ do
     hline
     row header
@@ -85,14 +85,28 @@ linedTable header notes = ma $ do
       hline
       content ns
 
+-- | Figure environment.
+hereFigure :: LaTeXC l => l -> l
+hereFigure = liftL $ (\n -> TeXEnv "figure" [ OptArg $ TeXRaw $ "H" ] (comm0 "centering" <> n))
 
 truthTables :: Note
-truthTables = do
-  truthTableNot
-  truthTableOr
-  truthTableAnd
-  truthTableImplies
-  truthTableXor
+truthTables = nte $ do
+  s ["Truth tables are a very common and naive way of reasoning about sentences propositional logic."]
+  s ["The validity of a proposition is checked by enumerating the truth table for the sentence and checking whether all the values in the column for the sentence are true."]
+
+  hereFigure $ do
+		truthTableNot
+  hereFigure $ do
+		truthTableOr
+		m quad
+		truthTableAnd
+  hereFigure $ do
+		truthTableImplies
+		m quad
+		truthTableIff
+		m quad
+		truthTableXor
+		caption "Elementary truth tables"
 
 truthTableNot :: Note
 truthTableNot = do
@@ -146,3 +160,17 @@ truthTableXor = do
     , [true , false, true ]
     , [true , true , false]
     ]
+
+
+truthTableIff :: Note
+truthTableIff = do
+  linedTable
+    ["A", "B", "A" ⇔ "B"]
+    [
+      [false, false, true ]
+    , [false, true , false]
+    , [true , false, false]
+    , [true , true , true]
+    ]
+
+
