@@ -18,9 +18,9 @@ module Types (
   , module Control.Monad.Reader
   ) where
 import           Prelude                      (Eq (..), FilePath,
-                                               Fractional (..), IO, Num (..),
-                                               Show (..), mempty, ($), (&&),
-                                               (++), (.))
+                                               Fractional (..), IO, Maybe (..),
+                                               Num (..), Show (..), mempty, ($),
+                                               (&&), (++), (.))
 
 import           Text.LaTeX                   hiding (Label, cite, item, ref)
 import           Text.LaTeX.Base.Class

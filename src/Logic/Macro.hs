@@ -77,6 +77,11 @@ lor = between $ comm0 "vee"
 (∨) :: Note -> Note -> Note
 (∨) = lor
 
+-- Logical Xor
+xor :: Note -> Note -> Note
+xor = between $ comm0 "oplus"
+
+
 
 -- Hoare Triple
 htrip :: Note -> Note -> Note -> Note
