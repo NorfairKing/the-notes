@@ -15,8 +15,9 @@ GHC_FLAGS = \
 	-fwarn-unused-imports \
 	-fwarn-incomplete-patterns \
 	-Wall \
-	-fno-warn-unused-do-bind \
+	-fwarn-unused-do-bind \
 	-fno-warn-name-shadowing \
+	-fno-warn-orphans \
 	-XOverloadedStrings \
 	-XNoImplicitPrelude
 

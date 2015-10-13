@@ -83,9 +83,6 @@ ruleOfConjunction :: Note
 ruleOfConjunction = de $ do
   s [the, term "rule of conjunction", " is an ", inference, " in Hoare Logic."]
   ma $ linf [htrip p a q, htrip p a r] $ htrip p a (q ∧ r)
-  where
-    p' = "P'"
-    q' = "Q'"
 
 sequentialComposition :: Note
 sequentialComposition = de $ do

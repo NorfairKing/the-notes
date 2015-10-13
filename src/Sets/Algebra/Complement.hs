@@ -34,7 +34,6 @@ body = do
 a, b, x, y :: Note
 a = "A"
 b = "B"
-c = "C"
 x = "x"
 y = "y"
 

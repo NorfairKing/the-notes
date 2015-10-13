@@ -20,7 +20,7 @@ body = do
   unionIdentityLaw
   unionDominationLaw
 
-a, b, x, y :: Note
+a, b, c, x, y :: Note
 a = "A"
 b = "B"
 c = "C"

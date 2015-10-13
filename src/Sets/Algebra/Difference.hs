@@ -29,7 +29,7 @@ body = do
 
   intersectionOverDifference
 
-a, b, x, y :: Note
+a, b, c, x, y :: Note
 a = "A"
 b = "B"
 c = "C"

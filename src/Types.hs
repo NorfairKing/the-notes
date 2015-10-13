@@ -62,10 +62,12 @@ data Part = Part String Note [Reference]
 instance Eq Part where
   (Part n1 _ rfs1) == (Part n2 _ rfs2) = n1 == n2 && rfs1 == rfs2
 
+
 instance MonadReader r m => MonadReader r (LaTeXT m) where
   ask   = lift ask
   local = local
   reader = lift . reader
+
 
 data Label = Label RefKind Note
   deriving (Show, Eq)

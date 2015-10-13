@@ -1,12 +1,13 @@
 module Logic.AbstractLogic (
     abstractLogic
 
+  , axiom
   , expression
   , formula
-  , theory
   , grammar
-  , knowledgeBase
   , inference
+  , knowledgeBase
+  , theory
   ) where
 
 import           Notes
