@@ -1,15 +1,17 @@
 module Logic.AbstractLogic (
     abstractLogic
 
-  , axiom
-  , expression
-  , formula
-  , grammar
-  , inference
-  , knowledgeBase
-  , theory
-  , sound
-  , complete
+    , axiom
+    , complete
+    , expression
+    , formula
+    , grammar
+    , inference
+    , knowledgeBase
+    , model
+    , sound
+    , theory
+    , world
   ) where
 
 import           Notes
@@ -74,6 +76,11 @@ theoryDefinition = de $ do
     item $ do
       s ["An ", term "axiom", " is a theorem that can be asserted without inference."]
 
+world :: Note
+world = ix "world"
+
+model :: Note
+model = ix "model"
 
 worldDefinition :: Note
 worldDefinition = de $ do

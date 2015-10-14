@@ -55,11 +55,6 @@ defineas = binop defineasSign
 (===) :: Note -> Note -> Note
 (===) = defineas
 
-forallSign :: Note
-forallSign = comm0 "forall"
-
-fa :: Note -> Note -> Note
-fa n m = forallSign <> n <> ":" <> raw "\\ " <> m
 
 dotsc :: Note
 dotsc = comm0 "dotsc"

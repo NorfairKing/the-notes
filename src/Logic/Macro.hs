@@ -116,3 +116,24 @@ ifThenElse c i e = text "if " <> c <> text " then " <> i <> text " else " <> e <
 
 fromUntilLoop :: Note -> Note -> Note -> Note
 fromUntilLoop a c b = text "from " <> a <> text " until " <> c <> text " loop " <> b <> text " end"
+
+
+-- Quantifiers
+existentialQuantifier :: Note
+existentialQuantifier = comm0 "exists"
+
+thereExistsSign :: Note
+thereExistsSign = existentialQuantifier
+
+te :: Note -> Note -> Note
+te n m = thereExistsSign <> n <> ":" <> commS " " <> m
+
+universalQuantifier :: Note
+universalQuantifier = comm0 "forall"
+
+forallSign :: Note
+forallSign = universalQuantifier
+
+fa :: Note -> Note -> Note
+fa n m = forallSign <> n <> ":" <> commS " " <> m
+
