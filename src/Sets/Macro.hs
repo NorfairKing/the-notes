@@ -17,7 +17,7 @@ setcmpr n m = setof $ n <> mid <> m
 
 --[ Set list
 setlst :: Note -> Note -> Note
-setlst n m = setof $ n <> ", " <> dotsc <> ", " <> m
+setlst m n = setof $ m <> ", " <> dotsc <> ", " <> n
 
 setlist :: Note -> Note -> Note -> Note
 setlist m n o = setof $ m <> ", " <> n <> ", " <> dotsc <> ", " <> o

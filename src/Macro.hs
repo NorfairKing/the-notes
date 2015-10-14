@@ -11,6 +11,7 @@ module Macro (
   , module Sets.Macro
   , module Probability.Macro
   , module Numbers.Macro
+  , module LinearAlgebra.Macro
   ) where
 
 import           Macro.Index
@@ -21,6 +22,7 @@ import           Macro.Text
 import           Macro.Theorem
 import           Macro.Todo
 
+import           LinearAlgebra.Macro
 import           Logic.Macro
 import           Numbers.Macro
 import           Probability.Macro

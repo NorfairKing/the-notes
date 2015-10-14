@@ -183,6 +183,12 @@ sumcmpr = compr sumsign
 eq :: Note -> Note -> Note
 eq = between "="
 
+neq :: Note -> Note -> Note
+neq = between $ comm0 "neq"
+
+(≠) :: Note -> Note -> Note
+(≠) = neq
+
 -- Inequality
 lt :: Note -> Note -> Note
 lt = between "<"
@@ -195,6 +201,10 @@ not n = notsign <> n
 
 (¬) :: Note -> Note
 (¬) = not
+
+-- Exponential
+exp :: Note -> Note
+exp n = "e" ^: n
 
 --[ Symbols
 bot :: Note

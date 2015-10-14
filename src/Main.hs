@@ -1,12 +1,12 @@
 module Main where
 
-import           System.Environment (getArgs)
-import           System.Process     (system)
+import           System.Environment   (getArgs)
+import           System.Process       (system)
 
 import           Notes
 import           Utils
 
-import           Prelude            (Maybe (..), error, map, print, return)
+import           Prelude              (Maybe (..), error, map, print, return)
 
 import           Constants
 import           Header
@@ -15,6 +15,7 @@ import           Titlepage
 
 import           Functions.Main
 import           Logic.Main
+import           MachineLearning.Main
 import           Probability.Main
 import           Relations.Main
 import           Sets.Main
@@ -79,5 +80,6 @@ allNotes = notes ""
     , relations
     , functions
     , probability
+    , machineLearning
   ]
 
