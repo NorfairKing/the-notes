@@ -7,11 +7,12 @@ module Macro (
   , module Macro.Theorem
   , module Macro.Todo
 
-  , module Logic.Macro
-  , module Sets.Macro
-  , module Probability.Macro
-  , module Numbers.Macro
   , module LinearAlgebra.Macro
+  , module Logic.Macro
+  , module Numbers.Macro
+  , module Probability.Macro
+  , module Sets.Macro
+  , module Topology.Macro
   ) where
 
 import           Macro.Index
@@ -27,3 +28,4 @@ import           Logic.Macro
 import           Numbers.Macro
 import           Probability.Macro
 import           Sets.Macro
+import           Topology.Macro

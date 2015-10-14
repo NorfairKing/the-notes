@@ -19,6 +19,7 @@ import           MachineLearning.Main
 import           Probability.Main
 import           Relations.Main
 import           Sets.Main
+import           Topology.Main
 
 
 
@@ -79,6 +80,7 @@ allNotes = notes ""
     , sets
     , relations
     , functions
+    , topologyNotes
     , probability
     , machineLearning
   ]
