@@ -9,7 +9,7 @@ import           Prelude (sequence_)
 s :: [Note] -> Note
 s ns = do
   sequence_ ns
-  " "
+  ". "
 
 quoted :: Note -> Note
 quoted n = "`" <> n <> "'"

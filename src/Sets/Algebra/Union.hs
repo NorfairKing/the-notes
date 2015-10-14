@@ -29,12 +29,12 @@ y = "y"
 
 unionDefinition :: Note
 unionDefinition = de $ do
-  s [the, term "union", " ", m (a `setun` b), " of two sets ", m a, " and ", m b, " is the set of all elements of both ", m a, " and ", m b, "."]
+  s [the, term "union", " ", m (a `setun` b), " of two sets ", m a, " and ", m b, " is the set of all elements of both ", m a, " and ", m b]
   ma $ a ∪ b =§= setcmpr x ((x ∈ a) |: (x ∈ b))
 
 unionAssociative :: Note
 unionAssociative = prop $ do
-  s ["The set ", union, " is ", associative, "."]
+  s ["The set ", union, " is ", associative]
   ma $ a ∪ (pars $ b ∪ c) =§= (pars $ a ∪ b) ∪ c
 
   proof $ do
@@ -51,7 +51,7 @@ unionAssociative = prop $ do
 
 unionCommutative :: Note
 unionCommutative = prop $ do
-  s ["The set ", union, " is ", commutative, "."]
+  s ["The set ", union, " is ", commutative]
   ma $ a ∪ b =§= b ∪ a
 
   proof $ do
@@ -62,7 +62,7 @@ unionCommutative = prop $ do
 
 unionIdempotent :: Note
 unionIdempotent = prop $ do
-  s ["The set ", union, " is ", idempotent ,"."]
+  s ["The set ", union, " is ", idempotent ,""]
   ma $ a ∪ a =§= a
 
   proof $ do
@@ -74,7 +74,7 @@ unionIdempotent = prop $ do
 
 unionSupset :: Note
 unionSupset = thm $ do
-  s ["The set ", union, " of two sets ", m a, " and ", m b, " is a superset of ", m a, "."]
+  s ["The set ", union, " of two sets ", m a, " and ", m b, " is a superset of ", m a]
 
   ma $ a ⊆ a ∪ b
 
@@ -89,14 +89,14 @@ unionSubsetDefinition = thm $ do
   ma $ a ⊆ b ⇔ (a ∪ b =§= a)
 
   proof $ do
-    s ["Let ", m b, " be a set and ", m a, " a subset of ", m b, "."]
+    s ["Let ", m b, " be a set and ", m a, " a subset of ", m b]
     ma $ a ∪ b
         =§= setcmpr x ((x ∈ a) |: (x ∈ b))
         =§= setcmpr x (x ∈ a)
 
 unionIdentityLaw :: Note
 unionIdentityLaw = thm $ do
-  s [the, term "identity law", " for the set ", union, "."]
+  s [the, term "identity law", " for the set ", union]
   ma $ a ∪ emptyset =§= a
 
   proof $ do
@@ -108,7 +108,7 @@ unionIdentityLaw = thm $ do
 
 unionDominationLaw :: Note
 unionDominationLaw = thm $ do
-  s [the, term "domination law", " for the set ", union, "."]
+  s [the, term "domination law", " for the set ", union]
   ma $ a ∪ setuniv =§= setuniv
 
   proof $ do

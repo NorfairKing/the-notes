@@ -34,7 +34,7 @@ traditionalProbabilityMeasures = do
 
 
 msDec :: Note
-msDec = s ["Let ", m prms, " be a ", ix "measurable space", "."]
+msDec = s ["Let ", m prms, " be a ", ix "measurable spac"]
 
 probabilityMeasureDefinitionLabel :: Label
 probabilityMeasureDefinitionLabel = delab "probability-measure"
@@ -44,7 +44,7 @@ probabilityMeasureDefinition = de $ do
   lab probabilityMeasureDefinitionLabel
 
   msDec
-  s ["A ", term "probability measure", " is a function ", m prpm, " with the following three properties: "]
+  s ["A ", term "probability measure", " is a function ", m prpm, " with the following three properties:"]
   ma $ fun prpm prsa $ ccint 0 1
 
   enumerate $ do
@@ -53,13 +53,13 @@ probabilityMeasureDefinition = de $ do
     item $ do
       term "countable additivity"
       newline
-      s ["Let ", m (sequ an "n"), " be a countably infinite ", ix "sequence", " of pairwise disjunct sets."]
+      s ["Let ", m (sequ an "n"), " be a countably infinite ", ix "sequence", " of pairwise disjunct sets"]
       ma $ prob (setuncmp (natural "n") an) =: sumcmp (natural "n") (prob an)
 
   where an = "A" !: "n"
 
 msppsDec :: Note
-msppsDec = s ["Let ", m prms, " be a ", ix "measurable space", " and ", m prpm, " a ", ix "probability measure", "."]
+msppsDec = s ["Let ", m prms, " be a ", ix "measurable space", " and ", m prpm, " a ", ix "probability measur"]
 
 measurablespaceDefinition :: Note
 measurablespaceDefinition = de $ do
@@ -75,16 +75,16 @@ probabilityMeasureFiniteAdditivity :: Note
 probabilityMeasureFiniteAdditivity = thm $ do
   lab probabilityMeasureFiniteAdditivityLabel
 
-  s ["Let ", m prsp, " be a ", ix "probability space", " and let ", m (setcmpr an $ "n" ∈ setlst "1" "N"), " be ", m "N", " pairwise disjunct events of ", m prsa, "."]
+  s ["Let ", m prsp, " be a ", ix "probability space", " and let ", m (setcmpr an $ "n" ∈ setlst "1" "N"), " be ", m "N", " pairwise disjunct events of ", m prsa]
   ma $ prob (setuncmpr (n =: 1) "N" an) =: sumcmpr (n =: 1) "N" (prob an)
 
-  proof $ s ["Use the ", ix "countable additivity", " property of probability measures", ref probabilityMeasureDefinitionLabel, " where only ", m n, " sets are non-empty."]
+  proof $ s ["Use the ", ix "countable additivity", " property of probability measures", ref probabilityMeasureDefinitionLabel, " where only ", m n, " sets are non-empty"]
   where
     n = "n"
     an = "A" !: n
 
 psDec :: Note
-psDec = s ["Let ", m prsp, " be a ", ix "probability space", "."]
+psDec = s ["Let ", m prsp, " be a ", ix "probability spac"]
 
 probabilitySpaceProbabilityOfComplement :: Note
 probabilitySpaceProbabilityOfComplement = thm $ do
@@ -92,7 +92,7 @@ probabilitySpaceProbabilityOfComplement = thm $ do
   ma $ fa (a ∈ prsa) (prob (setc a) =: (1 - prob a))
 
   proof $ do
-    s ["Let ", m a, " be an event in ", m prsa, "."]
+    s ["Let ", m a, " be an event in ", m prsa]
     s ["The union of ", m a, " and its complement is ", m pruniv, ".", ref unionComplementaryLawLabel]
     align_
       [
@@ -120,7 +120,7 @@ probabilityPartitionByIntersection = prop $ do
   ma $ fa (a <> ", " <> b ∈ prsa) (prob b =: prob (b ∩ a) + prob (b ∩ setc a))
 
   proof $ do
-    s ["Because ", m (b ∩ a), " and ", m (b ∩ setc a), " are disjunct, the theorem follows from the finite additivity property of probability measures."]
+    s ["Because ", m (b ∩ a), " and ", m (b ∩ setc a), " are disjunct, the theorem follows from the finite additivity property of probability measures"]
     ref probabilityMeasureFiniteAdditivityLabel
 
   where
@@ -138,7 +138,7 @@ probabilityOfUnion = prop $ do
   ma $ fa (a <> ", " <> b ∈ prsa) (prob (a ∪ b) =: prob a + prob b - prob (a ∩ b))
 
   proof $ do
-    s ["Let ", m a, " and ", m b, " be events in ", m prsa, "."]
+    s ["Let ", m a, " and ", m b, " be events in ", m prsa]
     align_
       [
         prob (a ∪ b) & "" =: prob (pars (a ∩ setc b) ∪ pars (a ∩ b) ∪ pars (setc a ∩ b))
@@ -164,7 +164,7 @@ probabilityOfDifference = prop $ do
   ma $ fa (a <> ", " <> b ∈ prsa) (prob (a `setdiff` b) =: prob (a ∪ b) - prob b)
 
   proof $ do
-    s ["Let ", m a, " and ", m b, " be events in ", m prsa, "."]
+    s ["Let ", m a, " and ", m b, " be events in ", m prsa]
     ma $ prob (a ∪ b) =: prob (b `setdiff` pars (b ∩ setc a)) =: prob b + prob (a `setdiff` b)
     "Note that we used the equivalent definition of set difference in the first equation."
     ref setDifferenceEquivalentDefinitionLabel
@@ -185,7 +185,7 @@ probabilitySubsetImpliesSmaller = prop $ do
   proof $ do
     ma $ prob a =: prob (b `setdiff` pars (b ∩ a)) =: prob b - prob (b ∩ a) <= prob b
 
-    s ["Note that in the first equation we used that ", m a, " is a subset of ", m b, " and in the second equation, we used the previous property."]
+    s ["Note that in the first equation we used that ", m a, " is a subset of ", m b, " and in the second equation, we used the previous property"]
     ref probabilityOfDifferenceLabel
   where
     a = "A"
@@ -205,11 +205,11 @@ probabilityAtMostOne = prop $ do
 
 uniformeProbabilityMeasure :: Note
 uniformeProbabilityMeasure = de $ do
-  s ["The ", term "uniforme probability measure", " is a ", ix "probability measure", " that is only defined for measurable spaces with a finite ", universe, "."]
+  s ["The ", term "uniforme probability measure", " is a ", ix "probability measure", " that is only defined for measurable spaces with a finite ", universe]
   ma $ func prpm prsa (ccint 0 1 ⊆ reals) "A" (setsize "A" / setsize pruniv)
 
 
 discreteProbabilityMeasure :: Note
 discreteProbabilityMeasure = de $ do
-  s ["The ", term "discrete probability measure", " is a ", ix "probability measure", " that is only defined for measure spaces with a countable ", universe, "."]
+  s ["The ", term "discrete probability measure", " is a ", ix "probability measure", " that is only defined for measure spaces with a countable ", universe]
   ma $ func prpm prsa (ccint 0 1 ⊆ reals) ("A" !: "i") ("p" !: "i")

@@ -30,11 +30,11 @@ conditionalProbabilityDefinition :: Note
 conditionalProbabilityDefinition = de $ do
   lab conditionalProbabilityDefinitionLabel
 
-  s ["The", term "conditional probability", " of an ", event, m (a ∈ prsa), " given an ", event, m (b ∈ prsa), " with ", m (prob b /=: 0), " is denoted as ", m (cprob a b), "."]
+  s ["The", term "conditional probability", " of an ", event, m (a ∈ prsa), " given an ", event, m (b ∈ prsa), " with ", m (prob b /=: 0), " is denoted as ", m (cprob a b), ""]
   ma $ cprob a b === (prob (a ∩ b) /: prob b)
 
 psDec :: Note
-psDec = s ["Let ", m prsp, " be a ", ix "probability space", "."]
+psDec = s ["Let ", m prsp, " be a ", ix "probability space", ""]
 
 conditionalProbabilityEventGivenItself :: Note
 conditionalProbabilityEventGivenItself = prop $ do

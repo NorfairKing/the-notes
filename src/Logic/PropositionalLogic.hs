@@ -18,22 +18,22 @@ body = do
 propositionalLogicDefinition :: Note
 propositionalLogicDefinition = do
   de $ do
-    s ["The ", term "propositional logic", " has a ", grammar, " ", m g, " and only two axioms."]
+    s ["The ", term "propositional logic", " has a ", grammar, " ", m g, " and only two axioms"]
     enumerate $ do
       item $ do
-        s [m g, " defines well formed formulas recursively with the following cases."]
+        s [m g, " defines well formed formulas recursively with the following cases"]
         itemize $ do
-          item $ s [dquoted "true", " and ", dquoted "false", " are sentences."]
-          item $ s ["So-called propositional symbols, boolean variables, are sentences."]
-          item $ s ["If ", m ss, " is a sentence, then ", m (neg ss), " is a sentence and it is true only if ", m ss, " is not."]
-          item $ s ["If ", m s1, " and ", m s2, " are sentences, then ", m (s1 ∨ s2), " is a sentence and it is true only if one of ", m s1, and, m s2, " are true."]
-          item $ s ["If ", m s1, " and ", m s2, " are sentences, then ", m (s1 ∧ s2), " is a sentence and it is true only if both ", m s1, and, m s2, " are true."]
+          item $ s [dquoted "true", " and ", dquoted "false", " are sentences"]
+          item $ s ["So-called propositional symbols, boolean variables, are sentences"]
+          item $ s ["If ", m ss, " is a sentence, then ", m (neg ss), " is a sentence and it is true only if ", m ss, " is not"]
+          item $ s ["If ", m s1, " and ", m s2, " are sentences, then ", m (s1 ∨ s2), " is a sentence and it is true only if one of ", m s1, and, m s2, " are true"]
+          item $ s ["If ", m s1, " and ", m s2, " are sentences, then ", m (s1 ∧ s2), " is a sentence and it is true only if both ", m s1, and, m s2, " are true"]
       item $ do
-        s ["The sentences ", dquoted "true", " and ", dquoted "false", " are respesctively asserted to be true and false."]
-    s ["In propositional logic, a world defines a truth value to every propositional symbol."]
+        s ["The sentences ", dquoted "true", " and ", dquoted "false", " are respesctively asserted to be true and false"]
+    s ["In propositional logic, a world defines a truth value to every propositional symbol"]
 
   nte $ do
-    "There are some very common notational shorthands in propositional logic: "
+    "There are some very common notational shorthands in propositional logic."
     itemize $ do
       item $ s [dquoted (m $ s1 ⇒ s2), " for ", dquoted (m $ neg s1 ∨ s2)]
       item $ s [dquoted (m $ s1 ⇔ s2), " for ", dquoted (m $ (pars $ s1 ⇒ s2) ∧ (pars $ s2 ⇒ s1))]
@@ -93,8 +93,8 @@ hereFigure = liftL $ (\n -> TeXEnv "figure" [ OptArg $ TeXRaw $ "H" ] (comm0 "ce
 
 truthTables :: Note
 truthTables = nte $ do
-  s ["Truth tables are a very common and naive way of reasoning about sentences propositional logic."]
-  s ["The validity of a proposition is checked by enumerating the truth table for the sentence and checking whether all the values in the column for the sentence are true."]
+  s ["Truth tables are a very common and naive way of reasoning about sentences propositional logic"]
+  s ["The validity of a proposition is checked by enumerating the truth table for the sentence and checking whether all the values in the column for the sentence are true"]
 
   hereFigure $ do
 		truthTableNot
@@ -185,11 +185,11 @@ conjunctiveNormalForm :: Note
 conjunctiveNormalForm = do
   subsubsection "Conjunctive Normal Form"
   de $ do
-    s ["A sentence in propositional logic is said to be in ", term "conjunctive normal form", or, term "clausal normal form", " (", term "CNF", ") if it is a conjunction of clauses where a clause is a disjunction of literals."]
+    s ["A sentence in propositional logic is said to be in ", term "conjunctive normal form", or, term "clausal normal form", " (", term "CNF", ") if it is a conjunction of clauses where a clause is a disjunction of literals"]
   thm $ do
-    s ["Every sentence propositional logic can be converted into an equivalent formula that is in CNF."]
+    s ["Every sentence propositional logic can be converted into an equivalent formula that is in CNF"]
     np
-    s ["There is a famous transformation called the ", term "Tseitin transformation", " that does exactly this."]
+    s ["There is a famous transformation called the ", term "Tseitin transformation", " that does exactly this"]
     cite tseitinTransformation
 
 
@@ -212,13 +212,13 @@ inferences = do
 resolution :: Note
 resolution = do
   de $ do
-    s ["The ", inference, " ", term "rule of resolution", " is an inference in proposition logic."]
-    s ["Let ", m a, and, m b, " be propositional formulae in CNF:"]
+    s ["The ", inference, " ", term "rule of resolution", " is an inference in proposition logic"]
+    s ["Let ", m a, and, m b, " be propositional formulae in CNF."]
     ma $ do
       a =: vsep [a !: 1, a !: 2, dotsc, a !: k]
       quad
       b =: vsep [b !: 1, b !: 2, dotsc, b !: l]
-    s ["Suppose also that, for some ", m i, and, m j, ", ", m (a !: i =: not (b !: j)), " holds."]
+    s ["Suppose also that, for some ", m i, and, m j, ", ", m (a !: i =: not (b !: j)), " holds"]
     ma $ do
       linf [vsep [a !: 1, a !: 2, dotsc, a !: k], vsep [b !: 1, b !: 2, dotsc, b !: l]] $
         vsep $
@@ -231,7 +231,7 @@ resolution = do
     toprove
 
   nte $ do
-    s ["Eventhough this ", inference, " is ", sound, and, complete, ", finding proofs can be difficult as search spaces become exponentially large."]
+    s ["Eventhough this ", inference, " is ", sound, and, complete, ", finding proofs can be difficult as search spaces become exponentially large"]
     citneeded
 
   where
