@@ -69,15 +69,6 @@ lossfunctions = do
     f = "f"
     l = "l" !: f
 
--- NIY
-variableTypes :: Note
-variableTypes = do
-  subsection "Variable Types"
-
-  "quantitative"
-  " vs "
-  "quantitative"
-
 taxonomyOfData :: Note
 taxonomyOfData = do
   subsection "Taxonomy of data"
@@ -107,6 +98,34 @@ taxonomyOfData = do
 scales :: Note
 scales = do
   subsection "Scales"
+  s ["Data are of different scales"]
+  s ["This means that they have to be treated in different ways"]
+  s ["Eventhough most measurements will be represented by numbers eventually, we cannot just treat them as numbers with all their properties depending on what the numbers represent"]
+
+
+  de $ s [the, term "nominal scale", " describes qualitative measurements with a finite amount of possibilities"]
+  ex $ s ["Data about presence or absence is nominal"]
+  ex $ s ["The taste categories: ", dquoted "sweet, sour, salty, bitter", " are nominal"]
+
+  de $ do
+    s [the, term "ordinal scale", " describes data that is ranked with respect to an order"]
+    s ["Only the order matters however, not the absolute values or the difference between values."]
+  ex $ do
+    s ["Typically self-assesment questions are on an ordinal scale"]
+    s ["These may be questions like ", dquoted "How happy are you?", " where you have to tick one of three boxes: ", cs [dquoted "A. Unhappy", dquoted "B. OK", dquoted "C. Happy"]]
+
+  de $ s [the, term "interval scale", " describes data where the difference between datapoints carries information"]
+  ex $ "The Farenheit scale of temperature"
+
+  de $ s [the, term "ratio scale", " describes data where the ", dquoted "zero", " is meaningful but the measurement unit does not necessarily"]
+  ex $ "The Kelvin scale of temperature"
+
+  de $ s [the, term "absolute scale", " describes data where also the measurement unit carries information"]
+  ex $ "The amount of questions you got right on an exam"
+
+
+
+
 
 linearModelAndLeastSquares :: Note
 linearModelAndLeastSquares = do

@@ -15,7 +15,7 @@ quoted :: Note -> Note
 quoted n = "`" <> n <> "'"
 
 dquoted :: Note -> Note
-dquoted n = "``" <> n <> "''"
+dquoted n = raw "``" <> n <> raw "''"
 
 separated :: Note -> [Note] -> Note
 separated _ [] = ""
