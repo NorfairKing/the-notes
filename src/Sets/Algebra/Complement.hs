@@ -117,7 +117,7 @@ firstLawOfDeMorganLabel = thmlab "first-law-of-de-morgan"
 firstLawOfDeMorgan :: Note
 firstLawOfDeMorgan = thm $ do
   lab firstLawOfDeMorganLabel
-  s [the, term "first law of De Morga"]
+  s [the, term "first law of De Morgan"]
 
   ma $ setc (pars $ a ∪ b) =§= setc a ∩ setc b
 
@@ -140,7 +140,7 @@ secondLawOfDeMorganLabel = thmlab "second-law-of-de-morgan"
 secondLawOfDeMorgan :: Note
 secondLawOfDeMorgan = thm $ do
   lab secondLawOfDeMorganLabel
-  s [the, term "second law of De Morga"]
+  s [the, term "second law of De Morgan"]
 
   ma $ setc (pars $ a ∩ b) =§= setc a ∪ setc b
 
