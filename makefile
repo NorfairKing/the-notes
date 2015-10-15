@@ -33,6 +33,9 @@ bin: $(SOURCES)
 generate: bin
 	./the-notes $(shell cat current)
 
+graph:
+	graphmod $(MAIN_SRC) -q -p -i $(SRC_DIR) > graph.dot
+
 love:
 	@echo "not war"
 	
