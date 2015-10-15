@@ -1,4 +1,11 @@
-module Sets.Algebra.Intersection (setIntersection, intersection) where
+module Sets.Algebra.Intersection (
+    setIntersection
+
+  , intersection
+  , intersectionAssociativityLabel
+  , distributionLaw1Label
+  , distributionLaw2Label
+  ) where
 
 import           Notes
 
@@ -38,8 +45,12 @@ intersectionDefinition = de $ do
   s [the, term "intersection", " ", m (a ∪ b), " of two sets ", m a, " and ", m b, " is the set of all elements of both ", m a, " and ", m b]
   ma $ a ∪ b =§= setcmpr x ((x ∈ a) &: (x ∈ b))
 
+intersectionAssociativityLabel :: Label
+intersectionAssociativityLabel = Label Property "intersection-associative"
+
 intersectionAssociative :: Note
 intersectionAssociative = prop $ do
+  lab intersectionAssociativityLabel
   s ["The set ", intersection, " is ", associative]
   ma $ a ∩ (pars $ b ∩ c) =§= (pars $ a ∩ b) ∩ c
 
@@ -179,8 +190,12 @@ distributionLaws = do
   distributionLaw1
   distributionLaw2
 
+distributionLaw1Label :: Label
+distributionLaw1Label = Label Theorem "dristribution-law-1"
+
 distributionLaw1 :: Note
 distributionLaw1 = thm $ do
+  lab distributionLaw1Label
   s ["The set ", intersection, is, distributive, " with respect to the set ", union]
   ma $ a ∩ (pars $ b ∪ c) =§= (pars $ a ∪ b) ∩ (pars $ a ∪ c)
 
@@ -197,8 +212,12 @@ distributionLaw1 = thm $ do
         , "" & "" =§= (pars $ a ∪ b) ∩ (pars $ a ∪ c)
       ]
 
+distributionLaw2Label :: Label
+distributionLaw2Label = Label Theorem "dristribution-law-2"
+
 distributionLaw2 :: Note
 distributionLaw2 = thm $ do
+  lab distributionLaw2Label
   s ["The set ", union, is, distributive, " with respect to the set ", intersection]
   ma $ a ∪ (pars $ b ∩ c) =§= (pars $ a ∩ b) ∪ (pars $ a ∩ c)
 

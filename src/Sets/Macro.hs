@@ -3,12 +3,15 @@ module Sets.Macro where
 import           Macro.Index
 import           Macro.Math
 import           Macro.MetaMacro
+import           Macro.Text
 import           Types
 
 --[ Set of
 setof :: Note -> Note
 setof = brac
 
+setofs :: [Note] -> Note
+setofs = setof . cs
 
 --[ Set comprehension
 setcmpr :: Note -> Note -> Note
@@ -165,7 +168,7 @@ powsetsign :: Note
 powsetsign = mathcal "P"
 
 powset :: Note -> Note
-powset set = powsetsign `funapp` pars set
+powset set = powsetsign `funapp` set
 
 
 --[ Set size

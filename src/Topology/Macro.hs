@@ -11,7 +11,7 @@ topset = "X"
 
 -- Topology Topology (Topology on topset)
 toptop :: Note
-toptop = mathcal "T"
+toptop = comm0 "tau"
 
 
 -- Topological space

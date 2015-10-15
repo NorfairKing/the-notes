@@ -42,3 +42,6 @@ the = "The "
 
 by :: Note
 by = " by "
+
+on :: Note
+on = " on "
