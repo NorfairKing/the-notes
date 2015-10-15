@@ -1,4 +1,13 @@
-module Functions.Distances (distances) where
+module Functions.Distances (
+    distances
+
+  , distance
+  , pseudometric
+  , metric
+
+  , distanceDefinitionLabel
+  , metricDefinitionLabel
+  ) where
 
 import           Notes
 
@@ -7,12 +16,26 @@ distances = notesPart "distances" body
 
 body :: Note
 body = do
+  section "Distances"
+  subsection "Pseudometrics"
   distanceDefinition
   jaccardSimilarity
   jaccardSimilarityEquivalentDefinition
+  subsection "Metrics"
+  metricDefinition
+
+distance :: Note
+distance = ix "distance"
+
+pseudometric :: Note
+pseudometric = ix "pseudemetric"
+
+distanceDefinitionLabel :: Label
+distanceDefinitionLabel = Label Definition "distance"
 
 distanceDefinition :: Note
 distanceDefinition = de $ do
+  lab distanceDefinitionLabel
   s ["Let ", m ss, " be a set"]
   s ["A ", term "distance function", " ", m d, " for ", m ss, " is a function ", m (fun d tups realsp), " with the following four properties"]
   enumerate $ do
@@ -21,7 +44,7 @@ distanceDefinition = de $ do
     item $ do
       s ["The ", term "triangle inequality"]
       ma $ fa (cs [x, y, z] ∈ reals) $ (d `fn` xy + d `fn` yz) <= (d `fn` xz)
-
+  s ["A distance function is also called a ", term "pseudometric"]
   where
     x = "x"
     y = "y"
@@ -33,9 +56,10 @@ distanceDefinition = de $ do
     dxy = d `fn` xy
     dyx = d `fn` yx
     rxy = xy ∈ tups
-    d = "d"
+    d = fundist
     ss = "S"
     tups = ss `setprod` ss
+
 
 jaccard :: Note -> Note -> Note
 jaccard n m = "J" `funapp` cs [n,m]
@@ -48,6 +72,8 @@ jaccardSimilarity = do
   de $ do
     s ["The ", ix "Jaccard distance", " ", m dj, " between two sets ", m a, " and ", m b, " is defined as ", m (jaccard a b - 1)]
     ma $ dj `fn` cs [a, b] === (jaccard a b - 1)
+
+  todo "prove that the Jaccard distance is in fact a distance"
 
   where
     a = "A"
@@ -65,3 +91,28 @@ jaccardSimilarityEquivalentDefinition = thm $ do
   where
     a = "A"
     b = "B"
+
+
+metric :: Note
+metric = ix "metric"
+
+metricDefinitionLabel :: Label
+metricDefinitionLabel = Label Definition "metric"
+
+metricDefinition :: Note
+metricDefinition = de $ do
+  lab metricDefinitionLabel
+  s ["A ", term "metric", " on a set ", m ss, " is a distance function", ref distanceDefinitionLabel, " ", m funm, " on that set with one extra property"]
+  ma $ fa (cs [v,w] ∈ ss) (d_ v w =: 0 ⇔ v =: w)
+
+  where
+    v = "v"
+    w = "w"
+    ss = "S"
+    d_ v w = funm `fn` cs [v, w]
+
+
+
+
+
+

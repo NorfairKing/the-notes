@@ -1,9 +1,12 @@
 module Probability.Macro where
 
+import           Types
+
 import           Macro.Index
 import           Macro.Math
+
+import           Functions.Macro
 import           Sets.Macro
-import           Types
 
 --[ Probability universe
 pruniv :: Note

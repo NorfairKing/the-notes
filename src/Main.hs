@@ -80,7 +80,7 @@ allNotes = notes ""
     , sets
     , relations
     , functions
-    , topologyNotes
+    , topology
     , probability
     , machineLearning
   ]

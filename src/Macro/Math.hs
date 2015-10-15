@@ -2,6 +2,7 @@ module Macro.Math where
 
 import           Macro.Index
 import           Macro.MetaMacro
+import           Macro.Text      (commaSeparated)
 import           Types
 
 m :: Note -> Note
@@ -111,23 +112,6 @@ subseteq :: Note -> Note -> Note
 subseteq m n = m <> subseteqsign <> n
 
 
-
--- Functions
-fun :: Note -> Note -> Note -> Note
-fun m n o = m <> ":" <> raw "\\ " <> n <> rightarrow <> o
-
-func :: Note -> Note -> Note -> Note -> Note -> Note
-func m n o p q = fun m n o <> ":" <> raw "\\ " <> p <> comm0 "mapsto" <> q
-
-funinv :: Note -> Note
-funinv n = n ^: (-1)
-
-funapp :: Note -> Note -> Note
-funapp n m = n <> pars m
-
-fn :: Note -> Note -> Note
-fn = funapp
-
 -- Intervals
 interval :: LaTeXC l => [TeXArg] -> l -> l -> l
 interval args = liftL2 $ (\l1 l2 -> TeXComm "interval" (args ++ [FixArg l1, FixArg l2]))
@@ -232,3 +216,11 @@ np = do
   newline
   textit "no proof"
   newline
+
+-- Tuples
+tuple :: Note -> Note -> Note
+tuple a b = pars $ commaSeparated [a, b]
+
+-- Absolute value
+av :: Note -> Note
+av = autoBrackets "|" "|"

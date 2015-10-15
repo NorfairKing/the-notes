@@ -1,9 +1,13 @@
 module Logic.Macro where
 
+import           Types
+
+import           Functions.Macro
+
 import           Macro.Math
 import           Macro.MetaMacro
 import           Macro.Text
-import           Types
+
 
 -- Truth values
 true :: Note

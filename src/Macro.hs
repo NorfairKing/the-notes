@@ -8,13 +8,14 @@ module Macro (
   , module Macro.Theorem
   , module Macro.Todo
 
+  , module Functions.Macro
   , module LinearAlgebra.Macro
   , module Logic.Macro
+  , module MachineLearning.Macro
   , module Numbers.Macro
   , module Probability.Macro
   , module Sets.Macro
   , module Topology.Macro
-  , module MachineLearning.Macro
   ) where
 
 import           Macro.Figure
@@ -26,6 +27,7 @@ import           Macro.Text
 import           Macro.Theorem
 import           Macro.Todo
 
+import           Functions.Macro
 import           LinearAlgebra.Macro
 import           Logic.Macro
 import           MachineLearning.Macro
