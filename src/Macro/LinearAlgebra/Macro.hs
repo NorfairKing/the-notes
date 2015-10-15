@@ -28,14 +28,28 @@ laset = "V"
 lafield :: Note
 lafield = "F"
 
--- Linear Algebraa Vector Space Addition
+-- Linear Algebra Field Addition
+lafadd :: Note
+lafadd = comm0 "star"
+
+(+.) :: Note -> Note -> Note
+(+.) = binop lafadd
+
+-- Linear Algebra Field Multiplication
+lafmul :: Note
+lafmul = comm0 "ast"
+
+(*.) :: Note -> Note -> Note
+(*.) = binop lafmul
+
+-- Linear Algebra Vector Space Addition
 laadd :: Note
 laadd = "+"
 
 (<+>) :: Note -> Note -> Note
 (<+>) = binop laadd
 
--- Linear Algebraa Vector Space Multiplication
+-- Linear Algebra Vector Space Scalar Multiplication
 lamul :: Note
 lamul = comm0 "cdot"
 
@@ -43,7 +57,13 @@ lamul = comm0 "cdot"
 (<*>) = binop lamul
 
 
-
 -- Linear Algebra Vector Space
--- lavs :: Note
--- lavs = "ddd
+lavs :: Note
+lavs = lavs_ lafield laset laadd lamul
+
+lavs_ :: Note -- Field
+      -> Note -- Set
+      -> Note -- Addition
+      -> Note -- Multiplication
+      -> Note
+lavs_ f s a m = quadruple f s a m

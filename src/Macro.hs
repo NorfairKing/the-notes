@@ -8,7 +8,9 @@ module Macro (
   , module Macro.Theorem
   , module Macro.Todo
 
+  , module Macro.Fields.Macro
   , module Macro.Functions.Macro
+  , module Macro.Groups.Macro
   , module Macro.LinearAlgebra.Macro
   , module Macro.Logic.Macro
   , module Macro.MachineLearning.Macro
@@ -27,7 +29,9 @@ import           Macro.Text
 import           Macro.Theorem
 import           Macro.Todo
 
+import           Macro.Fields.Macro
 import           Macro.Functions.Macro
+import           Macro.Groups.Macro
 import           Macro.LinearAlgebra.Macro
 import           Macro.Logic.Macro
 import           Macro.MachineLearning.Macro

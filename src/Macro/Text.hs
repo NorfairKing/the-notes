@@ -45,3 +45,9 @@ by = " by "
 
 on :: Note
 on = " on "
+
+over :: Note
+over = " over "
+
+wrt :: Note
+wrt = " with respect to "

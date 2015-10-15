@@ -221,6 +221,12 @@ np = do
 tuple :: Note -> Note -> Note
 tuple a b = pars $ commaSeparated [a, b]
 
+triple :: Note -> Note -> Note -> Note
+triple a b c = pars $ commaSeparated [a, b, c]
+
+quadruple :: Note -> Note -> Note -> Note -> Note
+quadruple a b c d = pars $ commaSeparated [a, b, c, d]
+
 -- Absolute value
 av :: Note -> Note
 av = autoBrackets "|" "|"
