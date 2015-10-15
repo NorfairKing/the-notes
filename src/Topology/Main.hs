@@ -49,9 +49,12 @@ topologyDefinition = de $ do
   s ["These sets are called the ", term "open", " sets of ", m topset]
 
 topologicalSpaceDefinition :: Note
-topologicalSpaceDefinition = de $ do
-  s ["Let ", m topset, " be a set and ", m toptop, " a topology on ", m topset]
-  s [m topsp, " is called a ", term "topological space"]
+topologicalSpaceDefinition = do
+  de $ do
+    s ["Let ", m topset, " be a set and ", m toptop, " a topology on ", m topset]
+    s [m topsp, " is called a ", term "topological space"]
+  nte $ do
+    s ["In a sence, the sets in ", m toptop, " describe very abstractly which sets in ", m topset, " are ", quoted "close", " to eachother without describing ", emph "how", " close they are"]
 
 closedSetDefinition :: Note
 closedSetDefinition = de $ do
