@@ -13,6 +13,8 @@ supervisedLearning :: Note
 supervisedLearning = do
   section "Supervised Learning"
   learningProblem
+  taxonomyOfData
+  scales
   linearModelAndLeastSquares
 
 learningProblem :: Note
@@ -29,6 +31,16 @@ learningProblem = do
     y = "Y"
     f = "f"
     l = "l" !: f
+
+-- Conditional expected risk
+-- total expected risk
+-- emperical risk
+-- training data
+-- test data
+-- validation data
+-- emperical test error
+-- expected risk
+
 
 -- NIY
 lossfunctions :: Note
@@ -66,6 +78,35 @@ variableTypes = do
   " vs "
   "quantitative"
 
+taxonomyOfData :: Note
+taxonomyOfData = do
+  subsection "Taxonomy of data"
+  s ["We are given an object space ", m mlos]
+  s ["A ", term "measurement", " is a partial function from the object space to a ", term "domain", " ", m mldom]
+  s ["This measurement is used to gather data about the objects"]
+  s ["Ideally the domain has some more convenient mathematical properties than the raw object spae"]
+
+  s ["A carthesian product of object spaces can be an object space in itself"]
+  s ["A single object space is called ", term "monadic"]
+  s ["A carthesian product of two object spaces is called ", term "diadic"]
+  s ["A carthesian product of multiple object spaces is called ", term "polyadic"]
+
+  ex $ do
+    s ["Let the object space be the set of all possible positions on the earth"]
+    s ["The measurement could map a position into the temperature at that position"]
+    ma $ fun mlmes mlos reals
+  ex $ do
+    s ["Let the object space be the carthesian product of the set of all websites ", m (mlos !: 1), and, " the set of all words ", m (mlos !: 2)]
+    s ["The measurement could be the amount of occurences of that word on that website"]
+    ma $ fun mlmes (mlos !: 1 ⨯ mlos !: 2) naturals
+  ex $ do
+    s ["In preferential choice analysis, the object space is often the carthesian product of the set of test persons ", m (mlos !: 1), " with the set of choices ", m (mlos !: 2), " twice"]
+    s ["The measurement then maps this space into a boolean choice"]
+    ma $ fun mlmes (mlos !: 1 ⨯ mlos !: 2 ⨯ mlos !: 2) (setofs ["left", "right"])
+
+scales :: Note
+scales = do
+  subsection "Scales"
 
 linearModelAndLeastSquares :: Note
 linearModelAndLeastSquares = do

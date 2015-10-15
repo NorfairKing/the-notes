@@ -13,6 +13,7 @@ module Macro (
   , module Probability.Macro
   , module Sets.Macro
   , module Topology.Macro
+  , module MachineLearning.Macro
   ) where
 
 import           Macro.Index
@@ -25,6 +26,7 @@ import           Macro.Todo
 
 import           LinearAlgebra.Macro
 import           Logic.Macro
+import           MachineLearning.Macro
 import           Numbers.Macro
 import           Probability.Macro
 import           Sets.Macro
