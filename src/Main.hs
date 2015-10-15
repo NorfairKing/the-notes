@@ -14,6 +14,7 @@ import           Packages
 import           Titlepage
 
 import           Functions.Main
+import           LinearAlgebra.Main
 import           Logic.Main
 import           MachineLearning.Main
 import           Probability.Main
@@ -80,6 +81,7 @@ allNotes = notes ""
     , sets
     , relations
     , functions
+    , linearAlgebra
     , topology
     , probability
     , machineLearning
