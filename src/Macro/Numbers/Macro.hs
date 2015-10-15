@@ -1,6 +1,7 @@
-module Numbers.Macro where
+module Macro.Numbers.Macro where
 
-import           Sets.Macro
+import           Macro.Sets.Macro
+
 import           Types
 
 natural :: Note -> Note

@@ -1,4 +1,4 @@
-module MachineLearning.Macro where
+module Macro.MachineLearning.Macro where
 
 import           Types
 

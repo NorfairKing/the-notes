@@ -1,10 +1,11 @@
-module Functions.Macro where
+module Macro.Functions.Macro where
 
 import           Types
 
 import           Macro.Math
 import           Macro.Text
-import           Sets.Macro.CarthesianProduct
+
+import           Macro.Sets.CarthesianProduct
 
 
 -- Functions

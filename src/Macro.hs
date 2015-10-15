@@ -8,14 +8,14 @@ module Macro (
   , module Macro.Theorem
   , module Macro.Todo
 
-  , module Functions.Macro
-  , module LinearAlgebra.Macro
-  , module Logic.Macro
-  , module MachineLearning.Macro
-  , module Numbers.Macro
-  , module Probability.Macro
-  , module Sets.Macro
-  , module Topology.Macro
+  , module Macro.Functions.Macro
+  , module Macro.LinearAlgebra.Macro
+  , module Macro.Logic.Macro
+  , module Macro.MachineLearning.Macro
+  , module Macro.Numbers.Macro
+  , module Macro.Probability.Macro
+  , module Macro.Sets.Macro
+  , module Macro.Topology.Macro
   ) where
 
 import           Macro.Figure
@@ -27,11 +27,11 @@ import           Macro.Text
 import           Macro.Theorem
 import           Macro.Todo
 
-import           Functions.Macro
-import           LinearAlgebra.Macro
-import           Logic.Macro
-import           MachineLearning.Macro
-import           Numbers.Macro
-import           Probability.Macro
-import           Sets.Macro
-import           Topology.Macro
+import           Macro.Functions.Macro
+import           Macro.LinearAlgebra.Macro
+import           Macro.Logic.Macro
+import           Macro.MachineLearning.Macro
+import           Macro.Numbers.Macro
+import           Macro.Probability.Macro
+import           Macro.Sets.Macro
+import           Macro.Topology.Macro

@@ -1,11 +1,11 @@
-module Topology.Macro where
+module Macro.Topology.Macro where
 
 import           Types
 
 import           Macro.Math
 import           Macro.Text
 
-import           Functions.Macro (fundist, funm)
+import           Macro.Functions.Macro (fundist, funm)
 
 -- Topology set
 topset :: Note

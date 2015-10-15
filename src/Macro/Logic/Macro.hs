@@ -1,8 +1,8 @@
-module Logic.Macro where
+module Macro.Logic.Macro where
 
 import           Types
 
-import           Functions.Macro
+import           Macro.Functions.Macro
 
 import           Macro.Math
 import           Macro.MetaMacro

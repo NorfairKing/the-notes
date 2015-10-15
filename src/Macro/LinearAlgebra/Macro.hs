@@ -1,4 +1,4 @@
-module LinearAlgebra.Macro where
+module Macro.LinearAlgebra.Macro where
 
 import           Types
 

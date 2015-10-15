@@ -1,14 +1,13 @@
-module Sets.Macro (
-    module Sets.Macro
+module Macro.Sets.Macro (
+    module Macro.Sets.Macro
 
-  , module Sets.Macro.CarthesianProduct
+  , module Macro.Sets.CarthesianProduct
   ) where
 
 import           Types
 
-import           Sets.Macro.CarthesianProduct
-
-import           Functions.Macro
+import           Macro.Functions.Macro
+import           Macro.Sets.CarthesianProduct
 
 import           Macro.Index
 import           Macro.Math

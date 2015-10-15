@@ -1,4 +1,4 @@
-module Sets.Macro.CarthesianProduct where
+module Macro.Sets.CarthesianProduct where
 
 import           Types
 
