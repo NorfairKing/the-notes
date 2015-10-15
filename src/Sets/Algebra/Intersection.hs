@@ -152,7 +152,7 @@ absorptionLaws = do
 
 absorptionLaw1 :: Note
 absorptionLaw1 = thm $ do
-  s ["The first ", term "absorption la"]
+  s ["The first ", term "absorption law"]
   ma $ a ∪ (pars $ a ∩ b) =§= a
 
   proof $ do
@@ -170,7 +170,7 @@ absorptionLaw1 = thm $ do
 
 absorptionLaw2 :: Note
 absorptionLaw2 = thm $ do
-  s ["The second ", term "absorption la"]
+  s ["The second ", term "absorption law"]
   ma $ a ∩ (pars $ a ∪ b) =§= a
 
   proof $ do
