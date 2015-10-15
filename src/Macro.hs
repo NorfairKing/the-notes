@@ -1,5 +1,6 @@
 module Macro (
-    module Macro.Index
+    module Macro.Figure
+  , module Macro.Index
   , module Macro.Math
   , module Macro.MetaMacro
   , module Macro.Reference
@@ -16,6 +17,7 @@ module Macro (
   , module MachineLearning.Macro
   ) where
 
+import           Macro.Figure
 import           Macro.Index
 import           Macro.Math
 import           Macro.MetaMacro

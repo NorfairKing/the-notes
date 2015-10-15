@@ -15,6 +15,7 @@ supervisedLearning = do
   learningProblem
   taxonomyOfData
   scales
+  transformationInvariances
   linearModelAndLeastSquares
 
 learningProblem :: Note
@@ -123,6 +124,43 @@ scales = do
   de $ s [the, term "absolute scale", " describes data where also the measurement unit carries information"]
   ex $ "The amount of questions you got right on an exam"
 
+transformationInvariances :: Note
+transformationInvariances = do
+  subsection "Transformation Invariances"
+  s ["Data is sometimes transformed for various reasons"]
+  s ["It is important that we realise that some transformations alter the data and some don't"]
+  s ["If data is not altered by a transformation ", m "t", " then that data is called ", m "t", "-invariant"]
+
+  hereFigure $ do
+    tabular Nothing [VerticalLine, LeftColumn, VerticalLine, LeftColumn, VerticalLine] $ do
+      hline
+      "scale type"  & "transformation invariances"
+      ln
+      hline
+      "nominal"     & fs (f <> text " is bijective.")
+      ln
+      "ordinal"     & fs (fa (cs [x1, x2] ∈ reals) $ f_ x1 <: f_ x2)
+      ln
+      "interval"    & fs (te (cs [a ∈ realsp, c ∈ reals]) $ f_ x =: a * x + c)
+      ln
+      "ratio"       & fs (te (a ∈ realsp) $ f_ x =: a * x)
+      ln
+      "absolute"    & m (func f reals reals x (f_ x =: x))
+      ln
+
+
+    caption "Transformation invariances for different scales"
+
+  where
+    f = "f"
+    f_ = funapp f
+    fs n = m (setcmpr (fun f reals reals) n)
+    ln = lnbk <> hline
+    x = "x"
+    x1 = x !: 1
+    x2 = x !: 2
+    a = "a"
+    c = "c"
 
 
 

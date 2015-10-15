@@ -87,10 +87,6 @@ linedTable header notes = m $ do
       hline
       content ns
 
--- | Figure environment.
-hereFigure :: LaTeXC l => l -> l
-hereFigure = liftL $ (\n -> TeXEnv "figure" [ OptArg $ TeXRaw $ "H" ] (comm0 "centering" <> n))
-
 truthTables :: Note
 truthTables = nte $ do
   s ["Truth tables are a very common and naive way of reasoning about sentences propositional logic"]
