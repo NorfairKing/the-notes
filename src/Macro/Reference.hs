@@ -25,7 +25,9 @@ labelFor :: Label -> Note
 labelFor l = wordFor l <> ":" <> labelOf l
 
 ref :: Label -> Note
-ref l = footnote $ "See " <> wordFor l <> " " <> T.ref (labelFor l) <> " on page " <> T.pageref (labelFor l) <> "."
+ref l = do
+  footnote $ "See " <> wordFor l <> " " <> T.ref (labelFor l) <> " on page " <> T.pageref (labelFor l) <> "."
+
 
 lab :: Label -> Note
 lab l = label $ labelFor l
@@ -44,7 +46,11 @@ prolab = Label Proposition
 
 
 cite :: Reference -> Note
-cite = comm1 "cite" . refName
+cite ref = do
+  comm1 "cite" $ refName ref
+  addReference ref
 
 nocite :: Reference -> Note
-nocite = comm1 "nocite" . refName
+nocite ref = do
+  comm1 "nocite" $ refName ref
+  addReference ref

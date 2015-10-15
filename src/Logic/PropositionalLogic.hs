@@ -6,7 +6,7 @@ import           Notes
 import           Data.List           (concat, intersperse, length, replicate)
 
 propositionalLogic :: Notes
-propositionalLogic = notesPartRef "propositional-logic" body [tseitinTransformation]
+propositionalLogic = notesPart "propositional-logic" body
 
 body :: Note
 body = do

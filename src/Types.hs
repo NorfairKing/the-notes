@@ -15,7 +15,7 @@ module Types (
   , module Text.LaTeX.Packages.AMSThm
   , module Text.LaTeX.Packages.Fancyhdr
 
-  , module Control.Monad.Reader
+  , modify
   ) where
 import           Prelude                      (Eq (..), FilePath,
                                                Fractional (..), IO, Maybe (..),
@@ -33,9 +33,15 @@ import           Text.LaTeX.Packages.Fancyhdr
 
 import           Control.Monad.Reader         (MonadReader (..), ReaderT, ask,
                                                asks, runReaderT)
+import           Control.Monad.State          (MonadState (..), StateT, get,
+                                               gets, modify, put, runStateT)
 
 
-type Note = LaTeXT_ (ReaderT Config IO)
+type Note = LaTeXT_ (StateT State (ReaderT Config IO))
+
+data State = State {
+    state_refs :: [Reference]
+  } deriving (Show, Eq)
 
 data Config = Config {
     conf_selections :: [Selection]
@@ -45,28 +51,30 @@ data Selection = All
                | Match String
   deriving (Show, Eq)
 
-data Notes = NotesPart String Note [Reference]
+data Notes = NotesPart String Note
            | NotesPartList String [Notes]
 
 notes :: String -> [Notes] -> Notes
 notes = NotesPartList
 
 notesPart :: String -> Note -> Notes
-notesPart name body = NotesPart name body []
+notesPart = NotesPart
 
-notesPartRef :: String -> Note -> [Reference] -> Notes
-notesPartRef = NotesPart
-
-data Part = Part String Note [Reference]
+data Part = Part String Note
 
 instance Eq Part where
-  (Part n1 _ rfs1) == (Part n2 _ rfs2) = n1 == n2 && rfs1 == rfs2
+  (Part n1 _) == (Part n2 _) = n1 == n2
 
 
 instance MonadReader r m => MonadReader r (LaTeXT m) where
   ask   = lift ask
   local = local
   reader = lift . reader
+
+instance MonadState s m => MonadState s (LaTeXT m) where
+  get = lift get
+  put = lift . put
+  state = lift . state
 
 
 data Label = Label RefKind Note

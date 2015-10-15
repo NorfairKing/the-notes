@@ -27,3 +27,6 @@ showReferences rs = (++ "\n\n") . intercalate ",\n\n" $ map showRef rs
 
 refName :: LaTeXC l => Reference -> l
 refName (Reference _ name _) = fromString name
+
+addReference :: Reference -> Note
+addReference ref = modify (\s -> s {state_refs = state_refs s ++ [ref]})

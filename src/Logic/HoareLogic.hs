@@ -5,8 +5,7 @@ import           Notes
 import           Logic.AbstractLogic (inference, theory)
 
 hoareLogic :: Notes
-hoareLogic = notesPartRef "hoare-logic" body
-  [softwareVerificationAxiomaticSemanticsSlides]
+hoareLogic = notesPart "hoare-logic" body
 
 body :: Note
 body = do

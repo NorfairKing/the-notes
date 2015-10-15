@@ -6,7 +6,8 @@ import           System.Process       (system)
 import           Notes
 import           Utils
 
-import           Prelude              (Maybe (..), error, map, print, return)
+import           Prelude              (Maybe (..), appendFile, error, map,
+                                       print, return)
 
 import           Constants
 import           Header
@@ -36,13 +37,19 @@ main = do
       Nothing -> error "Couldn't parse arguments."
       Just cf -> do
         removeIfExists mainBibFile
-        t <- runNote entireDocument cf
+        (t, endState) <- runNote entireDocument cf startState
 
         renderFile mainTexFile t
+
+        appendFile mainBibFile $ showReferences $ state_refs endState
 
         _ <- liftIO $ system $ "latexmk -pdf -pdflatex=\"pdflatex -shell-escape -halt-on-error -enable-write18\" " ++ mainTexFile ++ " -jobname=" ++ outName
         return ()
 
+startState :: State
+startState = State {
+    state_refs = []
+  }
 
 config :: [String] -> Maybe Config
 config args = do
@@ -52,9 +59,6 @@ config args = do
 constructSelection :: String -> Selection
 constructSelection "all" = All
 constructSelection s = Match s
-
-runNote :: Note -> Config -> IO LaTeX
-runNote note conf = runReaderT (execLaTeXT note) conf
 
 entireDocument :: Note
 entireDocument = do

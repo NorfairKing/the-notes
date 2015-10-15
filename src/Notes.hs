@@ -3,6 +3,8 @@ module Notes (
   , module Notes
   , module Macro
   , module Reference
+
+  , modify
   ) where
 
 import           Types
@@ -11,10 +13,25 @@ import           Constants
 import           Macro
 import           Reference
 
-import           Prelude   (appendFile, concatMap, filter, foldl, map, mapM_,
-                            putStrLn, sequence_)
+import           Prelude              (appendFile, concatMap, filter, foldl,
+                                       map, mapM_, putStrLn, sequence_)
 
-import           Data.List (isPrefixOf, union)
+import           Control.Monad.Reader (MonadReader (..), ReaderT, ask, asks,
+                                       runReaderT)
+import           Control.Monad.State  (MonadState (..), StateT, get, gets, put,
+                                       runStateT)
+
+
+import           Control.Monad.Reader (MonadReader (..), ReaderT, ask, asks,
+                                       runReaderT)
+import           Control.Monad.State  (MonadState (..), StateT, get, gets,
+                                       modify, put, runStateT)
+
+
+import           Data.List            (isPrefixOf, union)
+
+runNote :: Note -> Config -> State -> IO (LaTeX, State)
+runNote note conf state = runReaderT (runStateT (execLaTeXT note) state) conf
 
 renderNotes :: Notes -> Note
 renderNotes notes = do
@@ -30,12 +47,12 @@ un = foldl union []
 
 applySelection :: [Part] -> Selection -> [Part]
 applySelection ps All = ps
-applySelection ps (Match s) = filter (\(Part name _ _) -> s `isPrefixOf` name) ps
+applySelection ps (Match s) = filter (\(Part name _) -> s `isPrefixOf` name) ps
 
 flattenNotes :: Notes -> [Part]
 flattenNotes = go ""
   where
-    go path (NotesPart name nt rfs) = [Part (path <.> name) nt rfs]
+    go path (NotesPart name nt) = [Part (path <.> name) nt]
     go path (NotesPartList name ds) = concatMap (go $ path <.> name) ds
 
     (<.>) :: String -> String -> String
@@ -45,12 +62,10 @@ flattenNotes = go ""
 renderParts :: [Part] -> Note
 renderParts ps = do
     liftIO $ putStrLn "\nBuilding parts:"
-    liftIO $ mapM_ putStrLn $ map (\(Part name _ _) -> name) ps
+    liftIO $ mapM_ putStrLn $ map (\(Part name _) -> name) ps
     liftIO $ putStrLn ""
 
-    liftIO $ appendFile mainBibFile $ showReferences $ concatMap (\(Part _ _ rfs) -> rfs) $ ps
-
-    sequence_ $ map (\(Part _ body _) -> body) ps
+    sequence_ $ map (\(Part _ body) -> body) ps
 
 
 boxed :: Note -> Note
