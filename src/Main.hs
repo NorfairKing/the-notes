@@ -13,12 +13,15 @@ import           Header
 import           Packages
 import           Titlepage
 
+import           Fields.Main
 import           Functions.Main
+import           Groups.Main
 import           LinearAlgebra.Main
 import           Logic.Main
 import           MachineLearning.Main
 import           Probability.Main
 import           Relations.Main
+import           Rings.Main
 import           Sets.Main
 import           Topology.Main
 
@@ -81,6 +84,9 @@ allNotes = notes ""
     , sets
     , relations
     , functions
+    , groups
+    , rings
+    , fields
     , linearAlgebra
     , topology
     , probability
