@@ -12,3 +12,14 @@ realsp = reals ^: "+"
 
 realsn :: Note
 realsn = reals ^: "n"
+
+-- Complex conjugate
+conj :: Note -> Note
+conj = overline
+
+-- Operations un numbers
+addition :: Note
+addition = "+"
+
+multiplication :: Note
+multiplication = comm0 "cdot"

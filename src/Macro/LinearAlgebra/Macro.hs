@@ -2,8 +2,11 @@ module Macro.LinearAlgebra.Macro where
 
 import           Types
 
+import           Macro.Numbers.Macro
+
 import           Macro.Math
 import           Macro.MetaMacro
+import           Macro.Text
 
 
 -- Transpose
@@ -19,6 +22,13 @@ veclist m n o = pars $ m <> ", " <> n <> ", " <> dotsc <> ", " <> o
 -- Matrix inverse
 matinv :: Note -> Note
 matinv mat = mat ^: (-1)
+
+-- Operations on Vector of numbers
+realVecAddition :: Note
+realVecAddition = addition
+
+realVecScalarMultiplication :: Note
+realVecScalarMultiplication = multiplication
 
 -- Linear Algebra Set
 laset :: Note
@@ -44,14 +54,14 @@ lafmul = comm0 "ast"
 
 -- Linear Algebra Vector Space Addition
 laadd :: Note
-laadd = "+"
+laadd = bm "+"
 
 (<+>) :: Note -> Note -> Note
 (<+>) = binop laadd
 
 -- Linear Algebra Vector Space Scalar Multiplication
 lamul :: Note
-lamul = comm0 "cdot"
+lamul = bm $ comm0 "cdot"
 
 (<*>) :: Note -> Note -> Note
 (<*>) = binop lamul
@@ -66,4 +76,38 @@ lavs_ :: Note -- Field
       -> Note -- Addition
       -> Note -- Multiplication
       -> Note
-lavs_ f s a m = quadruple f s a m
+lavs_ = quadruple
+
+realVectorsSpace :: Note -> Note
+realVectorsSpace p = lavs_ reals (reals ^: p) "+" (comm0 "cdot")
+
+
+-- Linear Algebra Inproduct
+lainprod :: Note
+lainprod = autoBrackets langle rangle $ cs [comm0 "cdot", comm0 "cdot"]
+
+lain :: Note -> Note -> Note
+lain v w = autoBrackets langle rangle $ cs [v, w]
+
+(<.>) :: Note -> Note -> Note
+(<.>) = lain
+
+realVectorInproduct :: Note
+realVectorInproduct = lainprod
+
+
+-- Linear Algebra Inner Product Space
+laips :: Note
+laips = laips_ lafield laset laadd lamul lainprod
+
+laips_ :: Note -- Field
+       -> Note -- Set
+       -> Note -- Addition
+       -> Note -- Multiplication
+       -> Note -- Inner product
+       -> Note
+laips_ = quintuple
+
+euclideanInnerProductSpace :: Note -> Note
+euclideanInnerProductSpace p = laips_ reals (reals ^: p) realVecAddition realVecScalarMultiplication lainprod
+

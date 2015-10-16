@@ -227,6 +227,13 @@ triple a b c = pars $ commaSeparated [a, b, c]
 quadruple :: Note -> Note -> Note -> Note -> Note
 quadruple a b c d = pars $ commaSeparated [a, b, c, d]
 
+quintuple :: Note -> Note -> Note -> Note -> Note -> Note
+quintuple a b c d e = pars $ commaSeparated [a, b, c, d, e]
+
 -- Absolute value
 av :: Note -> Note
 av = autoBrackets "|" "|"
+
+-- Bold math
+bm :: Note -> Note
+bm = comm1 "bm"

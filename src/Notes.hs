@@ -83,3 +83,6 @@ item n = comm0 "item" <> n
 
 (<=) :: Note -> Note -> Note
 (<=) = (<=:)
+
+(>=) :: Note -> Note -> Note
+(>=) = (>=:)
