@@ -24,6 +24,7 @@ learningProblem = do
   s ["In statistical literature they are ofter called ", term "predictors"]
   s ["In pattern recognition, these are called ", term "feature"]
   s [dquoted "Outputs", " are called ", term "dependent variables", " in statistics and ", term "responses", " in pattern recognition"]
+  s ["The ", term "measurement space", " is the tuple ", m (tuple x y)]
   where
     x = "X"
     y = "Y"

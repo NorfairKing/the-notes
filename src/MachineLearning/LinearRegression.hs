@@ -9,7 +9,31 @@ linearRegression = notesPart "linear-regression" body
 
 body :: Note
 body = do
+  intro
   linearModelAndLeastSquares
+
+x = "X"
+y = "Y"
+
+intro :: Note
+intro = do
+  subsection "Regression"
+
+  s ["Regression is a supervised learning technique"]
+  s ["It assumes that the input space is ", m (realVecSpace "p"), " and the output space is ", m reals]
+
+  s ["It also assumes that the input ", m x, " the output ", m y, " the parameters of the model ", m theta, " and the noise on the observations ", m mlnv, " can be modelled as random variables"]
+  ma $ y =: mlm `fn` (cs [mlmp, x]) + mlnv
+
+  -- Parametric Statistics: the functional form of the likelihood
+  -- P(X, Y|θ) is given; we want to estimate the parameters θ of the likelihood.
+  -- Non-Parametric Statistics: we sample X, Y to estimate the likelihood.
+  -- Statistical Learning Theory: we minimize the empirical risk directly without estimating the likelihood.
+  --
+  -- prior: P(model)
+  -- likelihood: P(data|model)
+  -- posterior: P(model|data)
+  -- evidence: P(data)
 
 linearModelAndLeastSquares :: Note
 linearModelAndLeastSquares = do

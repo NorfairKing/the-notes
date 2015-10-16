@@ -23,6 +23,10 @@ veclist m n o = pars $ m <> ", " <> n <> ", " <> dotsc <> ", " <> o
 matinv :: Note -> Note
 matinv mat = mat ^: (-1)
 
+-- Real vectors
+realVecSpace :: Note -> Note
+realVecSpace p = reals ^: p
+
 -- Operations on Vector of numbers
 realVecAddition :: Note
 realVecAddition = addition
