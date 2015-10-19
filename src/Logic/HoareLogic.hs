@@ -29,7 +29,7 @@ body = do
 
   nocite softwareVerificationAxiomaticSemanticsSlides
 
-a, b, c, i, p, q, r, e, x :: Note
+a, b, c, i, p, q, r, e, x, y, z :: Note
 a = "A"
 b = "B"
 c = "c"
@@ -39,6 +39,8 @@ q = "Q"
 r = "R"
 e = "e"
 x = "x"
+y = "y"
+z = "z"
 
 hoareLogicDefinition :: Note
 hoareLogicDefinition = do
@@ -105,18 +107,26 @@ abortDefinition = de $ do
   ma $ fa p $ htrip false abort p
 
 substitutionDefinition :: Note
-substitutionDefinition = de $ do
-  s [m (ass p e x), " is the expression obtained from ", m p, " by replacing every occurence of ", m x, by, m e]
-  s ["Read it as ", dquoted (s [m p, " with ", m e, " instead of ", m x, "."])]
+substitutionDefinition = do
+  de $ do
+    s [m (lrepl p e x), " is the expression obtained from ", m p, " by replacing every occurence of ", m x, by, m e]
+    s ["Read it as ", dquoted (s [m p, " with ", m e, " instead of ", m x])]
 
-  exneeded
+  ex $ m $ dquoted (lrepl (pars $ y =:= x) z y) =: dquoted (z =:= x)
+  ex $ m $ dquoted (lrepl (pars $ y =:= x) (x + 1) x) =: dquoted (x =:= x + 1)
+
 
 assignmentDefinition :: Note
-assignmentDefinition = de $ do
-  s [term "assignment", " is an axiom schema in Hoare Logic"]
-  ma $ fa (cs [p,e,x]) $ htrip (ass p e x) (x =:= e) p
+assignmentDefinition = do
+  de $ do
+    s [term "assignment", " is an axiom schema in Hoare Logic"]
+    ma $ fa (cs [p,e,x]) $ htrip (lrepl p e x) (x =:= e) p
 
-  exneeded
+  ex $ m $ htrip (x + 1 > 0) (x =:= x + 1) (x > 0)
+  ex $ do
+    s ["The assignment axiom schema can", textbf "not", " be used to prove following triple"]
+    ma $ htrip (x > 0) (x =:= x + 1) (x > 1)
+
 
 freeVariableDefinition :: Note
 freeVariableDefinition = de $ do
@@ -135,13 +145,13 @@ ruleOfConstancy = de $ do
   s [the, term "rule of constancy", " is an ", inference, " in Hoare Logic"]
   s ["Let ", m r, " be an assertion"]
   ma $ linf [htrip p a q, (freevars r) ∩ (modifies a) =§= emptyset] (htrip (p ∧ r) a (q ∧ r))
-  s ["This is known as ", dquoted (s ["Whatever ", m a, " doesn't modify, stays the same."])]
+  s ["This is known as ", dquoted (s ["Whatever ", m a, " doesn't modify, stays the same"])]
 
   exneeded
 
 conditionalRule :: Note
 conditionalRule = de $ do
-  s [the, term "conditional rule", " is an ", inference, " in Hoare Logic."]
+  s [the, term "conditional rule", " is an ", inference, " in Hoare Logic"]
   ma $ linf [htrip (p ∧ c) a q, htrip (p ∧ not c) b q] $ htrip p (ifThenElse c a b) q
 
   exneeded

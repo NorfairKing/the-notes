@@ -1,15 +1,16 @@
-module MachineLearning.LinearRegression (
-    linearRegression
+module MachineLearning.Regression (
+    regression
   ) where
 
 import           Notes
 
-linearRegression :: Notes
-linearRegression = notesPart "linear-regression" body
+regression :: Notes
+regression = notesPart "regression" body
 
 body :: Note
 body = do
   intro
+  linearRegression
   linearModelAndLeastSquares
 
 x = "X"
@@ -34,6 +35,10 @@ intro = do
   -- likelihood: P(data|model)
   -- posterior: P(model|data)
   -- evidence: P(data)
+
+linearRegression :: Note
+linearRegression = do
+  subsubsection "Linear Regression"
 
 linearModelAndLeastSquares :: Note
 linearModelAndLeastSquares = do

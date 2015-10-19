@@ -101,12 +101,16 @@ htrip p a q = brac p <> commS "," <> a <> commS "," <> brac q
 (؛) :: Note -> Note -> Note
 (؛) = between (";" <> commS " ")
 
--- Assignment
-ass :: Note -> Note -> Note -> Note
-ass p e x = p <> sqbrac (e <> " / " <> x)
+-- Logic Replacement
+lrepl :: Note -> Note -> Note -> Note
+lrepl p e x = p <> sqbrac (e <> " / " <> x)
+
+-- Logic Assignment
+lass :: Note -> Note -> Note
+lass = between ":="
 
 (=:=) :: Note -> Note -> Note
-(=:=) = between ":="
+(=:=) = lass
 
 freevars :: Note ->  Note
 freevars = funapp "FV"
