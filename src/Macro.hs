@@ -1,5 +1,6 @@
 module Macro (
-    module Macro.Figure
+    module Macro.Array
+  , module Macro.Figure
   , module Macro.Index
   , module Macro.Math
   , module Macro.MetaMacro
@@ -21,6 +22,7 @@ module Macro (
   , module Macro.Topology.Macro
   ) where
 
+import           Macro.Array
 import           Macro.Figure
 import           Macro.Index
 import           Macro.Math

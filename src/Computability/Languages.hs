@@ -23,6 +23,9 @@ body = do
   kleeneStarDefinition
   languagePlusDefinition
   languesOverAlphabetDefinition
+  infiniteLanguagesCountable
+  uncountablyManyLanguages
+  reverseLanguage
 
 language :: Note
 language = ix "language"
@@ -73,3 +76,23 @@ languesOverAlphabetDefinition :: Note
 languesOverAlphabetDefinition = de $ do
   s ["The set of all languages over an alphabet ", m calph, " is denoted as follows"]
   ma $ cls === powset cstrs
+
+infiniteLanguagesCountable :: Note
+infiniteLanguagesCountable = thm $ do
+  s ["Infinite languages are countable"]
+  refneeded "countable"
+
+  toprove
+
+uncountablyManyLanguages :: Note
+uncountablyManyLanguages = thm $ do
+  s ["There are uncountably infinitely many languages over a given alphabet"]
+
+  toprove
+
+reverseLanguage :: Note
+reverseLanguage = de $ do
+  s ["The ", term "reverse language", " ", m (crlan clan), " is the language of all reverse strings of the strings in ", m clan]
+  ma $ crlan clan === setcmpr (crstr cstr) (cstr ∈ clan)
+
+

@@ -1,8 +1,11 @@
 module Macro.Computability.Macro where
 
+import           Types
+
 import           Macro.Math
 import           Macro.MetaMacro
-import           Types
+
+import qualified Prelude         as P
 
 -- Computability Symbol Equality
 csymEqSign :: Note
@@ -89,3 +92,59 @@ cloa s = clan !: s
 
 cls :: Note
 cls =  cloa calph
+
+-- Computability reverse languages
+crlan :: Note -> Note
+crlan lan = lan ^: "R"
+
+-- Computability Regular Expressions
+
+-- empty
+cree :: Note
+cree = epsilon
+
+-- phi
+crep :: Note
+crep = phi
+
+-- concatenation
+crec :: Note -> Note -> Note
+crec m n = pars $ m <> n
+
+(<@@@>) :: Note -> Note -> Note
+(<@@@>) = crec
+
+-- disjunction
+cred :: Note -> Note -> Note
+cred m n = pars $ m <> n
+
+(<@|@>) :: Note -> Note -> Note
+(<@|@>) = cred
+
+-- asterisk
+crea :: Note -> Note
+crea n = pars n ^: "*"
+
+-- Computability Regular expression
+cre :: Note
+cre = "E"
+
+-- Computability Regexes over alphabet
+creoa :: Note -> Note
+creoa sigma = "RegEx" !: sigma
+
+cres :: Note
+cres = creoa calph
+
+-- Computability Language of regular expression
+clre :: Note -> Note
+clre e = clan !: e
+
+clore :: Note
+clore = clre cre
+
+-- Computability regular languages
+creglan :: Note
+creglan = "RegLan"
+
+

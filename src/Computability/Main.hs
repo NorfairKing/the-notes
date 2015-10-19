@@ -6,6 +6,7 @@ import           Notes
 
 import           Computability.FiniteStateAutomata
 import           Computability.Languages
+import           Computability.RegularExpressions
 import           Computability.Symbols
 
 computability :: Notes
@@ -15,4 +16,5 @@ computability = notes "computability"
   , symbols
   , languages
   , finiteStateAutomata
+  , regularExpressions
   ]
