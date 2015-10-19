@@ -8,6 +8,7 @@ module Macro (
   , module Macro.Theorem
   , module Macro.Todo
 
+  , module Macro.Computability.Macro
   , module Macro.Fields.Macro
   , module Macro.Functions.Macro
   , module Macro.Groups.Macro
@@ -29,6 +30,7 @@ import           Macro.Text
 import           Macro.Theorem
 import           Macro.Todo
 
+import           Macro.Computability.Macro
 import           Macro.Fields.Macro
 import           Macro.Functions.Macro
 import           Macro.Groups.Macro

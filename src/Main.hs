@@ -14,6 +14,7 @@ import           Header
 import           Packages
 import           Titlepage
 
+import           Computability.Main
 import           Fields.Main
 import           Functions.Main
 import           Groups.Main
@@ -54,7 +55,9 @@ startState = State {
 config :: [String] -> Maybe Config
 config args = do
   let ss = map constructSelection args
-  return $ Config { conf_selections = ss }
+  return $ Config {
+      conf_selections = ss
+    }
 
 constructSelection :: String -> Selection
 constructSelection "all" = All
@@ -93,6 +96,7 @@ allNotes = notes ""
     , fields
     , linearAlgebra
     , topology
+    , computability
     , probability
     , machineLearning
   ]

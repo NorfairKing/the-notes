@@ -26,6 +26,10 @@ exneeded = todo $ do
   "There is an example missing here. "
   "You can help improve these notes by sending an example to the author."
 
+cexneeded :: Note
+cexneeded = todo $ do
+  "There is an counter example missing here. "
+  "You can help improve these notes by sending a counter example to the author."
 refneeded :: Note -> Note
 refneeded n = todo $ do
   "There is a reference to "
