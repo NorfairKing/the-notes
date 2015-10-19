@@ -194,7 +194,7 @@ tseitinTransformation = Reference "article" "tseitin68" $
   [
     ("author", "Tseitin, G. S.")
   , ("journal", "Studies in Mathematics and Mathematical Logic")
-  , ("pages", "234–259")
+  , ("pages", "234-259")
   , ("title", "On the complexity of derivations in the propositional calculus")
   , ("volume", "Part II")
   , ("year", "1968")
