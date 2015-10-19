@@ -8,14 +8,14 @@ finiteStateAutomata :: Notes
 finiteStateAutomata = notesPart "finite-state-automata" body
 
 body :: Note
-body = do
-  section "Finite state automata"
-  deterministicFiniteStateAutomatonDefinition
-  nonDeterministicFiniteStateAutomatonDefinition
+body = mempty
+  -- section "Finite state automata"
+  -- nonDeterministicFiniteStateAutomatonDefinition
+  -- deterministicFiniteStateAutomatonDefinition
 
 deterministicFiniteStateAutomatonDefinition :: Note
-deterministicFiniteStateAutomatonDefinition = de $ do
-  s ["A ", term "deterministic finite state automaton", " (", term "DFSA", ") is a tuple "]
+deterministicFiniteStateAutomatonDefinition = de $ mempty
+  -- s ["A ", term "deterministic finite state automaton", " (", term "DFSA", ") is a tuple "]
 
 nonDeterministicFiniteStateAutomatonDefinition :: Note
 nonDeterministicFiniteStateAutomatonDefinition = de $ mempty

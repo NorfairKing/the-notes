@@ -3,6 +3,7 @@ module Computability.Symbols (
 
   , symbol
   , alphabet
+  , concatenation
   ) where
 
 import           Notes
@@ -42,7 +43,7 @@ alphabetDefinition = de $ do
 
 stringDefinition :: Note
 stringDefinition = de $ do
-  s ["A ", term "string", " ", m cstr, " over an alphabet ", m calph, " is a finite ordered sequence of symbols ", m (a "i"), " in ", m calph]
+  s ["A ", term "string", " ", m cstr, " over an alphabet ", m calph, " is a ordered sequence of symbols ", m (a "i"), " in ", m calph]
   ma $ cstr =: cstrlst (a 1) (a "n")
   where a n = "a" !: n
 
@@ -76,7 +77,7 @@ concatenationAssociative = thm $ do
 
 concatenationNotCommutative :: Note
 concatenationNotCommutative = thm $ do
-  s [the, concatenation, " of strings is ", emph "not", commutative]
+  s [the, concatenation, " of strings is ", emph "not", " ", commutative]
 
   cexneeded
 

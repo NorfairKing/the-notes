@@ -55,3 +55,37 @@ crstr s = s ^: "R"
 -- Computability Aplhabet and empty
 calphe :: Note
 calphe = calph !: cestr
+
+-- Computability Language
+clan :: Note
+clan = "L"
+
+-- Computability language concatenation
+clconcat :: [Note] -> Note
+clconcat = mconcat
+
+(<@@>) :: Note -> Note -> Note
+(<@@>) = (<>)
+
+-- Computability language power
+clanpow :: Note -> Note -> Note
+clanpow = (^:)
+
+(^@:) :: Note -> Note -> Note
+(^@:) = clanpow
+
+
+-- Computability Kleene star
+cks :: Note -> Note
+cks l = l ^: "*"
+
+-- Computability Language plus
+clp :: Note -> Note
+clp l = l ^: "+"
+
+-- Computability languages over alphabet
+cloa :: Note -> Note
+cloa s = clan !: s
+
+cls :: Note
+cls =  cloa calph
