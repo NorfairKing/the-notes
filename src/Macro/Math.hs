@@ -237,3 +237,15 @@ av = autoBrackets "|" "|"
 -- Bold math
 bm :: Note -> Note
 bm = comm1 "bm"
+
+-- Roots
+sqrt :: Note -> Note
+sqrt = tsqrt Nothing
+
+nrt :: Note -> Note -> Note
+nrt n = tsqrt (Just n)
+
+-- Extrema
+max :: Note -> Note -> Note
+max sub body = commS "max" !: sub <> body
+

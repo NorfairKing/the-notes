@@ -17,12 +17,16 @@ distances = notesPart "distances" body
 body :: Note
 body = do
   section "Distances"
+
   subsection "Pseudometrics"
   distanceDefinition
+  distanceExamples
   jaccardSimilarity
   jaccardSimilarityEquivalentDefinition
+
   subsection "Metrics"
   metricDefinition
+  metricExamples
 
 distance :: Note
 distance = ix "distance"
@@ -59,6 +63,27 @@ distanceDefinition = de $ do
     d = fundist
     ss = "S"
     tups = ss `setprod` ss
+
+distanceExamples :: Note
+distanceExamples = do
+  ex $ do
+    s [the, term "cosine distance"]
+    s ["Let ", m q, " be a natural numbers"]
+    ma $ func2 cd rq rq realsp v w $ arccos_ $ (trans v * w) /: (n2 v * n2 w)
+
+    toprove_ "Prove that this is actually a distance"
+
+  where
+    i = "i"
+    p = "p"
+    q = "q"
+    v = "v"
+    cd = fundist !: "cos"
+    n2 = norm_ 2
+    v_ n = v !: n
+    w = "w"
+    w_ n = w !: n
+    rq = realVecSpace q
 
 
 jaccard :: Note -> Note -> Note
@@ -109,10 +134,35 @@ metricDefinition = de $ do
     v = "v"
     w = "w"
     ss = "S"
-    d_ v w = funm `fn` cs [v, w]
+    d_ = fdist
 
 
+metricExamples :: Note
+metricExamples = do
+  ex $ do
+    s [the, m lp, "-", metric, "s"]
+    s ["Let ", m p, " be a real number and ", m q, " a natural numbers"]
+    ma $ func2 lp rq rq realsp v w $ nrt p $ sumcmpr (i =: 1) q $ (pars $ v_ i - w_ i) ^: p
 
+    toprove_ "Prove that these are actually metrics"
 
+  ex $ do
+    s [the, m lif, "-", metric]
+    ma $ func2 lif rq rq realsp v w $ max i $ av $ v_ i - w_ i
+
+    toprove_ "Prove that this is actually a metric"
+
+  where
+    i = "i"
+    l = "L"
+    p = "p"
+    q = "q"
+    v = "v"
+    v_ n = v !: n
+    w = "w"
+    w_ n = w !: n
+    rq = realVecSpace q
+    lp = l !: p
+    lif = l !: infty
 
 
