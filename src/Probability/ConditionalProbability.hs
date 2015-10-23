@@ -112,6 +112,29 @@ chainRule = do
 totalProbability :: Note
 totalProbability = do
   subsection "Law of total probability"
+  thm $ do
+    examq "Probability" "August 2013"
+    psDec
+    s ["Let ", m x, " be a ", partition, " of ", m pruniv, " in which ", m (fa (a ∈ x) $ prob a > 0), " holds"]
+    ma $ fa (b ∈ prsa) $ prob b =: sumcmp (a ∈ x) (prob a * cprob b a)
+
+    proof $ do
+      align_
+        [
+          sumcmp (a ∈ x) (prob a * cprob b a)
+        & "" =: sumcmp (a ∈ x) ((prob a * prob (a ∩ b)) /: prob a)
+        , "" & "" =: sumcmp (a ∈ x) (prob (b ∩ a))
+        , "" & "" =: prob (setuncmp (a ∈ x) (b ∩ a))
+        , "" & "" =: prob (b ∩ setuncmp (a ∈ x) a)
+        , "" & "" =: prob (b ∩ pruniv)  =: prob b
+        ]
+      s ["Note that the third equation only holds because ", m x, " is a partition of ", m pruniv, " and the sets ", m (b ∩ a), " are therefore disjunct "]
+      s ["The fifth equation also only holds because ", m x, " is a partition of ", m pruniv]
+
+  where
+    x = "X"
+    a = "A"
+    b = "B"
 
 bayesTheorem :: Note
 bayesTheorem = do

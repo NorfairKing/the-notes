@@ -183,3 +183,6 @@ setsize = autoBrackets "|" "|"
 set :: Note
 set = ix "set"
 
+
+partition :: Note
+partition = ix "partition"
