@@ -21,6 +21,9 @@ noproof = todo $ footnotesize $ do
   "There is a chance that the proof does not belong here but a reference to a proof is desired nonetheless. "
   "You can help improve these notes by sending a reference to a proof to the author. "
 
+noproof_ :: Note
+noproof_ = footnotesize "No proof."
+
 exneeded :: Note
 exneeded = todo $ do
   "There is an example missing here. "
