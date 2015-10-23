@@ -91,8 +91,8 @@ chainRule = do
               prob (setincmpr (i =: 1) (n + 1) (a i))
             &      "" =: prob ((pars (setincmpr (i =: 1) n (a i))) ∩ (a (n + 1)))
             , "" & "" =:
-                prob (setincmpr (i =: 1) n (a i))
-              * cprob (a (n + 1)) (pars $ setincmpr (i =: 1) n (a i))
+                cprob (a (n + 1)) (pars $ setincmpr (i =: 1) n (a i))
+              * prob (setincmpr (i =: 1) n (a i))
             , "" & "" =:
                 cprob (a (n + 1)) (pars $ setincmpr (i =: 1) n (a i))
               * prodcmpr (i =: 1) n (cprob (a i) (setincmpr (j =: 1) (i - 1) (a j)))
