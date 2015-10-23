@@ -22,7 +22,8 @@ import           Prelude                      (Eq (..), FilePath,
                                                Num (..), Show (..), mempty, ($),
                                                (&&), (++), (.))
 
-import           Text.LaTeX                   hiding (Label, cite, item, ref)
+import           Text.LaTeX                   hiding (Label, article, cite,
+                                               item, ref)
 import           Text.LaTeX.Base.Class
 import           Text.LaTeX.Base.Pretty
 import           Text.LaTeX.Base.Syntax

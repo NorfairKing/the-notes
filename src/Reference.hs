@@ -12,6 +12,9 @@ unpublished = "unpublished"
 lectureSlides :: ReferenceType
 lectureSlides = "unpublished"
 
+article :: ReferenceType
+article = "article"
+
 showReferences :: [Reference] -> String
 showReferences rs = (++ "\n\n") . intercalate ",\n\n" $ map showRef rs
   where

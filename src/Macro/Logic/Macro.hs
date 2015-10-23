@@ -57,6 +57,10 @@ linf n m = comm2 "infer" m $ separated ("," <> quad) n
 lkb :: Note
 lkb = "KB"
 
+-- Logic sentence
+lsen :: Note
+lsen = alpha
+
 -- Logical models of
 lmo :: Note -> Note
 lmo = funapp "M"
