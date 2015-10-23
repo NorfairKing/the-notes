@@ -159,6 +159,19 @@ sumcmp = comp sumsign
 sumcmpr :: Note -> Note -> Note -> Note
 sumcmpr = compr sumsign
 
+
+-- Products
+
+prodsign :: Note
+prodsign = commS "prod"
+
+prodcmp :: Note -> Note -> Note
+prodcmp = comp prodsign
+
+prodcmpr :: Note -> Note -> Note -> Note
+prodcmpr = compr prodsign
+
+
 -- Fraction
 (/:) :: Note -> Note -> Note
 (/:) = frac

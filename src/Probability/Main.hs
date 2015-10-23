@@ -3,6 +3,7 @@ module Probability.Main (probability) where
 import           Notes
 
 import           Probability.ConditionalProbability
+import           Probability.Independence
 import           Probability.ProbabilityMeasure
 import           Probability.RandomVariable
 import           Probability.SigmaAlgebra
@@ -16,6 +17,7 @@ probability = notes "probability" $
   , probabilityMeasure
   , randomVariable
   , conditionalProbability
+  , independence
   ]
 
 header :: Notes

@@ -56,7 +56,10 @@ probabilityMeasureDefinition = de $ do
       s ["Let ", m (sequ an "n"), " be a countably infinite ", ix "sequence", " of pairwise disjunct sets"]
       ma $ prob (setuncmp (natural "n") an) =: sumcmp (natural "n") (prob an)
 
-  where an = "A" !: "n"
+  s [m (prob a), " is called the ", term "probability", " that ", m a, " happens"]
+  where
+    a = "A"
+    an = "A" !: "n"
 
 msppsDec :: Note
 msppsDec = s ["Let ", m prms, " be a ", ix "measurable space", " and ", m prpm, " a ", ix "probability measur"]
