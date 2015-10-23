@@ -109,13 +109,22 @@ chainRule = do
     n = "n"
     p = "p"
 
+psAndPartDec :: Note
+psAndPartDec = do
+  psDec
+  s ["Let ", m x, " be a ", partition, " of ", m pruniv, " in which ", m (fa (a ∈ x) $ prob a > 0), " holds"]
+  where x = "X"
+
+totalProbabilityLabel :: Label
+totalProbabilityLabel = Label Theorem "law-of-total-probability"
+
 totalProbability :: Note
 totalProbability = do
   subsection "Law of total probability"
   thm $ do
+    lab totalProbabilityLabel
     examq "Probability" "August 2013"
-    psDec
-    s ["Let ", m x, " be a ", partition, " of ", m pruniv, " in which ", m (fa (a ∈ x) $ prob a > 0), " holds"]
+    psAndPartDec
     ma $ fa (b ∈ prsa) $ prob b =: sumcmp (a ∈ x) (prob a * cprob b a)
 
     proof $ do
@@ -139,7 +148,49 @@ totalProbability = do
 bayesTheorem :: Note
 bayesTheorem = do
   subsection "Bayes' theorem"
+  thm $ do
+    psAndPartDec
+    s ["Let ", m b, " be an event in ", m prsa, " for which ", m (prob b > 0), " holds"]
+    ma $ fa (a ∈ x) $ cprob a b =: (prob a * cprob b a) /: (sumcmp (c ∈ x) (prob c * cprob b c))
+
+    proof $ do
+      s ["Let ", m a, " be an event in ", m x]
+      align_
+        [
+          (prob a * cprob b a) /: (sumcmp (c ∈ x) (prob c * cprob b c))
+        & "" =: (prob a * cprob b a) /: (prob b)
+        , "" & "" =: (prob a * (prob $ b ∩ a)) /: (prob b * prob a)
+        , "" & "" =: prob (a ∩ b) /: prob b
+        , "" & "" =: cprob a b
+        ]
+      s ["Note that the first equation holds by the law of total probability", ref totalProbabilityLabel]
+
+  where
+    x = "X"
+    a = "A"
+    b = "B"
+    c = "C"
 
 handyRules :: Note
 handyRules = do
   subsection "Handy rules of computation"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
