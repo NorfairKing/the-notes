@@ -15,9 +15,9 @@ probability = notes "probability" $
   , intro
   , sigmaAlgebra
   , probabilityMeasure
-  , randomVariable
   , conditionalProbability
   , independence
+  , randomVariable
   ]
 
 header :: Notes
