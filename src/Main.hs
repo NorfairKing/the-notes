@@ -1,21 +1,33 @@
 module Main where
 
-import           System.Environment (getArgs)
-import           System.Process     (system)
+import           System.Environment   (getArgs)
+import           System.Process       (system)
 
 import           Notes
+import           Utils
 
-import           Prelude            (Maybe (..), error, map, print, return)
+import           Prelude              (Maybe (..), appendFile, error, map,
+                                       print, return)
 
+import           Constants
 import           Header
 import           Packages
 import           Titlepage
 
+import           Computability.Main
+import           Fields.Main
 import           Functions.Main
+import           Groups.Main
+import           LinearAlgebra.Main
 import           Logic.Main
+import           MachineLearning.Main
 import           Probability.Main
 import           Relations.Main
+import           Rings.Main
 import           Sets.Main
+import           Topology.Main
+
+
 
 main :: IO ()
 main = do
@@ -25,27 +37,31 @@ main = do
     case mc of
       Nothing -> error "Couldn't parse arguments."
       Just cf -> do
-        t <- runNote entireDocument cf
+        removeIfExists mainBibFile
+        (t, endState) <- runNote entireDocument cf startState
 
-        renderFile "main.tex" t
-        --let s = prettyLaTeX t
-        --writeFile "main.tex" s
+        renderFile mainTexFile t
 
-        liftIO $ system $ "latexmk -pdf -pdflatex=\"pdflatex -shell-escape -halt-on-error -enable-write18\" main.tex -jobname=notes"
+        appendFile mainBibFile $ showReferences $ state_refs endState
+
+        _ <- liftIO $ system $ "latexmk -pdf -pdflatex=\"pdflatex -shell-escape -halt-on-error -enable-write18\" " ++ mainTexFile ++ " -jobname=" ++ outName
         return ()
 
+startState :: State
+startState = State {
+    state_refs = []
+  }
 
 config :: [String] -> Maybe Config
 config args = do
   let ss = map constructSelection args
-  return $ Config { conf_selections = ss }
+  return $ Config {
+      conf_selections = ss
+    }
 
 constructSelection :: String -> Selection
 constructSelection "all" = All
 constructSelection s = Match s
-
-runNote :: Note -> Config -> IO LaTeX
-runNote note conf = runReaderT (execLaTeXT note) conf
 
 entireDocument :: Note
 entireDocument = do
@@ -75,6 +91,13 @@ allNotes = notes ""
     , sets
     , relations
     , functions
+    , groups
+    , rings
+    , fields
+    , linearAlgebra
+    , topology
+    , computability
     , probability
+    , machineLearning
   ]
 

@@ -15,8 +15,9 @@ GHC_FLAGS = \
 	-fwarn-unused-imports \
 	-fwarn-incomplete-patterns \
 	-Wall \
-	-fno-warn-unused-do-bind \
+	-fwarn-unused-do-bind \
 	-fno-warn-name-shadowing \
+	-fno-warn-orphans \
 	-XOverloadedStrings \
 	-XNoImplicitPrelude
 
@@ -31,6 +32,9 @@ bin: $(SOURCES)
 
 generate: bin
 	./the-notes $(shell cat current)
+
+graph:
+	graphmod $(MAIN_SRC) -q -p -i $(SRC_DIR) > graph.dot
 
 love:
 	@echo "not war"

@@ -29,7 +29,7 @@ body = do
 
   intersectionOverDifference
 
-a, b, x, y :: Note
+a, b, c, x, y :: Note
 a = "A"
 b = "B"
 c = "C"
@@ -38,14 +38,14 @@ y = "y"
 
 differenceDefinition :: Note
 differenceDefinition = de $ do
-  s ["The set ", term "difference", " between sets ", m a, and, m b, " is the set of all elements of ", m a, " that are not in ", m b, "."]
+  s ["The set ", term "difference", " between sets ", m a, and, m b, " is the set of all elements of ", m a, " that are not in ", m b]
   ma $ a \\ b === setcmpr x ((x ∈ a) &: (x `nin` b))
 
 setsDec :: Note
-setsDec = s ["Let ", m a, and, m b, " be sets."]
+setsDec = s ["Let ", m a, and, m b, " be sets"]
 
 setssDec :: Note
-setssDec = s ["Let ", m a, ", ", m b, and, m c, " be sets."]
+setssDec = s ["Let ", m a, ", ", m b, and, m c, " be sets"]
 
 intersectionAndDifferenceDisjunct :: Note
 intersectionAndDifferenceDisjunct = thm $ do
@@ -86,7 +86,7 @@ symmetricSetDifferencesDisjunct = thm $ do
 
 symmetricDifferenceDefinition :: Note
 symmetricDifferenceDefinition = de $ do
-  s [the, term "symmetric difference", " of two sets ", m a, and, m b, " is the set of all element that are in either ", m a, or, m b, " but not both."]
+  s [the, term "symmetric difference", " of two sets ", m a, and, m b, " is the set of all element that are in either ", m a, or, m b, " but not both"]
   ma $ a △ b === setcmpr x ((pars $ (x ∈ a) &: (x `nin` b)) |: (pars $ (x `nin` a) &: (x ∈ b)))
 
 symmetricDifferenceEquivalentDefinition :: Note

@@ -2,15 +2,36 @@ module Notes (
     module Types
   , module Notes
   , module Macro
+  , module Reference
+
+  , modify
   ) where
 
-import           Macro
 import           Types
 
-import           Prelude   (concatMap, filter, foldl, map, mapM_, putStrLn,
-                            sequence_)
+import           Constants
+import           Macro
+import           Reference
 
-import           Data.List (isPrefixOf, union)
+import           Prelude              (appendFile, concatMap, filter, foldl,
+                                       map, mapM_, putStrLn, sequence_)
+
+import           Control.Monad.Reader (MonadReader (..), ReaderT, ask, asks,
+                                       runReaderT)
+import           Control.Monad.State  (MonadState (..), StateT, get, gets, put,
+                                       runStateT)
+
+
+import           Control.Monad.Reader (MonadReader (..), ReaderT, ask, asks,
+                                       runReaderT)
+import           Control.Monad.State  (MonadState (..), StateT, get, gets,
+                                       modify, put, runStateT)
+
+
+import           Data.List            (isPrefixOf, union)
+
+runNote :: Note -> Config -> State -> IO (LaTeX, State)
+runNote note conf state = runReaderT (runStateT (execLaTeXT note) state) conf
 
 renderNotes :: Notes -> Note
 renderNotes notes = do
@@ -44,7 +65,6 @@ renderParts ps = do
     liftIO $ mapM_ putStrLn $ map (\(Part name _) -> name) ps
     liftIO $ putStrLn ""
 
-
     sequence_ $ map (\(Part _ body) -> body) ps
 
 
@@ -63,3 +83,12 @@ item n = comm0 "item" <> n
 
 (<=) :: Note -> Note -> Note
 (<=) = (<=:)
+
+(>=) :: Note -> Note -> Note
+(>=) = (>=:)
+
+(>) :: Note -> Note -> Note
+(>) = (>:)
+
+(<) :: Note -> Note -> Note
+(<) = (<:)

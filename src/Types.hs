@@ -15,13 +15,15 @@ module Types (
   , module Text.LaTeX.Packages.AMSThm
   , module Text.LaTeX.Packages.Fancyhdr
 
-  , module Control.Monad.Reader
+  , modify
   ) where
-import           Prelude                      (Eq (..), Fractional (..), IO,
+import           Prelude                      (Eq (..), FilePath,
+                                               Fractional (..), IO, Maybe (..),
                                                Num (..), Show (..), mempty, ($),
-                                               (++), (.))
+                                               (&&), (++), (.))
 
-import           Text.LaTeX                   hiding (Label (..), item, ref)
+import           Text.LaTeX                   hiding (Label, article, cite,
+                                               item, ref)
 import           Text.LaTeX.Base.Class
 import           Text.LaTeX.Base.Pretty
 import           Text.LaTeX.Base.Syntax
@@ -32,9 +34,15 @@ import           Text.LaTeX.Packages.Fancyhdr
 
 import           Control.Monad.Reader         (MonadReader (..), ReaderT, ask,
                                                asks, runReaderT)
+import           Control.Monad.State          (MonadState (..), StateT, get,
+                                               gets, modify, put, runStateT)
 
 
-type Note = LaTeXT_ (ReaderT Config IO)
+type Note = LaTeXT_ (StateT State (ReaderT Config IO))
+
+data State = State {
+    state_refs :: [Reference]
+  } deriving (Show, Eq)
 
 data Config = Config {
     conf_selections :: [Selection]
@@ -58,10 +66,17 @@ data Part = Part String Note
 instance Eq Part where
   (Part n1 _) == (Part n2 _) = n1 == n2
 
+
 instance MonadReader r m => MonadReader r (LaTeXT m) where
   ask   = lift ask
   local = local
   reader = lift . reader
+
+instance MonadState s m => MonadState s (LaTeXT m) where
+  get = lift get
+  put = lift . put
+  state = lift . state
+
 
 data Label = Label RefKind Note
   deriving (Show, Eq)
@@ -71,3 +86,9 @@ data RefKind = Definition
              | Proposition
              | Property
   deriving (Show, Eq)
+
+type ReferenceType = String
+
+data Reference = Reference ReferenceType String [(String, String)] -- Type Label
+  deriving (Show, Eq)
+

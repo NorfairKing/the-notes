@@ -1,9 +1,12 @@
-module Probability.Macro where
+module Macro.Probability.Macro where
+
+import           Types
 
 import           Macro.Index
 import           Macro.Math
-import           Sets.Macro
-import           Types
+
+import           Macro.Functions.Macro
+import           Macro.Sets.Macro
 
 --[ Probability universe
 pruniv :: Note
@@ -49,7 +52,7 @@ prob = probm prpm
 
 --[ Conditional probability
 cprob :: Note -> Note -> Note
-cprob n m = prob $ n <> mid <> m
+cprob n m = prob $ n <> commS ";" <> (commS "middle") <> "|" <> commS ";" <> m
 
 
 --[ Probability random variable

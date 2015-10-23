@@ -2,8 +2,11 @@
 the-notes
 current
 
+graph.dot
+
 # Temporary source files
 *.tex
+*.bib
 
 ### Haskell output files
 *.hi

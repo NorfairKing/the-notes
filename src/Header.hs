@@ -37,6 +37,3 @@ mathHeader = do
   renewcommand "leq" (comm0 "leqslant")
   renewcommand "geq" (comm0 "geqslant")
 
-
-atletteratother :: Note -> Note
-atletteratother n = between n (commS "makeatletter") (commS "makeatother")

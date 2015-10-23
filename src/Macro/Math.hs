@@ -2,6 +2,7 @@ module Macro.Math where
 
 import           Macro.Index
 import           Macro.MetaMacro
+import           Macro.Text      (commaSeparated)
 import           Types
 
 m :: Note -> Note
@@ -55,11 +56,6 @@ defineas = binop defineasSign
 (===) :: Note -> Note -> Note
 (===) = defineas
 
-forallSign :: Note
-forallSign = comm0 "forall"
-
-fa :: Note -> Note -> Note
-fa n m = forallSign <> n <> ":" <> raw "\\ " <> m
 
 dotsc :: Note
 dotsc = comm0 "dotsc"
@@ -116,23 +112,6 @@ subseteq :: Note -> Note -> Note
 subseteq m n = m <> subseteqsign <> n
 
 
-
--- Functions
-fun :: Note -> Note -> Note -> Note
-fun m n o = m <> ":" <> raw "\\ " <> n <> rightarrow <> o
-
-func :: Note -> Note -> Note -> Note -> Note -> Note
-func m n o p q = fun m n o <> ":" <> raw "\\ " <> p <> comm0 "mapsto" <> q
-
-funinv :: Note -> Note
-funinv n = n ^: (-1)
-
-funapp :: Note -> Note -> Note
-funapp n m = n <> pars m
-
-fn :: Note -> Note -> Note
-fn = funapp
-
 -- Intervals
 interval :: LaTeXC l => [TeXArg] -> l -> l -> l
 interval args = liftL2 $ (\l1 l2 -> TeXComm "interval" (args ++ [FixArg l1, FixArg l2]))
@@ -180,6 +159,19 @@ sumcmp = comp sumsign
 sumcmpr :: Note -> Note -> Note -> Note
 sumcmpr = compr sumsign
 
+
+-- Products
+
+prodsign :: Note
+prodsign = commS "prod"
+
+prodcmp :: Note -> Note -> Note
+prodcmp = comp prodsign
+
+prodcmpr :: Note -> Note -> Note -> Note
+prodcmpr = compr prodsign
+
+
 -- Fraction
 (/:) :: Note -> Note -> Note
 (/:) = frac
@@ -187,6 +179,12 @@ sumcmpr = compr sumsign
 -- Equality
 eq :: Note -> Note -> Note
 eq = between "="
+
+neq :: Note -> Note -> Note
+neq = between $ comm0 "neq"
+
+(≠) :: Note -> Note -> Note
+(≠) = neq
 
 -- Inequality
 lt :: Note -> Note -> Note
@@ -200,6 +198,14 @@ not n = notsign <> n
 
 (¬) :: Note -> Note
 (¬) = not
+
+-- Exponential
+exp :: Note -> Note
+exp n = "e" ^: n
+
+--[ Symbols
+bot :: Note
+bot = comm0 "bot"
 
 --[ Text
 text :: Note -> Note
@@ -216,3 +222,43 @@ idempotent = ix "idempotent"
 
 distributive :: Note
 distributive = ix "distributive"
+
+-- Proofs
+np :: Note
+np = do
+  newline
+  textit "no proof"
+  newline
+
+-- Tuples
+tuple :: Note -> Note -> Note
+tuple a b = pars $ commaSeparated [a, b]
+
+triple :: Note -> Note -> Note -> Note
+triple a b c = pars $ commaSeparated [a, b, c]
+
+quadruple :: Note -> Note -> Note -> Note -> Note
+quadruple a b c d = pars $ commaSeparated [a, b, c, d]
+
+quintuple :: Note -> Note -> Note -> Note -> Note -> Note
+quintuple a b c d e = pars $ commaSeparated [a, b, c, d, e]
+
+-- Absolute value
+av :: Note -> Note
+av = autoBrackets "|" "|"
+
+-- Bold math
+bm :: Note -> Note
+bm = comm1 "bm"
+
+-- Roots
+sqrt :: Note -> Note
+sqrt = tsqrt Nothing
+
+nrt :: Note -> Note -> Note
+nrt n = tsqrt (Just n)
+
+-- Extrema
+max :: Note -> Note -> Note
+max sub body = commS "max" !: sub <> body
+

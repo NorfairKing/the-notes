@@ -69,6 +69,9 @@ packages = do
   -- To cancel terms in math
   usepackage [] "cancel"
 
+  -- For bold math
+  usepackage [] "bm"
+
   applyHdrSettings myHdrSettings
 
   commS "makeindex"

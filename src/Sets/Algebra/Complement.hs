@@ -34,25 +34,24 @@ body = do
 a, b, x, y :: Note
 a = "A"
 b = "B"
-c = "C"
 x = "x"
 y = "y"
 
 setsDec :: Note
-setsDec = s ["Let ", m a, and, m b, " be sets."]
+setsDec = s ["Let ", m a, and, m b, " be sets"]
 
 complementDefinition :: Note
 complementDefinition = de $ do
-  s [the, term "complement", " of a set ", m a, " relative to a set ", m b, " is the set of all elements of ", m b, " that are not in ", m a, "."]
+  s [the, term "complement", " of a set ", m a, " relative to a set ", m b, " is the set of all elements of ", m b, " that are not in ", m a]
   ma $ setrelc b a === b \\ a
 
-  s ["When ", m b, " is clear from the context (i.e. there is a universe in play), we just speak about the ", term "complement", ":"]
+  s ["When ", m b, " is clear from the context (i.e. there is a universe in play), we just speak about the ", term "complemen"]
   ma $ setc a === setrelc setuniv a
 
 
 doubleComplement :: Note
 doubleComplement = thm $ do
-  s ["Let ", m a, " be a set."]
+  s ["Let ", m a, " be a set"]
   ma $ setc (setc a) =§= a
 
   proof $ do
@@ -76,7 +75,7 @@ unionComplementaryLawLabel = thmlab "complementary-law-union"
 complementaryLawUnion :: Note
 complementaryLawUnion = thm $ do
   lab unionComplementaryLawLabel
-  s [the, term "complementary law", " for the set ", union, "."]
+  s [the, term "complementary law", " for the set ", union]
   setsDec
   ma $ a ∪ (setc a) =§= setuniv
 
@@ -95,7 +94,7 @@ complementaryLawUnion = thm $ do
 
 complementaryLawIntersection :: Note
 complementaryLawIntersection = thm $ do
-  s [the, term "complementary law", " for the set ", intersection, "."]
+  s [the, term "complementary law", " for the set ", intersection]
   setsDec
   ma $ a ∩ (setc a) =§= emptyset
 
@@ -118,7 +117,7 @@ firstLawOfDeMorganLabel = thmlab "first-law-of-de-morgan"
 firstLawOfDeMorgan :: Note
 firstLawOfDeMorgan = thm $ do
   lab firstLawOfDeMorganLabel
-  s [the, term "first law of De Morgan", "."]
+  s [the, term "first law of De Morgan"]
 
   ma $ setc (pars $ a ∪ b) =§= setc a ∩ setc b
 
@@ -141,7 +140,7 @@ secondLawOfDeMorganLabel = thmlab "second-law-of-de-morgan"
 secondLawOfDeMorgan :: Note
 secondLawOfDeMorgan = thm $ do
   lab secondLawOfDeMorganLabel
-  s [the, term "second law of De Morgan", "."]
+  s [the, term "second law of De Morgan"]
 
   ma $ setc (pars $ a ∩ b) =§= setc a ∪ setc b
 

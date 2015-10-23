@@ -1,14 +1,26 @@
-module Sets.Macro where
+module Macro.Sets.Macro (
+    module Macro.Sets.Macro
+
+  , module Macro.Sets.CarthesianProduct
+  ) where
+
+import           Types
+
+import           Macro.Functions.Macro
+import           Macro.Sets.CarthesianProduct
 
 import           Macro.Index
 import           Macro.Math
 import           Macro.MetaMacro
-import           Types
+import           Macro.Text
+
 
 --[ Set of
 setof :: Note -> Note
 setof = brac
 
+setofs :: [Note] -> Note
+setofs = setof . cs
 
 --[ Set comprehension
 setcmpr :: Note -> Note -> Note
@@ -17,7 +29,7 @@ setcmpr n m = setof $ n <> mid <> m
 
 --[ Set list
 setlst :: Note -> Note -> Note
-setlst n m = setof $ n <> ", " <> dotsc <> ", " <> m
+setlst m n = setof $ m <> ", " <> dotsc <> ", " <> n
 
 setlist :: Note -> Note -> Note -> Note
 setlist m n o = setof $ m <> ", " <> n <> ", " <> dotsc <> ", " <> o
@@ -152,20 +164,12 @@ setsdiff = binop $ commS " " <> setsdiffsign <> commS " "
 (△) :: Note -> Note -> Note
 (△) = setsdiff
 
---[ Set product
-setprodsign :: Note
-setprodsign = comm0 "times"
-
-setprod :: Note -> Note -> Note
-setprod = binop setprodsign
-
-
 --[ Powerset
 powsetsign :: Note
 powsetsign = mathcal "P"
 
 powset :: Note -> Note
-powset set = powsetsign `funapp` pars set
+powset set = powsetsign `funapp` set
 
 
 --[ Set size
@@ -179,3 +183,6 @@ setsize = autoBrackets "|" "|"
 set :: Note
 set = ix "set"
 
+
+partition :: Note
+partition = ix "partition"
