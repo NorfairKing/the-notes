@@ -175,22 +175,63 @@ handyRules :: Note
 handyRules = do
   subsection "Handy rules of computation"
 
+  thm $ do
+    psDec
+    ma $ fa (cs [a, b] ∈ prsa) $ cprob a b =: (prob a /: prob b) * cprob b a
 
+    proof $ do
+      align_
+        [
+          cprob a b
+        & "" =: prob (a ∩ b) /: prob b
+        , "" & "" =: (prob a * prob (a ∩ b)) /: (prob b * prob a)
+        , "" & "" =: (prob a /: prob b) * (prob (a ∩ b) /: prob a)
+        , "" & "" =: (prob a /: prob b) * cprob b a
+        ]
 
+  thm $ do
+    psAndPartDec
+    ma $ fa (x ∈ pruniv) $ sumcmp (a ∈ x) (cprob a x) =: 1
+    proof $ do
+      s ["Let ", m x, " be an event in ", m pruniv]
+      align_
+        [
+          sumcmp (a ∈ x) (cprob a x)
+        & "" =: sumcmp (a ∈ x) ((prob $ a ∩ x) /: prob x)
+        , "" & "" =: (sumcmp (a ∈ x) (prob $ a ∩ x)) /: prob x
+        , "" & "" =: (prob $ setuncmp (a ∈ x) (a ∩ x)) /: prob x
+        , "" & "" =: prob (pruniv ∩ x) /: prob x
+        , "" & "" =: prob x /: prob x =: 1
+        ]
 
+  thm $ do
+    psDec
+    s ["Let ", m (setcmpr (a_ i) (i ∈ naturals)), " be a countable set in ", m prsa]
+    ma $ prob (setuncmp (n ∈ naturals) (a_ n)) =: prob (a_ 1) + sumcmp (n > 1) (prob $ a_ n ∩ (setincmpr (i =: 1) (n - 1) (setc $ a_ i)))
+    proof $ do
+      s ["Proof by induction on ", m naturals]
+      itemize $ do
+        item $ do
+          s ["The theorem holds for ", m (n =: 1)]
+          ma $ prob (a_ 1 ∪ a_ 2)
+            =: prob (a_ 1 ∪ pars (setc (a_ 1) ∩ a_ 2))
+            =: prob (a_ 1) + prob (setc (a_ 1) ∩ a_ 2)
+        item $ do
+          s ["From the theorem for ", m (k =: n), " follows the theorem for ", m (k + 1)]
+          ma $ prob (setuncmpr (i =: 1) (n + 1) (a_ i))
+            =: prob (a_ (n + 1) ∪ setuncmpr (i =: 1) n (a_ i))
+            =: prob (setc (pars $ setuncmpr (i =: 1) n (a_ i)) ∩ a_ (n + 1))
+             + prob (setuncmpr (i =: 1) n (a_ i))
+            =: prob (a_ 1)
+             + sumcmp (n > 1) (prob (a_ n ∩ setuncmpr (i =: 1) (n - 1) (setc $ a_ i)))
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  where
+    x = "X"
+    a = "A"
+    a_ n = a !: n
+    b = "B"
+    c = "C"
+    i = "i"
+    k = "k"
+    n = "n"
 
