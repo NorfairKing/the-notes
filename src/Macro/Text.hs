@@ -51,3 +51,6 @@ over = " over "
 
 wrt :: Note
 wrt = " with respect to "
+
+for :: Note
+for = " for "

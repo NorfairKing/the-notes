@@ -62,6 +62,10 @@ prrv = "X"
 prrvfunc :: Note
 prrvfunc = fun prrv pruniv reals
 
+-- Probability value from random variable
+prvrv :: Note -> Note
+prvrv = fn prrv
+
 
 --[ Probability distribution function
 prdfsign :: Note

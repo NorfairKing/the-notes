@@ -98,6 +98,7 @@ impliessign = rightArrow
 mimplies :: Note -> Note -> Note
 mimplies m n = m <> impliessign <> n
 
+
 -- C-k =>
 (⇒) :: Note -> Note -> Note
 (⇒) = mimplies
@@ -262,3 +263,23 @@ nrt n = tsqrt (Just n)
 max :: Note -> Note -> Note
 max sub body = commS "max" !: sub <> body
 
+-- Infinity
+minfty :: Note
+minfty = "-" <> infty
+
+pinfty :: Note
+pinfty = "+" <> infty
+
+-- Limits
+lim :: Note -> Note -> Note -> Note
+lim m n o = (commS "lim" !: (m → n)) <> o
+
+-- C-k ->
+(→) :: Note -> Note ->Note
+(→) = binop $ comm0 "rightarrow"
+
+rlim :: Note -> Note -> Note -> Note
+rlim m n o = (commS "lim" !: (m <> overset ">" (comm0 "rightarrow") <> n)) <> o
+
+llim :: Note -> Note -> Note -> Note
+llim m n o = (commS "lim" !: (m <> overset "<" (comm0 "rightarrow") <> n)) <> o
