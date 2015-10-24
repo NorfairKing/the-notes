@@ -34,7 +34,7 @@ traditionalProbabilityMeasures = do
 
 
 msDec :: Note
-msDec = s ["Let ", m prms, " be a ", ix "measurable spac"]
+msDec = s ["Let ", m prms, " be a ", ix "measurable space"]
 
 probabilityMeasureDefinitionLabel :: Label
 probabilityMeasureDefinitionLabel = delab "probability-measure"
@@ -62,7 +62,7 @@ probabilityMeasureDefinition = de $ do
     an = "A" !: "n"
 
 msppsDec :: Note
-msppsDec = s ["Let ", m prms, " be a ", ix "measurable space", " and ", m prpm, " a ", ix "probability measur"]
+msppsDec = s ["Let ", m prms, " be a ", ix "measurable space", " and ", m prpm, " a ", ix "probability measure"]
 
 measurablespaceDefinition :: Note
 measurablespaceDefinition = de $ do
@@ -87,7 +87,7 @@ probabilityMeasureFiniteAdditivity = thm $ do
     an = "A" !: n
 
 psDec :: Note
-psDec = s ["Let ", m prsp, " be a ", ix "probability spac"]
+psDec = s ["Let ", m prsp, " be a ", ix "probability space"]
 
 probabilitySpaceProbabilityOfComplement :: Note
 probabilitySpaceProbabilityOfComplement = thm $ do
@@ -148,8 +148,7 @@ probabilityOfUnion = prop $ do
       ,           "" & "" =: prob (a ∩ setc b) + prob (a ∩ b) + prob (setc a ∩ b)
       ,           "" & "" =: prob (a ∩ setc b) + prob (a ∩ b) + prob (setc a ∩ b) + pars (prob (a ∩ b) - prob (a ∩ b))
       ,           "" & "" =: pars (prob (a ∩ setc b) + prob (a ∩ b)) + pars (prob (setc a ∩ b) + prob (a ∩ b)) - prob (a ∩ b)
-      ,           "" & "" =: prob a + prob b - prob (a ∩ b)
-      ]
+      ,           "" & "" =: prob a + prob b - prob (a ∩ b) ]
     "Note that we used the previous property in the last equation."
     ref probabilityPartitionByIntersectionLabel
   where
