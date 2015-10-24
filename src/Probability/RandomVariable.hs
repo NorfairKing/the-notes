@@ -1,4 +1,8 @@
-module Probability.RandomVariable (randomVariable) where
+module Probability.RandomVariable (
+    randomVariable
+
+  , discrete
+  ) where
 
 import           Notes
 
@@ -173,7 +177,132 @@ typesOfRandomVariables = do
 discreteRandomVariables :: Note
 discreteRandomVariables = do
   subsubsection "Discrete random variables"
+  discreteRandomVariableDefinition
+  discreteDistributionDefinition
+  discreteCumulativeDistribution
+
+discrete :: Note
+discrete = ix "discrete"
+
+discreteRandomVariableDefinition :: Note
+discreteRandomVariableDefinition = de $ do
+  s ["A random variable ", m prrv, " in a probability space ", m prsp, " is called ", term "discrete", " if the image under ", m prrv, " is non-zero in just a countable number of points"]
+  ma $ pi =: prob (setcmpr (omega ∈ pruniv) (prvrv omega =: xi)) =: prob (prrv =: xi)
+
+  where
+    i = "i"
+    xi = "x" !: i
+    pi = "p" !: i
+
+discreteDistributionDefinition :: Note
+discreteDistributionDefinition = de $ do
+  s ["A ", term "discrete distribution", " ", m (sequ pi i), " of a ", discrete, " random variable ", m prrv, " in a probability space ", m prsp, " is a sequence with the following properties"]
+  enumerate $ do
+    item $ m $ fa (i ∈ naturals) (pi >= 0)
+    item $ m $ sumcmp i pi =: 1
+
+  where
+    i = "i"
+    pi = "p" !: i
+
+discreteCumulativeDistribution :: Note
+discreteCumulativeDistribution = thm $ do
+  s ["The distribution function ", m prdf, " of a ", discrete, " random variable ", m prrv, " in a probability space ", m prsp, " has a simpler formula"]
+  ma $ prd a =: prob (prrv <= a) =: sumcmp (xi <= a) pi
+
+  toprove
+  where
+    a = "a"
+    i = "i"
+    xi = "x" !: i
+    pi = "p" !: i
 
 continuousRandomVariables :: Note
 continuousRandomVariables = do
   subsubsection "Continuous random variables"
+  continuousRandomVariableDefinition
+  probabilityDensity
+  intervalOpenCloseDistribution
+
+continuous :: Note
+continuous = ix "continuous"
+
+continuousRandomVariableDefinition :: Note
+continuousRandomVariableDefinition = de $ do
+  s ["A random variable ", m prrv, " in a probability space ", m prsp, " is called ", term "continuous", " if the image of every point under ", m prrv, " is zero.."]
+  ma $ fa (x ∈ pruniv) (prob (setof x) =: 0)
+  s ["... and the distribution function ", m prdf, " is a continuous function"]
+  refneeded "continuous function"
+
+  where x = "x"
+
+prdsDec :: Note
+prdsDec = s ["Let ", m prdf, " be a distribution function of a ", continuous, " random variable ", m prrv, " in a probability space ", m prsp, " that is continuous with a continuous derivative"]
+
+probabilityDensity :: Note
+probabilityDensity = do
+  probabilityDensitiyFunctionDefinition
+  probabilityDensityDistribution
+  probabilityDensityDistributionBetween
+
+
+probabilityDensitiyFunctionDefinition :: Note
+probabilityDensitiyFunctionDefinition = de $ do
+  prdsDec
+  s ["The ", term "probability density function", or, term "probability density", " ", m prdsf, " is the following function"]
+  ma $ func prdsf reals reals x $ prds x =: deriv (prd x) x
+  where x = "x"
+
+probabilityDensityDistribution :: Note
+probabilityDensityDistribution = thm $ do
+  prdsDec
+  s ["Let ", m prdsf, " be the probability density function of ", m prrv]
+  ma $ prd a =: prob (x <= a) =: int minfty a (prds x) x
+
+  toprove
+  where
+    a = "a"
+    x = "x"
+
+
+probabilityDensityDistributionBetween :: Note
+probabilityDensityDistributionBetween = thm $ do
+  prdsDec
+  s ["Let ", m prdsf, " be the probability density function of ", m prrv]
+  ma $ prd x - prd a =: prob (a < prrv <= b) =: int a b (prds x) x
+
+  toprove
+  where
+    a = "a"
+    b = "b"
+    x = "x"
+
+intervalOpenCloseDistribution :: Note
+intervalOpenCloseDistribution = thm $ do
+  s ["Let ", m prrv, " be a ", continuous, " random variable in a probability space ", m prsp, " and let ", m prdf, " be the distribution function of ", m prrv]
+  ma $ prd (ooint a b)
+    =: prd (ocint a b)
+    =: prd (coint a b)
+    =: prd (ccint a b)
+
+  toprove
+  where
+    a = "a"
+    b = "b"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

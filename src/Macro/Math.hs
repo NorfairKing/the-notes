@@ -276,10 +276,18 @@ lim m n o = (commS "lim" !: (m → n)) <> o
 
 -- C-k ->
 (→) :: Note -> Note ->Note
-(→) = binop $ comm0 "rightarrow"
+(→) = binop rightarrow
 
 rlim :: Note -> Note -> Note -> Note
-rlim m n o = (commS "lim" !: (m <> overset ">" (comm0 "rightarrow") <> n)) <> o
+rlim m n o = (commS "lim" !: (m <> overset ">" rightarrow) <> n) <> o
 
 llim :: Note -> Note -> Note -> Note
-llim m n o = (commS "lim" !: (m <> overset "<" (comm0 "rightarrow") <> n)) <> o
+llim m n o = (commS "lim" !: (m <> overset "<" rightarrow) <> n) <> o
+
+-- Derivatives
+deriv :: Note -> Note -> Note
+deriv top to = ("d" <> commS ";" <> top) /: ("d" <> to)
+
+-- Integrals
+int :: Note -> Note -> Note -> Note -> Note
+int a b c dx = commS "int" !: a ^: b <> c <> commS "," <> dx
