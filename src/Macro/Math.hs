@@ -291,3 +291,9 @@ deriv top to = ("d" <> commS ";" <> top) /: ("d" <> to)
 -- Integrals
 int :: Note -> Note -> Note -> Note -> Note
 int a b c dx = commS "int" !: a ^: b <> c <> commS "," <> dx
+
+-- Cases
+-- | Environment of unordered lists. Use 'item' to start each list item.
+cases :: LaTeXC l => l -> l
+cases = liftL $ TeXEnv "cases" []
+

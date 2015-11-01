@@ -21,3 +21,11 @@ renewcommand1 = liftL2 $ (\l1 l2 -> TeXComm "renewcommand" [FixArg $ raw "\\" <>
 binop :: Note -> Note -> Note -> Note
 binop = between
 
+
+-- prefix subscript operator
+subsc :: Note -> Note -> Note
+subsc = (!:)
+
+-- prefix superscript operator
+supsc :: Note -> Note -> Note
+supsc = (^:)
