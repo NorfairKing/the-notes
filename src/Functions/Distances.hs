@@ -4,9 +4,11 @@ module Functions.Distances (
   , distance
   , pseudometric
   , metric
+  , jaccardSimilarity
 
   , distanceDefinitionLabel
   , metricDefinitionLabel
+  , jaccardSimilarityDefinitionLabel
   ) where
 
 import           Notes
@@ -21,7 +23,7 @@ body = do
   subsection "Pseudometrics"
   distanceDefinition
   distanceExamples
-  jaccardSimilarity
+  jaccardSimilarityDefinition
   jaccardSimilarityEquivalentDefinition
 
   subsection "Metrics"
@@ -90,7 +92,13 @@ jaccard :: Note -> Note -> Note
 jaccard n m = "J" `funapp` cs [n,m]
 
 jaccardSimilarity :: Note
-jaccardSimilarity = do
+jaccardSimilarity = ix "Jaccard similarity"
+
+jaccardSimilarityDefinitionLabel :: Label
+jaccardSimilarityDefinitionLabel = Label Definition "jaccard-similarity-definition"
+
+jaccardSimilarityDefinition :: Note
+jaccardSimilarityDefinition = do
   de $ do
     s ["The ", term "Jaccard similarity", " of two sets ", m a, " and ", m b, " is defined as ", m (jaccard a b)]
     ma $ jaccard a b === (setsize (a ∩ b) / setsize (a ∪ b))
@@ -108,7 +116,7 @@ jaccardSimilarity = do
 jaccardSimilarityEquivalentDefinition :: Note
 jaccardSimilarityEquivalentDefinition = thm $ do
   s ["Let ", m a, " and ", m b, " be sets"]
-  s ["The ", ix "Jaccard similarity", " of ", m a, " and ", m b, " is equal to the following expression"]
+  s ["The ", jaccardSimilarity, " of ", m a, " and ", m b, " is equal to the following expression"]
 
   ma $ setsize (a ∩ b) / ((setsize $ a `setdiff` b) + (setsize $ b `setdiff` a) + (setsize $ a ∩ b))
 

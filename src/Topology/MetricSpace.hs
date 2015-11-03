@@ -1,6 +1,8 @@
 module Topology.MetricSpace (
     metricSpace
 
+  , pseudoMetricSpace
+
   , pseudoMetricSpaceDefinitionLabel
   , metricSpaceDefinitionLabel
   ) where
@@ -25,6 +27,9 @@ metricSpaces = do
   subsection "Metric Spaces"
   metricSpaceDefinition
   metricSpaceExamples
+
+pseudoMetricSpace :: Note
+pseudoMetricSpace = ix "pseudometric space"
 
 pseudoMetricSpaceDefinitionLabel :: Label
 pseudoMetricSpaceDefinitionLabel = Label Definition "pseudometric-space"
