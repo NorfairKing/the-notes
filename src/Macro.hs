@@ -1,5 +1,6 @@
 module Macro (
     module Macro.Array
+  , module Macro.Code
   , module Macro.Figure
   , module Macro.Index
   , module Macro.Math
@@ -7,6 +8,7 @@ module Macro (
   , module Macro.Reference
   , module Macro.Text
   , module Macro.Theorem
+  , module Macro.TH
   , module Macro.Todo
 
   , module Macro.Computability.Macro
@@ -23,12 +25,14 @@ module Macro (
   ) where
 
 import           Macro.Array
+import           Macro.Code
 import           Macro.Figure
 import           Macro.Index
 import           Macro.Math
 import           Macro.MetaMacro
 import           Macro.Reference
 import           Macro.Text
+import           Macro.TH
 import           Macro.Theorem
 import           Macro.Todo
 

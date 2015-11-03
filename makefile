@@ -18,6 +18,7 @@ GHC_FLAGS = \
 	-fwarn-unused-do-bind \
 	-fno-warn-name-shadowing \
 	-fno-warn-orphans \
+	-XTemplateHaskell \
 	-XOverloadedStrings \
 	-XNoImplicitPrelude
 
