@@ -88,4 +88,14 @@ wordCountReduce :: Note
 wordCountReduce = raw [litFile|src/DataMining/wordcountreduce.py|]
 
 mapReduceReferences :: Note
-mapReduceReferences = mempty
+mapReduceReferences = nocite dataMiningMapReduceSlides
+
+dataMiningMapReduceSlides :: Reference
+dataMiningMapReduceSlides = Reference lectureSlides "data-mining-mapreduce" $
+  [
+    ("author", "Andreas Krause")
+  , ("title", "Data Mining: Introduction")
+  , ("year", "2015")
+  , ("month", "September")
+  , ("note", "Lecture Slides")
+  ]
