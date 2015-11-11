@@ -6,7 +6,10 @@ module Probability.RandomVariable (
 
 import           Notes
 
-import qualified Prelude as P (map)
+import qualified Prelude                  as P (map)
+
+import           Probability.Independence (independenceDefinitionLabel,
+                                           independent)
 
 randomVariable :: Notes
 randomVariable = notesPart "random-variable" body
@@ -87,6 +90,9 @@ distributionFunctions = do
   distributionBetweenValues
   distributionAfterValue
 
+  independenceOfRandomVariables
+
+
 cumulativeDistributionFunctionDefinition :: Note
 cumulativeDistributionFunctionDefinition = de $ do
   psDec
@@ -128,7 +134,6 @@ distributionBetweenValues = thm $ do
   ma $ fa (cs [a, b] ∈ reals) $ prob (a < prrv <= b) =: prd b - prd a
 
   toprove
-
   where
     a = "a"
     b = "b"
@@ -139,9 +144,18 @@ distributionAfterValue = thm $ do
   ma $ fa (a ∈ reals) $ prob (prrv > a) =: 1 - prd a
 
   toprove
-
-
   where a = "a"
+
+
+independenceOfRandomVariables :: Note
+independenceOfRandomVariables = de $ do
+  s ["Let ", m x, and, m y, " be random variables in ", m prbsp]
+  s [m x, and, m y, " are called ", term "independent", " if and only if every two events ", m (x <= a), and, m (y <= b), " are independent ", ref independenceDefinitionLabel, " events"]
+  where
+    a = "a"
+    b = "b"
+    x = "X"
+    y = "Y"
 
 
 quantileFunction :: Note

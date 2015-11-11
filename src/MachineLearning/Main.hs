@@ -2,8 +2,9 @@ module MachineLearning.Main (machineLearning) where
 
 import           Notes
 
-import           MachineLearning.Regression         (regression)
-import           MachineLearning.SupervisedLearning (supervisedLearning)
+import           MachineLearning.Regression           (regression)
+import           MachineLearning.SupervisedLearning   (supervisedLearning)
+import           MachineLearning.UnsupervisedLearning (unsupervisedLearning)
 
 machineLearning :: Notes
 machineLearning = notes "machine-learning" $
@@ -11,6 +12,7 @@ machineLearning = notes "machine-learning" $
       notesPart "header" (chapter "Machine Learning")
     , supervisedLearning
     , regression
+    , unsupervisedLearning
   ]
 
 -- Conditional expected risk

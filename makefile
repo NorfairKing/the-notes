@@ -31,6 +31,10 @@ GHC_OPTIONS = \
 bin: $(SOURCES)
 	$(GHC) $(GHC_OPTIONS) -o $(BIN) --make $(MAIN_SRC)
 
+thorough: $(SOURCES)
+	$(GHC) $(GHC_OPTIONS) -fforce-recomp -o $(BIN) --make $(MAIN_SRC)
+
+
 generate: bin
 	./the-notes $(shell cat current)
 
