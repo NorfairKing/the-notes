@@ -15,7 +15,7 @@ You can also generate subsets of the notes by adding selectors to the command.
 ## Contribution
 Contributions to these notes are very welcome in the form of pull requests or patches via email.
 
-IMPORTANT, before contributing, please install the `bin/pre_commit_test.sh` hook into `.git/hooks/pre-commit`. You can do this by running `[spark](https://github.com/NorfairKing/super-user-spark) deploy hooks.sus` or by manually copying the file.
+`IMPORTANT`, before contributing, please install the `bin/pre_commit_test.sh` hook into `.git/hooks/pre-commit`. You can do this by running `spark deploy hooks.sus` or by manually copying the file.
 
 ## Licence
 
