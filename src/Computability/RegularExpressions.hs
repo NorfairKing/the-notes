@@ -23,6 +23,7 @@ body = do
   finiteLanguageRegular
   oneMoreStringRegular
   thereExistNonRegularLanguages
+  reverseLanguageRegular
 
 regularExpressionDefinition :: Note
 regularExpressionDefinition = de $ do

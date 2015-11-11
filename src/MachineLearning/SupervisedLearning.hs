@@ -29,7 +29,6 @@ learningProblem = do
     x = "X"
     y = "Y"
     f = "f"
-    l = "l" !: f
 
 -- NYI
 lossfunctions :: Note

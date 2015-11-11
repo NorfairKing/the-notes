@@ -32,10 +32,9 @@ import           Text.LaTeX.Packages.AMSMath
 import           Text.LaTeX.Packages.AMSThm   hiding (TheoremStyle (..), proof)
 import           Text.LaTeX.Packages.Fancyhdr
 
-import           Control.Monad.Reader         (MonadReader (..), ReaderT, ask,
-                                               asks, runReaderT)
+import           Control.Monad.Reader         (MonadReader (..), ReaderT, ask)
 import           Control.Monad.State          (MonadState (..), StateT, get,
-                                               gets, modify, put, runStateT)
+                                               modify, put)
 
 
 type Note = LaTeXT_ (StateT State (ReaderT Config IO))

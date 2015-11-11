@@ -5,8 +5,6 @@ import           Types
 import           Macro.Math
 import           Macro.MetaMacro
 
-import qualified Prelude         as P
-
 -- Computability Symbol Equality
 csymEqSign :: Note
 csymEqSign = underset "s" "="

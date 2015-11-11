@@ -3,8 +3,6 @@ module Logic.PropositionalLogic (propositionalLogic) where
 import           Logic.AbstractLogic (complete, grammar, inference, sound)
 import           Notes
 
-import           Data.List           (concat, intersperse, length, replicate)
-
 propositionalLogic :: Notes
 propositionalLogic = notesPart "propositional-logic" body
 
@@ -51,18 +49,18 @@ truthTables = nte $ do
   s ["The validity of a proposition is checked by enumerating the truth table for the sentence and checking whether all the values in the column for the sentence are true"]
 
   hereFigure $ do
-		truthTableNot
+    truthTableNot
   hereFigure $ do
-		truthTableOr
-		m quad
-		truthTableAnd
+    truthTableOr
+    m quad
+    truthTableAnd
   hereFigure $ do
-		truthTableImplies
-		m quad
-		truthTableIff
-		m quad
-		truthTableXor
-		caption "Elementary truth tables"
+    truthTableImplies
+    m quad
+    truthTableIff
+    m quad
+    truthTableXor
+    caption "Elementary truth tables"
 
 truthTableNot :: Note
 truthTableNot = do

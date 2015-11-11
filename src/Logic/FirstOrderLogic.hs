@@ -74,13 +74,15 @@ quantifiers = do
 
   propertiesOfQuantifiers
 
-x, y :: Note
+x, y, p :: Note
 x = "x"
 y = "y"
 p = "P"
+
 pp :: Note -> Note
 pp = funapp p
-ppp x y = funapp p $ cs [x, y]
+
+ppp :: Note -> Note -> Note
 ppp x y = funapp p $ cs [x, y]
 
 existentialQuantifierDefinition :: Note

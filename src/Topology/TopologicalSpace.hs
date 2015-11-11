@@ -1,5 +1,6 @@
 module Topology.TopologicalSpace (
-    topologicalSpace
+    topology
+  , topologicalSpace
   ) where
 
 import           Notes
@@ -80,7 +81,6 @@ topologyExamples = do
   where
     a = "a"
     b = "b"
-    c = "c"
 
 topspDec :: Note
 topspDec = s ["Let ", m topsp, " be a topological space"]

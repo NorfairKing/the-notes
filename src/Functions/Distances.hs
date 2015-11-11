@@ -76,15 +76,11 @@ distanceExamples = do
     toprove_ "Prove that this is actually a distance"
 
   where
-    i = "i"
-    p = "p"
     q = "q"
     v = "v"
     cd = fundist !: "cos"
     n2 = norm_ 2
-    v_ n = v !: n
     w = "w"
-    w_ n = w !: n
     rq = realVecSpace q
 
 

@@ -6,8 +6,6 @@ module Probability.RandomVariable (
 
 import           Notes
 
-import qualified Prelude                  as P (map)
-
 import           Probability.Independence (independenceDefinitionLabel,
                                            independent)
 
@@ -150,7 +148,7 @@ distributionAfterValue = thm $ do
 independenceOfRandomVariables :: Note
 independenceOfRandomVariables = de $ do
   s ["Let ", m x, and, m y, " be random variables in ", m prbsp]
-  s [m x, and, m y, " are called ", term "independent", " if and only if every two events ", m (x <= a), and, m (y <= b), " are independent ", ref independenceDefinitionLabel, " events"]
+  s [m x, and, m y, " are called ", term "independent", " if and only if every two events ", m (x <= a), and, m (y <= b), " are ", independent, ref independenceDefinitionLabel, " events"]
   where
     a = "a"
     b = "b"

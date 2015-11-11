@@ -8,11 +8,9 @@ import           Utils
 
 import qualified Data.Text            as T
 
-import           Control.Monad        (mapM_)
 import           Control.Monad.Reader (asks)
 
-import           Prelude              (Maybe (..), appendFile, error, map,
-                                       print, return)
+import           Prelude              (appendFile, error, map, print, return)
 
 import           Constants
 import           Header
