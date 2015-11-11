@@ -1,3 +1,4 @@
+# See https://github.com/NorfairKing/super-user-spark
 card hooks {
   into .git/hooks
   outof bin
