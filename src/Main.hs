@@ -1,16 +1,19 @@
 module Main where
 
-import           System.Environment   (getArgs)
-import           System.Process       (system)
+import           System.Environment       (getArgs)
+import           System.Process           (system)
 
 import           Notes
 import           Utils
 
-import qualified Data.Text            as T
+import           Text.LaTeX.Base.Warnings
 
-import           Control.Monad.Reader (asks)
+import qualified Data.Text                as T
 
-import           Prelude              (appendFile, error, map, print, return)
+import           Control.Monad.Reader     (asks)
+
+import           Prelude                  (Bool (..), appendFile, error, filter,
+                                           map, print, return)
 
 import           Constants
 import           Header
@@ -44,12 +47,22 @@ main = do
         removeIfExists mainBibFile
         (t, endState) <- runNote entireDocument cf startState
 
-        renderFile mainTexFile t
+        case surpressWarnings (check checkAll t) of
+          [] -> do
+              renderFile mainTexFile t
 
-        appendFile mainBibFile $ showReferences $ state_refs endState
+              appendFile mainBibFile $ showReferences $ state_refs endState
 
-        _ <- liftIO $ system $ "latexmk -pdf -pdflatex=\"pdflatex -shell-escape -halt-on-error -enable-write18\" " ++ mainTexFile ++ " -jobname=" ++ outName
-        return ()
+              _ <- liftIO $ system $ "latexmk -pdf -pdflatex=\"pdflatex -shell-escape -halt-on-error -enable-write18\" " ++ mainTexFile ++ " -jobname=" ++ outName
+              return ()
+          ws -> print ws
+
+surpressWarnings :: [Warning] -> [Warning]
+surpressWarnings = filter leave
+  where
+    leave :: Warning -> Bool
+    leave (UnusedLabel _) = False
+    leave _ = True
 
 startState :: State
 startState = State {
