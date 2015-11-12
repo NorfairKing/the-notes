@@ -297,3 +297,9 @@ int a b c dx = commS "int" !: a ^: b <> c <> commS "," <> dx
 cases :: LaTeXC l => l -> l
 cases = liftL $ TeXEnv "cases" []
 
+-- Lists
+lst :: Note -> Note -> Note
+lst n m = commaSeparated [n, dotsc, m]
+
+list :: Note -> Note -> Note -> Note
+list n m o = commaSeparated [n, m, dotsc, o]

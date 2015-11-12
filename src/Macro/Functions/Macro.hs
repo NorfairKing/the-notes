@@ -1,4 +1,9 @@
-module Macro.Functions.Macro where
+module Macro.Functions.Macro (
+    module Macro.Functions.Macro
+
+  , module Macro.Functions.Inverse
+  , module Macro.Functions.Application
+  ) where
 
 import           Types
 
@@ -6,6 +11,9 @@ import           Macro.Math
 import           Macro.Text
 
 import           Macro.Sets.CarthesianProduct
+
+import           Macro.Functions.Application
+import           Macro.Functions.Inverse
 
 
 -- Functions
@@ -17,22 +25,6 @@ func m n o p q = fun m n o <> ":" <> raw "\\ " <> p <> comm0 "mapsto" <> q
 
 func2 :: Note -> Note -> Note -> Note -> Note -> Note -> Note -> Note
 func2 m n1 n2 o p1 p2 q = func m (n1 ⨯ n2) o (tuple p1 p2) q
-
-funinv :: Note -> Note
-funinv n = n ^: (-1)
-
-funapp :: Note -> Note -> Note
-funapp n m = n <> pars m
-
-funapp2 :: Note -> Note -> Note -> Note
-funapp2 f a b = funapp f $ cs [a, b]
-
-fn :: Note -> Note -> Note
-fn = funapp
-
-fn2 :: Note -> Note -> Note -> Note
-fn2 = funapp2
-
 
 -- Distance function symbol
 fundist :: Note

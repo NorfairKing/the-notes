@@ -20,6 +20,7 @@ module Macro (
   , module Macro.MachineLearning.Macro
   , module Macro.Numbers.Macro
   , module Macro.Probability.Macro
+  , module Macro.Relations.Macro
   , module Macro.Sets.Macro
   , module Macro.Topology.Macro
   ) where
@@ -45,5 +46,6 @@ import           Macro.Logic.Macro
 import           Macro.MachineLearning.Macro
 import           Macro.Numbers.Macro
 import           Macro.Probability.Macro
+import           Macro.Relations.Macro
 import           Macro.Sets.Macro
 import           Macro.Topology.Macro

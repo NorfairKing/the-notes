@@ -54,3 +54,6 @@ wrt = " with respect to "
 
 for :: Note
 for = " for "
+
+with :: Note
+with = " with "
