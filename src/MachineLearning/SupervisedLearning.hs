@@ -22,13 +22,21 @@ learningProblem = do
   newline
   s [dquoted "Inputs", " is what they are called in machine learning"]
   s ["In statistical literature they are ofter called ", term "predictors"]
-  s ["In pattern recognition, these are called ", term "feature"]
+  s ["In pattern recognition, these are called ", term "feature", "s"]
   s [dquoted "Outputs", " are called ", term "dependent variables", " in statistics and ", term "responses", " in pattern recognition"]
   s ["The ", term "measurement space", " is the tuple ", m (tuple x y)]
   where
     x = "X"
     y = "Y"
     f = "f"
+
+trainingErrorDefinition :: Note
+trainingErrorDefinition = mempty
+  -- Number of errors on training data
+
+generalisationError :: Note
+generalisationError = mempty
+  -- Number of mistakes on _unknown_ test data
 
 -- NYI
 lossfunctions :: Note
@@ -105,13 +113,13 @@ scales = do
     s ["These may be questions like ", dquoted "How happy are you?", " where you have to tick one of three boxes: ", cs [dquoted "A. Unhappy", dquoted "B. OK", dquoted "C. Happy"]]
 
   de $ s [the, term "interval scale", " describes data where the difference between datapoints carries information"]
-  ex $ "The Farenheit scale of temperature"
+  ex $ "The Farenheit scale of temperature is an interval scale"
 
   de $ s [the, term "ratio scale", " describes data where the ", dquoted "zero", " is meaningful but the measurement unit does not necessarily"]
-  ex $ "The Kelvin scale of temperature"
+  ex $ "The Kelvin scale of temperature is a ratio scale"
 
   de $ s [the, term "absolute scale", " describes data where also the measurement unit carries information"]
-  ex $ "The amount of questions you got right on an exam"
+  ex $ "The amount of questions you got right on an exam is an absolute scale"
 
 transformationInvariances :: Note
 transformationInvariances = do
