@@ -146,7 +146,7 @@ conjunctiveNormalForm = do
 
 
 tseitinTransformation :: Reference
-tseitinTransformation = Reference "article" "tseitin68" $
+tseitinTransformation = Reference article "tseitin68" $
   [
     ("author", "Tseitin, G. S.")
   , ("journal", "Studies in Mathematics and Mathematical Logic")

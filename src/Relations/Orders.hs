@@ -36,6 +36,8 @@ orders = notesPart "orders" body
 
 body :: Note
 body = do
+    nocite orderTheoryForComputerScientists
+
     section "Orders"
 
     antisymmetricDefinition
@@ -279,7 +281,15 @@ completeLatticeIsBounded = thm $ do
     toprove
 
 
-
+orderTheoryForComputerScientists :: Reference
+orderTheoryForComputerScientists = Reference online "order-theory-for-computer-scientists" $
+    [
+        ("author", "Matt Might")
+      , ("title", "Order theory for computer scientists")
+      , ("year", "2012")
+      , ("url", "http://http://matt.might.net/articles/partial-orders/")
+      , ("urldate", "2015-10-13")
+    ]
 
 
 
