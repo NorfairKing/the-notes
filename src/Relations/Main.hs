@@ -13,8 +13,6 @@ relations = notes "relations"
   [
     header
   , relationBasics
-  , relationDomain
-  , composite
   ]
 
 header :: Notes

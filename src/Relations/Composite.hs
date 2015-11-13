@@ -1,9 +1,9 @@
-module Relations.Composite (composite) where
+module Relations.Composite (compositeRelations) where
 
 import           Notes
 
-composite :: Notes
-composite = notesPart "composite" body
+compositeRelations :: Notes
+compositeRelations = notesPart "compositeRelations" body
 
 body :: Note
 body = do

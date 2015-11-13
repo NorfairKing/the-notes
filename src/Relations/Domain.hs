@@ -1,5 +1,5 @@
 module Relations.Domain (
-    relationDomain
+    domainAndImage
 
   , domain
   , image
@@ -7,10 +7,10 @@ module Relations.Domain (
 
 import           Notes
 
-import           Relations.Basics (relation)
+import           Relations.BasicDefinitions (relation)
 
-relationDomain :: Notes
-relationDomain = notesPart "composite-and-image" body
+domainAndImage :: Notes
+domainAndImage = notesPart "domain-and-image" body
 
 body :: Note
 body = do
