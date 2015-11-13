@@ -53,11 +53,33 @@ domainIsInversesImage = thm $ do
   s [the, domain, " of a ", relation, " is the image of its inverse"]
   ma $ reldom rel =: relimg (relinv rel)
 
-  toprove
+  proof $ align_
+    [
+      relimg (relinv rel)
+      & "" =: setcmpr y (te x $ tuple x y ∈ relinv rel)
+      , "" & "" =: setcmpr y (te x $ tuple x y ∈ (setcmpr (tuple y x) (tuple x y ∈ rel)))
+      , "" & "" =: setcmpr x (te y $ tuple x y ∈ rel)
+      , "" & "" =: reldom rel
+    ]
+  where
+    x = "x"
+    y = "y"
 
 imageIsInversesDomain :: Note
 imageIsInversesDomain = thm $ do
   s [the, image, " of a ", relation, " is the ", domain, " of its inverse"]
-  ma $ reldom rel =: relimg (relinv rel)
+  ma $ relimg rel =: reldom (relinv rel)
 
-  toprove
+  proof $ align_
+    [
+      reldom (relinv rel)
+      & "" =: setcmpr x (te y $ tuple x y ∈ relinv rel)
+      , "" & "" =: setcmpr x (te y $ tuple x y ∈ (setcmpr (tuple y x) (tuple x y ∈ rel)))
+      , "" & "" =: setcmpr y (te x $ tuple x y ∈ rel)
+      , "" & "" =: relimg rel
+    ]
+  where
+    x = "x"
+    y = "y"
+
+

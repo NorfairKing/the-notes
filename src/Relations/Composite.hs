@@ -16,6 +16,10 @@ body = do
   compositeAssociative
   compositeDistributiveWrtInverse
 
+  domainAfterComposition
+  imageAfterComposition
+
+
 compositeRelationDefinition :: Note
 compositeRelationDefinition = de $ do
     s ["Let ", m q, and, m r, " be two binary relations"]
@@ -89,7 +93,52 @@ compositeDistributiveWrtInverse = thm $ do
     x = "x"
     y = "y"
 
--- TODO distributivity with inverse
--- TODO domain after composition
--- TODO image after composition
--- TODO if the image of the second is a part of the domain of the first, then the domain of the composition is the domain of the second. really? sure? make sure to prove it!
+
+domainAfterComposition :: Note
+domainAfterComposition = thm $ do
+    s ["Let ", m a, and, m b, " be relations"]
+    ma $ reldom (b ● a) ⊆ reldom a
+
+    proof $ align_
+      [
+        reldom (b ● a)
+        & "" =: setcmpr x (te y $ tuple x y ∈ b ● a)
+        , "" & "" =: setcmpr x (te y $ tuple x y ∈ (setcmpr (tuple u w) (te v $ (pars $ tuple u v ∈ b) ∧ (pars $ tuple v w ∈ a))))
+        , "" & "" =: setcmpr x (te v $ te w $ (pars $ tuple u v ∈ b) ∧ (pars $ tuple v w ∈ a))
+        , "" & "" ⊆ setcmpr x (te w $ tuple v w ∈ a)
+        , "" & "" =: reldom a
+      ]
+  where
+    a = "A"
+    b = "B"
+    u = "u"
+    v = "v"
+    w = "w"
+    x = "x"
+    y = "y"
+
+
+imageAfterComposition :: Note
+imageAfterComposition = thm $ do
+    s ["Let ", m a, and, m b, " be relations"]
+    ma $ relimg (b ● a) ⊆ relimg b
+
+    proof $ align_
+      [
+        relimg (b ● a)
+        & "" =: setcmpr y (te x $ tuple x y ∈ b ● a)
+        , "" & "" =: setcmpr y (te x $ tuple x y ∈ (setcmpr (tuple u w) (te v $ (pars $ tuple u v ∈ b) ∧ (pars $ tuple v w ∈ a))))
+        , "" & "" =: setcmpr y (te v $ te u $ (pars $ tuple u v ∈ b) ∧ (pars $ tuple v w ∈ a))
+        , "" & "" ⊆ setcmpr y (te u $ tuple u v ∈ b)
+        , "" & "" =: relimg b
+      ]
+  where
+    a = "A"
+    b = "B"
+    u = "u"
+    v = "v"
+    w = "w"
+    x = "x"
+    y = "y"
+
+-- TODO if the image of the first is a part of the domain of the second, then the domain of the composition is the domain of the second. really? sure? make sure to prove it!
