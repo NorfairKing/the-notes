@@ -1,5 +1,6 @@
 module MachineLearning.SupervisedLearning (
-    supervisedLearning
+      supervisedLearning
+    ,
   ) where
 
 import           Notes
@@ -9,11 +10,16 @@ supervisedLearning = notesPart "supervised-learning" body
 
 body :: Note
 body = do
-  section "Supervised Learning"
-  learningProblem
-  taxonomyOfData
-  scales
-  transformationInvariances
+    section "Supervised Learning"
+    learningProblem
+    taxonomyOfData
+    scales
+    transformationInvariances
+
+    trainingErrorDefinition
+    generalisationError
+    lossfunctions
+
 
 learningProblem :: Note
 learningProblem = do

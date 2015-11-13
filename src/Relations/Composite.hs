@@ -2,7 +2,7 @@ module Relations.Composite (compositeRelations) where
 
 import           Notes
 
-import           Macro.Math                 (associative, distributive)
+-- import           Macro.Math                 (associative, distributive)
 import           Relations.BasicDefinitions (inverseOfInverseIsNormalLabel)
 
 compositeRelations :: Notes

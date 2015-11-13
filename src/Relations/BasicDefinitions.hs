@@ -3,6 +3,10 @@ module Relations.BasicDefinitions (
 
   , relation
   , inverseOfInverseIsNormalLabel
+  , reflexive, reflexive_
+  , symmetric, symmetric_
+  , transitive, transitive_
+  , total, total_
   ) where
 
 import           Notes
@@ -18,6 +22,15 @@ basicDefinitions = notesPart "definitions" $ do
   inverseRelationDefinition
 
   inverseOfInverseIsNormal
+
+  subsection "Properties of relations"
+
+  reflexiveDefinition
+  transitiveDefinition
+  symmetricDefinition
+  totalDefinition
+
+  totalityImpliesReflexivity
 
 
 relation :: Note
@@ -89,9 +102,93 @@ inverseOfInverseIsNormal = thm $ do
     x = "x"
     y = "y"
 
+reflexive :: Note
+reflexive = ix "reflexive"
+
+reflexive_ :: Note
+reflexive_ = reflexive <> ref reflexiveDefinitionLabel
+
+reflexiveDefinitionLabel :: Label
+reflexiveDefinitionLabel = Label Definition "reflexive"
+
+reflexiveDefinition :: Note
+reflexiveDefinition = de $ do
+    lab reflexiveDefinitionLabel
+    s ["A ", relation, " ", m rel, " between a set ", m xx, " and itself is called ", term "reflexive", " if it has the following property"]
+    ma $ fa (x ∈ xx) (tuple x x ∈ rel)
+  where
+    x = "x"
+    xx = "X"
+
+transitive :: Note
+transitive = ix "transitive"
+
+transitive_ :: Note
+transitive_ = transitive <> ref transitiveDefinitionLabel
+
+transitiveDefinitionLabel :: Label
+transitiveDefinitionLabel = Label Definition "transitive"
+
+transitiveDefinition :: Note
+transitiveDefinition = de $ do
+    lab transitiveDefinitionLabel
+    s ["A ", relation, " ", m rel, " between a set ", m xx, " and itself is called ", term "transitive", " if it has the following property"]
+    ma $ fa (cs [x, y, z] ∈ xx) $ (pars $ (tuple x y ∈ rel) ∧ (tuple y z ∈ rel)) ⇒ (tuple x z ∈ rel)
+  where
+    x = "x"
+    y = "y"
+    z = "z"
+    xx = "X"
+
+symmetric :: Note
+symmetric = ix "symmetric"
+
+symmetric_ :: Note
+symmetric_ = symmetric <> ref symmetricDefinitionLabel
+
+symmetricDefinitionLabel :: Label
+symmetricDefinitionLabel = Label Definition "symmetric"
+
+symmetricDefinition :: Note
+symmetricDefinition = de $ do
+    lab symmetricDefinitionLabel
+    s ["A ", relation, " ", m rel, " between a set ", m xx, " and itself is called ", term "symmetric", " if it has the following property"]
+    ma $ fa (cs [x, y] ∈ xx) (tuple x y ∈ rel ⇔ tuple y x ∈ rel)
+  where
+    x = "x"
+    y = "y"
+    xx = "X"
 
 
 
+total :: Note
+total = ix "total"
 
+total_ :: Note
+total_ = total <> ref totalDefinitionLabel
 
+totalDefinitionLabel :: Label
+totalDefinitionLabel = Label Definition "total-relation"
 
+totalDefinition :: Note
+totalDefinition = de $ do
+    lab totalDefinitionLabel
+    s ["A binary ", relation, " ", m rel, " is called ", term "total", " if it has the following property"]
+    ma $ fa (cs [x, y]) ((x `inrel` y) ∨ (y `inrel` x))
+  where
+    x = "x"
+    y = "y"
+
+totalityImpliesReflexivity :: Note
+totalityImpliesReflexivity = thm $ do
+    s ["Every total relation is reflexive"]
+
+    proof $ do
+      s ["Let ", m rel, " be a total relation on a set ", m xx, " and ", m x, " an element of ", m xx]
+      s ["Because ", m rel, " is total, either ", m (x `inrel` x), or, m (x `inrel` x), " must be true"]
+      s ["This means that ", m (x `inrel` x), " must hold and ", m rel, " must therefore be reflexive"]
+    toprove
+
+  where
+    x = "x"
+    xx = "X"

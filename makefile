@@ -14,7 +14,7 @@ GHC = ghc
 GHC_FLAGS = \
 	-fwarn-unused-imports \
 	-fwarn-incomplete-patterns \
-	-Wall \
+	-Wall -Werror \
 	-fwarn-unused-do-bind \
 	-fno-warn-name-shadowing \
 	-fno-warn-orphans \

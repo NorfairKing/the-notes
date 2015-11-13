@@ -1,14 +1,17 @@
 module Relations.Equivalence (
     equivalenceRelations
 
-  , reflexive
-  , symmetric
-  , transitive
+  , equivalenceRelation
+  , equivalenceRelation_
+  , equivalenceClass
+  , preorder
+  , preorder_
   ) where
 
 import           Notes
 
-import           Relations.BasicDefinitions (relation)
+import           Relations.BasicDefinitions (reflexive_, relation, symmetric_,
+                                             transitive_)
 
 equivalenceRelations :: Notes
 equivalenceRelations = notesPart "equivalence-relations" body
@@ -17,51 +20,101 @@ body :: Note
 body = do
   section "Equivalence Relations"
 
-  reflexiveDefinition
-  symmetricDefinition
-  transitiveDefinition
+  basicDefinitions
+  equivalenceClasses
+
+basicDefinitions :: Note
+basicDefinitions = do
+  preorderDefinition
   equivalenceRelationDefinition
 
-reflexive :: Note
-reflexive = ix "reflexive"
+preorder :: Note
+preorder = ix "preorder"
 
-reflexiveDefinition :: Note
-reflexiveDefinition = de $ do
-    s ["A ", relation, " ", m rel, " between a set ", m xx, " and itself is called ", term "reflexive", " if it has the following property"]
-    ma $ fa (x ∈ xx) (tuple x x ∈ rel)
-  where
-    x = "x"
-    xx = "X"
+preorder_ :: Note
+preorder_ = preorder <> ref preorderDefinitionLabel
 
-symmetric :: Note
-symmetric = ix "symmetric"
+preorderDefinitionLabel :: Label
+preorderDefinitionLabel = Label Definition "preorder"
 
-symmetricDefinition :: Note
-symmetricDefinition = de $ do
-    s ["A ", relation, " ", m rel, " between a set ", m xx, " and itself is called ", term "symmetric", " if it has the following property"]
-    ma $ fa (cs [x, y] ∈ xx) (tuple x y ∈ rel ⇔ tuple y x ∈ rel)
-  where
-    x = "x"
-    y = "y"
-    xx = "X"
+preorderDefinition :: Note
+preorderDefinition = de $ do
+    lab preorderDefinitionLabel
+    s ["A ", relation, " ", m rel, " between a set ", m xx, " and itself is called an ", term "preorder", " if it is ", reflexive_, and, transitive_]
+  where xx = "X"
 
-transitive :: Note
-transitive = ix "transitive"
+equivalenceRelation :: Note
+equivalenceRelation = ix "equivalence relation"
 
-transitiveDefinition :: Note
-transitiveDefinition = de $ do
-    s ["A ", relation, " ", m rel, " between a set ", m xx, " and itself is called ", term "transitive", " if it has the following property"]
-    ma $ fa (cs [x, y, z] ∈ xx) $ (pars $ (tuple x y ∈ rel) ∧ (tuple y z ∈ rel)) ⇒ (tuple x z ∈ rel)
-  where
-    x = "x"
-    y = "y"
-    z = "z"
-    xx = "X"
+equivalenceRelation_ :: Note
+equivalenceRelation_ = equivalenceRelation <> ref equivalenceRelationDefinitionLabel
+
+equivalenceRelationDefinitionLabel :: Label
+equivalenceRelationDefinitionLabel = Label Definition "equivalence-relation"
 
 equivalenceRelationDefinition :: Note
 equivalenceRelationDefinition = de $ do
-   s ["A ", relation, " ", m rel, " between a set ", m xx, " and itself is called an ", term "equivalence relation", " if it is ", reflexive, ", ", symmetric, and, transitive]
-  where xx = "X"
+    lab equivalenceRelationDefinitionLabel
+    s ["A ", symmetric_, " ", preorder, " is called an ", term "equivalence relation"]
+
+
+equivalenceClasses :: Note
+equivalenceClasses = do
+  subsection "Equivalence Classes"
+
+  equivalenceClassDefinition
+
+  totheorem "The equivalence class of an element contains that element"
+  totheorem "If two elements are equivalent, then their equivalence classes are equal"
+
+  inducedEquivalenceRelation
+
+  quotientSetDefinition
+  totheorem "The quotient set is a partition"
+  totheorem "A partition induces an equivalence relation"
+
+
+equivalenceClass :: Note
+equivalenceClass = ix "equivalence class"
+
+equivalenceClassDefinition :: Note
+equivalenceClassDefinition = de $ do
+    s ["Let ", m eqrel, " be an ", equivalenceRelation, " on a set ", m xx, " and let ", m x, " be an element of ", m xx]
+    s ["The ", term "equivalence class", " ", m (eqcl_ eqrel x), " of ", m x, " in ", m eqrel, " is the set of all elements that are equivalent to ", m x]
+
+    ma $ eqcl_ eqrel x === setcmpr (y ∈ xx) (x .~ y)
+  where
+    x = "x"
+    y = "y"
+    xx = "X"
+
+quotientSetDefinition :: Note
+quotientSetDefinition = de $ do
+    s ["Let ", m eqrel, " be an ", equivalenceRelation, " on a set ", m xx]
+    s ["The ", term "quotient set", " ", m (eqrel `eqcls` xx),  " of ", m xx, " with respect to ", m eqrel, " is the set of all equivalennce classes of ", m xx, " in ", m eqrel]
+
+    ma $ (eqrel `eqcls` xx) === setcmpr (eqcl_ eqrel x) (x ∈ xx)
+  where
+    x = "x"
+    xx = "X"
+
+inducedEquivalenceRelation :: Note
+inducedEquivalenceRelation = thm $ do
+    s ["Let ", m preord, " be a preorder on a set ", m xx]
+    s ["The relation ", m indeqrel, " is an equivalence relation"]
+
+    ma $ indeqrel === (setcmpr (tuple a b) $ inpreord a b ∧ inpreord b a)
+
+    toprove
+  where
+    indeqrel = eqrel !: preord
+    a = "a"
+    b = "b"
+    xx = "X"
+
+
+
+
 
 
 

@@ -204,10 +204,6 @@ not n = notsign <> n
 exp :: Note -> Note
 exp n = "e" ^: n
 
---[ Symbols
-bot :: Note
-bot = comm0 "bot"
-
 --[ Text
 text :: Note -> Note
 text = comm1 "text"

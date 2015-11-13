@@ -3,7 +3,7 @@ module Macro.Relations.Macro where
 import           Macro.Math
 import           Macro.MetaMacro
 
-import           Macro.Functions.Application
+import           Macro.Functions.Application (fn)
 
 import           Types
 
@@ -50,3 +50,83 @@ relcomp = binop $ comm0 "circ"
 -- C-k 0M
 (●) :: Note -> Note -> Note
 (●) = relcomp
+
+-- Preorder
+preord :: Note
+preord = comm0 "sqsubseteq"
+
+inpreord_ :: Note -> Note -> Note -> Note
+inpreord_ = inrel_
+
+inpreord :: Note -> Note -> Note
+inpreord = inpreord_ preord
+
+-- Equivalence Relation
+eqrel :: Note
+eqrel = comm0 "sim" <> raw "\\mkern-3mu"
+
+ineqrel_ :: Note -> Note -> Note -> Note
+ineqrel_ = inpreord_
+
+ineqrel :: Note -> Note -> Note
+ineqrel = ineqrel_ eqrel
+
+(.~) :: Note -> Note -> Note
+(.~) = ineqrel
+
+-- Equivalence class
+eqcl_ :: Note -> Note -> Note
+eqcl_ r x = sqbrac x !: r
+
+eqcl :: Note -> Note
+eqcl x = sqbrac x
+
+eqcls :: Note -> Note -> Note
+eqcls r x = x <> "/" <> r
+
+-- Partial order
+partord :: Note
+partord = preord
+
+-- Poset
+posetset :: Note
+posetset = "X"
+
+relposet_ :: Note -> Note -> Note
+relposet_ = tuple
+
+relposet :: Note
+relposet = relposet_ posetset partord
+
+inposet :: Note -> Note -> Note
+inposet = binop partord
+
+(⊆:) :: Note -> Note -> Note
+(⊆:) = inposet
+
+-- Total order
+totord :: Note
+totord = comm0 "le"
+
+-- maximal element
+top :: Note
+top = comm0 "top"
+
+-- minimal element
+bot :: Note
+bot = comm0 "bot"
+
+
+-- Infimum C-k lb
+(⊔) :: Note -> Note -> Note
+(⊔) = binop $ comm0 "sqcup"
+
+inf :: Note -> Note
+inf = fn "Inf"
+
+-- supremum C-k ub
+(⊓) :: Note -> Note -> Note
+(⊓) = binop $ comm0 "sqcap"
+
+sup :: Note -> Note
+sup = fn "Sup"

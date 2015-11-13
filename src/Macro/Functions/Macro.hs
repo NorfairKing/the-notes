@@ -8,7 +8,6 @@ module Macro.Functions.Macro (
 import           Types
 
 import           Macro.Math
-import           Macro.Text
 
 import           Macro.Sets.CarthesianProduct
 
