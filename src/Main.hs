@@ -1,6 +1,7 @@
 module Main where
 
 import           System.Environment       (getArgs)
+import           System.Exit              (exitFailure)
 import           System.Process           (system)
 
 import           Notes
@@ -55,7 +56,10 @@ main = do
 
               _ <- liftIO $ system $ "latexmk -pdf -pdflatex=\"pdflatex -shell-escape -halt-on-error -enable-write18\" " ++ mainTexFile ++ " -jobname=" ++ outName
               return ()
-          ws -> print ws
+          ws -> do
+              print ws
+              exitFailure
+
 
 surpressWarnings :: [Warning] -> [Warning]
 surpressWarnings = filter leave

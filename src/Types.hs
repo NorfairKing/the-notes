@@ -78,7 +78,6 @@ instance MonadState s m => MonadState s (LaTeXT m) where
 
 
 data Label = Label RefKind Note
-  deriving (Show, Eq)
 
 data RefKind = Definition
              | Theorem

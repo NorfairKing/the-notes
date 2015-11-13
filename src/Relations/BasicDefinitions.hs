@@ -2,6 +2,7 @@ module Relations.BasicDefinitions (
     basicDefinitions
 
   , relation
+  , inverseOfInverseIsNormalLabel
   ) where
 
 import           Notes
@@ -16,6 +17,7 @@ basicDefinitions = notesPart "definitions" $ do
   unitRelationDefinition
   inverseRelationDefinition
 
+  inverseOfInverseIsNormal
 
 
 relation :: Note
@@ -63,5 +65,33 @@ inverseRelationDefinition = de $ do
     x = "x"
     y = "y"
 
--- TODO inverse of inverse is normal again
---
+inverseOfInverseIsNormalLabel :: Label
+inverseOfInverseIsNormalLabel = Label Theorem "inverse-of-inverse-relation-is-normal"
+
+inverseOfInverseIsNormal :: Note
+inverseOfInverseIsNormal = thm $ do
+    lab inverseOfInverseIsNormalLabel
+    s ["Let ", m rel, " be a binary relation on the sets ", m a, and, m b]
+    ma $ relinv (relinv rel) =: rel
+
+    proof $ do
+      align_
+        [
+          relinv (relinv rel)
+          & "" =: setcmpr (tuple y x) (tuple x y ∈ (relinv rel))
+          , "" & "" =: setcmpr (tuple y x) (tuple x y ∈ (setcmpr (tuple y x) (tuple x y ∈ rel)))
+          , "" & "" =: setcmpr (tuple y x) (tuple y x ∈ rel)
+          & "" =: rel
+        ]
+  where
+    a = "A"
+    b = "B"
+    x = "x"
+    y = "y"
+
+
+
+
+
+
+
