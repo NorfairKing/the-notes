@@ -14,7 +14,7 @@ domainAndImage = notesPart "domain-and-image" body
 
 body :: Note
 body = do
-  section "Domain and Image"
+  subsection "Domain and Image"
 
   domainDefinition
   imageDefinition

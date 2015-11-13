@@ -10,7 +10,7 @@ compositeRelations = notesPart "compositeRelations" body
 
 body :: Note
 body = do
-  section "Composite relations"
+  subsection "Composite relations"
 
   compositeRelationDefinition
   compositeAssociative
