@@ -14,10 +14,31 @@ makeDefs :: [String] -> Q [Dec]
 makeDefs strs = fmap concat $ sequenceQ $ map makeDef strs
 
 makeDef :: String -> Q [Dec]
-makeDef str = return $ indexDef str ++ refDef str ++ labelDef str
+makeDef str = return $ termDef str ++ indexDef str ++ refDef str ++ labelDef str
 
 noteName :: Name
 noteName = mkName "Note"
+
+termDef :: String -> [Dec]
+termDef concept = [sig, fun]
+  where
+    name = mkName $ concept ++ "'"
+    sig = SigD
+            name
+            (ConT noteName)
+    fun = FunD
+            name
+            [
+              Clause
+                []
+                (
+                  NormalB $
+                    AppE
+                      (VarE $ mkName "term")
+                      (LitE $ StringL concept)
+                )
+                []
+            ]
 
 indexDef :: String -> [Dec]
 indexDef concept = [sig, fun]
