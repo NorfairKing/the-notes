@@ -1,12 +1,15 @@
 module Computability.Symbols (
     symbols
 
-  , symbol
-  , alphabet
+  , symbol  , symbol_   , symbolDefinitionLabel
+  , alphabet, alphabet_ , alphabetDefinitionLabel
+  , string  , string_   , stringDefinitionLabel
   , concatenation
   ) where
 
 import           Notes
+
+makeDefs ["symbol", "alphabet", "string"]
 
 symbols :: Notes
 symbols = notesPart "symbols-and-strings" body
@@ -25,24 +28,22 @@ body = do
   stringsWithEmptyDefinition
   reverseStringDefinition
 
-symbol :: Note
-symbol = ix "symbol"
-
 symbolDefinition :: Note
 symbolDefinition = de $ do
+  lab symbolDefinitionLabel
   s ["A ", term "symbol", " is a representation of an abstract mathematical object."]
   s ["The only prerequisite of a symbol is that there is an equivalence relation ", m csymEqSign, " defined on it"]
   refneeded "equivalence relation"
 
-alphabet :: Note
-alphabet = ix "alphabet"
-
 alphabetDefinition :: Note
 alphabetDefinition = de $ do
+  lab alphabetDefinitionLabel
   s ["An ", term "alphabet", " ", m calph, " is a finite set of ", symbol, "s"]
+
 
 stringDefinition :: Note
 stringDefinition = de $ do
+  lab stringDefinitionLabel
   s ["A ", term "string", " ", m cstr, " over an alphabet ", m calph, " is a ordered sequence of symbols ", m (a "i"), " in ", m calph]
   ma $ cstr =: cstrlst (a 1) (a "n")
   where a n = "a" !: n

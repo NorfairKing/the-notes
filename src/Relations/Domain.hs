@@ -12,9 +12,9 @@ import           Relations.BasicDefinitions (relation)
 
 makeDefs ["domain", "image"]
 
+
 domainAndImage :: Notes
 domainAndImage = notesPart "domain-and-image" body
-
 
 body :: Note
 body = do
