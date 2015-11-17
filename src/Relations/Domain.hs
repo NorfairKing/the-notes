@@ -10,8 +10,7 @@ import           Notes
 
 import           Relations.BasicDefinitions (relation)
 
-makeDef "domain"
-makeDef "image"
+makeDefs ["domain", "image"]
 
 domainAndImage :: Notes
 domainAndImage = notesPart "domain-and-image" body
@@ -28,12 +27,6 @@ body = do
   imageIsInversesDomain
 
 
-domain_ :: Note
-domain_ = domain <> ref domainDefinitionLabel
-
-domainDefinitionLabel :: Label
-domainDefinitionLabel = Label Definition "domain"
-
 domainDefinition :: Note
 domainDefinition = de $ do
     lab domainDefinitionLabel
@@ -45,11 +38,6 @@ domainDefinition = de $ do
     x = "x"
     y = "y"
 
-image_ :: Note
-image_ = image <> ref imageDefinitionLabel
-
-imageDefinitionLabel :: Label
-imageDefinitionLabel = Label Definition "image"
 
 imageDefinition :: Note
 imageDefinition = de $ do
