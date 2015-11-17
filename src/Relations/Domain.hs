@@ -30,7 +30,7 @@ body = do
 domainDefinition :: Note
 domainDefinition = de $ do
     lab domainDefinitionLabel
-    s [the, term "domain", " of a binary relation ", m rel, " between sets ", m a, and, m b, " is the following subset of ", m a]
+    s [the, domain', " of a binary relation ", m rel, " between sets ", m a, and, m b, " is the following subset of ", m a]
     ma $ setcmpr x (te y $ tuple x y ∈ rel)
   where
     a = "A"
@@ -42,7 +42,7 @@ domainDefinition = de $ do
 imageDefinition :: Note
 imageDefinition = de $ do
     lab imageDefinitionLabel
-    s [the, term "image", or, term "range", " of a binary relation ", m rel, " between sets ", m a, and, m b, " is the following subset of ", m b]
+    s [the, image', or, term "range", " of a binary relation ", m rel, " between sets ", m a, and, m b, " is the following subset of ", m b]
     ma $ setcmpr y (te x $ tuple x y ∈ rel)
   where
     a = "A"

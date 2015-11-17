@@ -14,99 +14,66 @@ makeDefs :: [String] -> Q [Dec]
 makeDefs strs = fmap concat $ sequenceQ $ map makeDef strs
 
 makeDef :: String -> Q [Dec]
-makeDef str = return $ termDef str ++ indexDef str ++ refDef str ++ labelDef str
-
-noteName :: Name
-noteName = mkName "Note"
-
-termDef :: String -> [Dec]
-termDef concept = [sig, fun]
+makeDef concept = return $ [termSig, termFun, indexSig, indexFun, labelSig, labelFun, refSig, refFun]
   where
-    name = mkName $ concept ++ "'"
-    sig = SigD
-            name
-            (ConT noteName)
-    fun = FunD
-            name
-            [
-              Clause
-                []
-                (
-                  NormalB $
-                    AppE
-                      (VarE $ mkName "term")
-                      (LitE $ StringL concept)
-                )
-                []
-            ]
+    noteName :: Name
+    noteName = mkName "Note"
 
-indexDef :: String -> [Dec]
-indexDef concept = [sig, fun]
-  where
-    name = mkName concept
-    sig  = SigD
-            name
-            (ConT noteName)
-    fun  = FunD
-            name
-            [
-              Clause
-                [] -- No arguments
-                (
-                  NormalB $
-                    AppE
-                      (VarE $ mkName "ix")
-                      (LitE $ StringL concept)
-                )
-                [] -- No wheres
-            ]
+    termName :: Name
+    termName = mkName $ concept ++ "'"
 
-refDef :: String -> [Dec]
-refDef concept = [sig, fun]
-  where
-    name = mkName $ concept ++ "_"
-    defLabelName = mkName $ concept ++ "DefinitionLabel"
-    sig = SigD
-            name
-            (ConT noteName)
-    fun = FunD
-            name
-            [
-              Clause
-                [] -- No arguments
-                (
-                  NormalB $
-                    AppE
-                      (AppE
-                        (VarE $ mkName "mappend")
-                        (VarE $ mkName concept))
-                      (AppE
-                        (VarE $ mkName "ref")
-                        (VarE $ defLabelName))
-                )
-                [] -- No wheres
-            ]
+    termSig :: Dec
+    termSig = SigD termName (ConT noteName)
 
+    termFun :: Dec
+    termFun = FunD termName [Clause [] (NormalB $ AppE (VarE $ mkName "term") (LitE $ StringL concept)) []]
 
-labelDef :: String -> [Dec]
-labelDef concept = [sig, fun]
-  where
-    name = mkName $ concept ++ "DefinitionLabel"
-    sig = SigD
-            name
-            (ConT $ mkName "Label")
-    fun = FunD
-            name
-            [
-              Clause
-                [] -- No arguments
-                (
-                  NormalB $
-                    AppE
-                      (AppE
-                        (ConE $ mkName "Label")
-                        (ConE $ mkName "Definition"))
-                      (LitE $ StringL concept)
-                )
-                [] -- No wheres
-            ]
+    indexName :: Name
+    indexName = mkName concept
+
+    indexSig :: Dec
+    indexSig = SigD indexName (ConT noteName)
+
+    indexFun :: Dec
+    indexFun = FunD indexName [Clause [] (NormalB $ AppE (VarE $ mkName "ix") (LitE $ StringL concept)) []]
+
+    labelDefName :: Name
+    labelDefName = mkName $ concept ++ "DefinitionLabel"
+
+    labelName :: Name
+    labelName = mkName "Label"
+
+    definitionName :: Name
+    definitionName = mkName "Definition"
+
+    labelSig :: Dec
+    labelSig = SigD labelDefName (ConT labelName)
+
+    labelFun :: Dec
+    labelFun = FunD labelDefName [Clause [] (NormalB $ (AppE (AppE (ConE labelName) (ConE definitionName)) (LitE $ StringL concept))) []]
+
+    refName :: Name
+    refName = mkName $ concept ++ "_"
+
+    refSig :: Dec
+    refSig = SigD refName (ConT noteName)
+
+    refFun :: Dec
+    refFun = FunD
+                refName
+                [
+                  Clause
+                    [] -- No arguments
+                    (
+                      NormalB $
+                        AppE
+                          (AppE
+                            (VarE $ mkName "mappend")
+                            (VarE indexName))
+                          (AppE
+                            (VarE $ mkName "ref")
+                            (VarE labelDefName))
+                    )
+                    [] -- No wheres
+                ]
+
