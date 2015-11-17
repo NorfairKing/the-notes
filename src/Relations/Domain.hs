@@ -1,8 +1,8 @@
 module Relations.Domain (
     domainAndImage
 
-  , domain
-  , image
+  , domain  , domain_   , domainDefinitionLabel
+  , image   , image_    , imageDefinitionLabel
   ) where
 
 import           Notes
@@ -25,8 +25,15 @@ body = do
 domain :: Note
 domain = ix "domain"
 
+domain_ :: Note
+domain_ = domain <> ref domainDefinitionLabel
+
+domainDefinitionLabel :: Label
+domainDefinitionLabel = Label Definition "domain"
+
 domainDefinition :: Note
 domainDefinition = de $ do
+    lab domainDefinitionLabel
     s [the, term "domain", " of a binary relation ", m rel, " between sets ", m a, and, m b, " is the following subset of ", m a]
     ma $ setcmpr x (te y $ tuple x y ∈ rel)
   where
@@ -38,8 +45,15 @@ domainDefinition = de $ do
 image :: Note
 image = ix "image"
 
+image_ :: Note
+image_ = image <> ref imageDefinitionLabel
+
+imageDefinitionLabel :: Label
+imageDefinitionLabel = Label Definition "image"
+
 imageDefinition :: Note
 imageDefinition = de $ do
+    lab imageDefinitionLabel
     s [the, term "image", or, term "range", " of a binary relation ", m rel, " between sets ", m a, and, m b, " is the following subset of ", m b]
     ma $ setcmpr y (te x $ tuple x y ∈ rel)
   where

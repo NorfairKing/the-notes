@@ -14,6 +14,8 @@ import           Macro.Sets.CarthesianProduct
 import           Macro.Functions.Application
 import           Macro.Functions.Inverse
 
+import           Macro.Relations.Macro
+
 
 -- Functions
 fun :: Note -> Note -> Note -> Note
@@ -24,6 +26,31 @@ func m n o p q = fun m n o <> ":" <> raw "\\ " <> p <> comm0 "mapsto" <> q
 
 func2 :: Note -> Note -> Note -> Note -> Note -> Note -> Note -> Note
 func2 m n1 n2 o p1 p2 q = func m (n1 ⨯ n2) o (tuple p1 p2) q
+
+-- Function
+fundom_ :: Note
+fundom_ = "A"
+
+fundom :: Note -> Note
+fundom = reldom
+
+funimg_ :: Note
+funimg_ = "B"
+
+funimg :: Note -> Note
+funimg = relimg
+
+funrel_ :: Note
+funrel_ = "f"
+
+funfunc :: Note -> Note -> Note -> Note
+funfunc a f b = triple a f b
+
+funfunc_ :: Note
+funfunc_ = funfunc fundom_ funrel_ funimg_
+
+funfun :: Note
+funfun = funrel_
 
 -- Distance function symbol
 fundist :: Note

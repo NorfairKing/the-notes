@@ -1,12 +1,13 @@
 module Relations.BasicDefinitions (
     basicDefinitions
 
-  , relation
+  , relation    , relation_     , relationDefinitionLabel
   , inverseOfInverseIsNormalLabel
-  , reflexive, reflexive_
-  , symmetric, symmetric_
-  , transitive, transitive_
-  , total, total_
+
+  , reflexive   , reflexive_    , reflexiveDefinitionLabel
+  , symmetric   , symmetric_    , symmetricDefinitionLabel
+  , transitive  , transitive_   , transitiveDefinitionLabel
+  , total       , total_        , totalDefinitionLabel
   ) where
 
 import           Notes
@@ -36,8 +37,15 @@ basicDefinitions = notesPart "definitions" $ do
 relation :: Note
 relation = ix "relation"
 
+relation_ :: Note
+relation_ = relation <> ref relationDefinitionLabel
+
+relationDefinitionLabel :: Label
+relationDefinitionLabel = Label Definition "relation"
+
 relationDefinition :: Note
 relationDefinition = de $ do
+    lab relationDefinitionLabel
     s ["A ", term "relation", " between ", m n, " sets ", m $ cs [x 1, x 2, dotsc, x n], " is a subset of their Carthesian product"]
   where
     n = "n"
