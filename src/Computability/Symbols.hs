@@ -1,15 +1,15 @@
 module Computability.Symbols (
     symbols
 
-  , symbol  , symbol_   , symbolDefinitionLabel
-  , alphabet, alphabet_ , alphabetDefinitionLabel
-  , string  , string_   , stringDefinitionLabel
-  , concatenation
+  , symbol          , symbol_           , symbolDefinitionLabel
+  , alphabet        , alphabet_         , alphabetDefinitionLabel
+  , string          , string_           , stringDefinitionLabel
+  , concatenation   , concatenation_    , concatenationDefinitionLabel
   ) where
 
 import           Notes
 
-makeDefs ["symbol", "alphabet", "string"]
+makeDefs ["symbol", "alphabet", "string", "concatenation"]
 
 symbols :: Notes
 symbols = notesPart "symbols-and-strings" body
@@ -31,20 +31,20 @@ body = do
 symbolDefinition :: Note
 symbolDefinition = de $ do
   lab symbolDefinitionLabel
-  s ["A ", term "symbol", " is a representation of an abstract mathematical object."]
+  s ["A ", symbol', " is a representation of an abstract mathematical object."]
   s ["The only prerequisite of a symbol is that there is an equivalence relation ", m csymEqSign, " defined on it"]
   refneeded "equivalence relation"
 
 alphabetDefinition :: Note
 alphabetDefinition = de $ do
   lab alphabetDefinitionLabel
-  s ["An ", term "alphabet", " ", m calph, " is a finite set of ", symbol, "s"]
+  s ["An ", alphabet', " ", m calph, " is a finite set of ", symbol, "s"]
 
 
 stringDefinition :: Note
 stringDefinition = de $ do
   lab stringDefinitionLabel
-  s ["A ", term "string", " ", m cstr, " over an alphabet ", m calph, " is a ordered sequence of symbols ", m (a "i"), " in ", m calph]
+  s ["A ", string', " ", m cstr, " over an alphabet ", m calph, " is a ordered sequence of symbols ", m (a "i"), " in ", m calph]
   ma $ cstr =: cstrlst (a 1) (a "n")
   where a n = "a" !: n
 
@@ -56,12 +56,9 @@ emptyStringDefinition = do
     s [m cestr, " is just the notation for the empty string"]
     s ["It is only used because writing down ", quoted "nothing", ", even that word, is impractical"]
 
-concatenation :: Note
-concatenation = ix "concatenation"
-
 concatenationDefinition :: Note
 concatenationDefinition = de $ do
-  s [the, term "concatenation", " ",  m (x <@> y), " of two strings ", m x, and, m y, " is the following string"]
+  s [the, concatenation', " ",  m (x <@> y), " of two strings ", m x, and, m y, " is the following string"]
   ma $ (x <@> y) === cstrof [x_ 1, x_ 2, dotsc, x_ "m", y_ 1, y_ 2, dotsc, y_ "n"]
 
   where
