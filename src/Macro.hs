@@ -8,7 +8,6 @@ module Macro (
   , module Macro.Reference
   , module Macro.Text
   , module Macro.Theorem
-  , module Macro.TH
   , module Macro.Todo
 
   , module Macro.Computability.Macro
@@ -33,7 +32,6 @@ import           Macro.Math
 import           Macro.MetaMacro
 import           Macro.Reference
 import           Macro.Text
-import           Macro.TH
 import           Macro.Theorem
 import           Macro.Todo
 

@@ -1,3 +1,4 @@
+{-# LANGUAGE TemplateHaskell #-}
 module Relations.Domain (
     domainAndImage
 
@@ -9,8 +10,12 @@ import           Notes
 
 import           Relations.BasicDefinitions (relation)
 
+makeDef "domain"
+makeDef "image"
+
 domainAndImage :: Notes
 domainAndImage = notesPart "domain-and-image" body
+
 
 body :: Note
 body = do
@@ -22,8 +27,6 @@ body = do
   domainIsInversesImage
   imageIsInversesDomain
 
-domain :: Note
-domain = ix "domain"
 
 domain_ :: Note
 domain_ = domain <> ref domainDefinitionLabel
@@ -41,9 +44,6 @@ domainDefinition = de $ do
     b = "B"
     x = "x"
     y = "y"
-
-image :: Note
-image = ix "image"
 
 image_ :: Note
 image_ = image <> ref imageDefinitionLabel

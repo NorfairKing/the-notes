@@ -19,7 +19,8 @@ GHC_FLAGS = \
 	-fno-warn-name-shadowing \
 	-fno-warn-orphans \
 	-XOverloadedStrings \
-	-XNoImplicitPrelude
+	-XNoImplicitPrelude \
+	-XTemplateHaskell
 
 GHC_SRC_DIRS = \
 	-i$(SRC_DIR)

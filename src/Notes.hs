@@ -3,9 +3,12 @@ module Notes (
   , module Notes
   , module Macro
   , module Reference
+  , module TH
   ) where
 
 import           Types
+
+import           TH
 
 import           Macro
 import           Reference

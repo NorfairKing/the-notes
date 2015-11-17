@@ -1,4 +1,4 @@
-module Macro.TH where
+module TH.LitFile where
 
 import           Language.Haskell.TH
 import           Language.Haskell.TH.Quote
