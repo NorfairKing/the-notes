@@ -6,6 +6,8 @@ module Probability.ConditionalProbability (
 
 import           Notes
 
+import           Sets.Partition (partition)
+
 conditionalProbability :: Notes
 conditionalProbability = notesPart "conditional-probability" body
 

@@ -6,7 +6,7 @@ module Probability.SigmaAlgebra (
 
 import           Notes
 import           Sets.Algebra.Main (secondLawOfDeMorganLabel, symmetricDifferenceITOUnionAndIntersectionLabel)
-import           Sets.Basics       (setEqualityDefinitionLabel)
+import           Sets.Basics       (set, setEqualityDefinitionLabel)
 
 sigmaAlgebra :: Notes
 sigmaAlgebra = notesPart "sigma-algebra" body

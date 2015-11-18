@@ -1,63 +1,73 @@
 module Computability.RegularExpressions (
-    regularExpressions
+      regularExpressions
+
+    , regularExpression           , regularExpression_
+    , languageOfARegularExpression, languageOfARegularExpression_
+    , regular                     , regular_
   ) where
 
 import           Notes
 
 import           Computability.Languages (language)
+import           Computability.Symbols   (alphabet, string)
+
+import           Sets.Basics             (set)
+
+makeDefs ["regular expression", "language of a regular expression", "regular"]
 
 regularExpressions :: Notes
 regularExpressions = notesPart "regular-expressions" body
 
 body :: Note
 body = do
-  section "Regular Expressions"
+    section "Regular Expressions"
 
-  regularExpressionDefinition
-  regularExpressionsOverAlphabet
-  languageOfRegularExpression
-  regularLanguageDefinition
-  regularExpressionFiniteCriterium
-  regularLanguagesDefinition
-  reglanSubalgebra
-  finiteLanguageRegular
-  oneMoreStringRegular
-  thereExistNonRegularLanguages
-  reverseLanguageRegular
+    regularExpressionDefinition
+    regularExpressionsOverAlphabet
+    languageOfRegularExpression
+    regularLanguageDefinition
+    regularExpressionFiniteCriterium
+    regularLanguagesDefinition
+    reglanSubalgebra
+    finiteLanguageRegular
+    oneMoreStringRegular
+    thereExistNonRegularLanguages
+    reverseLanguageRegular
 
 regularExpressionDefinition :: Note
 regularExpressionDefinition = de $ do
-  s ["A ", term "regular expression", " (", term "RE", ") over an alphabet ", m calph, " is inductively defined as an expression of the following form"]
-  itemize $ do
-    item $ m $ cree
-    item $ m $ crep
-    item $ m $ "a" <> text " with " <> "a" ∈ calph
-    item $ m $ e_ 1 <@@@> e_ 2
-    item $ m $ e_ 1 <@|@> e_ 2
-    item $ m $ crea e
-  s ["Here, ", m (cs [e, e_ 1, e_ 2]), " must be regular expressions"]
-
+    s ["A ", regularExpression', " (", term "RE", ") over an ", alphabet, " ", m calph, " is inductively defined as an expression of the following form"]
+    itemize $ do
+      item $ m $ cree
+      item $ m $ crep
+      item $ m $ "a" <> text " with " <> "a" ∈ calph
+      item $ m $ e_ 1 <@@@> e_ 2
+      item $ m $ e_ 1 <@|@> e_ 2
+      item $ m $ crea e
+    s ["Here, ", m (cs [e, e_ 1, e_ 2]), " must be regular expressions"]
   where
     e = cre
     e_ n = e !: n
 
 regularExpressionsOverAlphabet :: Note
 regularExpressionsOverAlphabet = de $ do
-  s ["The set of regular expressions over an alphabet ", m calph, " is denoted as ", m cres]
+    s [the, set, " of ", regularExpression, "s over an ", alphabet, " ", m calph, " is denoted as ", m cres]
 
 languageOfRegularExpression :: Note
 languageOfRegularExpression = de $ do
-  s [the, language, " ", m clore, " of a regular expression ", m cre, " is inductively defined as follows"]
-  hereFigure $ linedTable
-    [cre, clre cre]
-    [
-      [cree, cestr]
-    , [crep, emptyset]
-    , ["a" <> text " with " <> "a" ∈ calph, setof "a"]
-    , [e_ 1 <@@@> e_ 2, clre (e_ 1) <@@> clre (e_ 2)]
-    , [e_ 1 <@|@> e_ 2, clre (e_ 1) ∪ clre (e_ 2)]
-    , [crea e, cks (clre e)]
-    ]
+      lab languageOfARegularExpressionDefinitionLabel
+      s [the, languageOfARegularExpression', " ", m clore, " is inductively defined as follows"]
+
+      hereFigure $ linedTable
+        [cre, clre cre]
+        [
+          [cree, cestr]
+        , [crep, emptyset]
+        , ["a" <> text " with " <> "a" ∈ calph, setof "a"]
+        , [e_ 1 <@@@> e_ 2, clre (e_ 1) <@@> clre (e_ 2)]
+        , [e_ 1 <@|@> e_ 2, clre (e_ 1) ∪ clre (e_ 2)]
+        , [crea e, cks (clre e)]
+        ]
 
   where
     e = cre
@@ -65,12 +75,13 @@ languageOfRegularExpression = de $ do
 
 regularLanguageDefinition :: Note
 regularLanguageDefinition = de $ do
-  s ["A ", term "regular language", " is the language of a regular expression"]
+    lab regularDefinitionLabel
+    s ["A ", language, " is called ", regular', " if it is the ", language, " of a ", regularExpression]
 
 regularExpressionFiniteCriterium :: Note
 regularExpressionFiniteCriterium = do
   thm $ do
-    s ["If a regular expression does not contain an asterisk, its language is finite"]
+    s ["If a ", regularExpression, " does not contain an asterisk, its ", language, " is finite"]
 
     toprove
 
@@ -80,7 +91,7 @@ regularExpressionFiniteCriterium = do
 
 regularLanguagesDefinition :: Note
 regularLanguagesDefinition = de $ do
-  s ["The set of all regular languages is denoted as ", m creglan]
+  s [the, set, " of all ", regular, " languages is denoted as ", m creglan]
 
 reglanSubalgebra :: Note
 reglanSubalgebra = de $ do
@@ -91,26 +102,26 @@ reglanSubalgebra = de $ do
 
 finiteLanguageRegular :: Note
 finiteLanguageRegular = thm $ do
-  s ["Every finite ", language, " is regular"]
+  s ["Every finite ", language, is, regular]
 
   toprove
 
 oneMoreStringRegular :: Note
 oneMoreStringRegular = thm $ do
-  s ["Let ", m clan, " be a language and ", m cstr, " be a string over the same alphabet ", m calph]
-  s [m (clan ∪ setof cstr), " is regular"]
+  s ["Let ", m clan, " be a ", language, and, m cstr, " be a ", string, " over the same ", alphabet, " ", m calph]
+  s [m (clan ∪ setof cstr), is, regular]
 
   toprove
 
 thereExistNonRegularLanguages :: Note
 thereExistNonRegularLanguages = thm $ do
-  s ["There exist non regular languages"]
+  s ["There exist non ", regular, " languages"]
 
   toprove
 
 
 reverseLanguageRegular :: Note
 reverseLanguageRegular = thm $ do
-  s ["For any language ", m clan, " ", m (crlan clan), " is regular"]
+  s ["For any ", language, " ", m clan, " ", m (crlan clan), is, regular]
 
   toprove

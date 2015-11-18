@@ -1,11 +1,15 @@
 module Sets.Basics (
-  basics
+      basics
 
-  , setEqualityDefinitionLabel
-  , universalSetSupsetOfAllSetsLabel
+    , set           , set_
+
+    , setEqualityDefinitionLabel
+    , universalSetSupsetOfAllSetsLabel
   ) where
 
 import           Notes
+
+makeDefs ["set"]
 
 basics :: Notes
 basics = notesPart "basics" body
@@ -47,13 +51,10 @@ emptySet = do
 singleton :: Note
 singleton = de $ s ["A ", ix "set", " with exactly one element is called a ", term "singleton"]
 
-setDefinitionLabel :: Label
-setDefinitionLabel = delab "set"
-
 setDefinition :: Note
 setDefinition = de $ do
   lab setDefinitionLabel
-  s ["A ", term "set", " is a ", ix "collection", " of distinct objects, considered as an object in its own right"]
+  s ["A ", set', " is a ", ix "collection", " of distinct objects, considered as an object in its own right"]
   s ["These objects are called the ", term "elements", " of the set"]
 
 setElementNotation :: Note

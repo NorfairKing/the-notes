@@ -1,9 +1,12 @@
-module Sets.Algebra.Union (setUnion, union) where
+module Sets.Algebra.Union (
+      setUnion
+
+    , union, union_
+    ) where
 
 import           Notes
 
-union :: Note
-union = ix "union"
+makeDef "union"
 
 setUnion :: Notes
 setUnion = notesPart "union" body
@@ -29,7 +32,8 @@ y = "y"
 
 unionDefinition :: Note
 unionDefinition = de $ do
-  s [the, term "union", " ", m (a `setun` b), " of two sets ", m a, " and ", m b, " is the set of all elements of both ", m a, " and ", m b]
+  lab unionDefinitionLabel
+  s [the, union', " ", m (a `setun` b), " of two sets ", m a, " and ", m b, " is the set of all elements of both ", m a, " and ", m b]
   ma $ a ∪ b =§= setcmpr x ((x ∈ a) |: (x ∈ b))
 
 unionAssociative :: Note
