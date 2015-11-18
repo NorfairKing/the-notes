@@ -12,6 +12,8 @@ module Relations.BasicDefinitions (
 
 import           Notes
 
+import           Sets.CarthesianProduct (carthesianProduct_)
+
 basicDefinitions :: Notes
 basicDefinitions = notesPart "definitions" $ do
   section "Basics"
@@ -46,7 +48,7 @@ relationDefinitionLabel = Label Definition "relation"
 relationDefinition :: Note
 relationDefinition = de $ do
     lab relationDefinitionLabel
-    s ["A ", term "relation", " between ", m n, " sets ", m $ cs [x 1, x 2, dotsc, x n], " is a subset of their Carthesian product"]
+    s ["A ", term "relation", " between ", m n, " sets ", m $ cs [x 1, x 2, dotsc, x n], " is a subset of their ", carthesianProduct_]
   where
     n = "n"
     x i = "X" !: i

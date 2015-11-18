@@ -7,6 +7,9 @@ import           Types
 
 import           Prelude                    (concat, fmap, map, return)
 
+import           Data.Char                  (toLower, toUpper)
+import           Data.List                  (intercalate)
+
 import           Language.Haskell.TH
 import           Language.Haskell.TH.Syntax (sequenceQ)
 
@@ -16,29 +19,35 @@ makeDefs strs = fmap concat $ sequenceQ $ map makeDef strs
 makeDef :: String -> Q [Dec]
 makeDef concept = return $ [termSig, termFun, indexSig, indexFun, labelSig, labelFun, refSig, refFun]
   where
+    baseName :: String
+    baseName = camelCase concept
+
+    conceptLit :: Exp
+    conceptLit = LitE $ StringL concept
+
     noteName :: Name
     noteName = mkName "Note"
 
     termName :: Name
-    termName = mkName $ concept ++ "'"
+    termName = mkName $ baseName ++ "'"
 
     termSig :: Dec
     termSig = SigD termName (ConT noteName)
 
     termFun :: Dec
-    termFun = FunD termName [Clause [] (NormalB $ AppE (VarE $ mkName "term") (LitE $ StringL concept)) []]
+    termFun = FunD termName [Clause [] (NormalB $ AppE (VarE $ mkName "term") conceptLit) []]
 
     indexName :: Name
-    indexName = mkName concept
+    indexName = mkName baseName
 
     indexSig :: Dec
     indexSig = SigD indexName (ConT noteName)
 
     indexFun :: Dec
-    indexFun = FunD indexName [Clause [] (NormalB $ AppE (VarE $ mkName "ix") (LitE $ StringL concept)) []]
+    indexFun = FunD indexName [Clause [] (NormalB $ AppE (VarE $ mkName "ix") conceptLit) []]
 
     labelDefName :: Name
-    labelDefName = mkName $ concept ++ "DefinitionLabel"
+    labelDefName = mkName $ baseName ++ "DefinitionLabel"
 
     labelName :: Name
     labelName = mkName "Label"
@@ -46,14 +55,17 @@ makeDef concept = return $ [termSig, termFun, indexSig, indexFun, labelSig, labe
     definitionName :: Name
     definitionName = mkName "Definition"
 
+    labelConceptLit :: Exp
+    labelConceptLit = LitE $ StringL $ interdashed concept
+
     labelSig :: Dec
     labelSig = SigD labelDefName (ConT labelName)
 
     labelFun :: Dec
-    labelFun = FunD labelDefName [Clause [] (NormalB $ (AppE (AppE (ConE labelName) (ConE definitionName)) (LitE $ StringL concept))) []]
+    labelFun = FunD labelDefName [Clause [] (NormalB $ (AppE (AppE (ConE labelName) (ConE definitionName)) labelConceptLit)) []]
 
     refName :: Name
-    refName = mkName $ concept ++ "_"
+    refName = mkName $ baseName ++ "_"
 
     refSig :: Dec
     refSig = SigD refName (ConT noteName)
@@ -77,3 +89,8 @@ makeDef concept = return $ [termSig, termFun, indexSig, indexFun, labelSig, labe
                     [] -- No wheres
                 ]
 
+camelCase :: String -> String
+camelCase str = (\(s:ss) -> (toLower s):ss) $ concat $ map (\(s:ss) -> (toUpper s) : ss) $ words str
+
+interdashed :: String -> String
+interdashed str = intercalate "-" $ words $ map toLower str

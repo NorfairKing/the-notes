@@ -14,7 +14,7 @@ sets = notes "sets" $
   , basics
   , algebra
   , powerset
-  , carthesianProduct
+  , carthesianProducts
   ]
 
 header :: Notes
