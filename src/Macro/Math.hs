@@ -178,8 +178,11 @@ prodcmpr = compr prodsign
 (/:) = frac
 
 -- Equality
+eqsign :: Note
+eqsign = "="
+
 eq :: Note -> Note -> Note
-eq = between "="
+eq = binop eqsign
 
 neq :: Note -> Note -> Note
 neq = between $ comm0 "neq"
@@ -207,9 +210,6 @@ exp n = "e" ^: n
 --[ Text
 text :: Note -> Note
 text = comm1 "text"
-
-associative :: Note
-associative = ix "associative"
 
 commutative :: Note
 commutative = ix "commutative"

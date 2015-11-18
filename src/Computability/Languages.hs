@@ -9,10 +9,12 @@ module Computability.Languages (
 
 import           Notes
 
-import           Computability.Symbols (alphabet)
+import           Computability.Symbols     (alphabet)
 
-import           Sets.Algebra.Union    (union)
-import           Sets.Basics           (set)
+import           Sets.Algebra.Union        (union)
+import           Sets.Basics               (set)
+
+import           Functions.BinaryOperation (associative_)
 
 makeDefs ["language", "concatenation", "Kleene star", "reverse language"]
 
@@ -51,7 +53,7 @@ languageConcatenationDefinition = de $ do
 
 concatenationAssociative :: Note
 concatenationAssociative = thm $ do
-    s [the, concatenation, " of languages is ", associative]
+    s [the, concatenation, " of languages is ", associative_]
 
     toprove
 

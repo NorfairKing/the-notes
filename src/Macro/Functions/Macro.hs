@@ -14,6 +14,8 @@ import           Macro.Sets.CarthesianProduct
 import           Macro.Functions.Application
 import           Macro.Functions.Inverse
 
+import           Macro.MetaMacro
+
 import           Macro.Relations.Macro
 
 
@@ -74,4 +76,22 @@ norm_ n b = autoBrackets dblPipe dblPipe b !: n
 -- Arccos
 arccos_ :: Note -> Note
 arccos_ = funapp arccos
+
+
+-- Binary Operations
+funbinopsign :: Note
+funbinopsign = comm0 "star"
+
+funbinop :: Note -> Note -> Note
+funbinop f a = fun (pars f) (a ⨯ a) a
+
+funbinop_ :: Note
+funbinop_ = funbinop funbinopsign fundom_
+
+funbinopapp :: Note -> Note -> Note
+funbinopapp = binop funbinopsign
+
+(★) :: Note -> Note -> Note
+(★) = funbinopapp
+
 

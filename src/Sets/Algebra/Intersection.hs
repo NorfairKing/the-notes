@@ -9,7 +9,9 @@ module Sets.Algebra.Intersection (
 
 import           Notes
 
-import           Sets.Algebra.Union (union)
+import           Sets.Algebra.Union        (union)
+
+import           Functions.BinaryOperation (associative_)
 
 intersection :: Note
 intersection = ix "intersection"
@@ -51,7 +53,7 @@ intersectionAssociativityLabel = Label Property "intersection-associative"
 intersectionAssociative :: Note
 intersectionAssociative = prop $ do
   lab intersectionAssociativityLabel
-  s ["The set ", intersection, " is ", associative]
+  s ["The set ", intersection, " is ", associative_]
   ma $ a ∩ (pars $ b ∩ c) =§= (pars $ a ∩ b) ∩ c
 
   proof $ do

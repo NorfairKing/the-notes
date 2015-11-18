@@ -11,7 +11,9 @@ module Computability.Symbols (
 
 import           Notes
 
-import           Sets.Basics (set)
+import           Sets.Basics               (set)
+
+import           Functions.BinaryOperation (associative_)
 
 makeDefs [
       "symbol", "alphabet"
@@ -78,7 +80,7 @@ concatenationDefinition = de $ do
 
 concatenationAssociative :: Note
 concatenationAssociative = thm $ do
-    s [the, concatenation, " of strings is ", associative]
+    s [the, concatenation, " of strings is ", associative_]
 
     toprove
 

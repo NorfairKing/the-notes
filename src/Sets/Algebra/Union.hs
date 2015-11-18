@@ -6,6 +6,10 @@ module Sets.Algebra.Union (
 
 import           Notes
 
+import           Sets.Basics               (set)
+
+import           Functions.BinaryOperation (associative_)
+
 makeDef "union"
 
 setUnion :: Notes
@@ -38,7 +42,7 @@ unionDefinition = de $ do
 
 unionAssociative :: Note
 unionAssociative = prop $ do
-  s ["The set ", union, " is ", associative]
+  s [the, set, " ", union, " is ", associative_]
   ma $ a ∪ (pars $ b ∪ c) =§= (pars $ a ∪ b) ∪ c
 
   proof $ do
@@ -55,7 +59,7 @@ unionAssociative = prop $ do
 
 unionCommutative :: Note
 unionCommutative = prop $ do
-  s ["The set ", union, " is ", commutative]
+  s ["The ", set, " ", union, " is ", commutative]
   ma $ a ∪ b =§= b ∪ a
 
   proof $ do
@@ -66,7 +70,7 @@ unionCommutative = prop $ do
 
 unionIdempotent :: Note
 unionIdempotent = prop $ do
-  s ["The set ", union, " is ", idempotent ,""]
+  s ["The ", set, " ", union, " is ", idempotent ,""]
   ma $ a ∪ a =§= a
 
   proof $ do
@@ -78,7 +82,7 @@ unionIdempotent = prop $ do
 
 unionSupset :: Note
 unionSupset = thm $ do
-  s ["The set ", union, " of two sets ", m a, " and ", m b, " is a superset of ", m a]
+  s ["The ", set, " ", union, " of two sets ", m a, and, m b, " is a superset of ", m a]
 
   ma $ a ⊆ a ∪ b
 
@@ -100,7 +104,7 @@ unionSubsetDefinition = thm $ do
 
 unionIdentityLaw :: Note
 unionIdentityLaw = thm $ do
-  s [the, term "identity law", " for the set ", union]
+  s [the, term "identity law", " for the ", set, " ", union]
   ma $ a ∪ emptyset =§= a
 
   proof $ do
@@ -112,7 +116,7 @@ unionIdentityLaw = thm $ do
 
 unionDominationLaw :: Note
 unionDominationLaw = thm $ do
-  s [the, term "domination law", " for the set ", union]
+  s [the, term "domination law", " for the ", set, " ", union]
   ma $ a ∪ setuniv =§= setuniv
 
   proof $ do

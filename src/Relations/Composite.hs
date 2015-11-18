@@ -2,7 +2,7 @@ module Relations.Composite (compositeRelations) where
 
 import           Notes
 
--- import           Macro.Math                 (associative, distributive)
+import           Functions.BinaryOperation  (associative_)
 import           Relations.BasicDefinitions (inverseOfInverseIsNormalLabel)
 
 compositeRelations :: Notes
@@ -36,7 +36,7 @@ compositeRelationDefinition = de $ do
 
 compositeAssociative :: Note
 compositeAssociative = thm $ do
-    s ["The composition of relations is ", associative]
+    s ["The composition of relations is ", associative_]
     s ["Let ", m a, ", ", m b, and, m c, " be binary relations"]
 
     ma $ (pars $ a ● b) ● c =: a ● (pars $ b ● c)
