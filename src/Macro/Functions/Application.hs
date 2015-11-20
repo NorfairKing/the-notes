@@ -17,3 +17,9 @@ fn = funapp
 fn2 :: Note -> Note -> Note -> Note
 fn2 = funapp2
 
+
+mwfunapp :: Note -> Note -> Note
+mwfunapp m n = m <> commS "," <> comm0 "square" <> commS "," <> n
+
+mwfn :: Note -> Note -> Note
+mwfn = mwfunapp

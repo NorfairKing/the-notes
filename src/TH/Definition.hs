@@ -5,7 +5,7 @@ module TH.Definition (
 
 import           Types
 
-import           Prelude                    (concat, fmap, map, return)
+import           Prelude                    (Char, concat, fmap, map, return)
 
 import           Data.Char                  (toLower, toUpper)
 import           Data.List                  (intercalate)
@@ -20,7 +20,7 @@ makeDef :: String -> Q [Dec]
 makeDef concept = return $ [termSig, termFun, indexSig, indexFun, labelSig, labelFun, refSig, refFun]
   where
     baseName :: String
-    baseName = camelCase concept
+    baseName = constructName concept
 
     conceptLit :: Exp
     conceptLit = LitE $ StringL concept
@@ -88,6 +88,16 @@ makeDef concept = return $ [termSig, termFun, indexSig, indexFun, labelSig, labe
                     )
                     [] -- No wheres
                 ]
+
+constructName :: String -> String
+constructName = camelCase . sanitize
+
+sanitize :: String -> String
+sanitize = map replaceBad
+  where
+    replaceBad :: Char -> Char
+    replaceBad '-' = ' '
+    replaceBad c = c
 
 camelCase :: String -> String
 camelCase str = (\(s:ss) -> (toLower s):ss) $ concat $ map (\(s:ss) -> (toUpper s) : ss) $ words str

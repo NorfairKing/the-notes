@@ -49,7 +49,7 @@ funfunc :: Note -> Note -> Note -> Note
 funfunc a f b = triple a f b
 
 funfunc_ :: Note
-funfunc_ = funfunc fundom_ funrel_ funimg_
+funfunc_ = fun funrel_ fundom_ funimg_
 
 funfun :: Note
 funfun = funrel_

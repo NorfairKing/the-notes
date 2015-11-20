@@ -2,6 +2,7 @@ module Sets.Basics (
       basics
 
     , set           , set_
+    , subset        , subset_
 
     , setEqualityDefinitionLabel
     , universalSetSupsetOfAllSetsLabel
@@ -9,7 +10,10 @@ module Sets.Basics (
 
 import           Notes
 
-makeDefs ["set"]
+makeDefs [
+      "set"
+    , "subset"
+    ]
 
 basics :: Notes
 basics = notesPart "basics" body
@@ -125,7 +129,8 @@ setEqTransitivity = thm $ do
 
 subsetDefinition :: Note
 subsetDefinition = de $ do
-  s ["A ", ix "set", " ", m "A", " is a ", term "subset", " of a set ", m "B", " if and only if ", m "B", " contains all elements of ", m "A"]
+  lab subsetDefinitionLabel
+  s ["A ", set, " ", m "A", " is a ", subset', " of a ", set, " " , m "B", " if and only if ", m "B", " contains all elements of ", m "A"]
   ma $ ("A" ⊆ "B") === (fa "x" $ "x" ∈ "A" ⇒ "x" ∈ "B")
 
 
