@@ -16,7 +16,7 @@ module Types (
   , module Text.LaTeX.Packages.Fancyhdr
   , module Text.LaTeX.Packages.Color
 
-  , asks
+  , ask, asks
   , modify
   ) where
 import           Prelude                      (Bool (..))
