@@ -49,7 +49,7 @@ packages = do
   usepackage [] "verbatim"
 
   -- For urls
-  usepackage [] "hyperref"
+  usepackage ["hidelinks"] "hyperref"
 
   usepackage [] "listings"
   usepackage [] "minted"
@@ -64,7 +64,7 @@ packages = do
   usepackage [] "makeidx"
 
   -- For colored text
-  usepackage [] "color"
+  usepackage [] pcolor
 
   -- To cancel terms in math
   usepackage [] "cancel"

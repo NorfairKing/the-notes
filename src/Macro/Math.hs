@@ -134,14 +134,6 @@ sequ :: Note -> Note -> Note
 sequ m n = pars m !: n
 
 
--- Comprehensions
-compr :: Note -> Note -> Note -> Note -> Note
-compr sign lower upper content = sign !: lower ^: upper <> braces content
-
-comp :: Note -> Note -> Note -> Note
-comp sign lower content = (braces $ sign !: (braces lower)) <> braces content
-
-
 --[ Exam questions
 examq :: Note -> Note -> Note
 examq m n = do

@@ -1,6 +1,5 @@
 module Main where
 
-import           System.Environment       (getArgs)
 import           System.Exit              (exitFailure)
 import           System.Process           (system)
 
@@ -11,14 +10,13 @@ import           Text.LaTeX.Base.Warnings
 
 import qualified Data.Text                as T
 
-import           Control.Monad.Reader     (asks)
-
 import           Prelude                  (Bool (..), appendFile, error, filter,
                                            map, print, return)
 
 import           Constants
 import           Header
 import           Packages
+import           Parser
 import           Titlepage
 
 import           Computability.Main
@@ -39,8 +37,7 @@ import           Topology.Main
 
 main :: IO ()
 main = do
-    args <- getArgs
-    let mc = config args
+    mc <- getConfig
     print mc
     case mc of
       Nothing -> error "Couldn't parse arguments."
@@ -72,17 +69,6 @@ startState :: State
 startState = State {
     state_refs = []
   }
-
-config :: [String] -> Maybe Config
-config args = do
-  let ss = map constructSelection args
-  return $ Config {
-      conf_selections = ss
-    }
-
-constructSelection :: String -> Selection
-constructSelection "all" = All
-constructSelection s = Match s
 
 renderSelection :: Note
 renderSelection = do

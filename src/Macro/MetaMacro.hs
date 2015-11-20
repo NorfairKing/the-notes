@@ -29,3 +29,21 @@ subsc = (!:)
 -- prefix superscript operator
 supsc :: Note -> Note -> Note
 supsc = (^:)
+
+
+-- | Special Superscript.
+(.^:) :: LaTeXC l => l -> l -> l
+x .^: y = x <> raw "^"  <> braces y
+
+
+-- | Special Subscript.
+(.!:) :: LaTeXC l => l -> l -> l
+x .!: y = x <> raw "_" <> braces y
+
+-- Comprehensions
+compr :: Note -> Note -> Note -> Note -> Note
+compr sign lower upper content = sign .!: lower .^: upper <> braces content
+
+comp :: Note -> Note -> Note -> Note
+comp sign lower content = (braces $ sign .!: (braces lower)) <> braces content
+

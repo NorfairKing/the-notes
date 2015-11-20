@@ -16,7 +16,7 @@ import           Reference
 import           Prelude              (concatMap, filter, foldl, map, mapM_,
                                        putStrLn, sequence_)
 
-import           Control.Monad.Reader (asks, runReaderT)
+import           Control.Monad.Reader (runReaderT)
 import           Control.Monad.State  (runStateT)
 
 import           Data.List            (isPrefixOf, union)

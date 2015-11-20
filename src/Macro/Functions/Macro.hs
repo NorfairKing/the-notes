@@ -91,6 +91,7 @@ funbinop_ = funbinop funbinopsign fundom_
 funbinopapp :: Note -> Note -> Note
 funbinopapp = binop funbinopsign
 
+-- C-k 2*
 (★) :: Note -> Note -> Note
 (★) = funbinopapp
 
