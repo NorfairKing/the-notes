@@ -1,7 +1,9 @@
 module Main where
 
 import           System.Exit              (exitFailure)
-import           System.Process           (system)
+import           System.Exit              (ExitCode (..))
+import           System.Process           (CreateProcess (..),
+                                           readCreateProcessWithExitCode, shell)
 
 import           Notes
 import           Utils
@@ -11,7 +13,7 @@ import           Text.LaTeX.Base.Warnings
 import qualified Data.Text                as T
 
 import           Prelude                  (Bool (..), appendFile, error, filter,
-                                           print, return)
+                                           print, putStrLn, return)
 
 import           Constants
 import           Header
@@ -51,12 +53,36 @@ main = do
 
               appendFile mainBibFile $ showReferences $ state_refs endState
 
-              _ <- liftIO $ system $ "latexmk -pdf -pdflatex=\"pdflatex -shell-escape -halt-on-error -enable-write18\" " ++ mainTexFile ++ " -jobname=" ++ outName
+              (ec, out, err) <- liftIO $ readCreateProcessWithExitCode latexMkJob ""
+              case ec of
+                ExitSuccess -> return ()
+                ExitFailure c -> do
+                    putStrLn out
+                    putStrLn err
+                    print c
+
               return ()
           ws -> do
               print ws
               exitFailure
 
+latexMkJob :: CreateProcess
+latexMkJob = shell $ "latexmk " ++ unwords latexMkArgs
+  where
+    latexMkArgs :: [String]
+    latexMkArgs = ["-pdf", pdfLatexArg, jobNameArg, mainTexFile]
+
+    jobNameArg :: String
+    jobNameArg = "-jobname=" ++ outName
+
+    pdfLatexArg :: String
+    pdfLatexArg = "-pdflatex='" ++ pdfLatexCmd ++ "'"
+
+    pdfLatexCmd :: String
+    pdfLatexCmd = "pdflatex " ++ unwords pdfLatexArgs
+
+    pdfLatexArgs :: [String]
+    pdfLatexArgs = ["-shell-escape", "-halt-on-error", "-enable-write18"]
 
 surpressWarnings :: [Warning] -> [Warning]
 surpressWarnings = filter leave

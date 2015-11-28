@@ -59,7 +59,7 @@ setDefinition :: Note
 setDefinition = de $ do
   lab setDefinitionLabel
   s ["A ", set', " is a ", ix "collection", " of distinct objects, considered as an object in its own right"]
-  s ["These objects are called the ", term "elements", " of the set"]
+  s ["These objects are called the ", term "elements", " of the ", set]
 
 setElementNotation :: Note
 setElementNotation = de $ do
