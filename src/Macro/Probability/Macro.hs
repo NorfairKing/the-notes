@@ -4,6 +4,7 @@ import           Types
 
 import           Macro.Index
 import           Macro.Math
+import           Macro.MetaMacro
 
 import           Macro.Functions.Macro
 import           Macro.Sets.Macro
@@ -61,6 +62,10 @@ prrv = "X"
 
 prrvfunc :: Note
 prrvfunc = fun prrv pruniv reals
+
+-- Probability value from random variable
+prvrv :: Note -> Note
+prvrv = fn prrv
 
 
 --[ Probability distribution function
@@ -140,3 +145,28 @@ sa = ix salgebra
 
 --sa_ :: Note
 -- sa_ = sa <> " " <> m prsa
+
+
+--[ Distributions
+
+distributedAs :: Note -> Note -> Note
+distributedAs = binop $ comm0 "sim"
+
+(~.) :: Note -> Note -> Note
+(~.) = distributedAs
+
+-- Bernoulli
+
+bernoulliD :: Note -> Note
+bernoulliD = binomialD 1
+
+bernoulliD_ :: Note
+bernoulliD_ = bernoulliD "p"
+
+-- Binomial
+
+binomialD :: Note -> Note -> Note
+binomialD = fn2 $ mathcal "B"
+
+binomialD_ :: Note
+binomialD_ = binomialD "n" "p"

@@ -1,5 +1,7 @@
 module Macro.Reference where
 
+import           Control.Monad            (when)
+
 import           Reference
 import           Types
 
@@ -7,7 +9,7 @@ import qualified Text.LaTeX.Base.Commands as T (pageref, ref)
 
 
 wordOf :: RefKind -> Note
-wordOf Definition     = "Definition"
+wordOf Definition     = "definition"
 wordOf Theorem        = "theorem"
 wordOf Property       = "property"
 wordOf Proposition    = "proposition"
@@ -25,12 +27,29 @@ labelFor :: Label -> Note
 labelFor l = wordFor l <> ":" <> labelOf l
 
 ref :: Label -> Note
-ref l = do
-  footnote $ "See " <> wordFor l <> " " <> T.ref (labelFor l) <> " on page " <> T.pageref (labelFor l) <> "."
+ref l = footnote $ do
+    debug <- asks conf_visualDebug
+    let ll = labelFor l
+    "See "
+    wordFor l
+    " "
+    T.ref ll
+    " on page "
+    T.pageref ll
+    "."
+    " "
+    when debug $ labelBox l
 
+labelBox :: Label -> Note
+labelBox l = colorbox (ModColor $ RGB 0.5 0.5 0.5) $ textcolor (ModColor $ RGB 0 1 0) ll
+  where ll = labelFor l
 
 lab :: Label -> Note
-lab l = label $ labelFor l
+lab l = do
+    debug <- asks conf_visualDebug
+    let ll = labelFor l
+    when debug $ labelBox l <> lnbk
+    label ll
 
 delab :: Note -> Label
 delab = Label Definition

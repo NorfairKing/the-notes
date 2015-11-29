@@ -3,6 +3,7 @@ module Functions.Main (functions) where
 import           Notes
 
 import           Functions.Basics
+import           Functions.BinaryOperation
 import           Functions.Distances
 
 
@@ -11,6 +12,7 @@ functions = notes "functions" $
   [
     header
   , functionBasics
+  , binaryOperations
   , distances
   ]
 

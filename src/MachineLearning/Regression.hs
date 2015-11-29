@@ -13,6 +13,7 @@ body = do
   linearRegression
   linearModelAndLeastSquares
 
+x, y :: Note
 x = "X"
 y = "Y"
 

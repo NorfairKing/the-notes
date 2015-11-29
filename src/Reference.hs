@@ -12,6 +12,9 @@ unpublished = "unpublished"
 lectureSlides :: ReferenceType
 lectureSlides = "unpublished"
 
+online :: ReferenceType
+online = "online"
+
 article :: ReferenceType
 article = "article"
 

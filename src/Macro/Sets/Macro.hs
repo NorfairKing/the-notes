@@ -9,7 +9,6 @@ import           Types
 import           Macro.Functions.Macro
 import           Macro.Sets.CarthesianProduct
 
-import           Macro.Index
 import           Macro.Math
 import           Macro.MetaMacro
 import           Macro.Text
@@ -52,6 +51,9 @@ setneqsign = underset "set" $ comm0 "neq"
 
 setneq :: Note -> Note -> Note
 setneq = binop setneqsign
+
+(=§/=) :: Note -> Note -> Note
+(=§/=) = setneq
 
 --[ Element of
 -- C-k (-
@@ -176,13 +178,3 @@ powset set = powsetsign `funapp` set
 setsize :: Note -> Note
 setsize = autoBrackets "|" "|"
 
-
-
---[ Text
-
-set :: Note
-set = ix "set"
-
-
-partition :: Note
-partition = ix "partition"

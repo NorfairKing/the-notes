@@ -98,6 +98,7 @@ impliessign = rightArrow
 mimplies :: Note -> Note -> Note
 mimplies m n = m <> impliessign <> n
 
+
 -- C-k =>
 (⇒) :: Note -> Note -> Note
 (⇒) = mimplies
@@ -131,14 +132,6 @@ ccint = interval []
 -- Sequences
 sequ :: Note -> Note -> Note
 sequ m n = pars m !: n
-
-
--- Comprehensions
-compr :: Note -> Note -> Note -> Note -> Note
-compr sign lower upper content = sign !: lower ^: upper <> braces content
-
-comp :: Note -> Note -> Note -> Note
-comp sign lower content = (braces $ sign !: (braces lower)) <> braces content
 
 
 --[ Exam questions
@@ -177,8 +170,11 @@ prodcmpr = compr prodsign
 (/:) = frac
 
 -- Equality
+eqsign :: Note
+eqsign = "="
+
 eq :: Note -> Note -> Note
-eq = between "="
+eq = binop eqsign
 
 neq :: Note -> Note -> Note
 neq = between $ comm0 "neq"
@@ -203,16 +199,9 @@ not n = notsign <> n
 exp :: Note -> Note
 exp n = "e" ^: n
 
---[ Symbols
-bot :: Note
-bot = comm0 "bot"
-
 --[ Text
 text :: Note -> Note
 text = comm1 "text"
-
-associative :: Note
-associative = ix "associative"
 
 commutative :: Note
 commutative = ix "commutative"
@@ -262,3 +251,43 @@ nrt n = tsqrt (Just n)
 max :: Note -> Note -> Note
 max sub body = commS "max" !: sub <> body
 
+-- Infinity
+minfty :: Note
+minfty = "-" <> infty
+
+pinfty :: Note
+pinfty = "+" <> infty
+
+-- Limits
+lim :: Note -> Note -> Note -> Note
+lim m n o = (commS "lim" !: (m → n)) <> o
+
+-- C-k ->
+(→) :: Note -> Note ->Note
+(→) = binop rightarrow
+
+rlim :: Note -> Note -> Note -> Note
+rlim m n o = (commS "lim" !: (m <> overset ">" rightarrow) <> n) <> o
+
+llim :: Note -> Note -> Note -> Note
+llim m n o = (commS "lim" !: (m <> overset "<" rightarrow) <> n) <> o
+
+-- Derivatives
+deriv :: Note -> Note -> Note
+deriv top to = ("d" <> commS ";" <> top) /: ("d" <> to)
+
+-- Integrals
+int :: Note -> Note -> Note -> Note -> Note
+int a b c dx = commS "int" !: a ^: b <> c <> commS "," <> dx
+
+-- Cases
+-- | Environment of unordered lists. Use 'item' to start each list item.
+cases :: LaTeXC l => l -> l
+cases = liftL $ TeXEnv "cases" []
+
+-- Lists
+lst :: Note -> Note -> Note
+lst n m = commaSeparated [n, dotsc, m]
+
+list :: Note -> Note -> Note -> Note
+list n m o = commaSeparated [n, m, dotsc, o]

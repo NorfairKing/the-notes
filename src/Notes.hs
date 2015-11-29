@@ -3,30 +3,21 @@ module Notes (
   , module Notes
   , module Macro
   , module Reference
-
-  , modify
+  , module TH
   ) where
 
 import           Types
 
-import           Constants
+import           TH
+
 import           Macro
 import           Reference
 
-import           Prelude              (appendFile, concatMap, filter, foldl,
-                                       map, mapM_, putStrLn, sequence_)
+import           Prelude              (concatMap, filter, foldl, map, mapM_,
+                                       putStrLn, sequence_)
 
-import           Control.Monad.Reader (MonadReader (..), ReaderT, ask, asks,
-                                       runReaderT)
-import           Control.Monad.State  (MonadState (..), StateT, get, gets, put,
-                                       runStateT)
-
-
-import           Control.Monad.Reader (MonadReader (..), ReaderT, ask, asks,
-                                       runReaderT)
-import           Control.Monad.State  (MonadState (..), StateT, get, gets,
-                                       modify, put, runStateT)
-
+import           Control.Monad.Reader (runReaderT)
+import           Control.Monad.State  (runStateT)
 
 import           Data.List            (isPrefixOf, union)
 

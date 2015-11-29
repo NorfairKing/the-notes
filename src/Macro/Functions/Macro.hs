@@ -1,11 +1,22 @@
-module Macro.Functions.Macro where
+module Macro.Functions.Macro (
+    module Macro.Functions.Macro
+
+  , module Macro.Functions.Inverse
+  , module Macro.Functions.Application
+  ) where
 
 import           Types
 
 import           Macro.Math
-import           Macro.Text
 
 import           Macro.Sets.CarthesianProduct
+
+import           Macro.Functions.Application
+import           Macro.Functions.Inverse
+
+import           Macro.MetaMacro
+
+import           Macro.Relations.Macro
 
 
 -- Functions
@@ -18,21 +29,30 @@ func m n o p q = fun m n o <> ":" <> raw "\\ " <> p <> comm0 "mapsto" <> q
 func2 :: Note -> Note -> Note -> Note -> Note -> Note -> Note -> Note
 func2 m n1 n2 o p1 p2 q = func m (n1 ⨯ n2) o (tuple p1 p2) q
 
-funinv :: Note -> Note
-funinv n = n ^: (-1)
+-- Function
+fundom_ :: Note
+fundom_ = "A"
 
-funapp :: Note -> Note -> Note
-funapp n m = n <> pars m
+fundom :: Note -> Note
+fundom = reldom
 
-funapp2 :: Note -> Note -> Note -> Note
-funapp2 f a b = funapp f $ cs [a, b]
+funimg_ :: Note
+funimg_ = "B"
 
-fn :: Note -> Note -> Note
-fn = funapp
+funimg :: Note -> Note
+funimg = relimg
 
-fn2 :: Note -> Note -> Note -> Note
-fn2 = funapp2
+funrel_ :: Note
+funrel_ = "f"
 
+funfunc :: Note -> Note -> Note -> Note
+funfunc a f b = triple a f b
+
+funfunc_ :: Note
+funfunc_ = fun funrel_ fundom_ funimg_
+
+funfun :: Note
+funfun = funrel_
 
 -- Distance function symbol
 fundist :: Note
@@ -56,4 +76,23 @@ norm_ n b = autoBrackets dblPipe dblPipe b !: n
 -- Arccos
 arccos_ :: Note -> Note
 arccos_ = funapp arccos
+
+
+-- Binary Operations
+funbinopsign :: Note
+funbinopsign = comm0 "star"
+
+funbinop :: Note -> Note -> Note
+funbinop f a = fun (pars f) (a ⨯ a) a
+
+funbinop_ :: Note
+funbinop_ = funbinop funbinopsign fundom_
+
+funbinopapp :: Note -> Note -> Note
+funbinopapp = binop funbinopsign
+
+-- C-k 2*
+(★) :: Note -> Note -> Note
+(★) = funbinopapp
+
 

@@ -1,10 +1,19 @@
-module Relations.Basics (relationBasics) where
+module Relations.Basics (
+    relationBasics
+
+  , relation
+  ) where
 
 import           Notes
 
-relationBasics :: Notes
-relationBasics = notesPart "basics" body
+import           Relations.BasicDefinitions
+import           Relations.Composite
+import           Relations.Domain
 
-body :: Note
-body = do
-  mempty
+relationBasics :: Notes
+relationBasics = notes "basics"
+  [
+    basicDefinitions
+  , domainAndImage
+  , compositeRelations
+  ]

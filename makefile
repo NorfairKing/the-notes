@@ -14,12 +14,13 @@ GHC = ghc
 GHC_FLAGS = \
 	-fwarn-unused-imports \
 	-fwarn-incomplete-patterns \
-	-Wall \
+	-Wall -Werror \
 	-fwarn-unused-do-bind \
 	-fno-warn-name-shadowing \
 	-fno-warn-orphans \
 	-XOverloadedStrings \
-	-XNoImplicitPrelude
+	-XNoImplicitPrelude \
+	-XTemplateHaskell
 
 GHC_SRC_DIRS = \
 	-i$(SRC_DIR)
@@ -29,6 +30,10 @@ GHC_OPTIONS = \
 
 bin: $(SOURCES)
 	$(GHC) $(GHC_OPTIONS) -o $(BIN) --make $(MAIN_SRC)
+
+thorough: $(SOURCES)
+	$(GHC) $(GHC_OPTIONS) -fforce-recomp -o $(BIN) --make $(MAIN_SRC)
+
 
 generate: bin
 	./the-notes $(shell cat current)

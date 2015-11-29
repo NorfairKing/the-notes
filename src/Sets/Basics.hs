@@ -1,11 +1,19 @@
 module Sets.Basics (
-  basics
+      basics
 
-  , setEqualityDefinitionLabel
-  , universalSetSupsetOfAllSetsLabel
+    , set           , set_
+    , subset        , subset_
+
+    , setEqualityDefinitionLabel
+    , universalSetSupsetOfAllSetsLabel
   ) where
 
 import           Notes
+
+makeDefs [
+      "set"
+    , "subset"
+    ]
 
 basics :: Notes
 basics = notesPart "basics" body
@@ -47,14 +55,11 @@ emptySet = do
 singleton :: Note
 singleton = de $ s ["A ", ix "set", " with exactly one element is called a ", term "singleton"]
 
-setDefinitionLabel :: Label
-setDefinitionLabel = delab "set"
-
 setDefinition :: Note
 setDefinition = de $ do
   lab setDefinitionLabel
-  s ["A ", term "set", " is a ", ix "collection", " of distinct objects, considered as an object in its own right"]
-  s ["These objects are called the ", term "elements", " of the set"]
+  s ["A ", set', " is a ", ix "collection", " of distinct objects, considered as an object in its own right"]
+  s ["These objects are called the ", term "elements", " of the ", set]
 
 setElementNotation :: Note
 setElementNotation = de $ do
@@ -124,7 +129,8 @@ setEqTransitivity = thm $ do
 
 subsetDefinition :: Note
 subsetDefinition = de $ do
-  s ["A ", ix "set", " ", m "A", " is a ", term "subset", " of a set ", m "B", " if and only if ", m "B", " contains all elements of ", m "A"]
+  lab subsetDefinitionLabel
+  s ["A ", set, " ", m "A", " is a ", subset', " of a ", set, " " , m "B", " if and only if ", m "B", " contains all elements of ", m "A"]
   ma $ ("A" ⊆ "B") === (fa "x" $ "x" ∈ "A" ⇒ "x" ∈ "B")
 
 

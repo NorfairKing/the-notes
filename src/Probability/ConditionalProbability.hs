@@ -6,6 +6,8 @@ module Probability.ConditionalProbability (
 
 import           Notes
 
+import           Sets.Partition (partition)
+
 conditionalProbability :: Notes
 conditionalProbability = notesPart "conditional-probability" body
 
@@ -107,7 +109,6 @@ chainRule = do
     j = "j"
     k = "k"
     n = "n"
-    p = "p"
 
 psAndPartDec :: Note
 psAndPartDec = do
@@ -230,7 +231,6 @@ handyRules = do
     a = "A"
     a_ n = a !: n
     b = "B"
-    c = "C"
     i = "i"
     k = "k"
     n = "n"

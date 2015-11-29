@@ -19,7 +19,7 @@ noproof :: Note
 noproof = todo $ footnotesize $ do
   "There is a proof missing here. "
   "There is a chance that the proof does not belong here but a reference to a proof is desired nonetheless. "
-  "You can help improve these notes by sending a reference to a proof to the author. "
+  "You can help improve these notes by sending a reference to a proof to the author or by confirming that there is no proof required at all. "
 
 noproof_ :: Note
 noproof_ = footnotesize "No proof."
@@ -44,3 +44,6 @@ refneeded n = todo $ do
 citneeded :: Note
 citneeded = todo $ do
   "[Citation needed]"
+
+totheorem :: Note -> Note
+totheorem th = todo $ "TODO, theorem: " <> th

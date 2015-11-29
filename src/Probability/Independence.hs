@@ -1,5 +1,8 @@
 module Probability.Independence (
     independence
+
+  , independent
+  , independenceDefinitionLabel
   ) where
 
 import           Notes
@@ -24,8 +27,12 @@ body = do
 independent :: Note
 independent = ix "independent"
 
+independenceDefinitionLabel :: Label
+independenceDefinitionLabel = Label Definition "independence-events-in-probabiliy-space"
+
 independenceDefinition :: Note
 independenceDefinition = de $ do
+  lab independenceDefinitionLabel
   psDec
   s ["Two events ", m a, and, m b, " in ", m prsa, " are called ", term "independent", " if the following equality holds"]
   ma $ prob (a ∩ b) =: prob a * prob b

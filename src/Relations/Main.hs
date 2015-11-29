@@ -3,16 +3,17 @@ module Relations.Main (relations) where
 import           Notes
 
 import           Relations.Basics
-
+import           Relations.Equivalence
+import           Relations.Orders
 
 
 relations :: Notes
-relations = notes "relations" $
+relations = notes "relations"
   [
-    header
+    notesPart "header" (chapter "Relations")
   , relationBasics
+  , equivalenceRelations
+  , orders
   ]
 
-header :: Notes
-header = notesPart "header" (chapter "Relations")
 

@@ -32,3 +32,7 @@ fie_ :: Note -- Set
      -> Note -- Multiplication
      -> Note
 fie_ set add mul = triple set add mul
+
+-- BinaryField
+binfie_ :: Note
+binfie_ = mathbb "F" !: 2
