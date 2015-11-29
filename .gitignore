@@ -4,6 +4,10 @@ current
 
 graph.dot
 
+dist/
+Setup.hs
+
+
 # Temporary source files
 *.tex
 *.bib
