@@ -40,7 +40,6 @@ import           Topology.Main
 main :: IO ()
 main = do
     mc <- getConfig
-    print mc
     case mc of
       Nothing -> error "Couldn't parse arguments."
       Just cf -> do
