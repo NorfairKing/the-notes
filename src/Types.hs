@@ -20,7 +20,7 @@ module Types (
   , modify
   ) where
 import           Prelude                      (Bool (..))
-import           Prelude                      as P (Eq (..), FilePath,
+import           Prelude                      as P (Double, Eq (..), FilePath,
                                                     Fractional (..), IO,
                                                     Maybe (..), Num (..),
                                                     Show (..), mempty, ($),
@@ -52,11 +52,19 @@ data State = State {
 data Args = Args {
       args_selectionStrings :: [String]
     , args_visualDebug      :: Bool
+    , args_verbose          :: Bool
+    , args_texFileName      :: String
+    , args_bibFileName      :: String
+    , args_pdfFileName      :: String
     } deriving (Show, Eq)
 
 data Config = Config {
       conf_selections  :: [Selection]
     , conf_visualDebug :: Bool
+    , conf_verbose     :: Bool
+    , conf_texFileName :: FilePath
+    , conf_bibFileName :: FilePath
+    , conf_pdfFileName :: FilePath
     } deriving (Show, Eq)
 
 data Selection = All

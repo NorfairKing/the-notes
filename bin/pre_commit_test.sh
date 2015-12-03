@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Abort on error
-set -x
+set -e
 
 # Make sure code quality is up to par
 hlint src \
@@ -12,7 +12,12 @@ hlint src \
   --ignore "Reduce duplication"  \
   --ignore "Use camelCase"  \
   --ignore "Use import/export shortcut"  \
-  --ignore "Use ."
+  --ignore "Use ." \
+  -XFlexibleInstances \
+  -XMultiParamTypeClasses \
+  -XUndecidableInstances \
+  -XQuasiQuotes \
+  -XTemplateHaskell
 
 # Make sure the build succeeds
 make
