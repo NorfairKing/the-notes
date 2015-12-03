@@ -57,7 +57,6 @@ renderParts :: [Part] -> Note
 renderParts ps = do
     liftIO $ putStrLn "Building parts:"
     liftIO $ putStrLn $ drawForest $ treeify ps
-    liftIO $ putStrLn ""
 
     mapM_ (\(Part _ body) -> body) ps
 
@@ -98,9 +97,9 @@ draw (Node x ts0) = x : drawSubTrees ts0
   where
     drawSubTrees [] = []
     drawSubTrees [t] =
-        shift "`- " "   " (draw t)
+        shift "└─ " "   " (draw t)
     drawSubTrees (t:ts) =
-        shift "+- " "|  " (draw t) ++ drawSubTrees ts
+        shift "├─ " "│  " (draw t) ++ drawSubTrees ts
     shift first other = zipWith (++) (first : repeat other)
 
 boxed :: Note -> Note
