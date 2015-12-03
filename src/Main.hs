@@ -1,7 +1,6 @@
 module Main where
 
-import           System.Exit              (exitFailure)
-import           System.Exit              (ExitCode (..))
+import           System.Exit              (ExitCode (..), exitFailure)
 import           System.Process           (CreateProcess (..),
                                            readCreateProcessWithExitCode, shell)
 

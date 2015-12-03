@@ -53,7 +53,7 @@ prob = probm prpm
 
 --[ Conditional probability
 cprob :: Note -> Note -> Note
-cprob n m = prob $ n <> commS ";" <> (commS "middle") <> "|" <> commS ";" <> m
+cprob n m = prob $ n <> commS ";" <> commS "middle" <> "|" <> commS ";" <> m
 
 
 --[ Probability random variable

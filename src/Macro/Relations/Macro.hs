@@ -79,7 +79,7 @@ eqcl_ :: Note -> Note -> Note
 eqcl_ r x = sqbrac x !: r
 
 eqcl :: Note -> Note
-eqcl x = sqbrac x
+eqcl = sqbrac
 
 eqcls :: Note -> Note -> Note
 eqcls r x = x <> "/" <> r

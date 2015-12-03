@@ -1,11 +1,11 @@
 module Titlepage (myTitlePage) where
 
+import           Control.Monad  (void)
 import           Notes
-import           Prelude        (return, (>>))
 import           System.Process (system)
 
 myTitlePage :: Note
 myTitlePage = do
-  liftIO $ system "git rev-parse --short HEAD > commit.tex" >> return ()
+  liftIO $ void $ system "git rev-parse --short HEAD > commit.tex"
   text <- liftIO $ readFileTex "src/titlepage.tex"
   raw text

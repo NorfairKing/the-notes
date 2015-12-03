@@ -19,8 +19,7 @@ array (Just p) ts = liftL $ TeXEnv "array" [ OptArg $ TeXRaw $ render p , FixArg
 
 
 linedTable :: [Note] -> [[Note]] -> Note
-linedTable header notes = m $ do
-  array (Just Center) specs $ do
+linedTable header notes = m $ array (Just Center) specs $ do
     hline
     row header
     lnbk
@@ -30,7 +29,7 @@ linedTable header notes = m $ do
     hline
   where
     specs :: [TableSpec]
-    specs = VerticalLine: (P.concat $ P.replicate (P.length notes) [CenterColumn, VerticalLine])
+    specs = VerticalLine : P.concat (P.replicate (P.length notes) [CenterColumn, VerticalLine])
 
     row :: [Note] -> Note
     row [] = mempty

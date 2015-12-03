@@ -27,7 +27,7 @@ func :: Note -> Note -> Note -> Note -> Note -> Note
 func m n o p q = fun m n o <> ":" <> raw "\\ " <> p <> comm0 "mapsto" <> q
 
 func2 :: Note -> Note -> Note -> Note -> Note -> Note -> Note -> Note
-func2 m n1 n2 o p1 p2 q = func m (n1 ⨯ n2) o (tuple p1 p2) q
+func2 m n1 n2 o p1 p2 = func m (n1 ⨯ n2) o (tuple p1 p2)
 
 -- Function
 fundom_ :: Note
@@ -46,7 +46,7 @@ funrel_ :: Note
 funrel_ = "f"
 
 funfunc :: Note -> Note -> Note -> Note
-funfunc a f b = triple a f b
+funfunc = triple
 
 funfunc_ :: Note
 funfunc_ = fun funrel_ fundom_ funimg_

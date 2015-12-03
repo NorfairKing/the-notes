@@ -10,7 +10,7 @@ getConfig = fmap config getArgs
 config :: Args -> Maybe Config
 config args = do
   let ss = map constructSelection $ args_selectionStrings args
-  return $ Config {
+  return Config {
       conf_selections = ss
     , conf_visualDebug = args_visualDebug args
     }

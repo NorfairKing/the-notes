@@ -42,8 +42,7 @@ refneeded n = todo $ do
   " missing here. "
 
 citneeded :: Note
-citneeded = todo $ do
-  "[Citation needed]"
+citneeded = todo "[Citation needed]"
 
 totheorem :: Note -> Note
 totheorem th = todo $ "TODO, theorem: " <> th

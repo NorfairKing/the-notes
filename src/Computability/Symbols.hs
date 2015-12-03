@@ -98,7 +98,7 @@ stringsOfAlphabetDefinition = de $ do
 
 stringsWithEmptyDefinition :: Note
 stringsWithEmptyDefinition = do
-    de $ s ["The ", set, " ", m (calph ∪ (setof cestr)), " is sometimes written more consisely as ", m calphe]
+    de $ s ["The ", set, " ", m $ calph ∪ setof cestr, " is sometimes written more consisely as ", m calphe]
 
     nte $ s ["This is not just a set of symbols because ", m cestr, " is a string"]
 

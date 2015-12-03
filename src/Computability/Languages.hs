@@ -40,7 +40,7 @@ body = do
 languageDefinition :: Note
 languageDefinition = de $ do
     lab languageDefinitionLabel
-    s ["A ", language', " over an ", alphabet, " ", m (calph), " is a ", set, " of finite strings over that ", alphabet]
+    s ["A ", language', " over an ", alphabet, " ", m calph, " is a ", set, " of finite strings over that ", alphabet]
 
 languageConcatenationDefinition :: Note
 languageConcatenationDefinition = de $ do
