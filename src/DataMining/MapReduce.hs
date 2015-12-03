@@ -1,5 +1,4 @@
-{-# LANGUAGE QuasiQuotes     #-}
-{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE QuasiQuotes #-}
 module DataMining.MapReduce (
     mapReduce
   ) where
