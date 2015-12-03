@@ -61,9 +61,9 @@ intersectionAssociative = prop $ do
       [
         a ∩ (pars $ b ∩ c)
         & "" =§= setcmpr x ((x ∈ a) &: (x ∈ (pars $ b ∩ c)))
-        , "" & "" =§= setcmpr x ((x ∈ a) &: (x ∈ (setcmpr y ((y ∈ b) &: (y ∈ c)))))
+        , "" & "" =§= setcmpr x ((x ∈ a) &: (x ∈ setcmpr y ((y ∈ b) &: (y ∈ c))))
         , "" & "" =§= setcmpr x ((x ∈ a) &: (x ∈ b) &: (y ∈ c))
-        , "" & "" =§= setcmpr x ((x ∈ (setcmpr y ((y ∈ a) &: (y ∈ b)))) &: (x ∈ c))
+        , "" & "" =§= setcmpr x ((x ∈ setcmpr y ((y ∈ a) &: (y ∈ b))) &: (x ∈ c))
         , "" & "" =§= setcmpr x ((x ∈ (pars $ a ∩ b)) &: (x ∈ c))
         , "" & "" =§= (pars $ a ∩ b) ∩ c
       ]
@@ -206,11 +206,11 @@ distributionLaw1 = thm $ do
       [
         a ∩ (pars $ b ∪ c)
         & "" =§= setcmpr x ((x ∈ a) &: (x ∈ b ∪ c))
-        , "" & "" =§= setcmpr x ((x ∈ a) &: (setcmpr y ((y ∈ b) |: (y ∈ c))))
+        , "" & "" =§= setcmpr x ((x ∈ a) &: setcmpr y ((y ∈ b) |: (y ∈ c)))
         , "" & "" =§= setcmpr x ((pars $ (x ∈ a) |: (x ∈ b)) &: (pars $ (x ∈ a) |: (x ∈ c)))
         , "" & "" =§= setcmpr x ((pars $ (x ∈ a) |: (x ∈ b)) &: (pars $ (x ∈ a) |: (x ∈ c)))
         , "" & "" =§= setcmpr x (x ∈ setcmpr y (pars $ (y ∈ a) |: (y ∈ b)) &: (x ∈ setcmpr y (pars $ (y ∈ a) |: (y ∈ c))))
-        , "" & "" =§= (setcmpr x (pars $ (x ∈ a) |: (x ∈ b)) ∩ (setcmpr x (pars $ (x ∈ a) |: (x ∈ c))))
+        , "" & "" =§= setcmpr x (pars $ (x ∈ a) |: (x ∈ b)) ∩ setcmpr x (pars $ (x ∈ a) |: (x ∈ c))
         , "" & "" =§= (pars $ a ∪ b) ∩ (pars $ a ∪ c)
       ]
 
@@ -228,10 +228,10 @@ distributionLaw2 = thm $ do
       [
         a ∪ (pars $ b ∩ c)
         & "" =§= setcmpr x ((x ∈ a) |: (x ∈ b ∩ c))
-        , "" & "" =§= setcmpr x ((x ∈ a) |: (setcmpr y ((y ∈ b) &: (y ∈ c))))
+        , "" & "" =§= setcmpr x ((x ∈ a) |: setcmpr y ((y ∈ b) &: (y ∈ c)))
         , "" & "" =§= setcmpr x ((pars $ (x ∈ a) &: (x ∈ b)) |: (pars $ (x ∈ a) &: (x ∈ c)))
         , "" & "" =§= setcmpr x ((pars $ (x ∈ a) &: (x ∈ b)) |: (pars $ (x ∈ a) &: (x ∈ c)))
         , "" & "" =§= setcmpr x (x ∈ setcmpr y (pars $ (y ∈ a) &: (y ∈ b)) |: (x ∈ setcmpr y (pars $ (y ∈ a) &: (y ∈ c))))
-        , "" & "" =§= (setcmpr x (pars $ (x ∈ a) &: (x ∈ b)) ∪ (setcmpr x (pars $ (x ∈ a) &: (x ∈ c))))
+        , "" & "" =§= setcmpr x (pars $ (x ∈ a) &: (x ∈ b)) ∪ setcmpr x (pars $ (x ∈ a) &: (x ∈ c))
         , "" & "" =§= (pars $ a ∩ b) ∪ (pars $ a ∩ c)
       ]

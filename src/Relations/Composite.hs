@@ -48,7 +48,7 @@ compositeAssociative = thm $ do
           & "" =: (pars $ setcmpr (tuple x z) (te y $ (pars $ tuple x y ∈ b) ∧ (pars $ tuple y z ∈ a))) ● c
           , "" & "" =: setcmpr (tuple u w) (te v $ (pars $ tuple u v ∈ c) ∧ (pars $ tuple v w ∈ setcmpr (tuple x z) (te y $ (pars $ tuple x y ∈ b) ∧ (pars $ tuple y z ∈ a))))
           , "" & "" =: setcmpr (tuple u z) (te v $ te w $ tuple u v ∈ c ∧ tuple v w ∈ b ∧ tuple w z ∈ a)
-          , "" & "" =: setcmpr (tuple u w) (te v $ (pars $ tuple u v ∈ (setcmpr (tuple x z) (te y $ (pars $ tuple x y) ∈ b ∧ (pars $ tuple y z) ∈ a))) ∧ (pars $ tuple v w ∈ a))
+          , "" & "" =: setcmpr (tuple u w) (te v $ (pars $ tuple u v ∈ setcmpr (tuple x z) (te y $ (pars $ tuple x y) ∈ b ∧ (pars $ tuple y z) ∈ a)) ∧ (pars $ tuple v w ∈ a))
           , "" & "" =: setcmpr (tuple u w) (te v $ (pars $ tuple u v ∈ (b ● c)) ∧ (pars $ tuple v w ∈ a))
           , "" & "" =: a ● (pars $ b ● c)
         ]
@@ -75,10 +75,10 @@ compositeDistributiveWrtInverse = thm $ do
       align_ $
         [
           relinv (pars $ a ● b)
-          & "" =: setcmpr (tuple y x) ((tuple x y) ∈ (a ● b))
-          , "" & "" =: setcmpr (tuple y x) ((tuple x y) ∈ (setcmpr (tuple u w) (te v $ (pars $ tuple u v ∈ b) ∧ (pars $ tuple v w ∈ a))))
+          & "" =: setcmpr (tuple y x) (tuple x y ∈ (a ● b))
+          , "" & "" =: setcmpr (tuple y x) (tuple x y ∈ setcmpr (tuple u w) (te v $ (pars $ tuple u v ∈ b) ∧ (pars $ tuple v w ∈ a)))
           , "" & "" =: setcmpr (tuple w u) (te v $ (pars $ tuple u v ∈ b) ∧ (pars $ tuple v w ∈ a))
-          , "" & "" =: setcmpr (tuple w u) (te v $ (pars $ tuple u v ∈ (setcmpr (tuple u v) (tuple v u ∈ relinv b))) ∧ (pars $ tuple v w ∈ (setcmpr (tuple v w) (tuple w v ∈ relinv a))))
+          , "" & "" =: setcmpr (tuple w u) (te v $ (pars $ tuple u v ∈ setcmpr (tuple u v) (tuple v u ∈ relinv b)) ∧ (pars $ tuple v w ∈ setcmpr (tuple v w) (tuple w v ∈ relinv a)))
           , "" & "" =: setcmpr (tuple w u) (te v $ (pars $ tuple v u ∈ relinv b) ∧ (pars $ tuple w v ∈ relinv a))
           , "" & "" =: relinv b ● relinv a
         ]
@@ -103,7 +103,7 @@ domainAfterComposition = thm $ do
       [
         reldom (b ● a)
         & "" =: setcmpr x (te y $ tuple x y ∈ b ● a)
-        , "" & "" =: setcmpr x (te y $ tuple x y ∈ (setcmpr (tuple u w) (te v $ (pars $ tuple u v ∈ b) ∧ (pars $ tuple v w ∈ a))))
+        , "" & "" =: setcmpr x (te y $ tuple x y ∈ setcmpr (tuple u w) (te v $ (pars $ tuple u v ∈ b) ∧ (pars $ tuple v w ∈ a)))
         , "" & "" =: setcmpr x (te v $ te w $ (pars $ tuple u v ∈ b) ∧ (pars $ tuple v w ∈ a))
         , "" & "" ⊆ setcmpr x (te w $ tuple v w ∈ a)
         , "" & "" =: reldom a
@@ -127,7 +127,7 @@ imageAfterComposition = thm $ do
       [
         relimg (b ● a)
         & "" =: setcmpr y (te x $ tuple x y ∈ b ● a)
-        , "" & "" =: setcmpr y (te x $ tuple x y ∈ (setcmpr (tuple u w) (te v $ (pars $ tuple u v ∈ b) ∧ (pars $ tuple v w ∈ a))))
+        , "" & "" =: setcmpr y (te x $ tuple x y ∈ setcmpr (tuple u w) (te v $ (pars $ tuple u v ∈ b) ∧ (pars $ tuple v w ∈ a)))
         , "" & "" =: setcmpr y (te v $ te u $ (pars $ tuple u v ∈ b) ∧ (pars $ tuple v w ∈ a))
         , "" & "" ⊆ setcmpr y (te u $ tuple u v ∈ b)
         , "" & "" =: relimg b

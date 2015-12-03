@@ -14,7 +14,7 @@ import           Macro
 import           Reference
 
 import           Prelude              (concatMap, filter, foldl, map, mapM_,
-                                       putStrLn, sequence_)
+                                       putStrLn)
 
 import           Control.Monad.Reader (runReaderT)
 import           Control.Monad.State  (runStateT)
@@ -56,7 +56,7 @@ renderParts ps = do
     liftIO $ mapM_ putStrLn $ map (\(Part name _) -> name) ps
     liftIO $ putStrLn ""
 
-    sequence_ $ map (\(Part _ body) -> body) ps
+    mapM_ (\(Part _ body) -> body) ps
 
 
 boxed :: Note -> Note

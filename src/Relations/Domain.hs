@@ -59,7 +59,7 @@ domainIsInversesImage = thm $ do
     [
       relimg (relinv rel)
       & "" =: setcmpr y (te x $ tuple x y ∈ relinv rel)
-      , "" & "" =: setcmpr y (te x $ tuple x y ∈ (setcmpr (tuple y x) (tuple x y ∈ rel)))
+      , "" & "" =: setcmpr y (te x $ tuple x y ∈ setcmpr (tuple y x) (tuple x y ∈ rel))
       , "" & "" =: setcmpr x (te y $ tuple x y ∈ rel)
       , "" & "" =: reldom rel
     ]
@@ -76,7 +76,7 @@ imageIsInversesDomain = thm $ do
     [
       reldom (relinv rel)
       & "" =: setcmpr x (te y $ tuple x y ∈ relinv rel)
-      , "" & "" =: setcmpr x (te y $ tuple x y ∈ (setcmpr (tuple y x) (tuple x y ∈ rel)))
+      , "" & "" =: setcmpr x (te y $ tuple x y ∈ setcmpr (tuple y x) (tuple x y ∈ rel))
       , "" & "" =: setcmpr y (te x $ tuple x y ∈ rel)
       , "" & "" =: relimg rel
     ]

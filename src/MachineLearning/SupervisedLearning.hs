@@ -54,15 +54,15 @@ lossfunctions = do
     item $ do
       term "quadratic loss"
       " (regression): "
-      m $ l `funapp` "x" =: (pars $ ("y" `funapp` "x" - f `funapp` "x")) ^: 2
+      m $ l `fn` "x" =: (pars $ ("y" `fn` "x" - f `fn` "x")) ^: 2
     item $ do
       term "0-1 loss"
       " (classification): "
-      m $ l `funapp` "x" =: mathbb "I" !: ("y" ≠ "x")
+      m $ l `fn` "x" =: mathbb "I" !: ("y" ≠ "x")
     item $ do
       term "exponential loss"
       " (classification): "
-      m $ l `funapp` "x" =: exp (- beta * y * (funapp f "x"))
+      m $ l `fn` "x" =: exp (- beta * y * (f `fn` "x"))
       " for some "
       m beta
   where
