@@ -109,6 +109,7 @@ symmetricDifferenceITOUnionAndIntersectionLabel = thmlab "sets-symmetric-differe
 
 symmetricDifferenceITOUnionAndIntersection :: Note
 symmetricDifferenceITOUnionAndIntersection = thm $ do
+  lab symmetricDifferenceITOUnionAndIntersectionLabel
   setsDec
   ma $ a △ b =§= (pars $ a ∪ b) \\ (pars $ a ∩ b)
 

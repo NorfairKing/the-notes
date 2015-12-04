@@ -95,6 +95,7 @@ jaccardSimilarityDefinitionLabel = Label Definition "jaccard-similarity-definiti
 
 jaccardSimilarityDefinition :: Note
 jaccardSimilarityDefinition = do
+  lab jaccardSimilarityDefinitionLabel
   de $ do
     s ["The ", term "Jaccard similarity", " of two sets ", m a, " and ", m b, " is defined as ", m (jaccard a b)]
     ma $ jaccard a b === (setsize (a ∩ b) / setsize (a ∪ b))
