@@ -1,6 +1,6 @@
 module Main where
 
-import           System.Exit              (ExitCode (..), exitFailure)
+import           System.Exit              (ExitCode (..), die)
 import           System.Process           (CreateProcess (..),
                                            readCreateProcessWithExitCode, shell)
 
@@ -12,9 +12,10 @@ import           Text.LaTeX.Base.Warnings
 import qualified Data.Text                as T
 
 import           Control.Monad            (when)
-import           Data.List                (intercalate, splitAt)
+import           Data.List                (intercalate, isInfixOf, splitAt)
 import           Prelude                  (Bool (..), Int, appendFile, error,
                                            filter, print, putStrLn, return)
+import qualified Prelude                  as P
 
 import           Header
 import           Packages
@@ -45,6 +46,7 @@ main = do
       Just cf -> do
         let mainBibFile = conf_bibFileName cf ++ ".bib"
             mainTexFile = conf_texFileName cf ++ ".tex"
+            mainPdfFile = conf_pdfFileName cf ++ ".pdf"
         removeIfExists mainBibFile
         (t, endState) <- runNote entireDocument cf startState
 
@@ -58,15 +60,28 @@ main = do
               let outputAnyway = do
                     putStrLn out
                     putStrLn err
-                    print ec
               case ec of
-                ExitSuccess -> when (conf_verbose cf) outputAnyway
-                ExitFailure _ -> outputAnyway
+                ExitFailure _ -> do
+                    outputAnyway
+                    die "Compilation failed"
+                ExitSuccess -> do
+                    if containsRefErrors $ out ++ "\n" ++ err
+                    then do
+                        removeIfExists mainPdfFile
+                        outputAnyway
+                        die "Undefined references"
+                    else when (conf_verbose cf) outputAnyway
 
               return ()
           ws -> do
               print ws
-              exitFailure
+              die "There were unacceptable warnings."
+
+containsRefErrors :: String -> Bool
+containsRefErrors s = P.or $ [t `isInfixOf` l | t <- wrongThings, l <- lines s]
+  where
+    wrongThings :: [String]
+    wrongThings = ["There were undefined references.", "There were multiply-defined labels."]
 
 latexMkJob :: Config -> CreateProcess
 latexMkJob cf = shell $ "latexmk " ++ unwords latexMkArgs
