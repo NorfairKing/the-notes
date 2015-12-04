@@ -14,6 +14,7 @@ config args = do
       conf_selections   = ss
     , conf_visualDebug  = args_visualDebug args
     , conf_verbose      = args_verbose args
+    , conf_ignoreReferenceErrors = args_ignoreReferenceErrors args
     , conf_subtitle     = if null st then Nothing else Just st
     , conf_texFileName  = args_texFileName args
     , conf_bibFileName  = args_bibFileName args
@@ -35,7 +36,7 @@ getArgs = execParser opts
 
 
 parseSelection :: Parser [String]
-parseSelection = fmap words $ strArgument (
+parseSelection = words <$> strArgument (
        metavar "SELECTION"
     <> help "The selection of parts to generate"
     <> value [])
@@ -51,6 +52,9 @@ argParser = Args
         (long "verbose"
             <> short 'v'
             <> help "Show latex output")
+    <*> switch
+        (long "ignore-reference-errors"
+            <> help "Ignore reference errors, compile anyway.")
     <*> strOption
         (long "subtitle"
             <> value []

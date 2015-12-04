@@ -1,21 +1,19 @@
 module Main where
 
-import           System.Exit              (ExitCode (..), die)
-import           System.Process           (CreateProcess (..),
-                                           readCreateProcessWithExitCode, shell)
+import           System.Exit          (ExitCode (..), die)
+import           System.Process       (CreateProcess (..),
+                                       readCreateProcessWithExitCode, shell)
 
 import           Notes
 import           Utils
 
-import           Text.LaTeX.Base.Warnings
+import qualified Data.Text            as T
 
-import qualified Data.Text                as T
-
-import           Control.Monad            (void, when)
-import           Data.List                (intercalate, isInfixOf, splitAt)
-import           Prelude                  (Bool (..), Int, appendFile, error,
-                                           filter, print, putStrLn, return)
-import qualified Prelude                  as P
+import           Control.Monad        (void, when)
+import           Data.List            (intercalate, isInfixOf, splitAt)
+import           Prelude              (Bool (..), Int, appendFile, error,
+                                       putStrLn, return)
+import qualified Prelude              as P
 
 import           Header
 import           Packages
@@ -50,33 +48,29 @@ main = do
         removeIfExists mainBibFile
         (t, endState) <- runNote entireDocument cf startState
 
-        case surpressWarnings (check checkAll t) of
-          [] -> do
-              renderFile mainTexFile t
+        renderFile mainTexFile t
 
-              appendFile mainBibFile $ showReferences $ state_refs endState
+        appendFile mainBibFile $ showReferences $ state_refs endState
 
-              liftIO $ void $ readCreateProcessWithExitCode (latexMkJob cf) ""
-              (ec, out, err) <- liftIO $ readCreateProcessWithExitCode (latexMkJob cf) ""
-              let outputAnyway = do
-                    putStrLn out
-                    putStrLn err
-              case ec of
-                ExitFailure _ -> do
-                    outputAnyway
-                    die "Compilation failed"
-                ExitSuccess -> do
-                    if containsRefErrors $ out ++ "\n" ++ err
-                    then do
-                        removeIfExists mainPdfFile
-                        outputAnyway
-                        die "Undefined references"
-                    else when (conf_verbose cf) outputAnyway
+        liftIO $ void $ readCreateProcessWithExitCode (latexMkJob cf) "" -- Ugly hack so that the containsRefErrors works
+        removeIfExists mainPdfFile
+        (ec, out, err) <- liftIO $ readCreateProcessWithExitCode (latexMkJob cf) ""
+        let outputAnyway = do
+              putStrLn out
+              putStrLn err
+        case ec of
+          ExitFailure _ -> do
+              outputAnyway
+              die "Compilation failed"
+          ExitSuccess -> do
+              if (P.not $ conf_ignoreReferenceErrors cf) && (containsRefErrors $ out ++ "\n" ++ err)
+              then do
+                  removeIfExists mainPdfFile
+                  outputAnyway
+                  die "Undefined references"
+              else when (conf_verbose cf) outputAnyway
 
-              return ()
-          ws -> do
-              print ws
-              die "There were unacceptable warnings."
+        return ()
 
 containsRefErrors :: String -> Bool
 containsRefErrors s = P.or $ [t `isInfixOf` l | t <- wrongThings, l <- lines s]
@@ -105,12 +99,6 @@ latexMkJob cf = shell $ "latexmk " ++ unwords latexMkArgs
     pdfLatexArgs :: [String]
     pdfLatexArgs = ["-shell-escape", "-halt-on-error", "-enable-write18"]
 
-surpressWarnings :: [Warning] -> [Warning]
-surpressWarnings = filter leave
-  where
-    leave :: Warning -> Bool
-    leave (UnusedLabel _) = False
-    leave _ = True
 
 startState :: State
 startState = State {
