@@ -17,7 +17,7 @@ packages = do
   usepackage [] "proof"
 
   -- For todo's
-  usepackage ["colorinlistoftodos", "obeyFinal"] "todonotes"
+  usepackage ["obeyFinal"] "todonotes"
 
   -- For a nice font with math support
   usepackage [] "libertine"

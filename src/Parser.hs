@@ -1,7 +1,7 @@
 module Parser (getConfig) where
 
 import           Options.Applicative
-import           Prelude             (fmap, map, return)
+import           Prelude             (fmap, map, null, return)
 import           Types
 
 getConfig :: IO (Maybe Config)
@@ -14,10 +14,12 @@ config args = do
       conf_selections   = ss
     , conf_visualDebug  = args_visualDebug args
     , conf_verbose      = args_verbose args
+    , conf_subtitle     = if null st then Nothing else Just st
     , conf_texFileName  = args_texFileName args
     , conf_bibFileName  = args_bibFileName args
     , conf_pdfFileName  = args_pdfFileName args
     }
+  where st = args_subtitle args
 
 constructSelection :: String -> Selection
 constructSelection "all" = All
@@ -49,6 +51,11 @@ argParser = Args
         (long "verbose"
             <> short 'v'
             <> help "Show latex output")
+    <*> strOption
+        (long "subtitle"
+            <> value []
+            <> metavar "SUBTITLE"
+            <> help "The subtitle, usually for a preselect")
     <*> strOption
         (long "tex-name"
             <> value "main"

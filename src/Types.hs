@@ -53,6 +53,7 @@ data Args = Args {
       args_selectionStrings :: [String]
     , args_visualDebug      :: Bool
     , args_verbose          :: Bool
+    , args_subtitle         :: String
     , args_texFileName      :: String
     , args_bibFileName      :: String
     , args_pdfFileName      :: String
@@ -62,6 +63,7 @@ data Config = Config {
       conf_selections  :: [Selection]
     , conf_visualDebug :: Bool
     , conf_verbose     :: Bool
+    , conf_subtitle    :: Maybe String
     , conf_texFileName :: FilePath
     , conf_bibFileName :: FilePath
     , conf_pdfFileName :: FilePath

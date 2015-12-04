@@ -11,7 +11,7 @@ import           Text.LaTeX.Base.Warnings
 
 import qualified Data.Text                as T
 
-import           Control.Monad            (when)
+import           Control.Monad            (void, when)
 import           Data.List                (intercalate, isInfixOf, splitAt)
 import           Prelude                  (Bool (..), Int, appendFile, error,
                                            filter, print, putStrLn, return)
@@ -56,6 +56,7 @@ main = do
 
               appendFile mainBibFile $ showReferences $ state_refs endState
 
+              liftIO $ void $ readCreateProcessWithExitCode (latexMkJob cf) ""
               (ec, out, err) <- liftIO $ readCreateProcessWithExitCode (latexMkJob cf) ""
               let outputAnyway = do
                     putStrLn out
@@ -147,8 +148,9 @@ entireDocument = do
     renderConfig
     renderNotes allNotes
 
+    bibfn <- asks conf_bibFileName
     comm1 "bibliographystyle" "plain"
-    comm1 "bibliography" "main"
+    comm1 "bibliography" $ raw $ T.pack bibfn
 
     comm0 "printindex"
     comm0 "listoftodos"
