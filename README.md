@@ -1,6 +1,13 @@
 # The Notes
 
-## Compilation
+## Preselects
+
+This is a large collection of notes.
+Not all of them are coherent or related.
+There are predefined selections of coherent subparts that can be compiled into a coherent collection of notes on a specific topic.
+See the `preselect` directory.
+
+## Raw Compilation
 
 Compiling the notes generator is as easy as running `make`.
 Generating the notes is done with `./the-notes`.
