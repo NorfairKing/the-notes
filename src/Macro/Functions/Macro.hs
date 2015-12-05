@@ -21,7 +21,10 @@ import           Macro.Relations.Macro
 
 -- Functions
 fun :: Note -> Note -> Note -> Note
-fun m n o = m <> ":" <> raw "\\ " <> n <> rightarrow <> o
+fun m n o = m <> negspace <> ":" <> raw "\\, " <> n <> rightarrow <> o
+  where
+    negspace :: Note
+    negspace = commS "kern" <> raw "-2pt"
 
 func :: Note -> Note -> Note -> Note -> Note -> Note
 func m n o p q = fun m n o <> ":" <> raw "\\ " <> p <> comm0 "mapsto" <> q

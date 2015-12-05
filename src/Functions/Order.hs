@@ -3,10 +3,12 @@ module Functions.Order where
 import           Notes
 
 import           Relations.Orders (lattice_, poset_)
+import           Sets.Basics      (set)
 
 makeDefs [
       "monotonic"
     , "Scott continuous"
+    , "fixed point"
     ]
 
 order :: Notes
@@ -18,6 +20,8 @@ body = do
 
     monotonicDefinition
     scottContinuousDefinition
+    fixedPointDefinition
+
 
 monotonicDefinition :: Note
 monotonicDefinition = de $ do
@@ -42,7 +46,6 @@ scottContinuousDefinition = de $ do
     s ["Let ", m $ rellat_ x rx, and, m $ rellat_ y ry, " each be a ", lattice_, and, m $ fun f x y, " a function"]
     s [m $ fun funrel_ x y, " is called ", scottContinuous', " if it has the following property"]
     ma $ fa (ss ⊆ x) $ f_ (sup ss) =: sup (f □ ss)
-
   where
     ss = "S"
     f = funrel_
@@ -51,3 +54,19 @@ scottContinuousDefinition = de $ do
     rx = partord !: x
     y = "Y"
     ry = partord !: y
+
+fixedPointDefinition :: Note
+fixedPointDefinition = de $ do
+    lab fixedPointDefinitionLabel
+    s ["Let ", m x, and, m y, " be ", set, "s ", m $ fun f x y, " be a function"]
+    s ["An element ", m a, " of ", m x, " is called a ", fixedPoint', " of ", m f, " if ", m f, " leaves a unchanged"]
+    ma $ fn f a =: a
+  where
+    f = funrel_
+    a = "a"
+    x = "X"
+    y = "Y"
+
+
+
+
