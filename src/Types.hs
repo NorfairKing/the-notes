@@ -73,6 +73,7 @@ data Config = Config {
 
 data Selection = All
                | Match String
+               | Ignore String
     deriving (Show, Eq)
 
 data Notes = NotesPart String Note

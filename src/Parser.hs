@@ -24,6 +24,7 @@ config args = do
 
 constructSelection :: String -> Selection
 constructSelection "all" = All
+constructSelection ('-':s) = Ignore s
 constructSelection s = Match s
 
 

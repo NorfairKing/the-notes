@@ -9,7 +9,7 @@ import           Utils
 
 import qualified Data.Text            as T
 
-import           Control.Monad        (void, when)
+import           Control.Monad        (when)
 import           Data.List            (intercalate, isInfixOf, splitAt)
 import           Prelude              (Bool (..), Int, appendFile, error,
                                        putStrLn, return)
@@ -52,8 +52,6 @@ main = do
 
         appendFile mainBibFile $ showReferences $ state_refs endState
 
-        liftIO $ void $ readCreateProcessWithExitCode (latexMkJob cf) "" -- Ugly hack so that the containsRefErrors works
-        removeIfExists mainPdfFile
         (ec, out, err) <- liftIO $ readCreateProcessWithExitCode (latexMkJob cf) ""
         let outputAnyway = do
               putStrLn out

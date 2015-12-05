@@ -8,7 +8,7 @@ SRC_DIR = src
 MAIN_SRC_NAME = Main
 MAIN_SRC = $(SRC_DIR)/$(MAIN_SRC_NAME).$(SRC_EXT)
 
-SOURCES = $(wildcard $(SRC_DIR)/**/*.hs)
+SOURCES = $(wildcard $(SRC_DIR)/**.hs)
 
 GHC = ghc
 GHC_FLAGS = \
@@ -36,7 +36,7 @@ thorough: $(SOURCES)
 
 
 generate: bin
-	./the-notes $(shell cat current)
+	./current
 
 graph:
 	graphmod $(MAIN_SRC) -q -p -i $(SRC_DIR) > graph.dot

@@ -13,8 +13,8 @@ import           TH
 import           Macro
 import           Reference
 
-import           Prelude              (concatMap, filter, flip, foldl, map,
-                                       mapM_, putStrLn)
+import           Prelude              (Bool (..), concatMap, filter, flip,
+                                       foldl, map, mapM_, putStrLn)
 import qualified Prelude              as P
 
 import           Control.Monad.Reader (runReaderT)
@@ -33,15 +33,19 @@ renderNotes notes = do
   renderParts $ selectParts selection $ flattenNotes notes
 
 selectParts :: [Selection] -> [Part] -> [Part]
-selectParts [] ps = ps
-selectParts ss ps = un $ map (applySelection ps) ss
+selectParts ss ps = foldl (applySelection ps) [] ss
 
 un :: Eq a => [[a]] -> [a]
 un = foldl union []
 
-applySelection :: [Part] -> Selection -> [Part]
-applySelection ps All = ps
-applySelection ps (Match s) = filter (\(Part name _) -> s `isPrefixOf` name) ps
+
+applySelection :: [Part] -> [Part] -> Selection -> [Part]
+applySelection global _ All = global
+applySelection global ps (Match s) = ps ++ filter (matches s) global
+applySelection _ ps (Ignore s) = filter (P.not . matches s) ps
+
+matches :: String -> Part -> Bool
+matches s (Part n _) = split s `isPrefixOf` split n
 
 flattenNotes :: Notes -> [Part]
 flattenNotes = go ""
