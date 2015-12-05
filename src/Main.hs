@@ -146,7 +146,7 @@ entireDocument = do
 allNotes :: Notes
 allNotes = notes ""
   [
-      logic
+      logica
     , sets
     , relations
     , functions

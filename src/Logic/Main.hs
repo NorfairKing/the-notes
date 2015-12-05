@@ -1,15 +1,15 @@
-module Logic.Main (logic) where
+module Logic.Main (logica) where
 
 import           Notes
 
-import           Logic.AbstractLogic
+import           Logic.AbstractLogic      (abstractLogic)
 import           Logic.FirstOrderLogic
 import           Logic.HoareLogic
 import           Logic.PropositionalLogic
 
 
-logic :: Notes
-logic = notes "logic"
+logica :: Notes
+logica = notes "logic"
   [
     logicHeader
   , abstractLogic

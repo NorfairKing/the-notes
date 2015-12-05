@@ -1,12 +1,12 @@
 module Computability.Symbols (
       symbols
 
-    , symbol          , symbol_           , symbolDefinitionLabel
-    , alphabet        , alphabet_         , alphabetDefinitionLabel
-    , string          , string_           , stringDefinitionLabel
-    , emptyString     , emptyString_      , emptyStringDefinitionLabel
-    , reverseString   , reverseString_    , reverseStringDefinitionLabel
-    , concatenation   , concatenation_    , concatenationDefinitionLabel
+    , symbol          , symbol_
+    , alphabet        , alphabet_
+    , string          , string_
+    , emptyString     , emptyString_
+    , reverseString   , reverseString_
+    , concatenation   , concatenation_
   ) where
 
 import           Notes

@@ -2,6 +2,8 @@ module Macro.Theorem where
 
 import           Types
 
+import           Text.LaTeX.Packages.AMSThm (theorem)
+
 de :: Note -> Note
 de = theorem "de"
 
