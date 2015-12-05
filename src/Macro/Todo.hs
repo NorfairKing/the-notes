@@ -2,8 +2,15 @@ module Macro.Todo where
 
 import           Types
 
-todo :: LaTeXC l => l -> l
-todo = liftL $ \l -> TeXComm "todo" [MOptArg ["color=red", "inline", raw "size=\\small"], FixArg l ]
+import           Control.Monad (unless)
+
+todo' :: LaTeXC l => l -> l
+todo' = liftL $ \l -> TeXComm "todo" [MOptArg ["color=red", "inline", raw "size=\\small"], FixArg l ]
+
+todo :: Note -> Note
+todo n = do
+    o <- asks conf_omitTodos
+    unless o $ todo' n
 
 toprove :: Note
 toprove = todo $ "There is a proof missing here."

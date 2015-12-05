@@ -9,7 +9,7 @@ import           Utils
 
 import qualified Data.Text            as T
 
-import           Control.Monad        (when)
+import           Control.Monad        (unless, when)
 import           Data.List            (intercalate, isInfixOf, splitAt)
 import           Prelude              (Bool (..), Int, appendFile, error,
                                        putStrLn, return)
@@ -139,7 +139,9 @@ entireDocument = do
     comm1 "bibliography" $ raw $ T.pack bibfn
 
     comm0 "printindex"
-    comm0 "listoftodos"
+
+    o <- asks conf_omitTodos
+    unless o $ comm0 "listoftodos"
 
 
 

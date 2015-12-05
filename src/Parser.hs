@@ -11,14 +11,15 @@ config :: Args -> Maybe Config
 config args = do
   let ss = map constructSelection $ args_selectionStrings args
   return Config {
-      conf_selections   = ss
-    , conf_visualDebug  = args_visualDebug args
-    , conf_verbose      = args_verbose args
-    , conf_ignoreReferenceErrors = args_ignoreReferenceErrors args
-    , conf_subtitle     = if null st then Nothing else Just st
-    , conf_texFileName  = args_texFileName args
-    , conf_bibFileName  = args_bibFileName args
-    , conf_pdfFileName  = args_pdfFileName args
+      conf_selections               = ss
+    , conf_visualDebug              = args_visualDebug args
+    , conf_verbose                  = args_verbose args
+    , conf_ignoreReferenceErrors    = args_ignoreReferenceErrors args
+    , conf_omitTodos                = args_omitTodos args
+    , conf_subtitle                 = if null st then Nothing else Just st
+    , conf_texFileName              = args_texFileName args
+    , conf_bibFileName              = args_bibFileName args
+    , conf_pdfFileName              = args_pdfFileName args
     }
   where st = args_subtitle args
 
@@ -56,6 +57,9 @@ argParser = Args
     <*> switch
         (long "ignore-reference-errors"
             <> help "Ignore reference errors, compile anyway.")
+    <*> switch
+        (long "omit-todos"
+            <> help "Omit all todo's left in the text.")
     <*> strOption
         (long "subtitle"
             <> value []
