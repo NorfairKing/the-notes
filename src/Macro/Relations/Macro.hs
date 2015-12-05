@@ -98,6 +98,9 @@ relposet_ = tuple
 relposet :: Note
 relposet = relposet_ posetset partord
 
+inposet_ :: Note -> Note -> Note -> Note
+inposet_ = inpreord_
+
 inposet :: Note -> Note -> Note
 inposet = binop partord
 
@@ -130,3 +133,10 @@ inf = fn "Inf"
 
 sup :: Note -> Note
 sup = fn "Sup"
+
+-- Lattice
+rellat :: Note
+rellat = relposet
+
+rellat_ :: Note -> Note -> Note
+rellat_ = relposet_

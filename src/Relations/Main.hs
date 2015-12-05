@@ -4,7 +4,7 @@ import           Notes
 
 import           Relations.Basics
 import           Relations.Equivalence
-import           Relations.Orders
+import           Relations.Orders      (orders)
 
 
 relations :: Notes

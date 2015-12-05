@@ -1,21 +1,4 @@
-module Functions.Basics (
-          functionBasics
-
-        , function              , function_
-        , partialFunction       , partialFunction_
-        , corange               , corange_
-        , codomain              , codomain_
-
-        , total                 , total_
-        , surjective            , surjective_
-
-        , binaryFunction        , binaryFunction_
-        , ternaryFunction       , ternaryFunction_
-
-        , memberWiseApplication , memberWiseApplication_
-
-        , scottContinuous       , scottContinuous_
-    ) where
+module Functions.Basics where
 
 import           Notes
 
@@ -34,7 +17,6 @@ makeDefs [
     , "binary function"
     , "ternary function"
     , "member-wise application"
-    , "Scott-continuous"
     ]
 
 functionBasics :: Notes
@@ -52,8 +34,6 @@ body = do
     ternaryFunctionDefinition
 
     memberwiseApplication
-
-    scottContinuousFunctionDefinition
 
 
 partialFunctionDefinition :: Note
@@ -100,9 +80,3 @@ memberwiseApplication = de $ do
   where
     ss = "S"
     e = "s"
-
-scottContinuousFunctionDefinition :: Note
-scottContinuousFunctionDefinition = mempty $ de $ do -- TODO(kerckhove) finish this
-    lab scottContinuousDefinitionLabel
-    s ["A ", function, " is called ", scottContinuous']
-

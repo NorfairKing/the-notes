@@ -2,17 +2,19 @@ module Functions.Main (functions) where
 
 import           Notes
 
-import           Functions.Basics
+import           Functions.Basics          (functionBasics)
 import           Functions.BinaryOperation
 import           Functions.Distances
+import           Functions.Order           (order)
 
 
 functions :: Notes
-functions = notes "functions" $
+functions = notes "functions"
   [
     header
   , functionBasics
   , binaryOperations
+  , order
   , distances
   ]
 

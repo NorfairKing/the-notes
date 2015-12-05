@@ -1,56 +1,54 @@
-module Sets.Basics (
-      basics
-
-    , set           , set_
-    , subset        , subset_
-
-    , setEqualityDefinitionLabel
-    , universalSetSupsetOfAllSetsLabel
-  ) where
+module Sets.Basics where
 
 import           Notes
 
 makeDefs [
       "set"
     , "subset"
+    , "predicate"
     ]
 
-basics :: Notes
-basics = notesPart "basics" body
+setBasics :: Notes
+setBasics = notesPart "basics" body
 
 body :: Note
 body = do
-  section "Set Basics"
-  sets
-  subsets
-  universalSet
-  emptySet
-  singleton
+    section "Set Basics"
+    sets
+    subsets
+    universalSet
+    emptySet
+    singleton
+    predicates
 
 sets :: Note
 sets = do
-  setDefinition
-  setElementNotation
-  setComprehensionDefinition
-  setEqualityDefinition
-  setEqTransitivity
+    setDefinition
+    setElementNotation
+    setComprehensionDefinition
+    setEqualityDefinition
+    setEqTransitivity
 
 subsets :: Note
 subsets = do
-  subsetDefinition
-  subsetAntiSymmetry
-  subsetTransitivity
-  strictSubsetDefinition
+    subsetDefinition
+    subsetAntiSymmetry
+    subsetTransitivity
+    strictSubsetDefinition
 
 universalSet :: Note
 universalSet = do
-  universalSetDefinition
-  universalSetSupsetOfAllSets
+    universalSetDefinition
+    universalSetSupsetOfAllSets
 
 emptySet :: Note
 emptySet = do
-  emptySetDefinition
-  emptySetSubsetOfAllSets
+    emptySetDefinition
+    emptySetSubsetOfAllSets
+
+predicates :: Note
+predicates = do
+    predicateDefinition
 
 singleton :: Note
 singleton = de $ s ["A ", ix "set", " with exactly one element is called a ", term "singleton"]
@@ -239,3 +237,14 @@ emptySetSubsetOfAllSets = thm $ do
     ma $ fa "x" $ ("x" ∈ emptyset) ⇒ ("x" ∈ "A")
 
     "This is vacuously true."
+
+predicateDefinition :: Note
+predicateDefinition = de $ do
+    lab predicateDefinitionLabel
+    s ["A ", predicate', " ", m p, " over a ", set, " ", m aa, " is a ", subset, " of ", m aa]
+    s ["Using a little notational overloading, ", m $ p `fn` a, " is said to hold if ", m a, " is an element of ", m aa]
+    ma $ p `fn` a === a ∈ p
+  where
+    p = "P"
+    a = "a"
+    aa = "A"

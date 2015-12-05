@@ -23,3 +23,7 @@ mwfunapp m n = m <> commS "," <> comm0 "square" <> commS "," <> n
 
 mwfn :: Note -> Note -> Note
 mwfn = mwfunapp
+
+-- C-k OS
+(□) :: Note -> Note -> Note
+(□) = mwfn
