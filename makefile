@@ -34,10 +34,6 @@ bin: $(SOURCES)
 thorough: $(SOURCES)
 	$(GHC) $(GHC_OPTIONS) -fforce-recomp -o $(BIN) --make $(MAIN_SRC)
 
-
-generate: bin
-	./current
-
 graph:
 	graphmod $(MAIN_SRC) -q -p -i $(SRC_DIR) > graph.dot
 
