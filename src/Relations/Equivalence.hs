@@ -1,17 +1,14 @@
-module Relations.Equivalence (
-    equivalenceRelations
-
-  , equivalenceRelation
-  , equivalenceRelation_
-  , equivalenceClass
-  , preorder
-  , preorder_
-  ) where
+module Relations.Equivalence where
 
 import           Notes
 
 import           Relations.BasicDefinitions (reflexive_, relation, symmetric_,
                                              transitive_)
+
+makeDefs [
+      "preorder"
+    , "equivalence relation"
+    ]
 
 equivalenceRelations :: Notes
 equivalenceRelations = notesPart "equivalence-relations" body
@@ -28,35 +25,16 @@ basicDefinitions = do
   preorderDefinition
   equivalenceRelationDefinition
 
-preorder :: Note
-preorder = ix "preorder"
-
-preorder_ :: Note
-preorder_ = preorder <> ref preorderDefinitionLabel
-
-preorderDefinitionLabel :: Label
-preorderDefinitionLabel = Label Definition "preorder"
-
 preorderDefinition :: Note
 preorderDefinition = de $ do
     lab preorderDefinitionLabel
-    s ["A ", relation, " ", m rel, " between a set ", m xx, " and itself is called an ", term "preorder", " if it is ", reflexive_, and, transitive_]
+    s ["A ", relation, " ", m rel, " between a set ", m xx, " and itself is called an ", preorder', " if it is ", reflexive_, and, transitive_]
   where xx = "X"
-
-equivalenceRelation :: Note
-equivalenceRelation = ix "equivalence relation"
-
-equivalenceRelation_ :: Note
-equivalenceRelation_ = equivalenceRelation <> ref equivalenceRelationDefinitionLabel
-
-equivalenceRelationDefinitionLabel :: Label
-equivalenceRelationDefinitionLabel = Label Definition "equivalence-relation"
 
 equivalenceRelationDefinition :: Note
 equivalenceRelationDefinition = de $ do
     lab equivalenceRelationDefinitionLabel
-    s ["A ", symmetric_, " ", preorder, " is called an ", term "equivalence relation"]
-
+    s ["A ", symmetric_, " ", preorder, " is called an ", equivalenceRelation']
 
 equivalenceClasses :: Note
 equivalenceClasses = do

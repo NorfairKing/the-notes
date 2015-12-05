@@ -2,11 +2,16 @@ module Functions.Order where
 
 import           Notes
 
-import           Relations.Orders (completeLattice, joinSemilattice_, lattice_,
-                                   meetSemilattice_, poset_)
-import           Sets.Basics      (set)
+import           Relations.BasicDefinitions (reflexive_)
+import           Relations.Equivalence      (preorderDefinitionLabel)
+import           Relations.Orders           (antisymmetric_, boundedLattice_,
+                                             completeLattice, completeLattice_,
+                                             lattice_,
+                                             partialOrderDefinitionLabel,
+                                             poset_)
+import           Sets.Basics                (set)
 
-import           Functions.Basics (function)
+import           Functions.Basics           (function)
 
 makeDefs [
       "monotonic"
@@ -38,12 +43,12 @@ regions :: Note
 regions = do
     subsection "Regions"
 
-    todo "weaken necessary properties of lattices in this section. For example, the ascending region can be defined for arbitrary posets. It is only for the partitioning theorem that a complete lattice is required."
     fixedPointRegionDefinition
     ascendingRegionDefinition
     descendingRegionDefinition
 
     fixedPointRegionIsIntersectionOfAscAndDesc
+
     regionPartitionTheorem
     topInDescendingRegion
     botInAscendingRegion
@@ -98,62 +103,59 @@ fixedPointDefinition = de $ do
 leastFixedPointDefinition :: Note
 leastFixedPointDefinition = de $ do
     lab leastFixedPointDefinitionLabel
-    s ["Let ", m rellat, " be a ", meetSemilattice_, and, m $ fun f x x, " a ", function]
-    s ["The ", leastFixedPoint', " is defined as follows"]
+    s ["Let ", m relposet, " be a ", poset_, and, m $ fun f x x, " a ", function]
+    s ["The ", leastFixedPoint', " ", m $ lfp f, " of ", m f, " is defined as follows"]
     ma $ lfp f === inf (fix f)
   where
     f = funrel_
-    x = latticeset
+    x = posetset
 
 
 greatestFixedPointDefinition :: Note
 greatestFixedPointDefinition = de $ do
     lab greatestFixedPointDefinitionLabel
-    s ["Let ", m rellat, " be a ", joinSemilattice_, and, m $ fun f x x, " a ", function]
-    s ["The ", greatestFixedPoint', " is defined as follows"]
+    s ["Let ", m relposet, " be a ", poset_, and, m $ fun f x x, " a ", function]
+    s ["The ", greatestFixedPoint', " ", m $ gfp f, " of ", m f, " is defined as follows"]
     ma $ gfp f === sup (fix f)
   where
     f = funrel_
-    x = latticeset
-
-regionDec :: Note
-regionDec = s ["Let ", m rellat, " be a ", completeLattice, and, m $ fun f x x, " a ", monotonic, " ", function]
-  where
-    f = funrel_
-    x = latticeset
+    x = posetset
 
 fixedPointRegionDefinition :: Note
 fixedPointRegionDefinition = de $ do
     lab fixedPointRegionDefinitionLabel
-    regionDec
+    s ["Let ", m relposet, " be a ", poset_, and, m $ fun f x x, " a ", function]
     s ["The ", fixedPointRegion', " ", m $ fix f, " is the ", set, " of ", fixedPoint, "s of ", m latticeset]
-    ma $ fix f === setcmpr (x ∈ latticeset) (x =: f_ x)
+    ma $ fix f === setcmpr (a ∈ latticeset) (a =: f_ a)
   where
     f = funrel_
     f_ = fn f
-    x = "x"
+    a = "x"
+    x = posetset
 
 ascendingRegionDefinition :: Note
 ascendingRegionDefinition = de $ do
     lab ascendingRegionDefinitionLabel
-    regionDec
+    s ["Let ", m relposet, " be a ", poset_, and, m $ fun f x x, " a ", function]
     s ["The ", ascendingRegion', " ", m $ asc f, " is the following ", set]
-    ma $ asc f === setcmpr (x ∈ latticeset) (x ⊆: f_ x)
+    ma $ asc f === setcmpr (a ∈ latticeset) (a ⊆: f_ a)
   where
     f = funrel_
     f_ = fn f
-    x = "x"
+    a = "x"
+    x = posetset
 
 descendingRegionDefinition :: Note
 descendingRegionDefinition = de $ do
     lab descendingRegionDefinitionLabel
-    regionDec
+    s ["Let ", m relposet, " be a ", poset_, and, m $ fun f x x, " a ", function]
     s ["The ", descendingRegion', " ", m $ desc f, " is the following ", set]
-    ma $ desc f === setcmpr (x ∈ latticeset) (f_ x ⊆: x)
+    ma $ desc f === setcmpr (a ∈ latticeset) (f_ a ⊆: a)
   where
     f = funrel_
     f_ = fn f
-    x = "x"
+    a = "x"
+    x = posetset
 
 
 fixedPointRegionIsIntersectionOfAscAndDescLabel :: Label
@@ -162,11 +164,35 @@ fixedPointRegionIsIntersectionOfAscAndDescLabel = Label Theorem "fixed-point-reg
 fixedPointRegionIsIntersectionOfAscAndDesc :: Note
 fixedPointRegionIsIntersectionOfAscAndDesc = thm $ do
     lab fixedPointRegionIsIntersectionOfAscAndDescLabel
-    regionDec
+    s ["Let ", m rellat, " be a ", completeLattice_, and, m $ fun f x x, " a ", monotonic, " ", function]
     ma $ fix f =: asc f ∩ desc f
-    toprove
+
+    proof $ do
+        noindent
+        itemize $ do
+            item $ do
+                bsub
+                newline
+
+                s ["Let ", m a, " be an element of ", m $ fix f]
+                s ["By definition of ", m $ fix f, ", ", m $ f_ a, " is equal to ", m a]
+                s ["Because ", m partord, is, reflexive_, ref partialOrderDefinitionLabel, ref preorderDefinitionLabel, ", ", m $ a ⊆: a, " must hold"]
+                s ["This means that ", m a, " is both an element of ", m $ asc f, " and of ", m $ desc f, " and therefore in their intersection"]
+
+            item $ do
+                bsup
+                newline
+
+                s ["Let ", m a, " be an element of both ", m $ asc f, and, m $ desc f]
+                s ["This means that both ", m $ a ⊆: f_ a, and, m $ f_ a ⊆: a, " hold"]
+                s ["Because ", m partord, is, antisymmetric_, ", that means that ", m a, " equals ", m $ f_ a, " which entails that ", m a, " is a fixed point of ", m f]
+
+
   where
     f = funrel_
+    f_ = fn f
+    a = "a"
+    x = latticeset
 
 regionPartitionTheoremLabel :: Label
 regionPartitionTheoremLabel = Label Theorem "region-partition-theorem"
@@ -174,8 +200,9 @@ regionPartitionTheoremLabel = Label Theorem "region-partition-theorem"
 regionPartitionTheorem :: Note
 regionPartitionTheorem = thm $ do
     lab regionPartitionTheoremLabel
-    regionDec
+    s ["Let ", m rellat, " be a ", completeLattice, and, m $ fun f x x, " a ", monotonic, " ", function]
     s [m $ setofs [asc f \\ fix f, fix f, desc f \\ fix f], " is a partition of ", m x]
+
     toprove
   where
     f = funrel_
@@ -187,10 +214,13 @@ topInDescendingRegionLabel = Label Theorem "top-element-is-in-descending-region"
 topInDescendingRegion :: Note
 topInDescendingRegion = thm $ do
     lab topInDescendingRegionLabel
-    regionDec
+    s ["Let ", m rellat, " be a ", completeLattice_, " and a ", boundedLattice_, " and let ", m $ fun f x x, " a ", monotonic, " ", function]
     ma $ bot ∈ asc f
+
+    toprove
   where
     f = funrel_
+    x = latticeset
 
 botInAscendingRegionLabel :: Label
 botInAscendingRegionLabel = Label Theorem "bot-element-is-in-ascending-region"
@@ -198,10 +228,13 @@ botInAscendingRegionLabel = Label Theorem "bot-element-is-in-ascending-region"
 botInAscendingRegion :: Note
 botInAscendingRegion = thm $ do
     lab botInAscendingRegionLabel
-    regionDec
+    s ["Let ", m rellat, " be a ", completeLattice_, " and a ", boundedLattice_, " and let ", m $ fun f x x, " a ", monotonic, " ", function]
     ma $ top ∈ desc f
+
+    toprove
   where
     f = funrel_
+    x = latticeset
 
 ascendingRegionIsClosedUnderApplicationLabel :: Label
 ascendingRegionIsClosedUnderApplicationLabel = Label Theorem "ascending-region-is-closed-under-application"
@@ -209,8 +242,10 @@ ascendingRegionIsClosedUnderApplicationLabel = Label Theorem "ascending-region-i
 ascendingRegionIsClosedUnderApplication :: Note
 ascendingRegionIsClosedUnderApplication = thm $ do
     lab ascendingRegionIsClosedUnderApplicationLabel
-    regionDec
+    s ["Let ", m rellat, " be a ", completeLattice, and, m $ fun f x x, " a ", monotonic, " ", function]
     ma $ fa (a ∈ x) $ x ∈ asc f ⇒ f_ x ∈ asc f
+
+    toprove
   where
     f = funrel_
     f_ = fn f
@@ -223,8 +258,10 @@ descendingRegionIsClosedUnderApplicationLabel = Label Theorem "descending-region
 descendingRegionIsClosedUnderApplication :: Note
 descendingRegionIsClosedUnderApplication = thm $ do
     lab descendingRegionIsClosedUnderApplicationLabel
-    regionDec
+    s ["Let ", m rellat, " be a ", completeLattice, and, m $ fun f x x, " a ", monotonic, " ", function]
     ma $ fa (a ∈ x) $ x ∈ desc f ⇒ f_ x ∈ desc f
+
+    toprove
   where
     f = funrel_
     f_ = fn f

@@ -67,9 +67,21 @@ nin = binop $ comm1 "not" $ comm0 "in"
 
 
 --[ Subseteq
+subseteq_ :: Note
+subseteq_ = comm0 "subseteq"
+
 -- C-k (_
 (⊆) :: Note -> Note -> Note
-(⊆) = subseteq
+(⊆) = binop subseteq_
+
+--[ Supseteq
+supseteq_ :: Note
+supseteq_ = comm0 "supseteq"
+
+-- C-k )_
+(⊇) :: Note -> Note -> Note
+(⊇) = binop supseteq_
+
 
 
 --[ Subsetneq
@@ -178,3 +190,13 @@ powset set = powsetsign `funapp` set
 setsize :: Note -> Note
 setsize = autoBrackets "|" "|"
 
+
+-- Boxes (for proofs)
+bx :: Note -> Note
+bx = framebox (Just $ CustomMeasure $ raw "1.5\\width") Nothing
+
+bsub :: Note
+bsub = bx $ m subseteq_
+
+bsup :: Note
+bsup = bx $ m supseteq_

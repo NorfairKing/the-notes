@@ -55,6 +55,9 @@ relcomp = binop $ comm0 "circ"
 preord :: Note
 preord = comm0 "sqsubseteq"
 
+ipreord :: Note
+ipreord = comm0 "sqsupseteq"
+
 inpreord_ :: Note -> Note -> Note -> Note
 inpreord_ = inrel_
 
@@ -88,6 +91,9 @@ eqcls r x = x <> "/" <> r
 partord :: Note
 partord = preord
 
+ipartord :: Note
+ipartord = ipreord
+
 -- Poset
 posetset :: Note
 posetset = "X"
@@ -104,8 +110,16 @@ inposet_ = inpreord_
 inposet :: Note -> Note -> Note
 inposet = binop partord
 
+iinposet :: Note -> Note -> Note
+iinposet = binop ipartord
+
+-- C-k (_
 (⊆:) :: Note -> Note -> Note
 (⊆:) = inposet
+
+-- C-k )_
+(⊇:) :: Note -> Note -> Note
+(⊇:) = iinposet
 
 -- Total order
 totord :: Note
