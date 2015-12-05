@@ -135,8 +135,11 @@ sup :: Note -> Note
 sup = fn "Sup"
 
 -- Lattice
-rellat :: Note
-rellat = relposet
+latticeset :: Note
+latticeset = posetset
 
 rellat_ :: Note -> Note -> Note
 rellat_ = relposet_
+
+rellat :: Note
+rellat = rellat_ latticeset partord

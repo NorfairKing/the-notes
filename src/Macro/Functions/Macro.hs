@@ -98,4 +98,20 @@ funbinopapp = binop funbinopsign
 (★) :: Note -> Note -> Note
 (★) = funbinopapp
 
+-- Regions
+fix :: Note -> Note
+fix = fn "Fix"
 
+asc :: Note -> Note
+asc = fn "Asc"
+
+desc :: Note -> Note
+desc = fn "Desc"
+
+-- Least fixed point
+lfp :: Note -> Note
+lfp = fn "lfp"
+
+-- Greatest fixed point
+gfp :: Note -> Note
+gfp = fn "gfp"

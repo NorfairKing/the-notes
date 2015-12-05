@@ -2,13 +2,21 @@ module Functions.Order where
 
 import           Notes
 
-import           Relations.Orders (lattice_, poset_)
+import           Relations.Orders (completeLattice_, joinSemilattice_, lattice_,
+                                   meetSemilattice_, poset_)
 import           Sets.Basics      (set)
+
+import           Functions.Basics (function)
 
 makeDefs [
       "monotonic"
     , "Scott continuous"
     , "fixed point"
+    , "fixed point region"
+    , "ascending region"
+    , "descending region"
+    , "least fixed point"
+    , "greatest fixed point"
     ]
 
 order :: Notes
@@ -21,6 +29,18 @@ body = do
     monotonicDefinition
     scottContinuousDefinition
     fixedPointDefinition
+    leastFixedPointDefinition
+    greatestFixedPointDefinition
+    regions
+
+
+regions :: Note
+regions = do
+    subsection "Regions"
+
+    fixedPointRegionDefinition
+    ascendingRegionDefinition
+    descendingRegionDefinition
 
 
 monotonicDefinition :: Note
@@ -67,6 +87,62 @@ fixedPointDefinition = de $ do
     x = "X"
     y = "Y"
 
+regionDec :: Note
+regionDec = s ["Let ", m rellat, " be a ", completeLattice_, and, m $ fun f x x, " a ", monotonic, " ", function]
+  where
+    f = funrel_
+    x = latticeset
+
+fixedPointRegionDefinition :: Note
+fixedPointRegionDefinition = de $ do
+    lab fixedPointRegionDefinitionLabel
+    regionDec
+    s ["The ", fixedPointRegion', " ", m $ fix f, " is the ", set, " of ", fixedPoint, "s of ", m latticeset]
+    ma $ fix f === setcmpr (x ∈ latticeset) (x =: f_ x)
+  where
+    f = funrel_
+    f_ = fn f
+    x = "x"
+
+ascendingRegionDefinition :: Note
+ascendingRegionDefinition = de $ do
+    lab ascendingRegionDefinitionLabel
+    regionDec
+    s ["The ", ascendingRegion', " ", m $ asc f, " is the following ", set]
+    ma $ asc f === setcmpr (x ∈ latticeset) (x ⊆: f_ x)
+  where
+    f = funrel_
+    f_ = fn f
+    x = "x"
+
+descendingRegionDefinition :: Note
+descendingRegionDefinition = de $ do
+    lab descendingRegionDefinitionLabel
+    regionDec
+    s ["The ", descendingRegion', " ", m $ desc f, " is the following ", set]
+    ma $ desc f === setcmpr (x ∈ latticeset) (f_ x ⊆: x)
+  where
+    f = funrel_
+    f_ = fn f
+    x = "x"
+
+leastFixedPointDefinition :: Note
+leastFixedPointDefinition = de $ do
+    lab leastFixedPointDefinitionLabel
+    s ["Let ", m rellat, " be a ", meetSemilattice_, and, m $ fun f x x, " a ", function]
+    s ["The ", leastFixedPoint', " is defined as follows"]
+    ma $ lfp f === inf (fix f)
+  where
+    f = funrel_
+    x = latticeset
 
 
-
+greatestFixedPointDefinition :: Note
+greatestFixedPointDefinition = de $ do
+    lab greatestFixedPointDefinitionLabel
+    s ["Let ", m rellat, " be a ", joinSemilattice_, and, m $ fun f x x, " a ", function]
+    s ["The ", greatestFixedPoint', " is defined as follows"]
+    ma $ gfp f === sup (fix f)
+  where
+    f = funrel_
+    x = latticeset
