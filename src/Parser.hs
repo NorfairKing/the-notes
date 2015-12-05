@@ -40,7 +40,7 @@ parseSelection :: Parser [String]
 parseSelection = words <$> strArgument (
        metavar "SELECTION"
     <> help "The selection of parts to generate"
-    <> value [])
+    <> value "all")
 
 argParser :: Parser Args
 argParser = Args

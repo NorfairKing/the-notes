@@ -13,6 +13,9 @@ packages = do
   usepackage [] "amssymb"
   usepackage [] "amsthm"
 
+  -- For an even bigger font
+  usepackage [] "fix-cm"
+
   -- For logical inference
   usepackage [] "proof"
 
