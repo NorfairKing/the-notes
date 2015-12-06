@@ -21,26 +21,38 @@ renewcommand1 = liftL2 $ \l1 l2 -> TeXComm "renewcommand" [FixArg $ raw "\\" <> 
 binop :: Note -> Note -> Note -> Note
 binop = between
 
+-- * Subscript
 
--- prefix subscript operator
+-- | Safe Subscript
+(!:) :: Note -> Note -> Note
+x !: y = braces x <> raw "_" <> braces y
+
+-- | Prefix Subscript Operator
 subsc :: Note -> Note -> Note
 subsc = (!:)
 
--- prefix superscript operator
+-- | Unsafe (in the first argument) Subscript.
+(.!:) :: LaTeXC l => l -> l -> l
+x .!: y = x <> raw "_" <> braces y
+
+
+-- * Superscript
+
+-- | Superscript
+(^:) :: Note -> Note -> Note
+x ^: y = braces x <> raw "^"  <> braces y
+
+-- | Prefix Superscript Operator
 supsc :: Note -> Note -> Note
 supsc = (^:)
 
-
--- | Special Superscript.
+-- | Unsafe (in the first argument) Superscript.
 (.^:) :: LaTeXC l => l -> l -> l
 x .^: y = x <> raw "^"  <> braces y
 
 
--- | Special Subscript.
-(.!:) :: LaTeXC l => l -> l -> l
-x .!: y = x <> raw "_" <> braces y
 
--- Comprehensions
+-- * Comprehensions
 compr :: Note -> Note -> Note -> Note -> Note
 compr sign lower upper content = sign .!: lower .^: upper <> braces content
 

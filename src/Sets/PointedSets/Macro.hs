@@ -3,6 +3,7 @@ module Sets.PointedSets.Macro where
 import           Types
 
 import           Macro.Math
+import           Macro.MetaMacro
 
 -- * Pointed set
 pset :: Note -> Note -> Note

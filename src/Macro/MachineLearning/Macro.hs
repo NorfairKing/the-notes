@@ -2,6 +2,8 @@ module Macro.MachineLearning.Macro where
 
 import           Types
 
+import           Macro.MetaMacro
+
 mlos :: Note
 mlos = mathcal "O"
 
