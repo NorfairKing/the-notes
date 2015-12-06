@@ -18,7 +18,6 @@ You can also generate subsets of the notes by adding selectors to the command.
 - `./the-notes sets.basics` will only generate the 'basics' section of the sets chapter
 - `./the-notes sets probability` will only generate the chapters on sets and probability.
 
-Make sure to compile twice, the first time.
 You may need to `ignore-reference-errors`.
 
 ## Contribution

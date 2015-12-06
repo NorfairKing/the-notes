@@ -26,6 +26,7 @@ executable the-notes
                         , optparse-applicative  >= 0.11      && < 0.12
                         , template-haskell      >= 2.10      && < 2.11
                         , containers            >= 0.5       && < 0.6
+                        , pcre-heavy            >= 1.0       && < 1.1
   ghc-options:        -Wall
                       -fwarn-unused-imports
                       -fwarn-incomplete-patterns

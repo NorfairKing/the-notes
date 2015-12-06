@@ -1,19 +1,21 @@
+{-# LANGUAGE QuasiQuotes #-}
 module Main where
 
-import           System.Exit          (ExitCode (..), die)
-import           System.Process       (CreateProcess (..),
-                                       readCreateProcessWithExitCode, shell)
+import           System.Exit           (ExitCode (..), die)
+import           System.Process        (CreateProcess (..),
+                                        readCreateProcessWithExitCode, shell)
+import           Text.Regex.PCRE.Heavy (re, scan)
 
 import           Notes
 import           Utils
 
-import qualified Data.Text            as T
+import qualified Data.Text             as T
 
-import           Control.Monad        (unless, when)
-import           Data.List            (intercalate, isInfixOf, splitAt)
-import           Prelude              (Bool (..), Int, appendFile, error,
-                                       putStrLn, return)
-import qualified Prelude              as P
+import           Control.Monad         (unless, when)
+import           Data.List             (intercalate, splitAt)
+import           Prelude               (Bool (..), Int, appendFile, error,
+                                        putStrLn, return)
+import qualified Prelude               as P
 
 import           Header
 import           Packages
@@ -71,10 +73,7 @@ main = do
         return ()
 
 containsRefErrors :: String -> Bool
-containsRefErrors s = P.or $ [t `isInfixOf` l | t <- wrongThings, l <- lines s]
-  where
-    wrongThings :: [String]
-    wrongThings = ["There were undefined references.", "There were multiply-defined labels."]
+containsRefErrors s = (P.> 2) $ P.length $ scan [re|There were undefined references.|] s
 
 latexMkJob :: Config -> CreateProcess
 latexMkJob cf = shell $ "latexmk " ++ unwords latexMkArgs
