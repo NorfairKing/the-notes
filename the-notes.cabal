@@ -4,11 +4,11 @@
 name:                the-notes
 version:             0.1.0.0
 synopsis:            The Notes
--- description:         
+description:         The Notes
 homepage:            https://github.com/NorfairKing/the-notes
 author:              Tom Sydney Kerckhove
 maintainer:          syd.kerckhove@gmail.com
--- copyright:           
+copyright:           2015 Tom Sydney Kerckhove
 category:            Text
 build-type:          Simple
 extra-source-files:  README.md
