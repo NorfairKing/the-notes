@@ -20,7 +20,7 @@ hlint src \
   -XTemplateHaskell
 
 # Make sure the build succeeds
-make
+make bin
 
 # Make sure compilation of the pdf succeeds
 ./the-notes
