@@ -6,7 +6,7 @@ import           Functions.BinaryOperation  (associative_)
 import           Relations.BasicDefinitions (inverseOfInverseIsNormalLabel)
 
 compositeRelations :: Notes
-compositeRelations = notesPart "compositeRelations" body
+compositeRelations = notesPart "composite-relations" body
 
 body :: Note
 body = do
