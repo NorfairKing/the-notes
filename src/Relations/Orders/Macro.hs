@@ -10,10 +10,10 @@ import           Functions.Application.Macro
 
 -- * Partial order
 partord_ :: Note
-partord_ = preord
+partord_ = preord_
 
 ipartord_ :: Note
-ipartord_ = ipreord
+ipartord_ = ipreord_
 
 -- * Poset
 posetset_ :: Note
@@ -26,7 +26,7 @@ relposet_ :: Note
 relposet_ = relposet posetset_ partord_
 
 inposet :: Note -> Note -> Note -> Note
-inposet = inpreord_
+inposet = inpreord
 
 inposet_ :: Note -> Note -> Note
 inposet_ = binop partord_
@@ -67,6 +67,9 @@ bot = comm0 "bot"
 inf :: Note -> Note
 inf = fn "Inf"
 
+infcomp :: Note -> Note -> Note
+infcomp = comp $ commS "bigsqcap"
+
 
 -- | Greatest lower bound
 (⊓) :: Note -> Note -> Note
@@ -75,6 +78,8 @@ inf = fn "Inf"
 sup :: Note -> Note
 sup = fn "Sup"
 
+supcomp :: Note -> Note -> Note
+supcomp = comp $ commS "bigsqcup"
 
 -- * Lattices
 

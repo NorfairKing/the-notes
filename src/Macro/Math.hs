@@ -297,3 +297,11 @@ quadruple a b c d = pars $ commaSeparated [a, b, c, d]
 -- | 5-tuple
 quintuple :: Note -> Note -> Note -> Note -> Note -> Note
 quintuple a b c d e = pars $ commaSeparated [a, b, c, d, e]
+
+-- | Tuple list
+tuplelst :: Note -> Note -> Note
+tuplelst x1 xn = pars $ lst x1 xn
+
+-- | Tuple list
+tuplelist :: Note -> Note -> Note -> Note
+tuplelist x1 x2 xn = pars $ list x1 x2 xn

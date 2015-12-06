@@ -44,6 +44,8 @@ body = do
     subsection "Partial orders"
     partialOrderDefinition
     posetDefinition
+    crossPosetLift
+    powsetPosetPreorder
 
     subsection "Total orders"
     totalOrderDefinition
@@ -67,6 +69,8 @@ body = do
     meetSemilatticeDefinition
     joinSemilatticeDefinition
     latticeDefinition
+    latticeExamples
+    crossLatticeLift
     boundedLatticeDefinition
     completeLatticeDefinition
     completeLatticeIsBounded
@@ -89,13 +93,52 @@ antisymmetricDefinition = de $ do
 
 partialOrderDefinition :: Note
 partialOrderDefinition = de $ do
-  lab partialOrderDefinitionLabel
-  s ["A ", partialOrder', " is an ", antisymmetric, " ", preorder_]
+    lab partialOrderDefinitionLabel
+    s ["A ", partialOrder', " is an ", antisymmetric, " ", preorder_]
+
+powsetPosetPreorderLabel :: Label
+powsetPosetPreorderLabel = Label Theorem "powerset-poset-induces-preorder"
+
+powsetPosetPreorder :: Note
+powsetPosetPreorder = thm $ do
+    lab powsetPosetPreorderLabel
+    s ["Let ", m relposet_, " be a poset"]
+    s [m $ relpreord (powset posetset_) partord_, ", where ", m partord_, " is defined as follows, is a ", preorder_]
+    ma $ p ⊆: q ⇔ (fa (x ∈ p) $ te (y ∈ q) $ x ⊆: y)
+
+    toprove
+  where
+    x = "x"
+    y = "y"
+    p = "P"
+    q = "Q"
 
 posetDefinition :: Note
 posetDefinition = de $ do
     lab posetDefinitionLabel
     s ["A ", term "partially ordered set", or, poset', " is a tuple ", m relposet_, " of a set and a partial order on that set"]
+
+crossPosetLiftLabel :: Label
+crossPosetLiftLabel = Label Theorem "cross-poset-lift"
+
+crossPosetLift :: Note
+crossPosetLift = thm $ do
+    lab crossPosetLiftLabel
+    s ["Let ", m $ list (relposet (x !: 1) (o !: 1)) (relposet (x !: 2) (o !: 2)) (relposet (x !: n) (o !: n)), " be ", poset, "s"]
+    s [m $ relposet ((x !: 1) ⨯ (x !: 2) ⨯ dotsb ⨯ (x !: n)) o, " is a ", poset, " where ", m o, " is defined as follows"]
+    ma $ a ⊆: b ⇔ fa i (a !: i `oi` b !: i)
+
+    toprove
+
+  where
+    a = "a"
+    b = "b"
+    i = "i"
+    o = partord_
+    oi = binop $ raw "\\ " <> o !: "i" <> raw "\\ "
+    x = posetset_
+    n = "n"
+
 
 totalOrderDefinition :: Note
 totalOrderDefinition = de $ do
@@ -218,6 +261,37 @@ latticeDefinition :: Note
 latticeDefinition = de $ do
     lab latticeDefinitionLabel
     s ["If a ", poset, " is both a ", meetSemilattice, " and a ", joinSemilattice, ", it is called a ", lattice']
+
+latticeExamples :: Note
+latticeExamples = do
+    ex $ do
+        s ["Let ", m ss, " be a set"]
+        s [m $ lat (powset ss) subseteq_, " is a lattice"]
+        toprove
+  where
+    ss = "S"
+
+crossLatticeLiftLabel :: Label
+crossLatticeLiftLabel = Label Theorem "cross-lattice-lift"
+
+crossLatticeLift :: Note
+crossLatticeLift = thm $ do
+    lab crossLatticeLiftLabel
+    s ["Let ", m $ list (relposet (x !: 1) (o !: 1)) (relposet (x !: 2) (o !: 2)) (relposet (x !: n) (o !: n)), " be ", lattice, "s"]
+    s ["The poset ", m $ relposet ((x !: 1) ⨯ (x !: 2) ⨯ dotsb ⨯ (x !: n)) o, ref crossPosetLiftLabel, " is a ", lattice, " where the following properties hold"]
+
+    ma $ (a ⊔ b =: supcomp i (a !: i ⊔ b !: i)) <> quad <> text "and" <> quad <> (a ⊓ b =: infcomp i (a !: i ⊓ b !: i))
+    ma $ (bot =: tuplelist (bot !: (x !: 1)) (bot !: (x !: 2)) (bot !: (x !: n)))  <> quad <> text "and" <> quad <> (top =: tuplelist (top !: (x !: 1)) (top !: (x !: 2)) (top !: (x !: n)))
+
+    toprove
+
+  where
+    a = "a"
+    b = "b"
+    o = partord_
+    x = posetset_
+    i = "i"
+    n = "n"
 
 boundedLatticeDefinition :: Note
 boundedLatticeDefinition = de $ do

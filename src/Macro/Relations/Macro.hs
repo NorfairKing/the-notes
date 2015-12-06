@@ -52,30 +52,39 @@ relcomp = binop $ comm0 "circ"
 (●) = relcomp
 
 -- Preorder
-preord :: Note
-preord = comm0 "sqsubseteq"
+preordset_ :: Note
+preordset_  = "X"
 
-ipreord :: Note
-ipreord = comm0 "sqsupseteq"
+preord_ :: Note
+preord_ = commS "sqsubseteq" <> " "
 
-inpreord_ :: Note -> Note -> Note -> Note
-inpreord_ = inrel_
+ipreord_ :: Note
+ipreord_ = commS "sqsupseteq" <> " "
 
-inpreord :: Note -> Note -> Note
-inpreord = inpreord_ preord
+relpreord :: Note -> Note -> Note
+relpreord = tuple
+
+relpreord_ :: Note
+relpreord_ = relpreord preordset_ preord_
+
+inpreord :: Note -> Note -> Note -> Note
+inpreord = inrel_
+
+inpreord_ :: Note -> Note -> Note
+inpreord_ = inpreord preord_
 
 -- Equivalence Relation
 eqrel :: Note
 eqrel = comm0 "sim" <> raw "\\mkern-3mu"
 
-ineqrel_ :: Note -> Note -> Note -> Note
-ineqrel_ = inpreord_
+ineqrel :: Note -> Note -> Note -> Note
+ineqrel = inpreord
 
-ineqrel :: Note -> Note -> Note
-ineqrel = ineqrel_ eqrel
+ineqrel_ :: Note -> Note -> Note
+ineqrel_ = ineqrel eqrel
 
 (.~) :: Note -> Note -> Note
-(.~) = ineqrel
+(.~) = ineqrel_
 
 -- Equivalence class
 eqcl_ :: Note -> Note -> Note

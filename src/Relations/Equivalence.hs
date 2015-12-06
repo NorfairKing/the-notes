@@ -78,14 +78,14 @@ quotientSetDefinition = de $ do
 
 inducedEquivalenceRelation :: Note
 inducedEquivalenceRelation = thm $ do
-    s ["Let ", m preord, " be a preorder on a set ", m xx]
+    s ["Let ", m preord_, " be a preord_er on a set ", m xx]
     s ["The relation ", m indeqrel, " is an equivalence relation"]
 
-    ma $ indeqrel === (setcmpr (tuple a b) $ inpreord a b ∧ inpreord b a)
+    ma $ indeqrel === (setcmpr (tuple a b) $ inpreord_ a b ∧ inpreord_ b a)
 
     toprove
   where
-    indeqrel = eqrel !: preord
+    indeqrel = eqrel !: preord_
     a = "a"
     b = "b"
     xx = "X"
