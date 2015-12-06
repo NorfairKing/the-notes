@@ -1,7 +1,63 @@
-language: haskell
+sudo: false
+language: c
 
-env:
- - GHCVER=7.6.3 CABALVER=1.16
- - GHCVER=7.8.4 CABALVER=1.18
- - GHCVER=7.10.1 CABALVER=1.22
- - GHCVER=7.10.2 CABALVER=1.22
+cache:
+  directories:
+    - $HOME/.cabsnap
+    - $HOME/.cabal/packages
+
+before_cache:
+  - rm -fv $HOME/.cabal/packages/hackage.haskell.org/build-reports.log
+  - rm -fv $HOME/.cabal/packages/hackage.haskell.org/00-index.tar
+
+script:
+  - cabal configure --enable-tests -v2  # -v2 provides useful information for debugging
+  - cabal build   # this builds all libraries and executables (including tests)
+  - cabal test
+  - cabal sdist   # tests that a source-distribution can be generated
+
+matrix:
+  include:
+    - env: CABALVER=1.16 GHCVER=7.4.2
+      compiler: ": #GHC 7.4.2"
+      addons: {apt: {packages: [cabal-install-1.16,ghc-7.4.2,alex-3.1.4,happy-1.19.5], sources: [hvr-ghc]}}
+    - env: CABALVER=1.16 GHCVER=7.6.3
+      compiler: ": #GHC 7.6.3"
+      addons: {apt: {packages: [cabal-install-1.16,ghc-7.6.3,alex-3.1.4,happy-1.19.5], sources: [hvr-ghc]}}
+    - env: CABALVER=1.18 GHCVER=7.8.4
+      compiler: ": #GHC 7.8.4"
+      addons: {apt: {packages: [cabal-install-1.18,ghc-7.8.4,alex-3.1.4,happy-1.19.5], sources: [hvr-ghc]}}
+    - env: CABALVER=1.22 GHCVER=7.10.1
+      compiler: ": #GHC 7.10.1"
+      addons: {apt: {packages: [cabal-install-1.22,ghc-7.10.1,alex-3.1.4,happy-1.19.5], sources: [hvr-ghc]}}
+    - env: CABALVER=1.22 GHCVER=7.10.2
+      compiler: ": #GHC 7.10.2"
+      addons: {apt: {packages: [cabal-install-1.22,ghc-7.10.2,alex-3.1.4,happy-1.19.5], sources: [hvr-ghc]}}
+    - env: CABALVER=1.22 GHCVER=head
+      compiler: ": #GHC head"
+      addons: {apt: {packages: [cabal-install-1.22,ghc-head,alex-3.1.4,happy-1.19.5], sources: [hvr-ghc]}}
+
+  allow_failures:
+   - env: CABALVER=1.22 GHCVER=head
+
+before_install:
+ - unset CC
+ - export HAPPYVER=1.19.5
+ - export ALEXVER=3.1.4
+ - export PATH=~/.cabal/bin:/opt/ghc/$GHCVER/bin:/opt/cabal/$CABALVER/bin:/opt/happy/$HAPPYVER/bin:/opt/alex/$ALEXVER/bin:$PATH
+
+
+# Here starts the actual work to be performed for the package under test;
+# any command which exits with a non-zero exit code causes the build to fail.
+script:
+ - cabal configure --enable-tests -v2  # -v2 provides useful information for debugging
+ - cabal build   # this builds all libraries and executables (including tests)
+ - cabal test
+ - cabal sdist   # tests that a source-distribution can be generated
+
+# Check that the resulting source distribution can be built & installed.
+# If there are no other `.tar.gz` files in `dist`, this can be even simpler:
+# `cabal install --force-reinstalls dist/*-*.tar.gz`
+ - SRC_TGZ=$(cabal info . | awk '{print $2;exit}').tar.gz &&
+   (cd dist && cabal install --force-reinstalls "$SRC_TGZ")
+
