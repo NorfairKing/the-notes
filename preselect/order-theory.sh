@@ -9,5 +9,4 @@
   relations
   functions
   -functions.distances
-  -functions.binary-operations
   "
