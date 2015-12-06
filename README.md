@@ -1,4 +1,5 @@
 # The Notes
+[![Build Status](https://travis-ci.org/NorfairKing/super-user-spark.svg?branch=master)](https://travis-ci.org/NorfairKing/super-user-spark)
 
 ## Preselects
 
