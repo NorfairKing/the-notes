@@ -10,6 +10,8 @@ import           Relations.Orders           (antisymmetric_, boundedLattice_,
                                              poset_)
 import           Sets.Basics                (set)
 
+import           Relations.Orders.Macro
+
 import           Functions.Basics           (function)
 
 import           Functions.Order.Macro
@@ -64,24 +66,24 @@ regions = do
 monotonicDefinition :: Note
 monotonicDefinition = de $ do
     lab monotonicDefinitionLabel
-    s ["Let ", m $ relposet_ x rx, and, m $ relposet_ y ry, " each be a ", poset_, and, m $ fun f x y, " a function"]
+    s ["Let ", m $ relposet x rx, and, m $ relposet y ry, " each be a ", poset_, and, m $ fun f x y, " a function"]
     s [m $ fun f x y, " is said to be ", monotonic', " if it has the following property"]
-    ma $ fa (cs [x1, x2] ∈ x) $ inposet_ rx x1 x2 ⇒ inposet_ ry (f_ x1) (f_ x2)
+    ma $ fa (cs [x1, x2] ∈ x) $ inposet rx x1 x2 ⇒ inposet ry (f_ x1) (f_ x2)
   where
     x1 = x !: 1
     x2 = x !: 2
     f = funrel_
     f_ = fn f
     x = "X"
-    rx = partord !: x
+    rx = partord_ !: x
     y = "Y"
-    ry = partord !: y
+    ry = partord_ !: y
 
 
 scottContinuousDefinition :: Note
 scottContinuousDefinition = de $ do
     lab scottContinuousDefinitionLabel
-    s ["Let ", m $ rellat_ x rx, and, m $ rellat_ y ry, " each be a ", lattice_, and, m $ fun f x y, " a function"]
+    s ["Let ", m $ lat x rx, and, m $ lat y ry, " each be a ", lattice_, and, m $ fun f x y, " a function"]
     s [m $ fun funrel_ x y, " is called ", scottContinuous', " if it has the following property"]
     ma $ fa (ss ⊆ x) $ f_ (sup ss) =: sup (f □ ss)
   where
@@ -89,9 +91,9 @@ scottContinuousDefinition = de $ do
     f = funrel_
     f_ = fn f
     x = "X"
-    rx = partord !: x
+    rx = partord_ !: x
     y = "Y"
-    ry = partord !: y
+    ry = partord_ !: y
 
 fixedPointDefinition :: Note
 fixedPointDefinition = de $ do
@@ -108,59 +110,59 @@ fixedPointDefinition = de $ do
 leastFixedPointDefinition :: Note
 leastFixedPointDefinition = de $ do
     lab leastFixedPointDefinitionLabel
-    s ["Let ", m relposet, " be a ", poset_, and, m $ fun f x x, " a ", function]
+    s ["Let ", m relposet_, " be a ", poset_, and, m $ fun f x x, " a ", function]
     s ["The ", leastFixedPoint', " ", m $ lfp f, " of ", m f, " is defined as follows"]
     ma $ lfp f === inf (fix f)
   where
     f = funrel_
-    x = posetset
+    x = posetset_
 
 
 greatestFixedPointDefinition :: Note
 greatestFixedPointDefinition = de $ do
     lab greatestFixedPointDefinitionLabel
-    s ["Let ", m relposet, " be a ", poset_, and, m $ fun f x x, " a ", function]
+    s ["Let ", m relposet_, " be a ", poset_, and, m $ fun f x x, " a ", function]
     s ["The ", greatestFixedPoint', " ", m $ gfp f, " of ", m f, " is defined as follows"]
     ma $ gfp f === sup (fix f)
   where
     f = funrel_
-    x = posetset
+    x = posetset_
 
 fixedPointRegionDefinition :: Note
 fixedPointRegionDefinition = de $ do
     lab fixedPointRegionDefinitionLabel
-    s ["Let ", m relposet, " be a ", poset_, and, m $ fun f x x, " a ", function]
-    s ["The ", fixedPointRegion', " ", m $ fix f, " is the ", set, " of ", fixedPoint, "s of ", m latticeset]
-    ma $ fix f === setcmpr (a ∈ latticeset) (a =: f_ a)
+    s ["Let ", m relposet_, " be a ", poset_, and, m $ fun f x x, " a ", function]
+    s ["The ", fixedPointRegion', " ", m $ fix f, " is the ", set, " of ", fixedPoint, "s of ", m latset_]
+    ma $ fix f === setcmpr (a ∈ latset_) (a =: f_ a)
   where
     f = funrel_
     f_ = fn f
     a = "x"
-    x = posetset
+    x = posetset_
 
 ascendingRegionDefinition :: Note
 ascendingRegionDefinition = de $ do
     lab ascendingRegionDefinitionLabel
-    s ["Let ", m relposet, " be a ", poset_, and, m $ fun f x x, " a ", function]
+    s ["Let ", m relposet_, " be a ", poset_, and, m $ fun f x x, " a ", function]
     s ["The ", ascendingRegion', " ", m $ asc f, " is the following ", set]
-    ma $ asc f === setcmpr (a ∈ latticeset) (a ⊆: f_ a)
+    ma $ asc f === setcmpr (a ∈ latset_) (a ⊆: f_ a)
   where
     f = funrel_
     f_ = fn f
     a = "x"
-    x = posetset
+    x = posetset_
 
 descendingRegionDefinition :: Note
 descendingRegionDefinition = de $ do
     lab descendingRegionDefinitionLabel
-    s ["Let ", m relposet, " be a ", poset_, and, m $ fun f x x, " a ", function]
+    s ["Let ", m relposet_, " be a ", poset_, and, m $ fun f x x, " a ", function]
     s ["The ", descendingRegion', " ", m $ desc f, " is the following ", set]
-    ma $ desc f === setcmpr (a ∈ latticeset) (f_ a ⊆: a)
+    ma $ desc f === setcmpr (a ∈ latset_) (f_ a ⊆: a)
   where
     f = funrel_
     f_ = fn f
     a = "x"
-    x = posetset
+    x = posetset_
 
 ascendingRegionIsClosedUnderApplicationLabel :: Label
 ascendingRegionIsClosedUnderApplicationLabel = Label Theorem "ascending-region-is-closed-under-application"
@@ -168,7 +170,7 @@ ascendingRegionIsClosedUnderApplicationLabel = Label Theorem "ascending-region-i
 ascendingRegionIsClosedUnderApplication :: Note
 ascendingRegionIsClosedUnderApplication = thm $ do
     lab ascendingRegionIsClosedUnderApplicationLabel
-    s ["Let ", m relposet, " be a ", poset_, and, m $ fun f x x, " a ", monotonic, " ", function]
+    s ["Let ", m relposet_, " be a ", poset_, and, m $ fun f x x, " a ", monotonic, " ", function]
     ma $ fa (a ∈ x) $ x ∈ asc f ⇒ f_ x ∈ asc f
 
     proof $ do
@@ -179,7 +181,7 @@ ascendingRegionIsClosedUnderApplication = thm $ do
     f = funrel_
     f_ = fn f
     a = "x"
-    x = posetset
+    x = posetset_
 
 descendingRegionIsClosedUnderApplicationLabel :: Label
 descendingRegionIsClosedUnderApplicationLabel = Label Theorem "descending-region-is-closed-under-application"
@@ -187,7 +189,7 @@ descendingRegionIsClosedUnderApplicationLabel = Label Theorem "descending-region
 descendingRegionIsClosedUnderApplication :: Note
 descendingRegionIsClosedUnderApplication = thm $ do
     lab descendingRegionIsClosedUnderApplicationLabel
-    s ["Let ", m relposet, " be a ", poset_, and, m $ fun f x x, " a ", monotonic, " ", function]
+    s ["Let ", m relposet_, " be a ", poset_, and, m $ fun f x x, " a ", monotonic, " ", function]
     ma $ fa (a ∈ x) $ x ∈ desc f ⇒ f_ x ∈ desc f
 
     proof $ do
@@ -198,7 +200,7 @@ descendingRegionIsClosedUnderApplication = thm $ do
     f = funrel_
     f_ = fn f
     a = "x"
-    x = posetset
+    x = posetset_
 
 topInDescendingRegionLabel :: Label
 topInDescendingRegionLabel = Label Theorem "top-element-is-in-descending-region"
@@ -206,7 +208,7 @@ topInDescendingRegionLabel = Label Theorem "top-element-is-in-descending-region"
 topInDescendingRegion :: Note
 topInDescendingRegion = thm $ do
     lab topInDescendingRegionLabel
-    s ["Let ", m rellat, " be a ", boundedLattice_, " and let ", m $ fun f x x, " a ", monotonic, " ", function]
+    s ["Let ", m lat_, " be a ", boundedLattice_, " and let ", m $ fun f x x, " a ", monotonic, " ", function]
     ma $ bot ∈ asc f
 
     proof $ do
@@ -215,7 +217,7 @@ topInDescendingRegion = thm $ do
   where
     f_ = fn f
     f = funrel_
-    x = latticeset
+    x = latset_
 
 botInAscendingRegionLabel :: Label
 botInAscendingRegionLabel = Label Theorem "bot-element-is-in-ascending-region"
@@ -223,7 +225,7 @@ botInAscendingRegionLabel = Label Theorem "bot-element-is-in-ascending-region"
 botInAscendingRegion :: Note
 botInAscendingRegion = thm $ do
     lab botInAscendingRegionLabel
-    s ["Let ", m rellat, " be a ", boundedLattice_, " and let ", m $ fun f x x, " a ", monotonic, " ", function]
+    s ["Let ", m lat_, " be a ", boundedLattice_, " and let ", m $ fun f x x, " a ", monotonic, " ", function]
     ma $ top ∈ desc f
 
     proof $ do
@@ -232,7 +234,7 @@ botInAscendingRegion = thm $ do
   where
     f_ = fn f
     f = funrel_
-    x = latticeset
+    x = latset_
 
 
 fixedPointRegionIsIntersectionOfAscAndDescLabel :: Label
@@ -241,7 +243,7 @@ fixedPointRegionIsIntersectionOfAscAndDescLabel = Label Theorem "fixed-point-reg
 fixedPointRegionIsIntersectionOfAscAndDesc :: Note
 fixedPointRegionIsIntersectionOfAscAndDesc = thm $ do
     lab fixedPointRegionIsIntersectionOfAscAndDescLabel
-    s ["Let ", m relposet, " be a ", poset_, and, m $ fun f x x, " a ", monotonic, " ", function]
+    s ["Let ", m relposet_, " be a ", poset_, and, m $ fun f x x, " a ", monotonic, " ", function]
     ma $ fix f =: asc f ∩ desc f
 
     proof $ do
@@ -253,7 +255,7 @@ fixedPointRegionIsIntersectionOfAscAndDesc = thm $ do
 
                 s ["Let ", m a, " be an element of ", m $ fix f]
                 s ["By definition of ", m $ fix f, ", ", m $ f_ a, " is equal to ", m a]
-                s ["Because ", m partord, is, reflexive_, ref partialOrderDefinitionLabel, ref preorderDefinitionLabel, ", ", m $ a ⊆: a, " must hold"]
+                s ["Because ", m partord_, is, reflexive_, ref partialOrderDefinitionLabel, ref preorderDefinitionLabel, ", ", m $ a ⊆: a, " must hold"]
                 s ["This means that ", m a, " is both an element of ", m $ asc f, " and of ", m $ desc f, " and therefore in their intersection"]
 
             item $ do
@@ -262,33 +264,33 @@ fixedPointRegionIsIntersectionOfAscAndDesc = thm $ do
 
                 s ["Let ", m a, " be an element of both ", m $ asc f, and, m $ desc f]
                 s ["This means that both ", m $ a ⊆: f_ a, and, m $ f_ a ⊆: a, " hold"]
-                s ["Because ", m partord, is, antisymmetric_, ", that means that ", m a, " equals ", m $ f_ a, " which entails that ", m a, " is a fixed point of ", m f]
+                s ["Because ", m partord_, is, antisymmetric_, ", that means that ", m a, " equals ", m $ f_ a, " which entails that ", m a, " is a fixed point of ", m f]
 
 
   where
     f = funrel_
     f_ = fn f
     a = "a"
-    x = posetset
+    x = posetset_
 
 kleeneChainDefinition :: Note
 kleeneChainDefinition = de $ do
     lab kleeneChainDefinitionLabel
-    s ["Let ",  m rellat, " be a ", lattice_, and, m $ fun f x x, " a ", scottContinuous, " function"]
+    s ["Let ",  m lat_, " be a ", lattice_, and, m $ fun f x x, " a ", scottContinuous, " function"]
     s ["The ", kleeneChain', " starting at a point ", m $ a ∈ x, " is the set ", m $ kleeneCh a]
     ma $ kleeneCh a === setcmpr (i ∈ naturals) (f !: i `fn` x)
   where
     i = "i"
     f = funrel_
     a = "x"
-    x = latticeset
+    x = latset_
 
 kleenesFixedPointTheorem :: Note
 kleenesFixedPointTheorem = do
     thm $ do
         term "Kleene's fixed point theorem"
         newline
-        s ["Let ", m rellat, " be a ", completeLattice_, and, m $ fun f x x, " a ", scottContinuous, " function"]
+        s ["Let ", m lat_, " be a ", completeLattice_, and, m $ fun f x x, " a ", scottContinuous, " function"]
         ma $ lfp f =: sup (kleeneCh bot)
 
         toprove
@@ -297,7 +299,7 @@ kleenesFixedPointTheorem = do
         s ["Repeatedly applying ", m f, " to bot until we find a fixed point is enough to find ", m $ lfp f]
   where
     f = funrel_
-    x = latticeset
+    x = latset_
 
 
 

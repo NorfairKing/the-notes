@@ -2,7 +2,9 @@ module Logic.HoareLogic (hoareLogic) where
 
 import           Notes
 
-import           Logic.AbstractLogic (inference, theory)
+import           Logic.AbstractLogic    (inference, theory)
+
+import           Relations.Orders.Macro
 
 hoareLogic :: Notes
 hoareLogic = notesPart "hoare-logic" body

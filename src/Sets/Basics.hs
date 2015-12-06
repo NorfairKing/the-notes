@@ -10,10 +10,7 @@ makeDefs [
     ]
 
 setBasics :: Notes
-setBasics = notesPart "basics" body
-
-body :: Note
-body = do
+setBasics = notesPart "basics" $ do
     section "Set Basics"
     sets
     subsets
