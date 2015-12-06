@@ -219,18 +219,6 @@ np = do
   textit "no proof"
   newline
 
--- Tuples
-tuple :: Note -> Note -> Note
-tuple a b = pars $ commaSeparated [a, b]
-
-triple :: Note -> Note -> Note -> Note
-triple a b c = pars $ commaSeparated [a, b, c]
-
-quadruple :: Note -> Note -> Note -> Note -> Note
-quadruple a b c d = pars $ commaSeparated [a, b, c, d]
-
-quintuple :: Note -> Note -> Note -> Note -> Note -> Note
-quintuple a b c d e = pars $ commaSeparated [a, b, c, d, e]
 
 -- Absolute value
 av :: Note -> Note
@@ -291,3 +279,21 @@ lst n m = commaSeparated [n, dotsc, m]
 
 list :: Note -> Note -> Note -> Note
 list n m o = commaSeparated [n, m, dotsc, o]
+
+-- * Tuples
+
+-- | 2-tuple
+tuple :: Note -> Note -> Note
+tuple a b = pars $ commaSeparated [a, b]
+
+-- | 3-tuple
+triple :: Note -> Note -> Note -> Note
+triple a b c = pars $ commaSeparated [a, b, c]
+
+-- | 4-tuple
+quadruple :: Note -> Note -> Note -> Note -> Note
+quadruple a b c d = pars $ commaSeparated [a, b, c, d]
+
+-- | 5-tuple
+quintuple :: Note -> Note -> Note -> Note -> Note -> Note
+quintuple a b c d e = pars $ commaSeparated [a, b, c, d, e]

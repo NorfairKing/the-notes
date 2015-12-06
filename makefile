@@ -8,7 +8,7 @@ SRC_DIR = src
 MAIN_SRC_NAME = Main
 MAIN_SRC = $(SRC_DIR)/$(MAIN_SRC_NAME).$(SRC_EXT)
 
-SOURCES = $(wildcard $(SRC_DIR)/**.hs)
+SOURCES = $(shell find $(SRC_DIR) -type f -name '*.hs')
 
 GHC = ghc
 GHC_FLAGS = \
@@ -37,7 +37,7 @@ thorough: $(SOURCES)
 	$(GHC) $(GHC_OPTIONS) -fforce-recomp -o $(BIN) --make $(MAIN_SRC)
 
 doc: $(SOURCES)
-	cabal haddock --executables
+	cabal haddock --executables --haddock-options="--no-warnings --no-print-missing-docs --pretty-html"
 
 graph:
 	graphmod $(MAIN_SRC) -q -p -i $(SRC_DIR) > graph.dot

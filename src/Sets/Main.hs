@@ -6,18 +6,17 @@ import           Sets.Algebra.Main
 import           Sets.Basics            (setBasics)
 import           Sets.CarthesianProduct
 import           Sets.Partition
+import           Sets.PointedSets       (pointedSets)
 import           Sets.Powerset
 
 sets :: Notes
 sets = notes "sets" $
   [
-    header
+    notesPart "header" (chapter "Sets")
   , setBasics
   , partitions
   , algebra
   , powerset
   , carthesianProducts
+  , pointedSets
   ]
-
-header :: Notes
-header = notesPart "header" (chapter "Sets")

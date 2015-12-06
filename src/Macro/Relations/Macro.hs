@@ -3,7 +3,7 @@ module Macro.Relations.Macro where
 import           Macro.Math
 import           Macro.MetaMacro
 
-import           Macro.Functions.Application (fn)
+import           Functions.Application.Macro (fn)
 
 import           Types
 

@@ -1,6 +1,6 @@
 module Functions.Order.Macro where
 
-import           Macro.Functions.Application (fn)
+import           Functions.Application.Macro (fn)
 import           Types
 
 -- * Regions

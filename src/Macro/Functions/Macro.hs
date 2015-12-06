@@ -2,7 +2,7 @@ module Macro.Functions.Macro (
     module Macro.Functions.Macro
 
   , module Macro.Functions.Inverse
-  , module Macro.Functions.Application
+  , module Functions.Application.Macro
   ) where
 
 import           Types
@@ -11,7 +11,7 @@ import           Macro.Math
 
 import           Macro.Sets.CarthesianProduct
 
-import           Macro.Functions.Application
+import           Functions.Application.Macro
 import           Macro.Functions.Inverse
 
 import           Macro.MetaMacro

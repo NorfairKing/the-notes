@@ -4,6 +4,7 @@ import           Notes
 
 makeDefs [
       "set"
+    , "element"
     , "subset"
     , "predicate"
     ]
@@ -56,8 +57,9 @@ singleton = de $ s ["A ", ix "set", " with exactly one element is called a ", te
 setDefinition :: Note
 setDefinition = de $ do
   lab setDefinitionLabel
+  lab elementDefinitionLabel
   s ["A ", set', " is a ", ix "collection", " of distinct objects, considered as an object in its own right"]
-  s ["These objects are called the ", term "elements", " of the ", set]
+  s ["These objects are called the ", element', "s of the ", set]
 
 setElementNotation :: Note
 setElementNotation = de $ do
