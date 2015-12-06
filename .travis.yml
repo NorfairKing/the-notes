@@ -1,5 +1,4 @@
-sudo: false
-language: c
+sudo: required
 
 cache:
   directories:
