@@ -21,7 +21,7 @@ partitionDefinition :: Note
 partitionDefinition = de $ do
     s ["A ", partition', " is a ", set, " ", m bb, " of subsets of a set ", m a, " with the following properties"]
     enumerate $ do
-        item $ m $ emptyset ∈ bb
+        item $ m $ emptyset `nin` bb
         item $ m $ setuncmp (b ∈ bb) b =: a
         item $ m $ fa (cs [b1, b2] ∈ bb) $ (b1 =§/= b2) ⇒ ((b1 ∩ b2) =§= emptyset)
   where

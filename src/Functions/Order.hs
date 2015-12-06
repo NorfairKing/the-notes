@@ -5,7 +5,6 @@ import           Notes
 import           Relations.BasicDefinitions (reflexive_)
 import           Relations.Equivalence      (preorderDefinitionLabel)
 import           Relations.Orders           (antisymmetric_, boundedLattice_,
-                                             completeLattice, completeLattice_,
                                              lattice_,
                                              partialOrderDefinitionLabel,
                                              poset_)
@@ -47,13 +46,13 @@ regions = do
     ascendingRegionDefinition
     descendingRegionDefinition
 
-    fixedPointRegionIsIntersectionOfAscAndDesc
-
-    regionPartitionTheorem
-    topInDescendingRegion
-    botInAscendingRegion
     ascendingRegionIsClosedUnderApplication
     descendingRegionIsClosedUnderApplication
+
+    topInDescendingRegion
+    botInAscendingRegion
+
+    fixedPointRegionIsIntersectionOfAscAndDesc
 
 
 monotonicDefinition :: Note
@@ -157,6 +156,78 @@ descendingRegionDefinition = de $ do
     a = "x"
     x = posetset
 
+ascendingRegionIsClosedUnderApplicationLabel :: Label
+ascendingRegionIsClosedUnderApplicationLabel = Label Theorem "ascending-region-is-closed-under-application"
+
+ascendingRegionIsClosedUnderApplication :: Note
+ascendingRegionIsClosedUnderApplication = thm $ do
+    lab ascendingRegionIsClosedUnderApplicationLabel
+    s ["Let ", m relposet, " be a ", poset_, and, m $ fun f x x, " a ", monotonic, " ", function]
+    ma $ fa (a ∈ x) $ x ∈ asc f ⇒ f_ x ∈ asc f
+
+    proof $ do
+        s ["Let ", m a, " be an element of ", m $ asc f]
+        s ["Because ", m $ a ⊆: f_ a, " holds, and because ", m f, " is monotonic, ", m $ f_ a ⊆: f_ (f_ a), " must also hold"]
+        s ["This means that ", m $ f_ a, " is in the ascending region"]
+  where
+    f = funrel_
+    f_ = fn f
+    a = "x"
+    x = posetset
+
+descendingRegionIsClosedUnderApplicationLabel :: Label
+descendingRegionIsClosedUnderApplicationLabel = Label Theorem "descending-region-is-closed-under-application"
+
+descendingRegionIsClosedUnderApplication :: Note
+descendingRegionIsClosedUnderApplication = thm $ do
+    lab descendingRegionIsClosedUnderApplicationLabel
+    s ["Let ", m relposet, " be a ", poset_, and, m $ fun f x x, " a ", monotonic, " ", function]
+    ma $ fa (a ∈ x) $ x ∈ desc f ⇒ f_ x ∈ desc f
+
+    proof $ do
+        s ["Let ", m a, " be an element of ", m $ desc f]
+        s ["Because ", m $ f_ a ⊆: a, " holds, and because ", m f, " is monotonic, ", m $ f_ (f_ a) ⊆: f_ a, " must also hold"]
+        s ["This means that ", m $ f_ a, " is in the descending region"]
+  where
+    f = funrel_
+    f_ = fn f
+    a = "x"
+    x = posetset
+
+topInDescendingRegionLabel :: Label
+topInDescendingRegionLabel = Label Theorem "top-element-is-in-descending-region"
+
+topInDescendingRegion :: Note
+topInDescendingRegion = thm $ do
+    lab topInDescendingRegionLabel
+    s ["Let ", m rellat, " be a ", boundedLattice_, " and let ", m $ fun f x x, " a ", monotonic, " ", function]
+    ma $ bot ∈ asc f
+
+    proof $ do
+        s [m $ f_ bot, " is an element of ", m x, " and must therefore have the property ", m $ bot ⊆: f_ bot]
+        s ["This means that ", m bot, " is an element of the ascending region"]
+  where
+    f_ = fn f
+    f = funrel_
+    x = latticeset
+
+botInAscendingRegionLabel :: Label
+botInAscendingRegionLabel = Label Theorem "bot-element-is-in-ascending-region"
+
+botInAscendingRegion :: Note
+botInAscendingRegion = thm $ do
+    lab botInAscendingRegionLabel
+    s ["Let ", m rellat, " be a ", boundedLattice_, " and let ", m $ fun f x x, " a ", monotonic, " ", function]
+    ma $ top ∈ desc f
+
+    proof $ do
+        s [m $ f_ top, " is an element of ", m x, " and must therefore have the property ", m $ f_ top ⊆: top]
+        s ["This means that ", m top, " is an element of the descending region"]
+  where
+    f_ = fn f
+    f = funrel_
+    x = latticeset
+
 
 fixedPointRegionIsIntersectionOfAscAndDescLabel :: Label
 fixedPointRegionIsIntersectionOfAscAndDescLabel = Label Theorem "fixed-point-region-is-intersection-of-ascending-region-and-descending-region"
@@ -164,7 +235,7 @@ fixedPointRegionIsIntersectionOfAscAndDescLabel = Label Theorem "fixed-point-reg
 fixedPointRegionIsIntersectionOfAscAndDesc :: Note
 fixedPointRegionIsIntersectionOfAscAndDesc = thm $ do
     lab fixedPointRegionIsIntersectionOfAscAndDescLabel
-    s ["Let ", m rellat, " be a ", completeLattice_, and, m $ fun f x x, " a ", monotonic, " ", function]
+    s ["Let ", m relposet, " be a ", poset_, and, m $ fun f x x, " a ", monotonic, " ", function]
     ma $ fix f =: asc f ∩ desc f
 
     proof $ do
@@ -192,81 +263,7 @@ fixedPointRegionIsIntersectionOfAscAndDesc = thm $ do
     f = funrel_
     f_ = fn f
     a = "a"
-    x = latticeset
-
-regionPartitionTheoremLabel :: Label
-regionPartitionTheoremLabel = Label Theorem "region-partition-theorem"
-
-regionPartitionTheorem :: Note
-regionPartitionTheorem = thm $ do
-    lab regionPartitionTheoremLabel
-    s ["Let ", m rellat, " be a ", completeLattice, and, m $ fun f x x, " a ", monotonic, " ", function]
-    s [m $ setofs [asc f \\ fix f, fix f, desc f \\ fix f], " is a partition of ", m x]
-
-    toprove
-  where
-    f = funrel_
-    x = latticeset
-
-topInDescendingRegionLabel :: Label
-topInDescendingRegionLabel = Label Theorem "top-element-is-in-descending-region"
-
-topInDescendingRegion :: Note
-topInDescendingRegion = thm $ do
-    lab topInDescendingRegionLabel
-    s ["Let ", m rellat, " be a ", completeLattice_, " and a ", boundedLattice_, " and let ", m $ fun f x x, " a ", monotonic, " ", function]
-    ma $ bot ∈ asc f
-
-    toprove
-  where
-    f = funrel_
-    x = latticeset
-
-botInAscendingRegionLabel :: Label
-botInAscendingRegionLabel = Label Theorem "bot-element-is-in-ascending-region"
-
-botInAscendingRegion :: Note
-botInAscendingRegion = thm $ do
-    lab botInAscendingRegionLabel
-    s ["Let ", m rellat, " be a ", completeLattice_, " and a ", boundedLattice_, " and let ", m $ fun f x x, " a ", monotonic, " ", function]
-    ma $ top ∈ desc f
-
-    toprove
-  where
-    f = funrel_
-    x = latticeset
-
-ascendingRegionIsClosedUnderApplicationLabel :: Label
-ascendingRegionIsClosedUnderApplicationLabel = Label Theorem "ascending-region-is-closed-under-application"
-
-ascendingRegionIsClosedUnderApplication :: Note
-ascendingRegionIsClosedUnderApplication = thm $ do
-    lab ascendingRegionIsClosedUnderApplicationLabel
-    s ["Let ", m rellat, " be a ", completeLattice, and, m $ fun f x x, " a ", monotonic, " ", function]
-    ma $ fa (a ∈ x) $ x ∈ asc f ⇒ f_ x ∈ asc f
-
-    toprove
-  where
-    f = funrel_
-    f_ = fn f
-    a = "x"
-    x = latticeset
-
-descendingRegionIsClosedUnderApplicationLabel :: Label
-descendingRegionIsClosedUnderApplicationLabel = Label Theorem "descending-region-is-closed-under-application"
-
-descendingRegionIsClosedUnderApplication :: Note
-descendingRegionIsClosedUnderApplication = thm $ do
-    lab descendingRegionIsClosedUnderApplicationLabel
-    s ["Let ", m rellat, " be a ", completeLattice, and, m $ fun f x x, " a ", monotonic, " ", function]
-    ma $ fa (a ∈ x) $ x ∈ desc f ⇒ f_ x ∈ desc f
-
-    toprove
-  where
-    f = funrel_
-    f_ = fn f
-    a = "x"
-    x = latticeset
+    x = posetset
 
 
 
