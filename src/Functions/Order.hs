@@ -5,12 +5,14 @@ import           Notes
 import           Relations.BasicDefinitions (reflexive_)
 import           Relations.Equivalence      (preorderDefinitionLabel)
 import           Relations.Orders           (antisymmetric_, boundedLattice_,
-                                             lattice_,
+                                             completeLattice_, lattice_,
                                              partialOrderDefinitionLabel,
                                              poset_)
 import           Sets.Basics                (set)
 
 import           Functions.Basics           (function)
+
+import           Functions.Order.Macro
 
 makeDefs [
       "monotonic"
@@ -21,6 +23,7 @@ makeDefs [
     , "descending region"
     , "least fixed point"
     , "greatest fixed point"
+    , "Kleene chain"
     ]
 
 order :: Notes
@@ -36,6 +39,9 @@ body = do
     leastFixedPointDefinition
     greatestFixedPointDefinition
     regions
+
+    kleeneChainDefinition
+    kleenesFixedPointTheorem
 
 
 regions :: Note
@@ -265,8 +271,33 @@ fixedPointRegionIsIntersectionOfAscAndDesc = thm $ do
     a = "a"
     x = posetset
 
+kleeneChainDefinition :: Note
+kleeneChainDefinition = de $ do
+    lab kleeneChainDefinitionLabel
+    s ["Let ",  m rellat, " be a ", lattice_, and, m $ fun f x x, " a ", scottContinuous, " function"]
+    s ["The ", kleeneChain', " starting at a point ", m $ a ∈ x, " is the set ", m $ kleeneCh a]
+    ma $ kleeneCh a === setcmpr (i ∈ naturals) (f !: i `fn` x)
+  where
+    i = "i"
+    f = funrel_
+    a = "x"
+    x = latticeset
 
+kleenesFixedPointTheorem :: Note
+kleenesFixedPointTheorem = do
+    thm $ do
+        term "Kleene's fixed point theorem"
+        newline
+        s ["Let ", m rellat, " be a ", completeLattice_, and, m $ fun f x x, " a ", scottContinuous, " function"]
+        ma $ lfp f =: sup (kleeneCh bot)
 
+        toprove
+    nte $ do
+        s ["This gives us an algorithm to compute the least fixed point."]
+        s ["Repeatedly applying ", m f, " to bot until we find a fixed point is enough to find ", m $ lfp f]
+  where
+    f = funrel_
+    x = latticeset
 
 
 

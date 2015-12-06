@@ -6,13 +6,13 @@ import qualified Prelude    as P
 
 import           Macro.Math
 
-    -- | The 'tabular' environment can be used to typeset tables with optional horizontal and vertical lines.
+-- | The 'tabular' environment can be used to typeset tables with optional horizontal and vertical lines.
 array :: LaTeXC l =>
-    Maybe Pos   -- ^ This optional parameter can be used to specify the vertical position of the table.
-    --   Defaulted to 'Center'.
-    -> [TableSpec] -- ^ Table specification of columns and vertical lines.
-    -> l       -- ^ Table content. See '&', 'lnbk', 'hline' and 'cline'.
-    -> l       -- ^ Resulting table syntax.
+    Maybe Pos       -- ^ This optional parameter can be used to specify the vertical position of the table.
+                    --   Defaulted to 'Center'.
+    -> [TableSpec]  -- ^ Table specification of columns and vertical lines.
+    -> l            -- ^ Table content. See '&', 'lnbk', 'hline' and 'cline'.
+    -> l            -- ^ Resulting table syntax.
 array Nothing ts  = liftL $ TeXEnv "array" [ FixArg $ TeXRaw $ renderAppend ts ]
 array (Just p) ts = liftL $ TeXEnv "array" [ OptArg $ TeXRaw $ render p , FixArg $ TeXRaw $ renderAppend ts ]
 

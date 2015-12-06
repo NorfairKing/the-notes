@@ -28,11 +28,16 @@ GHC_OPTIONS = \
 	$(GHC_FLAGS) \
 	$(GHC_SRC_DIRS)
 
+all: bin doc
+
 bin: $(SOURCES)
 	$(GHC) $(GHC_OPTIONS) -o $(BIN) --make $(MAIN_SRC)
 
 thorough: $(SOURCES)
 	$(GHC) $(GHC_OPTIONS) -fforce-recomp -o $(BIN) --make $(MAIN_SRC)
+
+doc: $(SOURCES)
+	cabal haddock --executables
 
 graph:
 	graphmod $(MAIN_SRC) -q -p -i $(SRC_DIR) > graph.dot
