@@ -1,7 +1,7 @@
 # NB: don't set `language: haskell` here
 language: c
 
-# See also https://github.com/hvr/multi-ghc-travis for more information
+cache: apt
 
 # The following lines enable several GHC versions and/or HP versions
 # to be tested; often it's enough to test only against the last
