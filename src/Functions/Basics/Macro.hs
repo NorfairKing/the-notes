@@ -3,7 +3,6 @@ module Functions.Basics.Macro where
 import           Types
 
 import           Macro.Math
-import           Macro.MetaMacro
 
 import           Functions.Application.Macro
 import           Macro.Sets.CarthesianProduct
@@ -84,22 +83,4 @@ arcsin_ = app arcsin
 -- | Arccos
 arccos_ :: Note -> Note
 arccos_ = app arcsin
-
-
--- Binary Operations
-funbinopsign :: Note
-funbinopsign = comm0 "star"
-
-funbinop :: Note -> Note -> Note
-funbinop f a = fun (pars f) (a ⨯ a) a
-
-funbinop_ :: Note
-funbinop_ = funbinop funbinopsign dom_
-
-funbinopapp :: Note -> Note -> Note
-funbinopapp = binop funbinopsign
-
--- C-k 2*
-(★) :: Note -> Note -> Note
-(★) = funbinopapp
 

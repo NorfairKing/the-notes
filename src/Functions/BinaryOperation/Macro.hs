@@ -5,9 +5,8 @@ import           Types
 import           Macro.Math
 import           Macro.MetaMacro              (binop)
 
-import           Functions.Application.Macro
+import           Functions.Basics.Macro
 import           Macro.Sets.CarthesianProduct
-import qualified Relations.Domain.Macro       as R (dom, img)
 
 -- * Binary operations
 
@@ -17,14 +16,13 @@ binop_ = comm0 "star"
 
 -- | Binary operation function definition
 binopdef :: Note -- ^ Sign
-         -> Note -- ^ Name
          -> Note -- ^ Corange
          -> Note
 binopdef f a = fun (pars f) (a ⨯ a) a
 
 -- | Standard binary operation function definition
 binopdef_ :: Note
-binopdef_ = binopdef binop_ fundom_
+binopdef_ = binopdef binop_ dom_
 
 -- | Application of given binary operation
 binopapp :: Note -- ^ Sign
