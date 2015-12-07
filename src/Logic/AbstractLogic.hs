@@ -6,7 +6,7 @@ import           Functions.Application.Macro
 
 makeDefs [
       "formula"
-    , "axiom"
+    , "axiom", "axiom schema"
     , "theory"  , "logic"
     , "grammar"
     , "semantics"
@@ -54,26 +54,29 @@ formulaDefinition = do
 
 
 theoryDefinition :: Note
-theoryDefinition = de $ do
-    lab theoryDefinitionLabel
-    lab logicDefinitionLabel
-    lab axiomDefinitionLabel
-    lab grammarDefinitionLabel
-    lab semanticsDefinitionLabel
-    lab sentenceDefinitionLabel
+theoryDefinition = do
+    de $ do
+        lab theoryDefinitionLabel
+        lab logicDefinitionLabel
+        lab axiomDefinitionLabel
+        lab grammarDefinitionLabel
+        lab semanticsDefinitionLabel
+        lab sentenceDefinitionLabel
 
-    s ["A ", theory', or, logic',  " is a mathematical framework for proving properties about a certain object domain"]
-    s ["Those properties are called ", theorem, "s"]
-    s ["A ", theory, " consists of a ", grammar', ", a set of ", axiom', "s", and , semantics', " for formulae"]
-    enumerate $ do
-        item $ do
-            s ["A ", grammar', " defines well-formed formulae"]
-            s ["A well-formed ", formula, " is also called a ", sentence']
-            s ["A ", formula', " represents an expression if it adheres to the ", grammar]
-        item $ do
-            s ["An ", axiom', " is a ", theorem, " that can be asserted without ", inference]
-        item $ do
-            s ["Semantics dictate the ", emph "meaning", " of formulae in the ", logic]
+        s ["A ", theory', or, logic',  " is a mathematical framework for proving properties about a certain object domain"]
+        s ["Those properties are called ", theorem, "s"]
+        s ["A ", theory, " consists of a ", grammar', ", a set of ", axiom', "s", and , semantics', " for formulae"]
+        enumerate $ do
+            item $ do
+                s ["A ", grammar', " defines well-formed formulae"]
+                s ["A well-formed ", formula, " is also called a ", sentence']
+                s ["A ", formula', " represents an expression if it adheres to the ", grammar]
+            item $ do
+                s ["An ", axiom', " is a ", theorem, " that can be asserted without ", inference]
+            item $ do
+                s ["Semantics dictate the ", emph "meaning", " of formulae in the ", logic]
+    nte $ do
+        s ["Theorems are obtained from the axioms by a finite amount of applications of the inference rules"]
 
 worldDefinition :: Note
 worldDefinition = de $ do

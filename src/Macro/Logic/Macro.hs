@@ -2,8 +2,6 @@ module Macro.Logic.Macro where
 
 import           Types
 
--- import           Macro.Functions.Macro
-
 import           Macro.Math
 import           Macro.MetaMacro
 import           Macro.Text
@@ -52,7 +50,7 @@ lent = between lentsign
 
 -- Logical inference
 linf :: [Note] -> Note -> Note
-linf n m = comm2 "infer" m $ separated ("," <> quad) n
+linf n m = comm2 "infer" m $ separated ("," <> commS ",") n
 
 -- Logic knowledge base
 lkb :: Note
@@ -95,40 +93,6 @@ lor = between lorsign
 -- Logical Xor
 xor :: Note -> Note -> Note
 xor = between $ comm0 "oplus"
-
-
-
--- Hoare Triple
-htrip :: Note -> Note -> Note -> Note
-htrip p a q = brac p <> commS "," <> a <> commS "," <> brac q
-
--- Sequence C-k ;+
-(؛) :: Note -> Note -> Note
-(؛) = between (";" <> commS " ")
-
--- Logic Replacement
-lrepl :: Note -> Note -> Note -> Note
-lrepl p e x = p <> sqbrac (e <> " / " <> x)
-
--- Logic Assignment
-lass :: Note -> Note -> Note
-lass = between ":="
-
-(=:=) :: Note -> Note -> Note
-(=:=) = lass
-
-freevars :: Note ->  Note
-freevars = app "FV"
-
-modifies :: Note -> Note
-modifies = app "modifies"
-
--- If then else
-ifThenElse :: Note -> Note -> Note -> Note
-ifThenElse c i e = text "if " <> c <> text " then " <> i <> text " else " <> e <> text " end"
-
-fromUntilLoop :: Note -> Note -> Note -> Note
-fromUntilLoop a c b = text "from " <> a <> text " until " <> c <> text " loop " <> b <> text " end"
 
 
 -- Quantifiers

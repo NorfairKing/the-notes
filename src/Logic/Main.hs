@@ -4,7 +4,7 @@ import           Notes
 
 import           Logic.AbstractLogic      (abstractLogic)
 import           Logic.FirstOrderLogic
-import           Logic.HoareLogic
+import           Logic.HoareLogic         (hoareLogicS)
 import           Logic.PropositionalLogic
 
 
@@ -15,7 +15,7 @@ logica = notes "logic"
   , abstractLogic
   , propositionalLogic
   , firstOrderLogic
-  , hoareLogic
+  , hoareLogicS
   ]
 
 logicHeader :: Notes

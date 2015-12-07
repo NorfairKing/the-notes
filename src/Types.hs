@@ -17,7 +17,6 @@ module Types (
   , module Text.LaTeX.Packages.Color
 
   , ask, asks
-  , modify
   ) where
 import           Prelude                      (Bool (..))
 import           Prelude                      as P (Double, Eq (..), FilePath,
@@ -41,7 +40,7 @@ import           Text.LaTeX.Packages.Fancyhdr
 import           Control.Monad.Reader         (MonadReader (..), ReaderT, ask,
                                                asks)
 import           Control.Monad.State          (MonadState (..), StateT, get,
-                                               modify, put)
+                                               put)
 
 
 type Note = LaTeXT_ (StateT State (ReaderT Config IO))

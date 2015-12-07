@@ -2,8 +2,10 @@ module Reference where
 
 import           Types
 
-import           Data.List (intercalate)
-import           Prelude   (map)
+import           Data.List           (intercalate)
+import           Prelude             (map)
+
+import           Control.Monad.State (modify)
 
 
 unpublished :: ReferenceType
