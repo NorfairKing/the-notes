@@ -6,6 +6,8 @@ module LinearAlgebra.VectorSpaces (
 
 import           Notes
 
+import           Functions.Basics.Macro
+
 vectorSpaces :: Notes
 vectorSpaces = notesPart "vector-spaces" body
 

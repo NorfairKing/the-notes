@@ -9,8 +9,10 @@ module Topology.MetricSpace (
 
 import           Notes
 
-import           Functions.Distances (distanceDefinitionLabel, metric,
-                                      metricDefinitionLabel, pseudometric)
+import           Functions.Distances    (distanceDefinitionLabel, metric,
+                                         metricDefinitionLabel, pseudometric)
+
+import           Functions.Basics.Macro
 
 metricSpace :: Notes
 metricSpace = notesPart "metric-space" body

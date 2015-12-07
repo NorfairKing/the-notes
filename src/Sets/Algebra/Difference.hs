@@ -55,9 +55,9 @@ intersectionAndDifferenceDisjunct = thm $ do
   proof $ do
     align_ $
       [
-        ((pars $ a ∩ b) ∩ (pars $ a \\ b))
-        & "" =§= (setcmpr x ((x ∈ a) &: (x ∈ b))) ∩ (setcmpr x ((x ∈ a) &: (x `nin` b)))
-        , "" & "" =§= setcmpr x (x ∈ (setcmpr y ((y ∈ a) &: (y ∈ b))) &: x ∈ (setcmpr y ((y ∈ a) &: (y `nin` b))))
+        (pars $ a ∩ b) ∩ (pars $ a \\ b)
+        & "" =§= setcmpr x ((x ∈ a) &: (x ∈ b)) ∩ setcmpr x ((x ∈ a) &: (x `nin` b))
+        , "" & "" =§= setcmpr x (x ∈ setcmpr y ((y ∈ a) &: (y ∈ b)) &: x ∈ (setcmpr y (y ∈ a) &: (y `nin` b)))
         , "" & "" =§= setcmpr x ((pars $ (x ∈ a) &: (x ∈ b)) &: (pars $ (x ∈ a) &: (x `nin` b)))
         , "" & "" =§= setcmpr x ((x ∈ a) &: (x ∈ b) &: (x `nin` b))
         , "" & "" =§= setcmpr x ((x ∈ a) &: false)
@@ -73,9 +73,9 @@ symmetricSetDifferencesDisjunct = thm $ do
   proof $ do
     align_ $
       [
-        ((pars $ a \\ b) ∩ (pars $ b \\ a))
-        & "" =§= (setcmpr x ((x ∈ a) &: (x `nin` b))) ∩ (setcmpr x ((x ∈ b) &: (x `nin` a)))
-        , "" & "" =§= setcmpr x (x ∈ (setcmpr y ((y ∈ a) &: (y `nin` b))) &: x ∈ (setcmpr y ((y ∈ b) &: (y `nin` a))))
+        (pars $ a \\ b) ∩ (pars $ b \\ a)
+        & "" =§= setcmpr x ((x ∈ a) &: (x `nin` b)) ∩ setcmpr x ((x ∈ b) &: (x `nin` a))
+        , "" & "" =§= setcmpr x (x ∈ setcmpr y ((y ∈ a) &: (y `nin` b)) &: x ∈ setcmpr y ((y ∈ b) &: (y `nin` a)))
         , "" & "" =§= setcmpr x ((pars $ (x ∈ a) &: (x `nin` b)) &: (pars $ (x ∈ b) &: (x `nin` a)))
         , "" & "" =§= setcmpr x ((pars $ (x ∈ a) &: (a `nin` a)) &: (pars $ (x ∈ b) &: (x `nin` b)))
         , "" & "" =§= setcmpr x (false &: false)
@@ -109,6 +109,7 @@ symmetricDifferenceITOUnionAndIntersectionLabel = thmlab "sets-symmetric-differe
 
 symmetricDifferenceITOUnionAndIntersection :: Note
 symmetricDifferenceITOUnionAndIntersection = thm $ do
+  lab symmetricDifferenceITOUnionAndIntersectionLabel
   setsDec
   ma $ a △ b =§= (pars $ a ∪ b) \\ (pars $ a ∩ b)
 
@@ -116,8 +117,8 @@ symmetricDifferenceITOUnionAndIntersection = thm $ do
     align_ $
       [
         (pars $ a ∪ b) \\ (pars $ a ∩ b)
-        & "" =§= (setcmpr x ((x ∈ a) |: (x ∈ b))) \\ (setcmpr x ((x ∈ a) &: (x ∈ b)))
-        , "" & "" =§= setcmpr x (x ∈ (setcmpr y ((y ∈ a) |: (y ∈ b))) &: x `nin` (setcmpr y ((y ∈ a) &: (y ∈ b))))
+        & "" =§= setcmpr x ((x ∈ a) |: (x ∈ b)) \\ setcmpr x ((x ∈ a) &: (x ∈ b))
+        , "" & "" =§= setcmpr x (x ∈ setcmpr y ((y ∈ a) |: (y ∈ b)) &: x `nin` setcmpr y ((y ∈ a) &: (y ∈ b)))
         , "" & "" =§= setcmpr x ((pars $ (x ∈ a) |: (x ∈ b)) &: (not . pars $ ((x ∈ a) &: (x ∈ b))))
         , "" & "" =§= setcmpr x ((pars $ (x ∈ a) |: (x ∈ b)) &: (pars $ ((x `nin` a) |: (x `nin` b))))
         , "" & "" =§= setcmpr x ((pars $ (x ∈ a) &: (x `nin` b)) |: (pars $ (x ∈ b) &: (x `nin` a)))
@@ -140,7 +141,7 @@ intersectionOverDifference = thm $ do
         & "" =§= setcmpr x ((x ∈ a) &: x ∈ (b \\ c))
         , "" & "" =§= setcmpr x ((x ∈ a) &: x ∈ setcmpr y ((y ∈ b) &: (y `nin` c)))
         , "" & "" =§= setcmpr x ((x ∈ a) &: (x ∈ b) &: (x `nin` c))
-        , "" & "" =§= setcmpr x (x ∈ (setcmpr y ((y ∈ a) &: (y ∈ b))) &: (x `nin` c))
+        , "" & "" =§= setcmpr x (x ∈ setcmpr y ((y ∈ a) &: (y ∈ b)) &: (x `nin` c))
         , "" & "" =§= setcmpr x (x ∈ (pars $ a ∩ b) &: (x `nin` c))
         , "" & "" =§= (pars $ a ∩ b) \\ c
       ]

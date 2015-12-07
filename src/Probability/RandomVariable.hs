@@ -6,8 +6,12 @@ module Probability.RandomVariable (
 
 import           Notes
 
-import           Probability.Independence (independenceDefinitionLabel,
-                                           independent)
+import           Probability.Independence    (independenceDefinitionLabel,
+                                              independent)
+
+import           Functions.Application.Macro
+import           Functions.Basics.Macro
+import           Functions.Inverse.Macro
 
 randomVariable :: Notes
 randomVariable = notesPart "random-variable" body
@@ -45,7 +49,7 @@ randomVariableDefinition = de $ do
 
   s ["A real function as follows is called a ", term "random variable", or, term "stochastic variable"]
   ma $ prrvfunc
-  ma $ fa (b ∈ boreals) $ funinv x `fn` b =: setcmpr omega (x `fn` omega ∈ b)
+  ma $ fa (b ∈ boreals) $ inv x `fn` b =: setcmpr omega (x `fn` omega ∈ b)
 
   where
     b = "B"
@@ -64,7 +68,7 @@ borealMesureDefinition = de $ do
 randomVariableCondition :: Note
 randomVariableCondition = thm $ do
   s ["A function ", m (fun x reals reals), " is a random variable in the measurable space ", m (prmspace reals boreals), " if and only if the following holds"]
-  ma $ fa (a ∈ reals) $ funinv x `fn` (ocint minfty a) =: setcmpr omega (prrv `fn` omega <= a) ∈ prsa
+  ma $ fa (a ∈ reals) $ inv x `fn` (ocint minfty a) =: setcmpr omega (prrv `fn` omega <= a) ∈ prsa
   where
     a = "A"
     x = "X"
@@ -72,7 +76,7 @@ randomVariableCondition = thm $ do
 borealMeasurableInducesProbabilityMeasure :: Note
 borealMeasurableInducesProbabilityMeasure = thm $ do
   s ["A Borel-measurable function induces a probability measure ", m (prpm !: prrv), on, m boreals, " in ", m prbsp, " as follows"]
-  ma $ px b =: prob (x ∈ b) =: prob (funinv x `fn` b)
+  ma $ px b =: prob (x ∈ b) =: prob (inv x `fn` b)
   ma $ px b =: prob (setcmpr (omega ∈ pruniv) (prvrv omega ∈ b))
   toprove
   where

@@ -77,12 +77,12 @@ complementaryLawUnion = thm $ do
   lab unionComplementaryLawLabel
   s [the, term "complementary law", " for the set ", union]
   setsDec
-  ma $ a ∪ (setc a) =§= setuniv
+  ma $ a ∪ setc a =§= setuniv
 
   proof $ do
     align_ $
       [
-          a ∪ (setc a)
+          a ∪ setc a
           & "" =§= setcmpr x ((x ∈ a) |: (x ∈ setc a))
         , "" & "" =§= setcmpr x ((x ∈ a) |: (x ∈ setcmpr y ((y ∈ setuniv) &: (y `nin` a))))
         , "" & "" =§= setcmpr x ((x ∈ a) |: (pars $ (x ∈ setuniv) &: (x `nin` a)))
@@ -96,12 +96,12 @@ complementaryLawIntersection :: Note
 complementaryLawIntersection = thm $ do
   s [the, term "complementary law", " for the set ", intersection]
   setsDec
-  ma $ a ∩ (setc a) =§= emptyset
+  ma $ a ∩ setc a =§= emptyset
 
   proof $ do
     align_ $
       [
-          a ∩ (setc a)
+          a ∩ setc a
           & "" =§= setcmpr x ((x ∈ a) &: (x ∈ setc a))
         , "" & "" =§= setcmpr x ((x ∈ a) &: (x ∈ setcmpr y ((y ∈ setuniv) &: (y `nin` a))))
         , "" & "" =§= setcmpr x ((x ∈ a) &: (pars $ (x ∈ setuniv) &: (x `nin` a)))
@@ -126,7 +126,7 @@ firstLawOfDeMorgan = thm $ do
       [
         setc (pars $ a ∪ b)
       & "" =§= setcmpr x (x `nin` (pars $ a ∪ b))
-      , "" & "" =§= setcmpr x (x `nin` (setcmpr y ((y ∈ a) |: (y ∈ b))))
+      , "" & "" =§= setcmpr x (x `nin` setcmpr y ((y ∈ a) |: (y ∈ b)))
       , "" & "" =§= setcmpr x (not . pars $ ((x ∈ a) |: (x ∈ b)))
       , "" & "" =§= setcmpr x ((x `nin` a) &: (x `nin` b))
       , "" & "" =§= setcmpr x (x ∈ setcmpr y (y `nin` a) &: x ∈ setcmpr y (y `nin` b))
@@ -149,7 +149,7 @@ secondLawOfDeMorgan = thm $ do
       [
         setc (pars $ a ∩ b)
       & "" =§= setcmpr x (x `nin` (pars $ a ∩ b))
-      , "" & "" =§= setcmpr x (x `nin` (setcmpr y ((y ∈ a) &: (y ∈ b))))
+      , "" & "" =§= setcmpr x (x `nin` setcmpr y ((y ∈ a) &: (y ∈ b)))
       , "" & "" =§= setcmpr x (not . pars $ ((x ∈ a) &: (x ∈ b)))
       , "" & "" =§= setcmpr x ((x `nin` a) |: (x `nin` b))
       , "" & "" =§= setcmpr x (x ∈ setcmpr y (y `nin` a) |: x ∈ setcmpr y (y `nin` b))

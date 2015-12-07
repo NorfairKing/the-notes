@@ -5,7 +5,8 @@ module TH.Definition (
 
 import           Types
 
-import           Prelude                    (Char, concat, fmap, map, return)
+import           Prelude                    (Char, concat, concatMap, fmap, map,
+                                             return)
 
 import           Data.Char                  (toLower, toUpper)
 import           Data.List                  (intercalate)
@@ -62,7 +63,7 @@ makeDef concept = return $ [termSig, termFun, indexSig, indexFun, labelSig, labe
     labelSig = SigD labelDefName (ConT labelName)
 
     labelFun :: Dec
-    labelFun = FunD labelDefName [Clause [] (NormalB $ (AppE (AppE (ConE labelName) (ConE definitionName)) labelConceptLit)) []]
+    labelFun = FunD labelDefName [Clause [] (NormalB $ AppE (AppE (ConE labelName) (ConE definitionName)) labelConceptLit) []]
 
     refName :: Name
     refName = mkName $ baseName ++ "_"
@@ -100,7 +101,7 @@ sanitize = map replaceBad
     replaceBad c = c
 
 camelCase :: String -> String
-camelCase str = (\(s:ss) -> (toLower s):ss) $ concat $ map (\(s:ss) -> (toUpper s) : ss) $ words str
+camelCase str = (\(s:ss) -> toLower s : ss) $ concatMap (\(s:ss) -> toUpper s : ss) $ words str
 
 interdashed :: String -> String
 interdashed str = intercalate "-" $ words $ map toLower str

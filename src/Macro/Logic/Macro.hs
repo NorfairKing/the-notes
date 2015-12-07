@@ -2,12 +2,13 @@ module Macro.Logic.Macro where
 
 import           Types
 
-import           Macro.Functions.Macro
+-- import           Macro.Functions.Macro
 
 import           Macro.Math
 import           Macro.MetaMacro
 import           Macro.Text
 
+import           Functions.Application.Macro
 
 -- Truth values
 true :: Note
@@ -63,7 +64,7 @@ lsen = alpha
 
 -- Logical models of
 lmo :: Note -> Note
-lmo = funapp "M"
+lmo = app "M"
 
 -- Logical negation
 neg :: Note -> Note
@@ -117,10 +118,10 @@ lass = between ":="
 (=:=) = lass
 
 freevars :: Note ->  Note
-freevars = funapp "FV"
+freevars = app "FV"
 
 modifies :: Note -> Note
-modifies = funapp "modifies"
+modifies = app "modifies"
 
 -- If then else
 ifThenElse :: Note -> Note -> Note -> Note

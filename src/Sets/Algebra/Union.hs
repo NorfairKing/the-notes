@@ -50,10 +50,10 @@ unionAssociative = prop $ do
       [
         a ∪ (pars $ b ∪ c)
         & "" =§= setcmpr x ((x ∈ a) |: (x ∈ (pars $ b ∪ c)))
-        , "" & "" =§= setcmpr x ((x ∈ a) |: (x ∈ (setcmpr y ((y ∈ b) |: (y ∈ c)))))
-        , "" & "" =§= setcmpr x ((x ∈ a) |: (x ∈ b) |: (y ∈ c))
-        , "" & "" =§= setcmpr x ((x ∈ (setcmpr y ((y ∈ a) |: (y ∈ b)))) |: (x ∈ c))
-        , "" & "" =§= setcmpr x ((x ∈ (pars $ a ∪ b)) |: (x ∈ c))
+        , "" & "" =§= setcmpr x (x ∈ a) |: x ∈ setcmpr y ((y ∈ b) |: (y ∈ c))
+        , "" & "" =§= setcmpr x ((x ∈ a) |: (x ∈ b)) |: (y ∈ c)
+        , "" & "" =§= setcmpr x (x ∈ setcmpr y ((y ∈ a) |: (y ∈ b))) |: (x ∈ c)
+        , "" & "" =§= setcmpr x (x ∈ (pars $ a ∪ b)) |: (x ∈ c)
         , "" & "" =§= (pars $ a ∪ b) ∪ c
       ]
 

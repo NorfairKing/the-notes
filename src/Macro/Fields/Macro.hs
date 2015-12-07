@@ -31,7 +31,7 @@ fie_ :: Note -- Set
      -> Note -- Addition
      -> Note -- Multiplication
      -> Note
-fie_ set add mul = triple set add mul
+fie_ = triple
 
 -- BinaryField
 binfie_ :: Note

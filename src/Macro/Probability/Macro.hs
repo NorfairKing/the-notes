@@ -6,7 +6,8 @@ import           Macro.Index
 import           Macro.Math
 import           Macro.MetaMacro
 
-import           Macro.Functions.Macro
+import           Functions.Application.Macro
+import           Functions.Basics.Macro
 import           Macro.Sets.Macro
 
 --[ Probability universe
@@ -45,7 +46,7 @@ prpm = "P"
 
 --[ Probability
 probm :: Note -> Note -> Note
-probm = funapp -- probability with custom measure
+probm = app -- probability with custom measure
 
 prob :: Note -> Note
 prob = probm prpm
@@ -53,7 +54,7 @@ prob = probm prpm
 
 --[ Conditional probability
 cprob :: Note -> Note -> Note
-cprob n m = prob $ n <> commS ";" <> (commS "middle") <> "|" <> commS ";" <> m
+cprob n m = prob $ n <> commS ";" <> commS "middle" <> "|" <> commS ";" <> m
 
 
 --[ Probability random variable
@@ -79,7 +80,7 @@ prdf :: Note
 prdf = prdfm prrv  -- probability distribution function
 
 prd :: Note -> Note
-prd = funapp prdf -- probability distribution at point argument
+prd = app prdf -- probability distribution at point argument
 
 
 --[ Probability density function
@@ -93,7 +94,7 @@ prdsf :: Note
 prdsf = prdsfm prrv -- probability density function
 
 prds :: Note -> Note
-prds = funapp prdsf -- probability density
+prds = app prdsf -- probability density
 
 
 --[ Borel
@@ -101,7 +102,7 @@ borelsign :: Note
 borelsign = mathcal "B"
 
 borel :: Note -> Note
-borel = funapp borelsign
+borel = app borelsign
 
 boreals :: Note
 boreals = borel reals
@@ -118,7 +119,7 @@ prqf :: Note
 prqf = prqfm prrv
 
 prq :: Note -> Note
-prq = funapp prqf
+prq = app prqf
 
 
 --[ Expected value

@@ -1,49 +1,25 @@
 module Macro (
-    module Macro.Array
-  , module Macro.Code
-  , module Macro.Figure
-  , module Macro.Index
-  , module Macro.Math
-  , module Macro.MetaMacro
-  , module Macro.Reference
-  , module Macro.Text
-  , module Macro.Theorem
-  , module Macro.Todo
-
-  , module Macro.Computability.Macro
-  , module Macro.Fields.Macro
-  , module Macro.Functions.Macro
-  , module Macro.Groups.Macro
-  , module Macro.LinearAlgebra.Macro
-  , module Macro.Logic.Macro
-  , module Macro.MachineLearning.Macro
-  , module Macro.Numbers.Macro
-  , module Macro.Probability.Macro
-  , module Macro.Relations.Macro
-  , module Macro.Sets.Macro
-  , module Macro.Topology.Macro
+    module X
   ) where
 
-import           Macro.Array
-import           Macro.Code
-import           Macro.Figure
-import           Macro.Index
-import           Macro.Math
-import           Macro.MetaMacro
-import           Macro.Reference
-import           Macro.Text
-import           Macro.Theorem
-import           Macro.Todo
+import           Macro.Array                 as X
+import           Macro.Code                  as X
+import           Macro.Figure                as X
+import           Macro.Index                 as X
+import           Macro.Math                  as X
+import           Macro.MetaMacro             as X
+import           Macro.Reference             as X
+import           Macro.Text                  as X
+import           Macro.Theorem               as X
+import           Macro.Todo                  as X
 
-import           Macro.Computability.Macro
-import           Macro.Fields.Macro
-import           Macro.Functions.Macro
-import           Macro.Groups.Macro
-import           Macro.LinearAlgebra.Macro
-import           Macro.Logic.Macro
-import           Macro.MachineLearning.Macro
-import           Macro.Numbers.Macro
-import           Macro.Probability.Macro
-import           Macro.Relations.Macro
-import           Macro.Sets.Macro
-import           Macro.Topology.Macro
+import           Macro.Computability.Macro   as X
+import           Macro.Fields.Macro          as X
+import           Macro.Groups.Macro          as X
+import           Macro.LinearAlgebra.Macro   as X
+import           Macro.Logic.Macro           as X
+import           Macro.MachineLearning.Macro as X
+import           Macro.Numbers.Macro         as X
+import           Macro.Probability.Macro     as X
+import           Macro.Sets.Macro            as X
+import           Macro.Topology.Macro        as X

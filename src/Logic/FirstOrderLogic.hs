@@ -5,9 +5,13 @@ module Logic.FirstOrderLogic (
 
 import           Notes
 
-import           Logic.AbstractLogic (complete, inference, model, theory)
+import qualified Prelude                     as P (map)
 
-import qualified Prelude             as P (map)
+import           Logic.AbstractLogic         (complete, inference, model,
+                                              theory)
+
+import           Functions.Application.Macro
+
 
 firstOrderLogic :: Notes
 firstOrderLogic = notesPart "first-order-logic" body
@@ -80,10 +84,10 @@ y = "y"
 p = "P"
 
 pp :: Note -> Note
-pp = funapp p
+pp = fn p
 
 ppp :: Note -> Note -> Note
-ppp x y = funapp p $ cs [x, y]
+ppp x y = fn p $ cs [x, y]
 
 existentialQuantifierDefinition :: Note
 existentialQuantifierDefinition = de $ do

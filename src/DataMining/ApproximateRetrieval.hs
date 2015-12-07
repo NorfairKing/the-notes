@@ -2,10 +2,12 @@ module DataMining.ApproximateRetrieval where
 
 import           Notes
 
-import           Functions.Distances  (jaccardSimilarity,
-                                       jaccardSimilarityDefinitionLabel)
-import           Topology.MetricSpace (pseudoMetricSpace,
-                                       pseudoMetricSpaceDefinitionLabel)
+import           Functions.Distances    (jaccardSimilarity,
+                                         jaccardSimilarityDefinitionLabel)
+import           Topology.MetricSpace   (pseudoMetricSpace,
+                                         pseudoMetricSpaceDefinitionLabel)
+
+import           Functions.Basics.Macro
 
 approximateRetrieval :: Notes
 approximateRetrieval = notesPart "approximate-retrieval" body

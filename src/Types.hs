@@ -20,7 +20,7 @@ module Types (
   , modify
   ) where
 import           Prelude                      (Bool (..))
-import           Prelude                      as P (Eq (..), FilePath,
+import           Prelude                      as P (Double, Eq (..), FilePath,
                                                     Fractional (..), IO,
                                                     Maybe (..), Num (..),
                                                     Show (..), mempty, ($),
@@ -32,8 +32,9 @@ import           Text.LaTeX.Base.Class
 import           Text.LaTeX.Base.Pretty
 import           Text.LaTeX.Base.Syntax
 import           Text.LaTeX.Packages.AMSFonts
-import           Text.LaTeX.Packages.AMSMath  hiding (subset)
-import           Text.LaTeX.Packages.AMSThm   hiding (TheoremStyle (..), proof)
+import           Text.LaTeX.Packages.AMSMath  hiding (subset, (!:), (^:))
+import           Text.LaTeX.Packages.AMSThm   hiding (TheoremStyle (..), proof,
+                                               theorem)
 import           Text.LaTeX.Packages.Color
 import           Text.LaTeX.Packages.Fancyhdr
 
@@ -50,17 +51,32 @@ data State = State {
     } deriving (Show, Eq)
 
 data Args = Args {
-      args_selectionStrings :: [String]
-    , args_visualDebug      :: Bool
+      args_selectionStrings      :: [String]
+    , args_visualDebug           :: Bool
+    , args_verbose               :: Bool
+    , args_ignoreReferenceErrors :: Bool
+    , args_omitTodos             :: Bool
+    , args_subtitle              :: String
+    , args_texFileName           :: String
+    , args_bibFileName           :: String
+    , args_pdfFileName           :: String
     } deriving (Show, Eq)
 
 data Config = Config {
-      conf_selections  :: [Selection]
-    , conf_visualDebug :: Bool
+      conf_selections            :: [Selection]
+    , conf_visualDebug           :: Bool
+    , conf_verbose               :: Bool
+    , conf_ignoreReferenceErrors :: Bool
+    , conf_omitTodos             :: Bool
+    , conf_subtitle              :: Maybe String
+    , conf_texFileName           :: FilePath
+    , conf_bibFileName           :: FilePath
+    , conf_pdfFileName           :: FilePath
     } deriving (Show, Eq)
 
 data Selection = All
                | Match String
+               | Ignore String
     deriving (Show, Eq)
 
 data Notes = NotesPart String Note

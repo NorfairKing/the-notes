@@ -1,56 +1,54 @@
-module Sets.Basics (
-      basics
-
-    , set           , set_
-    , subset        , subset_
-
-    , setEqualityDefinitionLabel
-    , universalSetSupsetOfAllSetsLabel
-  ) where
+module Sets.Basics where
 
 import           Notes
 
+import           Functions.Application.Macro
+
 makeDefs [
       "set"
+    , "element"
     , "subset"
+    , "predicate"
     ]
 
-basics :: Notes
-basics = notesPart "basics" body
-
-body :: Note
-body = do
-  section "Set Basics"
-  sets
-  subsets
-  universalSet
-  emptySet
-  singleton
+setBasics :: Notes
+setBasics = notesPart "basics" $ do
+    section "Set Basics"
+    sets
+    subsets
+    universalSet
+    emptySet
+    singleton
+    predicates
 
 sets :: Note
 sets = do
-  setDefinition
-  setElementNotation
-  setComprehensionDefinition
-  setEqualityDefinition
-  setEqTransitivity
+    setDefinition
+    setElementNotation
+    setComprehensionDefinition
+    setEqualityDefinition
+    setEqTransitivity
 
 subsets :: Note
 subsets = do
-  subsetDefinition
-  subsetAntiSymmetry
-  subsetTransitivity
-  strictSubsetDefinition
+    subsetDefinition
+    subsetAntiSymmetry
+    subsetTransitivity
+    strictSubsetDefinition
 
 universalSet :: Note
 universalSet = do
-  universalSetDefinition
-  universalSetSupsetOfAllSets
+    universalSetDefinition
+    universalSetSupsetOfAllSets
 
 emptySet :: Note
 emptySet = do
-  emptySetDefinition
-  emptySetSubsetOfAllSets
+    emptySetDefinition
+    emptySetSubsetOfAllSets
+
+predicates :: Note
+predicates = do
+    predicateDefinition
 
 singleton :: Note
 singleton = de $ s ["A ", ix "set", " with exactly one element is called a ", term "singleton"]
@@ -58,8 +56,9 @@ singleton = de $ s ["A ", ix "set", " with exactly one element is called a ", te
 setDefinition :: Note
 setDefinition = de $ do
   lab setDefinitionLabel
+  lab elementDefinitionLabel
   s ["A ", set', " is a ", ix "collection", " of distinct objects, considered as an object in its own right"]
-  s ["These objects are called the ", term "elements", " of the ", set]
+  s ["These objects are called the ", element', "s of the ", set]
 
 setElementNotation :: Note
 setElementNotation = de $ do
@@ -68,7 +67,7 @@ setElementNotation = de $ do
 setComprehensionDefinition :: Note
 setComprehensionDefinition = de $ do
   s ["A formal description of a ", ix "set", " using a ", ix "predicate", " ", m "p", " is written as follows"]
-  ma $ setcmpr "x" $ funapp "p" "x"
+  ma $ setcmpr "x" $ app "p" "x"
   s ["This is the ", ix "set", " of all objects that have the ", ix "property", " ", m "P"]
 
 setEqualityDefinitionLabel :: Label
@@ -239,3 +238,14 @@ emptySetSubsetOfAllSets = thm $ do
     ma $ fa "x" $ ("x" ∈ emptyset) ⇒ ("x" ∈ "A")
 
     "This is vacuously true."
+
+predicateDefinition :: Note
+predicateDefinition = de $ do
+    lab predicateDefinitionLabel
+    s ["A ", predicate', " ", m p, " over a ", set, " ", m aa, " is a ", subset, " of ", m aa]
+    s ["Using a little notational overloading, ", m $ p `fn` a, " is said to hold if ", m a, " is an element of ", m aa]
+    ma $ p `fn` a === a ∈ p
+  where
+    p = "P"
+    a = "a"
+    aa = "A"

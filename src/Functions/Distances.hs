@@ -1,56 +1,47 @@
-module Functions.Distances (
-    distances
-
-  , distance
-  , pseudometric
-  , metric
-  , jaccardSimilarity
-
-  , distanceDefinitionLabel
-  , metricDefinitionLabel
-  , jaccardSimilarityDefinitionLabel
-  ) where
+module Functions.Distances where
 
 import           Notes
 
+import           Functions.Application.Macro
+import           Functions.Basics.Macro
+import           Functions.Distances.Macro
+
+makeDefs [
+      "distance"
+    , "pseudometric"
+    , "metric"
+
+    , "Jaccard similarity"
+    , "Jaccard distance"
+    ]
+
 distances :: Notes
-distances = notesPart "distances" body
+distances = notesPart "distances" $ do
+    section "Distances"
 
-body :: Note
-body = do
-  section "Distances"
+    subsection "Pseudometrics"
+    distanceDefinition
+    distanceExamples
+    jaccardSimilarityDefinition
+    jaccardSimilarityEquivalentDefinition
 
-  subsection "Pseudometrics"
-  distanceDefinition
-  distanceExamples
-  jaccardSimilarityDefinition
-  jaccardSimilarityEquivalentDefinition
-
-  subsection "Metrics"
-  metricDefinition
-  metricExamples
-
-distance :: Note
-distance = ix "distance"
-
-pseudometric :: Note
-pseudometric = ix "pseudemetric"
-
-distanceDefinitionLabel :: Label
-distanceDefinitionLabel = Label Definition "distance"
+    subsection "Metrics"
+    metricDefinition
+    metricExamples
 
 distanceDefinition :: Note
 distanceDefinition = de $ do
-  lab distanceDefinitionLabel
-  s ["Let ", m ss, " be a set"]
-  s ["A ", term "distance function", " ", m d, " for ", m ss, " is a function ", m (fun d tups realsp), " with the following four properties"]
-  enumerate $ do
-    item $ m $ fa rxy $ dxy =: 0
-    item $ m $ fa rxy $ dxy =: dyx
-    item $ do
-      s ["The ", term "triangle inequality"]
-      ma $ fa (cs [x, y, z] ∈ reals) $ (d `fn` xy + d `fn` yz) <= (d `fn` xz)
-  s ["A distance function is also called a ", term "pseudometric"]
+    lab distanceDefinitionLabel
+    lab pseudometricDefinitionLabel
+    s ["Let ", m ss, " be a set"]
+    s ["A ", term "distance function", " ", m d, " for ", m ss, " is a function ", m (fun d tups realsp), " with the following four properties"]
+    enumerate $ do
+      item $ m $ fa rxy $ dxy =: 0
+      item $ m $ fa rxy $ dxy =: dyx
+      item $ do
+        s ["The ", term "triangle inequality"]
+        ma $ fa (cs [x, y, z] ∈ reals) $ (d `fn` xy + d `fn` yz) <= (d `fn` xz)
+    s ["A distance function is also called a ", term "pseudometric"]
   where
     x = "x"
     y = "y"
@@ -62,44 +53,40 @@ distanceDefinition = de $ do
     dxy = d `fn` xy
     dyx = d `fn` yx
     rxy = xy ∈ tups
-    d = fundist
+    d = dist_
     ss = "S"
     tups = ss `setprod` ss
 
 distanceExamples :: Note
 distanceExamples = do
-  ex $ do
-    s [the, term "cosine distance"]
-    s ["Let ", m q, " be a natural numbers"]
-    ma $ func2 cd rq rq realsp v w $ arccos_ $ (trans v * w) /: (n2 v * n2 w)
+    ex $ do
+        s [the, term "cosine distance"]
+        s ["Let ", m q, " be a natural numbers"]
+        ma $ func2 cd rq rq realsp v w $ arccos_ $ (trans v * w) /: (n2 v * n2 w)
 
-    toprove_ "Prove that this is actually a distance"
+        toprove_ "Prove that this is actually a distance"
 
   where
     q = "q"
     v = "v"
-    cd = fundist !: "cos"
+    cd = dist_ !: "cos"
     n2 = norm_ 2
     w = "w"
     rq = realVecSpace q
 
 
 jaccard :: Note -> Note -> Note
-jaccard n m = "J" `funapp` cs [n,m]
-
-jaccardSimilarity :: Note
-jaccardSimilarity = ix "Jaccard similarity"
-
-jaccardSimilarityDefinitionLabel :: Label
-jaccardSimilarityDefinitionLabel = Label Definition "jaccard-similarity-definition"
+jaccard n m = "J" `fn` cs [n,m]
 
 jaccardSimilarityDefinition :: Note
 jaccardSimilarityDefinition = do
   de $ do
-    s ["The ", term "Jaccard similarity", " of two sets ", m a, " and ", m b, " is defined as ", m (jaccard a b)]
+    lab jaccardSimilarityDefinitionLabel
+    s ["The ", jaccardSimilarity', " of two sets ", m a, " and ", m b, " is defined as ", m (jaccard a b)]
     ma $ jaccard a b === (setsize (a ∩ b) / setsize (a ∪ b))
   de $ do
-    s ["The ", ix "Jaccard distance", " ", m dj, " between two sets ", m a, " and ", m b, " is defined as ", m (jaccard a b - 1)]
+    lab jaccardDistanceDefinitionLabel
+    s ["The ", jaccardDistance', " ", m dj, " between two sets ", m a, " and ", m b, " is defined as ", m (jaccard a b - 1)]
     ma $ dj `fn` cs [a, b] === (jaccard a b - 1)
 
   todo "prove that the Jaccard distance is in fact a distance"
@@ -122,23 +109,17 @@ jaccardSimilarityEquivalentDefinition = thm $ do
     b = "B"
 
 
-metric :: Note
-metric = ix "metric"
-
-metricDefinitionLabel :: Label
-metricDefinitionLabel = Label Definition "metric"
-
 metricDefinition :: Note
 metricDefinition = de $ do
   lab metricDefinitionLabel
-  s ["A ", term "metric", " on a set ", m ss, " is a distance function", ref distanceDefinitionLabel, " ", m funm, " on that set with one extra property"]
+  s ["A ", metric', " on a set ", m ss, " is a distance function", ref distanceDefinitionLabel, " ", m metr_, " on that set with one extra property"]
   ma $ fa (cs [v,w] ∈ ss) (d_ v w =: 0 ⇔ v =: w)
 
   where
     v = "v"
     w = "w"
     ss = "S"
-    d_ = fdist
+    d_ = distapp metr_
 
 
 metricExamples :: Note

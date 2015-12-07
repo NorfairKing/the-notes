@@ -38,8 +38,8 @@ regularExpressionDefinition :: Note
 regularExpressionDefinition = de $ do
     s ["A ", regularExpression', " (", term "RE", ") over an ", alphabet, " ", m calph, " is inductively defined as an expression of the following form"]
     itemize $ do
-      item $ m $ cree
-      item $ m $ crep
+      item $ m cree
+      item $ m crep
       item $ m $ "a" <> text " with " <> "a" ∈ calph
       item $ m $ e_ 1 <@@@> e_ 2
       item $ m $ e_ 1 <@|@> e_ 2

@@ -129,7 +129,7 @@ sigmaAlgebraInfiniteIntersection = thm $ do
     an = "A" !: "n"
 
 sigmaAlgebraFiniteIntersectionLabel :: Label
-sigmaAlgebraFiniteIntersectionLabel = thmlab "sigma-algebra-infinite-intersection"
+sigmaAlgebraFiniteIntersectionLabel = thmlab "sigma-algebra-finite-intersection"
 
 sigmaAlgebraFiniteIntersection :: Note
 sigmaAlgebraFiniteIntersection = thm $ do

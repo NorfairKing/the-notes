@@ -13,11 +13,14 @@ packages = do
   usepackage [] "amssymb"
   usepackage [] "amsthm"
 
+  -- For an even bigger font
+  usepackage [] "fix-cm"
+
   -- For logical inference
   usepackage [] "proof"
 
   -- For todo's
-  usepackage ["colorinlistoftodos", "obeyFinal"] "todonotes"
+  usepackage ["obeyFinal"] "todonotes"
 
   -- For a nice font with math support
   usepackage [] "libertine"

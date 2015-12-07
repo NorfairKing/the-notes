@@ -1,14 +1,11 @@
-module Functions.BinaryOperation (
-      binaryOperations
-
-    , binaryOperation   , binaryOperation_
-
-    , associative       , associative_
-    ) where
+module Functions.BinaryOperation where
 
 import           Notes
 
-import           Functions.Basics (binaryFunction)
+import           Functions.Basics                (binaryFunction)
+
+import           Functions.Basics.Macro
+import           Functions.BinaryOperation.Macro
 
 makeDefs [
       "binary operation"
@@ -16,10 +13,7 @@ makeDefs [
     ]
 
 binaryOperations :: Notes
-binaryOperations = notesPart "binary-operations" body
-
-body :: Note
-body = do
+binaryOperations = notesPart "binary-operations" $ do
     section "Binary operations"
     binaryOperationDefinition
 
@@ -29,13 +23,13 @@ binaryOperationDefinition :: Note
 binaryOperationDefinition = de $ do
     lab binaryOperationDefinitionLabel
     s ["A ", binaryOperation', " is a ", binaryFunction, " as follows"]
-    ma $ fun funrel_ (fundom_ ⨯ fundom_) fundom_
+    ma $ fun fun_ (dom_ ⨯ dom_) dom_
 
 associativeDefinition :: Note
 associativeDefinition = de $ do
     lab associativeDefinitionLabel
-    s ["A ", binaryOperation, " ", m funbinop_ , " is called ", associative', " if ", quoted "placement of parentheses does not matter"]
-    ma $ fa (cs [a, b, c] ∈ fundom_) ((pars $ a ★ b) ★ c) =: (a ★ (pars $ b ★ c))
+    s ["A ", binaryOperation, " ", m binop_ , " is called ", associative', " if ", quoted "placement of parentheses does not matter"]
+    ma $ fa (cs [a, b, c] ∈ dom_) ((pars $ a ★ b) ★ c) =: (a ★ (pars $ b ★ c))
 
     exneeded
   where

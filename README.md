@@ -1,6 +1,14 @@
 # The Notes
+[![Build Status](https://travis-ci.org/NorfairKing/super-user-spark.svg?branch=master)](https://travis-ci.org/NorfairKing/super-user-spark)
 
-## Compilation
+## Preselects
+
+This is a large collection of notes.
+Not all of them are coherent or related.
+There are predefined selections of coherent subparts that can be compiled into a coherent collection of notes on a specific topic.
+See the `preselect` directory.
+
+## Raw Compilation
 
 Compiling the notes generator is as easy as running `make`.
 Generating the notes is done with `./the-notes`.
@@ -11,6 +19,7 @@ You can also generate subsets of the notes by adding selectors to the command.
 - `./the-notes sets.basics` will only generate the 'basics' section of the sets chapter
 - `./the-notes sets probability` will only generate the chapters on sets and probability.
 
+You may need to `ignore-reference-errors`.
 
 ## Contribution
 Contributions to these notes are very welcome in the form of pull requests or patches via email.

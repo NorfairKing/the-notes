@@ -1,12 +1,12 @@
 module Computability.Symbols (
       symbols
 
-    , symbol          , symbol_           , symbolDefinitionLabel
-    , alphabet        , alphabet_         , alphabetDefinitionLabel
-    , string          , string_           , stringDefinitionLabel
-    , emptyString     , emptyString_      , emptyStringDefinitionLabel
-    , reverseString   , reverseString_    , reverseStringDefinitionLabel
-    , concatenation   , concatenation_    , concatenationDefinitionLabel
+    , symbol          , symbol_
+    , alphabet        , alphabet_
+    , string          , string_
+    , emptyString     , emptyString_
+    , reverseString   , reverseString_
+    , concatenation   , concatenation_
   ) where
 
 import           Notes
@@ -98,7 +98,7 @@ stringsOfAlphabetDefinition = de $ do
 
 stringsWithEmptyDefinition :: Note
 stringsWithEmptyDefinition = do
-    de $ s ["The ", set, " ", m (calph ∪ (setof cestr)), " is sometimes written more consisely as ", m calphe]
+    de $ s ["The ", set, " ", m $ calph ∪ setof cestr, " is sometimes written more consisely as ", m calphe]
 
     nte $ s ["This is not just a set of symbols because ", m cestr, " is a string"]
 

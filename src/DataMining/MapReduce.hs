@@ -1,10 +1,11 @@
-{-# LANGUAGE QuasiQuotes     #-}
-{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE QuasiQuotes #-}
 module DataMining.MapReduce (
     mapReduce
   ) where
 
 import           Notes
+
+import           Functions.Basics.Macro
 
 mapReduce :: Notes
 mapReduce = notesPart "MapReduce" body

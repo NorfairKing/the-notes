@@ -1,5 +1,6 @@
 module Macro.Numbers.Macro where
 
+import           Macro.MetaMacro
 import           Macro.Sets.Macro
 
 import           Types
