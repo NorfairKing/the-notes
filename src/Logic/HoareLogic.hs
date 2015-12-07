@@ -252,7 +252,10 @@ conditionalRule = do
     t3 = htrip (y > 0) (ifThenElse (x > 0) (y =:= y + x) (y =:= y - x)) (y > 0)
 
 conditionalRuleGcdProof :: Note
-conditionalRuleGcdProof = ex $ ""
+conditionalRuleGcdProof = todo "gcd proof"
+
+loopRuleExampleLabel :: Label
+loopRuleExampleLabel = Label Example "loop-rule-example"
 
 loopRule :: Note
 loopRule = do
@@ -262,7 +265,9 @@ loopRule = do
         s ["The first triple is called the ", term "initiation", and, " the second is called the ", term "consecution", or, term "inductiveness"]
         s ["This rule is also sometimes written as follows"]
         ma $ linf [htrip p a i, htrip (i ∧ not c) b i, brac (i ∧ c ⇒ q)] $ htrip p (fromUntilLoop a c b) q
-    ex $ ma $ e
+    ex $ do
+        lab loopRuleExampleLabel
+        ma e
   where
     e = linf [t1, t2, t3] t4
     t1 = htrip p_ a_ i_
@@ -295,26 +300,58 @@ loopTermination = de $ do
     s ["Three more conditions must hold"]
 
     enumerate $ do
-        item $ m $ htrip p a (0 <> "< v")
+        item $ m $ htrip p a (v >= bot)
         item $ do
-            m $ brac $ bot <> "< v"
-            " is an invariant of the loop."
+            s [m $ brac $ v >= bot, " is an invariant of the loop"]
+            ma $ htrip (v >= bot) a (v >= bot)
         item $ do
-            m v
-            " decreases with ever iteration."
+            s [m v, " decreases with ever iteration"]
             ma $ fa v0 ((v <> "<" <> v0) ⇒ (htrip ((v =: v0) ∧ not c) b (v <> "<" <> v0)))
 
   where
     ss = "S"
     v = "v"
-    v0 = "v" !: 0
+    v0 = "v'"
 
 terminationProofExample :: Note
-terminationProofExample = exneeded
+terminationProofExample = ex $ do
+    s ["This program is totally correct"]
+    ma $ htrip p_ l_ q_
+    proof $ do
+        s ["Partial correctness was already proven in an earlier example", ref loopRuleExampleLabel]
+        s ["Only termination is left to prove"]
+
+        s ["Let ", m v, " be the variant of the loop"]
+        itemize $ do
+            item $ do
+                s ["The variant stays positive after initialization"]
+                ma $ htrip p_ a_ v_
+                toprove
+            item $ do
+                s [m $ brac v_, " is an invariant of the loop"]
+                ma $ htrip v_ b_ v_
+                toprove
+            item $ do
+                s [m v, " decreases with ever iteration"]
+                ma $ fa v0 ((v <> "<" <> v0) ⇒ (htrip ((v =: v0) ∧ not c) b (v <> "<" <> v0)))
+                toprove
+  where
+    i = "i"
+    n = "n"
+
+    v = pars (n - i)
+    v_ = (v >= 0)
+    v0 = "v'"
+    l_ = (fromUntilLoop a_ c_ b_)
+    p_ = (y > 3 ∧ n > 0)
+    q_ = (y > 3 + n)
+    a_ = (i =:= 0)
+    c_ = (i =: n)
+    b_ = seqins [(i =:= i + 1), (y =:= y + 1)]
 
 
 softwareVerificationAxiomaticSemanticsSlides :: Reference
-softwareVerificationAxiomaticSemanticsSlides = Reference lectureSlides "software-verification-axiomatic-semantics-part1" $
+softwareVerificationAxiomaticSemanticsSlides = Reference lectureSlides "software-verification-axiomatic-semantics-part1"
   [
     ("author", "Bertrand Meyer")
   , ("title", "Lecture 2: Axiomatic Semantics")

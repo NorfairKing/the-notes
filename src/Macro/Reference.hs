@@ -13,6 +13,7 @@ wordOf Definition     = "definition"
 wordOf Theorem        = "theorem"
 wordOf Property       = "property"
 wordOf Proposition    = "proposition"
+wordOf Example        = "example"
 
 refKind :: Label -> RefKind
 refKind (Label kind _) = kind

@@ -110,6 +110,7 @@ data RefKind = Definition
              | Theorem
              | Proposition
              | Property
+             | Example
   deriving (Show, Eq)
 
 type ReferenceType = String
