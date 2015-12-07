@@ -8,7 +8,10 @@ import           Relations.Basics       (relation)
 import           Relations.Basics.Macro
 import           Relations.Domain.Macro
 
-makeDefs ["domain", "image"]
+makeDefs [
+      "domain"
+    , "image"
+    ]
 
 
 domainAndImage :: Notes
