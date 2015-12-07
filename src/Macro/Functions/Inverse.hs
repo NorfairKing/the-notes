@@ -2,8 +2,8 @@ module Macro.Functions.Inverse where
 
 import           Types
 
-import           Macro.Relations.Macro (relinv)
+import qualified Relations.Basics.Macro as R (inv)
 
-funinv :: Note -> Note
-funinv = relinv
+inv :: Note -> Note
+inv = R.inv
 

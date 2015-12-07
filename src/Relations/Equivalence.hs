@@ -2,7 +2,7 @@ module Relations.Equivalence where
 
 import           Notes
 
-import           Relations.BasicDefinitions  (symmetric_)
+import           Relations.Basics            (symmetric_)
 import           Relations.Preorders         (preorder)
 
 import           Relations.Equivalence.Macro

@@ -2,9 +2,9 @@ module Relations.Preorders where
 
 import           Notes
 
-import           Relations.BasicDefinitions (reflexive_, relation, transitive_)
+import           Relations.Basics          (reflexive_, relation, transitive_)
 
--- import           Relations.Preorders.Macro
+import           Relations.Preorders.Macro
 
 makeDefs [
       "preorder"
@@ -19,7 +19,7 @@ preorders = notesPart "preorders" $ do
 preorderDefinition :: Note
 preorderDefinition = de $ do
     lab preorderDefinitionLabel
-    s ["A ", relation, " ", m rel, " between a set ", m xx, " and itself is called an ", preorder', " if it is ", reflexive_, and, transitive_]
+    s ["A ", relation, " ", m preord_, " between a set ", m xx, " and itself is called an ", preorder', " if it is ", reflexive_, and, transitive_]
   where xx = "X"
 
 

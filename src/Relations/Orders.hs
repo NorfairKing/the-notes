@@ -2,7 +2,7 @@ module Relations.Orders where
 
 import           Notes
 
-import           Relations.BasicDefinitions  (relation, total_, transitive_)
+import           Relations.Basics            (relation, total_, transitive_)
 import           Relations.Equivalence       (equivalenceRelation_)
 import           Relations.Preorders         (preorder, preorder_)
 
@@ -10,6 +10,7 @@ import           Sets.Basics
 
 import           Sets.PointedSets.Macro
 
+import           Relations.Basics.Macro
 import           Relations.Equivalence.Macro
 import           Relations.Orders.Macro
 import           Relations.Preorders.Macro
@@ -88,9 +89,9 @@ antisymmetricDefinition :: Note
 antisymmetricDefinition = de $ do
     lab antisymmetricDefinitionLabel
     s ["Let ", m xx, " be a set and ", m eqrel_, " an ", equivalenceRelation_, on , m xx]
-    s ["Let ", m rel, " be a binary ", relation, on, m xx]
-    s [m rel, " is called ", antisymmetric', " if it has the following property"]
-    ma $ fa (cs [a, b] ∈ xx) ((pars $ (a `inrel` b) ∧ (b `inrel` a)) ⇒ (a .~ b))
+    s ["Let ", m rel_, " be a binary ", relation, on, m xx]
+    s [m rel_, " is called ", antisymmetric', " if it has the following property"]
+    ma $ fa (cs [a, b] ∈ xx) ((pars $ (a `elem_` b) ∧ (b `elem_` a)) ⇒ (a .~ b))
   where
     a = "a"
     b = "b"

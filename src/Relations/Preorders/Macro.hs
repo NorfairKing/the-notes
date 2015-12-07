@@ -3,7 +3,7 @@ module Relations.Preorders.Macro where
 import           Types
 
 import           Macro.Math
-import           Macro.Relations.Macro
+import           Relations.Basics.Macro (elem)
 
 
 -- * Preorder
@@ -33,7 +33,7 @@ relpreord_ = relpreord preordset_ preord_
 -- | Application of a given preorder
 inpreord :: Note -- ^ Preorder
          -> Note -> Note -> Note
-inpreord = inrel_
+inpreord = elem
 
 -- | Application of @preord_@
 inpreord_ :: Note -> Note -> Note

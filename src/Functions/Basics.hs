@@ -2,10 +2,10 @@ module Functions.Basics where
 
 import           Notes
 
-import           Sets.Basics                (subset)
+import           Sets.Basics      (subset)
 
-import           Relations.BasicDefinitions (relation_)
-import           Relations.Domain           (domain_, image_)
+import           Relations.Basics (relation_)
+import           Relations.Domain (domain_, image_)
 
 makeDefs [
       "function"

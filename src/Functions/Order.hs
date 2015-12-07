@@ -2,17 +2,16 @@ module Functions.Order where
 
 import           Notes
 
-import           Relations.BasicDefinitions (reflexive_)
-import           Relations.Orders           (antisymmetric_, boundedLattice_,
-                                             completeLattice_, lattice_,
-                                             partialOrderDefinitionLabel,
-                                             poset_)
-import           Relations.Preorders        (preorderDefinitionLabel)
-import           Sets.Basics                (set)
+import           Relations.Basics       (reflexive_)
+import           Relations.Orders       (antisymmetric_, boundedLattice_,
+                                         completeLattice_, lattice_,
+                                         partialOrderDefinitionLabel, poset_)
+import           Relations.Preorders    (preorderDefinitionLabel)
+import           Sets.Basics            (set)
 
 import           Relations.Orders.Macro
 
-import           Functions.Basics           (function)
+import           Functions.Basics       (function)
 
 import           Functions.Order.Macro
 

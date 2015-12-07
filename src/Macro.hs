@@ -22,6 +22,5 @@ import           Macro.Logic.Macro           as X
 import           Macro.MachineLearning.Macro as X
 import           Macro.Numbers.Macro         as X
 import           Macro.Probability.Macro     as X
-import           Macro.Relations.Macro       as X
 import           Macro.Sets.Macro            as X
 import           Macro.Topology.Macro        as X

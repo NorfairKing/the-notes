@@ -1,9 +1,13 @@
 module Relations.Composite (compositeRelations) where
 
-import           Notes
+import           Notes                     hiding (inv)
 
-import           Functions.BinaryOperation  (associative_)
-import           Relations.BasicDefinitions (inverseOfInverseIsNormalLabel)
+import           Functions.BinaryOperation (associative_)
+import           Relations.Basics          (inverseOfInverseIsNormalLabel)
+
+import           Relations.Basics.Macro
+import           Relations.Composite.Macro
+import           Relations.Domain.Macro
 
 compositeRelations :: Notes
 compositeRelations = notesPart "composite-relations" body
@@ -69,18 +73,18 @@ compositeDistributiveWrtInverse = thm $ do
     s ["The composition of relations is ", distributive, " with respect to the inverse of relations"]
     s ["Let ", m a, and, m b, " be binary relations"]
 
-    ma $ relinv (pars $ a ● b) =: relinv b ● relinv a
+    ma $ inv (pars $ a ● b) =: inv b ● inv a
 
     proof $ do
       align_ $
         [
-          relinv (pars $ a ● b)
+          inv (pars $ a ● b)
           & "" =: setcmpr (tuple y x) (tuple x y ∈ (a ● b))
           , "" & "" =: setcmpr (tuple y x) (tuple x y ∈ setcmpr (tuple u w) (te v $ (pars $ tuple u v ∈ b) ∧ (pars $ tuple v w ∈ a)))
           , "" & "" =: setcmpr (tuple w u) (te v $ (pars $ tuple u v ∈ b) ∧ (pars $ tuple v w ∈ a))
-          , "" & "" =: setcmpr (tuple w u) (te v $ (pars $ tuple u v ∈ setcmpr (tuple u v) (tuple v u ∈ relinv b)) ∧ (pars $ tuple v w ∈ setcmpr (tuple v w) (tuple w v ∈ relinv a)))
-          , "" & "" =: setcmpr (tuple w u) (te v $ (pars $ tuple v u ∈ relinv b) ∧ (pars $ tuple w v ∈ relinv a))
-          , "" & "" =: relinv b ● relinv a
+          , "" & "" =: setcmpr (tuple w u) (te v $ (pars $ tuple u v ∈ setcmpr (tuple u v) (tuple v u ∈ inv b)) ∧ (pars $ tuple v w ∈ setcmpr (tuple v w) (tuple w v ∈ inv a)))
+          , "" & "" =: setcmpr (tuple w u) (te v $ (pars $ tuple v u ∈ inv b) ∧ (pars $ tuple w v ∈ inv a))
+          , "" & "" =: inv b ● inv a
         ]
       s ["Note that we use that the inverse of the inverse of a relation is the original relation", ref inverseOfInverseIsNormalLabel]
 
@@ -97,16 +101,16 @@ compositeDistributiveWrtInverse = thm $ do
 domainAfterComposition :: Note
 domainAfterComposition = thm $ do
     s ["Let ", m a, and, m b, " be relations"]
-    ma $ reldom (b ● a) ⊆ reldom a
+    ma $ dom (b ● a) ⊆ dom a
 
     proof $ align_
       [
-        reldom (b ● a)
+        dom (b ● a)
         & "" =: setcmpr x (te y $ tuple x y ∈ b ● a)
         , "" & "" =: setcmpr x (te y $ tuple x y ∈ setcmpr (tuple u w) (te v $ (pars $ tuple u v ∈ b) ∧ (pars $ tuple v w ∈ a)))
         , "" & "" =: setcmpr x (te v $ te w $ (pars $ tuple u v ∈ b) ∧ (pars $ tuple v w ∈ a))
         , "" & "" ⊆ setcmpr x (te w $ tuple v w ∈ a)
-        , "" & "" =: reldom a
+        , "" & "" =: dom a
       ]
   where
     a = "A"
@@ -121,16 +125,16 @@ domainAfterComposition = thm $ do
 imageAfterComposition :: Note
 imageAfterComposition = thm $ do
     s ["Let ", m a, and, m b, " be relations"]
-    ma $ relimg (b ● a) ⊆ relimg b
+    ma $ img (b ● a) ⊆ img b
 
     proof $ align_
       [
-        relimg (b ● a)
+        img (b ● a)
         & "" =: setcmpr y (te x $ tuple x y ∈ b ● a)
         , "" & "" =: setcmpr y (te x $ tuple x y ∈ setcmpr (tuple u w) (te v $ (pars $ tuple u v ∈ b) ∧ (pars $ tuple v w ∈ a)))
         , "" & "" =: setcmpr y (te v $ te u $ (pars $ tuple u v ∈ b) ∧ (pars $ tuple v w ∈ a))
         , "" & "" ⊆ setcmpr y (te u $ tuple u v ∈ b)
-        , "" & "" =: relimg b
+        , "" & "" =: img b
       ]
   where
     a = "A"

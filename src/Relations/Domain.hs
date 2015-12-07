@@ -1,23 +1,18 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Relations.Domain (
-    domainAndImage
+module Relations.Domain where
 
-  , domain  , domain_   , domainDefinitionLabel
-  , image   , image_    , imageDefinitionLabel
-  ) where
+import           Notes                  hiding (inv)
 
-import           Notes
+import           Relations.Basics       (relation)
 
-import           Relations.BasicDefinitions (relation)
+import           Relations.Basics.Macro
+import           Relations.Domain.Macro
 
 makeDefs ["domain", "image"]
 
 
 domainAndImage :: Notes
-domainAndImage = notesPart "domain-and-image" body
-
-body :: Note
-body = do
+domainAndImage = notesPart "domain-and-image" $ do
   subsection "Domain and Image"
 
   domainDefinition
@@ -30,8 +25,8 @@ body = do
 domainDefinition :: Note
 domainDefinition = de $ do
     lab domainDefinitionLabel
-    s [the, domain', " of a binary relation ", m rel, " between sets ", m a, and, m b, " is the following subset of ", m a]
-    ma $ setcmpr x (te y $ tuple x y ∈ rel)
+    s [the, domain', " of a binary relation ", m rel_, " between sets ", m a, and, m b, " is the following subset of ", m a]
+    ma $ setcmpr x (te y $ tuple x y ∈ rel_)
   where
     a = "A"
     b = "B"
@@ -42,8 +37,8 @@ domainDefinition = de $ do
 imageDefinition :: Note
 imageDefinition = de $ do
     lab imageDefinitionLabel
-    s [the, image', or, term "range", " of a binary relation ", m rel, " between sets ", m a, and, m b, " is the following subset of ", m b]
-    ma $ setcmpr y (te x $ tuple x y ∈ rel)
+    s [the, image', or, term "range", " of a binary relation ", m rel_, " between sets ", m a, and, m b, " is the following subset of ", m b]
+    ma $ setcmpr y (te x $ tuple x y ∈ rel_)
   where
     a = "A"
     b = "B"
@@ -53,15 +48,15 @@ imageDefinition = de $ do
 domainIsInversesImage :: Note
 domainIsInversesImage = thm $ do
   s [the, domain, " of a ", relation, " is the image of its inverse"]
-  ma $ reldom rel =: relimg (relinv rel)
+  ma $ dom rel_ =: img (inv rel_)
 
   proof $ align_
     [
-      relimg (relinv rel)
-      & "" =: setcmpr y (te x $ tuple x y ∈ relinv rel)
-      , "" & "" =: setcmpr y (te x $ tuple x y ∈ setcmpr (tuple y x) (tuple x y ∈ rel))
-      , "" & "" =: setcmpr x (te y $ tuple x y ∈ rel)
-      , "" & "" =: reldom rel
+      img (inv rel_)
+      & "" =: setcmpr y (te x $ tuple x y ∈ inv rel_)
+      , "" & "" =: setcmpr y (te x $ tuple x y ∈ setcmpr (tuple y x) (tuple x y ∈ rel_))
+      , "" & "" =: setcmpr x (te y $ tuple x y ∈ rel_)
+      , "" & "" =: dom rel_
     ]
   where
     x = "x"
@@ -70,15 +65,15 @@ domainIsInversesImage = thm $ do
 imageIsInversesDomain :: Note
 imageIsInversesDomain = thm $ do
   s [the, image, " of a ", relation, " is the ", domain, " of its inverse"]
-  ma $ relimg rel =: reldom (relinv rel)
+  ma $ img rel_ =: dom (inv rel_)
 
   proof $ align_
     [
-      reldom (relinv rel)
-      & "" =: setcmpr x (te y $ tuple x y ∈ relinv rel)
-      , "" & "" =: setcmpr x (te y $ tuple x y ∈ setcmpr (tuple y x) (tuple x y ∈ rel))
-      , "" & "" =: setcmpr y (te x $ tuple x y ∈ rel)
-      , "" & "" =: relimg rel
+      dom (inv rel_)
+      & "" =: setcmpr x (te y $ tuple x y ∈ inv rel_)
+      , "" & "" =: setcmpr x (te y $ tuple x y ∈ setcmpr (tuple y x) (tuple x y ∈ rel_))
+      , "" & "" =: setcmpr y (te x $ tuple x y ∈ rel_)
+      , "" & "" =: img rel_
     ]
   where
     x = "x"

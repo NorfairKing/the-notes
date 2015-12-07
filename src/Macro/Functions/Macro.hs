@@ -13,10 +13,9 @@ import           Macro.Sets.CarthesianProduct
 
 import           Functions.Application.Macro
 import           Macro.Functions.Inverse
+import qualified Relations.Domain.Macro       as R (dom, img)
 
 import           Macro.MetaMacro
-
-import           Macro.Relations.Macro
 
 
 -- Functions
@@ -37,13 +36,13 @@ fundom_ :: Note
 fundom_ = "A"
 
 fundom :: Note -> Note
-fundom = reldom
+fundom = R.dom
 
 funimg_ :: Note
 funimg_ = "B"
 
 funimg :: Note -> Note
-funimg = relimg
+funimg = R.img
 
 funrel_ :: Note
 funrel_ = "f"
