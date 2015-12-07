@@ -1,6 +1,6 @@
 module Relations.Composite (compositeRelations) where
 
-import           Notes                     hiding (inv)
+import           Notes
 
 import           Functions.BinaryOperation (associative_)
 import           Relations.Basics          (inverseOfInverseIsNormalLabel)

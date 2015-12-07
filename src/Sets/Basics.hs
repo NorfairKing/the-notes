@@ -2,6 +2,8 @@ module Sets.Basics where
 
 import           Notes
 
+import           Functions.Application.Macro
+
 makeDefs [
       "set"
     , "element"
@@ -65,7 +67,7 @@ setElementNotation = de $ do
 setComprehensionDefinition :: Note
 setComprehensionDefinition = de $ do
   s ["A formal description of a ", ix "set", " using a ", ix "predicate", " ", m "p", " is written as follows"]
-  ma $ setcmpr "x" $ funapp "p" "x"
+  ma $ setcmpr "x" $ app "p" "x"
   s ["This is the ", ix "set", " of all objects that have the ", ix "property", " ", m "P"]
 
 setEqualityDefinitionLabel :: Label

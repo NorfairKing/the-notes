@@ -4,9 +4,11 @@ module Probability.ProbabilityMeasure (
   ) where
 
 import           Notes
-import           Sets.Algebra.Main (setDifferenceEquivalentDefinitionLabel,
-                                    unionComplementaryLawLabel)
-import           Sets.Basics       (universalSetSupsetOfAllSetsLabel)
+import           Sets.Algebra.Main      (setDifferenceEquivalentDefinitionLabel,
+                                         unionComplementaryLawLabel)
+import           Sets.Basics            (universalSetSupsetOfAllSetsLabel)
+
+import           Functions.Basics.Macro
 
 probabilityMeasure :: Notes
 probabilityMeasure = notesPart "probability-measure" body

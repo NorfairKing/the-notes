@@ -1,5 +1,8 @@
 module Logic.AbstractLogic where
+
 import           Notes
+
+import           Functions.Application.Macro
 
 makeDefs [
       "formula"
@@ -191,8 +194,8 @@ exampleTheoryIntegers = ex $ do
     "."
 
   where
-    p = funapp "P"
-    su = funapp "S"
+    p = fn "P"
+    su = fn "S"
     i1 = "i" !: 1
     i2 = "i" !: 2
     b = "b"

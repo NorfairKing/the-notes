@@ -5,7 +5,7 @@ import           Types
 import           Macro.Math
 import           Macro.Text
 
-import           Macro.Functions.Macro (fundist, funm)
+import           Functions.Distances.Macro (dist_, metr_)
 
 -- Topology set
 topset :: Note
@@ -21,7 +21,7 @@ topsp = pars $ cs [topset, toptop]
 
 -- Topology Pseudometric
 toppm :: Note
-toppm = fundist
+toppm = dist_
 
 -- Topology Pseudometric Space
 toppms :: Note
@@ -32,7 +32,7 @@ toppms_ = tuple
 
 -- Topology Metric
 topm :: Note
-topm = funm
+topm = metr_
 
 -- Topology Metric Space
 topms :: Note

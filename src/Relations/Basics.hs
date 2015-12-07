@@ -1,5 +1,5 @@
 module Relations.Basics where
-import           Notes                  hiding (inv)
+import           Notes
 
 import           Sets.CarthesianProduct (carthesianProduct_)
 

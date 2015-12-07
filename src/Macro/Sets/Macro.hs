@@ -6,7 +6,7 @@ module Macro.Sets.Macro (
 
 import           Types
 
-import           Macro.Functions.Macro
+import           Functions.Application.Macro
 import           Macro.Sets.CarthesianProduct
 
 import           Macro.Math
@@ -183,7 +183,7 @@ powsetsign :: Note
 powsetsign = mathcal "P"
 
 powset :: Note -> Note
-powset set = powsetsign `funapp` set
+powset set = powsetsign `app` set
 
 
 --[ Set size

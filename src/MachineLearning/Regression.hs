@@ -4,6 +4,9 @@ module MachineLearning.Regression (
 
 import           Notes
 
+import           Functions.Application.Macro
+import           Functions.Basics.Macro
+
 regression :: Notes
 regression = notesPart "regression" body
 
@@ -55,7 +58,7 @@ linearModelAndLeastSquares = do
 
   s ["To fit the linear model to a set of training data, we pick the coefficients ", m (hat beta), " sich that the ", term "residual sum of squares", " ", term "(RSS)", " is minimized"]
   s ["This is called the method of ", term "least square"]
-  ma $ "RSS" `funapp` beta =: sumcmpr (i =: 1) n (pars ("y" !: i - trans ("x" !: i) * beta)) ^: 2 =: (trans . pars $ y - x * beta) * (pars $ y - x * beta)
+  ma $ "RSS" `fn` beta =: sumcmpr (i =: 1) n (pars ("y" !: i - trans ("x" !: i) * beta)) ^: 2 =: (trans . pars $ y - x * beta) * (pars $ y - x * beta)
 
   s ["Differentiating with respect to ", m beta, ", we get the ", term "normal equation"]
   ma $ trans x * (pars $ "y" - x * beta) =: 0

@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Relations.Domain where
 
-import           Notes                  hiding (inv)
+import           Notes
 
 import           Relations.Basics       (relation)
 

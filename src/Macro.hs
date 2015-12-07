@@ -15,7 +15,6 @@ import           Macro.Todo                  as X
 
 import           Macro.Computability.Macro   as X
 import           Macro.Fields.Macro          as X
-import           Macro.Functions.Macro       as X
 import           Macro.Groups.Macro          as X
 import           Macro.LinearAlgebra.Macro   as X
 import           Macro.Logic.Macro           as X

@@ -2,17 +2,20 @@ module Functions.Order where
 
 import           Notes
 
-import           Relations.Basics       (reflexive_)
-import           Relations.Orders       (antisymmetric_, boundedLattice_,
-                                         completeLattice_, lattice_,
-                                         partialOrderDefinitionLabel, poset_)
-import           Relations.Preorders    (preorderDefinitionLabel)
-import           Sets.Basics            (set)
+import           Relations.Basics            (reflexive_)
+import           Relations.Orders            (antisymmetric_, boundedLattice_,
+                                              completeLattice_, lattice_,
+                                              partialOrderDefinitionLabel,
+                                              poset_)
+import           Relations.Preorders         (preorderDefinitionLabel)
+import           Sets.Basics                 (set)
 
 import           Relations.Orders.Macro
 
-import           Functions.Basics       (function)
+import           Functions.Basics            (function)
 
+import           Functions.Application.Macro
+import           Functions.Basics.Macro
 import           Functions.Order.Macro
 
 makeDefs [
@@ -71,7 +74,7 @@ monotonicDefinition = de $ do
   where
     x1 = x !: 1
     x2 = x !: 2
-    f = funrel_
+    f = fun_
     f_ = fn f
     x = "X"
     rx = partord_ !: x
@@ -83,11 +86,11 @@ scottContinuousDefinition :: Note
 scottContinuousDefinition = de $ do
     lab scottContinuousDefinitionLabel
     s ["Let ", m $ lat x rx, and, m $ lat y ry, " each be a ", lattice_, and, m $ fun f x y, " a function"]
-    s [m $ fun funrel_ x y, " is called ", scottContinuous', " if it has the following property"]
+    s [m $ fun fun_ x y, " is called ", scottContinuous', " if it has the following property"]
     ma $ fa (ss ⊆ x) $ f_ (sup ss) =: sup (f □ ss)
   where
     ss = "S"
-    f = funrel_
+    f = fun_
     f_ = fn f
     x = "X"
     rx = partord_ !: x
@@ -101,7 +104,7 @@ fixedPointDefinition = de $ do
     s ["An element ", m a, " of ", m x, " is called a ", fixedPoint', " of ", m f, " if ", m f, " leaves a unchanged"]
     ma $ fn f a =: a
   where
-    f = funrel_
+    f = fun_
     a = "a"
     x = "X"
     y = "Y"
@@ -113,7 +116,7 @@ leastFixedPointDefinition = de $ do
     s ["The ", leastFixedPoint', " ", m $ lfp f, " of ", m f, " is defined as follows"]
     ma $ lfp f === inf (fix f)
   where
-    f = funrel_
+    f = fun_
     x = posetset_
 
 
@@ -124,7 +127,7 @@ greatestFixedPointDefinition = de $ do
     s ["The ", greatestFixedPoint', " ", m $ gfp f, " of ", m f, " is defined as follows"]
     ma $ gfp f === sup (fix f)
   where
-    f = funrel_
+    f = fun_
     x = posetset_
 
 fixedPointRegionDefinition :: Note
@@ -134,7 +137,7 @@ fixedPointRegionDefinition = de $ do
     s ["The ", fixedPointRegion', " ", m $ fix f, " is the ", set, " of ", fixedPoint, "s of ", m latset_]
     ma $ fix f === setcmpr (a ∈ latset_) (a =: f_ a)
   where
-    f = funrel_
+    f = fun_
     f_ = fn f
     a = "x"
     x = posetset_
@@ -146,7 +149,7 @@ ascendingRegionDefinition = de $ do
     s ["The ", ascendingRegion', " ", m $ asc f, " is the following ", set]
     ma $ asc f === setcmpr (a ∈ latset_) (a ⊆: f_ a)
   where
-    f = funrel_
+    f = fun_
     f_ = fn f
     a = "x"
     x = posetset_
@@ -158,7 +161,7 @@ descendingRegionDefinition = de $ do
     s ["The ", descendingRegion', " ", m $ desc f, " is the following ", set]
     ma $ desc f === setcmpr (a ∈ latset_) (f_ a ⊆: a)
   where
-    f = funrel_
+    f = fun_
     f_ = fn f
     a = "x"
     x = posetset_
@@ -177,7 +180,7 @@ ascendingRegionIsClosedUnderApplication = thm $ do
         s ["Because ", m $ a ⊆: f_ a, " holds, and because ", m f, " is monotonic, ", m $ f_ a ⊆: f_ (f_ a), " must also hold"]
         s ["This means that ", m $ f_ a, " is in the ascending region"]
   where
-    f = funrel_
+    f = fun_
     f_ = fn f
     a = "x"
     x = posetset_
@@ -196,7 +199,7 @@ descendingRegionIsClosedUnderApplication = thm $ do
         s ["Because ", m $ f_ a ⊆: a, " holds, and because ", m f, " is monotonic, ", m $ f_ (f_ a) ⊆: f_ a, " must also hold"]
         s ["This means that ", m $ f_ a, " is in the descending region"]
   where
-    f = funrel_
+    f = fun_
     f_ = fn f
     a = "x"
     x = posetset_
@@ -215,7 +218,7 @@ topInDescendingRegion = thm $ do
         s ["This means that ", m bot, " is an element of the ascending region"]
   where
     f_ = fn f
-    f = funrel_
+    f = fun_
     x = latset_
 
 botInAscendingRegionLabel :: Label
@@ -232,7 +235,7 @@ botInAscendingRegion = thm $ do
         s ["This means that ", m top, " is an element of the descending region"]
   where
     f_ = fn f
-    f = funrel_
+    f = fun_
     x = latset_
 
 
@@ -267,7 +270,7 @@ fixedPointRegionIsIntersectionOfAscAndDesc = thm $ do
 
 
   where
-    f = funrel_
+    f = fun_
     f_ = fn f
     a = "a"
     x = posetset_
@@ -280,7 +283,7 @@ kleeneChainDefinition = de $ do
     ma $ kleeneCh a === setcmpr (i ∈ naturals) (f !: i `fn` x)
   where
     i = "i"
-    f = funrel_
+    f = fun_
     a = "x"
     x = latset_
 
@@ -297,7 +300,7 @@ kleenesFixedPointTheorem = do
         s ["This gives us an algorithm to compute the least fixed point."]
         s ["Repeatedly applying ", m f, " to bot until we find a fixed point is enough to find ", m $ lfp f]
   where
-    f = funrel_
+    f = fun_
     x = latset_
 
 

@@ -5,6 +5,9 @@ module MachineLearning.SupervisedLearning (
 
 import           Notes
 
+import           Functions.Application.Macro
+import           Functions.Basics.Macro
+
 supervisedLearning :: Notes
 supervisedLearning = notesPart "supervised-learning" body
 
@@ -155,7 +158,7 @@ transformationInvariances = do
 
   where
     f = "f"
-    f_ = funapp f
+    f_ = fn f
     fs n = m (setcmpr (fun f reals reals) n)
     ln = lnbk <> hline
     x = "x"
