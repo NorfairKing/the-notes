@@ -72,26 +72,3 @@ inpreord = inrel_
 
 inpreord_ :: Note -> Note -> Note
 inpreord_ = inpreord preord_
-
--- Equivalence Relation
-eqrel :: Note
-eqrel = comm0 "sim" <> raw "\\mkern-3mu"
-
-ineqrel :: Note -> Note -> Note -> Note
-ineqrel = inpreord
-
-ineqrel_ :: Note -> Note -> Note
-ineqrel_ = ineqrel eqrel
-
-(.~) :: Note -> Note -> Note
-(.~) = ineqrel_
-
--- Equivalence class
-eqcl_ :: Note -> Note -> Note
-eqcl_ r x = sqbrac x !: r
-
-eqcl :: Note -> Note
-eqcl = sqbrac
-
-eqcls :: Note -> Note -> Note
-eqcls r x = x <> "/" <> r

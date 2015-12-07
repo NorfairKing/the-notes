@@ -2,11 +2,13 @@ module Relations.Orders where
 
 import           Notes
 
-import           Relations.BasicDefinitions (relation, total_, transitive_)
-import           Relations.Equivalence      (equivalenceRelation_, preorder_)
+import           Relations.BasicDefinitions  (relation, total_, transitive_)
+import           Relations.Equivalence       (equivalenceRelation_, preorder,
+                                              preorder_)
 
 import           Sets.Basics
 
+import           Relations.Equivalence.Macro
 import           Relations.Orders.Macro
 import           Sets.PointedSets.Macro
 
@@ -46,6 +48,7 @@ body = do
     posetDefinition
     crossPosetLift
     powsetPosetPreorder
+    partialOrdersFromPreorders
 
     subsection "Total orders"
     totalOrderDefinition
@@ -82,7 +85,7 @@ body = do
 antisymmetricDefinition :: Note
 antisymmetricDefinition = de $ do
     lab antisymmetricDefinitionLabel
-    s ["Let ", m xx, " be a set and ", m eqrel, " an ", equivalenceRelation_, on , m xx]
+    s ["Let ", m xx, " be a set and ", m eqrel_, " an ", equivalenceRelation_, on , m xx]
     s ["Let ", m rel, " be a binary ", relation, on, m xx]
     s [m rel, " is called ", antisymmetric', " if it has the following property"]
     ma $ fa (cs [a, b] ∈ xx) ((pars $ (a `inrel` b) ∧ (b `inrel` a)) ⇒ (a .~ b))
@@ -100,18 +103,43 @@ powsetPosetPreorderLabel :: Label
 powsetPosetPreorderLabel = Label Theorem "powerset-poset-induces-preorder"
 
 powsetPosetPreorder :: Note
-powsetPosetPreorder = thm $ do
-    lab powsetPosetPreorderLabel
-    s ["Let ", m relposet_, " be a poset"]
-    s [m $ relpreord (powset posetset_) partord_, ", where ", m partord_, " is defined as follows, is a ", preorder_]
-    ma $ p ⊆: q ⇔ (fa (x ∈ p) $ te (y ∈ q) $ x ⊆: y)
+powsetPosetPreorder = do
+    thm $ do
+        lab powsetPosetPreorderLabel
+        s ["Let ", m relposet_, " be a poset"]
+        s [m $ relpreord (powset posetset_) partord_, ", where ", m partord_, " is defined as follows, is a ", preorder_]
+        ma $ p ⊆: q ⇔ (fa (x ∈ p) $ te (y ∈ q) $ x ⊆: y)
 
-    toprove
+        toprove
+    cex $ do
+        s ["In general, this preorder is not a partial order"]
+        proof $ do
+            s ["Consider sets of natural numbers with the natural total order."]
+            ma $ setofs [1, 2, 3] ⊆: setof 3 <> quad <> text "and" <> quad <> setof 3 ⊆: setofs [1, 2, 3] <> quad <> text "but" <> quad <> setof 3 =§/= setofs [1, 2, 3]
+            s ["This violates antisymmetry"]
   where
     x = "x"
     y = "y"
     p = "P"
     q = "Q"
+
+partialOrdersFromPreordersLabel :: Label
+partialOrdersFromPreordersLabel = Label Theorem "partial-orders-from-preorders"
+
+partialOrdersFromPreorders :: Note
+partialOrdersFromPreorders = thm $ do
+    lab partialOrdersFromPreordersLabel
+    s ["Given a preordered set ", m relpreord_, ", it is possible to lift the ", preorder, " ", m preord_, " to a ", partialOrder, " ", m $ relposet (eqcls_ preordset_) partord_]
+    s ["Here, ", m eqrel_, " is defined naturally"]
+    ma $ x .~ y ⇔ (x ⊆: y ∧ y ⊆: x)
+    s [m partord_, " is then defined accross equivalence classes"]
+    ma $ eqcl_ x ⊆: eqcl_ y ⇔ x ⊆: y
+
+    toprove_ "This is in fact a partial order"
+  where
+    x = "x"
+    y = "y"
+
 
 posetDefinition :: Note
 posetDefinition = de $ do

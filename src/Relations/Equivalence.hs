@@ -2,8 +2,10 @@ module Relations.Equivalence where
 
 import           Notes
 
-import           Relations.BasicDefinitions (reflexive_, relation, symmetric_,
-                                             transitive_)
+import           Relations.BasicDefinitions  (reflexive_, relation, symmetric_,
+                                              transitive_)
+
+import           Relations.Equivalence.Macro
 
 makeDefs [
       "preorder"
@@ -57,10 +59,10 @@ equivalenceClass = ix "equivalence class"
 
 equivalenceClassDefinition :: Note
 equivalenceClassDefinition = de $ do
-    s ["Let ", m eqrel, " be an ", equivalenceRelation, " on a set ", m xx, " and let ", m x, " be an element of ", m xx]
-    s ["The ", term "equivalence class", " ", m (eqcl_ eqrel x), " of ", m x, " in ", m eqrel, " is the set of all elements that are equivalent to ", m x]
+    s ["Let ", m eqrel_, " be an ", equivalenceRelation, " on a set ", m xx, " and let ", m x, " be an element of ", m xx]
+    s ["The ", term "equivalence class", " ", m (eqcl_ x), " of ", m x, " in ", m eqrel_, " is the set of all elements that are equivalent to ", m x]
 
-    ma $ eqcl_ eqrel x === setcmpr (y ∈ xx) (x .~ y)
+    ma $ eqcl_ x === setcmpr (y ∈ xx) (x .~ y)
   where
     x = "x"
     y = "y"
@@ -68,10 +70,10 @@ equivalenceClassDefinition = de $ do
 
 quotientSetDefinition :: Note
 quotientSetDefinition = de $ do
-    s ["Let ", m eqrel, " be an ", equivalenceRelation, " on a set ", m xx]
-    s ["The ", term "quotient set", " ", m (eqrel `eqcls` xx),  " of ", m xx, " with respect to ", m eqrel, " is the set of all equivalennce classes of ", m xx, " in ", m eqrel]
+    s ["Let ", m eqrel_, " be an ", equivalenceRelation, " on a set ", m xx]
+    s ["The ", term "quotient set", " ", m (eqrel_ `eqcls` xx),  " of ", m xx, " with respect to ", m eqrel_, " is the set of all equivalennce classes of ", m xx, " in ", m eqrel_]
 
-    ma $ (eqrel `eqcls` xx) === setcmpr (eqcl_ eqrel x) (x ∈ xx)
+    ma $ (xx ./~ eqrel_) === setcmpr (eqcl_ x) (x ∈ xx)
   where
     x = "x"
     xx = "X"
@@ -85,7 +87,7 @@ inducedEquivalenceRelation = thm $ do
 
     toprove
   where
-    indeqrel = eqrel !: preord_
+    indeqrel = eqrel_ !: preord_
     a = "a"
     b = "b"
     xx = "X"
