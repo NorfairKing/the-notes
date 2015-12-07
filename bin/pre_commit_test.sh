@@ -3,6 +3,11 @@
 # Abort on error
 set -e
 
+echo "Testing whether you're allowed to do this."
+echo
+
+./bin/trailing_whitespace_test.sh
+
 # Make sure code quality is up to par
 hlint src \
   --ignore "Redundant do" \
@@ -24,3 +29,5 @@ make bin
 
 # Make sure compilation of the pdf succeeds
 ./the-notes
+
+echo "All clear!"
