@@ -3,14 +3,16 @@ module Relations.Orders where
 import           Notes
 
 import           Relations.BasicDefinitions  (relation, total_, transitive_)
-import           Relations.Equivalence       (equivalenceRelation_, preorder,
-                                              preorder_)
+import           Relations.Equivalence       (equivalenceRelation_)
+import           Relations.Preorders         (preorder, preorder_)
 
 import           Sets.Basics
 
+import           Sets.PointedSets.Macro
+
 import           Relations.Equivalence.Macro
 import           Relations.Orders.Macro
-import           Sets.PointedSets.Macro
+import           Relations.Preorders.Macro
 
 makeDefs [
       "antisymmetric"

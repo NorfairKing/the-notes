@@ -2,36 +2,22 @@ module Relations.Equivalence where
 
 import           Notes
 
-import           Relations.BasicDefinitions  (reflexive_, relation, symmetric_,
-                                              transitive_)
+import           Relations.BasicDefinitions  (symmetric_)
+import           Relations.Preorders         (preorder)
 
 import           Relations.Equivalence.Macro
+import           Relations.Preorders.Macro
 
 makeDefs [
-      "preorder"
-    , "equivalence relation"
+      "equivalence relation"
     ]
 
 equivalenceRelations :: Notes
-equivalenceRelations = notesPart "equivalence-relations" body
-
-body :: Note
-body = do
+equivalenceRelations = notesPart "equivalence-relations" $ do
   section "Equivalence Relations"
 
-  basicDefinitions
-  equivalenceClasses
-
-basicDefinitions :: Note
-basicDefinitions = do
-  preorderDefinition
   equivalenceRelationDefinition
-
-preorderDefinition :: Note
-preorderDefinition = de $ do
-    lab preorderDefinitionLabel
-    s ["A ", relation, " ", m rel, " between a set ", m xx, " and itself is called an ", preorder', " if it is ", reflexive_, and, transitive_]
-  where xx = "X"
+  equivalenceClasses
 
 equivalenceRelationDefinition :: Note
 equivalenceRelationDefinition = de $ do

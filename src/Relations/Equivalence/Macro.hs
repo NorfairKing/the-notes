@@ -1,11 +1,12 @@
 module Relations.Equivalence.Macro where
 
-import           Prelude               (flip)
+import           Prelude                   (flip)
 import           Types
 
 import           Macro.Math
 import           Macro.MetaMacro
-import           Macro.Relations.Macro
+
+import           Relations.Preorders.Macro
 
 -- * Equivalence Relation
 

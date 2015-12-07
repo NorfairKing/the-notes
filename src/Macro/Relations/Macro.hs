@@ -1,6 +1,5 @@
 module Macro.Relations.Macro where
 
-import           Macro.Math
 import           Macro.MetaMacro
 
 import           Functions.Application.Macro (fn)
@@ -50,25 +49,3 @@ relcomp = binop $ comm0 "circ"
 -- C-k 0M
 (●) :: Note -> Note -> Note
 (●) = relcomp
-
--- Preorder
-preordset_ :: Note
-preordset_  = "X"
-
-preord_ :: Note
-preord_ = commS "sqsubseteq" <> " "
-
-ipreord_ :: Note
-ipreord_ = commS "sqsupseteq" <> " "
-
-relpreord :: Note -> Note -> Note
-relpreord = tuple
-
-relpreord_ :: Note
-relpreord_ = relpreord preordset_ preord_
-
-inpreord :: Note -> Note -> Note -> Note
-inpreord = inrel_
-
-inpreord_ :: Note -> Note -> Note
-inpreord_ = inpreord preord_

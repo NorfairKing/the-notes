@@ -4,9 +4,9 @@ import           Types
 
 import           Macro.Math
 import           Macro.MetaMacro
-import           Macro.Relations.Macro
 
 import           Functions.Application.Macro
+import           Relations.Preorders.Macro
 
 -- * Partial order
 partord_ :: Note
