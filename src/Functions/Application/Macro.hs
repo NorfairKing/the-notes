@@ -17,6 +17,10 @@ app n m = n <> negspace <> pars m
 fn :: Note -> Note -> Note
 fn = app
 
+-- | Infix operator for function application
+(-:) :: Note -> Note -> Note
+(-:) = app
+
 -- * Function application with two arguments
 app2 :: Note -> Note -> Note -> Note
 app2 f a b = app f $ cs [a, b]

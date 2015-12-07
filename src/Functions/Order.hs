@@ -4,7 +4,8 @@ import           Notes
 
 import           Relations.Basics            (reflexive_)
 import           Relations.Orders            (antisymmetric_, boundedLattice_,
-                                              completeLattice_, lattice_,
+                                              completeLattice_, lattice,
+                                              lattice_,
                                               partialOrderDefinitionLabel,
                                               poset_)
 import           Relations.Preorders         (preorderDefinitionLabel)
@@ -46,6 +47,8 @@ body = do
 
     kleeneChainDefinition
     kleenesFixedPointTheorem
+
+    latticesOverFunctions
 
 
 regions :: Note
@@ -304,9 +307,26 @@ kleenesFixedPointTheorem = do
     x = latset_
 
 
+latticesOverFunctionsLabel :: Label
+latticesOverFunctionsLabel = Label Theorem "lattices-over-functions"
 
+latticesOverFunctions :: Note
+latticesOverFunctions = thm $ do
+    lab latticesOverFunctionsLabel
+    s ["Let ", m lat_, " be a ", lattice, and, m y, " a set"]
+    s [m $ lat (funt x y) partord_, " is a ", lattice, " where ", m partord_, " is defined as follows"]
+    ma $ f ⊆: g ⇔ fa (a ∈ dom f) (f -: a ⊆: g -: a)
+    s ["This also implies the following"]
+    ma $ (pars $ f ⊔ g) -: a =: (f -: a ⊔  g -: a)
+    ma $ (pars $ f ⊓ g) -: a =: (f -: a ⊓  g -: a)
 
-
+    toprove
+  where
+    f = "f"
+    g = "g"
+    a = "a"
+    x = latset_
+    y = "Y"
 
 
 
