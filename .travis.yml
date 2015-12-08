@@ -15,8 +15,11 @@ addons:
   apt:
     packages: &global_deps
       - texlive
+      - texlive-fonts-extra
+      - texlive-fonts-recommended
+      - texlive-latex-extra
+      - texlive-latex-recommended
       - latexmk
-      - dvipng
       - python-pygments
 
 # The following lines enable several GHC versions and/or HP versions
@@ -128,7 +131,7 @@ script:
  - cabal configure --enable-tests --enable-benchmarks -v2
 
  # this builds all libraries and executables
- - cabal install
+ - cabal build
  - cabal sdist
 
  # Check whether the latex can be compiled

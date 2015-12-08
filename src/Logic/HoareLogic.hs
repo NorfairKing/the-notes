@@ -269,6 +269,7 @@ loopRule = do
     ex $ do
         lab loopRuleExampleLabel
         ma e
+    todo "Loop rule with do while instead of just while."
   where
     e = linf [t1, t2, t3] t4
     t1 = htrip p_ a_ i_
