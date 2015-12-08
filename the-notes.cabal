@@ -17,7 +17,7 @@ cabal-version:       >=1.10
 executable the-notes
   main-is:             Main.hs
   other-extensions:    FlexibleInstances, MultiParamTypeClasses, UndecidableInstances, QuasiQuotes, TemplateHaskell
-  build-depends:          base                  >= 4.6       && < 4.9
+  build-depends:          base                  >= 4.6       && < 4.10
                         , HaTeX                 >= 3.16.2    && < 3.17
                         , mtl                   >= 2.2       && < 2.3
                         , process               >= 1.2       && < 1.4
