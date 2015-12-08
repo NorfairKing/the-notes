@@ -73,8 +73,8 @@ matrix:
             - happy-1.19.5
           sources: hvr-ghc
 
-      # allow_failures:
-      #   - env: CABALVER=1.22 GHCVER=head
+  allow_failures:
+    - env: CABALVER=1.22 GHCVER=head
 
 before_install:
  - unset CC
