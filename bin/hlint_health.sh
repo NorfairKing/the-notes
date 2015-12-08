@@ -9,7 +9,7 @@ hlint src \
   --ignore "Use camelCase"  \
   --ignore "Use import/export shortcut"  \
   --ignore "Use ." \
-  --ignore "Warning: Move brackets to avoid $" \
+  --ignore "Move brackets to avoid $" \
   -XFlexibleInstances \
   -XMultiParamTypeClasses \
   -XUndecidableInstances \
