@@ -1,3 +1,4 @@
+echo "Running hlint..."
 # Make sure code quality is up to par
 hlint src \
   --ignore "Redundant do" \
