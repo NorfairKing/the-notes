@@ -36,19 +36,16 @@ matrix:
       compiler: ": #GHC head"
       addons: {apt: {packages: [cabal-install-1.22,ghc-head,alex-3.1.4,happy-1.19.5], sources: [hvr-ghc]}}
 
-      allow_failures:
-        - env: CABALVER=1.22 GHCVER=head
+      # allow_failures:
+      #   - env: CABALVER=1.22 GHCVER=head
 
 addons:
   apt:
     packages:
-      - texlive-fonts-recommended 
-      - texlive-latex-extra
-      - texlive-fonts-extra
-      - texlive-latex-recommended
+      - texlive-full
+      - latexmk
       - dvipng
       - python-pygments
-      - latexmk
 
 before_install:
  - unset CC
