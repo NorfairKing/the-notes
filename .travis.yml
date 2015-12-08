@@ -81,12 +81,17 @@ matrix:
 
 
 before_install:
+  # Get latexmk and texlive
   #TODO(kerckhove) cache these
  - mkdir -p ~/texlive/bin/x86_64-linux
  - export PATH="$PATH:$HOME/texlive/bin/x86_64-linux"
  - curl -L http://mirror.switch.ch/ftp/mirror/tex/support/latexmk/latexmk.pl > ~/texlive/bin/x86_64-linux/latexmk && chmod 775 ~/texlive/bin/x86_64-linux/latexmk
  - latexmk --version
- - curl -L https://raw.githubusercontent.com/krlmlr/texlive-squashfs/master/out/texlive.tar.xz | tar xJC ~
+
+ - bash -x ./install-texlive.sh
+ - export PATH=$PWD/texlive/bin/x86_64-linux:$PATH
+
+
  - unset CC
  - export HAPPYVER=1.19.5
  - export ALEXVER=3.1.4
