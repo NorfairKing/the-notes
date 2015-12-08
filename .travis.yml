@@ -82,11 +82,11 @@ matrix:
 
 before_install:
   #TODO(kerckhove) cache these
- - curl -L http://mirror.switch.ch/ftp/mirror/tex/support/latexmk/latexmk.pl > ~/latexmk && chmod 775 ~/latexmk
- - export PATH="$PATH:$HOME/latexmk"
+ - mkdir -p ~/texlive/bin/x86_64-linux
+ - export PATH="$PATH:$HOME/texlive/bin/x86_64-linux"
+ - curl -L http://mirror.switch.ch/ftp/mirror/tex/support/latexmk/latexmk.pl > ~/texlive/bin/x86_64-linux/latexmk && chmod 775 ~/texlive/bin/x86_64-linux/latexmk
  - latexmk --version
  - curl -L https://raw.githubusercontent.com/krlmlr/texlive-squashfs/master/out/texlive.tar.xz | tar xJC ~
- - export PATH="$PATH:$HOME/texlive/bin/x86_64-linux"
  - unset CC
  - export HAPPYVER=1.19.5
  - export ALEXVER=3.1.4
