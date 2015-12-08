@@ -26,6 +26,16 @@ Contributions to these notes are very welcome in the form of pull requests or pa
 
 `IMPORTANT`, before contributing, please install the `bin/pre_commit_test.sh` hook into `.git/hooks/pre-commit`. You can do this by running `spark deploy hooks.sus` or by manually copying the file.
 
+### Dependencies
+To make contributions, you will need:
+
+- `ghc`
+- `cabal`
+- `haddock`
+- `hlint`
+- `minted` (`pygmentize`)
+- `latexmk`
+
 ## Licence
 "The Notes"
 Copyright 2015 Tom Sydney Kerckhove
