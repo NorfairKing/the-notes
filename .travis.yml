@@ -82,10 +82,11 @@ matrix:
 
 before_install:
  - curl -L https://raw.githubusercontent.com/krlmlr/texlive-squashfs/master/out/texlive.tar.xz | tar xJC ~
+ - curl -L http://mirror.switch.ch/ftp/mirror/tex/support/latexmk/latexmk.pl > latexmk
  - unset CC
  - export HAPPYVER=1.19.5
  - export ALEXVER=3.1.4
- - export PATH=$HOME/texlive/bin/x86_64-linux:~/.cabal/bin:/opt/ghc/$GHCVER/bin:/opt/cabal/$CABALVER/bin:/opt/happy/$HAPPYVER/bin:/opt/alex/$ALEXVER/bin:/usr/bin/latexmk:$PATH
+ - export PATH=~/texlive/bin/x86_64-linux:~/latexmk:~/.cabal/bin:/opt/ghc/$GHCVER/bin:/opt/cabal/$CABALVER/bin:/opt/happy/$HAPPYVER/bin:/opt/alex/$ALEXVER/bin:/usr/bin/latexmk:$PATH
 
 install:
  - cabal --version
