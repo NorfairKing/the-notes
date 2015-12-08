@@ -25,7 +25,7 @@ tlmgr install \
  color \
  courier \
  enumerate \
- fancyhdr
+ fancyhdr \
  fix-cm \
  float \
  geometry \
