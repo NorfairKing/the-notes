@@ -14,7 +14,8 @@ before_cache:
 addons:
   apt:
     packages: &global_deps
-      - texlive-full
+      # - texlive-full
+      - texlive
       # - texlive-extra
       # - texlive-fonts-extra
       # - texlive-fonts-recommended
@@ -50,6 +51,7 @@ matrix:
             - happy-1.19.5
           sources:
             - hvr-ghc
+            - texlive-backports/ppa
     - env: CABALVER=1.22 GHCVER=7.10.2
       compiler: ": #GHC 7.10.2"
       addons:
