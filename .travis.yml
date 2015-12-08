@@ -88,8 +88,10 @@ before_install:
  - curl -L http://mirror.switch.ch/ftp/mirror/tex/support/latexmk/latexmk.pl > ~/texlive/bin/x86_64-linux/latexmk && chmod 775 ~/texlive/bin/x86_64-linux/latexmk
  - latexmk --version
 
- - bash -x ./install-texlive.sh
- - export PATH=$PWD/texlive/bin/x86_64-linux:$PATH
+ - sudo add-apt-repository -y "ppa:texlive-backports/ppa"
+ - sudo apt-get install texlive-full
+ # - bash -x ./install-texlive.sh
+ # - export PATH=$PWD/texlive/bin/x86_64-linux:$PATH
 
 
  - unset CC
