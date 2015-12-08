@@ -14,11 +14,12 @@ before_cache:
 addons:
   apt:
     packages: &global_deps
-      - texlive
-      - texlive-fonts-extra
-      - texlive-fonts-recommended
-      - texlive-latex-extra
-      - texlive-latex-recommended
+      - texlive-full
+      # - texlive-extra
+      # - texlive-fonts-extra
+      # - texlive-fonts-recommended
+      # - texlive-latex-extra
+      # - texlive-latex-recommended
       - latexmk
       - python-pygments
 
