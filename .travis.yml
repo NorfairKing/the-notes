@@ -21,7 +21,7 @@ addons:
       # - texlive-fonts-recommended
       # - texlive-latex-extra
       # - texlive-latex-recommended
-      - latexmk
+      # - latexmk
       - python-pygments
 
 # The following lines enable several GHC versions and/or HP versions
@@ -85,7 +85,7 @@ before_install:
  - unset CC
  - export HAPPYVER=1.19.5
  - export ALEXVER=3.1.4
- - export PATH=~/.cabal/bin:/opt/ghc/$GHCVER/bin:/opt/cabal/$CABALVER/bin:/opt/happy/$HAPPYVER/bin:/opt/alex/$ALEXVER/bin:/usr/bin/latexmk:/$HOME/texlive/bin/x86_64-linux:$PATH
+ - export PATH=$HOME/texlive/bin/x86_64-linux:~/.cabal/bin:/opt/ghc/$GHCVER/bin:/opt/cabal/$CABALVER/bin:/opt/happy/$HAPPYVER/bin:/opt/alex/$ALEXVER/bin:/usr/bin/latexmk:$PATH
 
 install:
  - cabal --version
