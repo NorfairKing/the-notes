@@ -11,6 +11,14 @@ before_cache:
   - rm -fv $HOME/.cabal/packages/hackage.haskell.org/build-reports.log
   - rm -fv $HOME/.cabal/packages/hackage.haskell.org/00-index.tar
 
+addons:
+  apt:
+    packages: &global_deps
+      - texlive-full
+      - latexmk
+      - dvipng
+      - python-pygments
+
 # The following lines enable several GHC versions and/or HP versions
 # to be tested; often it's enough to test only against the last
 # release of a major GHC version. Setting HPVER implictly sets
@@ -28,24 +36,16 @@ matrix:
     #   addons: {apt: {packages: [cabal-install-1.18,ghc-7.8.4,alex-3.1.4,happy-1.19.5], sources: [hvr-ghc]}}
     - env: CABALVER=1.22 GHCVER=7.10.1
       compiler: ": #GHC 7.10.1"
-      addons: {apt: {packages: [cabal-install-1.22,ghc-7.10.1,alex-3.1.4,happy-1.19.5], sources: [hvr-ghc]}}
+      addons: {apt: {packages: [*global_deps, [cabal-install-1.22,ghc-7.10.1,alex-3.1.4,happy-1.19.5]], sources: [hvr-ghc]}}
     - env: CABALVER=1.22 GHCVER=7.10.2
       compiler: ": #GHC 7.10.2"
-      addons: {apt: {packages: [cabal-install-1.22,ghc-7.10.2,alex-3.1.4,happy-1.19.5], sources: [hvr-ghc]}}
+      addons: {apt: {packages: [*global_deps, [cabal-install-1.22,ghc-7.10.2,alex-3.1.4,happy-1.19.5]], sources: [hvr-ghc]}}
     - env: CABALVER=1.22 GHCVER=head
       compiler: ": #GHC head"
-      addons: {apt: {packages: [cabal-install-1.22,ghc-head,alex-3.1.4,happy-1.19.5], sources: [hvr-ghc]}}
+      addons: {apt: {packages: [*global_deps, [cabal-install-1.22,ghc-head,alex-3.1.4,happy-1.19.5]], sources: [hvr-ghc]}}
 
       # allow_failures:
       #   - env: CABALVER=1.22 GHCVER=head
-
-addons:
-  apt:
-    packages:
-      - texlive-full
-      - latexmk
-      - dvipng
-      - python-pygments
 
 before_install:
  - unset CC
