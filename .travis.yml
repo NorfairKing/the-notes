@@ -1,6 +1,6 @@
 # NB: don't set `language: haskell` here
 language: c
-sudo: required
+sudo: false
 
 cache:
   directories:
@@ -14,15 +14,7 @@ before_cache:
 addons:
   apt:
     packages: &global_deps
-      # - texlive-full
-      # - texlive
-      # - texlive-extra
-      # - texlive-fonts-extra
-      # - texlive-fonts-recommended
-      # - texlive-latex-extra
-      # - texlive-latex-recommended
-      # - latexmk
-      - python-pygments
+      - hlint
 
 # The following lines enable several GHC versions and/or HP versions
 # to be tested; often it's enough to test only against the last
@@ -30,15 +22,6 @@ addons:
 # GHCVER. Omit lines with versions you don't need/want testing for.
 matrix:
   include:
-    # - env: CABALVER=1.16 GHCVER=7.4.2
-    #   compiler: ": #GHC 7.4.2"
-    #   addons: {apt: {packages: [cabal-install-1.16,ghc-7.4.2,alex-3.1.4,happy-1.19.5], sources: [hvr-ghc]}}
-    # - env: CABALVER=1.16 GHCVER=7.6.3
-    #   compiler: ": #GHC 7.6.3"
-    #   addons: {apt: {packages: [cabal-install-1.16,ghc-7.6.3,alex-3.1.4,happy-1.19.5], sources: [hvr-ghc]}}
-    # - env: CABALVER=1.18 GHCVER=7.8.4
-    #   compiler: ": #GHC 7.8.4"
-    #   addons: {apt: {packages: [cabal-install-1.18,ghc-7.8.4,alex-3.1.4,happy-1.19.5], sources: [hvr-ghc]}}
     - env: CABALVER=1.22 GHCVER=7.10.1
       compiler: ": #GHC 7.10.1"
       addons:
@@ -51,7 +34,6 @@ matrix:
             - happy-1.19.5
           sources:
             - hvr-ghc
-            # - texlive-backports/ppa
     - env: CABALVER=1.22 GHCVER=7.10.2
       compiler: ": #GHC 7.10.2"
       addons:
@@ -81,19 +63,6 @@ matrix:
 
 
 before_install:
-  # Get latexmk and texlive
-  #TODO(kerckhove) cache these
- - mkdir -p ~/texlive/bin/x86_64-linux
- - export PATH="$PATH:$HOME/texlive/bin/x86_64-linux"
- - curl -L http://mirror.switch.ch/ftp/mirror/tex/support/latexmk/latexmk.pl > ~/texlive/bin/x86_64-linux/latexmk && chmod 775 ~/texlive/bin/x86_64-linux/latexmk
- - latexmk --version
-
- - sudo add-apt-repository -y "ppa:texlive-backports/ppa"
- - sudo apt-get install texlive-full
- # - bash -x ./install-texlive.sh
- # - export PATH=$PWD/texlive/bin/x86_64-linux:$PATH
-
-
  - unset CC
  - export HAPPYVER=1.19.5
  - export ALEXVER=3.1.4
@@ -136,7 +105,6 @@ install:
       cp -a $HOME/.ghc $HOME/.cabsnap/ghc;
       cp -a $HOME/.cabal/lib $HOME/.cabal/share $HOME/.cabal/bin installplan.txt $HOME/.cabsnap/;
    fi
- - cabal install hlint
 
 # Here starts the actual work to be performed for the package under
 # test; any command which exits with a non-zero exit code causes the
