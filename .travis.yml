@@ -111,8 +111,8 @@ install:
 # test; any command which exits with a non-zero exit code causes the
 # build to fail.
 script:
- - ./code_health.sh
- - ./documentation.sh
+ - ./bin/code_health.sh
+ - ./bin/documentation.sh
 
  # -v2 provides useful information for debugging
  - cabal configure --enable-tests --enable-benchmarks -v2
