@@ -112,7 +112,6 @@ install:
 # build to fail.
 script:
  - ./bin/code_health.sh
- - ./bin/documentation.sh
 
  # -v2 provides useful information for debugging
  - cabal configure --enable-tests --enable-benchmarks -v2
