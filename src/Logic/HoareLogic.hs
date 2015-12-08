@@ -36,27 +36,28 @@ makeDefs [
 
 hoareLogicS :: Notes
 hoareLogicS = notesPart "hoare-logic" $ do
-  section "Hoare Logic"
-  hoareLogicDefinition
-  hoareTripleNote
+    section "Hoare Logic"
+    hoareLogicDefinition
+    hoareTripleNote
 
-  ruleOfConsequenceDefinition
-  ruleOfConjunctionDefinition
-  sequentialCompositionDefinition
+    ruleOfConsequenceDefinition
+    ruleOfConjunctionDefinition
+    sequentialCompositionDefinition
 
-  skipDefinition
-  abortDefinition
-  substitutionDefinition
-  assignmentDefinition
-  freeVariableDefinition
-  modifiesDefinition
-  ruleOfConstancy
-  conditionalRule
-  loopRule
+    skipDefinition
+    abortDefinition
+    substitutionDefinition
+    assignmentDefinition
+    freeVariableDefinition
+    modifiesDefinition
+    ruleOfConstancy
+    conditionalRule
+    loopRule
 
-  termination
+    termination
+    exampleProof
 
-  nocite softwareVerificationAxiomaticSemanticsSlides
+    nocite softwareVerificationAxiomaticSemanticsSlides
 
 a, b, c, i, p, q, r, e, x, y, z :: Note
 a = "A"
@@ -144,7 +145,7 @@ sequentialCompositionDefinition = do
     de $ do
         lab sequentialCompositionDefinitionLabel
         s [the, " rule of ", sequentialComposition', " is an ", inference, " in ", hoareLogic ]
-        ma $ linf [htrip p a q, htrip q b r] $ htrip p (a ؛ b) q
+        ma $ linf [htrip p a q, htrip q b r] $ htrip p (a ؛ b) r
         s ["Instructions can be sequenced as long as their conditions line up"]
     ex $ ma $ linf [t1, t2] t3
   where
@@ -348,6 +349,33 @@ terminationProofExample = ex $ do
     a_ = (i =:= 0)
     c_ = (i =: n)
     b_ = seqins [(i =:= i + 1), (y =:= y + 1)]
+
+exampleProof :: Note
+exampleProof = ex $ do
+    s ["The following ", hoareTriple, is, true]
+    ma $ t_
+
+    proof $ do
+        prooftree $ do
+            seqcomp
+                (
+                conseq2
+                    (assignmentAs $ m $ htrip p_' a1_ q_)
+                    (elemmath $ m $ p_ ⇒ p_')
+                    (m $ htrip p_ a1_ q_)
+                )
+                (skipAs $ m $ htrip q_ a2_ q_)
+                (m t_)
+
+
+  where
+    t_ = htrip p_ a_ q_
+    p_ = x > 0
+    p_' = x + 1 > 1
+    a_ = a1_ ؛ a2_
+    a1_ = x =:= x + 1
+    a2_ = skip
+    q_ = x > 1
 
 
 softwareVerificationAxiomaticSemanticsSlides :: Reference

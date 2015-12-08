@@ -75,6 +75,9 @@ packages = do
   -- For bold math
   usepackage [] "bm"
 
+  -- For fancy logic proofs
+  usepackage [] "bussproofs"
+
   applyHdrSettings myHdrSettings
 
   commS "makeindex"
