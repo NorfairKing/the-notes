@@ -56,9 +56,6 @@ before_install:
  - export ALEXVER=3.1.4
  - export PATH=~/.cabal/bin:/opt/ghc/$GHCVER/bin:/opt/cabal/$CABALVER/bin:/opt/happy/$HAPPYVER/bin:/opt/alex/$ALEXVER/bin:$PATH
  - travis_retry cabal update
- - cabal install hlint
-
-
 
 install:
  - cabal --version
@@ -70,7 +67,7 @@ install:
    fi
  - travis_retry cabal update
  - "sed -i  's/^jobs:.*$/jobs: 2/' $HOME/.cabal/config"
- - cabal install --only-dependencies --enable-tests --enable-benchmarks > installplan.txt
+ - cabal install --only-dependencies --enable-tests --enable-benchmarks hlint > installplan.txt
  - sed -i -e '1,/^Resolving /d' installplan.txt; cat installplan.txt
 
  # check whether current requested install-plan matches cached package-db snapshot
@@ -96,6 +93,7 @@ install:
       cp -a $HOME/.ghc $HOME/.cabsnap/ghc;
       cp -a $HOME/.cabal/lib $HOME/.cabal/share $HOME/.cabal/bin installplan.txt $HOME/.cabsnap/;
    fi
+ - cabal install hlint
 
 # Here starts the actual work to be performed for the package under
 # test; any command which exits with a non-zero exit code causes the
