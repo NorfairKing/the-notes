@@ -11,11 +11,6 @@ before_cache:
   - rm -fv $HOME/.cabal/packages/hackage.haskell.org/build-reports.log
   - rm -fv $HOME/.cabal/packages/hackage.haskell.org/00-index.tar
 
-addons:
-  apt:
-    packages: &global_deps
-      - hlint
-
 # The following lines enable several GHC versions and/or HP versions
 # to be tested; often it's enough to test only against the last
 # release of a major GHC version. Setting HPVER implictly sets
@@ -27,7 +22,6 @@ matrix:
       addons:
         apt:
           packages:
-            - *global_deps
             - cabal-install-1.22
             - ghc-7.10.1
             - alex-3.1.4
@@ -39,7 +33,6 @@ matrix:
       addons:
         apt:
           packages:
-            - *global_deps
             - cabal-install-1.22
             - ghc-7.10.2
             - alex-3.1.4
@@ -51,7 +44,6 @@ matrix:
       addons:
         apt:
           packages:
-            - *global_deps
             - cabal-install-1.22
             - ghc-head
             - alex-3.1.4
