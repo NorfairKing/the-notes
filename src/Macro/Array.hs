@@ -2,7 +2,8 @@ module Macro.Array where
 
 import           Types
 
-import qualified Prelude    as P
+import           Control.Monad (sequence_)
+import qualified Prelude       as P
 
 import           Macro.Math
 
@@ -47,3 +48,16 @@ linedTable header notes = m $ array (Just Center) specs $ do
       hline
       content ns
 
+-- * Math statements below eachother
+
+-- | Math statements below eachother using an array.
+belowEachOther :: [TableSpec] -> [Note] -> Note
+belowEachOther sp = array Nothing sp . sequence_ . P.map (<> lnbk)
+
+-- | Same as @belowEachOther@ but left outlined.
+leftBelowEachOther :: [Note] -> Note
+leftBelowEachOther = belowEachOther [LeftColumn]
+
+-- | Same as @belowEachOther@ but centered.
+centeredBelowEachOther :: [Note] -> Note
+centeredBelowEachOther = belowEachOther [CenterColumn]

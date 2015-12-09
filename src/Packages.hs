@@ -78,6 +78,12 @@ packages = do
   -- For fancy logic proofs
   usepackage [] "bussproofs"
 
+  -- For sideways figures
+  usepackage [] "rotating"
+
+  -- For the huge page
+  usepackage ["strict"] "changepage"
+
   applyHdrSettings myHdrSettings
 
   commS "makeindex"

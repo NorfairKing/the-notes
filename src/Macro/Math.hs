@@ -38,6 +38,9 @@ rightarrow = comm0 "rightarrow"
 rightArrow :: Note
 rightArrow = comm0 "Rightarrow"
 
+mod :: Note -> Note -> Note
+mod = between $ text " mod "
+
 mid :: Note
 mid = comm0 "mid"
 

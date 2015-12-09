@@ -111,6 +111,7 @@ data RefKind = Definition
              | Proposition
              | Property
              | Example
+             | Figure
   deriving (Show, Eq)
 
 type ReferenceType = String

@@ -5,9 +5,6 @@ module Logic.HoareLogic.Macro (
 
 import           Types
 
-import           Control.Monad               (sequence_)
-import           Prelude                     (map)
-
 import           Macro.Array
 import           Macro.BussProofs
 import           Macro.Math
@@ -22,6 +19,10 @@ import           Macro.Logic.Macro
 htrip :: Note -> Note -> Note -> Note
 htrip p a q = brac p <> commS "," <> a <> commS "," <> brac q
 
+-- | Hoare triple in a collumn instead of a row
+htrip_ :: Note -> Note -> Note -> Note
+htrip_ p a q = leftBelowEachOther [brac p, a, brac q]
+
 -- | Sequence
 -- > C-k ;+
 (؛) :: Note -> Note -> Note
@@ -30,7 +31,7 @@ htrip p a q = brac p <> commS "," <> a <> commS "," <> brac q
 -- | Sequence of instructions below eachother
 -- > C-k ;+
 seqins :: [Note] -> Note
-seqins = array Nothing [CenterColumn] . sequence_ . map (\n -> n <> ";" <> lnbk)
+seqins = leftBelowEachOther
 
 -- * Replacement
 lrepl :: Note -> Note -> Note -> Note
@@ -52,15 +53,66 @@ modifies = app "modifies"
 
 -- * Conditionals
 
+-- | If then end
+ifThen :: Note -> Note -> Note
+ifThen c i = t "if " <> c <> t " then " <> i <> t " end"
+  where t = text . textbf
+
+ifThen_ :: Note -> Note -> Note
+ifThen_ c i = leftBelowEachOther $
+    [
+      t "if " <> c
+    , t "then"
+    , quad <> i
+    , t "end"
+    ]
+  where t = text . textbf
+
 -- | If then else end
 ifThenElse :: Note -> Note -> Note -> Note
-ifThenElse c i e = text "if " <> c <> text " then " <> i <> text " else " <> e <> text " end"
+ifThenElse c i e = t "if " <> c <> t " then " <> i <> t " else " <> e <> t " end"
+  where t = text . textbf
+
+-- | If then else end but in a collumn instead of a row
+ifThenElse_ :: Note -> Note -> Note -> Note
+ifThenElse_ c i e = leftBelowEachOther
+    [
+      t "if " <> c
+    , quad <> i
+    , t "else"
+    , quad <> e
+    , t "end"
+    ]
+  where t = text . textbf
 
 -- * Loops
 
 -- | from until loop end
 fromUntilLoop :: Note -> Note -> Note -> Note
-fromUntilLoop a c b = text "from " <> a <> text " until " <> c <> text " loop " <> b <> text " end"
+fromUntilLoop a c b = t "from " <> a <> t " until " <> c <> t " loop " <> b <> t " end"
+  where t = text . textbf
+
+-- | from until loop end but in a collumn instead of a row
+fromUntilLoop_ :: Note -> Note -> Note -> Note
+fromUntilLoop_ a c b = leftBelowEachOther
+    [
+      t "from"
+    , quad <> a
+    , t "until " <> c <> t " loop"
+    , quad <> b
+    , t "end"
+    ]
+  where t = text . textbf
+
+-- * Arrays
+
+-- | Array indexing
+-- @index a i@ represents a[i]
+index :: Note -> Note -> Note
+index a i = a <> sqbrac i
+
+(!) :: Note -> Note -> Note
+(!) = index
 
 
 -- * Proof rules
@@ -104,7 +156,12 @@ assignmentAs = unaryInf "[ass]" axiomC
 
 -- | Assumption without a label
 assumption :: Note -> Note
-assumption = unaryInf "" axiomC
+assumption = axiomC_
 
+-- | Elementary Math
 elemmath :: Note -> Note
 elemmath = unaryInf "[EM]" axiomC
+
+-- | Loop rule
+looprule :: Note -> Note -> Note -> Note -> Note
+looprule = trinaryInf "[loop]"
