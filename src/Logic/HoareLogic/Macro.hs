@@ -21,7 +21,7 @@ htrip p a q = brac p <> commS "," <> a <> commS "," <> brac q
 
 -- | Hoare triple in a collumn instead of a row
 htrip_ :: Note -> Note -> Note -> Note
-htrip_ p a q = leftBelowEachOther [brac p, a, brac q]
+htrip_ p a q = centeredBelowEachOther [brac p, a, brac q]
 
 -- | Sequence
 -- > C-k ;+
