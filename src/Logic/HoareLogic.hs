@@ -14,6 +14,15 @@ import           Relations.Orders.Macro
 hoareLogicS :: Notes
 hoareLogicS = notesPart "hoare-logic" $ do
     section "Hoare Logic"
+    s [hoareLogic', " is used to reason about imperative computer programs in abstract machines that have a ", state]
+
+    stateDefinition
+    evaluationDefinition
+    instructionDefinition
+    assertionDefinition
+    satisfactionExamples
+    variableAssignmentDefinition
+
     hoareLogicDefinition
     hoareTripleNote
 
@@ -51,19 +60,69 @@ x = "x"
 y = "y"
 z = "z"
 
+stateDefinition :: Note
+stateDefinition = do
+    de $ do
+        lab stateDefinitionLabel
+        s ["A ",state', " is an assignment of values to abstract symbols"]
+    nte $ do
+        s ["In computers these values are typically finite strings of bits but they can be arbitrary values in theory"]
+        s ["In logical reasoning, the values are typically (unbounded) integers"]
+    ex $ do
+        s [m $ cs ["a" .-> 4, "b" .-> 3], " could be a ", state]
+
+evaluationDefinition :: Note
+evaluationDefinition = de $ do
+    lab evaluationDefinitionLabel
+    s ["The ", evaluation', " ", m $ b .: ss, " of a symbol ", m b, " with respect to a program state ", m ss, " is the value of ", m b, " in ", m ss]
+    ma $ (b .: ss) =: a ⇔ ((b .-> a) ∈ a)
+  where
+    a = "a"
+    b = "b"
+    ss = "S"
+
+instructionDefinition :: Note
+instructionDefinition = do
+    de $ do
+        lab instructionDefinitionLabel
+        s ["An ", instruction', " in such an abstract machine is a procedure of modifying that ", state]
+    nte $ do
+        s ["While we say ", quoted "modify", " it is perfectly valid to model a modification as a reconstruction with different variables"]
+        s ["There is no real difference in math, but this difference manifests itself physically in real machines"]
+
+assertionDefinition :: Note
+assertionDefinition = de $ do
+    lab assertionDefinitionLabel
+    lab satisfiesDefinitionLabel
+    s ["An ", assertion', " is a predicate on the set of posssible program states"]
+    s ["A program ", state," ", m ss, " ", satisfies', " an ", assertion, " if the ", assertion, " holds for that program state"]
+    todo "define assertions recursively, see the separation logic part"
+  where ss = "S"
+
+satisfactionExamples :: Note
+satisfactionExamples = do
+    ex $ m $ cs [x .-> 5, y .-> 10] |= ((x < y) ∧ (x > 0))
+    ex $ do
+        s [m $ x .-> 25 |= te y (y > x), " holds"]
+        s ["Note that the ", m y, " doesn't have to be the value of a variable"]
+
+variableAssignmentDefinition :: Note
+variableAssignmentDefinition = do
+    de $ do
+        s [m $ a =:= b, " represents the instruction to assign the value of ", m b, " to the variable a"]
+    ex $ do
+        s ["If the program state holds ", m $ cs [a .-> 3, b .-> 5], " and the instruction ", m $ a =:= b, " is performed, the state afterwards would be ", m $ cs [a .-> 5, b .-> 5]]
+  where
+    a = "a"
+    b = "b"
+
 hoareLogicDefinition :: Note
 hoareLogicDefinition = do
-    s [hoareLogic', " is used to reason about imperative computer programs in abstract machines that have a ", state]
-    s ["A ",state', " is an assignment of values to abstract symbols"]
-    s ["An ", instruction', " in such an abstract machine is a procedure of modifying that ", state]
     de $ do
         lab hoareLogicDefinitionLabel
-        lab stateDefinitionLabel
-        lab instructionDefinitionLabel
         lab hoareTripleDefinitionLabel
         lab preconditionDefinitionLabel
         lab postconditionDefinitionLabel
-        lab assertionDefinitionLabel
         lab partialCorrectnessDefinitionLabel
         lab totalCorrectnessDefinitionLabel
         s [hoareLogic', " is a ", theory]
@@ -148,11 +207,11 @@ substitutionDefinition :: Note
 substitutionDefinition = do
     de $ do
         lab substitutionDefinitionLabel
-        s [m (lrepl p e x), " is the expression obtained from ", m p, by, substitution', " of every occurence of ", m x, by, m e]
+        s [m (repl p e x), " is the expression obtained from ", m p, by, substitution', " of every occurence of ", m x, by, m e]
         s ["Read it as ", dquoted (s [m p, " with ", m e, " instead of ", m x])]
 
-    ex $ dquoted (m $ lrepl (pars $ y =:= x) z y) <> " " =: " " <> dquoted (m $ z =:= x)
-    ex $ dquoted (m $ lrepl (pars $ y =:= x) (x + 1) x) <> " " =: " " <> dquoted (m $ x =:= x + 1)
+    ex $ dquoted (m $ repl (pars $ y =:= x) z y) <> " " =: " " <> dquoted (m $ z =:= x)
+    ex $ dquoted (m $ repl (pars $ y =:= x) (x + 1) x) <> " " =: " " <> dquoted (m $ x =:= x + 1)
 
 
 assignmentDefinition :: Note
@@ -160,7 +219,7 @@ assignmentDefinition = do
     de $ do
         lab assignmentDefinitionLabel
         s ["The ", assignment', " of variables is an ", axiomSchema, " in ", hoareLogic]
-        ma $ fa (cs [p,e,x]) $ htrip (lrepl p e x) (x =:= e) p
+        ma $ fa (cs [p,e,x]) $ htrip (repl p e x) (x =:= e) p
 
     ex $ m $ htrip (y > z - 2) (x =:= x + 1) (y > z - 2)
     ex $ m $ htrip (2 + 2 =: 5) (x =:= x + 1) (2 + 2 =: 5)

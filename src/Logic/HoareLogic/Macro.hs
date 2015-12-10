@@ -9,11 +9,48 @@ import           Macro.Array
 import           Macro.BussProofs
 import           Macro.Math
 import           Macro.MetaMacro
+import           Macro.Text
 
 
 import           Functions.Application.Macro
--- import           Logic.AbstractLogic.Macro
 import           Macro.Logic.Macro
+
+-- * Program states
+
+-- | Value of symbol in state
+(.->) :: Note -> Note -> Note
+(.->) = binop mapsto
+
+
+-- | Shortcut for multiple points to
+(..->) :: Note -> [Note] -> Note
+a ..-> bs = a .-> cs bs
+
+-- * Evaluation
+
+-- | Evaluation of a variable in a program state
+eval :: Note -- ^ State
+     -> Note -- ^ Symbol
+     -> Note
+eval state symbol = (!: state) $ sqbrac $ "|" <> symbol <> "|"
+
+-- | Infix evaluation operator
+(.:) :: Note -> Note -> Note
+(.:) symbol state = eval state symbol
+
+-- * Satisfaction
+
+-- | Satisfaction
+satis :: Note -- ^ Program state
+      -> Note -- ^ Assertion
+      -> Note
+satis = lent
+
+-- | Infix operator for satisfaction
+(|=) :: Note -> Note -> Note
+(|=) = satis
+
+-- * Hoare Logic
 
 -- | Hoare Triple
 htrip :: Note -> Note -> Note -> Note
@@ -34,8 +71,8 @@ seqins :: [Note] -> Note
 seqins = leftBelowEachOther
 
 -- * Replacement
-lrepl :: Note -> Note -> Note -> Note
-lrepl p e x = p <> sqbrac (e <> " / " <> x)
+repl :: Note -> Note -> Note -> Note
+repl p e x = p <> sqbrac (e <> " / " <> x)
 
 -- *  Assignment
 lass :: Note -> Note -> Note

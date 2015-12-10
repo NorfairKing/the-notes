@@ -3,13 +3,16 @@ module Logic.HoareLogic.Terms where
 import           Notes
 
 makeDefs [
-      "Hoare logic"
-    , "state"
+      "state"
+    , "evaluation"
     , "instruction"
+    , "assertion"
+    , "satisfies"
+
+    , "Hoare logic"
     , "Hoare triple"
     , "precondition"
     , "postcondition"
-    , "assertion"
     , "partial correctness"
     , "total correctness"
 
