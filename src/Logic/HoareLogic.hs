@@ -34,6 +34,7 @@ hoareLogicS = notesPart "hoare-logic" $ do
     abortDefinition
     substitutionDefinition
     assignmentDefinition
+    forwardAssignmentDefinition
     freeVariableDefinition
     modifiesDefinition
     ruleOfConstancy
@@ -238,6 +239,17 @@ assignmentDefinition = do
         s ["It is assumed that the assigned expression is side-effect-free"]
         s ["This always holds in mathematics, but infrequently in real machines"]
 
+forwardAssignmentDefinitionLabel :: Label
+forwardAssignmentDefinitionLabel = Label Definition "forward-assignment"
+
+forwardAssignmentDefinition :: Note
+forwardAssignmentDefinition = de $ do
+    lab forwardAssignmentDefinitionLabel
+    s ["There is also a ", quoted "forward version", " of the assignment axiom"]
+    ma $ htrip p (x =:= e) (te xo $ (pars $ repl p xo x) ∧ (pars $ x =: repl e xo x))
+  where
+    x = "x"
+    xo = x ^: "old"
 
 freeVariableDefinition :: Note
 freeVariableDefinition = de $ do

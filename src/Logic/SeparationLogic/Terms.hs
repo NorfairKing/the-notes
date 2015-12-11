@@ -13,6 +13,9 @@ makeDefs [
     , "empty heap"
 
     , "satisfies"
+    , "allocation"
+    , "heap mutation"
+    , "disposal"
     , "frame"
     , "frame rule"
     ]

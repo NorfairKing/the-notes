@@ -3,6 +3,9 @@ module Macro.Graphviz where
 import           Prelude
 import           Types
 
+import           Control.Monad          (unless)
+
+import           System.Directory       (doesFileExist)
 import           System.Exit            (ExitCode (..))
 import           System.FilePath.Posix  ((<.>), (</>))
 import           System.Process         (CreateProcess,
@@ -17,15 +20,17 @@ import qualified Data.Text.IO           as T
 
 dot2tex :: Text -> Note' FilePath
 dot2tex text = do
-    liftIO $ T.writeFile file_dot text
+    doneAlready <- liftIO $ doesFileExist file_eps -- This works because we use hashes for the file name
+    unless doneAlready $ do
+        liftIO $ T.writeFile file_dot text
 
-    (ec, out, err) <- liftIO $ readCreateProcessWithExitCode dotJob ""
-    case ec of
-        ExitSuccess -> return ()
-        ExitFailure c -> do
-            liftIO $ putStrLn $ out ++ err
-            liftIO $ print c
-            error $ "Generating graph" ++ filename -- FIXME send this to a logfile instead
+        (ec, out, err) <- liftIO $ readCreateProcessWithExitCode dotJob ""
+        case ec of
+            ExitSuccess -> return ()
+            ExitFailure c -> do
+                liftIO $ putStrLn $ out ++ err
+                liftIO $ print c
+                error $ "Generating graph" ++ filename -- FIXME send this to a logfile instead before we start asyncing this code
 
     return file_eps
   where
