@@ -130,6 +130,7 @@ entireDocument = do
   document $ do
     myTitlePage
     tableofcontents
+    newpage
     renderConfig
     renderNotes allNotes
 
