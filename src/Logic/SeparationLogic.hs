@@ -2,6 +2,8 @@ module Logic.SeparationLogic where
 
 import           Notes
 
+import           Prelude                     (Either (..))
+
 import           Logic.AbstractLogic
 import           Logic.HoareLogic.Macro      hiding (satis)
 import           Logic.HoareLogic.Terms      hiding (satisfies, satisfies')
@@ -22,15 +24,24 @@ separationLogicS = notesPart "separation-logic" $ do
     emptyHeapSemanticsDefinition
     pointsToSemanticsDefinition
     separatingConjunctionSemanticsDefinition
+
     chainedPointsToDefinition
+    chainedPointsToExample
+
     separatingImplicationSemanticsDefinition
+
 
     satisfactionExamples
 
+
     fetchAssignmentDefinition
     heapMutationDefinition
+
     allocationAssignmentDefinition
+    allocationAssignmentExample
+
     disposalDefinition
+
 
     separationLogicAxioms
 
@@ -115,15 +126,9 @@ separatingConjunctionSemanticsDefinition = de $ do
     q = "Q"
 
 chainedPointsToDefinition :: Note
-chainedPointsToDefinition = do
-    de $ do
-        s ["The notation ", m $ e ..-> [f0, f1, dotsc, fn], " is a shorthand for the following"]
-        ma $ (e .-> f0) .* (e + 1 .-> f1) .* dotsc .* ((e + n) .-> fn)
-    ex $ do
-        fp <- graphExample
-        hereFigure $ do
-            includegraphics [IGWidth (CustomMeasure $ "0.3" <> textwidth)] fp
-            caption $ s $ ["The result of ", m $ e ..-> [f0, f1, dotsc, fn], " starting from an empty heap"]
+chainedPointsToDefinition = de $ do
+    s ["The notation ", m $ e ..-> [f0, f1, dotsc, fn], " is a shorthand for the following"]
+    ma $ (e .-> f0) .* (e + 1 .-> f1) .* dotsc .* ((e + n) .-> fn)
   where
     e = "e"
     f = "f"
@@ -131,6 +136,14 @@ chainedPointsToDefinition = do
     f0 = f !: 0
     f1 = f !: 1
     fn = f !: n
+
+chainedPointsToExample :: Note
+chainedPointsToExample = ex $ do
+    fp <- storeHeap ["e"] [("a", ["1", "5"])] [(Left "e", ("a", 0))]
+    hereFigure $ do
+        includegraphics [IGWidth (CustomMeasure $ "0.25" <> textwidth)] fp
+        caption $ s $ ["A situation in which ", m $ "e" ..-> [1, 5], " holds"]
+
 
 separatingImplicationSemanticsDefinition :: Note
 separatingImplicationSemanticsDefinition = de $ do
@@ -165,7 +178,6 @@ heapMutationDefinition = de $ do
 allocationAssignmentDefinition :: Note
 allocationAssignmentDefinition = de $ do
     s [m $ cons [e1, dotsc, en], " represents the instruction to allocate ", m n, " consecutive locations that are not in the heap yet, say ", m $ cs [l1, dotsc, ln], " and assign the values of ", m $ cs [e1, dotsc, en], " to the contents of ", m $ cs [l1, dotsc, ln], " respectively"]
-    exneeded
   where
     e = "e"
     e1 = e !: 1
@@ -174,6 +186,13 @@ allocationAssignmentDefinition = de $ do
     l1 = l !: 1
     ln = l !: n
     n = "n"
+
+allocationAssignmentExample :: Note
+allocationAssignmentExample = ex $ do
+    fp <- storeHeap [] [("a",["1", "2", "5"])] []
+    hereFigure $ do
+        includegraphics [IGWidth (CustomMeasure $ "0.25" <> textwidth)] fp
+        caption $ s $ ["The result of ", m $ cons [1, 2, 5], " starting from an empty heap"]
 
 disposalDefinition :: Note
 disposalDefinition = de $ do

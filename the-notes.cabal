@@ -29,8 +29,11 @@ executable the-notes
                         , pcre-heavy            >= 1.0       && < 1.1
                         , blaze-html            >= 0.8       && < 0.9
                         , blaze-markup          >= 0.7       && < 0.8
-                        , haphviz               >= 0.1       && < 0.2
+                        , haphviz               >= 0.1.0.1   && < 0.2
                         , filepath              >= 1.4       && < 1.5
+                        , base16-bytestring     >= 0.1       && < 0.2
+                        , bytestring            >= 0.10      && < 0.11
+                        , cryptohash            >= 0.11      && < 0.12
   ghc-options:        -Wall
                       -fwarn-unused-imports
                       -fwarn-incomplete-patterns
