@@ -24,6 +24,15 @@ cellborder :: Text.Blaze.Internal.AttributeValue
               -> Text.Blaze.Internal.Attribute
 cellborder = customAttribute "cellborder"
 
+storeHeapFig :: [Text] -> [(Text, [Text])] -> [(Either Text (Text, Int), (Text, Int))] -> Note -> Note
+storeHeapFig ss hs es cap = do
+    fp <- storeHeap ss hs es
+    noindent
+    hereFigure $ do
+        includegraphics [KeepAspectRatio True, IGHeight (Cm 3.0), IGWidth (CustomMeasure $ "0.25" <> textwidth)] fp
+        caption $ cap
+
+
 storeHeap :: [Text] -- ^ Store as list of variables
           -> [(Text, [Text])] -- ^ Heap as lists of consequtive locations with names
           -> [(Either Text (Text, Int), (Text, Int))] -- ^ Edges

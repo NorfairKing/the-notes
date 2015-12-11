@@ -29,6 +29,7 @@ dot2tex text = do
 
     return file_eps
   where
+    -- A unique filename based on content. In the odd case that the content is the same, it doesn't matter.
     filename = SB8.unpack $ SB.take 16 $ B16.encode $ MD5.hash $ T.encodeUtf8 text
     filedir = "/tmp"
     f e = filedir </> filename <.> e

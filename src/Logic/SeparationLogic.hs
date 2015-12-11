@@ -22,8 +22,13 @@ separationLogicS = notesPart "separation-logic" $ do
     satisfiesDefinition
 
     emptyHeapSemanticsDefinition
+    emptyHeapExample
+
     pointsToSemanticsDefinition
+    pointsToExample
+
     separatingConjunctionSemanticsDefinition
+    separatingConjunctionExample
 
     chainedPointsToDefinition
     chainedPointsToExample
@@ -90,12 +95,13 @@ emptyHeapSemanticsDefinition :: Note
 emptyHeapSemanticsDefinition = de $ do
     s [m emp, " represents the assertion that the heap is empty"]
     m $ ss emp ⇔ (hp =§= emptyset)
-    exneeded
   where
     ss = satis st hp
     st = "s"
     hp = "h"
 
+emptyHeapExample :: Note
+emptyHeapExample = ex $ storeHeapFig ["e", "f"] [] [] (s $ ["A situation in which ", m emp, " holds"])
 
 pointsToSemanticsDefinition :: Note
 pointsToSemanticsDefinition = do
@@ -110,12 +116,19 @@ pointsToSemanticsDefinition = do
     e = "e"
     f = "f"
 
+pointsToExample :: Note
+pointsToExample = ex $ storeHeapFig
+    ["e"]
+    [("a", ["1"])]
+    [(Left "e", ("a", 0))] $
+    s $ ["A situation in which ", m $ "e" .-> 1, " holds"]
+
+
 
 separatingConjunctionSemanticsDefinition :: Note
 separatingConjunctionSemanticsDefinition = de $ do
-    m $ ss (p -* q) ⇔ (te (cs [h1, h2]) $ between (comm0 "bot") h1 h2 ∧ between (comm0 "circ") h1 h2 =: hp ∧ satis st h1 p ∧ satis st h2 q)
+    m $ ss (p .* q) ⇔ (te (cs [h1, h2]) $ between (comm0 "bot") h1 h2 ∧ between (comm0 "circ") h1 h2 =: hp ∧ satis st h1 p ∧ satis st h2 q)
     s ["... or informally: ", dquoted $ s ["The heap can be divided into two parts ", m h1, and, m h2, ", one where ", m $ satis st h1 p, " holds and one where ", m $ satis st h2 q]]
-    exneeded
   where
     ss = satis st hp
     st = "s"
@@ -124,6 +137,17 @@ separatingConjunctionSemanticsDefinition = de $ do
     h2 = hp !: 2
     p = "P"
     q = "Q"
+
+separatingConjunctionExample :: Note
+separatingConjunctionExample = ex $ storeHeapFig
+    ["x", "y"]
+    [("x", ["4"]), ("y", ["5"])]
+    [(Left "x", ("x", 0)), (Left "y", ("y", 0))] $
+    s ["A situation in which ", m $ ss ("x" =: 4 .* "y" =: 5), " holds"]
+  where
+    ss = satis st hp
+    st = "s"
+    hp = "h"
 
 chainedPointsToDefinition :: Note
 chainedPointsToDefinition = de $ do
@@ -138,11 +162,11 @@ chainedPointsToDefinition = de $ do
     fn = f !: n
 
 chainedPointsToExample :: Note
-chainedPointsToExample = ex $ do
-    fp <- storeHeap ["e"] [("a", ["1", "5"])] [(Left "e", ("a", 0))]
-    hereFigure $ do
-        includegraphics [IGWidth (CustomMeasure $ "0.25" <> textwidth)] fp
-        caption $ s $ ["A situation in which ", m $ "e" ..-> [1, 5], " holds"]
+chainedPointsToExample = ex $ storeHeapFig
+    ["e"]
+    [("a", ["1", "5"])]
+    [(Left "e", ("a", 0))] $
+    s $ ["A situation in which ", m $ "e" ..-> [1, 5], " holds"]
 
 
 separatingImplicationSemanticsDefinition :: Note
