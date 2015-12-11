@@ -2,7 +2,7 @@ module Logic.SeparationLogic where
 
 import           Notes
 
-import           Prelude                     (Either (..))
+import           Prelude                     (Bool (..), Either (..))
 
 import           Logic.AbstractLogic
 import           Logic.HoareLogic.Macro      hiding (satis)
@@ -34,18 +34,21 @@ separationLogicS = notesPart "separation-logic" $ do
     chainedPointsToExample
 
     separatingImplicationSemanticsDefinition
-
+    separatingImplicationExample
 
     satisfactionExamples
 
 
     fetchAssignmentDefinition
+
     heapMutationDefinition
+    heapMutationExample
 
     allocationAssignmentDefinition
     allocationAssignmentExample
 
     disposalDefinition
+    disposalExample
 
 
     separationLogicAxioms
@@ -119,9 +122,9 @@ pointsToSemanticsDefinition = do
 pointsToExample :: Note
 pointsToExample = ex $ storeHeapFig
     ["e"]
-    [("a", ["1"])]
+    [("a", ["8"])]
     [(Left "e", ("a", 0))] $
-    s $ ["A situation in which ", m $ "e" .-> 1, " holds"]
+    s $ ["A situation in which ", m $ "e" .-> 8, " holds"]
 
 
 
@@ -140,10 +143,10 @@ separatingConjunctionSemanticsDefinition = de $ do
 
 separatingConjunctionExample :: Note
 separatingConjunctionExample = ex $ storeHeapFig
-    ["x", "y"]
-    [("x", ["4"]), ("y", ["5"])]
-    [(Left "x", ("x", 0)), (Left "y", ("y", 0))] $
-    s ["A situation in which ", m $ ss ("x" =: 4 .* "y" =: 5), " holds"]
+    ["x", "y", "z"]
+    [("5", ["5"]), ("z", ["z"]), ("10", ["10"])]
+    [(Left "x", ("5", 0)), (Left "z", ("10", 0)), (Right ("5", 0), ("z", 0)), (Right ("z", 0), ("10", 0))] $
+    s ["A situation in which ", m $ ss ("x" .-> 5 .* 5 .-> "z" .* "z" .-> 10), " holds"]
   where
     ss = satis st hp
     st = "s"
@@ -172,7 +175,6 @@ chainedPointsToExample = ex $ storeHeapFig
 separatingImplicationSemanticsDefinition :: Note
 separatingImplicationSemanticsDefinition = de $ do
     s [m $ satis st hp (p -* q), " is said to hold if and only if ", dquoted $ s ["Extending ", m hp, " with a disjoint part ", m hp', " that satisfies ", m p, " results in a new heap satisfying ", m q]]
-    exneeded
   where
     hp = "h"
     hp' = "h'"
@@ -180,13 +182,75 @@ separatingImplicationSemanticsDefinition = de $ do
     p = "P"
     q = "Q"
 
+separatingImplicationExample :: Note
+separatingImplicationExample = ex $ do
+    fpa <- storeHeap
+        ["x"]
+        [("x", ["5"])]
+        [(Left "x", ("x", 0))]
+    fpb <- storeHeap
+        ["y"]
+        [("y", ["6"])]
+        [(Left "y", ("y", 0))]
+    fpc <- storeHeap
+        ["x", "y"]
+        [("x", ["5"]), ("y", ["6"])]
+        [(Left "x", ("x", 0)), (Left "y", ("y", 0))]
+    hereFigure $ do
+        includegraphics [KeepAspectRatio True, IGHeight (Cm 3.0), IGWidth (CustomMeasure $ "0.25" <> textwidth)] fpa
+        hspace  $ Cm 1.0
+        includegraphics [KeepAspectRatio True, IGHeight (Cm 3.0), IGWidth (CustomMeasure $ "0.25" <> textwidth)] fpb
+        hspace  $ Cm 1.0
+        includegraphics [KeepAspectRatio True, IGHeight (Cm 3.0), IGWidth (CustomMeasure $ "0.25" <> textwidth)] fpc
+    s ["The first situation is an example of a situation in which ", m $ satis st hp ((pars $ x .-> 5) -* (pars $ x .-> 5 .* y .-> 6)), " holds."]
+    s ["This assertion holds because the heap could be extended with the disjunct heap from the second situation to produce a heap (the one on the right), that satisfies ", m $ (x .-> 5 .* y .-> 6)]
+  where
+    hp = "h"
+    st = "s"
+    x = "x"
+    y = "y"
+
 satisfactionExamples :: Note
-satisfactionExamples = todo "examples on slide 43"
+satisfactionExamples = ex $ do
+    noindent
+    fpa <- storeHeap
+                ["x", "y"]
+                [("x", ["4","4"]), ("y", ["4","4"])]
+                [(Left "x", ("x", 0)), (Left "y", ("y", 0))]
+    fpb <- storeHeap
+                ["x", "y"]
+                [("x", ["4","4"])]
+                [(Left "x", ("x", 0)), (Left "y", ("x", 0))]
+    hereFigure $ do
+        includegraphics [KeepAspectRatio True, IGHeight (Cm 3.0), IGWidth (CustomMeasure $ "0.25" <> textwidth)] fpa
+        hspace  $ Cm 1.0
+        includegraphics [KeepAspectRatio True, IGHeight (Cm 3.0), IGWidth (CustomMeasure $ "0.25" <> textwidth)] fpb
+        caption $ s ["Two situations ", m aa, " on the left and ", m bb, " on the right"]
+
+    hereFigure $ do
+        linedTable ["", aa, bb]
+            [
+              [x ..-> [4,4]                                                     , f, t]
+            , [x ..-> [4,4] .* t                                                , t, t]
+            , [x ..-> [4,4] .* y ..-> [4,4]                                     , t, t]
+            , [x ..-> [4,4] ∧  y ..-> [4,4]                                     , f, t]
+            , [(pars $ x ..-> [4,4] .* true) ∧ (pars $ y ..-> [4,4] .* true)    , t, t]
+            ]
+        caption $ "Assertions on the situations"
+    s ["The first assertion doesn't hold for situation ", m aa, " because there are more elements on the heap than just the two mentioned in ", m $ x ..-> [4,4]]
+    s ["The third assertion doesn't hold for situation ", m bb, " because the heap cannot be divided into two parts"]
+    s ["The fourth assertion doesn't hold for situation ", m aa, " because there are too many elements on the heap"]
+  where
+    t = true
+    f = false
+    x = "x"
+    y = "y"
+    aa = "A"
+    bb = "B"
 
 fetchAssignmentDefinition :: Note
 fetchAssignmentDefinition = de $ do
-    s [m $ e .& hp, " represents the location of the variabl that is said to be stored in ", m e]
-    exneeded
+    s [m $ e .& hp, " represents the location of the variable that is said to be stored in ", m e]
   where
     hp = "h"
     e = "e"
@@ -198,6 +262,27 @@ heapMutationDefinition = de $ do
     hp = "h"
     e = "e"
     f = "f"
+
+heapMutationExample :: Note
+heapMutationExample = ex $ do
+    noindent
+    fpa <- storeHeap
+                ["x", "y"]
+                [("x", ["2","4"]), ("y", ["3","5"])]
+                [(Left "x", ("x", 0)), (Left "y", ("y", 0))]
+    fpb <- storeHeap
+                ["x", "y"]
+                [("x", ["2"," "]), ("y", ["3","5"])]
+                [(Left "x", ("x", 0)), (Left "y", ("y", 0)), (Right ("x", 1), ("y", 0))]
+    hereFigure $ do
+        includegraphics [KeepAspectRatio True, IGHeight (Cm 3.0), IGWidth (CustomMeasure $ "0.25" <> textwidth)] fpa
+        hspace  $ Cm 1.0
+        includegraphics [KeepAspectRatio True, IGHeight (Cm 3.0), IGWidth (CustomMeasure $ "0.25" <> textwidth)] fpb
+        caption $ s ["An example situation before and after a ", m $ ((x + 1) .& hp) =:= y, " instruction"]
+  where
+    x = "x"
+    y = "y"
+    hp = "h"
 
 allocationAssignmentDefinition :: Note
 allocationAssignmentDefinition = de $ do
@@ -212,19 +297,38 @@ allocationAssignmentDefinition = de $ do
     n = "n"
 
 allocationAssignmentExample :: Note
-allocationAssignmentExample = ex $ do
-    fp <- storeHeap [] [("a",["1", "2", "5"])] []
-    hereFigure $ do
-        includegraphics [IGWidth (CustomMeasure $ "0.25" <> textwidth)] fp
-        caption $ s $ ["The result of ", m $ cons [1, 2, 5], " starting from an empty heap"]
+allocationAssignmentExample = ex $ storeHeapFig
+    ["x"]
+    [("x",["1", "2", "5"])]
+    [(Left "x", ("x", 0))] $
+    s $ ["The result of ", m $ x =:= cons [1, 2, 5], " starting from an empty heap"]
+  where
+    x = "x"
 
 disposalDefinition :: Note
 disposalDefinition = de $ do
     s [m $ dispose e, " represents the instruction to fetch ", m e, " to get its location ", m l, " and remove ", m l, " from the heap"]
-    exneeded
   where
     e = "e"
     l = "l"
+
+disposalExample :: Note
+disposalExample = ex $ do
+    noindent
+    fpa <- storeHeap
+                ["x"]
+                [("x", ["2","4", "8"])]
+                [(Left "x", ("x", 0))]
+    fpb <- storeHeap
+                []
+                [("x", [" ","4", "8"])]
+                []
+    hereFigure $ do
+        includegraphics [KeepAspectRatio True, IGHeight (Cm 3.0), IGWidth (CustomMeasure $ "0.25" <> textwidth)] fpa
+        hspace  $ Cm 1.0
+        includegraphics [KeepAspectRatio True, IGHeight (Cm 3.0), IGWidth (CustomMeasure $ "0.25" <> textwidth)] fpb
+        caption $ s ["An example situation before and after a ", m $ dispose "x", " instruction"]
+
 
 
 exampleProgram :: Note
@@ -240,7 +344,7 @@ separationLogicAxioms = do
 
 heapMutationAxiomSchemaDefinition :: Note
 heapMutationAxiomSchemaDefinition = de $ do
-    s [m $ htrip (e .-> x) ((e .& hp) =:= f) (e .-> f), " is an ", axiomSchema, " in ", separationLogic]
+    s [m $ htrip (te x $ e .-> x) ((e .& hp) =:= f) (e .-> f), " is an ", axiomSchema, " in ", separationLogic]
   where
     e = "e"
     f = "f"
@@ -249,7 +353,7 @@ heapMutationAxiomSchemaDefinition = de $ do
 
 disposalAxiomSchemaDefinition :: Note
 disposalAxiomSchemaDefinition = de $ do
-    s [m $ htrip (e .-> x) (dispose e) emp, " is an ", axiomSchema, " in ", separationLogic]
+    s [m $ htrip (te x $ e .-> x) (dispose e) emp, " is an ", axiomSchema, " in ", separationLogic]
   where
     e = "e"
     x = "x"

@@ -49,8 +49,8 @@ storeHeap store heap edges = dot2tex $ renderGraph $ graph_ directed $ do
             n <- newNode
             return (name, (ts, n))
 
-    let flattenedHeapNodes :: [(Text, (NodeId, Int))]
-        flattenedHeapNodes = concatMap (\(name, (ts, n)) -> map (\(i, _) -> (name, (n, i))) (zip [0..] ts)) heapNodes
+    let flattenedHeapNodes :: [(Text, NodeId)]
+        flattenedHeapNodes = map (\(name, (_, n)) -> (name, n)) heapNodes
 
 
     cluster_ "store" $ do
@@ -77,10 +77,10 @@ storeHeap store heap edges = dot2tex $ renderGraph $ graph_ directed $ do
                         Left st -> fromMaybe (error $ "Node not found: " ++ T.unpack st) (lookup st storeNodes)
                         Right (hn, hp) -> case lookup hn flattenedHeapNodes of
                                             Nothing -> error $ "Node not found: " ++ T.unpack hn ++ ":" ++ show hp
-                                            Just (n, port) -> n .: (T.pack $ show port)
+                                            Just n -> n .: (T.pack $ show hp)
         let toNode = case lookup t flattenedHeapNodes of
                         Nothing -> error $ "Node not found: " ++ T.unpack t ++ ":" ++ show t
-                        Just (n, _) -> n .: (T.pack $ show p)
+                        Just n -> n .: (T.pack $ show p)
 
         fromNode --> toNode
     return ()
