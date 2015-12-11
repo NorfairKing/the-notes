@@ -6,6 +6,7 @@ import           Macro.Array                 as X
 import           Macro.Code                  as X
 import           Macro.Figure                as X
 import           Macro.Framed                as X
+import           Macro.Graphviz              as X
 import           Macro.Index                 as X
 import           Macro.Math                  as X
 import           Macro.MetaMacro             as X

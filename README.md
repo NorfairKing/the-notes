@@ -35,6 +35,7 @@ To make contributions, you will need:
 - `hlint`
 - `minted` (`pygmentize`)
 - `latexmk`
+- `dot`
 
 ## Licence
 "The Notes"

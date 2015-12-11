@@ -15,6 +15,7 @@ module Types (
   , module Text.LaTeX.Packages.AMSThm
   , module Text.LaTeX.Packages.Fancyhdr
   , module Text.LaTeX.Packages.Color
+  , module Text.LaTeX.Packages.Graphicx
 
   , ask, asks
   ) where
@@ -36,6 +37,7 @@ import           Text.LaTeX.Packages.AMSThm   hiding (TheoremStyle (..), proof,
                                                theorem)
 import           Text.LaTeX.Packages.Color
 import           Text.LaTeX.Packages.Fancyhdr
+import           Text.LaTeX.Packages.Graphicx
 
 import           Control.Monad.Reader         (MonadReader (..), ReaderT, ask,
                                                asks)
@@ -44,6 +46,7 @@ import           Control.Monad.State          (MonadState (..), StateT, get,
 
 
 type Note = LaTeXT_ (StateT State (ReaderT Config IO))
+type Note' = LaTeXT (StateT State (ReaderT Config IO))
 
 data State = State {
       state_refs :: [Reference]

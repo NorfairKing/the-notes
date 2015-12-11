@@ -84,6 +84,8 @@ packages = do
   -- For the huge page
   usepackage ["strict"] "changepage"
 
+
+  -- For the nice header
   applyHdrSettings myHdrSettings
 
   commS "makeindex"

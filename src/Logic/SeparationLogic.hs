@@ -5,6 +5,7 @@ import           Notes
 import           Logic.AbstractLogic
 import           Logic.HoareLogic.Macro      hiding (satis)
 import           Logic.HoareLogic.Terms      hiding (satisfies, satisfies')
+import           Logic.SeparationLogic.Graph
 import           Logic.SeparationLogic.Macro
 import           Logic.SeparationLogic.Terms
 
@@ -86,11 +87,11 @@ emptyHeapSemanticsDefinition = de $ do
 
 
 pointsToSemanticsDefinition :: Note
-pointsToSemanticsDefinition = de $ do
-    lab pointsToDefinitionLabel
-    m $ ss (e .-> f) ⇔ hp =§= ((e .: st) .-> (f .: st)) ∈ hp
-    s ["... or informally: ", dquoted $ s ["There exists a value ", m f, " on the heap that ", m e, " (which may also be a value on the heap) points to and no others"]]
-    exneeded
+pointsToSemanticsDefinition = do
+    de $ do
+        lab pointsToDefinitionLabel
+        m $ ss (e .-> f) ⇔ hp =§= ((e .: st) .-> (f .: st)) ∈ hp
+        s ["... or informally: ", dquoted $ s ["There exists a value ", m f, " on the heap that ", m e, " (which may also be a value on the heap) points to and no others"]]
   where
     ss = satis st hp
     st = "s"
@@ -114,10 +115,15 @@ separatingConjunctionSemanticsDefinition = de $ do
     q = "Q"
 
 chainedPointsToDefinition :: Note
-chainedPointsToDefinition = de $ do
-    s ["The notation ", m $ e ..-> [f0, f1, dotsc, fn], " is a shorthand for the following"]
-    ma $ (e .-> f0) .* (e + 1 .-> f1) .* dotsc .* ((e + n) .-> fn)
-    exneeded
+chainedPointsToDefinition = do
+    de $ do
+        s ["The notation ", m $ e ..-> [f0, f1, dotsc, fn], " is a shorthand for the following"]
+        ma $ (e .-> f0) .* (e + 1 .-> f1) .* dotsc .* ((e + n) .-> fn)
+    ex $ do
+        fp <- graphExample
+        hereFigure $ do
+            includegraphics [IGWidth (CustomMeasure $ "0.3" <> textwidth)] fp
+            caption $ s $ ["The result of ", m $ e ..-> [f0, f1, dotsc, fn], " starting from an empty heap"]
   where
     e = "e"
     f = "f"
