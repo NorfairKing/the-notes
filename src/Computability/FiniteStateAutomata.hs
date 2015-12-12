@@ -4,22 +4,37 @@ import           Notes
 
 import           Computability.FiniteStateAutomata.Macro
 import           Computability.FiniteStateAutomata.Terms
+--import           Computability.Languages.Macro
+--import           Computability.Languages.Terms
+import           Computability.Symbols.Macro
+--import           Computability.Symbols.Terms
+
+import           Functions.Basics.Macro
 
 finiteStateAutomata :: Notes
-finiteStateAutomata = notesPart "finite-state-automata" body
+finiteStateAutomata = notesPart "finite-state-automata" $ do
+    section "Finite state automata"
+    subsection "NFSA"
+    nonDeterministicFiniteStateAutomatonDefinition
+    todo "input word"
+    todo "accepting run"
+    todo "rejecting run"
+    todo "language of NFSA"
 
-body :: Note
-body = do
-  section "Finite state automata"
-  nonDeterministicFiniteStateAutomatonDefinition
-  deterministicFiniteStateAutomatonDefinition
+
+    subsection "DFSA"
+    deterministicFiniteStateAutomatonDefinition
 
 
 nonDeterministicFiniteStateAutomatonDefinition :: Note
 nonDeterministicFiniteStateAutomatonDefinition = de $ do
     s ["A ", nondeterministicFiniteStateAutomaton', " is a ", m 5, "-tuple ", m nfsa_, " where the following conents"]
     enumerate $ do
-        item $ "hi"
+        item $ s [m nfas_, ": a finite set of states"]
+        item $ s [m alph_, ": an alphabet"]
+        item $ s [m $ fun nfatf_ (nfas_ ⨯ alphe_) (powset nfas_), ": A transition function"]
+        item $ s [m $ nfass_, ": an initial state"]
+        item $ s [m $ nfaas_, ": a set of accepting states"]
 
 deterministicFiniteStateAutomatonDefinition :: Note
 deterministicFiniteStateAutomatonDefinition = mempty
