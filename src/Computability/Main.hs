@@ -4,7 +4,7 @@ module Computability.Main (
 
 import           Notes
 
-import           Computability.FiniteStateAutomata
+import           Computability.FiniteStateAutomata (finiteStateAutomata)
 import           Computability.Languages
 import           Computability.RegularExpressions
 import           Computability.Symbols

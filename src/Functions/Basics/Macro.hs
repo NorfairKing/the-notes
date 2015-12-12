@@ -3,6 +3,7 @@ module Functions.Basics.Macro where
 import           Types
 
 import           Macro.Math
+import           Macro.Tuple
 
 import           Functions.Application.Macro
 import           Macro.Sets.CarthesianProduct

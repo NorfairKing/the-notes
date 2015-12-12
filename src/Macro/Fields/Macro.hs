@@ -2,8 +2,8 @@ module Macro.Fields.Macro where
 
 import           Types
 
-import           Macro.Math
 import           Macro.MetaMacro
+import           Macro.Tuple
 
 -- Field Set
 fieset :: Note

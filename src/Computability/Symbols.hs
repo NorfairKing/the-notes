@@ -1,31 +1,16 @@
-module Computability.Symbols (
-      symbols
-
-    , symbol          , symbol_
-    , alphabet        , alphabet_
-    , string          , string_
-    , emptyString     , emptyString_
-    , reverseString   , reverseString_
-    , concatenation   , concatenation_
-  ) where
+module Computability.Symbols where
 
 import           Notes
 
-import           Sets.Basics               (set)
+import           Sets.Basics                 (set)
 
-import           Functions.BinaryOperation (associative_)
+import           Functions.BinaryOperation   (associative_)
 
-makeDefs [
-      "symbol", "alphabet"
-    , "string", "empty string", "reverse string"
-    , "concatenation"
-    ]
+import           Computability.Symbols.Macro
+import           Computability.Symbols.Terms
 
 symbols :: Notes
-symbols = notesPart "symbols-and-strings" body
-
-body :: Note
-body = do
+symbols = notesPart "symbols-and-strings" $ do
     section "Symbols and strings"
     symbolDefinition
     alphabetDefinition
@@ -42,35 +27,35 @@ symbolDefinition :: Note
 symbolDefinition = de $ do
     lab symbolDefinitionLabel
     s ["A ", symbol', " is a representation of an abstract mathematical object."]
-    s ["The only prerequisite of a ", symbol, " is that there is an equivalence relation ", m csymEqSign, " defined on it"]
+    s ["The only prerequisite of a ", symbol, " is that there is an equivalence relation ", m symEqSign, " defined on it"]
     refneeded "equivalence relation"
 
 alphabetDefinition :: Note
 alphabetDefinition = de $ do
     lab alphabetDefinitionLabel
-    s ["An ", alphabet', " ", m calph, " is a finite ", set, " of ", symbol, "s"]
+    s ["An ", alphabet', " ", m alph_, " is a finite ", set, " of ", symbol, "s"]
 
 
 stringDefinition :: Note
 stringDefinition = de $ do
     lab stringDefinitionLabel
-    s ["A ", string', " ", m cstr, " over an ", alphabet, " ", m calph, " is a ordered sequence of symbols ", m (a "i"), " in ", m calph]
-    ma $ cstr =: cstrlst (a 1) (a "n")
+    s ["A ", string', " ", m str_, " over an ", alphabet, " ", m alph_, " is a ordered sequence of symbols ", m (a "i"), " in ", m alph_]
+    ma $ str_ =: strlst (a 1) (a "n")
   where a n = "a" !: n
 
 emptyStringDefinition :: Note
 emptyStringDefinition = do
     lab emptyStringDefinitionLabel
-    de $ s [the, emptyString', " ", m cestr, " is the ", string, " of no symbols"]
+    de $ s [the, emptyString', " ", m estr, " is the ", string, " of no symbols"]
 
     nte $ do
-      s [m cestr, " is just the notation for the empty string"]
+      s [m estr, " is just the notation for the empty string"]
       s ["It is only used because writing down ", quoted "nothing", ", even that word, is impractical"]
 
 concatenationDefinition :: Note
 concatenationDefinition = de $ do
     s [the, concatenation', " ",  m (x <@> y), " of two strings ", m x, and, m y, " is the following ", string]
-    ma $ (x <@> y) === cstrof [x_ 1, x_ 2, dotsc, x_ "m", y_ 1, y_ 2, dotsc, y_ "n"]
+    ma $ (x <@> y) === strof [x_ 1, x_ 2, dotsc, x_ "m", y_ 1, y_ 2, dotsc, y_ "n"]
 
   where
     x = "x"
@@ -92,21 +77,21 @@ concatenationNotCommutative = thm $ do
 
 stringsOfAlphabetDefinition :: Note
 stringsOfAlphabetDefinition = de $ do
-    s ["The ", set, " of all strings over an ", alphabet, " ", m calph, " is denoted as ", m cstrs]
-    ma $ cstrs === setcmpr (cstrlist (a 1) (a 2) (a "n")) (cs [a "i" ∈ cstrs, cs ["n", "i"] ∈ naturals])
+    s ["The ", set, " of all strings over an ", alphabet, " ", m alph_, " is denoted as ", m strsof_]
+    ma $ strsof_ === setcmpr (strlist (a 1) (a 2) (a "n")) (cs [a "i" ∈ alph_, cs ["n", "i"] ∈ naturals])
   where a n = "a" !: n
 
 stringsWithEmptyDefinition :: Note
 stringsWithEmptyDefinition = do
-    de $ s ["The ", set, " ", m $ calph ∪ setof cestr, " is sometimes written more consisely as ", m calphe]
+    de $ s ["The ", set, " ", m $ alph_ ∪ setof estr, " is sometimes written more consisely as ", m alphe_]
 
-    nte $ s ["This is not just a set of symbols because ", m cestr, " is a string"]
+    nte $ s ["This is not just a set of symbols because ", m estr, " is a string"]
 
 reverseStringDefinition :: Note
 reverseStringDefinition = de $ do
     lab reverseStringDefinitionLabel
-    s [the, reverseString', " ", m (crstr cstr), " of a ", string, " ", m (cstr =: cstrlst (a 1) (a n)), " is the ", string, " wherein the symbols of ", m cstr, " are ordered in reverse"]
-    ma $ crstr cstr === cstrlst (a n) (a 1)
+    s [the, reverseString', " ", m (rstr str_), " of a ", string, " ", m (str_ =: strlst (a 1) (a n)), " is the ", string, " wherein the symbols of ", m str_, " are ordered in reverse"]
+    ma $ rstr str_ === strlst (a n) (a 1)
   where
     a n = "a" !: n
     n = "n"

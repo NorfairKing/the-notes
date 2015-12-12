@@ -14,8 +14,8 @@ import           Macro.Reference             as X
 import           Macro.Text                  as X
 import           Macro.Theorem               as X
 import           Macro.Todo                  as X
+import           Macro.Tuple                 as X
 
-import           Macro.Computability.Macro   as X
 import           Macro.Fields.Macro          as X
 import           Macro.Groups.Macro          as X
 import           Macro.LinearAlgebra.Macro   as X
