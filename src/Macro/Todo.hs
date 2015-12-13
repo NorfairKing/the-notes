@@ -3,6 +3,7 @@ module Macro.Todo where
 import           Types
 
 import           Control.Monad (unless)
+import           Packages
 
 todo' :: LaTeXC l => l -> l
 todo' = liftL $ \l -> TeXComm "todo" [MOptArg ["color=red", "inline", raw "size=\\small"], FixArg l ]
@@ -10,7 +11,9 @@ todo' = liftL $ \l -> TeXComm "todo" [MOptArg ["color=red", "inline", raw "size=
 todo :: Note -> Note
 todo n = do
     o <- asks conf_omitTodos
-    unless o $ todo' n
+    unless o $ do
+        packageDep_ "todonotes"
+        todo' n
 
 toprove :: Note
 toprove = todo $ "There is a proof missing here."

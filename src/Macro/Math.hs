@@ -1,9 +1,11 @@
 module Macro.Math where
 
+import           Packages
+import           Types
+
 import           Macro.Index
 import           Macro.MetaMacro
 import           Macro.Text      (commaSeparated)
-import           Types
 
 m :: Note -> Note
 m = math
@@ -229,7 +231,9 @@ av = autoBrackets "|" "|"
 
 -- Bold math
 bm :: Note -> Note
-bm = comm1 "bm"
+bm n = do
+    packageDep_ "bm"
+    comm1 "bm" n
 
 -- Roots
 sqrt :: Note -> Note
