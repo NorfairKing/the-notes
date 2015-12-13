@@ -1,6 +1,15 @@
 {-# LANGUAGE QuasiQuotes #-}
 module Main where
 
+import qualified Prelude               as P
+
+import qualified Data.Set              as S
+import qualified Data.Text             as T
+
+import           Control.Monad         (unless, when)
+import           Data.List             (intercalate, splitAt)
+import           Prelude               (Bool (..), Int, appendFile, error,
+                                        putStrLn, return)
 import           System.Exit           (ExitCode (..), die)
 import           System.Process        (CreateProcess (..),
                                         readCreateProcessWithExitCode, shell)
@@ -8,14 +17,6 @@ import           Text.Regex.PCRE.Heavy (re, scan)
 
 import           Notes
 import           Utils
-
-import qualified Data.Text             as T
-
-import           Control.Monad         (unless, when)
-import           Data.List             (intercalate, splitAt)
-import           Prelude               (Bool (..), Int, appendFile, error,
-                                        putStrLn, return)
-import qualified Prelude               as P
 
 import           Header
 import           Packages
@@ -50,9 +51,9 @@ main = do
         removeIfExists mainBibFile
         (t, endState) <- runNote entireDocument cf startState
 
-        renderFile mainTexFile t
+        renderFile mainTexFile $ injectPackageDependencies (S.toList $ state_packages endState) $ t
 
-        appendFile mainBibFile $ showReferences $ state_refs endState
+        appendFile mainBibFile $ showReferences $ S.toList $ state_refs endState
 
         (ec, out, err) <- liftIO $ readCreateProcessWithExitCode (latexMkJob cf) ""
         let outputAnyway = do
@@ -99,7 +100,8 @@ latexMkJob cf = shell $ "latexmk " ++ unwords latexMkArgs
 
 startState :: State
 startState = State {
-    state_refs = []
+    state_refs = S.empty
+  , state_packages = S.empty
   }
 
 renderConfig :: Note

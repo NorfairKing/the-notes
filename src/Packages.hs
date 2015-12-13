@@ -1,9 +1,22 @@
-module Packages (packages) where
+module Packages (
+      packages
+    , packageDep
+    , packageDep_
+    , injectPackageDependencies
+    ) where
 
-import           Notes
+import           Types
+
+import qualified Data.Set            as S
+import           Prelude             (map)
+
+import           Control.Monad.State (modify)
+
 
 packages :: Note
 packages = do
+  -- For memoir class
+  -- usepackage [] "memoir"
   -- For frames
   usepackage [] "mdframed"
 
@@ -18,9 +31,6 @@ packages = do
 
   -- For logical inference
   usepackage [] "proof"
-
-  -- For todo's
-  usepackage ["obeyFinal"] "todonotes"
 
   -- For a nice font with math support
   usepackage [] "libertine"
@@ -81,10 +91,6 @@ packages = do
   -- For sideways figures
   usepackage [] "rotating"
 
-  -- For the huge page
-  usepackage ["strict"] "changepage"
-
-
   -- For the nice header
   applyHdrSettings myHdrSettings
 
@@ -102,4 +108,23 @@ myHdrSettings =  HdrSettings
     , headRuleWidth = Pt 0.4
     , footRuleWidth = Pt 0.4
     }
+
+
+packageDep :: String -> [TeXArg] -> Note
+packageDep name args = modify (\s -> s {state_packages = S.insert (PackageDep name args) $ state_packages s})
+
+packageDep_ :: String -> Note
+packageDep_ name = packageDep name []
+
+injectPackageDependencies :: [PackageDep] -> LaTeX -> LaTeX
+injectPackageDependencies ps = go
+    -- We're looking for this: TeXComm "documentclass" [MOptArg $ fmap rendertex opts , FixArg $ fromString cn]
+  where
+    -- We have to go looking through the LaTeX :(
+    go t@(TeXComm "documentclass" _) = TeXSeq t packages
+    go (TeXSeq t1 t2) = TeXSeq (go t1) (go t2)
+    go c = c
+
+    packages :: LaTeX
+    packages = mconcat $ map (\(PackageDep name args) -> TeXComm "usepackage" $ args ++ [FixArg $ fromString name]) ps
 

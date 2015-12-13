@@ -19,12 +19,15 @@ module Types (
 
   , ask, asks
   ) where
-import           Prelude                      (Bool (..))
+
+import           Prelude                      (Bool (..), Ord (..))
 import           Prelude                      as P (Double, Eq (..), FilePath,
                                                     Fractional (..), IO,
                                                     Maybe (..), Num (..),
                                                     Show (..), mempty, ($),
                                                     (&&), (++), (.))
+
+import           Data.Set
 
 import           Text.LaTeX                   hiding (Label, alph_, article,
                                                cite, item, ref, rule)
@@ -49,7 +52,8 @@ type Note = LaTeXT_ (StateT State (ReaderT Config IO))
 type Note' = LaTeXT (StateT State (ReaderT Config IO))
 
 data State = State {
-      state_refs :: [Reference]
+      state_refs     :: Set Reference
+    , state_packages :: Set PackageDep
     } deriving (Show, Eq)
 
 data Args = Args {
@@ -122,3 +126,11 @@ type ReferenceType = String
 data Reference = Reference ReferenceType String [(String, String)] -- Type Label
   deriving (Show, Eq)
 
+instance Ord Reference where
+    compare (Reference _ r1 _) (Reference _ r2 _) = compare r1 r2
+
+data PackageDep = PackageDep String [TeXArg]
+  deriving (Show, Eq)
+
+instance Ord PackageDep where
+    compare (PackageDep n1 _) (PackageDep n2 _) = compare n1 n2
