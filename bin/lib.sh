@@ -28,5 +28,6 @@ check () {
     echo $command
     cat $OUT
     cat $ERR
+    return -1
   fi
 }
