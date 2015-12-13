@@ -1,6 +1,6 @@
-echo "Running hlint..."
-# Make sure code quality is up to par
-hlint src \
+source bin/lib.sh
+h () {
+  hlint src \
   --ignore "Redundant do" \
   --ignore "Redundant $" \
   --ignore "Redundant bracket"  \
@@ -15,4 +15,5 @@ hlint src \
   -XUndecidableInstances \
   -XQuasiQuotes \
   -XTemplateHaskell
-
+}
+check "Hlint" h

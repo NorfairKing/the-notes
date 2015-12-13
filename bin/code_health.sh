@@ -1,3 +1,2 @@
-echo Runnning all code health tests...
 ./bin/trailing_whitespace_test.sh
 ./bin/hlint_health.sh

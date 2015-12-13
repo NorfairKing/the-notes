@@ -1,9 +1,7 @@
 set -e # abort on error
 
-./bin/pre_commit_test.sh
+./bin/code_health.sh
+./bin/build.sh
+./bin/generate.sh
 ./bin/documentation.sh
-
-echo "Trying out all preselections..."
-for i in $(ls -1 ./preselect); do
-  ./preselect/$i
-done
+./bin/all_preselects.sh
