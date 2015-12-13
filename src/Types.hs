@@ -129,7 +129,7 @@ data Reference = Reference ReferenceType String [(String, String)] -- Type Label
 instance Ord Reference where
     compare (Reference _ r1 _) (Reference _ r2 _) = compare r1 r2
 
-data PackageDep = PackageDep String [TeXArg]
+data PackageDep = PackageDep String [LaTeX]
   deriving (Show, Eq)
 
 instance Ord PackageDep where

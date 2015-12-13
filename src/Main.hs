@@ -127,6 +127,7 @@ entireDocument = do
   documentclass [oneside, a4paper] book
 
   packages
+  makeindex
   header
 
   document $ do
@@ -140,7 +141,7 @@ entireDocument = do
     comm1 "bibliographystyle" "plain"
     comm1 "bibliography" $ raw $ T.pack bibfn
 
-    comm0 "printindex"
+    printindex
 
     o <- asks conf_omitTodos
     unless o $ comm0 "listoftodos"

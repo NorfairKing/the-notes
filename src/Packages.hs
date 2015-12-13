@@ -15,86 +15,64 @@ import           Control.Monad.State (modify)
 
 packages :: Note
 packages = do
-  -- For memoir class
-  -- usepackage [] "memoir"
-  -- For frames
-  usepackage [] "mdframed"
-
   -- For maths
-  usepackage [] "amsmath"
-  usepackage [] "amsfonts"
-  usepackage [] "amssymb"
-  usepackage [] "amsthm"
+  packageDep_ "amsmath"
+  packageDep_ "amsfonts"
+  packageDep_ "amssymb"
+  packageDep_ "amsthm"
 
   -- For an even bigger font
-  usepackage [] "fix-cm"
+  packageDep_ "fix-cm"
 
   -- For logical inference
-  usepackage [] "proof"
+  packageDep_ "proof"
 
   -- For a nice font with math support
-  usepackage [] "libertine"
-  usepackage ["libertine"] "newtxmath"
+  packageDep_ "libertine"
+  packageDep  "newtxmath" ["libertine"]
 
   -- To count pages
-  usepackage [] "lastpage"
-  usepackage [] "afterpage"
-
-  -- To get pages in the right position
-  usepackage [] "float"
-
-  -- For frames
-  usepackage [] "mdframed"
+  packageDep_ "lastpage"
+  packageDep_ "afterpage"
 
   -- To adjust marges
-  usepackage ["left=2cm", "right=2cm", "top=2cm", "bottom=2cm", "headheight=15pt"] "geometry"
+  packageDep "geometry" ["left=2cm", "right=2cm", "top=2cm", "bottom=2cm", "headheight=15pt"]
 
   -- For colros
-  usepackage [] "color"
+  packageDep_ "color"
 
   -- For intervals
-  usepackage [] "interval"
+  packageDep_ "interval"
 
   -- For nicer enumerates
-  usepackage [] "enumerate"
+  packageDep_ "enumerate"
 
   -- For nicer verbatim pieces
-  usepackage [] "verbatim"
+  packageDep_ "verbatim"
 
   -- For urls
   usepackage ["hidelinks"] "hyperref"
 
-  usepackage [] "listings"
-  usepackage [] "minted"
-
-  -- For nicer inline fractions
-  usepackage [] "nicefrac"
+  packageDep_ "listings"
+  packageDep_ "minted"
 
   -- For a nicer code font
-  usepackage [] "courier"
+  packageDep_ "courier"
 
   -- For indices
-  usepackage [] "makeidx"
+  packageDep_ "makeidx"
 
   -- For colored text
-  usepackage [] pcolor
+  packageDep_ pcolor
 
   -- To cancel terms in math
-  usepackage [] "cancel"
-
-  -- For bold math
-  usepackage [] "bm"
+  packageDep_ "cancel"
 
   -- For fancy logic proofs
-  usepackage [] "bussproofs"
-
-  -- For sideways figures
-  usepackage [] "rotating"
+  packageDep_ "bussproofs"
 
   -- For the nice header
   applyHdrSettings myHdrSettings
-
-  commS "makeindex"
 
 myHdrSettings :: HdrSettings
 myHdrSettings =  HdrSettings
@@ -110,7 +88,7 @@ myHdrSettings =  HdrSettings
     }
 
 
-packageDep :: String -> [TeXArg] -> Note
+packageDep :: String -> [LaTeX] -> Note
 packageDep name args = modify (\s -> s {state_packages = S.insert (PackageDep name args) $ state_packages s})
 
 packageDep_ :: String -> Note
@@ -126,5 +104,5 @@ injectPackageDependencies ps = go
     go c = c
 
     packages :: LaTeX
-    packages = mconcat $ map (\(PackageDep name args) -> TeXComm "usepackage" $ args ++ [FixArg $ fromString name]) ps
+    packages = mconcat $ map (\(PackageDep name args) -> usepackage args name) ps
 
