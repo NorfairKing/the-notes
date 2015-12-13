@@ -5,8 +5,9 @@ import           Notes
 import           Logic.AbstractLogic      (abstractLogic)
 import           Logic.FirstOrderLogic
 import           Logic.HoareLogic         (hoareLogicS)
-import           Logic.PropositionalLogic
+import           Logic.PropositionalLogic (propositionalLogicS)
 import           Logic.SeparationLogic    (separationLogicS)
+import           Logic.TemporalLogic      (temporalLogicS)
 
 
 logica :: Notes
@@ -14,10 +15,11 @@ logica = notes "logic"
   [
     logicHeader
   , abstractLogic
-  , propositionalLogic
+  , propositionalLogicS
   , firstOrderLogic
   , hoareLogicS
   , separationLogicS
+  , temporalLogicS
   ]
 
 logicHeader :: Notes

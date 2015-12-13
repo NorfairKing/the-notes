@@ -1,13 +1,15 @@
-module Logic.PropositionalLogic (propositionalLogic) where
+module Logic.PropositionalLogic where
 
-import           Logic.AbstractLogic (complete, grammar, inference, sound)
 import           Notes
 
-propositionalLogic :: Notes
-propositionalLogic = notesPart "propositional-logic" body
+import           Logic.AbstractLogic            (complete, grammar, inference,
+                                                 sound)
 
-body :: Note
-body = do
+import           Logic.PropositionalLogic.Terms
+
+propositionalLogicS :: Notes
+propositionalLogicS = notesPart "propositional-logic" $ do
+  section "Propositional Logic"
   propositionalLogicDefinition
   truthTables
   normalForms
@@ -16,7 +18,8 @@ body = do
 propositionalLogicDefinition :: Note
 propositionalLogicDefinition = do
   de $ do
-    s ["The ", term "propositional logic", " has a ", grammar, " ", m g, " and only two axioms"]
+    lab propositionalLogicDefinitionLabel
+    s ["The ", propositionalLogic', " has a ", grammar, " ", m g, " and only two axioms"]
     enumerate $ do
       item $ do
         s [m g, " defines well formed formulas recursively with the following cases"]
