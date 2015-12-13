@@ -195,7 +195,7 @@ generatedSigmaAlgebraIsUnique = thm $ do
 
 generatedSigmaAlgebraExists :: Note
 generatedSigmaAlgebraExists = thm $ do
-  examq "Probability" "June 2014"
+  examq kul "Probability" "June 2014"
   s ["The ", sagb, " a ", set, " of subsets ", m gsa, " of a ", universe_, " always exists"]
 
   proof $ do

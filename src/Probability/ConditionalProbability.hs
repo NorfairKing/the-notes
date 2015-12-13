@@ -124,7 +124,7 @@ totalProbability = do
   subsection "Law of total probability"
   thm $ do
     lab totalProbabilityLabel
-    examq "Probability" "August 2013"
+    examq kul "Probability" "August 2013"
     psAndPartDec
     ma $ fa (b ∈ prsa) $ prob b =: sumcmp (a ∈ x) (prob a * cprob b a)
 

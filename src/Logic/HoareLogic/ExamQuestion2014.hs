@@ -7,19 +7,15 @@ import           Notes
 
 examQuestion2014 :: Note
 examQuestion2014 = ex $ do
-    examq "Software Verification" "August 2014"
+    examq eth "Software Verification" "December 2014"
     s ["The following ", hoareTriple, " represents a partially correct program"]
     ma ht_
 
-    s ["We have two options for the format of the solution"]
-    s ["The first is is the longhand tree format"]
-    s ["The tree for this proof would be large enough to fill an A2 or even an A1 page and must therefore be broken down"]
-    s ["The second format is a proof outline that leaves a lot implicit"]
-    s ["It is a lot shorter and more manageable"]
-
-
     proof $ do
+        s ["The tree for this proof would be large enough to fill an A2 or even an A1 page and must therefore be broken down"]
+
         s ["The first thing to do for a loop like this, is to find an invariant of the loop"]
+        s ["It needs to be strong enough to, in conjunction with the guard, imply the postcondition"]
         s ["A good first suggestion could be the following"]
         ma $ "Inv" =: inv_
         s ["Now that we have a loop invariant, we can use the ", loopRule_, " to prove this Hoare triple"]

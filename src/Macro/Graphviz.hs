@@ -22,6 +22,8 @@ dot2tex :: Text -> Note' FilePath
 dot2tex text = do
     doneAlready <- liftIO $ doesFileExist file_eps -- This works because we use hashes for the file name
     unless doneAlready $ do
+        -- TODO(kerckhove) log rebuilding of image here instead of printing, maybe log skipping as well?
+        liftIO $ putStrLn $ "Building image " ++ filename
         liftIO $ T.writeFile file_dot text
 
         (ec, out, err) <- liftIO $ readCreateProcessWithExitCode dotJob ""

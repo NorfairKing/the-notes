@@ -2,8 +2,9 @@ module Logic.SeparationLogic where
 
 import           Notes
 
-import           Prelude                     (Bool (..), Either (..))
+import           Prelude                     (Either (..))
 
+import           Functions.Application.Macro
 import           Logic.AbstractLogic
 import           Logic.HoareLogic            (forwardAssignmentDefinitionLabel)
 import           Logic.HoareLogic.Macro      hiding (satis)
@@ -15,6 +16,7 @@ import           Logic.SeparationLogic.Terms
 separationLogicS :: Notes
 separationLogicS = notesPart "separation-logic" $ do
     section "Separation Logic"
+    subsection "Predicates"
 
     heapDefinition
 
@@ -40,8 +42,9 @@ separationLogicS = notesPart "separation-logic" $ do
 
     satisfactionExamples
 
-
+    subsection "Heap operations"
     fetchAssignmentDefinition
+    fetchAssignmentExamples
 
     heapMutationDefinition
     heapMutationExample
@@ -62,12 +65,15 @@ separationLogicS = notesPart "separation-logic" $ do
 
 
 heapDefinition :: Note
-heapDefinition = de $ do
-    lab heapDefinitionLabel
-    s ["A ", heap', " is a partial function from a set of locations (pointers) to values"]
-    s ["The difference between a ", heap, " and a program state is that values on the heap can represent other locations on the heap"]
-    s ["In this new model, variables will evaluate to locations"]
-    s [the, heap, " will then tell us what the value is that is stored at that location"]
+heapDefinition = do
+    de $ do
+        lab heapDefinitionLabel
+        s ["A ", heap', " is a partial function from a set of locations (pointers) to values"]
+        s ["The difference between a ", heap, " and a program state is that values on the heap can represent other locations on the heap"]
+        s ["In this new model, variables will evaluate to locations"]
+        s [the, heap, " will then tell us what the value is that is stored at that location"]
+    nte $ do
+        s ["Watch out, this means that variables aren't stored like they were before, now only references to variables are kept in the store"]
 
 
 separationLogicDefinition :: Note
@@ -210,24 +216,23 @@ separatingImplicationSemanticsDefinition = de $ do
 
 separatingImplicationExample :: Note
 separatingImplicationExample = ex $ do
-    fpa <- storeHeap
-        ["x"]
-        [("x", ["5"])]
-        [(Left "x", ("x", 0))]
-    fpb <- storeHeap
-        ["y"]
-        [("y", ["6"])]
-        [(Left "y", ("y", 0))]
-    fpc <- storeHeap
-        ["x", "y"]
-        [("x", ["5"]), ("y", ["6"])]
-        [(Left "x", ("x", 0)), (Left "y", ("y", 0))]
-    hereFigure $ do
-        includegraphics [KeepAspectRatio True, IGHeight (Cm 3.0), IGWidth (CustomMeasure $ "0.25" <> textwidth)] fpa
-        hspace  $ Cm 1.0
-        includegraphics [KeepAspectRatio True, IGHeight (Cm 3.0), IGWidth (CustomMeasure $ "0.25" <> textwidth)] fpb
-        hspace  $ Cm 1.0
-        includegraphics [KeepAspectRatio True, IGHeight (Cm 3.0), IGWidth (CustomMeasure $ "0.25" <> textwidth)] fpc
+    noindent
+    storeHeapsFig
+        [
+          storeHeap
+            ["x"]
+            [("x", ["5"])]
+            [(Left "x", ("x", 0))]
+        , storeHeap
+            ["y"]
+            [("y", ["6"])]
+            [(Left "y", ("y", 0))]
+        , storeHeap
+            ["x", "y"]
+            [("x", ["5"]), ("y", ["6"])]
+            [(Left "x", ("x", 0)), (Left "y", ("y", 0))]
+        ]
+        mempty
     s ["The first situation is an example of a situation in which ", m $ satis st hp ((pars $ x .-> 5) -* (pars $ x .-> 5 .* y .-> 6)), " holds."]
     s ["This assertion holds because the heap could be extended with the disjunct heap from the second situation to produce a heap (the one on the right), that satisfies ", m $ (x .-> 5 .* y .-> 6)]
   where
@@ -237,42 +242,102 @@ separatingImplicationExample = ex $ do
     y = "y"
 
 satisfactionExamples :: Note
-satisfactionExamples = ex $ do
-    noindent
-    fpa <- storeHeap
-                ["x", "y"]
-                [("x", ["4","4"]), ("y", ["4","4"])]
-                [(Left "x", ("x", 0)), (Left "y", ("y", 0))]
-    fpb <- storeHeap
-                ["x", "y"]
-                [("x", ["4","4"])]
-                [(Left "x", ("x", 0)), (Left "y", ("x", 0))]
-    hereFigure $ do
-        includegraphics [KeepAspectRatio True, IGHeight (Cm 3.0), IGWidth (CustomMeasure $ "0.25" <> textwidth)] fpa
-        hspace  $ Cm 1.0
-        includegraphics [KeepAspectRatio True, IGHeight (Cm 3.0), IGWidth (CustomMeasure $ "0.25" <> textwidth)] fpb
-        caption $ s ["Two situations ", m aa, " on the left and ", m bb, " on the right"]
-
-    hereFigure $ do
-        linedTable ["", aa, bb]
+satisfactionExamples = do
+    ex $ do
+        noindent
+        storeHeapsFig
             [
-              [x ..-> [4,4]                                                     , f, t]
-            , [x ..-> [4,4] .* t                                                , t, t]
-            , [x ..-> [4,4] .* y ..-> [4,4]                                     , t, t]
-            , [x ..-> [4,4] ∧  y ..-> [4,4]                                     , f, t]
-            , [(pars $ x ..-> [4,4] .* true) ∧ (pars $ y ..-> [4,4] .* true)    , t, t]
-            ]
-        caption $ "Assertions on the situations"
-    s ["The first assertion doesn't hold for situation ", m aa, " because there are more elements on the heap than just the two mentioned in ", m $ x ..-> [4,4]]
-    s ["The third assertion doesn't hold for situation ", m bb, " because the heap cannot be divided into two parts"]
-    s ["The fourth assertion doesn't hold for situation ", m aa, " because there are too many elements on the heap"]
+              storeHeap
+                    ["x", "y"]
+                    [("x", ["6", "7"]), ("y", ["6", "7"])]
+                    [(Left "x", ("x", 0)), (Left "y", ("y", 0))]
+            ,  storeHeap
+                    ["x", "y"]
+                    [("x", ["6", "7"])]
+                    [(Left "x", ("x", 0)), (Left "y", ("x", 0))]
+            ] $
+            s ["Two situations ", m aa, " on the left and ", m bb, " on the right"]
+
+        hereFigure $ do
+            linedTable ["", aa, bb]
+                [
+                  [x ..-> [6,7]                                                     , f, t]
+                , [x ..-> [6,7] .* t                                                , t, t]
+                , [x ..-> [6,7] .* y ..-> [6,7]                                     , t, t]
+                , [x ..-> [6,7] ∧  y ..-> [6,7]                                     , f, t]
+                , [(pars $ x ..-> [6,7] .* true) ∧ (pars $ y ..-> [6,7] .* true)    , t, t]
+                ]
+            caption $ "Assertions on the situations"
+        s ["The first assertion doesn't hold for situation ", m aa, " because there are more elements on the heap than just the two mentioned in ", m $ x ..-> [4,4]]
+        s ["The third assertion doesn't hold for situation ", m bb, " because the heap cannot be divided into two parts"]
+        s ["The fourth assertion doesn't hold for situation ", m aa, " because there are too many elements on the heap"]
+    ex $ do
+        examq eth "Software Verification" "December 2014"
+        storeHeapFig
+            ["x", "y"]
+            [("x", ["6", "7"]), ("y", ["8"])]
+            [(Left "x", ("x", 0)), (Left "y", ("y", 0))] $
+            s ["A situation in which ", m $ x ..-> [6, 7] .* (not . pars $ x ..-> [6, 7]), " holds"]
+        storeHeapFig
+            ["x", "y"]
+            [("x", ["6", "7"])]
+            [(Left "x", ("x", 0)), (Left "y", ("x", 0))] $
+            s ["A situation in which ", m $ x ..-> [6, 7] ∧ (y ..-> [6, 7]), " holds"]
+        storeHeapsFig
+            [
+              storeHeap
+                ["z"]
+                [("z", ["6", "7"])]
+                [(Left "z", ("z", 0))]
+            , storeHeap
+                ["x", "y"]
+                []
+                []
+            ] $
+            s ["Two situations in which ", m $ emp ⇒ x =: y, " holds"]
+        storeHeapFig
+            ["x"]
+            [("i", [" "]), ("j", [" "])]
+            [(Left "x", ("i", 0)), (Right ("i", 0), ("j", 0)), (Right ("j", 0), ("j", 0))] $
+            s ["A situation in which ", m $ te i $ x .-> i .* i .-> i, " holds"]
+    ex $ do
+        examq eth "Software Verification" "December 2013"
+        s ["A well-formed binary tree ", m "t", " is defined by the following grammar"]
+        ma $ "t" === n <> mid <> tuple t1 t2
+        s ["These symbols have the following semantics"]
+        itemize $ do
+            item $ m $ (tree n i) ⇔ (i .-> n)
+            item $ m $ (tree (tuple t1 t2) i) ⇔ (te (cs [l, r]) $ i ..-> [l, r] .* tree t1 l .* tree t2 r)
+        storeHeapFig
+            ["x"]
+            [("x", [" ", " "]), ("y", ["7"]), ("z", ["8"])]
+            [(Left "x", ("x", 0)), (Right ("x", 0), ("y", 1)), (Right ("x", 1), ("z", 1))] $
+            s ["An example of a situation in which ", m $ tree (tuple 7 8) x, " holds"]
+        storeHeapFig
+            ["x", "y"]
+            [("x", ["5"])]
+            [(Left "x", ("x", 0)), (Left "y", ("x", 0))] $
+            s ["An example of a situation in which ", m $ (tree 5 x) ∧ (tree 5 y), " holds"]
+        storeHeapFig
+            ["x"]
+            [("x", [" ", " "]), ("y", [" ", " "]), ("a", ["1"]), ("b", ["2"]), ("c", ["3"])]
+            [(Left "x", ("x", 0)), (Right ("x", 0), ("y", 0)), (Right ("x", 1), ("a", 0)), (Right ("y", 1), ("b", 0)), (Right ("y", 0), ("c", 0))] $
+            s ["An example of a situation in which ", m $ tree (tuple (tuple 3 2) 1) x, " holds"]
+
   where
+    tree = fn2 "tree"
     t = true
     f = false
-    x = "x"
-    y = "y"
+    t1 = "t" !: 1
+    t2 = "t" !: 2
     aa = "A"
     bb = "B"
+    i = "i"
+    l = "l"
+    n = "n"
+    r = "r"
+    x = "x"
+    y = "y"
 
 fetchAssignmentDefinition :: Note
 fetchAssignmentDefinition = de $ do
@@ -280,6 +345,43 @@ fetchAssignmentDefinition = de $ do
   where
     hp = "h"
     e = "e"
+
+fetchAssignmentExamples :: Note
+fetchAssignmentExamples = do
+    ex $ do
+        noindent
+        storeHeapsFig
+            [
+              storeHeap
+                    ["x", "y"]
+                    [("x", ["4"]), ("y", ["3"])]
+                    [(Left "x", ("x", 0)), (Left "y", ("y", 0))]
+            , storeHeap
+                    ["x", "y"]
+                    [("x", ["4"]), ("y", ["3"])]
+                    [(Left "x", ("y", 0)), (Left "y", ("y", 0))]
+            ] $
+            s ["An example situation before and after a ", m $ x =:= (y .& hp), " assignment"]
+        s ["Note that this example is slightly misleading because the variable stored in y is a value and not a pointer"]
+        s ["The next example should clear up the confusion"]
+    ex $ do
+        storeHeapsFig
+            [
+              storeHeap
+                    ["x", "y"]
+                    [("x", ["4"]), ("y", [" "]), ("z", ["5"])]
+                    [(Left "x", ("x", 0)), (Left "y", ("y", 0)), (Right ("y", 0), ("z", 0))]
+            , storeHeap
+                    ["x", "y"]
+                    [("x", ["4"]), ("y", [" "]), ("z", ["5"])]
+                    [(Left "x", ("z", 0)), (Left "y", ("y", 0)), (Right ("y", 0), ("z", 0))]
+            ] $
+            s ["An example situation before and after a ", m $ x =:= (y .& hp), " assignment"]
+  where
+    x = "x"
+    y = "y"
+    hp = "h"
+
 
 heapMutationDefinition :: Note
 heapMutationDefinition = de $ do
@@ -292,19 +394,18 @@ heapMutationDefinition = de $ do
 heapMutationExample :: Note
 heapMutationExample = ex $ do
     noindent
-    fpa <- storeHeap
+    storeHeapsFig
+        [
+          storeHeap
                 ["x", "y"]
                 [("x", ["2","4"]), ("y", ["3","5"])]
                 [(Left "x", ("x", 0)), (Left "y", ("y", 0))]
-    fpb <- storeHeap
+        , storeHeap
                 ["x", "y"]
                 [("x", ["2"," "]), ("y", ["3","5"])]
                 [(Left "x", ("x", 0)), (Left "y", ("y", 0)), (Right ("x", 1), ("y", 0))]
-    hereFigure $ do
-        includegraphics [KeepAspectRatio True, IGHeight (Cm 3.0), IGWidth (CustomMeasure $ "0.25" <> textwidth)] fpa
-        hspace  $ Cm 1.0
-        includegraphics [KeepAspectRatio True, IGHeight (Cm 3.0), IGWidth (CustomMeasure $ "0.25" <> textwidth)] fpb
-        caption $ s ["An example situation before and after a ", m $ ((x + 1) .& hp) =:= y, " instruction"]
+        ] $
+        s ["An example situation before and after a ", m $ ((x + 1) .& hp) =:= y, " instruction"]
   where
     x = "x"
     y = "y"
@@ -342,19 +443,18 @@ disposalDefinition = de $ do
 disposalExample :: Note
 disposalExample = ex $ do
     noindent
-    fpa <- storeHeap
+    storeHeapsFig
+        [
+          storeHeap
                 ["x"]
                 [("x", ["2","4", "8"])]
                 [(Left "x", ("x", 0))]
-    fpb <- storeHeap
+        , storeHeap
                 []
                 [("x", [" ","4", "8"])]
                 []
-    hereFigure $ do
-        includegraphics [KeepAspectRatio True, IGHeight (Cm 3.0), IGWidth (CustomMeasure $ "0.25" <> textwidth)] fpa
-        hspace  $ Cm 1.0
-        includegraphics [KeepAspectRatio True, IGHeight (Cm 3.0), IGWidth (CustomMeasure $ "0.25" <> textwidth)] fpb
-        caption $ s ["An example situation before and after a ", m $ dispose "x", " instruction"]
+        ] $
+        s ["An example situation before and after a ", m $ dispose "x", " instruction"]
 
 exampleProgramLabel :: Label
 exampleProgramLabel = Label Example "separation-logic-example-program"

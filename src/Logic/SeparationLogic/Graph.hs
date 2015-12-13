@@ -2,9 +2,11 @@ module Logic.SeparationLogic.Graph where
 
 import           Notes                              hiding (true, (=:))
 
-import           Control.Monad                      (forM, forM_)
-import           Data.Maybe                         (fromMaybe)
 import           Prelude
+
+import           Control.Monad                      (forM, forM_)
+import           Data.List                          (intersperse)
+import           Data.Maybe                         (fromMaybe)
 
 import           Text.Dot
 
@@ -17,12 +19,20 @@ import           Text.Blaze.Html4.Strict.Attributes (border, cellpadding,
                                                      cellspacing)
 import           Text.Blaze.Internal                (Attribute, AttributeValue)
 
-port :: Text.Blaze.Internal.AttributeValue
-              -> Text.Blaze.Internal.Attribute
-port = customAttribute "port"
-cellborder :: Text.Blaze.Internal.AttributeValue
-              -> Text.Blaze.Internal.Attribute
-cellborder = customAttribute "cellborder"
+
+storeHeapsFig :: [Note' FilePath] -> Note -> Note
+storeHeapsFig shs cap = do
+    fps <- sequence shs
+    hereFigure $ do
+        let gs = map makeFig fps
+        sequence_ $ intersperse (hspace $ Cm 0.5) gs
+        caption cap
+        return ()
+  where
+    makeFig = includegraphics [KeepAspectRatio True, IGHeight (Cm 3.0), IGWidth (CustomMeasure $ (TeXRaw . T.pack . show $ width) <> textwidth)]
+    width :: Double
+    width = 1 / fromIntegral l
+    l = length shs
 
 storeHeapFig :: [Text] -> [(Text, [Text])] -> [(Either Text (Text, Int), (Text, Int))] -> Note -> Note
 storeHeapFig ss hs es cap = do
@@ -85,6 +95,11 @@ storeHeap store heap edges = dot2tex $ renderGraph $ graph_ directed $ do
         fromNode --> toNode
     return ()
 
+  where
+    port :: Text.Blaze.Internal.AttributeValue -> Text.Blaze.Internal.Attribute
+    port = customAttribute "port"
+    cellborder :: Text.Blaze.Internal.AttributeValue -> Text.Blaze.Internal.Attribute
+    cellborder = customAttribute "cellborder"
 
 
 
