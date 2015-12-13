@@ -4,8 +4,8 @@ import           Notes         hiding (label, true, (=:))
 
 import           Prelude
 
-import           Control.Monad (forM, forM_)
-import           Data.Maybe    (fromMaybe)
+import           Control.Monad (forM, forM_, when)
+import           Data.Maybe    (fromMaybe, isNothing)
 
 import           Text.Dot
 
@@ -43,6 +43,12 @@ fsaGraph states initial accepting edges = dot2tex $ renderGraph $ graph_ directe
                 then [label =: s, shape =: "doublecircle"]
                 else [label =: s]
         return (s, n)
+
+    -- Check that accepting states are actually states
+    forM_ accepting $ \s -> do
+        when
+            (isNothing $ lookup s stateNodes)
+            (error $ "Accepting state is not in the set of states: " ++ T.unpack s)
 
     case lookup initial stateNodes of
         Nothing -> error "Initial state is not in the set of states" -- FIXME(kerckhove) better error locality.

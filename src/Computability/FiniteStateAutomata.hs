@@ -10,6 +10,7 @@ import           Computability.FiniteStateAutomata.Terms
 import           Computability.Symbols.Macro
 --import           Computability.Symbols.Terms
 
+import           Functions.Application.Macro
 import           Functions.Basics.Macro
 
 finiteStateAutomata :: Notes
@@ -18,9 +19,7 @@ finiteStateAutomata = notesPart "finite-state-automata" $ do
     subsection "NFSA"
     nonDeterministicFiniteStateAutomatonDefinition
     nfsaExample
-    todo "input word"
-    todo "accepting run"
-    todo "rejecting run"
+    acceptanceDefinition
     todo "language of NFSA"
 
 
@@ -52,6 +51,47 @@ nfsaExample = ex $ do
     c = "c"
     p = "p"
     q = "q"
+
+acceptanceDefinition :: Note
+acceptanceDefinition = do
+    de $ do
+        lab acceptDefinitionLabel
+        lab rejectDefinitionLabel
+        s ["A ", nondeterministicFiniteStateAutomaton, " is said to ", accept', " a string ", m $ str_ =: strlist s1 s2 sn, ", also called an input word, if there exists a sequence of states ", m $ strlist r1 r2 rn, " as follows"]
+        itemize $ do
+            item $ s ["It starts in the initial state: ", m $ r1 =: nfass_]
+            item $ s ["It ends in an accepting state: ", m $ rn ∈ nfaas_]
+            item $ do
+                "It respects the transition function: "
+                ma $ fa (i ∈ setlst 1 n) $ r !: (i + 1) ∈ (fn2 nfatf_ ri si)
+                s ["Note that this is slightly more simply specified than is actually the case"]
+                s ["To make this simplification work, you must assume that between any two symbols in ", m str_, " the empty string ", m estr, " can be inserted if the transition function's symbol is ", m estr]
+        s ["A ", nondeterministicFiniteStateAutomaton, " is said to ", reject', " a string ", m str_, " if it does not accept it"]
+    ex $ do
+        fsaFig
+            [a, b]
+            a
+            [b]
+            [(a, b, p), (b, b, q)] $
+            s ["A ", nondeterministicFiniteStateAutomaton]
+        s ["This ", nondeterministicFiniteStateAutomaton, " accepts the strings ", m $ cs ["p", "pq", "pqq", "pqqq", "..."]]
+
+  where
+    a = "a"
+    b = "b"
+    p = "p"
+    q = "q"
+    i = "i"
+    r = "r"
+    n = "n"
+    r1 = r !: 1
+    r2 = r !: 2
+    ri = r !: i
+    rn = r !: n
+    s1 = "s" !: 1
+    s2 = "s" !: 2
+    si = "s" !: i
+    sn = "s" !: n
 
 
 deterministicFiniteStateAutomatonDefinition :: Note
