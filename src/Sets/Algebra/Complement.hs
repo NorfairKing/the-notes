@@ -45,7 +45,7 @@ complementDefinition = de $ do
   s [the, term "complement", " of a set ", m a, " relative to a set ", m b, " is the set of all elements of ", m b, " that are not in ", m a]
   ma $ setrelc b a === b \\ a
 
-  s ["When ", m b, " is clear from the context (i.e. there is a universe in play), we just speak about the ", term "complemen"]
+  s ["When ", m b, " is clear from the context (i.e. there is a universe in play), we just speak about the ", term "complement"]
   ma $ setc a === setrelc setuniv a
 
 
