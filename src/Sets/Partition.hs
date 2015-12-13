@@ -1,8 +1,4 @@
-module Sets.Partition (
-      partitions
-
-    , partition     , partition_
-    ) where
+module Sets.Partition where
 
 import           Notes
 
@@ -10,11 +6,8 @@ import           Sets.Basics (set)
 
 makeDefs ["partition"]
 
-partitions :: Notes
-partitions = notesPart "partition" body
-
-body :: Note
-body = do
+partitions :: Note
+partitions = note "partition" $ do
     partitionDefinition
 
 partitionDefinition :: Note

@@ -57,3 +57,9 @@ for = " for "
 
 with :: Note
 with = " with "
+
+kul :: Note
+kul = "KU Leuven"
+
+eth :: Note
+eth = "ETH"

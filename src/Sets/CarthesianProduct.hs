@@ -8,11 +8,8 @@ import           Notes
 
 makeDefs ["Carthesian product"]
 
-carthesianProducts :: Notes
-carthesianProducts = notesPart "carthesian-products" body
-
-body :: Note
-body = do
+carthesianProducts :: Note
+carthesianProducts = note "carthesian-products" $ do
     carthesianProductDefinition
 
 carthesianProductDefinition :: Note

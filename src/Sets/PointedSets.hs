@@ -10,8 +10,8 @@ makeDefs [
     "pointed set"
     ]
 
-pointedSets :: Notes
-pointedSets = notesPart "pointed-set" $ do
+pointedSets :: Note
+pointedSets = note "pointed-set" $ do
     section "Pointed Sets"
     pointedSetDefinition
 

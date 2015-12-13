@@ -7,6 +7,7 @@ import           Macro.Numbers.Macro
 import           Macro.Math
 import           Macro.MetaMacro
 import           Macro.Text
+import           Macro.Tuple
 
 
 -- Transpose

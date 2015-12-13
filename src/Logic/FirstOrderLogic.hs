@@ -13,8 +13,8 @@ import           Logic.AbstractLogic         (complete, inference, model,
 import           Functions.Application.Macro
 
 
-firstOrderLogic :: Notes
-firstOrderLogic = notesPart "first-order-logic" body
+firstOrderLogic :: Note
+firstOrderLogic = note "first-order-logic" body
 
 body :: Note
 body = do

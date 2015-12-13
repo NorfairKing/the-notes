@@ -2,8 +2,8 @@ module Macro.Groups.Macro where
 
 import           Types
 
-import           Macro.Math
 import           Macro.MetaMacro
+import           Macro.Tuple
 
 
 grpset :: Note

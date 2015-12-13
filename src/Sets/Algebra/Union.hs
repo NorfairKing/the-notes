@@ -1,8 +1,4 @@
-module Sets.Algebra.Union (
-      setUnion
-
-    , union, union_
-    ) where
+module Sets.Algebra.Union where
 
 import           Notes
 
@@ -12,20 +8,17 @@ import           Functions.BinaryOperation (associative_)
 
 makeDef "union"
 
-setUnion :: Notes
-setUnion = notesPart "union" body
-
-body :: Note
-body = do
-  subsection "Set union"
-  unionDefinition
-  unionAssociative
-  unionCommutative
-  unionIdempotent
-  unionSupset
-  unionSubsetDefinition
-  unionIdentityLaw
-  unionDominationLaw
+setUnion :: Note
+setUnion = note "union" $ do
+    subsection "Set union"
+    unionDefinition
+    unionAssociative
+    unionCommutative
+    unionIdempotent
+    unionSupset
+    unionSubsetDefinition
+    unionIdentityLaw
+    unionDominationLaw
 
 a, b, c, x, y :: Note
 a = "A"

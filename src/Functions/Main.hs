@@ -9,17 +9,13 @@ import           Functions.Distances       (distances)
 import           Functions.Order           (order)
 
 
-functions :: Notes
-functions = notes "functions"
-  [
-    header
-  , basics
-  , application
-  , binaryOperations
-  , order
-  , distances
-  ]
+functions :: Note
+functions = note  "functions" $ do
+    chapter "Functions"
+    basics
+    application
+    binaryOperations
+    order
+    distances
 
-header :: Notes
-header = notesPart "header" (chapter "Functions")
 

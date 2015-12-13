@@ -2,8 +2,8 @@ module Relations.Orders.Macro where
 
 import           Types
 
-import           Macro.Math
 import           Macro.MetaMacro
+import           Macro.Tuple
 
 import           Functions.Application.Macro
 import           Relations.Preorders.Macro

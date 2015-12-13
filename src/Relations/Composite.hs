@@ -9,8 +9,8 @@ import           Relations.Basics.Macro
 import           Relations.Composite.Macro
 import           Relations.Domain.Macro
 
-compositeRelations :: Notes
-compositeRelations = notesPart "composite-relations" body
+compositeRelations :: Note
+compositeRelations = note "composite-relations" body
 
 body :: Note
 body = do

@@ -7,8 +7,8 @@ import           Notes
 
 import           Functions.Basics.Macro
 
-mapReduce :: Notes
-mapReduce = notesPart "MapReduce" body
+mapReduce :: Note
+mapReduce = note "MapReduce" body
 
 body :: Note
 body = do

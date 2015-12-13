@@ -13,120 +13,62 @@ import           TH
 import           Macro
 import           Reference
 
-import           Prelude              (Bool (..), concatMap, filter, flip,
-                                       foldl, map, mapM_, putStrLn)
-import qualified Prelude              as P
+import           Prelude              (Bool (..), init, length, putStr,
+                                       putStrLn, return)
 
 import           Control.Monad.Reader (runReaderT)
-import           Control.Monad.State  (runStateT)
+import           Control.Monad.State  (gets, modify, runStateT)
 
-import           Data.List            (break, head, intercalate, isPrefixOf,
-                                       null, repeat, tail, union, zipWith)
-import           Data.Tree            (Forest, Tree (..))
+import           Control.Monad        (when)
+import           Data.List            (intercalate, isPrefixOf, replicate)
 
 runNote :: Note -> Config -> State -> IO (LaTeX, State)
 runNote note conf state = runReaderT (runStateT (execLaTeXT note) state) conf
 
-renderNotes :: Notes -> Note
-renderNotes notes = do
-  selection <- asks conf_selections
-  renderParts $ selectParts selection $ flattenNotes notes
+note :: String -> Note -> Note
+note partname func = do
+    pushPart partname
 
-selectParts :: [Selection] -> [Part] -> [Part]
-selectParts ss ps = foldl (applySelection ps) [] ss
+    part <- currentPart
 
-un :: Eq a => [[a]] -> [a]
-un = foldl union []
+    s <- isSelected
+    when s $ do
+        liftIO $ putStr $ replicate (length part * 2) ' '
+        liftIO $ putStrLn $ intercalate "." part
+        func
 
+    popPart
 
-applySelection :: [Part] -> [Part] -> Selection -> [Part]
-applySelection global _ All = global
-applySelection global ps (Match s) = ps ++ filter (matches s) global
-applySelection _ ps (Ignore s) = filter (P.not . matches s) ps
+isSelected :: Note' Bool
+isSelected = do
+    part <- currentPart
+    sels <- asks conf_selections
+    return $ selects part sels
 
-matches :: String -> Part -> Bool
-matches s (Part n _) = split s `isPrefixOf` split n
-
-flattenNotes :: Notes -> [Part]
-flattenNotes = go ""
   where
-    go path (NotesPart name nt) = [Part (path <.> name) nt]
-    go path (NotesPartList name ds) = concatMap (go $ path <.> name) ds
+    selects :: [String] -> [Selection] -> Bool
+    selects ps ss = go ps ss False
+        where
+            go :: [String] -> [Selection] -> Bool -> Bool
+            go _ [] b                       = b
+            go ps (All:ss) _                = go ps ss True
+            go ps ((Match s):ss) b          = if ps `matches` s
+                                              then go ps ss True
+                                              else go ps ss b
+            go ps ((Ignore s):ss) True      = if ps `matches` s
+                                              then go ps ss False
+                                              else go ps ss True
+            go ps ((Ignore _):ss) False     = go ps ss False
 
-    (<.>) :: String -> String -> String
-    [] <.> s = s
-    s1 <.> s2 = s1 ++ "." ++ s2
+    matches :: [String] -> [String] -> Bool
+    matches ps s = s `isPrefixOf` ps
 
-renderParts :: [Part] -> Note
-renderParts ps = do
-    liftIO $ putStrLn "Building parts:"
-    liftIO $ putStrLn $ drawForest $ treeify ps
+currentPart :: Note' [String]
+currentPart = gets state_currentPart
 
-    mapM_ (\(Part _ body) -> body) ps
+pushPart :: String -> Note
+pushPart partname = modify (\s -> s { state_currentPart = state_currentPart s ++ [partname]})
 
-treeify :: [Part] -> Forest String
-treeify [] = []
-treeify [Part "" _] = []
-treeify [Part n _] = [Node n []]
-treeify (p@(Part n _):ps) = (Node nh $ treeify $ map losefirst (p:same)) : treeify rest
-  where
-    nh = head $ split n
-    (same, rest) = flip break ps $ \(Part m _) ->
-        let ms = split m
-        in (P.not (null ms) P.&& (nh /= head ms))
+popPart :: Note
+popPart = modify (\s -> s { state_currentPart = init $ state_currentPart s })
 
-losefirst :: Part -> Part
-losefirst p@(Part n c) = if null ns
-                       then p
-                       else Part (intercalate "." $ tail ns) c
-  where
-    ns = split n
-
-split :: String -> [String]
-split s = go s []
-  where
-    go :: String -> String -> [String]
-    go [] s = [s]
-    go ('.':ss) acc = acc : go [] ss
-    go (s:ss) acc = go ss (acc ++ [s])
-
-drawForest :: Forest String -> String
-drawForest  = unlines . map drawTree
-
-drawTree :: Tree String -> String
-drawTree  = unlines . draw
-
-draw :: Tree String -> [String]
-draw (Node x ts0) = x : drawSubTrees ts0
-  where
-    drawSubTrees [] = []
-    drawSubTrees [t] =
-        shift "└─ " "   " (draw t)
-    drawSubTrees (t:ts) =
-        shift "├─ " "│  " (draw t) ++ drawSubTrees ts
-    shift first other = zipWith (++) (first : repeat other)
-
-boxed :: Note -> Note
-boxed n = raw "\\text{\\fboxsep=.2em\\fbox{\\m@th$\\displaystyle" <> n <> "$}}"
-
-bla :: Note
-bla = boxed leftArrow
-
-bra :: Note
-bra = boxed rightArrow
-
-item :: Note -> Note
-item n = comm0 "item" <> n
-
-
-(<=) :: Note -> Note -> Note
-(<=) = (<=:)
-
-(>=) :: Note -> Note -> Note
-(>=) = (>=:)
-
-(>) :: Note -> Note -> Note
-(>) = (>:)
-
-(<) :: Note -> Note -> Note
-(<) = (<:)

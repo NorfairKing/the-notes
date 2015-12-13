@@ -1,11 +1,4 @@
-module Sets.Algebra.Intersection (
-    setIntersection
-
-  , intersection
-  , intersectionAssociativityLabel
-  , distributionLaw1Label
-  , distributionLaw2Label
-  ) where
+module Sets.Algebra.Intersection where
 
 import           Notes
 
@@ -16,23 +9,20 @@ import           Functions.BinaryOperation (associative_)
 intersection :: Note
 intersection = ix "intersection"
 
-setIntersection :: Notes
-setIntersection = notesPart "intersection" body
-
-body :: Note
-body = do
-  subsection "Set intersection"
-  intersectionDefinition
-  intersectionAssociative
-  intersectionCommutative
-  intersectionIdempotent
-  intersectionSubset
-  intersectionSubsetDefinition
-  intersectionIdentityLaw
-  intersectionDominationLaw
-  disjunctDefinition
-  absorptionLaws
-  distributionLaws
+setIntersection :: Note
+setIntersection = note "intersection" $ do
+    subsection "Set intersection"
+    intersectionDefinition
+    intersectionAssociative
+    intersectionCommutative
+    intersectionIdempotent
+    intersectionSubset
+    intersectionSubsetDefinition
+    intersectionIdentityLaw
+    intersectionDominationLaw
+    disjunctDefinition
+    absorptionLaws
+    distributionLaws
 
 
 a, b, c, x, y :: Note

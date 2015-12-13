@@ -10,8 +10,8 @@ import           Sets.Basics            (universalSetSupsetOfAllSetsLabel)
 
 import           Functions.Basics.Macro
 
-probabilityMeasure :: Notes
-probabilityMeasure = notesPart "probability-measure" body
+probabilityMeasure :: Note
+probabilityMeasure = note "probability-measure" body
 
 body :: Note
 body = do

@@ -15,8 +15,8 @@ makeDefs [
     , "Jaccard distance"
     ]
 
-distances :: Notes
-distances = notesPart "distances" $ do
+distances :: Note
+distances = note "distances" $ do
     section "Distances"
 
     subsection "Pseudometrics"

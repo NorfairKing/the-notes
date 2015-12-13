@@ -8,8 +8,8 @@ import           Notes
 
 import           Sets.Partition (partition)
 
-conditionalProbability :: Notes
-conditionalProbability = notesPart "conditional-probability" body
+conditionalProbability :: Note
+conditionalProbability = note "conditional-probability" body
 
 body :: Note
 body = do
@@ -46,7 +46,7 @@ conditionalProbabilityDefinition :: Note
 conditionalProbabilityDefinition = de $ do
   lab conditionalProbabilityDefinitionLabel
 
-  s [the, term "conditional probability", " of an ", event, m (a ∈ prsa), " given an ", event, m (b ∈ prsa), " with ", m (prob b /=: 0), " is denoted as ", m (cprob a b), ""]
+  s [the, term "conditional probability", " of an ", event, m (a ∈ prsa), " given an ", event, m (b ∈ prsa), " with ", m (prob b /=: 0), " is de:: Noted as ", m (cprob a b), ""]
   ma $ cprob a b === (prob (a ∩ b) /: prob b)
 
 conditionalProbabilityEventGivenItself :: Note
@@ -124,7 +124,7 @@ totalProbability = do
   subsection "Law of total probability"
   thm $ do
     lab totalProbabilityLabel
-    examq "Probability" "August 2013"
+    examq kul "Probability" "August 2013"
     psAndPartDec
     ma $ fa (b ∈ prsa) $ prob b =: sumcmp (a ∈ x) (prob a * cprob b a)
 

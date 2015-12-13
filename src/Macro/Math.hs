@@ -1,9 +1,11 @@
 module Macro.Math where
 
+import           Packages
+import           Types
+
 import           Macro.Index
 import           Macro.MetaMacro
 import           Macro.Text      (commaSeparated)
-import           Types
 
 m :: Note -> Note
 m = math
@@ -37,6 +39,9 @@ rightarrow = comm0 "rightarrow"
 
 rightArrow :: Note
 rightArrow = comm0 "Rightarrow"
+
+mod :: Note -> Note -> Note
+mod = between $ text " mod "
 
 mid :: Note
 mid = comm0 "mid"
@@ -135,9 +140,9 @@ sequ m n = pars m !: n
 
 
 --[ Exam questions
-examq :: Note -> Note -> Note
-examq m n = do
-  textbf $ "Exam Question: " <> m <> ", " <> n
+examq :: Note -> Note -> Note -> Note
+examq s m n = do
+  textbf $ "Exam Question: " <> m <> " @ " <> s <> ", " <> n
   newline
 
 
@@ -226,7 +231,9 @@ av = autoBrackets "|" "|"
 
 -- Bold math
 bm :: Note -> Note
-bm = comm1 "bm"
+bm n = do
+    packageDep_ "bm"
+    comm1 "bm" n
 
 -- Roots
 sqrt :: Note -> Note
@@ -279,29 +286,3 @@ lst n m = commaSeparated [n, dotsc, m]
 
 list :: Note -> Note -> Note -> Note
 list n m o = commaSeparated [n, m, dotsc, o]
-
--- * Tuples
-
--- | 2-tuple
-tuple :: Note -> Note -> Note
-tuple a b = pars $ commaSeparated [a, b]
-
--- | 3-tuple
-triple :: Note -> Note -> Note -> Note
-triple a b c = pars $ commaSeparated [a, b, c]
-
--- | 4-tuple
-quadruple :: Note -> Note -> Note -> Note -> Note
-quadruple a b c d = pars $ commaSeparated [a, b, c, d]
-
--- | 5-tuple
-quintuple :: Note -> Note -> Note -> Note -> Note -> Note
-quintuple a b c d e = pars $ commaSeparated [a, b, c, d, e]
-
--- | Tuple list
-tuplelst :: Note -> Note -> Note
-tuplelst x1 xn = pars $ lst x1 xn
-
--- | Tuple list
-tuplelist :: Note -> Note -> Note -> Note
-tuplelist x1 x2 xn = pars $ list x1 x2 xn

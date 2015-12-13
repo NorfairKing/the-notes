@@ -6,7 +6,7 @@ import           Functions.Application.Macro
 
 makeDefs [
       "formula"
-    , "axiom"
+    , "axiom", "axiom schema"
     , "theory"  , "logic"
     , "grammar"
     , "semantics"
@@ -21,8 +21,8 @@ makeDefs [
     , "modus ponens"
     ]
 
-abstractLogic :: Notes
-abstractLogic = notesPart "abstract-logic" body
+abstractLogic :: Note
+abstractLogic = note "abstract-logic" body
 
 body :: Note
 body = do
@@ -54,26 +54,29 @@ formulaDefinition = do
 
 
 theoryDefinition :: Note
-theoryDefinition = de $ do
-    lab theoryDefinitionLabel
-    lab logicDefinitionLabel
-    lab axiomDefinitionLabel
-    lab grammarDefinitionLabel
-    lab semanticsDefinitionLabel
-    lab sentenceDefinitionLabel
+theoryDefinition = do
+    de $ do
+        lab theoryDefinitionLabel
+        lab logicDefinitionLabel
+        lab axiomDefinitionLabel
+        lab grammarDefinitionLabel
+        lab semanticsDefinitionLabel
+        lab sentenceDefinitionLabel
 
-    s ["A ", theory', or, logic',  " is a mathematical framework for proving properties about a certain object domain"]
-    s ["Those properties are called ", theorem, "s"]
-    s ["A ", theory, " consists of a ", grammar', ", a set of ", axiom', "s", and , semantics', " for formulae"]
-    enumerate $ do
-        item $ do
-            s ["A ", grammar', " defines well-formed formulae"]
-            s ["A well-formed ", formula, " is also called a ", sentence']
-            s ["A ", formula', " represents an expression if it adheres to the ", grammar]
-        item $ do
-            s ["An ", axiom', " is a ", theorem, " that can be asserted without ", inference]
-        item $ do
-            s ["Semantics dictate the ", emph "meaning", " of formulae in the ", logic]
+        s ["A ", theory', or, logic',  " is a mathematical framework for proving properties about a certain object domain"]
+        s ["Those properties are called ", theorem, "s"]
+        s ["A ", theory, " consists of a ", grammar', ", a set of ", axiom', "s", and , semantics', " for formulae"]
+        enumerate $ do
+            item $ do
+                s ["A ", grammar', " defines well-formed formulae"]
+                s ["A well-formed ", formula, " is also called a ", sentence']
+                s ["A ", formula', " represents an expression if it adheres to the ", grammar]
+            item $ do
+                s ["An ", axiom', " is a ", theorem, " that can be asserted without ", inference]
+            item $ do
+                s ["Semantics dictate the ", emph "meaning", " of formulae in the ", logic]
+    nte $ do
+        s ["Theorems are obtained from the axioms by a finite amount of applications of the inference rules"]
 
 worldDefinition :: Note
 worldDefinition = de $ do
@@ -93,7 +96,7 @@ theoremNotation :: Note
 theoremNotation = de $ do
     lab theoremDefinitionLabel
     s ["A ", theorem' , " ", m logicf, " is a well-formed formula that is provable in a theory ", m logict]
-    s ["This is denoted as ", m (la logicf)]
+    s ["This is de:: Noted as ", m (la logicf)]
 
 entailmentDefinition :: Note
 entailmentDefinition = de $ do
@@ -108,10 +111,10 @@ modelDefinition = de $ do
 
 modelsOfDefinition :: Note
 modelsOfDefinition = do
-    de $ s ["The set of all models of an expression ", m alpha, " is denoted as ", m (lmo alpha), "."]
+    de $ s ["The set of all models of an expression ", m alpha, " is de:: Noted as ", m (lmo alpha), "."]
 
     nte $ do
-        s ["With a little notation overloading we also denote ", dquoted (s ["The intersection of the set of all models of the expressions in a set ", m "S"]), " as ", m (lmo "S")]
+        s ["With a little notation overloading we also de:: Note ", dquoted (s ["The intersection of the set of all models of the expressions in a set ", m "S"]), " as ", m (lmo "S")]
         ma $ lmo "S" `eq` setincmp ("s" ∈ "S") (lmo "s")
 
 
@@ -124,7 +127,7 @@ inferenceDefinition :: Note
 inferenceDefinition = de $ do
     lab inferenceDefinitionLabel
     s ["An ", inference', " ", m logicir, " in a theory ", m logict, " is a procedure for proving sentences from a ", knowledgeBase]
-    s ["If a theorem ", m logict, " can be proven using ", m logicir, " we denote this as ", m (lpvm logicir "" logicf)]
+    s ["If a theorem ", m logict, " can be proven using ", m logicir, " we de:: Note this as ", m (lpvm logicir "" logicf)]
 
 
 inferenceNotation :: Note

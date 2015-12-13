@@ -1,9 +1,8 @@
 set -e # abort on error
 
-./bin/pre_commit_test.sh
-
-make doc
-
-for i in $(ls -1 ./preselect); do
-  ./preselect/$i
-done
+./bin/code_health.sh
+./bin/build.sh
+./bin/generate.sh
+./bin/install.sh
+./bin/documentation.sh
+./bin/all_preselects.sh

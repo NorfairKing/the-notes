@@ -10,14 +10,14 @@ See the `preselect` directory.
 
 ## Raw Compilation
 
-Compiling the notes generator is as easy as running `make`.
-Generating the notes is done with `./the-notes`.
+Compiling the notes generator is as easy as running `cabal install`.
+Generating the notes is done with `the-notes`.
 
 You can also generate subsets of the notes by adding selectors to the command.
 
-- `./the-notes sets` will only generate the chapter on sets.
-- `./the-notes sets.basics` will only generate the 'basics' section of the sets chapter
-- `./the-notes sets probability` will only generate the chapters on sets and probability.
+- `the-notes sets` will only generate the chapter on sets.
+- `the-notes sets.basics` will only generate the 'basics' section of the sets chapter
+- `the-notes sets probability` will only generate the chapters on sets and probability.
 
 You may need to `ignore-reference-errors`.
 
@@ -25,6 +25,17 @@ You may need to `ignore-reference-errors`.
 Contributions to these notes are very welcome in the form of pull requests or patches via email.
 
 `IMPORTANT`, before contributing, please install the `bin/pre_commit_test.sh` hook into `.git/hooks/pre-commit`. You can do this by running `spark deploy hooks.sus` or by manually copying the file.
+
+### Dependencies
+To make contributions, you will need:
+
+- `ghc`
+- `cabal`
+- `haddock`
+- `hlint`
+- `minted` (`pygmentize`)
+- `latexmk`
+- `dot`
 
 ## Licence
 "The Notes"

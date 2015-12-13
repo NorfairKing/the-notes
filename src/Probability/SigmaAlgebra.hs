@@ -8,8 +8,8 @@ import           Notes
 import           Sets.Algebra.Main (secondLawOfDeMorganLabel, symmetricDifferenceITOUnionAndIntersectionLabel)
 import           Sets.Basics       (set, setEqualityDefinitionLabel)
 
-sigmaAlgebra :: Notes
-sigmaAlgebra = notesPart "sigma-algebra" body
+sigmaAlgebra :: Note
+sigmaAlgebra = note "sigma-algebra" body
 
 body :: Note
 body = do
@@ -195,7 +195,7 @@ generatedSigmaAlgebraIsUnique = thm $ do
 
 generatedSigmaAlgebraExists :: Note
 generatedSigmaAlgebraExists = thm $ do
-  examq "Probability" "June 2014"
+  examq kul "Probability" "June 2014"
   s ["The ", sagb, " a ", set, " of subsets ", m gsa, " of a ", universe_, " always exists"]
 
   proof $ do

@@ -1,15 +1,11 @@
-module DataMining.Main (
-    dataMining
-  ) where
+module DataMining.Main where
 
 import           DataMining.ApproximateRetrieval
 import           DataMining.MapReduce
 import           Notes
 
-dataMining :: Notes
-dataMining = notes "data-mining"
-  [
-    notesPart "header" (chapter "Data Mining")
-  , mapReduce
-  , approximateRetrieval
-  ]
+dataMining :: Note
+dataMining = note "data-mining" $ do
+    chapter "Data Mining"
+    mapReduce
+    approximateRetrieval

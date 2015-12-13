@@ -4,19 +4,19 @@ import           Notes
 
 import           Logic.AbstractLogic      (abstractLogic)
 import           Logic.FirstOrderLogic
-import           Logic.HoareLogic
-import           Logic.PropositionalLogic
+import           Logic.HoareLogic         (hoareLogicS)
+import           Logic.PropositionalLogic (propositionalLogicS)
+import           Logic.SeparationLogic    (separationLogicS)
+import           Logic.TemporalLogic      (temporalLogicS)
 
 
-logica :: Notes
-logica = notes "logic"
-  [
-    logicHeader
-  , abstractLogic
-  , propositionalLogic
-  , firstOrderLogic
-  , hoareLogic
-  ]
+logica :: Note
+logica = note "logic" $ do
+    chapter "Logic"
+    abstractLogic
+    propositionalLogicS
+    firstOrderLogic
+    hoareLogicS
+    separationLogicS
+    temporalLogicS
 
-logicHeader :: Notes
-logicHeader = notesPart "header" (chapter "Logic")

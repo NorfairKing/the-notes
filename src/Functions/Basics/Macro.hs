@@ -3,6 +3,7 @@ module Functions.Basics.Macro where
 import           Types
 
 import           Macro.Math
+import           Macro.Tuple
 
 import           Functions.Application.Macro
 import           Macro.Sets.CarthesianProduct
@@ -22,6 +23,10 @@ funfunc = triple
 funfunc_ :: Note
 funfunc_ = fun fun_ dom_ img_
 
+-- | Function type
+funt :: Note -> Note -> Note
+funt a b = a <> rightarrow <> b
+
 -- * Function definition
 
 -- | Shorthand function definiton
@@ -29,7 +34,7 @@ fun :: Note -- ^ Name
     -> Note -- ^ Corange
     -> Note -- ^ Codomain
     -> Note
-fun m n o = m <> negspace <> ":" <> raw "\\, " <> n <> rightarrow <> o
+fun m n o = m <> negspace <> ":" <> raw "\\, " <> funt n o
   where
     negspace :: Note
     negspace = commS "kern" <> raw "-2pt"

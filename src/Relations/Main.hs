@@ -9,15 +9,14 @@ import           Relations.Orders      (orders)
 import           Relations.Preorders   (preorders)
 
 
-relations :: Notes
-relations = notes "relations"
-  [
-    notesPart "header" (chapter "Relations")
-  , basicDefinitions
-  , domainAndImage
-  , preorders
-  , equivalenceRelations
-  , orders
-  ]
+relations :: Note
+relations = note "relations" $ do
+    chapter "Relations"
+    basicDefinitions
+    domainAndImage
+    preorders
+    equivalenceRelations
+    orders
+
 
 

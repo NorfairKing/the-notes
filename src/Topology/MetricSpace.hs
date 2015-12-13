@@ -1,11 +1,4 @@
-module Topology.MetricSpace (
-    metricSpace
-
-  , pseudoMetricSpace
-
-  , pseudoMetricSpaceDefinitionLabel
-  , metricSpaceDefinitionLabel
-  ) where
+module Topology.MetricSpace where
 
 import           Notes
 
@@ -14,15 +7,12 @@ import           Functions.Distances    (distanceDefinitionLabel, metric,
 
 import           Functions.Basics.Macro
 
-metricSpace :: Notes
-metricSpace = notesPart "metric-space" body
-
-body :: Note
-body = do
-  section "Metric Spaces"
-  subsection "Pseudometric Spaces"
-  pseudoMetricSpaceDefinition
-  metricSpaces
+metricSpace :: Note
+metricSpace = note "metric-space" $ do
+    section "Metric Spaces"
+    subsection "Pseudometric Spaces"
+    pseudoMetricSpaceDefinition
+    metricSpaces
 
 metricSpaces :: Note
 metricSpaces = do

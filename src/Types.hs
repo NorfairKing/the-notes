@@ -15,19 +15,22 @@ module Types (
   , module Text.LaTeX.Packages.AMSThm
   , module Text.LaTeX.Packages.Fancyhdr
   , module Text.LaTeX.Packages.Color
+  , module Text.LaTeX.Packages.Graphicx
 
   , ask, asks
-  , modify
   ) where
-import           Prelude                      (Bool (..))
+
+import           Prelude                      (Bool (..), Ord (..))
 import           Prelude                      as P (Double, Eq (..), FilePath,
                                                     Fractional (..), IO,
                                                     Maybe (..), Num (..),
                                                     Show (..), mempty, ($),
                                                     (&&), (++), (.))
 
-import           Text.LaTeX                   hiding (Label, article, cite,
-                                               item, ref)
+import           Data.Set
+
+import           Text.LaTeX                   hiding (Label, alph_, article,
+                                               cite, item, ref, rule)
 import           Text.LaTeX.Base.Class
 import           Text.LaTeX.Base.Pretty
 import           Text.LaTeX.Base.Syntax
@@ -37,17 +40,21 @@ import           Text.LaTeX.Packages.AMSThm   hiding (TheoremStyle (..), proof,
                                                theorem)
 import           Text.LaTeX.Packages.Color
 import           Text.LaTeX.Packages.Fancyhdr
+import           Text.LaTeX.Packages.Graphicx
 
 import           Control.Monad.Reader         (MonadReader (..), ReaderT, ask,
                                                asks)
 import           Control.Monad.State          (MonadState (..), StateT, get,
-                                               modify, put)
+                                               put)
 
 
 type Note = LaTeXT_ (StateT State (ReaderT Config IO))
+type Note' = LaTeXT (StateT State (ReaderT Config IO))
 
 data State = State {
-      state_refs :: [Reference]
+      state_refs        :: Set Reference
+    , state_packages    :: Set PackageDep
+    , state_currentPart :: [String]
     } deriving (Show, Eq)
 
 data Args = Args {
@@ -75,18 +82,9 @@ data Config = Config {
     } deriving (Show, Eq)
 
 data Selection = All
-               | Match String
-               | Ignore String
+               | Match [String]
+               | Ignore [String]
     deriving (Show, Eq)
-
-data Notes = NotesPart String Note
-           | NotesPartList String [Notes]
-
-notes :: String -> [Notes] -> Notes
-notes = NotesPartList
-
-notesPart :: String -> Note -> Notes
-notesPart = NotesPart
 
 data Part = Part String Note
 
@@ -111,6 +109,8 @@ data RefKind = Definition
              | Theorem
              | Proposition
              | Property
+             | Example
+             | Figure
   deriving (Show, Eq)
 
 type ReferenceType = String
@@ -118,3 +118,11 @@ type ReferenceType = String
 data Reference = Reference ReferenceType String [(String, String)] -- Type Label
   deriving (Show, Eq)
 
+instance Ord Reference where
+    compare (Reference _ r1 _) (Reference _ r2 _) = compare r1 r2
+
+data PackageDep = PackageDep String [LaTeX]
+  deriving (Show, Eq)
+
+instance Ord PackageDep where
+    compare (PackageDep n1 _) (PackageDep n2 _) = compare n1 n2

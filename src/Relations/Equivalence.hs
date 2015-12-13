@@ -12,12 +12,12 @@ makeDefs [
       "equivalence relation"
     ]
 
-equivalenceRelations :: Notes
-equivalenceRelations = notesPart "equivalence-relations" $ do
-  section "Equivalence Relations"
+equivalenceRelations :: Note
+equivalenceRelations = note "equivalence-relations" $ do
+    section "Equivalence Relations"
 
-  equivalenceRelationDefinition
-  equivalenceClasses
+    equivalenceRelationDefinition
+    equivalenceClasses
 
 equivalenceRelationDefinition :: Note
 equivalenceRelationDefinition = de $ do

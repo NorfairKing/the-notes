@@ -4,6 +4,7 @@ import           Types
 
 import           Macro.Math
 import           Macro.Text
+import           Macro.Tuple
 
 import           Functions.Distances.Macro (dist_, metr_)
 

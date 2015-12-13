@@ -13,6 +13,8 @@ wordOf Definition     = "definition"
 wordOf Theorem        = "theorem"
 wordOf Property       = "property"
 wordOf Proposition    = "proposition"
+wordOf Example        = "example"
+wordOf Figure         = "figure"
 
 refKind :: Label -> RefKind
 refKind (Label kind _) = kind
@@ -63,6 +65,8 @@ proplab = Label Property
 prolab :: Note -> Label
 prolab = Label Proposition
 
+figlab :: Note -> Label
+figlab = Label Figure
 
 cite :: Reference -> Note
 cite ref = do

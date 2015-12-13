@@ -2,7 +2,7 @@ module Relations.Preorders.Macro where
 
 import           Types
 
-import           Macro.Math
+import           Macro.Tuple
 import           Relations.Basics.Macro (elem)
 
 

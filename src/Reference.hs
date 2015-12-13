@@ -2,8 +2,11 @@ module Reference where
 
 import           Types
 
-import           Data.List (intercalate)
-import           Prelude   (map)
+import           Data.List           (intercalate)
+import qualified Data.Set            as S
+import           Prelude             (map)
+
+import           Control.Monad.State (modify)
 
 
 unpublished :: ReferenceType
@@ -35,4 +38,5 @@ refName :: LaTeXC l => Reference -> l
 refName (Reference _ name _) = fromString name
 
 addReference :: Reference -> Note
-addReference ref = modify (\s -> s {state_refs = state_refs s ++ [ref]})
+addReference ref = modify (\s -> s {state_refs = S.insert ref $ state_refs s})
+

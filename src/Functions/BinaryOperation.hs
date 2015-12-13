@@ -12,8 +12,8 @@ makeDefs [
     , "associative"
     ]
 
-binaryOperations :: Notes
-binaryOperations = notesPart "binary-operations" $ do
+binaryOperations :: Note
+binaryOperations = note "binary-operations" $ do
     section "Binary operations"
     binaryOperationDefinition
 

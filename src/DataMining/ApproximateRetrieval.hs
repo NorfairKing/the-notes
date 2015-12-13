@@ -9,15 +9,12 @@ import           Topology.MetricSpace   (pseudoMetricSpace,
 
 import           Functions.Basics.Macro
 
-approximateRetrieval :: Notes
-approximateRetrieval = notesPart "approximate-retrieval" body
+approximateRetrieval :: Note
+approximateRetrieval = note "approximate-retrieval" $ do
+    section "Approximate Retrieval"
 
-body :: Note
-body = do
-  section "Approximate Retrieval"
-
-  theProblem
-  nearDuplicate
+    theProblem
+    nearDuplicate
 
 theProblem :: Note
 theProblem = do

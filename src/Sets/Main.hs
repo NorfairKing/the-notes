@@ -1,4 +1,4 @@
-module Sets.Main (sets) where
+module Sets.Main where
 
 import           Notes
 
@@ -9,14 +9,13 @@ import           Sets.Partition
 import           Sets.PointedSets       (pointedSets)
 import           Sets.Powerset
 
-sets :: Notes
-sets = notes "sets" $
-  [
-    notesPart "header" (chapter "Sets")
-  , setBasics
-  , partitions
-  , algebra
-  , powerset
-  , carthesianProducts
-  , pointedSets
-  ]
+sets :: Note
+sets = note "sets" $ do
+   chapter "Sets"
+   setBasics
+   partitions
+   algebra
+   powerset
+   carthesianProducts
+   pointedSets
+

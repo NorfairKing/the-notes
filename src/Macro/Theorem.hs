@@ -2,6 +2,8 @@ module Macro.Theorem where
 
 import           Types
 
+import           Packages
+
 import           Text.LaTeX.Packages.AMSThm (theorem)
 
 de :: Note -> Note
@@ -29,6 +31,13 @@ prop = theorem "prop"
 newtheorem' :: LaTeXC l => String -> l -> l
 newtheorem' name = liftL $ \l -> TeXComm "newtheorem" [ FixArg $ fromString name , OptArg "thm", FixArg l ]
 
-newmdtheoremenv :: LaTeXC l => String -> l -> l
-newmdtheoremenv name = liftL $ \l -> TeXComm "newmdtheoremenv" [ FixArg $ fromString name , OptArg "thm", FixArg l ]
+newmdtheoremenv :: String -> Note -> Note
+newmdtheoremenv nm n = do
+    packageDep_ "mdframed"
+    thm nm n
+  where
+    thm :: LaTeXC l => String -> l -> l
+    thm name = liftL $ \l -> TeXComm "newmdtheoremenv" [ FixArg $ fromString name , OptArg "thm", FixArg l ]
+
+
 

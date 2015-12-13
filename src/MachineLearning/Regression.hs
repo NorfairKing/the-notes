@@ -7,8 +7,8 @@ import           Notes
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
 
-regression :: Notes
-regression = notesPart "regression" body
+regression :: Note
+regression = note "regression" body
 
 body :: Note
 body = do

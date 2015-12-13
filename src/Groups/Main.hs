@@ -1,11 +1,7 @@
-module Groups.Main (
-    groups
-  ) where
+module Groups.Main where
 
 import           Notes
 
-groups :: Notes
-groups = notes "groups"
-  [
-    notesPart "header" (chapter "Groups")
-  ]
+groups :: Note
+groups = note "groups" $ do
+    chapter "Groups"

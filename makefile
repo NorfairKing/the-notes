@@ -12,6 +12,7 @@ SOURCES = $(shell find $(SRC_DIR) -type f -name '*.hs')
 
 GHC = ghc
 GHC_FLAGS = \
+	-j8 \
 	-fwarn-unused-imports \
 	-fwarn-incomplete-patterns \
 	-Wall -Werror \
