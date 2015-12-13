@@ -14,6 +14,7 @@ print_colored_text () {
 }
 
 check () {
+  set +x
   name="$1"
   shift
   command="$*"
@@ -28,6 +29,7 @@ check () {
     echo $command
     cat $OUT
     cat $ERR
+    set -x
     return -1
   fi
 }
