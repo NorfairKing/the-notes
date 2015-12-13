@@ -5,10 +5,8 @@ import           Notes
 import           LinearAlgebra.InproductSpaces (inproductSpaces)
 import           LinearAlgebra.VectorSpaces    (vectorSpaces)
 
-linearAlgebra :: Notes
-linearAlgebra = notes "linear-algebra"
-  [
-    notesPart "header" (chapter "Linear Algebra")
-  , vectorSpaces
-  , inproductSpaces
-  ]
+linearAlgebra :: Note
+linearAlgebra = note  "linear-algebra" $ do
+    chapter "Linear Algebra"
+    vectorSpaces
+    inproductSpaces

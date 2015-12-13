@@ -1,6 +1,4 @@
-module Computability.Main (
-    computability
-  ) where
+module Computability.Main where
 
 import           Notes
 
@@ -9,12 +7,11 @@ import           Computability.Languages           (languages)
 import           Computability.RegularExpressions  (regularExpressions)
 import           Computability.Symbols             (symbols)
 
-computability :: Notes
-computability = notes "computability"
-  [
-    notesPart "header" (chapter "Computability")
-  , symbols
-  , languages
-  , regularExpressions
-  , finiteStateAutomata
-  ]
+computability :: Note
+computability = note "computability" $ do
+    chapter "Computability"
+    symbols
+    languages
+    regularExpressions
+    finiteStateAutomata
+

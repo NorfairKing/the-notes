@@ -9,8 +9,8 @@ import           Functions.BinaryOperation   (associative_)
 import           Computability.Symbols.Macro
 import           Computability.Symbols.Terms
 
-symbols :: Notes
-symbols = notesPart "symbols-and-strings" $ do
+symbols :: Note
+symbols = note "symbols-and-strings" $ do
     section "Symbols and strings"
     symbolDefinition
     alphabetDefinition
@@ -77,7 +77,7 @@ concatenationNotCommutative = thm $ do
 
 stringsOfAlphabetDefinition :: Note
 stringsOfAlphabetDefinition = de $ do
-    s ["The ", set, " of all strings over an ", alphabet, " ", m alph_, " is denoted as ", m strsof_]
+    s ["The ", set, " of all strings over an ", alphabet, " ", m alph_, " is de:: Noted as ", m strsof_]
     ma $ strsof_ === setcmpr (strlist (a 1) (a 2) (a "n")) (cs [a "i" ∈ alph_, cs ["n", "i"] ∈ naturals])
   where a n = "a" !: n
 

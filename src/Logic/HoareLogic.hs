@@ -11,8 +11,8 @@ import           Logic.HoareLogic.Macro
 import           Logic.HoareLogic.Terms
 import           Relations.Orders.Macro
 
-hoareLogicS :: Notes
-hoareLogicS = notesPart "hoare-logic" $ do
+hoareLogicS :: Note
+hoareLogicS = note "hoare-logic" $ do
     section "Hoare Logic"
     s [hoareLogic', " is used to reason about imperative computer programs in abstract machines that have a ", state]
 

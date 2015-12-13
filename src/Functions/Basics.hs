@@ -22,8 +22,8 @@ makeDefs [
     , "member-wise application"
     ]
 
-basics :: Notes
-basics = notesPart "basics" $ do
+basics :: Note
+basics = note "basics" $ do
     section "Basics"
 
     partialFunctionDefinition

@@ -10,17 +10,13 @@ import           Logic.SeparationLogic    (separationLogicS)
 import           Logic.TemporalLogic      (temporalLogicS)
 
 
-logica :: Notes
-logica = notes "logic"
-  [
-    logicHeader
-  , abstractLogic
-  , propositionalLogicS
-  , firstOrderLogic
-  , hoareLogicS
-  , separationLogicS
-  , temporalLogicS
-  ]
+logica :: Note
+logica = note "logic" $ do
+    chapter "Logic"
+    abstractLogic
+    propositionalLogicS
+    firstOrderLogic
+    hoareLogicS
+    separationLogicS
+    temporalLogicS
 
-logicHeader :: Notes
-logicHeader = notesPart "header" (chapter "Logic")

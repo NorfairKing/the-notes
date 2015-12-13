@@ -6,16 +6,15 @@ import           MachineLearning.Regression           (regression)
 import           MachineLearning.SupervisedLearning   (supervisedLearning)
 import           MachineLearning.UnsupervisedLearning (unsupervisedLearning)
 
-machineLearning :: Notes
-machineLearning = notes "machine-learning" $
-  [
-      notesPart "header" (chapter "Machine Learning")
-    , notesPart "learn-definition" learnDefinition
-    , supervisedLearning
-    , regression
-    , unsupervisedLearning
-    , notesPart "test" test
-  ]
+machineLearning :: Note
+machineLearning = note "machine-learning" $ do
+    chapter "Machine Learning"
+    note "learn-definition" learnDefinition
+    supervisedLearning
+    regression
+    unsupervisedLearning
+    note "test" test
+
 
 learnDefinition :: Note
 learnDefinition = de $ s ["A computer program is said to learn from experience ", m e, " with respect to some class of tasks ", m t, " and performance measure ", m p, ", if its performance at tasks in ", m t, " as measured by ", m p, " improves with experience"]

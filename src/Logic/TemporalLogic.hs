@@ -11,8 +11,8 @@ import           Logic.PropositionalLogic.Terms
 import           Logic.TemporalLogic.Macro
 import           Logic.TemporalLogic.Terms
 
-temporalLogicS :: Notes
-temporalLogicS = notesPart "temporal-logic" $ do
+temporalLogicS :: Note
+temporalLogicS = note "temporal-logic" $ do
     section "Temporal Logic"
     subsection "Linear temporal logic"
 
@@ -45,7 +45,7 @@ temporalLogicDefinition = de $ do
     s ["The semantics are defined as follows"]
     s ["In ", linearTemporalLogic, " truth is evaluated with respect to a(n input) string"]
     s ["Let ", m $ (w =: strlist w1 w2 wn) ∈ strsof pp, " be a string"]
-    s [m w, " satisfies a linear temporal logic ", formula, " ", m f, " at position ", m i, ", denoted as ", m $ satis w i f, " under the following conditions"]
+    s [m w, " satisfies a linear temporal logic ", formula, " ", m f, " at position ", m i, ", de:: Noted as ", m $ satis w i f, " under the following conditions"]
     itemize $ do
         item $ m $ ss p ⇔ p =: wi
         item $ m $ ss (not f) ⇔ not (ss f)

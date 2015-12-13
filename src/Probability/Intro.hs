@@ -6,8 +6,8 @@ module Probability.Intro (
 
 import           Notes
 
-intro :: Notes
-intro = notesPart "intro" introBody
+intro :: Note
+intro = note "intro" introBody
 
 introBody :: Note
 introBody = do
@@ -24,7 +24,7 @@ experimentDefinition = de $ do
 universeDefinition :: Note
 universeDefinition = de $ do
   s ["The ", term "universe", " of a ", ix "stochastic experiment", " is the set of all possible outcomes"]
-  s ["It is denoted as ", m pruniv]
+  s ["It is de:: Noted as ", m pruniv]
 
 eventDefinition :: Note
 eventDefinition = de $ do

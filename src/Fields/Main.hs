@@ -1,11 +1,7 @@
-module Fields.Main (
-    fields
-  ) where
+module Fields.Main where
 
 import           Notes
 
-fields :: Notes
-fields = notes "fields"
-  [
-    notesPart "header" (chapter "Fields")
-  ]
+fields :: Note
+fields = note "fields" $ do
+    chapter "Fields"

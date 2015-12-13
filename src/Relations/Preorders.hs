@@ -10,8 +10,8 @@ makeDefs [
       "preorder"
     ]
 
-preorders :: Notes
-preorders = notesPart "preorders" $ do
+preorders :: Note
+preorders = note "preorders" $ do
   section "Preorders"
 
   preorderDefinition

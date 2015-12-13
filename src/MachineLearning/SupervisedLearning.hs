@@ -8,8 +8,8 @@ import           Notes
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
 
-supervisedLearning :: Notes
-supervisedLearning = notesPart "supervised-learning" body
+supervisedLearning :: Note
+supervisedLearning = note "supervised-learning" body
 
 body :: Note
 body = do

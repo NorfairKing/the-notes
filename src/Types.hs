@@ -52,8 +52,9 @@ type Note = LaTeXT_ (StateT State (ReaderT Config IO))
 type Note' = LaTeXT (StateT State (ReaderT Config IO))
 
 data State = State {
-      state_refs     :: Set Reference
-    , state_packages :: Set PackageDep
+      state_refs        :: Set Reference
+    , state_packages    :: Set PackageDep
+    , state_currentPart :: [String]
     } deriving (Show, Eq)
 
 data Args = Args {
@@ -81,18 +82,9 @@ data Config = Config {
     } deriving (Show, Eq)
 
 data Selection = All
-               | Match String
-               | Ignore String
+               | Match [String]
+               | Ignore [String]
     deriving (Show, Eq)
-
-data Notes = NotesPart String Note
-           | NotesPartList String [Notes]
-
-notes :: String -> [Notes] -> Notes
-notes = NotesPartList
-
-notesPart :: String -> Note -> Notes
-notesPart = NotesPart
 
 data Part = Part String Note
 

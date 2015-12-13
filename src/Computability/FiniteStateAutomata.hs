@@ -13,8 +13,8 @@ import           Computability.Symbols.Macro
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
 
-finiteStateAutomata :: Notes
-finiteStateAutomata = notesPart "finite-state-automata" $ do
+finiteStateAutomata :: Note
+finiteStateAutomata = note "finite-state-automata" $ do
     section "Finite state automata"
     subsection "NFSA"
     nonDeterministicFiniteStateAutomatonDefinition

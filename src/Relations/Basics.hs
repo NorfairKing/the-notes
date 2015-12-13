@@ -1,4 +1,5 @@
 module Relations.Basics where
+
 import           Notes
 
 import           Sets.CarthesianProduct (carthesianProduct_)
@@ -16,8 +17,8 @@ makeDefs [
     , "total"
     ]
 
-basicDefinitions :: Notes
-basicDefinitions = notesPart "definitions" $ do
+basicDefinitions :: Note
+basicDefinitions = note "definitions" $ do
   section "Basics"
 
   relationDefinition

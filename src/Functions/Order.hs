@@ -31,8 +31,8 @@ makeDefs [
     , "Kleene chain"
     ]
 
-order :: Notes
-order = notesPart "orders" body
+order :: Note
+order = note "orders" body
 
 body :: Note
 body = do

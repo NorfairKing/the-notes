@@ -2,7 +2,7 @@ module Utils where
 
 import           Types
 
-import           Prelude           (otherwise, return)
+import           Prelude           (Char, otherwise, return)
 
 import           Control.Exception
 import           System.Directory  (removeFile)
@@ -14,3 +14,14 @@ removeIfExists fileName = removeFile fileName `catch` handleExists
           | isDoesNotExistError e = return ()
           | otherwise = throwIO e
 
+split :: String -> [String]
+split = splitOn '.'
+
+
+splitOn :: Char -> String -> [String]
+splitOn c s = go s []
+  where
+    go :: String -> String -> [String]
+    go [] s = [s]
+    go (sc:ss) acc | sc == c   = acc : go [] ss
+                   | otherwise = go ss (acc ++ [sc])

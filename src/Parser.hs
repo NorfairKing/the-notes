@@ -3,6 +3,7 @@ module Parser (getConfig) where
 import           Options.Applicative
 import           Prelude             (fmap, map, null, return)
 import           Types
+import           Utils
 
 getConfig :: IO (Maybe Config)
 getConfig = fmap config getArgs
@@ -25,8 +26,8 @@ config args = do
 
 constructSelection :: String -> Selection
 constructSelection "all" = All
-constructSelection ('-':s) = Ignore s
-constructSelection s = Match s
+constructSelection ('-':s) = Ignore $ split s
+constructSelection s = Match $ split s
 
 
 getArgs :: IO Args

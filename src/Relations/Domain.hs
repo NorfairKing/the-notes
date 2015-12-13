@@ -1,4 +1,3 @@
-{-# LANGUAGE TemplateHaskell #-}
 module Relations.Domain where
 
 import           Notes
@@ -14,8 +13,8 @@ makeDefs [
     ]
 
 
-domainAndImage :: Notes
-domainAndImage = notesPart "domain-and-image" $ do
+domainAndImage :: Note
+domainAndImage = note "domain-and-image" $ do
   subsection "Domain and Image"
 
   domainDefinition

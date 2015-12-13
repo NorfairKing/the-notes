@@ -4,8 +4,8 @@ import           Notes
 
 import           Probability.Intro (bernoulliExperimentDefinitionLabel)
 
-distributions :: Notes
-distributions = notesPart "important-distributions" body
+distributions :: Note
+distributions = note "important-distributions" body
 
 body :: Note
 body = do

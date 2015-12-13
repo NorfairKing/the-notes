@@ -4,8 +4,6 @@ module Rings.Main (
 
 import           Notes
 
-rings :: Notes
-rings = notes "rings"
-  [
-    notesPart "header" (chapter "Rings")
-  ]
+rings :: Note
+rings = note "rings" $ do
+    chapter "Rings"

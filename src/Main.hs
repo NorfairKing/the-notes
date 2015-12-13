@@ -102,6 +102,7 @@ startState :: State
 startState = State {
     state_refs = S.empty
   , state_packages = S.empty
+  , state_currentPart = []
   }
 
 renderConfig :: Note
@@ -135,7 +136,7 @@ entireDocument = do
     tableofcontents
     newpage
     renderConfig
-    renderNotes allNotes
+    allNotes
 
     bibfn <- asks conf_bibFileName
     comm1 "bibliographystyle" "plain"
@@ -148,21 +149,18 @@ entireDocument = do
 
 
 
-allNotes :: Notes
-allNotes = notes ""
-  [
-      logica
-    , sets
-    , relations
-    , functions
-    , groups
-    , rings
-    , fields
-    , linearAlgebra
-    , topology
-    , computability
-    , probability
-    , machineLearning
-    , dataMining
-  ]
-
+allNotes :: Note
+allNotes = do
+    logica
+    sets
+    relations
+    functions
+    groups
+    rings
+    fields
+    linearAlgebra
+    topology
+    computability
+    probability
+    machineLearning
+    dataMining

@@ -1,12 +1,4 @@
-module Sets.Algebra.Complement (
-    setComplement
-  , complement
-
-  , unionComplementaryLawLabel
-  , firstLawOfDeMorganLabel
-  , secondLawOfDeMorganLabel
-  , setDifferenceEquivalentDefinitionLabel
-  ) where
+module Sets.Algebra.Complement where
 
 import           Notes
 
@@ -17,19 +9,16 @@ import           Sets.Algebra.Union        (union)
 complement :: Note
 complement = ix "complement"
 
-setComplement :: Notes
-setComplement = notesPart "complement" body
-
-body :: Note
-body = do
-  subsection "Set complement"
-  complementDefinition
-  doubleComplement
-  complementaryLawUnion
-  complementaryLawIntersection
-  firstLawOfDeMorgan
-  secondLawOfDeMorgan
-  setDifferenceEquivalentDefinition
+setComplement :: Note
+setComplement = note "complement" $ do
+    subsection "Set complement"
+    complementDefinition
+    doubleComplement
+    complementaryLawUnion
+    complementaryLawIntersection
+    firstLawOfDeMorgan
+    secondLawOfDeMorgan
+    setDifferenceEquivalentDefinition
 
 a, b, x, y :: Note
 a = "A"

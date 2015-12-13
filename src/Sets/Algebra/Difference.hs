@@ -1,33 +1,23 @@
-module Sets.Algebra.Difference (
-    setDifference
-
-  , difference
-
-  , intersectionOverDifferenceLabel
-  , symmetricDifferenceITOUnionAndIntersectionLabel
-  ) where
+module Sets.Algebra.Difference where
 
 import           Notes
 
 difference :: Note
 difference = ix "difference"
 
-setDifference :: Notes
-setDifference = notesPart "difference" body
+setDifference :: Note
+setDifference = note "difference" $ do
+    subsection "Set difference"
 
-body :: Note
-body = do
-  subsection "Set difference"
+    differenceDefinition
+    intersectionAndDifferenceDisjunct
+    symmetricSetDifferencesDisjunct
 
-  differenceDefinition
-  intersectionAndDifferenceDisjunct
-  symmetricSetDifferencesDisjunct
+    symmetricDifferenceDefinition
+    symmetricDifferenceEquivalentDefinition
+    symmetricDifferenceITOUnionAndIntersection
 
-  symmetricDifferenceDefinition
-  symmetricDifferenceEquivalentDefinition
-  symmetricDifferenceITOUnionAndIntersection
-
-  intersectionOverDifference
+    intersectionOverDifference
 
 a, b, c, x, y :: Note
 a = "A"

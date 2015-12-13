@@ -12,8 +12,8 @@ import           Computability.RegularExpressions.Macro
 import           Computability.RegularExpressions.Terms
 
 
-regularExpressions :: Notes
-regularExpressions = notesPart "regular-expressions" $ do
+regularExpressions :: Note
+regularExpressions = note "regular-expressions" $ do
     section "Regular Expressions"
 
     regularExpressionDefinition
@@ -45,7 +45,7 @@ regularExpressionDefinition = de $ do
 
 regularExpressionsOverAlphabet :: Note
 regularExpressionsOverAlphabet = de $ do
-    s [the, set, " of ", regularExpression, "s over an ", alphabet, " ", m alph_, " is denoted as ", m reoa_]
+    s [the, set, " of ", regularExpression, "s over an ", alphabet, " ", m alph_, " is de:: Noted as ", m reoa_]
 
 languageOfRegularExpression :: Note
 languageOfRegularExpression = de $ do
@@ -85,7 +85,7 @@ regularExpressionFiniteCriterium = do
 
 regularLanguagesDefinition :: Note
 regularLanguagesDefinition = de $ do
-  s [the, set, " of all ", regular, " languages is denoted as ", m reglan]
+  s [the, set, " of all ", regular, " languages is de:: Noted as ", m reglan]
 
 reglanSubalgebra :: Note
 reglanSubalgebra = de $ do

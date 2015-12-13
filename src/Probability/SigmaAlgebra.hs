@@ -8,8 +8,8 @@ import           Notes
 import           Sets.Algebra.Main (secondLawOfDeMorganLabel, symmetricDifferenceITOUnionAndIntersectionLabel)
 import           Sets.Basics       (set, setEqualityDefinitionLabel)
 
-sigmaAlgebra :: Notes
-sigmaAlgebra = notesPart "sigma-algebra" body
+sigmaAlgebra :: Note
+sigmaAlgebra = note "sigma-algebra" body
 
 body :: Note
 body = do

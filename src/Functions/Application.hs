@@ -13,8 +13,8 @@ makeDefs [
       "member-wise application"
     ]
 
-application :: Notes
-application = notesPart "application" $ do
+application :: Note
+application = note "application" $ do
     memberwiseApplication
 
 memberwiseApplication :: Note

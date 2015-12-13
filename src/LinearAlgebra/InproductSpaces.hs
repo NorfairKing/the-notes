@@ -8,8 +8,8 @@ import           Notes
 
 import           Functions.Basics.Macro
 
-inproductSpaces :: Notes
-inproductSpaces = notesPart "inproduct-spaces" body
+inproductSpaces :: Note
+inproductSpaces = note "inproduct-spaces" body
 
 body :: Note
 body = do

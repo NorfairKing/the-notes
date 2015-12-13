@@ -2,8 +2,7 @@ module Sets.Powerset (powerset) where
 
 import           Notes
 
-powerset :: Notes
-powerset = notesPart "powerset" body
+powerset :: Note
+powerset = note "powerset" $ do
+    mempty
 
-body :: Note
-body = mempty

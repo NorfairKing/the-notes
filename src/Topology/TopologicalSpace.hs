@@ -1,7 +1,4 @@
-module Topology.TopologicalSpace (
-    topology
-  , topologicalSpace
-  ) where
+module Topology.TopologicalSpace where
 
 import           Notes
 
@@ -9,21 +6,18 @@ import           Sets.Algebra.Intersection (distributionLaw2Label,
                                             intersectionAssociativityLabel)
 
 
-topologicalSpace :: Notes
-topologicalSpace = notesPart "topological-spaces" body
-
-body :: Note
-body = do
-  section "Topological Space"
-  topologyDefinition
-  topologicalSpaceDefinition
-  closedSetDefinition
-  trivialTopologyDefinition
-  discreteTopologyDefinition
-  topologyExamples
-  inducedTopology
-  comparableDefinition
-  finerCoarserDefinition
+topologicalSpace :: Note
+topologicalSpace = note "topological-spaces" $ do
+    section "Topological Space"
+    topologyDefinition
+    topologicalSpaceDefinition
+    closedSetDefinition
+    trivialTopologyDefinition
+    discreteTopologyDefinition
+    topologyExamples
+    inducedTopology
+    comparableDefinition
+    finerCoarserDefinition
 
 topology :: Note
 topology = ix "topology"

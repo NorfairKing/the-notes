@@ -7,8 +7,8 @@ import           Logic.AbstractLogic            (complete, grammar, inference,
 
 import           Logic.PropositionalLogic.Terms
 
-propositionalLogicS :: Notes
-propositionalLogicS = notesPart "propositional-logic" $ do
+propositionalLogicS :: Note
+propositionalLogicS = note "propositional-logic" $ do
   section "Propositional Logic"
   propositionalLogicDefinition
   truthTables

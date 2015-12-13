@@ -4,8 +4,8 @@ module MachineLearning.UnsupervisedLearning (
 
 import           Notes
 
-unsupervisedLearning :: Notes
-unsupervisedLearning = notesPart "unsupervised-learning" body
+unsupervisedLearning :: Note
+unsupervisedLearning = note "unsupervised-learning" body
 
 body :: Note
 body = do

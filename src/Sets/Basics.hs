@@ -11,8 +11,8 @@ makeDefs [
     , "predicate"
     ]
 
-setBasics :: Notes
-setBasics = notesPart "basics" $ do
+setBasics :: Note
+setBasics = note "basics" $ do
     section "Set Basics"
     sets
     subsets

@@ -13,8 +13,8 @@ import           Functions.Application.Macro
 import           Functions.Basics.Macro
 import           Functions.Inverse.Macro
 
-randomVariable :: Notes
-randomVariable = notesPart "random-variable" body
+randomVariable :: Note
+randomVariable = note "random-variable" body
 
 psDec :: Note
 psDec = s ["Let ", m prsp, " be a ", ix "probability space"]

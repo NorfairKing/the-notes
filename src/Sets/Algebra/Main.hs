@@ -16,12 +16,11 @@ import           Sets.Algebra.Intersection
 import           Sets.Algebra.Union
 
 
-algebra :: Notes
-algebra = notes "algebra" $
-  [
-    notesPart "header" (section "The algebra of sets")
-  , setUnion
-  , setIntersection
-  , setDifference
-  , setComplement
-  ]
+algebra :: Note
+algebra = note "algebra" $ do
+    section "The algebra of sets"
+    setUnion
+    setIntersection
+    setDifference
+    setComplement
+

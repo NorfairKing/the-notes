@@ -7,8 +7,8 @@ module Probability.Independence (
 
 import           Notes
 
-independence :: Notes
-independence = notesPart "independence" body
+independence :: Note
+independence = note "independence" body
 
 psDec :: Note
 psDec = s ["Let ", m prsp, " be a ", ix "probability space"]

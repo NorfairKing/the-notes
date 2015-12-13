@@ -35,11 +35,8 @@ makeDefs [
     , "lattice"
     , "flat lattice"]
 
-orders :: Notes
-orders = notesPart "orders" body
-
-body :: Note
-body = do
+orders :: Note
+orders = note "orders" $ do
     nocite orderTheoryForComputerScientists
 
     section "Orders"
