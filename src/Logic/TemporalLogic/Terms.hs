@@ -5,4 +5,5 @@ import           Notes
 makeDefs [
       "temporal logic"
     , "linear temporal logic"
+    , "language"
     ]

@@ -1,7 +1,10 @@
 module Logic.TemporalLogic.Macro where
 
-import           Macro.MetaMacro
 import           Types
+
+import           Macro.Logic.Macro
+import           Macro.MetaMacro
+import           Macro.Text
 
 -- | The 'next' temporal logic operator
 next :: Note -> Note
@@ -22,3 +25,15 @@ evnt = mappend $ comm0 "Diamond"
 -- | Always
 alws :: Note -> Note
 alws = mappend $ comm0 "Box"
+
+-- | Satisfies
+satis :: Note -- Word
+          -> Note -- Position
+          -> Note -- Formula
+          -> Note
+satis w p = lent $ cs [w, p]
+
+-- | Language of a formula
+languageOf :: Note -- Formula
+           -> Note
+languageOf = (!:) "L"

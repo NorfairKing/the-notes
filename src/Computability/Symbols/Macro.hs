@@ -49,7 +49,7 @@ strsof alphabet = alphabet ^: "*"
 strsof_ :: Note
 strsof_ = strsof alph_
 
--- ** Lists of strings
+-- ** Lists of symbols
 strlst :: Note -> Note -> Note
 strlst s1 sn = s1 <> dotsc <> sn
 
