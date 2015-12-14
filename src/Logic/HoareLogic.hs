@@ -46,7 +46,7 @@ hoareLogicS = note "hoare-logic" $ do
 
     nocite softwareVerificationAxiomaticSemanticsSlides
 
-    examQuestion2014
+    note "exam-question-2014" examQuestion2014
 
 a, b, c, i, p, q, r, e, x, y, z :: Note
 a = "A"

@@ -20,7 +20,7 @@ import           Control.Monad.Reader (runReaderT)
 import           Control.Monad.State  (gets, modify, runStateT)
 
 import           Control.Monad        (when)
-import           Data.List            (intercalate, isPrefixOf, replicate)
+import           Data.List            (isPrefixOf, replicate)
 
 runNote :: Note -> Config -> State -> IO (LaTeX, State)
 runNote note conf state = runReaderT (runStateT (execLaTeXT note) state) conf
@@ -34,7 +34,7 @@ note partname func = do
     s <- isSelected
     when s $ do
         liftIO $ putStr $ replicate (length part * 2) ' '
-        liftIO $ putStrLn $ intercalate "." part
+        liftIO $ putStrLn partname
         func
 
     popPart
