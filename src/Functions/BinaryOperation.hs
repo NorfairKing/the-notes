@@ -19,6 +19,7 @@ binaryOperations = note "binary-operations" $ do
 
     associativeDefinition
 
+-- TODO(binary operation can go to other set than dom_
 binaryOperationDefinition :: Note
 binaryOperationDefinition = de $ do
     lab binaryOperationDefinitionLabel
