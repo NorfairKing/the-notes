@@ -1,10 +1,11 @@
 module Titlepage (myTitlePage) where
 
-import           Control.Monad (forM_)
+import           Control.Monad        (forM_)
+import           Control.Monad.Reader (asks)
 
-import           Prelude       (return)
+import           Prelude              (return)
 
-import qualified Data.Text     as T
+import qualified Data.Text            as T
 
 import           Notes
 

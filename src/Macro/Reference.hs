@@ -1,12 +1,11 @@
 module Macro.Reference where
 
 import           Control.Monad            (when)
-
-import           Reference
-import           Types
+import           Control.Monad.Reader     (asks)
 
 import qualified Text.LaTeX.Base.Commands as T (pageref, ref)
 
+import           Types
 
 wordOf :: RefKind -> Note
 wordOf Definition     = "definition"
@@ -67,13 +66,3 @@ prolab = Label Proposition
 
 figlab :: Note -> Label
 figlab = Label Figure
-
-cite :: Reference -> Note
-cite ref = do
-  comm1 "cite" $ refName ref
-  addReference ref
-
-nocite :: Reference -> Note
-nocite ref = do
-  comm1 "nocite" $ refName ref
-  addReference ref

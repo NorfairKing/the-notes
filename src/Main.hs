@@ -1,15 +1,14 @@
 {-# LANGUAGE QuasiQuotes #-}
 module Main where
 
-import qualified Prelude               as P
+import           Prelude               as P
 
-import qualified Data.Set              as S
 import qualified Data.Text             as T
+import qualified Data.Text.IO          as T
 
 import           Control.Monad         (unless, when)
-import           Data.List             (intercalate, splitAt)
-import           Prelude               (Bool (..), Int, appendFile, error,
-                                        putStrLn, return)
+import           Control.Monad.Reader  (MonadReader (..), asks)
+import           Data.List             (intercalate)
 import           System.Exit           (ExitCode (..), die)
 import           System.Process        (CreateProcess (..),
                                         readCreateProcessWithExitCode, shell)
@@ -49,27 +48,31 @@ main = do
             mainTexFile = conf_texFileName cf ++ ".tex"
             mainPdfFile = conf_pdfFileName cf ++ ".pdf"
         removeIfExists mainBibFile
-        (t, endState) <- runNote entireDocument cf startState
+        let sel = conf_selection cf
+        (eet, _) <- runNote entireDocument cf sel startState
+        case eet of
+            Left err -> error err
+            Right (t, refs) -> do
 
-        renderFile mainTexFile $ injectPackageDependencies (S.toList $ state_packages endState) $ t
+                renderFile mainTexFile t
 
-        appendFile mainBibFile $ showReferences $ S.toList $ state_refs endState
+                T.appendFile mainBibFile $ showReferences refs
 
-        (ec, out, err) <- liftIO $ readCreateProcessWithExitCode (latexMkJob cf) ""
-        let outputAnyway = do
-              putStrLn out
-              putStrLn err
-        case ec of
-          ExitFailure _ -> do
-              outputAnyway
-              die "Compilation failed"
-          ExitSuccess -> do
-              if (P.not $ conf_ignoreReferenceErrors cf) && (containsRefErrors $ out ++ "\n" ++ err)
-              then do
-                  removeIfExists mainPdfFile
-                  outputAnyway
-                  die "Undefined references"
-              else when (conf_verbose cf) outputAnyway
+                (ec, out, err) <- liftIO $ readCreateProcessWithExitCode (latexMkJob cf) ""
+                let outputAnyway = do
+                      putStrLn out
+                      putStrLn err
+                case ec of
+                  ExitFailure _ -> do
+                      outputAnyway
+                      die "Compilation failed"
+                  ExitSuccess -> do
+                      if (P.not $ conf_ignoreReferenceErrors cf) && (containsRefErrors $ out ++ "\n" ++ err)
+                      then do
+                          removeIfExists mainPdfFile
+                          outputAnyway
+                          die "Undefined references"
+                      else when (conf_verbose cf) outputAnyway
 
         return ()
 
@@ -99,11 +102,7 @@ latexMkJob cf = shell $ "latexmk " ++ unwords latexMkArgs
 
 
 startState :: State
-startState = State {
-    state_refs = S.empty
-  , state_packages = S.empty
-  , state_currentPart = []
-  }
+startState = State
 
 renderConfig :: Note
 renderConfig = do

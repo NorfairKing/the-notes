@@ -1,18 +1,19 @@
 module Parser (getConfig) where
 
 import           Options.Applicative
-import           Prelude             (fmap, map, null, return)
+import           Prelude                        (fmap, null, return)
 import           Types
-import           Utils
+
+import           Text.LaTeX.LambdaTeX.Selection
 
 getConfig :: IO (Maybe Config)
 getConfig = fmap config getArgs
 
 config :: Args -> Maybe Config
 config args = do
-  let ss = map constructSelection $ args_selectionStrings args
+  let ss = constructSelection $ args_selectionString args
   return Config {
-      conf_selections               = ss
+      conf_selection                = ss
     , conf_visualDebug              = args_visualDebug args
     , conf_verbose                  = args_verbose args
     , conf_ignoreReferenceErrors    = args_ignoreReferenceErrors args
@@ -24,12 +25,6 @@ config args = do
     }
   where st = args_subtitle args
 
-constructSelection :: String -> Selection
-constructSelection "all" = All
-constructSelection ('-':s) = Ignore $ split s
-constructSelection s = Match $ split s
-
-
 getArgs :: IO Args
 getArgs = execParser opts
   where
@@ -38,8 +33,8 @@ getArgs = execParser opts
     description = "\"The Notes\" generator"
 
 
-parseSelection :: Parser [String]
-parseSelection = words <$> strArgument (
+parseSelection :: Parser String
+parseSelection = strArgument (
        metavar "SELECTION"
     <> help "The selection of parts to generate"
     <> value "all")
