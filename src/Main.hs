@@ -1,19 +1,17 @@
 {-# LANGUAGE QuasiQuotes #-}
 module Main where
 
-import           Prelude                                 as P
+import           Prelude               as P
 
-import qualified Data.Text                               as T
-import qualified Data.Text.IO                            as T
+import qualified Data.Text             as T
 
-import           Control.Monad                           (unless, when)
-import           Control.Monad.Reader                    (MonadReader (..),
-                                                          asks)
-import           Data.List                               (intercalate)
-import           System.Exit                             (ExitCode (..), die)
-import           System.Process                          (CreateProcess (..), readCreateProcessWithExitCode,
-                                                          shell)
-import           Text.Regex.PCRE.Heavy                   (re, scan)
+import           Control.Monad         (unless, when)
+import           Control.Monad.Reader  (MonadReader (..), asks)
+import           Data.List             (intercalate)
+import           System.Exit           (ExitCode (..), die)
+import           System.Process        (CreateProcess (..),
+                                        readCreateProcessWithExitCode, shell)
+import           Text.Regex.PCRE.Heavy (re, scan)
 
 import           Notes
 import           Utils
@@ -37,8 +35,6 @@ import           Rings.Main
 import           Sets.Main
 import           Topology.Main
 
-import           Text.LaTeX.LambdaTeX.Reference.Internal (renderReferences)
-
 
 main :: IO ()
 main = do
@@ -46,19 +42,19 @@ main = do
     case mc of
       Nothing -> error "Couldn't parse arguments."
       Just cf -> do
-        let mainBibFile = conf_bibFileName cf ++ ".bib"
-            mainTexFile = conf_texFileName cf ++ ".tex"
-            mainPdfFile = conf_pdfFileName cf ++ ".pdf"
-        removeIfExists mainBibFile
-        let gconf = defaultGenerationConfig { generationSelection = conf_selection cf }
-        (eet, _) <- runNote entireDocument cf gconf startState
+        let mainPdfFile = conf_pdfFileName cf ++ ".pdf"
+        let gconf = defaultGenerationConfig {
+              generationSelection = conf_selection cf
+            }
+        let pconf = defaultProjectConfig {
+              projectGenerationConfig = gconf
+            , projectTexFileName = conf_texFileName cf
+            , projectBibFileName = conf_bibFileName cf
+            }
+        (eet, _) <- runNote entireDocument cf pconf startState
         case eet of
             Left err -> error err
-            Right (t, refs) -> do
-
-                renderFile mainTexFile t
-
-                T.appendFile mainBibFile $ renderReferences refs
+            Right () -> do
 
                 (ec, out, err) <- liftIO $ readCreateProcessWithExitCode (latexMkJob cf) ""
                 let outputAnyway = do
