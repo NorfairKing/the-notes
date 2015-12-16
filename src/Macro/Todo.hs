@@ -4,7 +4,6 @@ import           Types
 
 import           Control.Monad        (unless)
 import           Control.Monad.Reader (asks)
-import           Packages
 
 todo' :: LaTeXC l => l -> l
 todo' = liftL $ \l -> TeXComm "todo" [MOptArg ["color=red", "inline", raw "size=\\small"], FixArg l ]

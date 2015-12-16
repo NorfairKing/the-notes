@@ -1,14 +1,6 @@
-module Packages (
-      packages
-    , packageDep
-    , packageDep_
-    , injectPackageDependencies
-    ) where
+module Packages (packages) where
 
 import           Types
-
-import           Text.LaTeX.LambdaTeX.Package
-
 
 packages :: Note
 packages = do
@@ -26,14 +18,14 @@ packages = do
 
   -- For a nice font with math support
   packageDep_ "libertine"
-  packageDep  "newtxmath" ["libertine"]
+  packageDep  ["libertine"] "newtxmath"
 
   -- To count pages
   packageDep_ "lastpage"
   packageDep_ "afterpage"
 
   -- To adjust marges
-  packageDep "geometry" ["left=2cm", "right=2cm", "top=2cm", "bottom=2cm", "headheight=15pt"]
+  packageDep  ["left=2cm", "right=2cm", "top=2cm", "bottom=2cm", "headheight=15pt"] "geometry"
 
   -- For colros
   packageDep_ "color"
@@ -48,7 +40,7 @@ packages = do
   packageDep_ "verbatim"
 
   -- For urls
-  packageDep "hyperref" ["hidelinks"]
+  packageDep ["hidelinks"] "hyperref"
 
   packageDep_ "listings"
   packageDep_ "minted"

@@ -1,6 +1,5 @@
 module Macro.Index where
 
-import           Packages
 import           Types
 
 printindex :: Note

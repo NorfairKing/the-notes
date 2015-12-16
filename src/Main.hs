@@ -1,18 +1,19 @@
 {-# LANGUAGE QuasiQuotes #-}
 module Main where
 
-import           Prelude               as P
+import           Prelude                                 as P
 
-import qualified Data.Text             as T
-import qualified Data.Text.IO          as T
+import qualified Data.Text                               as T
+import qualified Data.Text.IO                            as T
 
-import           Control.Monad         (unless, when)
-import           Control.Monad.Reader  (MonadReader (..), asks)
-import           Data.List             (intercalate)
-import           System.Exit           (ExitCode (..), die)
-import           System.Process        (CreateProcess (..),
-                                        readCreateProcessWithExitCode, shell)
-import           Text.Regex.PCRE.Heavy (re, scan)
+import           Control.Monad                           (unless, when)
+import           Control.Monad.Reader                    (MonadReader (..),
+                                                          asks)
+import           Data.List                               (intercalate)
+import           System.Exit                             (ExitCode (..), die)
+import           System.Process                          (CreateProcess (..), readCreateProcessWithExitCode,
+                                                          shell)
+import           Text.Regex.PCRE.Heavy                   (re, scan)
 
 import           Notes
 import           Utils
@@ -36,6 +37,7 @@ import           Rings.Main
 import           Sets.Main
 import           Topology.Main
 
+import           Text.LaTeX.LambdaTeX.Reference.Internal (renderReferences)
 
 
 main :: IO ()
@@ -56,7 +58,7 @@ main = do
 
                 renderFile mainTexFile t
 
-                T.appendFile mainBibFile $ showReferences refs
+                T.appendFile mainBibFile $ renderReferences refs
 
                 (ec, out, err) <- liftIO $ readCreateProcessWithExitCode (latexMkJob cf) ""
                 let outputAnyway = do

@@ -6,6 +6,8 @@ module Types (
 
   , module P
 
+  , module Text.LaTeX.LambdaTeX
+
   , module Text.LaTeX
   , module Text.LaTeX.Base.Class
   , module Text.LaTeX.Base.Pretty
@@ -18,35 +20,31 @@ module Types (
   , module Text.LaTeX.Packages.Graphicx
   ) where
 
-import           Prelude                              (Bool (..))
-import           Prelude                              as P (Double, Eq (..),
-                                                            FilePath,
-                                                            Fractional (..), IO,
-                                                            Maybe (..),
-                                                            Num (..), Show (..),
-                                                            mempty, ($), (&&),
-                                                            (++), (.))
+import           Prelude                      (Bool (..))
+import           Prelude                      as P (Double, Eq (..), FilePath,
+                                                    Fractional (..), IO,
+                                                    Maybe (..), Num (..),
+                                                    Show (..), mempty, ($),
+                                                    (&&), (++), (.))
 
-import           Text.LaTeX                           hiding (Label, alph_,
-                                                       article, cite, item, ref,
-                                                       rule, usepackage)
+import           Text.LaTeX                   hiding (Label, alph_, article,
+                                               cite, item, ref, rule,
+                                               usepackage)
 import           Text.LaTeX.Base.Class
 import           Text.LaTeX.Base.Pretty
 import           Text.LaTeX.Base.Syntax
 import           Text.LaTeX.Packages.AMSFonts
-import           Text.LaTeX.Packages.AMSMath          hiding (subset, (!:),
-                                                       (^:))
-import           Text.LaTeX.Packages.AMSThm           hiding (TheoremStyle (..),
-                                                       proof, theorem)
+import           Text.LaTeX.Packages.AMSMath  hiding (subset, (!:), (^:))
+import           Text.LaTeX.Packages.AMSThm   hiding (TheoremStyle (..), proof,
+                                               theorem)
 import           Text.LaTeX.Packages.Color
 import           Text.LaTeX.Packages.Fancyhdr
 import           Text.LaTeX.Packages.Graphicx
 
-import           Control.Monad.Reader                 (ReaderT)
-import           Control.Monad.State                  (StateT)
+import           Control.Monad.Reader         (ReaderT)
+import           Control.Monad.State          (StateT)
 
 import           Text.LaTeX.LambdaTeX
-import           Text.LaTeX.LambdaTeX.Selection.Types (Selection)
 
 type Note  = Note' ()
 type Note' = ΛTeXT (StateT State (ReaderT Config IO))

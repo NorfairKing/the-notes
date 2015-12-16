@@ -1,10 +1,8 @@
 module Parser (getConfig) where
 
 import           Options.Applicative
-import           Prelude                        (fmap, null, return)
+import           Prelude             (fmap, null, return)
 import           Types
-
-import           Text.LaTeX.LambdaTeX.Selection
 
 getConfig :: IO (Maybe Config)
 getConfig = fmap config getArgs

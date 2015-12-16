@@ -2,8 +2,6 @@ module Macro.Figure where
 
 import           Types
 
-import           Packages
-
 
 hereFigure :: Note -> Note
 hereFigure n = do
