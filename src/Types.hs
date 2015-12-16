@@ -28,8 +28,8 @@ import           Prelude                      as P (Double, Eq (..), FilePath,
                                                     (&&), (++), (.))
 
 import           Text.LaTeX                   hiding (Label, alph_, article,
-                                               cite, item, ref, rule,
-                                               usepackage)
+                                               cite, item, label, pageref, ref,
+                                               ref, rule, usepackage)
 import           Text.LaTeX.Base.Class
 import           Text.LaTeX.Base.Pretty
 import           Text.LaTeX.Base.Syntax
@@ -44,7 +44,7 @@ import           Text.LaTeX.Packages.Graphicx
 import           Control.Monad.Reader         (ReaderT)
 import           Control.Monad.State          (StateT)
 
-import           Text.LaTeX.LambdaTeX
+import           Text.LaTeX.LambdaTeX         hiding (label, pageref, ref)
 
 type Note  = Note' ()
 type Note' = ΛTeXT (StateT State (ReaderT Config IO))
@@ -75,7 +75,7 @@ data Config = Config {
     , conf_pdfFileName           :: FilePath
     } deriving (Show, Eq)
 
-data Label = Label RefKind Note
+data Label = Label RefKind Text
 
 data RefKind = Definition
              | Theorem

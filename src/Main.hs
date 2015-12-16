@@ -1,20 +1,18 @@
-{-# LANGUAGE QuasiQuotes #-}
 module Main where
 
-import           Prelude               as P
+import           Prelude              as P
 
-import qualified Data.Text             as T
+import qualified Data.Text            as T
+import qualified Data.Text.IO         as T
 
-import           Control.Monad         (unless, when)
-import           Control.Monad.Reader  (MonadReader (..), asks)
-import           Data.List             (intercalate)
-import           System.Exit           (ExitCode (..), die)
-import           System.Process        (CreateProcess (..),
-                                        readCreateProcessWithExitCode, shell)
-import           Text.Regex.PCRE.Heavy (re, scan)
+import           Control.Monad        (unless)
+import           Control.Monad.Reader (MonadReader (..), asks)
+import           Data.List            (intercalate)
+import           System.Exit          (ExitCode (..), die)
+import           System.Process       (CreateProcess (..),
+                                       readCreateProcessWithExitCode, shell)
 
 import           Notes
-import           Utils
 
 import           Header
 import           Packages
@@ -42,7 +40,6 @@ main = do
     case mc of
       Nothing -> error "Couldn't parse arguments."
       Just cf -> do
-        let mainPdfFile = conf_pdfFileName cf ++ ".pdf"
         let gconf = defaultGenerationConfig {
               generationSelection = conf_selection cf
             }
@@ -51,31 +48,25 @@ main = do
             , projectTexFileName = conf_texFileName cf
             , projectBibFileName = conf_bibFileName cf
             }
-        (eet, _) <- runNote entireDocument cf pconf startState
-        case eet of
-            Left err -> error err
-            Right () -> do
 
-                (ec, out, err) <- liftIO $ readCreateProcessWithExitCode (latexMkJob cf) ""
-                let outputAnyway = do
-                      putStrLn out
-                      putStrLn err
-                case ec of
-                  ExitFailure _ -> do
-                      outputAnyway
-                      die "Compilation failed"
-                  ExitSuccess -> do
-                      if (P.not $ conf_ignoreReferenceErrors cf) && (containsRefErrors $ out ++ "\n" ++ err)
-                      then do
-                          removeIfExists mainPdfFile
-                          outputAnyway
-                          die "Undefined references"
-                      else when (conf_verbose cf) outputAnyway
+        -- This is where the magic happens
+        (eet, _) <- runNote entireDocument cf pconf startState
+
+        case eet of
+            Left err -> unless (conf_ignoreReferenceErrors cf) $ T.putStrLn err
+            Right () -> return ()
+
+        (ec, out, err) <- liftIO $ readCreateProcessWithExitCode (latexMkJob cf) ""
+        let outputAnyway = do
+              putStrLn out
+              putStrLn err
+        case ec of
+            ExitFailure _ -> do
+                outputAnyway
+                die "Compilation failed"
+            ExitSuccess -> return ()
 
         return ()
-
-containsRefErrors :: String -> Bool
-containsRefErrors s = (P.> 2) $ P.length $ scan [re|There were undefined references.|] s
 
 latexMkJob :: Config -> CreateProcess
 latexMkJob cf = shell $ "latexmk " ++ unwords latexMkArgs
