@@ -50,8 +50,8 @@ main = do
             mainTexFile = conf_texFileName cf ++ ".tex"
             mainPdfFile = conf_pdfFileName cf ++ ".pdf"
         removeIfExists mainBibFile
-        let sel = conf_selection cf
-        (eet, _) <- runNote entireDocument cf sel startState
+        let gconf = defaultGenerationConfig { generationSelection = conf_selection cf }
+        (eet, _) <- runNote entireDocument cf gconf startState
         case eet of
             Left err -> error err
             Right (t, refs) -> do
