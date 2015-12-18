@@ -16,6 +16,7 @@ theoremDefinitions :: Note
 theoremDefinitions = do
   theoremstyle T.Definition
 
+  packageDep_ "amsthm"
   raw "\\newtheorem{thm}{Theorem}[chapter]"
 
   newtheorem' "prop" "Property"
