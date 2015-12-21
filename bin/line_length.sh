@@ -2,7 +2,7 @@ source bin/lib.sh
 
 line_length () {
   local RESULT_FILE="/tmp/line_length"
-  for f in $(find src -type f -name '*.hs')
+  for f in $(git diff --name-only) # $(find src -type f -name '*.hs')
   do
     grep --line-number '.\{80\}' "$f" > "$RESULT_FILE"
     if [[ "$?" == "0" ]]
