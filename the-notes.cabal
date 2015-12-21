@@ -26,7 +26,6 @@ executable the-notes
                         , optparse-applicative  >= 0.11      && < 0.12
                         , template-haskell      >= 2.8       && < 2.12
                         , containers            >= 0.5       && < 0.6
-                        , pcre-heavy            >= 1.0       && < 1.1
                         , blaze-html            >= 0.8       && < 0.9
                         , blaze-markup          >= 0.7       && < 0.8
                         , haphviz               >= 0.1.0.1   && < 0.2
@@ -34,6 +33,8 @@ executable the-notes
                         , base16-bytestring     >= 0.1       && < 0.2
                         , bytestring            >= 0.10      && < 0.11
                         , cryptohash            >= 0.11      && < 0.12
+                        , shqq                  >= 0.1       && < 0.2
+                        , lambdatex             >= 0.1.0.0   && < 0.1.0.1
   ghc-options:        -Wall
                       -fwarn-unused-imports
                       -fwarn-incomplete-patterns

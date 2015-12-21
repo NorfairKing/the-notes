@@ -1,22 +1,17 @@
-{-# LANGUAGE QuasiQuotes #-}
 module Main where
 
-import qualified Prelude               as P
+import           Prelude              as P
 
-import qualified Data.Set              as S
-import qualified Data.Text             as T
+import qualified Data.Text            as T
 
-import           Control.Monad         (unless, when)
-import           Data.List             (intercalate, splitAt)
-import           Prelude               (Bool (..), Int, appendFile, error,
-                                        putStrLn, return)
-import           System.Exit           (ExitCode (..), die)
-import           System.Process        (CreateProcess (..),
-                                        readCreateProcessWithExitCode, shell)
-import           Text.Regex.PCRE.Heavy (re, scan)
+import           Control.Monad        (unless)
+import           Control.Monad.Reader (MonadReader (..), asks)
+import           Data.List            (intercalate)
+import           System.Exit          (ExitCode (..), die)
+import           System.Process       (CreateProcess (..),
+                                       readCreateProcessWithExitCode, shell)
 
 import           Notes
-import           Utils
 
 import           Header
 import           Packages
@@ -38,43 +33,39 @@ import           Sets.Main
 import           Topology.Main
 
 
-
 main :: IO ()
 main = do
     mc <- getConfig
     case mc of
       Nothing -> error "Couldn't parse arguments."
       Just cf -> do
-        let mainBibFile = conf_bibFileName cf ++ ".bib"
-            mainTexFile = conf_texFileName cf ++ ".tex"
-            mainPdfFile = conf_pdfFileName cf ++ ".pdf"
-        removeIfExists mainBibFile
-        (t, endState) <- runNote entireDocument cf startState
+        let gconf = defaultGenerationConfig {
+              generationSelection = conf_selection cf
+            }
+        let pconf = defaultProjectConfig {
+              projectGenerationConfig = gconf
+            , projectTexFileName = conf_texFileName cf
+            , projectBibFileName = conf_bibFileName cf
+            }
 
-        renderFile mainTexFile $ injectPackageDependencies (S.toList $ state_packages endState) $ t
+        -- This is where the magic happens
+        (eet, _) <- runNote entireDocument cf pconf startState
 
-        appendFile mainBibFile $ showReferences $ S.toList $ state_refs endState
+        case eet of
+            Left err -> unless (conf_ignoreReferenceErrors cf) $ P.print err
+            Right () -> return ()
 
         (ec, out, err) <- liftIO $ readCreateProcessWithExitCode (latexMkJob cf) ""
         let outputAnyway = do
               putStrLn out
               putStrLn err
         case ec of
-          ExitFailure _ -> do
-              outputAnyway
-              die "Compilation failed"
-          ExitSuccess -> do
-              if (P.not $ conf_ignoreReferenceErrors cf) && (containsRefErrors $ out ++ "\n" ++ err)
-              then do
-                  removeIfExists mainPdfFile
-                  outputAnyway
-                  die "Undefined references"
-              else when (conf_verbose cf) outputAnyway
+            ExitFailure _ -> do
+                outputAnyway
+                die "Compilation failed"
+            ExitSuccess -> return ()
 
         return ()
-
-containsRefErrors :: String -> Bool
-containsRefErrors s = (P.> 2) $ P.length $ scan [re|There were undefined references.|] s
 
 latexMkJob :: Config -> CreateProcess
 latexMkJob cf = shell $ "latexmk " ++ unwords latexMkArgs
@@ -99,11 +90,7 @@ latexMkJob cf = shell $ "latexmk " ++ unwords latexMkArgs
 
 
 startState :: State
-startState = State {
-    state_refs = S.empty
-  , state_packages = S.empty
-  , state_currentPart = []
-  }
+startState = State
 
 renderConfig :: Note
 renderConfig = do

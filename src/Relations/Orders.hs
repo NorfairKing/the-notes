@@ -368,7 +368,7 @@ flatLatticeDefinition = de $ do
     xs = latset_ .!: bot .^: top
 
 orderTheoryForComputerScientists :: Reference
-orderTheoryForComputerScientists = Reference online "order-theory-for-computer-scientists" $
+orderTheoryForComputerScientists = makeReference online "order-theory-for-computer-scientists" $
     [
         ("author", "Matt Might")
       , ("title", "Order theory for computer scientists")

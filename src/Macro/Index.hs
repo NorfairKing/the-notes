@@ -1,6 +1,5 @@
 module Macro.Index where
 
-import           Packages
 import           Types
 
 printindex :: Note
@@ -18,11 +17,13 @@ index = comm1 "index"
 
 ix :: Note -> Note
 ix text = do
+    packageDep_ "makeidx"
     index text
     text
 
 term :: Note -> Note
 term text = do
+    packageDep_ "makeidx"
     index text
     textbf text
 

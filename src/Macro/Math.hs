@@ -1,6 +1,5 @@
 module Macro.Math where
 
-import           Packages
 import           Types
 
 import           Macro.Index
