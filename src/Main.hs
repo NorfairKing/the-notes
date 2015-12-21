@@ -3,7 +3,6 @@ module Main where
 import           Prelude              as P
 
 import qualified Data.Text            as T
-import qualified Data.Text.IO         as T
 
 import           Control.Monad        (unless)
 import           Control.Monad.Reader (MonadReader (..), asks)
@@ -53,7 +52,7 @@ main = do
         (eet, _) <- runNote entireDocument cf pconf startState
 
         case eet of
-            Left err -> unless (conf_ignoreReferenceErrors cf) $ T.putStrLn err
+            Left err -> unless (conf_ignoreReferenceErrors cf) $ P.print err
             Right () -> return ()
 
         (ec, out, err) <- liftIO $ readCreateProcessWithExitCode (latexMkJob cf) ""
