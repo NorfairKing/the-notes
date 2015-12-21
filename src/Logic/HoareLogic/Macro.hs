@@ -11,9 +11,8 @@ import           Macro.Math
 import           Macro.MetaMacro
 import           Macro.Text
 
-
 import           Functions.Application.Macro
-import           Macro.Logic.Macro
+import           Logic.AbstractLogic.Macro
 
 -- * Program states
 

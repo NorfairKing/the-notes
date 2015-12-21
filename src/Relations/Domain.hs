@@ -2,7 +2,8 @@ module Relations.Domain where
 
 import           Notes
 
-import           Relations.Basics       (relation)
+import           Logic.FirstOrderLogic.Macro
+import           Relations.Basics            (relation)
 
 import           Relations.Basics.Macro
 import           Relations.Domain.Macro

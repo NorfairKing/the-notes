@@ -5,8 +5,12 @@ module Probability.SigmaAlgebra (
   ) where
 
 import           Notes
-import           Sets.Algebra.Main (secondLawOfDeMorganLabel, symmetricDifferenceITOUnionAndIntersectionLabel)
-import           Sets.Basics       (set, setEqualityDefinitionLabel)
+
+import           Logic.FirstOrderLogic.Macro
+import           Logic.PropositionalLogic.Macro
+import           Sets.Algebra.Main              (secondLawOfDeMorganLabel, symmetricDifferenceITOUnionAndIntersectionLabel)
+import           Sets.Basics                    (set,
+                                                 setEqualityDefinitionLabel)
 
 sigmaAlgebra :: Note
 sigmaAlgebra = note "sigma-algebra" body

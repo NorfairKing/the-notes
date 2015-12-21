@@ -4,6 +4,9 @@ import           Notes
 
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
+import           Logic.FirstOrderLogic.Macro
+import           Logic.PropositionalLogic.Macro
+
 import           Functions.Distances.Macro
 
 makeDefs [

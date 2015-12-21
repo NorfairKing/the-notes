@@ -1,14 +1,16 @@
 module Probability.ProbabilityMeasure (
-  probabilityMeasure
+    probabilityMeasure
 
   ) where
 
 import           Notes
-import           Sets.Algebra.Main      (setDifferenceEquivalentDefinitionLabel,
-                                         unionComplementaryLawLabel)
-import           Sets.Basics            (universalSetSupsetOfAllSetsLabel)
 
 import           Functions.Basics.Macro
+import           Logic.FirstOrderLogic.Macro
+import           Logic.PropositionalLogic.Macro
+import           Sets.Algebra.Main              (setDifferenceEquivalentDefinitionLabel,
+                                                 unionComplementaryLawLabel)
+import           Sets.Basics                    (universalSetSupsetOfAllSetsLabel)
 
 probabilityMeasure :: Note
 probabilityMeasure = note "probability-measure" body

@@ -7,6 +7,8 @@ module LinearAlgebra.InproductSpaces (
 import           Notes
 
 import           Functions.Basics.Macro
+import           Logic.FirstOrderLogic.Macro
+import           Logic.PropositionalLogic.Macro
 
 inproductSpaces :: Note
 inproductSpaces = note "inproduct-spaces" body

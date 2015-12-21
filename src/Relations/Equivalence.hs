@@ -2,10 +2,11 @@ module Relations.Equivalence where
 
 import           Notes
 
-import           Relations.Basics            (symmetric_)
-import           Relations.Preorders         (preorder)
-
+import           Logic.PropositionalLogic.Macro
+import           Relations.Basics               (symmetric_)
 import           Relations.Equivalence.Macro
+import           Relations.Preorders            (preorder)
+
 import           Relations.Preorders.Macro
 
 makeDefs [

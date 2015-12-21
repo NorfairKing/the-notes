@@ -6,7 +6,10 @@ module Probability.ConditionalProbability (
 
 import           Notes
 
-import           Sets.Partition (partition)
+import           Logic.FirstOrderLogic.Macro
+import           Logic.PropositionalLogic.Macro
+import           Sets.Partition                 (partition)
+
 
 conditionalProbability :: Note
 conditionalProbability = note "conditional-probability" body

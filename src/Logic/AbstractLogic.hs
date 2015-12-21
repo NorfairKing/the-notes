@@ -3,6 +3,10 @@ module Logic.AbstractLogic where
 import           Notes
 
 import           Functions.Application.Macro
+import           Logic.FirstOrderLogic.Macro
+import           Logic.PropositionalLogic.Macro
+
+import           Logic.AbstractLogic.Macro
 
 makeDefs [
       "formula"

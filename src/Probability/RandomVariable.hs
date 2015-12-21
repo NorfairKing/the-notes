@@ -6,12 +6,13 @@ module Probability.RandomVariable (
 
 import           Notes
 
-import           Probability.Independence    (independenceDefinitionLabel,
-                                              independent)
-
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
 import           Functions.Inverse.Macro
+import           Logic.FirstOrderLogic.Macro
+import           Logic.PropositionalLogic.Macro
+import           Probability.Independence       (independenceDefinitionLabel,
+                                                 independent)
 
 randomVariable :: Note
 randomVariable = note "random-variable" body

@@ -7,6 +7,9 @@ module Probability.Independence (
 
 import           Notes
 
+import           Logic.FirstOrderLogic.Macro
+
+
 independence :: Note
 independence = note "independence" body
 

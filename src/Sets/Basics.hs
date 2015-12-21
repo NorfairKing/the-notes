@@ -3,6 +3,10 @@ module Sets.Basics where
 import           Notes
 
 import           Functions.Application.Macro
+import           Logic.FirstOrderLogic.Macro
+import           Logic.PropositionalLogic.Macro
+
+import           Sets.Basics.Macro
 
 makeDefs [
       "set"
@@ -77,7 +81,7 @@ setEqualityDefinition :: Note
 setEqualityDefinition = de $ do
   lab setEqualityDefinitionLabel
   s ["Two sets ", m "A", " and ", m "B", " are ", term "equal", " if and only if they contain the same elements"]
-  ma $ ("A" =§= "B") === (fa "x" $ ("x" ∈ "A") &: ("x" ∈ "B"))
+  ma $ ("A" =§= "B") === (fa "x" $ ("x" ∈ "A") ∧ ("x" ∈ "B"))
 
 setEqTransitivity :: Note
 setEqTransitivity = thm $ do
@@ -88,7 +92,7 @@ setEqTransitivity = thm $ do
 
   ma $ do
     (pars ("A" =§= "B")
-      &:
+      ∧
      pars ("B" =§= "C"))
     ⇒
     ("A" =§= "C")
@@ -98,14 +102,14 @@ setEqTransitivity = thm $ do
       [
         (
           pars ("A" =§= "B")
-          &:
+          ∧
           pars ("B" =§= "C")
         )
         &
         (
           iffsign <>
           (pars $ fa "x" ("x" ∈ "A" ⇔ "x" ∈ "B"))
-            &:
+            ∧
           (pars $ fa "x" ("x" ∈ "B" ⇔ "x" ∈ "C"))
         )
         ,
@@ -114,7 +118,7 @@ setEqTransitivity = thm $ do
           impliessign <>
           fa "x"
             (pars $ "x" ∈ "A" ⇔ "x" ∈ "B")
-            &:
+            ∧
             (pars $ "x" ∈ "B" ⇔ "x" ∈ "C")
         )
         ,
@@ -137,16 +141,16 @@ subsetAntiSymmetry :: Note
 subsetAntiSymmetry = thm $ do
   s ["The ", term "anti-symmetry", " of ", quoted $ m subseteqsign, ": ", newline, " Let ", m "A", " and ", m "B", " be sets"]
 
-  ma $ (pars $ "A" ⊆ "B" &: "B" ⊆ "A") ⇔ "A" =§= "B"
+  ma $ (pars $ "A" ⊆ "B" ∧ "B" ⊆ "A") ⇔ "A" =§= "B"
 
   proof $ do
     align_
       [
-      ("A" ⊆ "B" &: "B" ⊆ "A")
+      ("A" ⊆ "B" ∧ "B" ⊆ "A")
       &
       iffsign <>
       (pars $ fa "x" $ "x" ∈ "A" ⇒ "x" ∈ "B")
-      &:
+      ∧
       (pars $ fa "x" $ "x" ∈ "B" ⇒ "x" ∈ "A")
       ,
       "" &
@@ -154,7 +158,7 @@ subsetAntiSymmetry = thm $ do
       (
         fa "x" (
           (pars $ "x" ∈ "A" ⇒ "x" ∈ "B")
-          &:
+          ∧
           (pars $ "x" ∈ "B" ⇒ "x" ∈ "A")
         )
       )
@@ -171,19 +175,19 @@ subsetTransitivity :: Note
 subsetTransitivity = thm $ do
   s ["The ", term "transitivity", " of ", quoted $ m subseteqsign, ": Let ", m "A", ", ", m "B", " and ", m "C", " be sets"]
   ma $ do
-    ("A" ⊆ "B") &: ("B" ⊆ "C") ⇒ ("A" ⊆ "C")
+    ("A" ⊆ "B") ∧ ("B" ⊆ "C") ⇒ ("A" ⊆ "C")
 
   proof $ do
     align_
       [
-        ("A" ⊆ "B") &: ("B" ⊆ "C")
+        ("A" ⊆ "B") ∧ ("B" ⊆ "C")
         &
         iffsign <>
-        (pars $ fa "x" $ "x" ∈ "A" ⇒ "x" ∈ "B") &: (pars $ fa "x" $ "x" ∈ "A" ⇒ "x" ∈ "B")
+        (pars $ fa "x" $ "x" ∈ "A" ⇒ "x" ∈ "B") ∧ (pars $ fa "x" $ "x" ∈ "A" ⇒ "x" ∈ "B")
         ,
         "" &
         impliessign <>
-        (fa "x" ((pars $ "x" ∈ "A" ⇒ "x" ∈ "B") &: (pars $ "x" ∈ "B" ⇒ "x" ∈ "C")))
+        (fa "x" ((pars $ "x" ∈ "A" ⇒ "x" ∈ "B") ∧ (pars $ "x" ∈ "B" ⇒ "x" ∈ "C")))
         ,
         "" &
         iffsign <>
@@ -197,7 +201,7 @@ subsetTransitivity = thm $ do
 strictSubsetDefinition :: Note
 strictSubsetDefinition = de $ do
   s ["A ", ix "set", " is a ", term "strict subset", " of another ", ix "set", " if and only if ", m "A", " is a ", ix "subset", " of ", m "B", " and not equal to ", m "B"]
-  ma $ ("A" `subsetneq` "B") === (("A" ⊆ "B") &: ("A" `setneq` "B"))
+  ma $ ("A" `subsetneq` "B") === (("A" ⊆ "B") ∧ ("A" `setneq` "B"))
 
 
 universalSetDefinition :: Note

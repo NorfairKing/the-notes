@@ -2,6 +2,7 @@ module Macro.Math where
 
 import           Types
 
+import           Macro.Arrows
 import           Macro.Index
 import           Macro.MetaMacro
 import           Macro.Text      (commaSeparated)
@@ -20,24 +21,6 @@ brac = autoBraces
 
 sqbrac :: Note -> Note
 sqbrac = autoSquareBrackets
-
-leftRightarrow :: Note
-leftRightarrow = comm0 "Leftrightarrow"
-
-leftrightarrow :: Note
-leftrightarrow = comm0 "leftrightarrow"
-
-leftarrow :: Note
-leftarrow = comm0 "leftarrow"
-
-leftArrow :: Note
-leftArrow = comm0 "Leftarrow"
-
-rightarrow :: Note
-rightarrow = comm0 "rightarrow"
-
-rightArrow :: Note
-rightArrow = comm0 "Rightarrow"
 
 mod :: Note -> Note -> Note
 mod = between $ text " mod "
@@ -72,50 +55,6 @@ overset = comm2 "overset"
 
 underset :: Note -> Note -> Note
 underset = comm2 "underset"
-
--- Logic
-mand :: Note -> Note -> Note
-mand = wedge
-
-(&:) :: Note -> Note -> Note
-(&:) = mand
-
-mor :: Note -> Note -> Note
-mor = vee
-
-(|:) :: Note -> Note -> Note
-(|:) = mor
-
-iffsign :: Note
-iffsign = leftRightarrow
-
-iff :: Note -> Note -> Note
-iff m n = m <> iffsign <> n
-
--- C-k ==
-(⇔) :: Note -> Note -> Note
-(⇔) = iff
-
-impliessign :: Note
-impliessign = rightArrow
-
-mimplies :: Note -> Note -> Note
-mimplies m n = m <> impliessign <> n
-
-
--- C-k =>
-(⇒) :: Note -> Note -> Note
-(⇒) = mimplies
-
-proof :: Note -> Note
-proof = liftL $ TeXEnv "proof" []
-
-subseteqsign :: Note
-subseteqsign = comm0 "subseteq"
-
-subseteq :: Note -> Note -> Note
-subseteq m n = m <> subseteqsign <> n
-
 
 -- Intervals
 interval :: LaTeXC l => [TeXArg] -> l -> l -> l
@@ -217,6 +156,9 @@ distributive :: Note
 distributive = ix "distributive"
 
 -- Proofs
+proof :: Note -> Note
+proof = liftL $ TeXEnv "proof" []
+
 np :: Note
 np = do
   newline

@@ -6,6 +6,7 @@ module Macro (
 import           Types
 
 import           Macro.Array                 as X
+import           Macro.Arrows                as X
 import           Macro.Code                  as X
 import           Macro.Figure                as X
 import           Macro.Framed                as X
@@ -22,7 +23,6 @@ import           Macro.Tuple                 as X
 import           Macro.Fields.Macro          as X
 import           Macro.Groups.Macro          as X
 import           Macro.LinearAlgebra.Macro   as X
-import           Macro.Logic.Macro           as X
 import           Macro.MachineLearning.Macro as X
 import           Macro.Numbers.Macro         as X
 import           Macro.Probability.Macro     as X

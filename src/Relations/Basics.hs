@@ -2,7 +2,9 @@ module Relations.Basics where
 
 import           Notes
 
-import           Sets.CarthesianProduct (carthesianProduct_)
+import           Logic.FirstOrderLogic.Macro
+import           Logic.PropositionalLogic.Macro
+import           Sets.CarthesianProduct         (carthesianProduct_)
 
 import           Relations.Basics.Macro
 

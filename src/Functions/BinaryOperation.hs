@@ -3,8 +3,9 @@ module Functions.BinaryOperation where
 import           Notes
 
 import           Functions.Basics                (binaryFunction)
-
 import           Functions.Basics.Macro
+import           Logic.FirstOrderLogic.Macro
+
 import           Functions.BinaryOperation.Macro
 
 makeDefs [

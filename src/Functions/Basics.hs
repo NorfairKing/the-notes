@@ -2,10 +2,12 @@ module Functions.Basics where
 
 import           Notes
 
-import           Sets.Basics                 (subset)
+import           Logic.FirstOrderLogic.Macro
+import           Logic.PropositionalLogic.Macro
+import           Relations.Basics               (relation_)
+import           Relations.Domain               (domain_, image_)
+import           Sets.Basics                    (subset)
 
-import           Relations.Basics            (relation_)
-import           Relations.Domain            (domain_, image_)
 
 import           Functions.Application.Macro
 import           Functions.Basics.Macro

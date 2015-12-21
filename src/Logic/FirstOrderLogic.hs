@@ -5,12 +5,15 @@ module Logic.FirstOrderLogic (
 
 import           Notes
 
-import qualified Prelude                     as P (map)
-
-import           Logic.AbstractLogic         (complete, inference, model,
-                                              theory)
+import qualified Prelude                        as P (map)
 
 import           Functions.Application.Macro
+import           Logic.AbstractLogic            (complete, inference, model,
+                                                 theory)
+import           Logic.AbstractLogic.Macro
+import           Logic.PropositionalLogic.Macro
+
+import           Logic.FirstOrderLogic.Macro
 
 
 firstOrderLogic :: Note

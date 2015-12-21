@@ -1,6 +1,6 @@
 module Computability.FiniteStateAutomata.Graph where
 
-import           Notes         hiding (true, (=:))
+import           Notes         hiding ((=:))
 
 import           Prelude
 

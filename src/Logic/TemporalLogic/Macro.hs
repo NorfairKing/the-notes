@@ -2,9 +2,10 @@ module Logic.TemporalLogic.Macro where
 
 import           Types
 
-import           Macro.Logic.Macro
 import           Macro.MetaMacro
 import           Macro.Text
+
+import           Logic.AbstractLogic.Macro
 
 -- | The 'next' temporal logic operator
 next :: Note -> Note

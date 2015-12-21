@@ -2,9 +2,10 @@ module Sets.Algebra.Intersection where
 
 import           Notes
 
-import           Sets.Algebra.Union        (union)
+import           Logic.PropositionalLogic.Macro
+import           Sets.Algebra.Union             (union)
 
-import           Functions.BinaryOperation (associative_)
+import           Functions.BinaryOperation      (associative_)
 
 intersection :: Note
 intersection = ix "intersection"
@@ -35,7 +36,7 @@ y = "y"
 intersectionDefinition :: Note
 intersectionDefinition = de $ do
   s [the, term "intersection", " ", m (a ∪ b), " of two sets ", m a, " and ", m b, " is the set of all elements of both ", m a, " and ", m b]
-  ma $ a ∪ b =§= setcmpr x ((x ∈ a) &: (x ∈ b))
+  ma $ a ∪ b =§= setcmpr x ((x ∈ a) ∧ (x ∈ b))
 
 intersectionAssociativityLabel :: Label
 intersectionAssociativityLabel = Label Property "intersection-associative"
@@ -50,11 +51,11 @@ intersectionAssociative = prop $ do
     align_ $
       [
         a ∩ (pars $ b ∩ c)
-        & "" =§= setcmpr x ((x ∈ a) &: (x ∈ (pars $ b ∩ c)))
-        , "" & "" =§= setcmpr x ((x ∈ a) &: (x ∈ setcmpr y ((y ∈ b) &: (y ∈ c))))
-        , "" & "" =§= setcmpr x ((x ∈ a) &: (x ∈ b) &: (y ∈ c))
-        , "" & "" =§= setcmpr x ((x ∈ setcmpr y ((y ∈ a) &: (y ∈ b))) &: (x ∈ c))
-        , "" & "" =§= setcmpr x ((x ∈ (pars $ a ∩ b)) &: (x ∈ c))
+        & "" =§= setcmpr x ((x ∈ a) ∧ (x ∈ (pars $ b ∩ c)))
+        , "" & "" =§= setcmpr x ((x ∈ a) ∧ (x ∈ setcmpr y ((y ∈ b) ∧ (y ∈ c))))
+        , "" & "" =§= setcmpr x ((x ∈ a) ∧ (x ∈ b) ∧ (y ∈ c))
+        , "" & "" =§= setcmpr x ((x ∈ setcmpr y ((y ∈ a) ∧ (y ∈ b))) ∧ (x ∈ c))
+        , "" & "" =§= setcmpr x ((x ∈ (pars $ a ∩ b)) ∧ (x ∈ c))
         , "" & "" =§= (pars $ a ∩ b) ∩ c
       ]
 
@@ -67,8 +68,8 @@ intersectionCommutative = prop $ do
 
   proof $ do
     m $ a ∩ b
-        =§= setcmpr x ((x ∈ a) &: (x ∈ b))
-        =§= setcmpr x ((x ∈ b) &: (x ∈ a))
+        =§= setcmpr x ((x ∈ a) ∧ (x ∈ b))
+        =§= setcmpr x ((x ∈ b) ∧ (x ∈ a))
         =§= b ∩ a
 
 intersectionIdempotent :: Note
@@ -78,7 +79,7 @@ intersectionIdempotent = prop $ do
 
   proof $ do
     m $ a ∩ a
-        =§= setcmpr x ((x ∈ a) &: (x ∈ a))
+        =§= setcmpr x ((x ∈ a) ∧ (x ∈ a))
         =§= setcmpr x (x ∈ a)
         =§= a
 
@@ -89,7 +90,7 @@ intersectionSubset = thm $ do
 
   proof $ do
     m $ a ∩ b
-        =§= setcmpr x ((x ∈ a) &: (x ∈ b))
+        =§= setcmpr x ((x ∈ a) ∧ (x ∈ b))
         ⊆ setcmpr x (x ∈ a)
         =§= a
 
@@ -101,7 +102,7 @@ intersectionSubsetDefinition = thm $ do
     s ["Let ", m b, " be a set and ", m a, " a subset of ", m b]
 
     ma $ a ∩ b
-        =§= setcmpr x ((x ∈ a) &: (x ∈ b))
+        =§= setcmpr x ((x ∈ a) ∧ (x ∈ b))
         =§= setcmpr x (x ∈ b)
         =§= b
 
@@ -113,8 +114,8 @@ intersectionIdentityLaw = thm $ do
 
   proof $ do
     m $ a ∩ emptyset
-        =§= setcmpr x ((x ∈ a) &: (x ∈ setuniv))
-        =§= setcmpr x ((x ∈ a) &: true)
+        =§= setcmpr x ((x ∈ a) ∧ (x ∈ setuniv))
+        =§= setcmpr x ((x ∈ a) ∧ true)
         =§= setcmpr x (x ∈ a)
         =§= a
 
@@ -125,8 +126,8 @@ intersectionDominationLaw = thm $ do
 
   proof $ do
     m $ a ∩ setuniv
-        =§= setcmpr x ((x ∈ a) &: (x ∈ setuniv))
-        =§= setcmpr x ((x ∈ a) &: true)
+        =§= setcmpr x ((x ∈ a) ∧ (x ∈ setuniv))
+        =§= setcmpr x ((x ∈ a) ∧ true)
         =§= setcmpr x (x ∈ a)
         =§= a
 
@@ -151,10 +152,10 @@ absorptionLaw1 = thm $ do
     align_ $
       [
         a ∪ (pars $ a ∩ b)
-        & "" =§= setcmpr x ((x ∈ a) |: (x ∈ a ∩ b))
-        , "" & "" =§= setcmpr x ((x ∈ a) |: (x ∈ setcmpr y ((y ∈ a) &: (y ∈ b))))
-        , "" & "" =§= setcmpr x ((pars $ (x ∈ a) &: (x ∈ a)) |: (pars $ (x ∈ a) &: (x ∈ b)))
-        , "" & "" =§= setcmpr x ((x ∈ a) |: (pars $ (x ∈ a) &: (x ∈ b)))
+        & "" =§= setcmpr x ((x ∈ a) ∨ (x ∈ a ∩ b))
+        , "" & "" =§= setcmpr x ((x ∈ a) ∨ (x ∈ setcmpr y ((y ∈ a) ∧ (y ∈ b))))
+        , "" & "" =§= setcmpr x ((pars $ (x ∈ a) ∧ (x ∈ a)) ∨ (pars $ (x ∈ a) ∧ (x ∈ b)))
+        , "" & "" =§= setcmpr x ((x ∈ a) ∨ (pars $ (x ∈ a) ∧ (x ∈ b)))
         , "" & "" =§= setcmpr x (x ∈ a)
         , "" & "" =§= a
       ]
@@ -169,10 +170,10 @@ absorptionLaw2 = thm $ do
     align_ $
       [
         a ∩ (pars $ a ∪ b)
-        & "" =§= setcmpr x ((x ∈ a) &: (x ∈ a ∪ b))
-        , "" & "" =§= setcmpr x ((x ∈ a) &: (x ∈ setcmpr y ((y ∈ a) |: (y ∈ b))))
-        , "" & "" =§= setcmpr x ((pars $ (x ∈ a) |: (x ∈ a)) &: (pars $ (x ∈ a) |: (x ∈ b)))
-        , "" & "" =§= setcmpr x ((x ∈ a) &: (pars $ (x ∈ a) |: (x ∈ b)))
+        & "" =§= setcmpr x ((x ∈ a) ∧ (x ∈ a ∪ b))
+        , "" & "" =§= setcmpr x ((x ∈ a) ∧ (x ∈ setcmpr y ((y ∈ a) ∨ (y ∈ b))))
+        , "" & "" =§= setcmpr x ((pars $ (x ∈ a) ∨ (x ∈ a)) ∧ (pars $ (x ∈ a) ∨ (x ∈ b)))
+        , "" & "" =§= setcmpr x ((x ∈ a) ∧ (pars $ (x ∈ a) ∨ (x ∈ b)))
         , "" & "" =§= setcmpr x (x ∈ a)
         , "" & "" =§= a
       ]
@@ -195,12 +196,12 @@ distributionLaw1 = thm $ do
     align_ $
       [
         a ∩ (pars $ b ∪ c)
-        & "" =§= setcmpr x ((x ∈ a) &: (x ∈ b ∪ c))
-        , "" & "" =§= setcmpr x ((x ∈ a) &: setcmpr y ((y ∈ b) |: (y ∈ c)))
-        , "" & "" =§= setcmpr x ((pars $ (x ∈ a) |: (x ∈ b)) &: (pars $ (x ∈ a) |: (x ∈ c)))
-        , "" & "" =§= setcmpr x ((pars $ (x ∈ a) |: (x ∈ b)) &: (pars $ (x ∈ a) |: (x ∈ c)))
-        , "" & "" =§= setcmpr x (x ∈ setcmpr y (pars $ (y ∈ a) |: (y ∈ b)) &: (x ∈ setcmpr y (pars $ (y ∈ a) |: (y ∈ c))))
-        , "" & "" =§= setcmpr x (pars $ (x ∈ a) |: (x ∈ b)) ∩ setcmpr x (pars $ (x ∈ a) |: (x ∈ c))
+        & "" =§= setcmpr x ((x ∈ a) ∧ (x ∈ b ∪ c))
+        , "" & "" =§= setcmpr x ((x ∈ a) ∧ setcmpr y ((y ∈ b) ∨ (y ∈ c)))
+        , "" & "" =§= setcmpr x ((pars $ (x ∈ a) ∨ (x ∈ b)) ∧ (pars $ (x ∈ a) ∨ (x ∈ c)))
+        , "" & "" =§= setcmpr x ((pars $ (x ∈ a) ∨ (x ∈ b)) ∧ (pars $ (x ∈ a) ∨ (x ∈ c)))
+        , "" & "" =§= setcmpr x (x ∈ setcmpr y (pars $ (y ∈ a) ∨ (y ∈ b)) ∧ (x ∈ setcmpr y (pars $ (y ∈ a) ∨ (y ∈ c))))
+        , "" & "" =§= setcmpr x (pars $ (x ∈ a) ∨ (x ∈ b)) ∩ setcmpr x (pars $ (x ∈ a) ∨ (x ∈ c))
         , "" & "" =§= (pars $ a ∪ b) ∩ (pars $ a ∪ c)
       ]
 
@@ -217,11 +218,11 @@ distributionLaw2 = thm $ do
     align_ $
       [
         a ∪ (pars $ b ∩ c)
-        & "" =§= setcmpr x ((x ∈ a) |: (x ∈ b ∩ c))
-        , "" & "" =§= setcmpr x ((x ∈ a) |: setcmpr y ((y ∈ b) &: (y ∈ c)))
-        , "" & "" =§= setcmpr x ((pars $ (x ∈ a) &: (x ∈ b)) |: (pars $ (x ∈ a) &: (x ∈ c)))
-        , "" & "" =§= setcmpr x ((pars $ (x ∈ a) &: (x ∈ b)) |: (pars $ (x ∈ a) &: (x ∈ c)))
-        , "" & "" =§= setcmpr x (x ∈ setcmpr y (pars $ (y ∈ a) &: (y ∈ b)) |: (x ∈ setcmpr y (pars $ (y ∈ a) &: (y ∈ c))))
-        , "" & "" =§= setcmpr x (pars $ (x ∈ a) &: (x ∈ b)) ∪ setcmpr x (pars $ (x ∈ a) &: (x ∈ c))
+        & "" =§= setcmpr x ((x ∈ a) ∨ (x ∈ b ∩ c))
+        , "" & "" =§= setcmpr x ((x ∈ a) ∨ setcmpr y ((y ∈ b) ∧ (y ∈ c)))
+        , "" & "" =§= setcmpr x ((pars $ (x ∈ a) ∧ (x ∈ b)) ∨ (pars $ (x ∈ a) ∧ (x ∈ c)))
+        , "" & "" =§= setcmpr x ((pars $ (x ∈ a) ∧ (x ∈ b)) ∨ (pars $ (x ∈ a) ∧ (x ∈ c)))
+        , "" & "" =§= setcmpr x (x ∈ setcmpr y (pars $ (y ∈ a) ∧ (y ∈ b)) ∨ (x ∈ setcmpr y (pars $ (y ∈ a) ∧ (y ∈ c))))
+        , "" & "" =§= setcmpr x (pars $ (x ∈ a) ∧ (x ∈ b)) ∪ setcmpr x (pars $ (x ∈ a) ∧ (x ∈ c))
         , "" & "" =§= (pars $ a ∩ b) ∪ (pars $ a ∩ c)
       ]

@@ -4,7 +4,9 @@ import           Notes
 
 import           Logic.AbstractLogic            (complete, grammar, inference,
                                                  sound)
+import           Logic.AbstractLogic.Macro
 
+import           Logic.PropositionalLogic.Macro
 import           Logic.PropositionalLogic.Terms
 
 propositionalLogicS :: Note

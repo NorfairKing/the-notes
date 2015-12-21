@@ -2,13 +2,16 @@ module Logic.SeparationLogic where
 
 import           Notes
 
-import           Prelude                     (Either (..))
+import           Prelude                        (Either (..))
 
 import           Functions.Application.Macro
 import           Logic.AbstractLogic
-import           Logic.HoareLogic            (forwardAssignmentDefinitionLabel)
-import           Logic.HoareLogic.Macro      hiding (satis)
-import           Logic.HoareLogic.Terms      hiding (satisfies, satisfies')
+import           Logic.FirstOrderLogic.Macro
+import           Logic.HoareLogic               (forwardAssignmentDefinitionLabel)
+import           Logic.HoareLogic.Macro         hiding (satis)
+import           Logic.HoareLogic.Terms         hiding (satisfies, satisfies')
+import           Logic.PropositionalLogic.Macro
+
 import           Logic.SeparationLogic.Graph
 import           Logic.SeparationLogic.Macro
 import           Logic.SeparationLogic.Terms

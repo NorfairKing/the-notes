@@ -4,12 +4,15 @@ import           Notes
 
 import           Logic.AbstractLogic               (axiomSchema, formula,
                                                     inference, theory)
+import           Logic.AbstractLogic.Macro
+import           Logic.FirstOrderLogic.Macro
+import           Logic.PropositionalLogic.Macro
+import           Relations.Orders.Macro
 import           Sets.Basics                       (predicate)
 
 import           Logic.HoareLogic.ExamQuestion2014
 import           Logic.HoareLogic.Macro
 import           Logic.HoareLogic.Terms
-import           Relations.Orders.Macro
 
 hoareLogicS :: Note
 hoareLogicS = note "hoare-logic" $ do

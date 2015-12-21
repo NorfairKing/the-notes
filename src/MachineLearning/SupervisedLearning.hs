@@ -7,6 +7,7 @@ import           Notes
 
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
+import           Logic.FirstOrderLogic.Macro
 
 supervisedLearning :: Note
 supervisedLearning = note "supervised-learning" body
