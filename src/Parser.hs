@@ -9,18 +9,18 @@ getConfig = fmap config getArgs
 
 config :: Args -> Maybe Config
 config args = do
-  let ss = constructSelection $ args_selectionString args
-  return Config {
-      conf_selection                = ss
-    , conf_visualDebug              = args_visualDebug args
-    , conf_verbose                  = args_verbose args
-    , conf_ignoreReferenceErrors    = args_ignoreReferenceErrors args
-    , conf_omitTodos                = args_omitTodos args
-    , conf_subtitle                 = if null st then Nothing else Just st
-    , conf_texFileName              = args_texFileName args
-    , conf_bibFileName              = args_bibFileName args
-    , conf_pdfFileName              = args_pdfFileName args
-    }
+    let ss = constructSelection $ args_selectionString args
+    return Config {
+          conf_selection                = ss
+        , conf_visualDebug              = args_visualDebug args
+        , conf_verbose                  = args_verbose args
+        , conf_ignoreReferenceErrors    = args_ignoreReferenceErrors args
+        , conf_omitTodos                = args_omitTodos args
+        , conf_subtitle                 = if null st then Nothing else Just st
+        , conf_texFileName              = args_texFileName args
+        , conf_bibFileName              = args_bibFileName args
+        , conf_pdfFileName              = args_pdfFileName args
+        }
   where st = args_subtitle args
 
 getArgs :: IO Args

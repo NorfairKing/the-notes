@@ -2,23 +2,23 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE UndecidableInstances  #-}
 module Types (
-    module Types
+      module Types
 
-  , module P
+    , module P
 
-  , module Text.LaTeX.LambdaTeX
+    , module Text.LaTeX.LambdaTeX
 
-  , module Text.LaTeX
-  , module Text.LaTeX.Base.Class
-  , module Text.LaTeX.Base.Pretty
-  , module Text.LaTeX.Base.Syntax
-  , module Text.LaTeX.Packages.AMSFonts
-  , module Text.LaTeX.Packages.AMSMath
-  , module Text.LaTeX.Packages.AMSThm
-  , module Text.LaTeX.Packages.Fancyhdr
-  , module Text.LaTeX.Packages.Color
-  , module Text.LaTeX.Packages.Graphicx
-  ) where
+    , module Text.LaTeX
+    , module Text.LaTeX.Base.Class
+    , module Text.LaTeX.Base.Pretty
+    , module Text.LaTeX.Base.Syntax
+    , module Text.LaTeX.Packages.AMSFonts
+    , module Text.LaTeX.Packages.AMSMath
+    , module Text.LaTeX.Packages.AMSThm
+    , module Text.LaTeX.Packages.Fancyhdr
+    , module Text.LaTeX.Packages.Color
+    , module Text.LaTeX.Packages.Graphicx
+    ) where
 
 import           Prelude                      (Bool (..))
 import           Prelude                      as P (Double, Eq (..), FilePath,
@@ -83,4 +83,4 @@ data RefKind = Definition
              | Property
              | Example
              | Figure
-  deriving (Show, Eq)
+    deriving (Show, Eq)

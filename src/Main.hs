@@ -38,35 +38,35 @@ main :: IO ()
 main = do
     mc <- getConfig
     case mc of
-      Nothing -> error "Couldn't parse arguments."
-      Just cf -> do
-        let gconf = defaultGenerationConfig {
-              generationSelection = conf_selection cf
-            }
-        let pconf = defaultProjectConfig {
-              projectGenerationConfig = gconf
-            , projectTexFileName = conf_texFileName cf
-            , projectBibFileName = conf_bibFileName cf
-            }
+        Nothing -> error "Couldn't parse arguments."
+        Just cf -> do
+            let gconf = defaultGenerationConfig {
+                  generationSelection = conf_selection cf
+                }
+            let pconf = defaultProjectConfig {
+                  projectGenerationConfig = gconf
+                , projectTexFileName = conf_texFileName cf
+                , projectBibFileName = conf_bibFileName cf
+                }
 
-        -- This is where the magic happens
-        (eet, _) <- runNote entireDocument cf pconf startState
+            -- This is where the magic happens
+            (eet, _) <- runNote entireDocument cf pconf startState
 
-        case eet of
-            Left err -> unless (conf_ignoreReferenceErrors cf) $ P.print err
-            Right () -> return ()
+            case eet of
+                Left err -> unless (conf_ignoreReferenceErrors cf) $ P.print err
+                Right () -> return ()
 
-        (ec, out, err) <- liftIO $ readCreateProcessWithExitCode (latexMkJob cf) ""
-        let outputAnyway = do
-              putStrLn out
-              putStrLn err
-        case ec of
-            ExitFailure _ -> do
-                outputAnyway
-                die "Compilation failed"
-            ExitSuccess -> return ()
+            (ec, out, err) <- liftIO $ readCreateProcessWithExitCode (latexMkJob cf) ""
+            let outputAnyway = do
+                  putStrLn out
+                  putStrLn err
+            case ec of
+                ExitFailure _ -> do
+                    outputAnyway
+                    die "Compilation failed"
+                ExitSuccess -> return ()
 
-        return ()
+            return ()
 
 latexMkJob :: Config -> CreateProcess
 latexMkJob cf = shell $ "latexmk " ++ unwords latexMkArgs
@@ -95,29 +95,28 @@ startState = State
 
 entireDocument :: Note
 entireDocument = do
-  documentclass [oneside, a4paper] book
+    documentclass [oneside, a4paper] book
 
-  packages
-  makeindex
-  header
+    packages
+    makeindex
+    header
 
-  document $ do
-    myTitlePage
-    tableofcontents
-    newpage
-    renderConfig
-    license
-    allNotes
+    document $ do
+        myTitlePage
+        tableofcontents
+        newpage
+        renderConfig
+        license
+        allNotes
 
-    bibfn <- asks conf_bibFileName
-    comm1 "bibliographystyle" "plain"
-    comm1 "bibliography" $ raw $ T.pack bibfn
+        bibfn <- asks conf_bibFileName
+        comm1 "bibliographystyle" "plain"
+        comm1 "bibliography" $ raw $ T.pack bibfn
 
-    printindex
+        printindex
 
-    o <- asks conf_omitTodos
-    unless o $ comm0 "listoftodos"
-
+        o <- asks conf_omitTodos
+        unless o $ comm0 "listoftodos"
 
 
 allNotes :: Note

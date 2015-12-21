@@ -20,9 +20,9 @@ toprove = todo $ "There is a proof missing here."
 
 toprove_ :: Note -> Note
 toprove_ n = todo $ do
-  n
-  newline
-  "There is a proof missing here."
+    n
+    newline
+    "There is a proof missing here."
 
 noproof :: Note
 noproof = todo "There either is a proof missing here or a confirmation that no proof is required at all."
@@ -39,9 +39,9 @@ cexneeded = todo "There is an counter example missing here."
 
 refneeded :: Note -> Note
 refneeded n = todo $ do
-  "There is a reference to "
-  raw "``" <> n <> raw "''"
-  " missing here. "
+    "There is a reference to "
+    raw "``" <> n <> raw "''"
+    " missing here. "
 
 citneeded :: Note
 citneeded = todo "Citation needed"

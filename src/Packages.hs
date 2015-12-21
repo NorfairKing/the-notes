@@ -4,64 +4,70 @@ import           Types
 
 packages :: Note
 packages = do
-  -- For maths
-  packageDep_ "amsmath"
-  packageDep_ "amsfonts"
-  packageDep_ "amssymb"
-  packageDep_ "amsthm"
+    -- For maths
+    packageDep_ "amsmath"
+    packageDep_ "amsfonts"
+    packageDep_ "amssymb"
+    packageDep_ "amsthm"
 
-  -- For an even bigger font
-  packageDep_ "fix-cm"
+    -- For an even bigger font
+    packageDep_ "fix-cm"
 
-  -- For logical inference
-  packageDep_ "proof"
+    -- For logical inference
+    packageDep_ "proof"
 
-  -- For a nice font with math support
-  packageDep_ "libertine"
-  packageDep  ["libertine"] "newtxmath"
+    -- For a nice font with math support
+    packageDep_ "libertine"
+    packageDep  ["libertine"] "newtxmath"
 
-  -- To count pages
-  packageDep_ "lastpage"
-  packageDep_ "afterpage"
+    -- To count pages
+    packageDep_ "lastpage"
+    packageDep_ "afterpage"
 
-  -- To adjust marges
-  packageDep  ["left=2cm", "right=2cm", "top=2cm", "bottom=2cm", "headheight=15pt"] "geometry"
+    -- To adjust marges
+    packageDep  [
+                    "left=2cm"
+                  , "right=2cm"
+                  , "top=2cm"
+                  , "bottom=2cm"
+                  , "headheight=15pt"
+                ] "geometry"
 
-  -- For colros
-  packageDep_ "color"
+    -- For colros
+    packageDep_ "color"
 
-  -- For intervals
-  packageDep_ "interval"
+    -- For intervals
+    packageDep_ "interval"
 
-  -- For nicer enumerates
-  packageDep_ "enumerate"
+    -- For nicer enumerates
+    packageDep_ "enumerate"
 
-  -- For nicer verbatim pieces
-  packageDep_ "verbatim"
+    -- For nicer verbatim pieces
+    packageDep_ "verbatim"
 
-  -- For urls
-  packageDep ["hidelinks"] "hyperref"
+    -- For urls
+    packageDep ["hidelinks"] "hyperref"
 
-  packageDep_ "listings"
-  packageDep_ "minted"
+    packageDep_ "listings"
+    packageDep_ "minted"
 
-  -- For a nicer code font
-  packageDep_ "courier"
+    -- For a nicer code font
+    packageDep_ "courier"
 
-  -- For indices
-  packageDep_ "makeidx"
+    -- For indices
+    packageDep_ "makeidx"
 
-  -- For colored text
-  packageDep_ "color"
+    -- For colored text
+    packageDep_ "color"
 
-  -- To cancel terms in math
-  packageDep_ "cancel"
+    -- To cancel terms in math
+    packageDep_ "cancel"
 
-  -- For fancy logic proofs
-  packageDep_ "bussproofs"
+    -- For fancy logic proofs
+    packageDep_ "bussproofs"
 
-  -- For the nice header
-  applyHdrSettings myHdrSettings
+    -- For the nice header
+    applyHdrSettings myHdrSettings
 
 myHdrSettings :: HdrSettings
 myHdrSettings =  HdrSettings

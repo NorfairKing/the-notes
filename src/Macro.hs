@@ -1,7 +1,7 @@
 module Macro (
-    module Macro
-  , module X
-  ) where
+      module Macro
+    , module X
+    ) where
 
 import           Types
 

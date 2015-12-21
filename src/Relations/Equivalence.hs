@@ -27,18 +27,18 @@ equivalenceRelationDefinition = de $ do
 
 equivalenceClasses :: Note
 equivalenceClasses = do
-  subsection "Equivalence Classes"
+    subsection "Equivalence Classes"
 
-  equivalenceClassDefinition
+    equivalenceClassDefinition
 
-  totheorem "The equivalence class of an element contains that element"
-  totheorem "If two elements are equivalent, then their equivalence classes are equal"
+    totheorem "The equivalence class of an element contains that element"
+    totheorem "If two elements are equivalent, then their equivalence classes are equal"
 
-  inducedEquivalenceRelation
+    inducedEquivalenceRelation
 
-  quotientSetDefinition
-  totheorem "The quotient set is a partition"
-  totheorem "A partition induces an equivalence relation"
+    quotientSetDefinition
+    totheorem "The quotient set is a partition"
+    totheorem "A partition induces an equivalence relation"
 
 
 equivalenceClass :: Note

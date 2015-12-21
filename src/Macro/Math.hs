@@ -80,8 +80,8 @@ sequ m n = pars m !: n
 --[ Exam questions
 examq :: Note -> Note -> Note -> Note
 examq s m n = do
-  textbf $ "Exam Question: " <> m <> " @ " <> s <> ", " <> n
-  newline
+    textbf $ "Exam Question: " <> m <> " @ " <> s <> ", " <> n
+    newline
 
 
 --[ Sums
@@ -161,9 +161,9 @@ proof = liftL $ TeXEnv "proof" []
 
 np :: Note
 np = do
-  newline
-  textit "no proof"
-  newline
+    newline
+    textit "no proof"
+    newline
 
 
 -- Absolute value

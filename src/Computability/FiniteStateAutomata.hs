@@ -94,5 +94,5 @@ acceptanceDefinition = do
 
 deterministicFiniteStateAutomatonDefinition :: Note
 deterministicFiniteStateAutomatonDefinition = mempty
-  -- s ["A ", term "deterministic finite state automaton", " (", term "DFSA", ") is a tuple "]
+    -- s ["A ", term "deterministic finite state automaton", " (", term "DFSA", ") is a tuple "]
 

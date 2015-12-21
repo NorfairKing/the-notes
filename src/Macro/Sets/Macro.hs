@@ -1,8 +1,8 @@
 module Macro.Sets.Macro (
-    module Macro.Sets.Macro
+      module Macro.Sets.Macro
 
-  , module Macro.Sets.CarthesianProduct
-  ) where
+    , module Macro.Sets.CarthesianProduct
+    ) where
 
 import           Types
 

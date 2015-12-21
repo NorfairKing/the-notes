@@ -1,12 +1,12 @@
 module Sets.Algebra.Main (
-    algebra
+      algebra
 
-  , symmetricDifferenceITOUnionAndIntersectionLabel
-  , unionComplementaryLawLabel
-  , setDifferenceEquivalentDefinitionLabel
-  , firstLawOfDeMorganLabel
-  , secondLawOfDeMorganLabel
-  ) where
+    , symmetricDifferenceITOUnionAndIntersectionLabel
+    , unionComplementaryLawLabel
+    , setDifferenceEquivalentDefinitionLabel
+    , firstLawOfDeMorganLabel
+    , secondLawOfDeMorganLabel
+    ) where
 
 import           Notes
 
