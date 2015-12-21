@@ -44,7 +44,7 @@ import           Text.LaTeX.Packages.Graphicx
 import           Control.Monad.Reader         (ReaderT)
 import           Control.Monad.State          (StateT)
 
-import           Text.LaTeX.LambdaTeX         hiding (label, pageref, ref)
+import           Text.LaTeX.LambdaTeX         hiding (label, note, pageref, ref)
 
 type Note  = Note' ()
 type Note' = ΛTeXT (StateT State (ReaderT Config IO))
