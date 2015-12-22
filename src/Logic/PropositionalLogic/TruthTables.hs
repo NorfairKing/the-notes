@@ -43,7 +43,7 @@ mapSub' :: (Sentence -> Sentence) -> Sentence -> Sentence
 mapSub' f = mapSubs (mapSub' f) . f
 
 mapHas :: (Sentence -> Bool) -> Sentence -> Bool
-mapHas f s = f s || any (mapHas f) $ subExprs s
+mapHas f s = f s || (any (mapHas f) $ subExprs s)
 
 evaluate :: Sentence -> Bool
 evaluate (Lit b)            = b
