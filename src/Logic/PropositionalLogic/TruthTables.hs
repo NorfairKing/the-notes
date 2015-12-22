@@ -2,7 +2,9 @@ module Logic.PropositionalLogic.TruthTables where
 
 import           Prelude
 
-import           Notes   hiding (not, or)
+import qualified Data.Text as T
+
+import           Notes     hiding (not, or)
 
 data Sentence = Lit Bool
               | Symbol Text
@@ -11,7 +13,17 @@ data Sentence = Lit Bool
               | And Sentence Sentence
               | Implies Sentence Sentence
               | Equiv Sentence Sentence
-    deriving (Show, Eq)
+    deriving (Eq)
+
+instance Show Sentence where
+    show (Lit True)         = "T"
+    show (Lit False)        = "F"
+    show (Symbol s)         = T.unpack s
+    show (Not s)            = "¬" ++ show s
+    show (Or s1 s2)         = "(" ++ show s1 ++ " ∨ " ++ show s2 ++ ")"
+    show (And s1 s2)        = "(" ++ show s1 ++ " ∧ " ++ show s2 ++ ")"
+    show (Implies s1 s2)    = "(" ++ show s1 ++ " ⇒ " ++ show s2 ++ ")"
+    show (Equiv s1 s2)      = "(" ++ show s1 ++ " ⇔ " ++ show s2 ++ ")"
 
 isBinary :: Sentence -> Bool
 isBinary (Or _ _)       = True
