@@ -100,7 +100,7 @@ theoremNotation :: Note
 theoremNotation = de $ do
     lab theoremDefinitionLabel
     s ["A ", theorem' , " ", m logicf, " is a well-formed formula that is provable in a theory ", m logict]
-    s ["This is de:: Noted as ", m (la logicf)]
+    s ["This is denoted as ", m (la logicf)]
 
 entailmentDefinition :: Note
 entailmentDefinition = de $ do
@@ -115,10 +115,10 @@ modelDefinition = de $ do
 
 modelsOfDefinition :: Note
 modelsOfDefinition = do
-    de $ s ["The set of all models of an expression ", m alpha, " is de:: Noted as ", m (lmo alpha), "."]
+    de $ s ["The set of all models of an expression ", m alpha, " is denoted as ", m (lmo alpha), "."]
 
     nte $ do
-        s ["With a little notation overloading we also de:: Note ", dquoted (s ["The intersection of the set of all models of the expressions in a set ", m "S"]), " as ", m (lmo "S")]
+        s ["With a little notation overloading we also denote ", dquoted (s ["The intersection of the set of all models of the expressions in a set ", m "S"]), " as ", m (lmo "S")]
         ma $ lmo "S" `eq` setincmp ("s" ∈ "S") (lmo "s")
 
 
@@ -131,7 +131,7 @@ inferenceDefinition :: Note
 inferenceDefinition = de $ do
     lab inferenceDefinitionLabel
     s ["An ", inference', " ", m logicir, " in a theory ", m logict, " is a procedure for proving sentences from a ", knowledgeBase]
-    s ["If a theorem ", m logict, " can be proven using ", m logicir, " we de:: Note this as ", m (lpvm logicir "" logicf)]
+    s ["If a theorem ", m logict, " can be proven using ", m logicir, " we denote this as ", m (lpvm logicir "" logicf)]
 
 
 inferenceNotation :: Note
