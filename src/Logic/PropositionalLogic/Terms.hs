@@ -4,4 +4,6 @@ import           Notes
 
 makeDefs [
       "Propositional logic"
+    , "implication"
+    , "equivalence"
     ]

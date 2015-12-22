@@ -1,2 +1,2 @@
 source bin/lib.sh
-check "Install" cabal install
+check "Install" stack install
