@@ -115,8 +115,7 @@ entireDocument = do
 
         printindex
 
-        o <- asks conf_omitTodos
-        unless o $ comm0 "listoftodos"
+        listoftodos
 
 
 allNotes :: Note

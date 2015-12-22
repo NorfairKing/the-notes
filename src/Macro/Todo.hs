@@ -5,6 +5,13 @@ import           Types
 import           Control.Monad        (unless)
 import           Control.Monad.Reader (asks)
 
+listoftodos :: Note
+listoftodos = do
+    o <- asks conf_omitTodos
+    unless o $ do
+        packageDep_ "todonotes"
+        comm0 "listoftodos"
+
 todo' :: LaTeXC l => l -> l
 todo' = liftL $ \l -> TeXComm "todo" [MOptArg ["color=red", "inline", raw "size=\\small"], FixArg l ]
 

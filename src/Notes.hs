@@ -23,7 +23,8 @@ runNote note conf λconf state = runReaderT (runStateT (buildLaTeXProject note 
 
 note :: Text -> Note -> Note
 note partname func = do
-    currentPart <- λgets stateCurrentPart
-    let d = length $ unPart currentPart
-    liftIO $ T.putStrLn $ T.replicate (2 * d) " " <> partname
-    L.note partname func
+    L.note partname $ do
+        currentPart <- λgets stateCurrentPart
+        let d = length $ unPart currentPart
+        liftIO $ T.putStrLn $ T.replicate (2 * d) " " <> partname
+        func
