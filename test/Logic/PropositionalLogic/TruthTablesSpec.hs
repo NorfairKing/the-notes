@@ -94,6 +94,15 @@ spec = do
         it "transforms a sentence into CNF" $ do
             property $ isCNF . cnfTransform
 
+    describe "symbolsOf" $ do
+        it "works on simple testcases" $ do
+            symbolsOf (Equiv (Symbol "a") (And (Symbol "b") (Symbol "c"))) `shouldBe` ["a", "b", "c"]
+            symbolsOf (Not (Lit True)) `shouldBe` []
+
+    describe "possibleStates" $ do
+        it "has an exponential space complexity" $ do
+            property $ \s -> 2 ^ (length $ symbolsOf s) === (length $ possibleStates $ symbolsOf s)
+
 
 evaluatable :: Sentence -> Bool
 evaluatable = not . mapHas go

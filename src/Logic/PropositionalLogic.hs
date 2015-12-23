@@ -2,12 +2,13 @@ module Logic.PropositionalLogic where
 
 import           Notes
 
-import           Logic.AbstractLogic            (complete, grammar, inference,
-                                                 sound)
+import           Logic.AbstractLogic                  (complete, grammar,
+                                                       inference, sound)
 import           Logic.AbstractLogic.Macro
 
 import           Logic.PropositionalLogic.Macro
 import           Logic.PropositionalLogic.Terms
+import           Logic.PropositionalLogic.TruthTables
 
 propositionalLogicS :: Note
 propositionalLogicS = note "propositional-logic" $ do
@@ -65,82 +66,29 @@ propositionalLogicDefinition = do
 
 
 truthTables :: Note
-truthTables = nte $ do
-    s ["Truth tables are a very common and naive way of reasoning about sentences propositional logic"]
-    s ["The validity of a proposition is checked by enumerating the truth table for the sentence and checking whether all the values in the column for the sentence are true"]
+truthTables = do
+    nte $ do
+        s ["Truth tables are a very common and naive way of reasoning about sentences propositional logic"]
+        s ["A cell in a truth table represents the value of the subexpression in the column for the a values of the symbols in that row"]
+        s ["The validity of a proposition is checked by building the truth table for the sentence and checking whether all the values in the column for the sentence are true"]
 
-    hereFigure $ do
-        truthTableNot
-    hereFigure $ do
-        truthTableOr
-        m quad
-        truthTableAnd
-    hereFigure $ do
-        truthTableImplies
-        m quad
-        truthTableIff
-        m quad
-        truthTableXor
-        caption "Elementary truth tables"
+        hereFigure $ do
+            truthTableOf $ Not (Symbol "A")
+        hereFigure $ do
+            truthTableOf $ Or (Symbol "A") (Symbol "B")
+            m quad
+            truthTableOf $ And (Symbol "A") (Symbol "B")
+        hereFigure $ do
+            truthTableOf $ Implies (Symbol "A") (Symbol "B")
+            m quad
+            truthTableOf $ Equiv (Symbol "A") (Symbol "B")
+            caption "Elementary truth tables"
 
-truthTableNot :: Note
-truthTableNot = linedTable
-    ["A", not "A"]
-    [
-      [true , false]
-    , [false, true]
-    ]
-
-truthTableOr :: Note
-truthTableOr = linedTable
-    ["A", "B", "A" ∨ "B"]
-    [
-      [false, false, false]
-    , [false, true , true ]
-    , [true , false, true ]
-    , [true , true , true ]
-    ]
-
-truthTableAnd :: Note
-truthTableAnd = linedTable
-    ["A", "B", "A" ∧ "B"]
-    [
-      [false, false, false]
-    , [false, true , false]
-    , [true , false, false]
-    , [true , true , true ]
-    ]
-
-truthTableImplies :: Note
-truthTableImplies = linedTable
-    ["A", "B", "A" ⇒ "B"]
-    [
-      [false, false, true ]
-    , [false, true , true ]
-    , [true , false, false]
-    , [true , true , true ]
-    ]
-
-truthTableXor :: Note
-truthTableXor = linedTable
-    ["A", "B", "A" `xor` "B"]
-    [
-      [false, false, false]
-    , [false, true , true ]
-    , [true , false, true ]
-    , [true , true , false]
-    ]
-
-
-truthTableIff :: Note
-truthTableIff = linedTable
-    ["A", "B", "A" ⇔ "B"]
-    [
-      [false, false, true ]
-    , [false, true , false]
-    , [true , false, false]
-    , [true , true , true]
-    ]
+    nte $ do
+        s ["Eventhough truth tables are valid way to prove or disprove any propositional sentence, they are not practical in practice because they require an exponential amount of space with respect to the numbor of symbols in the sentence"]
+        hereFigure $ do
+            truthTableOf $ Implies (Implies (Symbol "P") (Symbol "Q")) (Implies (Not (Symbol "Q")) (Not (Symbol "P")))
+            caption "Truth tables quickly become very large"
 
 
 normalForms :: Note

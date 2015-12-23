@@ -2,9 +2,11 @@ module Logic.PropositionalLogic.TruthTables where
 
 import           Prelude
 
-import qualified Data.Text as T
+import qualified Data.Text                      as T
 
-import           Notes     hiding (not, or)
+import           Logic.PropositionalLogic.Macro
+import           Notes                          hiding (not, or)
+import qualified Notes                          as N
 
 data Sentence = Lit Bool
               | Symbol Text
@@ -46,7 +48,7 @@ mapSubs f (Or s1 s2)         = Or       (f s1) (f s2)
 mapSubs f (And s1 s2)        = And      (f s1) (f s2)
 mapSubs f (Implies s1 s2)    = Implies  (f s1) (f s2)
 mapSubs f (Equiv s1 s2)      = Equiv    (f s1) (f s2)
-mapSubs f s                  = s
+mapSubs _ s                  = s
 
 mapSub :: (Sentence -> Sentence) -> Sentence -> Sentence
 mapSub f = f . mapSubs (mapSub f)
@@ -59,7 +61,7 @@ mapHas f s = f s || (any (mapHas f) $ subExprs s)
 
 evaluate :: Sentence -> Bool
 evaluate (Lit b)            = b
-evaluate (Symbol s)         = error $ "Symbols can't be evaluated"
+evaluate (Symbol _)         = error $ "Symbols can't be evaluated"
 evaluate (Not s)            = not $ evaluate s
 evaluate (And s1 s2)        = evaluate s1 && evaluate s2
 evaluate (Or s1 s2)         = evaluate s1 || evaluate s2
@@ -107,7 +109,7 @@ removeImplies = mapSub go
 hasNotNots :: Sentence -> Bool
 hasNotNots = mapHas go
   where
-    go (Not (Not s)) = True
+    go (Not (Not _)) = True
     go _ = False
 
 undoNotNots :: Sentence -> Sentence
@@ -166,6 +168,64 @@ isCNF = onlyAnds
     done (Lit _) = True
     done (Symbol _) = True
     done _ = False
+
+
+symbolsOf :: Sentence -> [Text]
+symbolsOf (Symbol s) = [s]
+symbolsOf s = concatMap symbolsOf $ subExprs s
+
+
+renderSentence :: Sentence -> Note
+renderSentence (Lit True)       = true
+renderSentence (Lit False)      = false
+renderSentence (Symbol s)       = raw s
+renderSentence (Not s)          = N.not $ renderSentence s
+renderSentence (Or s1 s2)       = renderSentence s1 ∨ renderSentence s2
+renderSentence (And s1 s2)      = renderSentence s1 ∧ renderSentence s2
+renderSentence (Implies s1 s2)  = renderSentence s1 ⇒ renderSentence s2
+renderSentence (Equiv s1 s2)    = renderSentence s1 ⇔ renderSentence s2
+
+
+fillInWith :: [(Text, Bool)] -> Sentence -> Sentence
+fillInWith vs = mapSub go
+  where
+    go (Symbol s) = case lookup s vs of
+                        Nothing -> Symbol s
+                        Just b  -> Lit b
+    go s = s
+
+
+possibleStates :: [Text] -> [[(Text, Bool)]]
+possibleStates [] = [[]]
+possibleStates (s:ss) = [ t:r | t <- theseStates, r <- rest ]
+  where
+    theseStates = [(s, True), (s, False)]
+    rest = possibleStates ss
+
+
+
+truthTableOf :: Sentence -> Note
+truthTableOf s = linedTable header content
+  where
+    exprs = infixSubs s
+    states = possibleStates $ symbolsOf s
+    header :: [Note]
+    header = map renderSentence exprs
+    content :: [[Note]]
+    content = map row states
+    row :: [(Text, Bool)] -> [Note]
+    row vals = map (\e -> raw $ render $ evaluate $ fillInWith vals e) exprs
+
+
+infixSubs :: Sentence -> [Sentence]
+infixSubs ss@(Not s)        = ss : infixSubs s
+infixSubs s | isBinary s    = ss1 ++ [s] ++ ss2
+  where [ss1, ss2] = map infixSubs $ subExprs s
+infixSubs s                 = [s]
+
+
+
+
 
 
 
