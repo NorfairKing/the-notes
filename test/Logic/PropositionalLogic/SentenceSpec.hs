@@ -1,20 +1,16 @@
 {-# LANGUAGE CPP #-}
-module Logic.PropositionalLogic.TruthTablesSpec (spec) where
+module Logic.PropositionalLogic.SentenceSpec (spec) where
 
 import           Prelude
 
 import           Test.Hspec
 import           Test.QuickCheck
 
-import           Data.Text                            (Text)
-import qualified Data.Text                            as T
+import           Data.Text                         (Text)
+import qualified Data.Text                         as T
 import           Data.Text.Arbitrary
 
-import           Logic.PropositionalLogic.TruthTables
-
-
--- instance EqProp Sentence where
-    -- (=-=) = eq
+import           Logic.PropositionalLogic.Sentence
 
 instance Arbitrary Sentence where
     -- The const 5 size parameter ensures that the sentence doesn't get too big.
@@ -44,19 +40,20 @@ instance Arbitrary Sentence where
                 ]
 
     shrink s = ss ++ concatMap shrink ss
-      where
-        ss = subExprs s
+      where ss = subExprs s
 
 
 spec :: Spec
 spec = do
     describe "isBinary" $ do
         it "is true for binary operators" $ do
-            isBinary (And (Lit True) (Lit False)) `shouldBe` True
-            isBinary (Or (Lit True) (Lit False))  `shouldBe` True
+            And (Lit True) (Lit False)     `shouldSatisfy` isBinary
+            Or (Lit True) (Lit False)      `shouldSatisfy` isBinary
+            Implies (Lit True) (Lit False) `shouldSatisfy` isBinary
+            Equiv (Lit True) (Lit False)   `shouldSatisfy` isBinary
 
     describe "subExprs" $ do
-        it "returns 2 for binary operators" $ do
+        it "has length 2 for binary operators" $ do
             property $ \s -> isBinary s ==> (length (subExprs s) == 2)
 
     describe "removeEquivs" $ do

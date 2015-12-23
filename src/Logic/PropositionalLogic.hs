@@ -7,6 +7,7 @@ import           Logic.AbstractLogic                  (complete, grammar,
 import           Logic.AbstractLogic.Macro
 
 import           Logic.PropositionalLogic.Macro
+import           Logic.PropositionalLogic.Sentence
 import           Logic.PropositionalLogic.Terms
 import           Logic.PropositionalLogic.TruthTables
 
