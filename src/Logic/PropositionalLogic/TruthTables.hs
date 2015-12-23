@@ -69,17 +69,20 @@ evaluate (Implies s1 s2)    = not (evaluate s1) || evaluate s2
 evaluate (Equiv s1 s2)      = evaluate s1 == evaluate s2
 
 cnfTransform :: Sentence -> Sentence
-cnfTransform = last . cnfTransformation
+cnfTransform = last . map fst . cnfTransformation
 
-cnfTransformation :: Sentence -> [Sentence]
-cnfTransformation s = s : go s
+cnfTransformation :: Sentence -> [(Sentence, Text)]
+cnfTransformation s = (s, "") : go s
   where
-    go s | hasEquivs s              = let s' = removeEquivs s       in s' : go s'
-         | hasImplies s             = let s' = removeImplies s      in s' : go s'
-         | hasNotNots s             = let s' = undoNotNots s        in s' : go s'
-         | hasTopNots s             = let s' = slideDownTopNots s   in s' : go s'
-         | hasUndistributedOrs s    = let s' = distributeOrs s      in s' : go s'
+    go s | hasEquivs s              = let s' = removeEquivs s       in (s', "Remove biconditionals") : go s'
+         | hasImplies s             = let s' = removeImplies s      in (s', "Remove conditionals") : go s'
+         | hasNotNots s             = let s' = undoNotNots s        in (s', "Double negation") : go s'
+         | hasTopNots s             = let s' = slideDownTopNots s   in (s', "De Morgan") : go s'
+         | hasUndistributedOrs s    = let s' = distributeOrs s      in (s', "Distributive law") : go s'
          | otherwise                = []
+
+renderTransformation :: Sentence -> Note
+renderTransformation = align_ . map (\(s, e) -> renderSentence s & text (raw $ " " <> e)) . cnfTransformation
 
 hasEquivs :: Sentence -> Bool
 hasEquivs = mapHas go
@@ -176,14 +179,24 @@ symbolsOf s = concatMap symbolsOf $ subExprs s
 
 
 renderSentence :: Sentence -> Note
-renderSentence (Lit True)       = true
-renderSentence (Lit False)      = false
-renderSentence (Symbol s)       = raw s
-renderSentence (Not s)          = N.not $ renderSentence s
-renderSentence (Or s1 s2)       = renderSentence s1 ∨ renderSentence s2
-renderSentence (And s1 s2)      = renderSentence s1 ∧ renderSentence s2
-renderSentence (Implies s1 s2)  = renderSentence s1 ⇒ renderSentence s2
-renderSentence (Equiv s1 s2)    = renderSentence s1 ⇔ renderSentence s2
+renderSentence (Lit True)           = true
+renderSentence (Lit False)          = false
+renderSentence (Symbol s)           = raw s
+renderSentence (Not s@(Symbol _))   = N.not $ renderSentence s
+renderSentence (Not s@(Not _))      = N.not $ renderSentence s
+renderSentence (Not s)              = pars $ N.not $ renderSentence s
+renderSentence s@(Or s1 s2)         = do
+    let f = if isCNF s
+            then id
+            else pars
+    f $ renderSentence s1 ∨ renderSentence s2
+renderSentence s@(And s1 s2)        = do
+    let f = if isCNF s
+            then id
+            else pars
+    f $ renderSentence s1 ∧ renderSentence s2
+renderSentence (Implies s1 s2)      = pars $ renderSentence s1 ⇒ renderSentence s2
+renderSentence (Equiv s1 s2)        = pars $ renderSentence s1 ⇔ renderSentence s2
 
 
 fillInWith :: [(Text, Bool)] -> Sentence -> Sentence

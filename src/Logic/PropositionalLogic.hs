@@ -103,10 +103,24 @@ conjunctiveNormalForm = do
       s ["A sentence in propositional logic is said to be in ", term "conjunctive normal form", or, term "clausal normal form", " (", term "CNF", ") if it is a conjunction of clauses where a clause is a disjunction of literals"]
     thm $ do
         s ["Every sentence propositional logic can be converted into an equivalent formula that is in CNF"]
-        np
-        s ["There is a famous transformation called the ", term "Tseitin transformation", " that does exactly this"]
-        cite tseitinTransformation
+        s ["There is a famous transformation called the ", term "Tseitin transformation", cite tseitinTransformation, " that does exactly this"]
 
+        s ["The Tseitin transformation works by applying the following steps"]
+        enumerate $ do
+            item $ do
+                s ["Remove biconditionals: Inversely apply the notational shorthand for ", m ("" ⇔ "")]
+            item $ do
+                s ["Remove conditionals: Inversely apply the notational shorthand for ", m ("" ⇒ "")]
+            item $ do
+                s ["Move all negations inwards by applying the De Morgan laws and removing double negations"]
+            item $ do
+                s ["Use the distributive laws to obtain a formula in CNF"]
+        np
+    ex $ do
+        renderTransformation sen
+        s ["The Tseitin transformation, applied to ", m $ renderSentence sen]
+  where
+    sen = Equiv (Implies (Symbol "P") (Symbol "Q")) (Implies (Not (Symbol "Q")) (Not (Symbol "P")))
 
 tseitinTransformation :: Reference
 tseitinTransformation = Reference article "tseitin68" $

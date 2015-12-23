@@ -161,9 +161,8 @@ proof = liftL $ TeXEnv "proof" []
 
 np :: Note
 np = do
-    newline
+    noindent
     textit "no proof"
-    newline
 
 
 -- Absolute value
