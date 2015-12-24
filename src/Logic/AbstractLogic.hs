@@ -7,23 +7,7 @@ import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
 
 import           Logic.AbstractLogic.Macro
-
-makeDefs [
-      "formula"
-    , "axiom", "axiom schema"
-    , "theory"  , "logic"
-    , "grammar"
-    , "semantics"
-    , "sentence"
-    , "world"   , "model"
-    , "theorem"
-    , "knowledge base"
-    , "entails"
-    , "inference"
-    , "sound"
-    , "complete"
-    , "modus ponens"
-    ]
+import           Logic.AbstractLogic.Terms
 
 abstractLogic :: Note
 abstractLogic = note "abstract-logic" body

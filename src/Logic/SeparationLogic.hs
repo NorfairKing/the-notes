@@ -5,7 +5,7 @@ import           Notes
 import           Prelude                        (Either (..))
 
 import           Functions.Application.Macro
-import           Logic.AbstractLogic
+import           Logic.AbstractLogic.Terms
 import           Logic.FirstOrderLogic.Macro
 import           Logic.HoareLogic               (forwardAssignmentDefinitionLabel)
 import           Logic.HoareLogic.Macro         hiding (satis)

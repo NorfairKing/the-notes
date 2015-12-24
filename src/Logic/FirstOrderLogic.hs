@@ -1,26 +1,20 @@
-module Logic.FirstOrderLogic (
-      firstOrderLogic
-
-    ) where
+module Logic.FirstOrderLogic where
 
 import           Notes
 
 import qualified Prelude                        as P (map)
 
 import           Functions.Application.Macro
-import           Logic.AbstractLogic            (complete, inference, model,
-                                                 theory)
 import           Logic.AbstractLogic.Macro
+import           Logic.AbstractLogic.Terms      (complete, inference, model,
+                                                 theory)
 import           Logic.PropositionalLogic.Macro
 
 import           Logic.FirstOrderLogic.Macro
 
 
 firstOrderLogic :: Note
-firstOrderLogic = note "first-order-logic" body
-
-body :: Note
-body = do
+firstOrderLogic = note "first-order-logic" $ do
     section "First Order Logic"
     firstOrderLogicDefinition
     termDefinition

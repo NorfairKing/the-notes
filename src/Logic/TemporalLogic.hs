@@ -4,7 +4,7 @@ import           Notes
 
 
 import           Computability.Symbols.Macro
-import           Logic.AbstractLogic            (formula, grammar)
+import           Logic.AbstractLogic.Terms
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
 import           Logic.PropositionalLogic.Terms

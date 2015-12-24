@@ -2,9 +2,8 @@ module Logic.HoareLogic where
 
 import           Notes
 
-import           Logic.AbstractLogic               (axiomSchema, formula,
-                                                    inference, theory)
 import           Logic.AbstractLogic.Macro
+import           Logic.AbstractLogic.Terms
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
 import           Relations.Orders.Macro

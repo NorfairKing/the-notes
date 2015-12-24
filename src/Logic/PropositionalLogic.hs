@@ -2,9 +2,8 @@ module Logic.PropositionalLogic where
 
 import           Notes
 
-import           Logic.AbstractLogic                  (complete, grammar,
-                                                       inference, sound)
 import           Logic.AbstractLogic.Macro
+import           Logic.AbstractLogic.Terms
 
 import           Logic.PropositionalLogic.Macro
 import           Logic.PropositionalLogic.Sentence
