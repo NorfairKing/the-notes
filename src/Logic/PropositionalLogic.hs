@@ -2,6 +2,8 @@ module Logic.PropositionalLogic where
 
 import           Notes
 
+import           Functions.Basics
+
 import           Logic.AbstractLogic.Macro
 import           Logic.AbstractLogic.Terms
 
@@ -14,6 +16,26 @@ propositionalLogicS :: Note
 propositionalLogicS = note "propositional-logic" $ do
     section "Propositional Logic"
     propositionalLogicDefinition
+    note "world" $ do
+        worldDefinition
+        worldExamples
+    note "model" $ do
+        modelDefinition
+        modelsOfDefinition
+        equivalentDefinitionEntailment
+    note "valid" $ do
+        validDefinition
+        validExamples
+    note "satisfiable" $ do
+        satisfiableDefinition
+        satisfiableExamples
+    note "unsatisfiable" $ do
+        unsatisfiableDefinition
+        unsatisfiableExamples
+        unsatisfiableMeansNegativeIsTrue
+    note "equivalent" $ do
+        logicallyEquivalentDefinition
+        logicallyEquivalentExample
     truthTables
     normalForms
     inferences
@@ -64,14 +86,106 @@ propositionalLogicDefinition = do
     s2 = ss !: 2
     g = ("G" !: mathbb "I")
 
+booleanValueDefinition :: Note
+booleanValueDefinition = de $ do
+    lab booleanValueDefinitionLabel
+    s ["A ", booleanValue', " is an element of the set ", m $ setofs [true, false]]
+
+worldDefinition :: Note
+worldDefinition = de $ do
+    lab worldDefinitionLabel
+    s ["A logical ", world', " is a set of assignments of boolean values to propositional symbols"]
+    s ["More rigorously, a ", world, " can be viewed as a ", function_, " from a set of symbols to ", m $ setofs [true, false]]
+
+worldExamples :: Note
+worldExamples = ex $ do
+    s ["The following ", function, " is a world"]
+    ma $ do
+        let a = "A"
+        let b = "B"
+        setofs [tuple a true, tuple b false]
+
+modelDefinition :: Note
+modelDefinition = de $ do
+    lab modelDefinitionLabel
+    s ["We say a world ", m "m", " is a ", model', " of an expression ", m alpha, " if ", m alpha, " is true in ", m "m"]
+
+modelsOfDefinition :: Note
+modelsOfDefinition = do
+    de $ s ["The set of all models of an expression ", m alpha, " is denoted as ", m (lmo alpha), "."]
+
+    nte $ do
+        s ["With a little notation overloading we also denote ", dquoted (s ["The intersection of the set of all models of the expressions in a set ", m "S"]), " as ", m (lmo "S")]
+        ma $ lmo "S" `eq` setincmp ("s" ∈ "S") (lmo "s")
+
+
+equivalentDefinitionEntailment :: Note
+equivalentDefinitionEntailment = de $ do
+    s ["Another way of expressing the fact that an expression ", m alpha, " is entailed by a ", knowledgeBase, " ", m lkb, ": ", m (lkb `lent` alpha), " is using models"]
+    ma $ lmo lkb ⊆ lmo alpha
+
+validDefinition :: Note
+validDefinition = de $ do
+    lab validDefinitionLabel
+    s ["A ", sentence, " is called ", valid', " if it is ", true, " in all ", world, "s"]
+
+validExamples :: Note
+validExamples = ex $ do
+    s ["The following sentence is valid"]
+    ma $ do
+        let a = "A"
+        a ⇔ a
+
+satisfiableDefinition :: Note
+satisfiableDefinition = de $ do
+    lab satisfiableDefinitionLabel
+    s ["A ", sentence, " is called ", satisfiable', " if there exists a ", world, " in which it is ", true]
+
+satisfiableExamples :: Note
+satisfiableExamples = do
+    ex $ do
+        s ["The following sentence is ", satisfiable, " but not valid"]
+        ma $ do
+            let a = "A"
+            a
+
+unsatisfiableDefinition :: Note
+unsatisfiableDefinition = de $ do
+    lab unsatisfiableDefinitionLabel
+    s ["A ", sentence, " is called ", unsatisfiable', " if it is not ", true, " in any world"]
+
+unsatisfiableExamples :: Note
+unsatisfiableExamples = do
+    ex $ do
+        s ["The following sentence is ", unsatisfiable]
+        ma $ do
+            let a = "A"
+            a ∧ neg a
+
+unsatisfiableMeansNegativeIsTrue :: Note
+unsatisfiableMeansNegativeIsTrue = thm $ do
+    s ["A ", knowledgeBase, " ", m lkb, " entails a sentence if and only if the negated sentence is ", unsatisfiable]
+    ma $ do
+        let a = "A"
+        (lkb `lent` alpha) ⇔ (neg a <> text " is unsatisfiable")
+
+logicallyEquivalentDefinition :: Note
+logicallyEquivalentDefinition = de $ do
+    lab logicallyEquivalentDefinitionLabel
+    s ["Two ", sentence, "s are called ", logicallyEquivalent', " if in any world, either both are true or neither are true"]
+
+logicallyEquivalentExample :: Note
+logicallyEquivalentExample = ex $ do
+    let (p, q) = ("P", "Q")
+    s ["The sentences ", m $ p ⇒ q, " and ", m $ neg q ⇒ neg p, " are ", logicallyEquivalent]
 
 truthTables :: Note
-truthTables = do
-    nte $ do
-        s ["Truth tables are a very common and naive way of reasoning about sentences propositional logic"]
-        s ["A cell in a truth table represents the value of the subexpression in the column for the a values of the symbols in that row"]
-        s ["The validity of a proposition is checked by building the truth table for the sentence and checking whether all the values in the column for the sentence are true"]
-
+truthTables = note "truth-tables" $ do
+    subsection "Truth tables"
+    s ["Truth tables are a very common and naive way of reasoning about sentences propositional logic"]
+    s ["A cell in a truth table represents the value of the subexpression in the column for the a values of the symbols in that row"]
+    s ["The validity of a proposition can be checked by building the truth table for the sentence and checking whether all the values in the column for the sentence are true"]
+    ex $ do
         hereFigure $ do
             truthTableOf $ Not (Symbol "A")
         hereFigure $ do
@@ -87,7 +201,7 @@ truthTables = do
     nte $ do
         s ["Eventhough truth tables are valid way to prove or disprove any propositional sentence, they are not practical in practice because they require an exponential amount of space with respect to the numbor of symbols in the sentence"]
         hereFigure $ do
-            truthTableOf $ Implies (Implies (Symbol "P") (Symbol "Q")) (Implies (Not (Symbol "Q")) (Not (Symbol "P")))
+            truthTableOf $ Equiv (Implies (Symbol "P") (Symbol "Q")) (Implies (Not (Symbol "Q")) (Not (Symbol "P")))
             caption "Truth tables quickly become very large"
 
 
