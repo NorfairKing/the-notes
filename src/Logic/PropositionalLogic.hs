@@ -291,13 +291,14 @@ distributivityAndOr = thm $ do
 normalForms :: Note
 normalForms = do
     subsection "Normal forms"
-    conjunctiveNormalForm
+    conjunctiveNormalFormS
 
-conjunctiveNormalForm :: Note
-conjunctiveNormalForm = do
+conjunctiveNormalFormS :: Note
+conjunctiveNormalFormS = note "cnf" $ do
     subsubsection "Conjunctive Normal Form"
     de $ do
-      s ["A sentence in propositional logic is said to be in ", term "conjunctive normal form", or, term "clausal normal form", " (", term "CNF", ") if it is a conjunction of clauses where a clause is a disjunction of literals"]
+        lab conjunctiveNormalFormDefinitionLabel
+        s ["A sentence in propositional logic is said to be in ", conjunctiveNormalForm', or, term "clausal normal form", " (", term "CNF", ") if it is a conjunction of clauses where a clause is a disjunction of literals"]
     thm $ do
         s ["Every sentence propositional logic can be converted into an equivalent formula that is in CNF"]
         s ["There is a famous transformation called the ", term "Tseitin transformation", cite tseitinTransformation, " that does exactly this"]
@@ -331,14 +332,23 @@ tseitinTransformation = Reference article "tseitin68" $
     ]
 
 inferences :: Note
-inferences = do
+inferences = note "inference" $ do
     subsection "Inference in propositional logic"
+    modusPonensInProp
     resolution
 
+modusPonensInProp :: Note
+modusPonensInProp = note "modus-ponens" $ thm $ do
+    s ["The ", modusPonens_, " ", inference, " rule in ", propositionalLogic, " is ", sound, " but not ", complete]
+
+    toprove
+
+
 resolution :: Note
-resolution = do
+resolution = note "resolution" $ do
     de $ do
-        s ["The ", inference, " ", term "rule of resolution", " is an inference in proposition logic"]
+        s ["The ", inference, " ", term "rule of resolution", " is an ", inference, " in proposition logic"]
+        s ["It assumes that sentences are in ", conjunctiveNormalForm]
         s ["Let ", m a, and, m b, " be propositional formulae in CNF."]
         ma $ do
             a =: vsep [a !: 1, a !: 2, dotsc, a !: k]

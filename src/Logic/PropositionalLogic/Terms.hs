@@ -11,4 +11,5 @@ makeDefs [
     , "satisfiable"
     , "unsatisfiable"
     , "logically equivalent"
+    , "conjunctive normal form"
     ]

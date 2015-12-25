@@ -23,6 +23,15 @@ renderSentence (And s1 s2)          = pars $ renderSentence s1 ∧ renderSentenc
 renderSentence (Implies s1 s2)      = pars $ renderSentence s1 ⇒ renderSentence s2
 renderSentence (Equiv s1 s2)        = pars $ renderSentence s1 ⇔ renderSentence s2
 
+renderCNFSentence :: Sentence -> Note
+renderCNFSentence s = if isCNF s
+                        then go s
+                        else renderSentence s
+  where
+    go (Or s1 s2)           = go s1 ∨ go s2
+    go (And s1 s2)          = (go s1 <> quad) ∧ (quad <> go s2)
+    go s = renderSentence s
+
 
 truthTableOf :: Sentence -> Note
 truthTableOf s = truthTableOfExprs [s]
@@ -41,4 +50,6 @@ truthTableOfExprs exs = linedTable header content
     row vals = map (\e -> raw $ render $ evaluate $ fillInWith vals e) exprs
 
 renderTransformation :: Sentence -> Note
-renderTransformation = align_ . map (\(s, e) -> renderSentence s & text (raw $ " " <> e)) . cnfTransformation
+renderTransformation = align_ . map (\(s, e) -> renderCNFSentence s & text (raw $ " " <> e)) . cnfTransformation
+
+
