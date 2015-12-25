@@ -25,10 +25,14 @@ renderSentence (Equiv s1 s2)        = pars $ renderSentence s1 ⇔ renderSentenc
 
 
 truthTableOf :: Sentence -> Note
-truthTableOf s = linedTable header content
+truthTableOf s = truthTableOfExprs [s]
+
+truthTableOfExprs :: [Sentence] -> Note
+truthTableOfExprs exs = linedTable header content
   where
-    exprs = sortBy (comparing sentenceDepth) $ nub $ infixSubs s
-    states = possibleStates $ symbolsOf s
+    exprs = sortBy (comparing sentenceDepth) $ nub $ concatMap infixSubs exs
+    symbols = nub $ concatMap symbolsOf exprs
+    states = possibleStates symbols
     header :: [Note]
     header = map renderSentence exprs
     content :: [[Note]]

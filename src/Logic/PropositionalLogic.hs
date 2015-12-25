@@ -226,10 +226,7 @@ equivalenceProof s1 s2 = do
     ma $ renderSentence $ Equiv s1 s2
     proof $ do
         noindent
-        hereFigure $ do
-            truthTableOf s1
-            commS " "
-            truthTableOf s2
+        hereFigure $ truthTableOfExprs [s1, s2]
 
 andCommutativity :: Note
 andCommutativity = thm $ do
