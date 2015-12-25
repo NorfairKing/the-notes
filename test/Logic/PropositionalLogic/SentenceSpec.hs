@@ -6,6 +6,7 @@ import           Prelude
 import           Test.Hspec
 import           Test.QuickCheck
 
+import           Data.List                         (nub)
 import           Data.Text                         (Text)
 import qualified Data.Text                         as T
 import           Data.Text.Arbitrary
@@ -95,6 +96,8 @@ spec = do
         it "works on simple testcases" $ do
             symbolsOf (Equiv (Symbol "a") (And (Symbol "b") (Symbol "c"))) `shouldBe` ["a", "b", "c"]
             symbolsOf (Not (Lit True)) `shouldBe` []
+        it "returns a list of unique symbols (a set)" $ do
+            property $ \s -> symbolsOf s == nub (symbolsOf s)
 
     describe "possibleStates" $ do
         it "has an exponential space complexity" $ do

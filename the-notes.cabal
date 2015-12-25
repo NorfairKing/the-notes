@@ -60,7 +60,7 @@ test-suite the-notes-test
                      , quickcheck-text
 
                      , HaTeX                 >= 3.16.2    && < 3.17
-                     , lambdatex             >= 0.1.0.2   && < 0.1.0.2
+                     , lambdatex             >= 0.1.0.2   && < 0.2
                      , mtl                   >= 2.2       && < 2.3
                      , process               >= 1.2       && < 1.5
                      , text                  >= 1.2       && < 1.3

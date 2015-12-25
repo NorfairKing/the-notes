@@ -2,6 +2,9 @@ module Logic.PropositionalLogic.TruthTables where
 
 import           Prelude
 
+import           Data.List                         (nub, sortBy)
+import           Data.Ord                          (comparing)
+
 import           Logic.PropositionalLogic.Macro
 import           Logic.PropositionalLogic.Sentence
 import           Notes                             hiding (not, or)
@@ -15,16 +18,8 @@ renderSentence (Symbol s)           = raw s
 renderSentence (Not s@(Symbol _))   = N.not $ renderSentence s
 renderSentence (Not s@(Not _))      = N.not $ renderSentence s
 renderSentence (Not s)              = pars $ N.not $ renderSentence s
-renderSentence s@(Or s1 s2)         = do
-    let f = if isCNF s
-            then id
-            else pars
-    f $ renderSentence s1 ∨ renderSentence s2
-renderSentence s@(And s1 s2)        = do
-    let f = if isCNF s
-            then id
-            else pars
-    f $ renderSentence s1 ∧ renderSentence s2
+renderSentence (Or s1 s2)           = pars $ renderSentence s1 ∨ renderSentence s2
+renderSentence (And s1 s2)          = pars $ renderSentence s1 ∧ renderSentence s2
 renderSentence (Implies s1 s2)      = pars $ renderSentence s1 ⇒ renderSentence s2
 renderSentence (Equiv s1 s2)        = pars $ renderSentence s1 ⇔ renderSentence s2
 
@@ -32,7 +27,7 @@ renderSentence (Equiv s1 s2)        = pars $ renderSentence s1 ⇔ renderSentenc
 truthTableOf :: Sentence -> Note
 truthTableOf s = linedTable header content
   where
-    exprs = infixSubs s
+    exprs = sortBy (comparing sentenceDepth) $ nub $ infixSubs s
     states = possibleStates $ symbolsOf s
     header :: [Note]
     header = map renderSentence exprs

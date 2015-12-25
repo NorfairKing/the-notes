@@ -2,6 +2,7 @@ module Logic.PropositionalLogic.Sentence where
 
 import           Prelude
 
+import           Data.List (nub)
 import           Data.Text (Text)
 import qualified Data.Text as T
 
@@ -38,6 +39,12 @@ subExprs (And s1 s2)        = [s1, s2]
 subExprs (Implies s1 s2)    = [s1, s2]
 subExprs (Equiv s1 s2)      = [s1, s2]
 subExprs _ = []
+
+sentenceDepth :: Sentence -> Int
+sentenceDepth s = 1 + (safeMax . map sentenceDepth . subExprs $ s)
+  where
+    safeMax [] = 0
+    safeMax ms = maximum ms
 
 mapSubs :: (Sentence -> Sentence) -> Sentence -> Sentence
 mapSubs f (Not s)            = Not $ f s
@@ -169,7 +176,7 @@ isCNF = onlyAnds
 
 symbolsOf :: Sentence -> [Text]
 symbolsOf (Symbol s) = [s]
-symbolsOf s = concatMap symbolsOf $ subExprs s
+symbolsOf s = nub $ concatMap symbolsOf $ subExprs s
 
 fillInWith :: [(Text, Bool)] -> Sentence -> Sentence
 fillInWith vs = mapSub go

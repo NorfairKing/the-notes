@@ -4,6 +4,8 @@ import           Notes
 
 import           Functions.Basics
 
+import           Functions.BinaryOperation
+
 import           Logic.AbstractLogic.Macro
 import           Logic.AbstractLogic.Terms
 
@@ -37,6 +39,8 @@ propositionalLogicS = note "propositional-logic" $ do
         logicallyEquivalentDefinition
         logicallyEquivalentExample
     truthTables
+    equivalences
+
     normalForms
     inferences
 
@@ -201,9 +205,91 @@ truthTables = note "truth-tables" $ do
     nte $ do
         s ["Eventhough truth tables are valid way to prove or disprove any propositional sentence, they are not practical in practice because they require an exponential amount of space with respect to the numbor of symbols in the sentence"]
         hereFigure $ do
-            truthTableOf $ Equiv (Implies (Symbol "P") (Symbol "Q")) (Implies (Not (Symbol "Q")) (Not (Symbol "P")))
+            truthTableOf $ Equiv (Implies (Symbol "P") (Symbol "Q")) (Implies (Not (Symbol "R")) (Not (Symbol "S")))
             caption "Truth tables quickly become very large"
 
+equivalences :: Note
+equivalences =  note "equivalences" $ do
+    andCommutativity
+    andAssociativity
+    orCommutativity
+    orAssociativity
+    doubleNegationElimination
+    contraposition
+    deMorgan1
+    deMorgan2
+    distributivityOrAnd
+    distributivityAndOr
+
+equivalenceProof :: Sentence -> Sentence -> Note
+equivalenceProof s1 s2 = do
+    ma $ renderSentence $ Equiv s1 s2
+    proof $ do
+        noindent
+        hereFigure $ do
+            truthTableOf s1
+            commS " "
+            truthTableOf s2
+
+andCommutativity :: Note
+andCommutativity = thm $ do
+    s [m ("" ∧ ""), " is ", commutative]
+    let (a, b) = (Symbol "A", Symbol "B")
+    equivalenceProof (And a b) (And b a)
+
+andAssociativity :: Note
+andAssociativity = thm $ do
+    s [m ("" ∧ ""), " is ", associative]
+    let (a, b, c) = (Symbol "A", Symbol "B", Symbol "C")
+    equivalenceProof (And a (And b c)) (And (And a b) c)
+
+orCommutativity :: Note
+orCommutativity = thm $ do
+    s [m ("" ∨ ""), " is ", commutative]
+    let (a, b) = (Symbol "A", Symbol "B")
+    equivalenceProof (Or a b) (Or b a)
+
+orAssociativity :: Note
+orAssociativity = thm $ do
+    s [m ("" ∨ ""), " is ", associative]
+    let (a, b, c) = (Symbol "A", Symbol "B", Symbol "C")
+    equivalenceProof (Or a (Or b c)) (Or (Or a b) c)
+
+doubleNegationElimination :: Note
+doubleNegationElimination = thm $ do
+    s ["Double negation"]
+    let a = Symbol "A"
+    equivalenceProof a $ Not $ Not a
+
+contraposition :: Note
+contraposition = thm $ do
+    s [term "Contraposition"]
+    let (a, b) = (Symbol "A", Symbol "B")
+    equivalenceProof (Implies a b) (Implies (Not b) (Not a))
+
+deMorgan1 :: Note
+deMorgan1 = thm $ do
+    s ["First law of ", term "De Morgan"]
+    let (a, b) = (Symbol "A", Symbol "B")
+    equivalenceProof (Not $ Or a b) (And (Not a) (Not b))
+
+deMorgan2 :: Note
+deMorgan2 = thm $ do
+    s ["Second law of ", term "De Morgan"]
+    let (a, b) = (Symbol "A", Symbol "B")
+    equivalenceProof (Not $ And a b) (Or (Not a) (Not b))
+
+distributivityOrAnd :: Note
+distributivityOrAnd = thm $ do
+    s [m $ "" ∨ "", " is ", distributive, " over ", m $ "" ∧ ""]
+    let (a, b, c) = (Symbol "A", Symbol "B", Symbol "C")
+    equivalenceProof (Or a (And b c)) (And (Or a b) (Or a c))
+
+distributivityAndOr :: Note
+distributivityAndOr = thm $ do
+    s [m $ "" ∧ "", " is ", distributive, " over ", m $ "" ∨ ""]
+    let (a, b, c) = (Symbol "A", Symbol "B", Symbol "C")
+    equivalenceProof (And a (Or b c)) (Or (And a b) (And a c))
 
 normalForms :: Note
 normalForms = do
