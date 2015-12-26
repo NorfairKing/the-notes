@@ -409,14 +409,15 @@ resolutionProofs = do
     ex $ do
         let (a, b, c) = ("A", "B", "C")
         let [as, bs, cs] = map (Literal . Symbol) [a, b, c]
-        let s1 = And (Equiv as (Or bs cs)) (Not as)
+        let s11 = Equiv as (Or bs cs)
+        let s12 = Not as
+        let s1 = And s11 s12
         let s2 = Not bs
-        s ["Suppose we have a ", knowledgeBase, " ", m $ setof $ renderSentence s1, " and let ", m $ alpha =: renderSentence s2]
+        s ["Suppose we have a ", knowledgeBase, " ", m $ setofs [renderSentence s11, renderSentence s12], " and let ", m $ alpha =: renderSentence s2]
         newline
         s ["First we convert all sentences to CNF"]
-        s [m alpha, " is already in CNF"]
-        renderTransformation s1
-        s ["Now we add ", m $ neg alpha, " in conjunction and prove that the resulting sentence is unsatisfiable"]
+        renderTransformation s11
+        s ["Now we add ", m $ neg alpha, " in conjunction with the sentences in the knowledge base and prove that the resulting sentence is unsatisfiable"]
         proofUnsatisfiable 10 s1 s2
 
 

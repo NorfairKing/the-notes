@@ -11,6 +11,8 @@ import           Text.Dot
 
 import           Data.List                            (find, intercalate, nub,
                                                        sort)
+import           Data.Ord                             (comparing)
+
 import qualified Data.Text                            as T
 import           Data.Text.Lazy                       (toStrict)
 
@@ -47,12 +49,10 @@ data CNFLit = JustLit Text
     deriving (Eq)
 
 instance Ord CNFLit where
-    compare (JustLit t1) (JustLit t2) = compare t1 t2
-    compare (NotLit t1)  (NotLit t2)  = compare t1 t2
-    compare (JustLit t1) (NotLit t2) = case compare t1 t2 of
-                                         EQ -> LT
-                                         c -> c
-    compare t1 t2 = compare t2 t1
+    compare = comparing textOfLit
+      where
+        textOfLit (JustLit t) = t
+        textOfLit (NotLit t) = t
 
 instance Show CNFLit where
     show (JustLit t) = T.unpack t
@@ -76,7 +76,7 @@ fromSentence = go . cnfTransform
 
 disjunctNode :: [Attribute] -> Disjunction -> DotGen NodeId
 disjunctNode as (Disjunct []) = namelessNode $ [color =: "red", label =: tableCells ["False"]] ++ as
-disjunctNode as (Disjunct ls) = namelessNode $ label =: (tableCells $ map show ls) : as
+disjunctNode as (Disjunct ls) = namelessNode $ label =: (tableCells $ map show $ sort ls) : as
 
 tableCells :: [String] -> Text
 tableCells ls = toStrict $ renderHtml $ table' $ tr $ forM_ ls $ \l -> td $ fromString $ l
