@@ -53,10 +53,14 @@ main = do
             (eet, _) <- runNote entireDocument cf pconf startState
 
             case eet of
-                Left err -> unless (conf_ignoreReferenceErrors cf) $ P.print err
+                Left err -> if conf_ignoreReferenceErrors cf
+                            then P.print err
+                            else error $ show err
                 Right () -> return ()
 
-            (ec, out, err) <- liftIO $ readCreateProcessWithExitCode (latexMkJob cf) ""
+            (ec, out, err) <- liftIO $ readCreateProcessWithExitCode
+                                        (latexMkJob cf)
+                                        ""
             let outputAnyway = do
                   putStrLn out
                   putStrLn err
