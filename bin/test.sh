@@ -1,2 +1,2 @@
 source bin/lib.sh
-check "Tests" stack test --jobs=8
+check "Test" stack test --jobs=8

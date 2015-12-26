@@ -1,4 +1,3 @@
-{-# LANGUAGE CPP #-}
 module Logic.PropositionalLogic.SentenceSpec (spec) where
 
 import           Prelude
@@ -13,26 +12,28 @@ import           Data.Text.Arbitrary
 
 import           Logic.PropositionalLogic.Sentence
 
+instance Arbitrary Literal where
+    arbitrary = oneof
+        [
+          Lit <$> arbitrary
+        , Symbol <$> arbitrary
+        ]
+
+
 instance Arbitrary Sentence where
     -- The const 5 size parameter ensures that the sentence doesn't get too big.
     arbitrary = scale (const 5) $ sized go
       where
         go :: Int -> Gen Sentence
-        go 0 = oneof
-                [
-                  Lit <$> arbitrary
-                , Symbol <$> arbitrary
-                ]
+        go 0 = Literal <$> arbitrary
         go 1 = oneof
                 [
-                  Lit <$> arbitrary
-                , Symbol <$> arbitrary
+                  Literal <$> arbitrary
                 , Not <$> go 0
                 ]
         go n = oneof
                 [
-                  Lit <$> arbitrary
-                , Symbol <$> arbitrary
+                  Literal <$> arbitrary
                 , Not <$> go (n-1)
                 , Or <$> go (n-1) <*> go (n-1)
                 , And <$> go (n-1) <*> go (n-1)
@@ -48,10 +49,12 @@ spec :: Spec
 spec = do
     describe "isBinary" $ do
         it "is true for binary operators" $ do
-            And (Lit True) (Lit False)     `shouldSatisfy` isBinary
-            Or (Lit True) (Lit False)      `shouldSatisfy` isBinary
-            Implies (Lit True) (Lit False) `shouldSatisfy` isBinary
-            Equiv (Lit True) (Lit False)   `shouldSatisfy` isBinary
+            let t = Literal $ Lit True
+                f = Literal $ Lit False
+            And t f     `shouldSatisfy` isBinary
+            Or t f      `shouldSatisfy` isBinary
+            Implies t f `shouldSatisfy` isBinary
+            Equiv t f   `shouldSatisfy` isBinary
 
     describe "subExprs" $ do
         it "has length 2 for binary operators" $ do
@@ -80,12 +83,14 @@ spec = do
 
     describe "isCNF" $ do
         it "works on simple testcases" $ do
-            (Lit True) `shouldSatisfy` isCNF
-            (Lit False) `shouldSatisfy` isCNF
-            (Or (Lit True) (Lit False)) `shouldSatisfy` isCNF
-            (And (Lit True) (Lit False)) `shouldSatisfy` isCNF
-            (Implies (Lit True) (Lit False)) `shouldNotSatisfy` isCNF
-            (Equiv (Lit True) (Lit False)) `shouldNotSatisfy` isCNF
+            let t = Literal $ Lit True
+                f = Literal $ Lit False
+            t `shouldSatisfy` isCNF
+            f `shouldSatisfy` isCNF
+            (Or t f) `shouldSatisfy` isCNF
+            (And t f) `shouldSatisfy` isCNF
+            (Implies t f) `shouldNotSatisfy` isCNF
+            (Equiv t f) `shouldNotSatisfy` isCNF
 
     describe "cnfTransform" $ do
         validTransformation cnfTransform
@@ -94,8 +99,10 @@ spec = do
 
     describe "symbolsOf" $ do
         it "works on simple testcases" $ do
-            symbolsOf (Equiv (Symbol "a") (And (Symbol "b") (Symbol "c"))) `shouldBe` ["a", "b", "c"]
-            symbolsOf (Not (Lit True)) `shouldBe` []
+            let t = Literal $ Lit True
+                s = Literal . Symbol
+            symbolsOf (Equiv (s "a") (And (s "b") (s "c"))) `shouldBe` ["a", "b", "c"]
+            symbolsOf (Not t) `shouldBe` []
         it "returns a list of unique symbols (a set)" $ do
             property $ \s -> symbolsOf s == nub (symbolsOf s)
 
@@ -107,7 +114,7 @@ spec = do
 evaluatable :: Sentence -> Bool
 evaluatable = not . mapHas go
   where
-    go (Symbol _) = True
+    go (Literal (Symbol _)) = True
     go _ = False
 
 validTransformation :: (Sentence -> Sentence) -> Spec

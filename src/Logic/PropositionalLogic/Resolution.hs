@@ -1,28 +1,36 @@
 module Logic.PropositionalLogic.Resolution where
 
-import           Control.Monad                      (forM_, unless)
-import           Notes                              hiding ((=:))
+import           Control.Monad                        (forM_)
+import           Notes                                hiding (color, not, (=:))
 
+import           Data.Maybe                           (fromJust)
 import           Prelude
--- import           System.FilePath.Posix (dropExtension)
-import           Data.Maybe                         (fromJust, isJust)
+import           Utils
 
 import           Text.Dot
 
-import           Data.List                          (find, intercalate)
-import qualified Data.Text                          as T
--- import           Logic.PropositionalLogic.Sentence
-import           Data.Text.Lazy                     (toStrict)
-import           Text.Blaze                         (customAttribute, (!))
-import           Text.Blaze.Html.Renderer.Text      (renderHtml)
-import           Text.Blaze.Html4.Strict            (table, td, tr)
-import           Text.Blaze.Html4.Strict.Attributes (border, cellpadding,
-                                                     cellspacing)
-import           Text.Blaze.Internal                (Attribute, AttributeValue)
+import           Data.List                            (find, intercalate, nub,
+                                                       sort)
+import qualified Data.Text                            as T
+import           Data.Text.Lazy                       (toStrict)
 
+import           Text.Blaze                           (customAttribute, (!))
+import           Text.Blaze.Html.Renderer.Text        (renderHtml)
+import           Text.Blaze.Html4.Strict              (table, td, tr)
+import           Text.Blaze.Html4.Strict.Attributes   (border, cellpadding,
+                                                       cellspacing)
+import qualified Text.Blaze.Internal
+
+import           Logic.PropositionalLogic.Sentence
+import           Logic.PropositionalLogic.TruthTables
 
 
 data CNFSentence = Conjunction [Disjunction]
+    deriving (Show, Eq)
+
+instance Monoid CNFSentence where
+    mempty = Conjunction []
+    mappend (Conjunction s1) (Conjunction s2) = Conjunction $ s1 ++ s2
 
 data Disjunction = Disjunct [CNFLit]
     deriving (Eq)
@@ -30,17 +38,45 @@ data Disjunction = Disjunct [CNFLit]
 instance Show Disjunction where
     show (Disjunct ls) = intercalate " ∧ " $ map show ls
 
+instance Monoid Disjunction where
+    mempty = Disjunct []
+    mappend (Disjunct s1) (Disjunct s2) = Disjunct $ s1 ++ s2
+
 data CNFLit = JustLit Text
             | NotLit Text
     deriving (Eq)
+
+instance Ord CNFLit where
+    compare (JustLit t1) (JustLit t2) = compare t1 t2
+    compare (NotLit t1)  (NotLit t2)  = compare t1 t2
+    compare (JustLit t1) (NotLit t2) = case compare t1 t2 of
+                                         EQ -> LT
+                                         c -> c
+    compare t1 t2 = compare t2 t1
 
 instance Show CNFLit where
     show (JustLit t) = T.unpack t
     show (NotLit t) = "¬" ++ T.unpack t
 
-disjunctNode :: Disjunction -> DotGen NodeId
-disjunctNode (Disjunct []) = node $ tableCells ["False"]
-disjunctNode (Disjunct ls) = node $ tableCells $ map show ls
+fromSentence :: Sentence -> CNFSentence
+fromSentence = go . cnfTransform
+  where
+    go :: Sentence -> CNFSentence
+    go s@(Literal _)    = Conjunction $ [go2 s]
+    go s@(Or _ _)       = Conjunction $ [go2 s]
+    go s@(Not _)        = Conjunction $ [go2 s]
+    go (And s1 s2)      = go s1 `mappend` go s2
+
+    go2 :: Sentence -> Disjunction
+    go2 (Literal (Lit True)) = Disjunct [JustLit "T", NotLit "T"] -- Something that works. In practice this won't be necessary.
+    go2 (Literal (Lit False)) = Disjunct []
+    go2 (Literal (Symbol s)) = Disjunct [JustLit s]
+    go2 (Not (Literal (Symbol s))) = Disjunct [NotLit s]
+    go2 (Or s1 s2)  = go2 s1 `mappend` go2 s2
+
+disjunctNode :: [Attribute] -> Disjunction -> DotGen NodeId
+disjunctNode as (Disjunct []) = namelessNode $ [color =: "red", label =: tableCells ["False"]] ++ as
+disjunctNode as (Disjunct ls) = namelessNode $ label =: (tableCells $ map show ls) : as
 
 tableCells :: [String] -> Text
 tableCells ls = toStrict $ renderHtml $ table' $ tr $ forM_ ls $ \l -> td $ fromString $ l
@@ -50,40 +86,52 @@ tableCells ls = toStrict $ renderHtml $ table' $ tr $ forM_ ls $ \l -> td $ from
 
     table' = table ! border "0" ! cellborder "1" ! cellspacing "0" ! cellpadding "5"
 
--- TODO(kerckhove) This doesn't actually work, it sometimes does if you're lucky. Fix that!
-proofUnsatisfiable :: Note -> CNFSentence -> Note
-proofUnsatisfiable cap (Conjunction ds) = dotFig cap $ graph_ directed $ do
+proofFig :: Note -> Double -> DotGraph -> Note
+proofFig cap height g = do
+    fp <- dot2tex g
+    noindent
+    hereFigure $ do
+        includegraphics [KeepAspectRatio True, IGHeight (Cm height), IGWidth (CustomMeasure $ textwidth)] fp
+        caption cap
+
+proofUnsatisfiable :: Double -> Sentence -> Sentence -> Note
+proofUnsatisfiable height s1 s2 = proofFig cap height $ graph_ directed $ do
+        let (Conjunction ds) = fromSentence s1 `mappend` fromSentence (Not s2)
         nodeDec [shape =: none]
         rankdir leftRight
-        ids <- mapM disjunctNode ds
-        go $ zip ids ds
+        ids <- mapM (disjunctNode [color =: "green"]) $ map simplify ds
+        go [] $ zip ids ds
   where
-    go :: [(NodeId, Disjunction)] -> DotGen ()
-    go [] = return ()
-    go [(_, Disjunct [])] = return ()
-    go ds =
-        unless (any empty ds) $ do
-            case find (justTrue . snd) ds of
-                Just t@(n, _) -> do
-                    n' <- node "true"
-                    n --> n'
-                    let rest = filter (/= t) ds
-                    go rest
-                Nothing -> do
-                    case find (\((_, d1), (_,d2)) -> isJust $ resolve d1 d2) cp of
-                        Nothing -> return ()
-                        Just ((n1, d1), (n2, d2)) -> do
-                            let d3 = fromJust $ resolve d1 d2
-                            n3 <- disjunctNode d3
-                            n1 --> n3
-                            n2 --> n3
-                            let rest = (n3, d3) : ds -- (filter (/= t1) $ filter (/= t2) $ ds)
-                            go rest
+    cap = (s ["A diagram of the proof of ", m $ renderSentence s2, " from ", m $ renderSentence s1])
+    go :: [NodeId] -> [(NodeId, Disjunction)] -> DotGen ()
+    go _ [] = return ()
+    go _ [(_, Disjunct [])] = return ()
+    go ts ds = do
+        case find (\(n, d) -> justTrue d && notElem n ts) ds of
+            Just (n, _) -> do
+                n' <- node "true"
+                n --> n'
+                go (n:ts) ds
+            Nothing -> do
+                let isNew (_, d1) (_, d2) =
+                        case simplify `fmap` resolve d1 d2 of
+                            Nothing -> False
+                            Just d3 -> not (justTrue d3) && (notElem d3 $ map snd ds)
+                case find (uncurry isNew) cp of
+                    Nothing -> return ()
+                    Just ((n1, d1), (n2, d2)) -> do
+                        let d3 = simplify $ fromJust $ resolve d1 d2
+                        n3 <- disjunctNode [] d3
+                        n1 --> n3
+                        n2 --> n3
+                        let rest = (n3, d3) : ds
+                        go ts rest
       where
-        empty (_, Disjunct []) = True
-        empty _ = False
         cp :: [((NodeId, Disjunction), (NodeId, Disjunction))]
         cp = pairs ds
+
+simplify :: Disjunction -> Disjunction
+simplify (Disjunct ls) = Disjunct . sort . nub $ ls
 
 justTrue :: Disjunction -> Bool
 justTrue (Disjunct ls) = any (uncurry canReselove) cp
@@ -101,21 +149,4 @@ canReselove :: CNFLit -> CNFLit -> Bool
 canReselove (JustLit s1) (NotLit s2) = s1 == s2
 canReselove (NotLit s1) (JustLit s2) = s1 == s2
 canReselove _ _ = False
-
-
-pairs :: [a] -> [(a,a)]
-pairs [] = []
-pairs as = go as $ tail as
-  where
-    go [] [] = []
-    go _  [] = []
-    go [] _  = []
-    go (a:as) bss@(_:bs) = map (\b -> (a, b)) bss ++ go as bs
-
-crossproduct :: [a] -> [b] -> [(a,b)]
-crossproduct [] [] = []
-crossproduct [] _  = []
-crossproduct _  [] = []
-crossproduct (a:as) bs = map (\b -> (a,b)) bs ++ crossproduct as bs
-
 

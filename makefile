@@ -15,13 +15,13 @@ GHC_FLAGS = \
 	-j8 \
 	-fwarn-unused-imports \
 	-fwarn-incomplete-patterns \
-	-Wall -Werror \
 	-fwarn-unused-do-bind \
 	-fno-warn-name-shadowing \
 	-fno-warn-orphans \
 	-XOverloadedStrings \
 	-XNoImplicitPrelude \
 	-XTemplateHaskell
+	# -Wall -Werror \
 
 GHC_SRC_DIRS = \
 	-i$(SRC_DIR)

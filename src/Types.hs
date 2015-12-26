@@ -5,6 +5,7 @@ module Types (
       module Types
 
     , module P
+    , module Debug.Trace
 
     , module Text.LaTeX.LambdaTeX
 
@@ -26,6 +27,8 @@ import           Prelude                      as P (Double, Eq (..), FilePath,
                                                     Maybe (..), Num (..),
                                                     Show (..), mempty, ($),
                                                     (&&), (++), (.))
+
+import           Debug.Trace
 
 import           Text.LaTeX                   hiding (Label, alph_, article,
                                                cite, item, label, pageref, ref,

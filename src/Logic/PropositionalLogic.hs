@@ -2,7 +2,6 @@ module Logic.PropositionalLogic where
 
 import           Notes
 
-import           Data.List                            (reverse)
 import           Prelude                              (map)
 
 import           Functions.Basics
@@ -403,8 +402,10 @@ resolutionProofs = do
     ex $ do
         let (a, b) = ("A", "B")
         let [as, bs] = map (Literal . Symbol) [a, b]
-        s ["We can prove ", m $ raw b, " from ", m $ renderSentence $ And (Or as bs) (Not as), " as follows"]
-        proofUnsatisfiable "" $ Conjunction [Disjunct [JustLit a, JustLit b], Disjunct [NotLit a], Disjunct [NotLit b]]
+        let s1 = And (Or as bs) (Not as)
+        let s2 = bs
+        s ["We can prove ", m $ renderSentence s2, " from ", m $ renderSentence s1 , " as follows"]
+        proofUnsatisfiable 3 s1 s2
     ex $ do
         let (a, b, c) = ("A", "B", "C")
         let [as, bs, cs] = map (Literal . Symbol) [a, b, c]
@@ -416,6 +417,6 @@ resolutionProofs = do
         s [m alpha, " is already in CNF"]
         renderTransformation s1
         s ["Now we add ", m $ neg alpha, " in conjunction and prove that the resulting sentence is unsatisfiable"]
-        proofUnsatisfiable "" $ Conjunction $ reverse [Disjunct [NotLit a, JustLit b, JustLit c], Disjunct [NotLit b, JustLit a], Disjunct [NotLit c, JustLit a], Disjunct [NotLit a], Disjunct [JustLit b]]
+        proofUnsatisfiable 10 s1 s2
 
 
