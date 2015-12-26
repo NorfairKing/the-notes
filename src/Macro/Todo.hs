@@ -7,7 +7,7 @@ import           Control.Monad.Reader (asks)
 
 listoftodos :: Note
 listoftodos = do
-    o <- asks conf_omitTodos
+    o <- asks conf_todos
     unless o $ do
         packageDep_ "todonotes"
         comm0 "listoftodos"
@@ -17,7 +17,7 @@ todo' = liftL $ \l -> TeXComm "todo" [MOptArg ["color=red", "inline", raw "size=
 
 todo :: Note -> Note
 todo n = do
-    o <- asks conf_omitTodos
+    o <- asks conf_todos
     unless o $ do
         packageDep_ "todonotes"
         todo' n

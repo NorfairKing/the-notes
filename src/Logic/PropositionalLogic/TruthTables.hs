@@ -11,11 +11,14 @@ import           Notes                             hiding (not, or)
 import qualified Notes                             as N
 
 
+renderLiteral :: Literal -> Note
+renderLiteral (Lit True)           = true
+renderLiteral (Lit False)          = false
+renderLiteral (Symbol s)           = raw s
+
 renderSentence :: Sentence -> Note
-renderSentence (Lit True)           = true
-renderSentence (Lit False)          = false
-renderSentence (Symbol s)           = raw s
-renderSentence (Not s@(Symbol _))   = N.not $ renderSentence s
+renderSentence (Literal l)          = renderLiteral l
+renderSentence (Not (Literal l))    = N.not $ renderLiteral l
 renderSentence (Not s@(Not _))      = N.not $ renderSentence s
 renderSentence (Not s)              = pars $ N.not $ renderSentence s
 renderSentence (Or s1 s2)           = pars $ renderSentence s1 ∨ renderSentence s2

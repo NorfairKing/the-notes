@@ -56,7 +56,7 @@ data Args = Args {
     , args_visualDebug           :: Bool
     , args_verbose               :: Bool
     , args_ignoreReferenceErrors :: Bool
-    , args_omitTodos             :: Bool
+    , args_todos                 :: Bool
     , args_subtitle              :: String
     , args_texFileName           :: String
     , args_bibFileName           :: String
@@ -68,7 +68,7 @@ data Config = Config {
     , conf_visualDebug           :: Bool
     , conf_verbose               :: Bool
     , conf_ignoreReferenceErrors :: Bool
-    , conf_omitTodos             :: Bool
+    , conf_todos                 :: Bool
     , conf_subtitle              :: Maybe String
     , conf_texFileName           :: FilePath
     , conf_bibFileName           :: FilePath

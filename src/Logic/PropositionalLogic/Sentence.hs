@@ -2,12 +2,22 @@ module Logic.PropositionalLogic.Sentence where
 
 import           Prelude
 
-import           Data.List (nub)
-import           Data.Text (Text)
-import qualified Data.Text as T
+import           Data.String (IsString (..))
 
-data Sentence = Lit Bool
-              | Symbol Text
+import           Data.List   (nub)
+import           Data.Text   (Text)
+import qualified Data.Text   as T
+
+data Literal = Lit Bool
+             | Symbol Text
+    deriving (Eq)
+
+instance Show Literal where
+    show (Lit True)         = "T"
+    show (Lit False)        = "F"
+    show (Symbol s)         = T.unpack s
+
+data Sentence = Literal Literal
               | Not Sentence
               | Or Sentence Sentence
               | And Sentence Sentence
@@ -15,10 +25,11 @@ data Sentence = Lit Bool
               | Equiv Sentence Sentence
     deriving (Eq)
 
+instance IsString Sentence where
+    fromString = Literal . Symbol . T.pack
+
 instance Show Sentence where
-    show (Lit True)         = "T"
-    show (Lit False)        = "F"
-    show (Symbol s)         = T.unpack s
+    show (Literal s)        = show s
     show (Not s)            = "¬" ++ show s
     show (Or s1 s2)         = "(" ++ show s1 ++ " ∨ " ++ show s2 ++ ")"
     show (And s1 s2)        = "(" ++ show s1 ++ " ∧ " ++ show s2 ++ ")"
@@ -63,9 +74,12 @@ mapSub' f = mapSubs (mapSub' f) . f
 mapHas :: (Sentence -> Bool) -> Sentence -> Bool
 mapHas f s = f s || (any (mapHas f) $ subExprs s)
 
+evalLit :: Literal -> Bool
+evalLit (Lit b)     = b
+evalLit (Symbol _)  = error $ "Symbols can't be evaluated"
+
 evaluate :: Sentence -> Bool
-evaluate (Lit b)            = b
-evaluate (Symbol _)         = error $ "Symbols can't be evaluated"
+evaluate (Literal l)        = evalLit l
 evaluate (Not s)            = not $ evaluate s
 evaluate (And s1 s2)        = evaluate s1 && evaluate s2
 evaluate (Or s1 s2)         = evaluate s1 || evaluate s2
@@ -159,31 +173,28 @@ isCNF = onlyAnds
     onlyAnds (And s1 s2) = onlyAnds s1 && onlyAnds s2
     onlyAnds (Or s1 s2) = onlyOrs s1 && onlyOrs s2
     onlyAnds (Not s) = done s
-    onlyAnds (Lit _) = True
-    onlyAnds (Symbol _) = True
+    onlyAnds (Literal _) = True
     onlyAnds _ = False
 
     onlyOrs (Or s1 s2) = onlyOrs s1 && onlyOrs s2
     onlyOrs (Not s) = done s
-    onlyOrs (Lit _) = True
-    onlyOrs (Symbol _) = True
+    onlyOrs (Literal _) = True
     onlyOrs _ = False
 
-    done (Lit _) = True
-    done (Symbol _) = True
+    done (Literal _) = True
     done _ = False
 
 
 symbolsOf :: Sentence -> [Text]
-symbolsOf (Symbol s) = [s]
+symbolsOf (Literal (Symbol s)) = [s]
 symbolsOf s = nub $ concatMap symbolsOf $ subExprs s
 
 fillInWith :: [(Text, Bool)] -> Sentence -> Sentence
 fillInWith vs = mapSub go
   where
-    go (Symbol s) = case lookup s vs of
-                        Nothing -> Symbol s
-                        Just b  -> Lit b
+    go (Literal (Symbol s)) = case lookup s vs of
+                                Nothing -> Literal (Symbol s)
+                                Just b  -> Literal (Lit b)
     go s = s
 
 

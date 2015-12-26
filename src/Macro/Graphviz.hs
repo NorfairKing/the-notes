@@ -11,7 +11,9 @@ import           System.FilePath.Posix  ((<.>), (</>))
 import           System.Process         (CreateProcess,
                                          readCreateProcessWithExitCode, shell)
 
-import           Text.Dot               (DotGraph, renderGraph)
+import           Macro.Figure
+
+import           Text.Dot
 
 import qualified Crypto.Hash.MD5        as MD5
 import qualified Data.ByteString        as SB
@@ -19,6 +21,16 @@ import qualified Data.ByteString.Base16 as B16
 import qualified Data.ByteString.Char8  as SB8
 import qualified Data.Text.Encoding     as T
 import qualified Data.Text.IO           as T
+
+
+dotFig :: Note -> DotGraph -> Note
+dotFig cap g = do
+    fp <- dot2tex g
+    noindent
+    hereFigure $ do
+        includegraphics [KeepAspectRatio True, IGHeight (Cm 3.0), IGWidth (CustomMeasure $ "0.5" <> textwidth)] fp
+        caption cap
+
 
 dot2tex :: DotGraph -> Note' FilePath
 dot2tex graph = do
@@ -33,7 +45,7 @@ dot2tex graph = do
                 ExitFailure c -> do
                     liftIO $ putStrLn $ out ++ err
                     liftIO $ print c
-                    error $ "Generating graph" ++ filename -- FIXME send this to a logfile instead before we start asyncing this code
+                    error $ "Error while generating graph " ++ filename -- FIXME send this to a logfile instead before we start asyncing this code
 
     return file_eps
   where

@@ -2,14 +2,17 @@ module Logic.PropositionalLogic where
 
 import           Notes
 
-import           Functions.Basics
+import           Data.List                            (reverse)
+import           Prelude                              (map)
 
+import           Functions.Basics
 import           Functions.BinaryOperation
 
 import           Logic.AbstractLogic.Macro
 import           Logic.AbstractLogic.Terms
 
 import           Logic.PropositionalLogic.Macro
+import           Logic.PropositionalLogic.Resolution
 import           Logic.PropositionalLogic.Sentence
 import           Logic.PropositionalLogic.Terms
 import           Logic.PropositionalLogic.TruthTables
@@ -38,6 +41,7 @@ propositionalLogicS = note "propositional-logic" $ do
     note "equivalent" $ do
         logicallyEquivalentDefinition
         logicallyEquivalentExample
+
     truthTables
     equivalences
 
@@ -190,22 +194,26 @@ truthTables = note "truth-tables" $ do
     s ["A cell in a truth table represents the value of the subexpression in the column for the a values of the symbols in that row"]
     s ["The validity of a proposition can be checked by building the truth table for the sentence and checking whether all the values in the column for the sentence are true"]
     ex $ do
+        let a = Literal $ Symbol "A"
+            b = Literal $ Symbol "B"
         hereFigure $ do
-            truthTableOf $ Not (Symbol "A")
+            truthTableOf $ Not b
         hereFigure $ do
-            truthTableOf $ Or (Symbol "A") (Symbol "B")
+            truthTableOf $ Or a b
             m quad
-            truthTableOf $ And (Symbol "A") (Symbol "B")
+            truthTableOf $ And a b
         hereFigure $ do
-            truthTableOf $ Implies (Symbol "A") (Symbol "B")
+            truthTableOf $ Implies a b
             m quad
-            truthTableOf $ Equiv (Symbol "A") (Symbol "B")
+            truthTableOf $ Equiv a b
             caption "Elementary truth tables"
 
     nte $ do
         s ["Eventhough truth tables are valid way to prove or disprove any propositional sentence, they are not practical in practice because they require an exponential amount of space with respect to the numbor of symbols in the sentence"]
         hereFigure $ do
-            truthTableOf $ Equiv (Implies (Symbol "P") (Symbol "Q")) (Implies (Not (Symbol "R")) (Not (Symbol "S")))
+            let sym = Literal . Symbol
+                [p, q, r, s] = map sym ["P", "Q", "R", "S"]
+            truthTableOf $ Equiv (Implies p q) (Implies (Not r) (Not s))
             caption "Truth tables quickly become very large"
 
 equivalences :: Note
@@ -231,61 +239,61 @@ equivalenceProof s1 s2 = do
 andCommutativity :: Note
 andCommutativity = thm $ do
     s [m ("" ∧ ""), " is ", commutative]
-    let (a, b) = (Symbol "A", Symbol "B")
+    let (a, b) = ("A", "B")
     equivalenceProof (And a b) (And b a)
 
 andAssociativity :: Note
 andAssociativity = thm $ do
     s [m ("" ∧ ""), " is ", associative]
-    let (a, b, c) = (Symbol "A", Symbol "B", Symbol "C")
+    let (a, b, c) = ("A", "B", "C")
     equivalenceProof (And a (And b c)) (And (And a b) c)
 
 orCommutativity :: Note
 orCommutativity = thm $ do
     s [m ("" ∨ ""), " is ", commutative]
-    let (a, b) = (Symbol "A", Symbol "B")
+    let (a, b) = ("A", "B")
     equivalenceProof (Or a b) (Or b a)
 
 orAssociativity :: Note
 orAssociativity = thm $ do
     s [m ("" ∨ ""), " is ", associative]
-    let (a, b, c) = (Symbol "A", Symbol "B", Symbol "C")
+    let (a, b, c) = ("A", "B", "C")
     equivalenceProof (Or a (Or b c)) (Or (Or a b) c)
 
 doubleNegationElimination :: Note
 doubleNegationElimination = thm $ do
     s ["Double negation"]
-    let a = Symbol "A"
+    let a = "A"
     equivalenceProof a $ Not $ Not a
 
 contraposition :: Note
 contraposition = thm $ do
     s [term "Contraposition"]
-    let (a, b) = (Symbol "A", Symbol "B")
+    let (a, b) = ("A", "B")
     equivalenceProof (Implies a b) (Implies (Not b) (Not a))
 
 deMorgan1 :: Note
 deMorgan1 = thm $ do
     s ["First law of ", term "De Morgan"]
-    let (a, b) = (Symbol "A", Symbol "B")
+    let (a, b) = ("A", "B")
     equivalenceProof (Not $ Or a b) (And (Not a) (Not b))
 
 deMorgan2 :: Note
 deMorgan2 = thm $ do
     s ["Second law of ", term "De Morgan"]
-    let (a, b) = (Symbol "A", Symbol "B")
+    let (a, b) = ("A", "B")
     equivalenceProof (Not $ And a b) (Or (Not a) (Not b))
 
 distributivityOrAnd :: Note
 distributivityOrAnd = thm $ do
     s [m $ "" ∨ "", " is ", distributive, " over ", m $ "" ∧ ""]
-    let (a, b, c) = (Symbol "A", Symbol "B", Symbol "C")
+    let (a, b, c) = ("A", "B", "C")
     equivalenceProof (Or a (And b c)) (And (Or a b) (Or a c))
 
 distributivityAndOr :: Note
 distributivityAndOr = thm $ do
     s [m $ "" ∧ "", " is ", distributive, " over ", m $ "" ∨ ""]
-    let (a, b, c) = (Symbol "A", Symbol "B", Symbol "C")
+    let (a, b, c) = ("A", "B", "C")
     equivalenceProof (And a (Or b c)) (Or (And a b) (And a c))
 
 normalForms :: Note
@@ -318,7 +326,8 @@ conjunctiveNormalFormS = note "cnf" $ do
         renderTransformation sen
         s ["The Tseitin transformation, applied to ", m $ renderSentence sen]
   where
-    sen = Equiv (Implies (Symbol "P") (Symbol "Q")) (Implies (Not (Symbol "Q")) (Not (Symbol "P")))
+    (p, q) = ("P", "Q")
+    sen = Equiv (Implies p q) (Implies (Not q) (Not p))
 
 tseitinTransformation :: Reference
 tseitinTransformation = Reference article "tseitin68" $
@@ -346,30 +355,26 @@ modusPonensInProp = note "modus-ponens" $ thm $ do
 
 resolution :: Note
 resolution = note "resolution" $ do
-    de $ do
-        s ["The ", inference, " ", term "rule of resolution", " is an ", inference, " in proposition logic"]
-        s ["It assumes that sentences are in ", conjunctiveNormalForm]
-        s ["Let ", m a, and, m b, " be propositional formulae in CNF."]
-        ma $ do
-            a =: vsep [a !: 1, a !: 2, dotsc, a !: k]
-            quad
-            b =: vsep [b !: 1, b !: 2, dotsc, b !: l]
-        s ["Suppose also that, for some ", m i, and, m j, ", ", m (a !: i =: not (b !: j)), " holds"]
-        ma $ do
-            linf [vsep [a !: 1, a !: 2, dotsc, a !: k], vsep [b !: 1, b !: 2, dotsc, b !: l]] $
-                vsep $
-                  [a !: 1, a !: 2, dotsc, a !: (i - 1), a !: (i + 1), dotsc, a !: k]
-                  ++
-                  [b !: 1, b !: 2, dotsc, b !: (j - 1), b !: (j + 1), dotsc, b !: k]
+    resolutionDefinition
+    resolutionSoundAndComplete
+    resolutionProofs
 
-    thm $ do
-        s ["This ", inference, " is ", sound, and, complete, "."]
-        toprove
-
-    nte $ do
-        s ["Eventhough this ", inference, " is ", sound, and, complete, ", finding proofs can be difficult as search spaces become exponentially large"]
-        citneeded
-
+resolutionDefinition :: Note
+resolutionDefinition = de $ do
+    s ["The ", inference, " ", term "rule of resolution", " is an ", inference, " in proposition logic"]
+    s ["It assumes that sentences are in ", conjunctiveNormalForm]
+    s ["Let ", m a, and, m b, " be propositional formulae in CNF."]
+    ma $ do
+        a =: vsep [a !: 1, a !: 2, dotsc, a !: k]
+        quad
+        b =: vsep [b !: 1, b !: 2, dotsc, b !: l]
+    s ["Suppose also that, for some ", m i, and, m j, ", ", m (a !: i =: not (b !: j)), " holds"]
+    ma $ do
+        linf [vsep [a !: 1, a !: 2, dotsc, a !: k], vsep [b !: 1, b !: 2, dotsc, b !: l]] $
+            vsep $
+              [a !: 1, a !: 2, dotsc, a !: (i - 1), a !: (i + 1), dotsc, a !: k]
+              ++
+              [b !: 1, b !: 2, dotsc, b !: (j - 1), b !: (j + 1), dotsc, b !: k]
   where
     vsep = separated lorsign
     a = "a"
@@ -378,3 +383,39 @@ resolution = note "resolution" $ do
     l = "l"
     i = "i"
     j = "j"
+
+resolutionSoundAndComplete :: Note
+resolutionSoundAndComplete = do
+    thm $ do
+        s ["This ", inference, " is ", sound, and, complete, "."]
+        toprove
+
+    nte $ do
+        s ["Eventhough this ", inference, " is ", sound, and, complete, ", finding proofs can be difficult as search spaces become exponentially large"]
+        citneeded
+
+resolutionProofs :: Note
+resolutionProofs = do
+    thm $ do
+        let a = "A"
+        s ["Given a ", knowledgeBase, " ", m lkb, and, " a ", sentence, " ", m alpha, " we can prove or disprove ", m alpha, " by showing that ", m $ not alpha ∧ andcomp (a ∈ lkb) a, " is ", unsatisfiable]
+        toprove
+    ex $ do
+        let (a, b) = ("A", "B")
+        let [as, bs] = map (Literal . Symbol) [a, b]
+        s ["We can prove ", m $ raw b, " from ", m $ renderSentence $ And (Or as bs) (Not as), " as follows"]
+        proofUnsatisfiable "" $ Conjunction [Disjunct [JustLit a, JustLit b], Disjunct [NotLit a], Disjunct [NotLit b]]
+    ex $ do
+        let (a, b, c) = ("A", "B", "C")
+        let [as, bs, cs] = map (Literal . Symbol) [a, b, c]
+        let s1 = And (Equiv as (Or bs cs)) (Not as)
+        let s2 = Not bs
+        s ["Suppose we have a ", knowledgeBase, " ", m $ setof $ renderSentence s1, " and let ", m $ alpha =: renderSentence s2]
+        newline
+        s ["First we convert all sentences to CNF"]
+        s [m alpha, " is already in CNF"]
+        renderTransformation s1
+        s ["Now we add ", m $ neg alpha, " in conjunction and prove that the resulting sentence is unsatisfiable"]
+        proofUnsatisfiable "" $ Conjunction $ reverse [Disjunct [NotLit a, JustLit b, JustLit c], Disjunct [NotLit b, JustLit a], Disjunct [NotLit c, JustLit a], Disjunct [NotLit a], Disjunct [JustLit b]]
+
+

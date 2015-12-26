@@ -1,6 +1,7 @@
 module Logic.PropositionalLogic.Macro where
 
 import           Macro.Arrows
+import           Macro.MetaMacro
 
 import           Notes
 
@@ -26,6 +27,9 @@ land = between landsign
 (∧) :: Note -> Note -> Note
 (∧) = land
 
+andcomp :: Note -> Note -> Note
+andcomp = comp $ comm0 "bigwedge"
+
 -- Logical or
 lorsign :: Note
 lorsign = comm0 "vee"
@@ -36,6 +40,9 @@ lor = between lorsign
 -- C-k OR
 (∨) :: Note -> Note -> Note
 (∨) = lor
+
+--orcom :: Note -> Note
+--orcom = comp lorsign
 
 -- Logical Xor
 xor :: Note -> Note -> Note

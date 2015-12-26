@@ -15,7 +15,7 @@ config args = do
         , conf_visualDebug              = args_visualDebug args
         , conf_verbose                  = args_verbose args
         , conf_ignoreReferenceErrors    = args_ignoreReferenceErrors args
-        , conf_omitTodos                = args_omitTodos args
+        , conf_todos                    = args_todos args
         , conf_subtitle                 = if null st then Nothing else Just st
         , conf_texFileName              = args_texFileName args
         , conf_bibFileName              = args_bibFileName args
@@ -52,8 +52,8 @@ argParser = Args
         (long "ignore-reference-errors"
             <> help "Ignore reference errors, compile anyway.")
     <*> switch
-        (long "omit-todos"
-            <> help "Omit all todo's left in the text.")
+        (long "todos"
+            <> help "Render all todo's left in the text.")
     <*> strOption
         (long "subtitle"
             <> value []
