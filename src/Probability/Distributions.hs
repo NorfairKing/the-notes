@@ -3,6 +3,7 @@ module Probability.Distributions where
 import           Notes
 
 import           Logic.FirstOrderLogic.Macro
+import           Probability.Intro.Macro
 import           Probability.Intro.Terms
 
 distributions :: Note
@@ -24,7 +25,7 @@ discreteDistributions = do
 
 discreteUniform :: Note
 discreteUniform = de $ do
-    s [the, term "discrete uniform distribution", " is defined only on a finite universe: ", m (pruniv =: setlist (x 1) (x 2) (x n))]
+    s [the, term "discrete uniform distribution", " is defined only on a finite universe: ", m (univ =: setlist (x 1) (x 2) (x n))]
     ma $ fa (i ∈ setlst 1 n) $ p i =: prob (setof $ x i) =: 1 /: n
 
   where

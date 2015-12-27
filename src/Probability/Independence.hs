@@ -8,6 +8,7 @@ module Probability.Independence (
 import           Notes
 
 import           Logic.FirstOrderLogic.Macro
+import           Probability.SigmaAlgebra.Macro
 
 
 independence :: Note

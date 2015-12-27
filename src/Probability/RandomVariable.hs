@@ -13,6 +13,9 @@ import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
 import           Probability.Independence       (independenceDefinitionLabel,
                                                  independent)
+import           Probability.Intro.Macro
+import           Probability.SigmaAlgebra.Macro
+
 
 randomVariable :: Note
 randomVariable = note "random-variable" body
@@ -64,11 +67,11 @@ saMeasureDefinition = de $ do
 
 borealMesureDefinition :: Note
 borealMesureDefinition = de $ do
-    s ["A ", m boreals, "-measure in the measurable space ", m (prmspace reals boreals), " is called ", term "Borel-measure"]
+    s ["A ", m boreals, "-measure in the measurable space ", m (mspace reals boreals), " is called ", term "Borel-measure"]
 
 randomVariableCondition :: Note
 randomVariableCondition = thm $ do
-    s ["A function ", m (fun x reals reals), " is a random variable in the measurable space ", m (prmspace reals boreals), " if and only if the following holds"]
+    s ["A function ", m (fun x reals reals), " is a random variable in the measurable space ", m (mspace reals boreals), " if and only if the following holds"]
     ma $ fa (a ∈ reals) $ inv x `fn` (ocint minfty a) =: setcmpr omega (prrv `fn` omega <= a) ∈ prsa
   where
     a = "A"
@@ -78,7 +81,7 @@ borealMeasurableInducesProbabilityMeasure :: Note
 borealMeasurableInducesProbabilityMeasure = thm $ do
     s ["A Borel-measurable function induces a probability measure ", m (prpm !: prrv), on, m boreals, " in ", m prbsp, " as follows"]
     ma $ px b =: prob (x ∈ b) =: prob (inv x `fn` b)
-    ma $ px b =: prob (setcmpr (omega ∈ pruniv) (prvrv omega ∈ b))
+    ma $ px b =: prob (setcmpr (omega ∈ univ) (prvrv omega ∈ b))
     toprove
   where
     b = "B"
@@ -204,7 +207,7 @@ discrete = ix "discrete"
 discreteRandomVariableDefinition :: Note
 discreteRandomVariableDefinition = de $ do
     s ["A random variable ", m prrv, " in a probability space ", m prsp, " is called ", term "discrete", " if the image under ", m prrv, " is non-zero in just a countable number of points"]
-    ma $ pi =: prob (setcmpr (omega ∈ pruniv) (prvrv omega =: xi)) =: prob (prrv =: xi)
+    ma $ pi =: prob (setcmpr (omega ∈ univ) (prvrv omega =: xi)) =: prob (prrv =: xi)
 
   where
     i = "i"
@@ -247,7 +250,7 @@ continuous = ix "continuous"
 continuousRandomVariableDefinition :: Note
 continuousRandomVariableDefinition = de $ do
     s ["A random variable ", m prrv, " in a probability space ", m prsp, " is called ", term "continuous", " if the image of every point under ", m prrv, " is zero.."]
-    ma $ fa (x ∈ pruniv) (prob (setof x) =: 0)
+    ma $ fa (x ∈ univ) (prob (setof x) =: 0)
     s ["... and the distribution function ", m prdf, " is a continuous function"]
     refneeded "continuous function"
 

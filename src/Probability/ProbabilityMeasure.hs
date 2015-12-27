@@ -8,7 +8,9 @@ import           Notes
 import           Functions.Basics.Macro
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
+import           Probability.Intro.Macro
 import           Probability.Intro.Terms
+import           Probability.SigmaAlgebra.Macro
 import           Sets.Algebra.Main              (setDifferenceEquivalentDefinitionLabel,
                                                  unionComplementaryLawLabel)
 import           Sets.Basics
@@ -39,7 +41,7 @@ traditionalProbabilityMeasures = do
 
 
 msDec :: Note
-msDec = s ["Let ", m prms, " be a ", ix "measurable space"]
+msDec = s ["Let ", m mspace_, " be a ", ix "measurable space"]
 
 probabilityMeasureDefinitionLabel :: Label
 probabilityMeasureDefinitionLabel = delab "probability-measure"
@@ -53,7 +55,7 @@ probabilityMeasureDefinition = de $ do
     ma $ fun prpm prsa $ ccint 0 1
 
     enumerate $ do
-        item $ m $ (prob pruniv) =: 1
+        item $ m $ (prob univ) =: 1
         item $ m $ fa ("A" ∈ prsa) ((prob "A") >=: 0)
         item $ do
             term "countable additivity"
@@ -67,7 +69,7 @@ probabilityMeasureDefinition = de $ do
     an = "A" !: "n"
 
 msppsDec :: Note
-msppsDec = s ["Let ", m prms, " be a ", ix "measurable space", " and ", m prpm, " a ", ix "probability measure"]
+msppsDec = s ["Let ", m mspace_, " be a ", ix "measurable space", " and ", m prpm, " a ", ix "probability measure"]
 
 measurablespaceDefinition :: Note
 measurablespaceDefinition = de $ do
@@ -101,11 +103,11 @@ probabilitySpaceProbabilityOfComplement = thm $ do
 
     proof $ do
         s ["Let ", m a, " be an event in ", m prsa]
-        s ["The union of ", m a, " and its complement is ", m pruniv, ".", ref unionComplementaryLawLabel]
+        s ["The union of ", m a, " and its complement is ", m univ, ".", ref unionComplementaryLawLabel]
         align_
             [
-              pruniv & seteqsign <> (a ∪ setc a)
-            , prob pruniv & "" =: prob (a ∪ setc a)
+              univ & seteqsign <> (a ∪ setc a)
+            , prob univ & "" =: prob (a ∪ setc a)
             , 1 & "" =: prob a + prob (setc a)
             , prob (setc a) & "" =: 1 - prob a
             ]
@@ -205,15 +207,15 @@ probabilityAtMostOne = prop $ do
 
     ma $ fa (a ∈ prsa) (prob a <= 1)
     proof $ do
-        s ["Every set ", m a, " is a subset of ", m pruniv, ref universalSetSupsetOfAllSetsLabel]
-        s [" so ", m (prob a), " must be smaller than ", m (prob pruniv =: 1), ref probabilityMeasureDefinitionLabel, ref probabilitySubsetImpliesSmallerLabel]
+        s ["Every set ", m a, " is a subset of ", m univ, ref universalSetSupsetOfAllSetsLabel]
+        s [" so ", m (prob a), " must be smaller than ", m (prob univ =: 1), ref probabilityMeasureDefinitionLabel, ref probabilitySubsetImpliesSmallerLabel]
   where a = "A"
 
 
 uniformeProbabilityMeasure :: Note
 uniformeProbabilityMeasure = de $ do
     s ["The ", term "uniforme probability measure", " is a ", ix "probability measure", " that is only defined for measurable spaces with a finite ", universe]
-    ma $ func prpm prsa (ccint 0 1 ⊆ reals) "A" (setsize "A" / setsize pruniv)
+    ma $ func prpm prsa (ccint 0 1 ⊆ reals) "A" (setsize "A" / setsize univ)
 
 
 discreteProbabilityMeasure :: Note

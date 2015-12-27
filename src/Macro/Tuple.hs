@@ -23,6 +23,14 @@ quadruple a b c d = pars $ commaSeparated [a, b, c, d]
 quintuple :: Note -> Note -> Note -> Note -> Note -> Note
 quintuple a b c d e = pars $ commaSeparated [a, b, c, d, e]
 
+-- | 6-tuple
+sextuple :: Note -> Note -> Note -> Note -> Note -> Note -> Note
+sextuple a b c d e f = pars $ commaSeparated [a, b, c, d, e, f]
+
+-- | 7-tuple
+heptuple :: Note -> Note -> Note -> Note -> Note -> Note -> Note -> Note
+heptuple a b c d e f g = pars $ commaSeparated [a, b, c, d, e, f, g]
+
 -- | Tuple list
 tuplelst :: Note -> Note -> Note
 tuplelst x1 xn = pars $ lst x1 xn

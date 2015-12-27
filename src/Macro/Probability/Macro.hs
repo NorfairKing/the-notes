@@ -8,19 +8,16 @@ import           Macro.MetaMacro
 
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
-import           Macro.Sets.Macro
 
---[ Probability universe
-pruniv :: Note
-pruniv = setuniv
-
+import           Probability.Intro.Macro
+import           Probability.SigmaAlgebra.Macro
 
 --[ Measurable space
-prmspace :: Note -> Note -> Note
-prmspace m n = m <> ", " <> n
-
-prms :: Note
-prms = prmspace pruniv prsa
+-- mspace_pace :: Note -> Note -> Note
+-- mspace_pace m n = m <> ", " <> n
+--
+-- mspace_ :: Note
+-- mspace_ = mspace_pace univ prsa
 
 
 --[ Probability space
@@ -28,15 +25,10 @@ prspace :: Note -> Note -> Note -> Note
 prspace m n o = m <> ", " <> n <> ", " <> o
 
 prsp :: Note
-prsp = prspace pruniv prsa prpm
+prsp = prspace univ prsa prpm
 
 prbsp :: Note
 prbsp = prspace reals boreals prpm
-
-
---[ Probability Sigma Algebra
-prsa :: Note
-prsa = mathcal "A"
 
 
 --[ Probability probability measure
@@ -62,7 +54,7 @@ prrv :: Note
 prrv = "X"
 
 prrvfunc :: Note
-prrvfunc = fun prrv pruniv reals
+prrvfunc = fun prrv univ reals
 
 -- Probability value from random variable
 prvrv :: Note -> Note

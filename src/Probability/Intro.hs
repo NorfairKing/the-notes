@@ -4,6 +4,7 @@ import           Notes
 
 import           Sets.Basics
 
+import           Probability.Intro.Macro
 import           Probability.Intro.Terms
 
 intro :: Note
@@ -25,7 +26,7 @@ universeDefinition :: Note
 universeDefinition = de $ do
     lab universeDefinitionLabel
     s ["The ", universe', " of a ", stochasticExperiment', " is the set of all possible outcomes"]
-    s ["It is denoted as ", m pruniv]
+    s ["It is denoted as ", m univ]
 
 eventDefinition :: Note
 eventDefinition = de $ do

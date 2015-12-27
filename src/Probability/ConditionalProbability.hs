@@ -10,6 +10,10 @@ import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
 import           Sets.Partition                 (partition)
 
+import           Probability.Intro.Macro
+import           Probability.SigmaAlgebra.Macro
+
+
 
 conditionalProbability :: Note
 conditionalProbability = note "conditional-probability" body
@@ -61,10 +65,10 @@ conditionalProbabilityEventGivenItself = prop $ do
 conditionalProbabilityEventGivenUniverse :: Note
 conditionalProbabilityEventGivenUniverse = prop $ do
     psDec
-    ma $ fa ai $ cprob a pruniv =: prob a
+    ma $ fa ai $ cprob a univ =: prob a
     "We say that every event is independent of the universe."
 
-    proof $ ma $ fa ai $ cprob a pruniv =: (prob (a ∩ pruniv) /: prob pruniv) =: (prob a /: prob pruniv) =: (prob a /: 1) =: prob a
+    proof $ ma $ fa ai $ cprob a univ =: (prob (a ∩ univ) /: prob univ) =: (prob a /: prob univ) =: (prob a /: 1) =: prob a
 
 
 chainRule :: Note
@@ -116,7 +120,7 @@ chainRule = do
 psAndPartDec :: Note
 psAndPartDec = do
     psDec
-    s ["Let ", m x, " be a ", partition, " of ", m pruniv, " in which ", m (fa (a ∈ x) $ prob a > 0), " holds"]
+    s ["Let ", m x, " be a ", partition, " of ", m univ, " in which ", m (fa (a ∈ x) $ prob a > 0), " holds"]
   where x = "X"
 
 totalProbabilityLabel :: Label
@@ -139,10 +143,10 @@ totalProbability = do
                 , "" & "" =: sumcmp (a ∈ x) (prob (b ∩ a))
                 , "" & "" =: prob (setuncmp (a ∈ x) (b ∩ a))
                 , "" & "" =: prob (b ∩ setuncmp (a ∈ x) a)
-                , "" & "" =: prob (b ∩ pruniv)  =: prob b
+                , "" & "" =: prob (b ∩ univ)  =: prob b
                 ]
-            s ["Note that the third equation only holds because ", m x, " is a partition of ", m pruniv, " and the sets ", m (b ∩ a), " are therefore disjunct "]
-            s ["The fifth equation also only holds because ", m x, " is a partition of ", m pruniv]
+            s ["Note that the third equation only holds because ", m x, " is a partition of ", m univ, " and the sets ", m (b ∩ a), " are therefore disjunct "]
+            s ["The fifth equation also only holds because ", m x, " is a partition of ", m univ]
 
   where
     x = "X"
@@ -195,16 +199,16 @@ handyRules = do
 
     thm $ do
         psAndPartDec
-        ma $ fa (x ∈ pruniv) $ sumcmp (a ∈ x) (cprob a x) =: 1
+        ma $ fa (x ∈ univ) $ sumcmp (a ∈ x) (cprob a x) =: 1
         proof $ do
-            s ["Let ", m x, " be an event in ", m pruniv]
+            s ["Let ", m x, " be an event in ", m univ]
             align_
                 [
                   sumcmp (a ∈ x) (cprob a x)
                 & "" =: sumcmp (a ∈ x) ((prob $ a ∩ x) /: prob x)
                 , "" & "" =: (sumcmp (a ∈ x) (prob $ a ∩ x)) /: prob x
                 , "" & "" =: (prob $ setuncmp (a ∈ x) (a ∩ x)) /: prob x
-                , "" & "" =: prob (pruniv ∩ x) /: prob x
+                , "" & "" =: prob (univ ∩ x) /: prob x
                 , "" & "" =: prob x /: prob x =: 1
                 ]
 
