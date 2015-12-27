@@ -6,30 +6,32 @@ import qualified Prelude                        as P (map)
 
 import           Functions.Application.Macro
 import           Logic.AbstractLogic.Macro
-import           Logic.AbstractLogic.Terms      (complete, inference, model,
-                                                 theory)
+import           Logic.AbstractLogic.Terms
 import           Logic.PropositionalLogic.Macro
+import           Logic.PropositionalLogic.Terms
+import           Sets.Basics
 
 import           Logic.FirstOrderLogic.Macro
+import           Logic.FirstOrderLogic.Terms
 
 
-firstOrderLogic :: Note
-firstOrderLogic = note "first-order-logic" $ do
+firstOrderLogicS :: Note
+firstOrderLogicS = note "first-order-logic" $ do
     section "First Order Logic"
     firstOrderLogicDefinition
     termDefinition
     atomicSentence
-    compositeSentence
-    modelFOL
     quantifiers
-    situationalCalculus
+    modelFOL
+    situationalCalculusSS
     inferenceInFOL
 
 
 firstOrderLogicDefinition :: Note
 firstOrderLogicDefinition = de $ do
+    lab firstOrderLogicDefinitionLabel
     s ["While propositional logic is about simple facts, first order logic is about complex facts involving objects, relations, functions, etc..."]
-    s [term "first order logic", " is a ", theory]
+    s [firstOrderLogic', " is a ", theory]
     s ["It is an extension of propositional logic with predicates, functions, variables and their quantifiers"]
     s ["Remember that these symbols are just that, symbols"]
 
@@ -45,33 +47,23 @@ termDefinition = do
 
 atomicSentence :: Note
 atomicSentence = do
-    de $ s ["A sentence in first order logic is called ", term "atomic", " if it is a constant symbol or a function of only constant symbols"]
+    de $ do
+        lab atomicDefinitionLabel
+        s ["A sentence in first order logic is called ", atomic', " if it is a constant symbol or a function of only constant symbols"]
 
-    ex $ s [cs $ P.map (dquoted . m) [1, small 1, smaller 1 2], " are atomic sentences in first order logic"]
+    ex $ s [cs $ P.map (dquoted . m) [1, small 1, smaller 1 2], " are atomic sentences in ", firstOrderLogic]
   where
     small = fn "Small"
     smaller = fn2 "Smaller"
 
-compositeSentence :: Note
-compositeSentence = do
-    de $ s ["A sentence in first order logic is called ", term "composite", " if it atomic, contains free variables an quantifiers, or is composed of composite sentences joined by connectives"]
-    ex $ s [cs $ P.map (dquoted . m) [1, greater 2 1, great x, fa y (great x ∨ greater x y)], " are composite sentences in first order logic"]
-  where
-    x = "x"
-    great = fn "Great"
-    greater = fn2 "Greater"
-
-modelFOL :: Note
-modelFOL = de $ do
-    s ["A ", model, " in first order logic consists of instantiations of objects, relations and functions"]
-    s ["Any constants not in the model is asserted to be false"]
 
 quantifiers :: Note
-quantifiers = do
+quantifiers = note "quantifiers" $ do
     subsection "Quantifiers"
     s ["Quantifiers bind free variables"]
     existentialQuantifierDefinition
     universalQuantifierDefinition
+    compositeSentence
 
     propertiesOfQuantifiers
 
@@ -88,16 +80,26 @@ ppp x y = fn p $ cs [x, y]
 
 existentialQuantifierDefinition :: Note
 existentialQuantifierDefinition = de $ do
-    s ["The ", term "existential quantifier", " ", m existentialQuantifier, " "]
+    s ["The ", existentialQuantifier', " ", m existentialQuantifier, " "]
     s ["A sentence ", m (te x $ pp x), ", in the context of a model ", m "m", " is defined to hold true if there exists a ", m x, " in ", m "m", " such that the predicate ", m p, " holds for ", m x]
 
 universalQuantifierDefinition :: Note
 universalQuantifierDefinition = de $ do
-    s ["The ", term "universal quantifier", " ", m universalQuantifier, " "]
+    s ["The ", universalQuantifier', " ", m universalQuantifier, " "]
     s ["A sentence ", m (fa x $ pp x), ", in the context of a model ", m "m", " is defined to hold true if the predicate ", m p, " holds for every instantiation of ", m x, " in ", m "m"]
 
+compositeSentence :: Note
+compositeSentence = do
+    de $ s ["A sentence in first order logic is called ", composite', " if it atomic, contains free variables an quantifiers, or is composed of composite sentences joined by connectives"]
+    ex $ s [cs $ P.map (dquoted . m) [1, greater 2 1, great x, fa y (great x ∨ greater x y)], " are composite sentences in first order logic"]
+  where
+    x = "x"
+    great = fn "Great"
+    greater = fn2 "Greater"
+
+
 propertiesOfQuantifiers :: Note
-propertiesOfQuantifiers = do
+propertiesOfQuantifiers = note "properties" $ do
     switchExistentials
     switchUniversals
     switchMixed
@@ -131,13 +133,18 @@ dualityOfQuantifiers = thm $ do
 
     toprove
 
+modelFOL :: Note
+modelFOL = de $ do
+    s ["A ", model, " in first order logic consists of instantiations of objects, relations and functions and their interpretations in terms of their symbols"]
+    s ["Often any constants not in the model is asserted to be false"]
 
-situationalCalculus :: Note
-situationalCalculus = do
+
+situationalCalculusSS :: Note
+situationalCalculusSS = do
     subsection "Situational Calculus"
-    s ["The use of ", term "situational calculus", " is to model situations"]
+    s ["The use of ", situationalCalculus', " is to model situations"]
     s ["In situational calculus, facts hold at a certain moment and/or in a certain situation"]
-    s ["This is modeled by adding a situational argument to every non-eternal predicate"]
+    s ["This is modeled by adding a situational argument to every non-eternal ", predicate]
 
     s ["Situational calculus can be used to model change, non-change, actions, perceptions, etc..."]
 
@@ -147,11 +154,11 @@ situationalCalculus = do
 frameProblem :: Note
 frameProblem = do
     subsubsection "The frame problem"
-    s ["Now that we can model situations using frames, there is a need for so called ", term "effect axioms", " that model changes due to actions"]
+    s ["Now that we can model situations using frames, there is a need for so called ", effectAxiom', "s that model changes due to actions"]
     s ["In addition to modeling change, one must also model non-change"]
     s ["The frame problem is that the number of frame axioms can be become large and even infinite"]
     s ["This poses problems in automated inference"]
-    s ["To solve the problem, we will use so called ", term "successor state axioms", " that model how each non-eternal predicate is affected or not affected by actions"]
+    s ["To solve the problem, we will use so called ", successorStateAxiom', "s that model how each non-eternal predicate is affected or not affected by actions"]
     s ["These successor state axioms model the fact that a predicate is true if and only if an action made it true or it was already true and no action made it false"]
 
 planning :: Note
@@ -166,17 +173,18 @@ inferenceInFOL :: Note
 inferenceInFOL = do
     subsection "Inference in first order logic"
 
-    s ["Inference in first order logic is more complicated than inference in propositional logic"]
+    s ["Inference in first order logic is more complicated than inference in ", propositionalLogic]
     s ["In general, there are two approaches: Propositionalisation and ", dquoted "lifted", " inference"]
 
-    propositionalisation
-    liftedInference
+    propositionalisationSS
+    liftedInferenceSS
 
-propositionalisation :: Note
-propositionalisation = do
+propositionalisationSS :: Note
+propositionalisationSS = note "propositionalisation" $ do
+    subsubsection "propositionalisation"
     de $ do
-        s [term "propositionalisation", " is an ", inference, " in first order logic"]
-        s ["It consists of replacing all quantified variables with so called ", term "grounding variables", " using each possible term"]
+        s [propositionalisation', " is an ", inference, " in first order logic"]
+        s ["It consists of replacing all quantified variables with so called ", groundingVariable', "s using each possible term"]
         s ["This turns the problem into a propositional logic problem and it can then be solved as discussed before"]
     s ["The problem with proportionalisation is that the solver may need to create a lot of unnecessary symbols"]
     s ["Even worse, the amount of created symbols could be infinite"]
@@ -202,18 +210,19 @@ herbrandReference = Reference article "herbrand-theorem" $
 
 herbrandTheorem :: Note
 herbrandTheorem = thm $ do
-    s [term "Herbrand's theorem"]
+    s [herbrandsTheorem']
     newline
     s ["If a sentence in entailed by a first order logic knowledge base, then there exists a proof using only a finite subset of the propositionalized knowledge base"]
     cite herbrandReference
 
-liftedInference :: Note
-liftedInference = do
-    s [term "lifted inference", " is a set of ", inference, "s in first order logic"]
+liftedInferenceSS :: Note
+liftedInferenceSS = note "lifted-inferences" $ do
+    subsubsection "Lifted inference"
+    s [the, liftedInference', "s are a ", set, " of ", inference, "s in first order logic"]
     s ["It consists of trying to infer sentences ", emph "without", " instantiating variables at all using propositional inference by lifting its inferences"]
 
     de $ do
-        s [the, term "generalized modus ponens", " is an ", inference, " in first order logic"]
+        s [the, generalizedModusPonens', " is an ", inference, " in first order logic"]
         s ["Let ", m (cs [pp 1, dotsc, pp n]), and, m (cs [p 1, dotsc, p n]), " be sentences in first order logic"]
         s ["Let ", m t, " be a substitution and ", m (subst t q), " its application to ", m q]
         s ["Suppose ", m (subst t (pp i) =: subst t (p i)), " holds"]
@@ -224,7 +233,7 @@ liftedInference = do
 
     s ["There also exists a lifted variant of resolution"]
     todo "Describe this variant"
-    s ["It is sound and refutation-complete"]
+    s ["It is ", sound, " and refutation-complete but not ", complete]
     todo "define refutation-complete"
 
   where

@@ -5,11 +5,8 @@ import           Types
 import           Macro.Text
 
 -- Quantifiers
-existentialQuantifier :: Note
-existentialQuantifier = comm0 "exists"
-
 thereExistsSign :: Note
-thereExistsSign = existentialQuantifier
+thereExistsSign = comm0 "exists"
 
 te :: Note -> Note -> Note
 te n m = thereExistsSign <> n <> ":" <> commS " " <> m
@@ -17,11 +14,8 @@ te n m = thereExistsSign <> n <> ":" <> commS " " <> m
 tes :: [Note] -> Note -> Note
 tes ns = te $ cs ns
 
-universalQuantifier :: Note
-universalQuantifier = comm0 "forall"
-
 forallSign :: Note
-forallSign = universalQuantifier
+forallSign = comm0 "forall"
 
 fa :: Note -> Note -> Note
 fa n m = forallSign <> n <> ":" <> commS " " <> m

@@ -94,11 +94,12 @@ constructName :: String -> String
 constructName = camelCase . sanitize
 
 sanitize :: String -> String
-sanitize = map replaceBad
+sanitize = concatMap replaceBad
   where
-    replaceBad :: Char -> Char
-    replaceBad '-' = ' '
-    replaceBad c = c
+    replaceBad :: Char -> String
+    replaceBad '-' = " "
+    replaceBad '\'' = ""
+    replaceBad c = [c]
 
 camelCase :: String -> String
 camelCase str = (\(s:ss) -> toLower s : ss) $ concatMap (\(s:ss) -> toUpper s : ss) $ words str
