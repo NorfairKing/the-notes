@@ -132,21 +132,11 @@ prvar n = "Var" <> sqbrac n
 
 
 --[ Text
-universe :: Note
-universe = ix "universe"
-
-universe_ :: Note
-universe_ = universe <> " " <> m pruniv
-
 salgebra :: Note
 salgebra = m (comm0 "sigma") <> "-algebra"
 
 sa :: Note
 sa = ix salgebra
-
---sa_ :: Note
--- sa_ = sa <> " " <> m prsa
-
 
 --[ Distributions
 

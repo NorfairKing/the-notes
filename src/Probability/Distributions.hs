@@ -3,7 +3,7 @@ module Probability.Distributions where
 import           Notes
 
 import           Logic.FirstOrderLogic.Macro
-import           Probability.Intro           (bernoulliExperimentDefinitionLabel)
+import           Probability.Intro.Terms
 
 distributions :: Note
 distributions = note "important-distributions" body

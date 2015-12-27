@@ -8,9 +8,10 @@ import           Notes
 
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
+import           Probability.Intro
+import           Probability.Intro.Terms
 import           Sets.Algebra.Main              (secondLawOfDeMorganLabel, symmetricDifferenceITOUnionAndIntersectionLabel)
-import           Sets.Basics                    (set,
-                                                 setEqualityDefinitionLabel)
+import           Sets.Basics
 
 sigmaAlgebra :: Note
 sigmaAlgebra = note "sigma-algebra" body

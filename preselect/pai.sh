@@ -12,4 +12,5 @@
   -sets.pointed-set
   relations
   functions
+  probability
   "

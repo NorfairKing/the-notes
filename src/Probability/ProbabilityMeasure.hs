@@ -8,9 +8,10 @@ import           Notes
 import           Functions.Basics.Macro
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
+import           Probability.Intro.Terms
 import           Sets.Algebra.Main              (setDifferenceEquivalentDefinitionLabel,
                                                  unionComplementaryLawLabel)
-import           Sets.Basics                    (universalSetSupsetOfAllSetsLabel)
+import           Sets.Basics
 
 probabilityMeasure :: Note
 probabilityMeasure = note "probability-measure" body
