@@ -15,7 +15,7 @@ probability = note "probability" $ do
     chapter "Probability"
     intro
     sigmaAlgebraS
-    probabilityMeasure
+    probabilityMeasureS
     conditionalProbability
     independence
     randomVariable

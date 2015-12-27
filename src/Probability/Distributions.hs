@@ -5,6 +5,7 @@ import           Notes
 import           Logic.FirstOrderLogic.Macro
 import           Probability.Intro.Macro
 import           Probability.Intro.Terms
+import           Probability.ProbabilityMeasure.Macro
 
 distributions :: Note
 distributions = note "important-distributions" body

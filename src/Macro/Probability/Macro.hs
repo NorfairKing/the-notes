@@ -10,31 +10,8 @@ import           Functions.Application.Macro
 import           Functions.Basics.Macro
 
 import           Probability.Intro.Macro
+import           Probability.ProbabilityMeasure.Macro
 import           Probability.SigmaAlgebra.Macro
-
---[ Probability space
-prspace :: Note -> Note -> Note -> Note
-prspace m n o = m <> ", " <> n <> ", " <> o
-
-prsp :: Note
-prsp = prspace univ_ sa_ prpm
-
-prbsp :: Note
-prbsp = prspace reals boreals prpm
-
-
---[ Probability probability measure
-prpm :: Note
-prpm = "P"
-
-
---[ Probability
-probm :: Note -> Note -> Note
-probm = app -- probability with custom measure
-
-prob :: Note -> Note
-prob = probm prpm
-
 
 --[ Conditional probability
 cprob :: Note -> Note -> Note
@@ -80,16 +57,6 @@ prdsf = prdsfm prrv -- probability density function
 prds :: Note -> Note
 prds = app prdsf -- probability density
 
-
---[ Borel
-borelsign :: Note
-borelsign = mathcal "B"
-
-borel :: Note -> Note
-borel = app borelsign
-
-boreals :: Note
-boreals = borel reals
 
 
 --[ Quantile function

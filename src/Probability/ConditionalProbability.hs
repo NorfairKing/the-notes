@@ -8,9 +8,10 @@ import           Notes
 
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
-import           Sets.Partition                 (partition)
+import           Sets.Partition                       (partition)
 
 import           Probability.Intro.Macro
+import           Probability.ProbabilityMeasure.Macro
 import           Probability.SigmaAlgebra.Macro
 
 

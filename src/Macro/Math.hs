@@ -155,6 +155,9 @@ idempotent = ix "idempotent"
 distributive :: Note
 distributive = ix "distributive"
 
+sequence :: Note
+sequence = ix "sequence"
+
 -- Proofs
 proof :: Note -> Note
 proof = liftL $ TeXEnv "proof" []

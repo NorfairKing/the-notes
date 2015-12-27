@@ -1,28 +1,26 @@
-module Probability.ProbabilityMeasure (
-      probabilityMeasure
-
-    ) where
+module Probability.ProbabilityMeasure where
 
 import           Notes
 
+import           Functions.Basics
 import           Functions.Basics.Macro
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
 import           Probability.Intro.Macro
 import           Probability.Intro.Terms
 import           Probability.SigmaAlgebra.Macro
-import           Sets.Algebra.Main              (setDifferenceEquivalentDefinitionLabel,
-                                                 unionComplementaryLawLabel)
+import           Probability.SigmaAlgebra.Terms
+import           Sets.Algebra.Main                    (setDifferenceEquivalentDefinitionLabel, unionComplementaryLawLabel)
 import           Sets.Basics
 
-probabilityMeasure :: Note
-probabilityMeasure = note "probability-measure" body
+import           Probability.ProbabilityMeasure.Macro
+import           Probability.ProbabilityMeasure.Terms
 
-body :: Note
-body = do
+probabilityMeasureS :: Note
+probabilityMeasureS = note "probability-measure" $ do
     section "Probability Measures"
     probabilityMeasureDefinition
-    measurablespaceDefinition
+    probabilitySpaceDefinition
     probabilityMeasureFiniteAdditivity
     probabilitySpaceProbabilityOfComplement
     probabilityPartitionByIntersection
@@ -36,47 +34,45 @@ body = do
 traditionalProbabilityMeasures :: Note
 traditionalProbabilityMeasures = do
     subsection "Traditional Probability Measures"
-    uniformeProbabilityMeasure
-    discreteProbabilityMeasure
+    uniformeProbabilityMeasureDefinition
+    discreteProbabilityMeasureDefinition
 
 
 msDec :: Note
-msDec = s ["Let ", m mspace_, " be a ", ix "measurable space"]
+msDec = s ["Let ", m mspace_, " be a ", measurableSpace]
 
-probabilityMeasureDefinitionLabel :: Label
-probabilityMeasureDefinitionLabel = delab "probability-measure"
 
 probabilityMeasureDefinition :: Note
 probabilityMeasureDefinition = de $ do
     lab probabilityMeasureDefinitionLabel
+    lab countableAdditivityDefinitionLabel
+    lab probabilityDefinitionLabel
 
     msDec
-    s ["A ", term "probability measure", " is a function ", m prpm, " with the following three properties:"]
+    s ["A ", probabilityMeasure', " is a ", function_, " ", m prpm, " with the following three properties:"]
     ma $ fun prpm sa_ $ ccint 0 1
 
     enumerate $ do
         item $ m $ (prob univ_) =: 1
         item $ m $ fa ("A" ∈ sa_) ((prob "A") >=: 0)
         item $ do
-            term "countable additivity"
+            countableAdditivity'
             newline
-            s ["Let ", m (sequ an "n"), " be a countably infinite ", ix "sequence", " of pairwise disjunct sets"]
+            s ["Let ", m (sequ an "n"), " be a countably infinite ", sequence, " of pairwise disjunct sets"]
             ma $ prob (setuncmp (natural "n") an) =: sumcmp (natural "n") (prob an)
 
-    s [m (prob a), " is called the ", term "probability", " that ", m a, " happens"]
+    s [m $ prob a, " is called the ", probability', " that ", m a, " happens"]
   where
     a = "A"
     an = "A" !: "n"
 
 msppsDec :: Note
-msppsDec = s ["Let ", m mspace_, " be a ", ix "measurable space", " and ", m prpm, " a ", ix "probability measure"]
+msppsDec = s ["Let ", m mspace_, " be a ", measurableSpace, " and ", m prpm, " a ", probabilityMeasure]
 
-measurablespaceDefinition :: Note
-measurablespaceDefinition = de $ do
-    msppsDec
-    m prsp
-    " is called a "
-    term "probability space"
+probabilitySpaceDefinition :: Note
+probabilitySpaceDefinition = de $ do
+    lab probabilitySpaceDefinitionLabel
+    s [msppsDec, m prsp, " is called a ", probabilitySpace']
 
 probabilityMeasureFiniteAdditivityLabel :: Label
 probabilityMeasureFiniteAdditivityLabel = thmlab "probability-measure-finite-additivity"
@@ -85,16 +81,16 @@ probabilityMeasureFiniteAdditivity :: Note
 probabilityMeasureFiniteAdditivity = thm $ do
     lab probabilityMeasureFiniteAdditivityLabel
 
-    s ["Let ", m prsp, " be a ", ix "probability space", " and let ", m (setcmpr an $ "n" ∈ setlst "1" "N"), " be ", m "N", " pairwise disjunct events of ", m sa_]
+    s ["Let ", m prsp, " be a ", probabilitySpace', " and let ", m (setcmpr an $ "n" ∈ setlst "1" "N"), " be ", m "N", " pairwise disjunct events of ", m sa_]
     ma $ prob (setuncmpr (n =: 1) "N" an) =: sumcmpr (n =: 1) "N" (prob an)
 
-    proof $ s ["Use the ", ix "countable additivity", " property of probability measures", ref probabilityMeasureDefinitionLabel, " where only ", m n, " sets are non-empty"]
+    proof $ s ["Use the ", countableAdditivity, " property of ", probabilityMeasure, "s", ref probabilityMeasureDefinitionLabel, " where only ", m n, " sets are non-empty"]
   where
     n = "n"
     an = "A" !: n
 
 psDec :: Note
-psDec = s ["Let ", m prsp, " be a ", ix "probability space"]
+psDec = s ["Let ", m prsp, " be a ", probabilitySpace]
 
 probabilitySpaceProbabilityOfComplement :: Note
 probabilitySpaceProbabilityOfComplement = thm $ do
@@ -112,7 +108,7 @@ probabilitySpaceProbabilityOfComplement = thm $ do
             , prob (setc a) & "" =: 1 - prob a
             ]
 
-        "Notice that the second equivalence only holds because of the finite additivity propertiy of probability measures."
+        s ["Notice that the second equivalence only holds because of the finite additivity propertiy of probability measures"]
         ref probabilityMeasureFiniteAdditivityLabel
 
     con $ m $ prob emptyset =: 0
@@ -212,13 +208,17 @@ probabilityAtMostOne = prop $ do
   where a = "A"
 
 
-uniformeProbabilityMeasure :: Note
-uniformeProbabilityMeasure = de $ do
-    s ["The ", term "uniforme probability measure", " is a ", ix "probability measure", " that is only defined for measurable spaces with a finite ", universe]
+uniformeProbabilityMeasureDefinition :: Note
+uniformeProbabilityMeasureDefinition = de $ do
+    lab uniformeProbabilityMeasureDefinitionLabel
+    s ["The ", uniformeProbabilityMeasure', " is a ", probabilityMeasure, " that is only defined for measurable spaces with a finite ", universe]
     ma $ func prpm sa_ (ccint 0 1 ⊆ reals) "A" (setsize "A" / setsize univ_)
 
 
-discreteProbabilityMeasure :: Note
-discreteProbabilityMeasure = de $ do
-    s ["The ", term "discrete probability measure", " is a ", ix "probability measure", " that is only defined for measure spaces with a countable ", universe]
+discreteProbabilityMeasureDefinition :: Note
+discreteProbabilityMeasureDefinition = de $ do
+    lab discreteProbabilityMeasureDefinitionLabel
+    s ["The ", discreteProbabilityMeasure', " is a ", probabilityMeasure, " that is only defined for measure spaces with a countable ", universe]
     ma $ func prpm sa_ (ccint 0 1 ⊆ reals) ("A" !: "i") ("p" !: "i")
+
+

@@ -11,9 +11,10 @@ import           Functions.Basics.Macro
 import           Functions.Inverse.Macro
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
-import           Probability.Independence       (independenceDefinitionLabel,
-                                                 independent)
+import           Probability.Independence             (independenceDefinitionLabel,
+                                                       independent)
 import           Probability.Intro.Macro
+import           Probability.ProbabilityMeasure.Macro
 import           Probability.SigmaAlgebra.Macro
 
 
