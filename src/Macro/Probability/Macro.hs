@@ -12,14 +12,6 @@ import           Functions.Basics.Macro
 import           Probability.Intro.Macro
 import           Probability.SigmaAlgebra.Macro
 
---[ Measurable space
--- mspace_pace :: Note -> Note -> Note
--- mspace_pace m n = m <> ", " <> n
---
--- mspace_ :: Note
--- mspace_ = mspace_pace univ_ sa_
-
-
 --[ Probability space
 prspace :: Note -> Note -> Note -> Note
 prspace m n o = m <> ", " <> n <> ", " <> o

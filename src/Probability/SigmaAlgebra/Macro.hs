@@ -7,6 +7,8 @@ import           Macro.Tuple
 import           Probability.Intro.Macro
 
 -- * Sigma algebra
+
+-- | Concrete sigma algebra
 sa_ :: Note
 sa_ = mathcal "A"
 

@@ -15,7 +15,7 @@ sets = note "sets" $ do
      setBasics
      partitions
      algebra
-     powerset
+     powersetS
      carthesianProducts
      pointedSets
 
