@@ -38,7 +38,7 @@ independenceDefinition :: Note
 independenceDefinition = de $ do
     lab independenceDefinitionLabel
     psDec
-    s ["Two events ", m a, and, m b, " in ", m prsa, " are called ", term "independent", " if the following equality holds"]
+    s ["Two events ", m a, and, m b, " in ", m sa_, " are called ", term "independent", " if the following equality holds"]
     ma $ prob (a ∩ b) =: prob a * prob b
 
   where
@@ -48,7 +48,7 @@ independenceDefinition = de $ do
 dependenceDefinition :: Note
 dependenceDefinition = de $ do
     psDec
-    s ["If two events ", m a, and, m b, " in ", m prsa, " are not ", independent, ", they are called ", term "dependent", " events"]
+    s ["If two events ", m a, and, m b, " in ", m sa_, " are not ", independent, ", they are called ", term "dependent", " events"]
     s ["This depedence is called.."]
     itemize $ do
         item $ s [term "positive dependence", " if ", m (prob (a ∩ b) > prob a * prob b), " holds"]
@@ -61,7 +61,7 @@ dependenceDefinition = de $ do
 conditionalProbabilityIndependentEvents :: Note
 conditionalProbabilityIndependentEvents = thm $ do
     psDec
-    s ["Let ", m a, and, m b, " be two ", independent, " events in ", m prsa]
+    s ["Let ", m a, and, m b, " be two ", independent, " events in ", m sa_]
     ma $ cprob a b =: prob a
 
     proof $ do

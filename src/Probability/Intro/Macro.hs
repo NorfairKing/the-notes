@@ -5,6 +5,6 @@ import           Types
 import           Macro.Sets.Macro
 
 -- | Probability universe
-univ :: Note
-univ = setuniv
+univ_ :: Note
+univ_ = setuniv
 

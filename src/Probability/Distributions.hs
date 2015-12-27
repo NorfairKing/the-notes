@@ -25,7 +25,7 @@ discreteDistributions = do
 
 discreteUniform :: Note
 discreteUniform = de $ do
-    s [the, term "discrete uniform distribution", " is defined only on a finite universe: ", m (univ =: setlist (x 1) (x 2) (x n))]
+    s [the, term "discrete uniform distribution", " is defined only on a finite universe: ", m (univ_ =: setlist (x 1) (x 2) (x n))]
     ma $ fa (i ∈ setlst 1 n) $ p i =: prob (setof $ x i) =: 1 /: n
 
   where

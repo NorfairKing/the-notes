@@ -7,8 +7,8 @@ import           Macro.Tuple
 import           Probability.Intro.Macro
 
 -- * Sigma algebra
-prsa :: Note
-prsa = mathcal "A"
+sa_ :: Note
+sa_ = mathcal "A"
 
 
 -- * Measurable space
@@ -19,5 +19,5 @@ mspace = tuple
 
 -- | Concrete measurable space
 mspace_ :: Note
-mspace_ = mspace univ prsa
+mspace_ = mspace univ_ sa_
 

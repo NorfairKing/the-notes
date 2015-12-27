@@ -63,7 +63,7 @@ saMeasureDefinition :: Note
 saMeasureDefinition = de $ do
     psDec
     s ["Let ", m prrv, " be a random variable"]
-    s [m prrv, " is called a ", m prsa, "-", term "measure"]
+    s [m prrv, " is called a ", m sa_, "-", term "measure"]
 
 borealMesureDefinition :: Note
 borealMesureDefinition = de $ do
@@ -72,7 +72,7 @@ borealMesureDefinition = de $ do
 randomVariableCondition :: Note
 randomVariableCondition = thm $ do
     s ["A function ", m (fun x reals reals), " is a random variable in the measurable space ", m (mspace reals boreals), " if and only if the following holds"]
-    ma $ fa (a ∈ reals) $ inv x `fn` (ocint minfty a) =: setcmpr omega (prrv `fn` omega <= a) ∈ prsa
+    ma $ fa (a ∈ reals) $ inv x `fn` (ocint minfty a) =: setcmpr omega (prrv `fn` omega <= a) ∈ sa_
   where
     a = "A"
     x = "X"
@@ -81,7 +81,7 @@ borealMeasurableInducesProbabilityMeasure :: Note
 borealMeasurableInducesProbabilityMeasure = thm $ do
     s ["A Borel-measurable function induces a probability measure ", m (prpm !: prrv), on, m boreals, " in ", m prbsp, " as follows"]
     ma $ px b =: prob (x ∈ b) =: prob (inv x `fn` b)
-    ma $ px b =: prob (setcmpr (omega ∈ univ) (prvrv omega ∈ b))
+    ma $ px b =: prob (setcmpr (omega ∈ univ_) (prvrv omega ∈ b))
     toprove
   where
     b = "B"
@@ -207,7 +207,7 @@ discrete = ix "discrete"
 discreteRandomVariableDefinition :: Note
 discreteRandomVariableDefinition = de $ do
     s ["A random variable ", m prrv, " in a probability space ", m prsp, " is called ", term "discrete", " if the image under ", m prrv, " is non-zero in just a countable number of points"]
-    ma $ pi =: prob (setcmpr (omega ∈ univ) (prvrv omega =: xi)) =: prob (prrv =: xi)
+    ma $ pi =: prob (setcmpr (omega ∈ univ_) (prvrv omega =: xi)) =: prob (prrv =: xi)
 
   where
     i = "i"
@@ -250,7 +250,7 @@ continuous = ix "continuous"
 continuousRandomVariableDefinition :: Note
 continuousRandomVariableDefinition = de $ do
     s ["A random variable ", m prrv, " in a probability space ", m prsp, " is called ", term "continuous", " if the image of every point under ", m prrv, " is zero.."]
-    ma $ fa (x ∈ univ) (prob (setof x) =: 0)
+    ma $ fa (x ∈ univ_) (prob (setof x) =: 0)
     s ["... and the distribution function ", m prdf, " is a continuous function"]
     refneeded "continuous function"
 

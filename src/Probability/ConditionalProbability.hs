@@ -44,7 +44,7 @@ event = ix "event"
 a,b,ai :: Note
 a = "A"
 b = "B"
-ai = a ∈ prsa
+ai = a ∈ sa_
 
 psDec :: Note
 psDec = s ["Let ", m prsp, " be a ", ix "probability space"]
@@ -53,7 +53,7 @@ conditionalProbabilityDefinition :: Note
 conditionalProbabilityDefinition = de $ do
     lab conditionalProbabilityDefinitionLabel
 
-    s [the, term "conditional probability", " of an ", event, m (a ∈ prsa), " given an ", event, m (b ∈ prsa), " with ", m (prob b /=: 0), " is de:: Noted as ", m (cprob a b), ""]
+    s [the, term "conditional probability", " of an ", event, m (a ∈ sa_), " given an ", event, m (b ∈ sa_), " with ", m (prob b /=: 0), " is de:: Noted as ", m (cprob a b), ""]
     ma $ cprob a b === (prob (a ∩ b) /: prob b)
 
 conditionalProbabilityEventGivenItself :: Note
@@ -65,10 +65,10 @@ conditionalProbabilityEventGivenItself = prop $ do
 conditionalProbabilityEventGivenUniverse :: Note
 conditionalProbabilityEventGivenUniverse = prop $ do
     psDec
-    ma $ fa ai $ cprob a univ =: prob a
+    ma $ fa ai $ cprob a univ_ =: prob a
     "We say that every event is independent of the universe."
 
-    proof $ ma $ fa ai $ cprob a univ =: (prob (a ∩ univ) /: prob univ) =: (prob a /: prob univ) =: (prob a /: 1) =: prob a
+    proof $ ma $ fa ai $ cprob a univ_ =: (prob (a ∩ univ_) /: prob univ_) =: (prob a /: prob univ_) =: (prob a /: 1) =: prob a
 
 
 chainRule :: Note
@@ -76,7 +76,7 @@ chainRule = do
     subsection "Chain rule"
     thm $ do
         psDec
-        s ["Let ", m (setlist (a 1) (a 2) (a k)), " be more than one event in ", m prsa]
+        s ["Let ", m (setlist (a 1) (a 2) (a k)), " be more than one event in ", m sa_]
         ma $
             prob (setincmpr (i =: 1) k (a i))
             =:
@@ -120,7 +120,7 @@ chainRule = do
 psAndPartDec :: Note
 psAndPartDec = do
     psDec
-    s ["Let ", m x, " be a ", partition, " of ", m univ, " in which ", m (fa (a ∈ x) $ prob a > 0), " holds"]
+    s ["Let ", m x, " be a ", partition, " of ", m univ_, " in which ", m (fa (a ∈ x) $ prob a > 0), " holds"]
   where x = "X"
 
 totalProbabilityLabel :: Label
@@ -133,7 +133,7 @@ totalProbability = do
         lab totalProbabilityLabel
         examq kul "Probability" "August 2013"
         psAndPartDec
-        ma $ fa (b ∈ prsa) $ prob b =: sumcmp (a ∈ x) (prob a * cprob b a)
+        ma $ fa (b ∈ sa_) $ prob b =: sumcmp (a ∈ x) (prob a * cprob b a)
 
         proof $ do
             align_
@@ -143,10 +143,10 @@ totalProbability = do
                 , "" & "" =: sumcmp (a ∈ x) (prob (b ∩ a))
                 , "" & "" =: prob (setuncmp (a ∈ x) (b ∩ a))
                 , "" & "" =: prob (b ∩ setuncmp (a ∈ x) a)
-                , "" & "" =: prob (b ∩ univ)  =: prob b
+                , "" & "" =: prob (b ∩ univ_)  =: prob b
                 ]
-            s ["Note that the third equation only holds because ", m x, " is a partition of ", m univ, " and the sets ", m (b ∩ a), " are therefore disjunct "]
-            s ["The fifth equation also only holds because ", m x, " is a partition of ", m univ]
+            s ["Note that the third equation only holds because ", m x, " is a partition of ", m univ_, " and the sets ", m (b ∩ a), " are therefore disjunct "]
+            s ["The fifth equation also only holds because ", m x, " is a partition of ", m univ_]
 
   where
     x = "X"
@@ -158,7 +158,7 @@ bayesTheorem = do
     subsection "Bayes' theorem"
     thm $ do
         psAndPartDec
-        s ["Let ", m b, " be an event in ", m prsa, " for which ", m (prob b > 0), " holds"]
+        s ["Let ", m b, " be an event in ", m sa_, " for which ", m (prob b > 0), " holds"]
         ma $ fa (a ∈ x) $ cprob a b =: (prob a * cprob b a) /: (sumcmp (c ∈ x) (prob c * cprob b c))
 
         proof $ do
@@ -185,7 +185,7 @@ handyRules = do
 
     thm $ do
         psDec
-        ma $ fa (cs [a, b] ∈ prsa) $ cprob a b =: (prob a /: prob b) * cprob b a
+        ma $ fa (cs [a, b] ∈ sa_) $ cprob a b =: (prob a /: prob b) * cprob b a
 
         proof $ do
             align_
@@ -199,22 +199,22 @@ handyRules = do
 
     thm $ do
         psAndPartDec
-        ma $ fa (x ∈ univ) $ sumcmp (a ∈ x) (cprob a x) =: 1
+        ma $ fa (x ∈ univ_) $ sumcmp (a ∈ x) (cprob a x) =: 1
         proof $ do
-            s ["Let ", m x, " be an event in ", m univ]
+            s ["Let ", m x, " be an event in ", m univ_]
             align_
                 [
                   sumcmp (a ∈ x) (cprob a x)
                 & "" =: sumcmp (a ∈ x) ((prob $ a ∩ x) /: prob x)
                 , "" & "" =: (sumcmp (a ∈ x) (prob $ a ∩ x)) /: prob x
                 , "" & "" =: (prob $ setuncmp (a ∈ x) (a ∩ x)) /: prob x
-                , "" & "" =: prob (univ ∩ x) /: prob x
+                , "" & "" =: prob (univ_ ∩ x) /: prob x
                 , "" & "" =: prob x /: prob x =: 1
                 ]
 
     thm $ do
         psDec
-        s ["Let ", m (setcmpr (a_ i) (i ∈ naturals)), " be a countable set in ", m prsa]
+        s ["Let ", m (setcmpr (a_ i) (i ∈ naturals)), " be a countable set in ", m sa_]
         ma $ prob (setuncmp (n ∈ naturals) (a_ n)) =: prob (a_ 1) + sumcmp (n > 1) (prob $ a_ n ∩ (setincmpr (i =: 1) (n - 1) (setc $ a_ i)))
         proof $ do
             s ["Proof by induction on ", m naturals]

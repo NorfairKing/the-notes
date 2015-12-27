@@ -26,7 +26,7 @@ universeDefinition :: Note
 universeDefinition = de $ do
     lab universeDefinitionLabel
     s ["The ", universe', " of a ", stochasticExperiment', " is the set of all possible outcomes"]
-    s ["It is denoted as ", m univ]
+    s ["It is denoted as ", m univ_]
 
 eventDefinition :: Note
 eventDefinition = de $ do

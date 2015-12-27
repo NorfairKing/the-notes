@@ -17,7 +17,7 @@ import           Probability.SigmaAlgebra.Macro
 -- mspace_pace m n = m <> ", " <> n
 --
 -- mspace_ :: Note
--- mspace_ = mspace_pace univ prsa
+-- mspace_ = mspace_pace univ_ sa_
 
 
 --[ Probability space
@@ -25,7 +25,7 @@ prspace :: Note -> Note -> Note -> Note
 prspace m n o = m <> ", " <> n <> ", " <> o
 
 prsp :: Note
-prsp = prspace univ prsa prpm
+prsp = prspace univ_ sa_ prpm
 
 prbsp :: Note
 prbsp = prspace reals boreals prpm
@@ -54,7 +54,7 @@ prrv :: Note
 prrv = "X"
 
 prrvfunc :: Note
-prrvfunc = fun prrv univ reals
+prrvfunc = fun prrv univ_ reals
 
 -- Probability value from random variable
 prvrv :: Note -> Note
