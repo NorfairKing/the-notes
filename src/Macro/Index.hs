@@ -13,17 +13,17 @@ makeindex = do
     commS "makeindex"
 
 index :: Note -> Note
-index = comm1 "index"
+index n = do
+    packageDep_ "makeidx"
+    comm1 "index" n
 
 ix :: Note -> Note
 ix text = do
-    packageDep_ "makeidx"
     index text
     text
 
 term :: Note -> Note
 term text = do
-    packageDep_ "makeidx"
     index text
     textbf text
 

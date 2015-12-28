@@ -12,23 +12,23 @@ import           Sets.Basics.Terms
 setBasics :: Note
 setBasics = note "basics" $ do
     section "Set Basics"
-    sets
-    subsets
+    setsS
+    subsetsS
     universalSet
     emptySet
     singleton
     predicates
 
-sets :: Note
-sets = do
+setsS :: Note
+setsS = do
     setDefinition
     setElementNotation
     setComprehensionDefinition
     setEqualityDefinition
     setEqTransitivity
 
-subsets :: Note
-subsets = do
+subsetsS :: Note
+subsetsS = do
     subsetDefinition
     subsetAntiSymmetry
     subsetTransitivity
@@ -74,7 +74,7 @@ setEqualityDefinitionLabel = delab "sets-equality"
 setEqualityDefinition :: Note
 setEqualityDefinition = de $ do
     lab setEqualityDefinitionLabel
-    s ["Two sets ", m "A", " and ", m "B", " are ", term "equal", " if and only if they contain the same elements"]
+    s ["Two ", sets, " ", m "A", " and ", m "B", " are ", term "equal", " if and only if they contain the same elements"]
     ma $ ("A" =§= "B") === (fa "x" $ ("x" ∈ "A") ∧ ("x" ∈ "B"))
 
 setEqTransitivity :: Note
@@ -82,7 +82,7 @@ setEqTransitivity = thm $ do
     s ["The ", term "transitivity", " of ", quoted $ m seteqsign]
     newline
 
-    s ["Let ", m "A", ", ", m "B", and , m "C", " be sets"]
+    s ["Let ", m "A", ", ", m "B", and , m "C", " be ", sets]
 
     ma $ do
         (pars ("A" =§= "B")
@@ -133,7 +133,7 @@ subsetDefinition = de $ do
 
 subsetAntiSymmetry :: Note
 subsetAntiSymmetry = thm $ do
-    s ["The ", term "anti-symmetry", " of ", quoted $ m subseteqsign, ": ", newline, " Let ", m "A", " and ", m "B", " be sets"]
+    s ["The ", term "anti-symmetry", " of ", quoted $ m subseteqsign, ": ", newline, " Let ", m "A", " and ", m "B", " be ", sets]
 
     ma $ (pars $ "A" ⊆ "B" ∧ "B" ⊆ "A") ⇔ "A" =§= "B"
 
@@ -167,7 +167,7 @@ subsetAntiSymmetry = thm $ do
 
 subsetTransitivity :: Note
 subsetTransitivity = thm $ do
-    s ["The ", term "transitivity", " of ", quoted $ m subseteqsign, ": Let ", m "A", ", ", m "B", " and ", m "C", " be sets"]
+    s ["The ", term "transitivity", " of ", quoted $ m subseteqsign, ": Let ", m "A", ", ", m "B", " and ", m "C", " be ", sets]
     ma $ do
         ("A" ⊆ "B") ∧ ("B" ⊆ "C") ⇒ ("A" ⊆ "C")
 
@@ -228,7 +228,7 @@ emptySetDefinition = de $ do
 
 emptySetSubsetOfAllSets :: Note
 emptySetSubsetOfAllSets = thm $ do
-    s ["The ", ix "empty set", " ", m emptyset, " is a ", ix "subset", " of all sets"]
+    s ["The ", ix "empty set", " ", m emptyset, " is a ", ix "subset", " of all ", sets]
     proof $ do
         s ["Let ", m "A", " be a set."]
         s ["Every element of ", m emptyset, " is also an element of ", m "A"]

@@ -13,10 +13,6 @@ import           Probability.Intro.Macro
 import           Probability.ProbabilityMeasure.Macro
 import           Probability.SigmaAlgebra.Macro
 
---[ Conditional probability
-cprob :: Note -> Note -> Note
-cprob n m = prob $ n <> commS ";" <> commS "middle" <> "|" <> commS ";" <> m
-
 
 --[ Probability random variable
 prrv :: Note

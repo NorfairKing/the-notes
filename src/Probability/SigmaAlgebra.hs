@@ -22,7 +22,7 @@ sigmaAlgebraS = note "sigma-algebra" $ do
     generatedSigmaAlgebra
 
 sigmaAlgebraBasics :: Note
-sigmaAlgebraBasics = do
+sigmaAlgebraBasics = note "basics" $ do
     sigmaAlgebraDefinition
     trivialSigmaAlgebraDefinition
     measurableSpaceDefinition
@@ -36,11 +36,12 @@ sigmaAlgebraBasics = do
     unionIsNotSigmaAlgebraExample
 
 generatedSigmaAlgebra :: Note
-generatedSigmaAlgebra = do
+generatedSigmaAlgebra = note "generated-sigma-algebra" $ do
     subsection $ "Generating " <> sa <> "s"
     generatedSigmaAlgebraDefinition
     generatedSigmaAlgebraIsUnique
     generatedSigmaAlgebraExists
+
 
 
 
@@ -59,9 +60,8 @@ sigmaAlgebraDefinition = de $ do
 
 trivialSigmaAlgebraDefinition :: Note
 trivialSigmaAlgebraDefinition = de $ do
-    m $ setof $ emptyset <> ", " <> univ_
-    " is called the "
-    trivialSigmaAlgebra
+    lab trivialSigmaAlgebraDefinitionLabel
+    s [m $ setofs[emptyset, univ_], " is called the ", trivialSigmaAlgebra]
 
 measurableSpaceDefinition :: Note
 measurableSpaceDefinition = de $ do
@@ -79,12 +79,10 @@ discreteSigmaAlgebraDefinition = de $ do
     lab discreteSigmaAlgebraDefinitionLabel
     s ["The ", powerset_, " of a ", universe_ , " is called the ", discreteSigmaAlgebra]
 
-saDec :: Note
-saDec = s ["Let ", m sa_, " be a ", sigmaAlgebra]
 
 emptysetInSigmaAlgebra :: Note
 emptysetInSigmaAlgebra = thm $ do
-    saDec
+    s ["Let ", m sa_, " be a ", sigmaAlgebra]
     ma $ emptyset ∈ sa_
 
     proof $ do
@@ -96,7 +94,7 @@ sigmaAlgebraFiniteUnionLabel = thmlab "sigma-algebra-finite-union"
 sigmaAlgebraFiniteUnion :: Note
 sigmaAlgebraFiniteUnion = thm $ do
     lab sigmaAlgebraFiniteUnionLabel
-    saDec
+    s ["Let ", m sa_, " be a ", sigmaAlgebra]
     ma $ pars (fa iInList $ ai ∈ sa_)
          ⇒
          (setuncmp iInList ai) ∈ sa_
@@ -113,7 +111,7 @@ sigmaAlgebraInfiniteIntersectionLabel = thmlab "sigma-algebra-infinite-intersect
 sigmaAlgebraInfiniteIntersection :: Note
 sigmaAlgebraInfiniteIntersection = thm $ do
     lab sigmaAlgebraInfiniteIntersectionLabel
-    saDec
+    s ["Let ", m sa_, " be a ", sigmaAlgebra]
     ma $ pars (fa (natural "n") (an ∈ sa_))
          ⇒
          setuncmp (natural "n") an ∈ sa_
@@ -129,7 +127,7 @@ sigmaAlgebraFiniteIntersectionLabel = thmlab "sigma-algebra-finite-intersection"
 sigmaAlgebraFiniteIntersection :: Note
 sigmaAlgebraFiniteIntersection = thm $ do
     lab sigmaAlgebraFiniteIntersectionLabel
-    saDec
+    s ["Let ", m sa_, " be a ", sigmaAlgebra]
 
     ma $ pars (fa iInList $ ai ∈ sa_)
          ⇒
@@ -143,7 +141,7 @@ sigmaAlgebraFiniteIntersection = thm $ do
 
 sigmaAlgebraSetDifference :: Note
 sigmaAlgebraSetDifference = thm $ do
-    saDec
+    s ["Let ", m sa_, " be a ", sigmaAlgebra]
 
     ma $ fa ("A, B" ∈ sa_) (("A" `setsdiff` "B") ∈ sa_)
 
@@ -211,12 +209,12 @@ generatedSigmaAlgebraExists = thm $ do
                 s [m sb, " must therefore contain ", m univ_]
 
             item $ do
-                m $ fa ("B" ⊆ univ_) $ ("B" ∈ sb) ⇒ (setc "B" ∈ sb)
+                m $ fa (b ⊆ univ_) $ (b ∈ sb) ⇒ (setc b ∈ sb)
                 newline
-                s ["Let ", m "B", " be a subset of ", m univ_, " in ", m sb]
-                s ["This means that ", m "B", " is also contained in every ", m ss, " of ", m saset]
-                s ["Because every ", m ss, " in ", m saset, " is a ", salgebra, ", ", m ss, " must also contain ", m (setc "B"), ".",  ref sigmaAlgebraDefinitionLabel]
-                s ["This means that ", m sb, " must also contains ", m (setc "B")]
+                s ["Let ", m b, " be a subset of ", m univ_, " in ", m sb]
+                s ["This means that ", m b, " is also contained in every ", m ss, " of ", m saset]
+                s ["Because every ", m ss, " in ", m saset, " is a ", salgebra, ", ", m ss, " must also contain ", m (setc b), ".",  ref sigmaAlgebraDefinitionLabel]
+                s ["This means that ", m sb, " must also contains ", m (setc b)]
 
             item $ do
                 m $ (pars $ fa (natural "n") (bn ∈ sb)) ⇒ ((setuncmp (natural "n") bn) ∈ sb)
@@ -226,9 +224,10 @@ generatedSigmaAlgebraExists = thm $ do
   where
     saset = "X"
     ss = mathcal "A"
-    sb = mathcal "B"
+    sb = mathcal b
     gsa = mathcal "C"
-    bn = "B" !: "n"
+    b = "B"
+    bn = b !: "n"
 
 
 

@@ -16,8 +16,8 @@ probability = note "probability" $ do
     intro
     sigmaAlgebraS
     probabilityMeasureS
-    conditionalProbability
-    independence
+    conditionalProbabilityS
+    independenceS
     randomVariable
     distributions
 

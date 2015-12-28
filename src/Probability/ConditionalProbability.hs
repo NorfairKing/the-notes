@@ -1,26 +1,24 @@
-module Probability.ConditionalProbability (
-      conditionalProbability
-
-    , conditionalProbabilityDefinitionLabel
-    ) where
+module Probability.ConditionalProbability where
 
 import           Notes
 
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
-import           Sets.Partition                       (partition)
+import           Sets.Partition                           (partition)
 
 import           Probability.Intro.Macro
+import           Probability.Intro.Terms
 import           Probability.ProbabilityMeasure.Macro
+import           Probability.ProbabilityMeasure.Terms
 import           Probability.SigmaAlgebra.Macro
 
+import           Probability.ConditionalProbability.Macro
+import           Probability.ConditionalProbability.Terms
 
 
-conditionalProbability :: Note
-conditionalProbability = note "conditional-probability" body
 
-body :: Note
-body = do
+conditionalProbabilityS :: Note
+conditionalProbabilityS = note "conditional-probability" $ do
     section "Conditional probibility"
     basics
     chainRule
@@ -36,25 +34,19 @@ basics = do
     conditionalProbabilityEventGivenItself
     conditionalProbabilityEventGivenUniverse
 
-conditionalProbabilityDefinitionLabel :: Label
-conditionalProbabilityDefinitionLabel = delab "conditional-probability"
-
-event :: Note
-event = ix "event"
-
 a,b,ai :: Note
 a = "A"
 b = "B"
 ai = a ∈ sa_
 
 psDec :: Note
-psDec = s ["Let ", m prsp, " be a ", ix "probability space"]
+psDec = s ["Let ", m prsp, " be a ", probabilitySpace]
 
 conditionalProbabilityDefinition :: Note
 conditionalProbabilityDefinition = de $ do
     lab conditionalProbabilityDefinitionLabel
 
-    s [the, term "conditional probability", " of an ", event, m (a ∈ sa_), " given an ", event, m (b ∈ sa_), " with ", m (prob b /=: 0), " is de:: Noted as ", m (cprob a b), ""]
+    s [the, conditionalProbability', " of an ", event, m (a ∈ sa_), " given an ", event, m (b ∈ sa_), " with ", m (prob b /=: 0), " is denoted as ", m (cprob a b), ""]
     ma $ cprob a b === (prob (a ∩ b) /: prob b)
 
 conditionalProbabilityEventGivenItself :: Note
@@ -67,7 +59,7 @@ conditionalProbabilityEventGivenUniverse :: Note
 conditionalProbabilityEventGivenUniverse = prop $ do
     psDec
     ma $ fa ai $ cprob a univ_ =: prob a
-    "We say that every event is independent of the universe."
+    s ["We say that every event is independent of the ", universe]
 
     proof $ ma $ fa ai $ cprob a univ_ =: (prob (a ∩ univ_) /: prob univ_) =: (prob a /: prob univ_) =: (prob a /: 1) =: prob a
 

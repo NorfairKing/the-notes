@@ -1,8 +1,4 @@
-module Probability.RandomVariable (
-      randomVariable
-
-    , discrete
-    ) where
+module Probability.RandomVariable where
 
 import           Notes
 
@@ -11,30 +7,26 @@ import           Functions.Basics.Macro
 import           Functions.Inverse.Macro
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
-import           Probability.Independence             (independenceDefinitionLabel,
-                                                       independent)
+import           Probability.Independence.Terms
 import           Probability.Intro.Macro
 import           Probability.ProbabilityMeasure.Macro
+import           Probability.ProbabilityMeasure.Terms
 import           Probability.SigmaAlgebra.Macro
 
 
 randomVariable :: Note
-randomVariable = note "random-variable" body
-
-psDec :: Note
-psDec = s ["Let ", m prsp, " be a ", ix "probability space"]
-
-
-body :: Note
-body = do
+randomVariable = note "random-variable" $ do
     section "Random Variables"
-    intro
+    introS
     distributionFunctions
     quantileFunction
     typesOfRandomVariables
 
-intro :: Note
-intro = do
+psDec :: Note
+psDec = s ["Let ", m prsp, " be a ", probabilitySpace]
+
+introS :: Note
+introS = note "intro" $ do
     borealsDefinition
     randomVariableDefinition
     saMeasureDefinition
@@ -90,7 +82,7 @@ borealMeasurableInducesProbabilityMeasure = thm $ do
     px = fn (prpm !: prrv)
 
 distributionFunctions :: Note
-distributionFunctions = do
+distributionFunctions = note "distribution-functions" $ do
     subsection "Cumulative distribution function"
     cumulativeDistributionFunctionDefinition
     distributionFunctionCondition
@@ -157,7 +149,7 @@ distributionAfterValue = thm $ do
 independenceOfRandomVariables :: Note
 independenceOfRandomVariables = de $ do
     s ["Let ", m x, and, m y, " be random variables in ", m prbsp]
-    s [m x, and, m y, " are called ", term "independent", " if and only if every two events ", m (x <= a), and, m (y <= b), " are ", independent, ref independenceDefinitionLabel, " events"]
+    s [m x, and, m y, " are called ", term "independent", " if and only if every two events ", m (x <= a), and, m (y <= b), " are ", independent_, " events"]
   where
     a = "a"
     b = "b"
@@ -166,7 +158,7 @@ independenceOfRandomVariables = de $ do
 
 
 quantileFunction :: Note
-quantileFunction = do
+quantileFunction = note "quantile" $ do
     subsection "The quantile function"
     quantileFunctionDefinition
     quartileDefinition
@@ -190,13 +182,13 @@ medianDefinition = de $ do
 
 
 typesOfRandomVariables :: Note
-typesOfRandomVariables = do
+typesOfRandomVariables = note "types" $ do
     subsection "Types of random variables"
     discreteRandomVariables
     continuousRandomVariables
 
 discreteRandomVariables :: Note
-discreteRandomVariables = do
+discreteRandomVariables = note "discrete" $ do
     subsubsection "Discrete random variables"
     discreteRandomVariableDefinition
     discreteDistributionDefinition
@@ -239,7 +231,7 @@ discreteCumulativeDistribution = thm $ do
     pi = "p" !: i
 
 continuousRandomVariables :: Note
-continuousRandomVariables = do
+continuousRandomVariables = note "continuous" $ do
     subsubsection "Continuous random variables"
     continuousRandomVariableDefinition
     probabilityDensity

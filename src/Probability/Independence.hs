@@ -1,25 +1,20 @@
-module Probability.Independence (
-      independence
-
-    , independent
-    , independenceDefinitionLabel
-    ) where
+module Probability.Independence where
 
 import           Notes
 
 import           Logic.FirstOrderLogic.Macro
+import           Probability.ConditionalProbability.Macro
 import           Probability.ProbabilityMeasure.Macro
+import           Probability.ProbabilityMeasure.Terms
 import           Probability.SigmaAlgebra.Macro
+import           Sets.Basics.Terms
+
+import           Probability.Independence.Macro
+import           Probability.Independence.Terms
 
 
-independence :: Note
-independence = note "independence" body
-
-psDec :: Note
-psDec = s ["Let ", m prsp, " be a ", ix "probability space"]
-
-body :: Note
-body = do
+independenceS :: Note
+independenceS = note "independence" $ do
     section "Independence"
     independenceDefinition
     dependenceDefinition
@@ -29,17 +24,14 @@ body = do
     mutualIndependenceImpliesPairwiseIndependence
     infiniteMutalIndependenceDefinition
 
-independent :: Note
-independent = ix "independent"
-
-independenceDefinitionLabel :: Label
-independenceDefinitionLabel = Label Definition "independence-events-in-probabiliy-space"
+psDec :: Note
+psDec = s ["Let ", m prsp, " be a ", probabilitySpace]
 
 independenceDefinition :: Note
 independenceDefinition = de $ do
-    lab independenceDefinitionLabel
+    lab independentDefinitionLabel
     psDec
-    s ["Two events ", m a, and, m b, " in ", m sa_, " are called ", term "independent", " if the following equality holds"]
+    s ["Two events ", m a, and, m b, " in ", m sa_, " are called ", independent', " if the following equality holds"]
     ma $ prob (a ∩ b) =: prob a * prob b
 
   where
@@ -49,11 +41,11 @@ independenceDefinition = de $ do
 dependenceDefinition :: Note
 dependenceDefinition = de $ do
     psDec
-    s ["If two events ", m a, and, m b, " in ", m sa_, " are not ", independent, ", they are called ", term "dependent", " events"]
+    s ["If two events ", m a, and, m b, " in ", m sa_, " are not ", independent, ", they are called ", dependent', " events"]
     s ["This depedence is called.."]
     itemize $ do
-        item $ s [term "positive dependence", " if ", m (prob (a ∩ b) > prob a * prob b), " holds"]
-        item $ s [term "negative dependence", " if ", m (prob (a ∩ b) < prob a * prob b), " holds"]
+        item $ s [positiveDependence', " if ", m (prob (a ∩ b) > prob a * prob b), " holds"]
+        item $ s [negativeDependence', " if ", m (prob (a ∩ b) < prob a * prob b), " holds"]
 
   where
     a = "A"
@@ -74,12 +66,12 @@ conditionalProbabilityIndependentEvents = thm $ do
 
 pairwiseIndependenceDefinition :: Note
 pairwiseIndependenceDefinition = de $ do
-    s ["A set of events is called ", term "pairwise independent", " if every two events in the set are independent"]
+    s ["A set of events is called ", pairwiseIndependent', " if every two events in the set are ", independent]
 
 mutualIndependenceDefinition :: Note
 mutualIndependenceDefinition = de $ do
     psDec
-    s ["A set ", m x, " of events is called ", term "mutual independence", " if the following holds"]
+    s ["A set ", m x, " of events is called ", mutuallyIndependent', " if the following holds"]
     ma $ fa (y ∈ powset x) $ prob (setincmp (a ∈ y) a) =: prodcmp (a ∈ y) (prob a)
   where
     a = "A"
@@ -93,7 +85,7 @@ mutualIndependenceImpliesPairwiseIndependence = thm $ do
 
 infiniteMutalIndependenceDefinition :: Note
 infiniteMutalIndependenceDefinition = de $ do
-    s ["An infinite set of events is called mutually independent if every finite subset is mutually independent"]
+    s ["An infinite ", set, " of events is called ", mutuallyIndependent, " if every finite subset is mutually independent"]
 
 
 

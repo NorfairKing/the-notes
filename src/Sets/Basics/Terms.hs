@@ -8,3 +8,10 @@ makeDefs [
     , "subset"
     , "predicate"
     ]
+
+sets :: Note
+sets = index "set" <> "sets"
+
+subsets :: Note
+subsets = index "subset" <> "subsets"
+
