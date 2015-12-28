@@ -9,7 +9,7 @@ import           Logic.AbstractLogic.Macro
 import           Logic.AbstractLogic.Terms
 import           Logic.PropositionalLogic.Macro
 import           Logic.PropositionalLogic.Terms
-import           Sets.Basics
+import           Sets.Basics.Terms
 
 import           Logic.FirstOrderLogic.Macro
 import           Logic.FirstOrderLogic.Terms

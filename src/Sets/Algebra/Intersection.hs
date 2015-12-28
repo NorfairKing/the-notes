@@ -2,13 +2,11 @@ module Sets.Algebra.Intersection where
 
 import           Notes
 
+import           Functions.BinaryOperation       (associative_)
 import           Logic.PropositionalLogic.Macro
-import           Sets.Algebra.Union             (union)
+import           Sets.Algebra.Union.Terms
 
-import           Functions.BinaryOperation      (associative_)
-
-intersection :: Note
-intersection = ix "intersection"
+import           Sets.Algebra.Intersection.Terms
 
 setIntersection :: Note
 setIntersection = note "intersection" $ do
@@ -35,7 +33,7 @@ y = "y"
 
 intersectionDefinition :: Note
 intersectionDefinition = de $ do
-    s [the, term "intersection", " ", m (a ∪ b), " of two sets ", m a, " and ", m b, " is the set of all elements of both ", m a, " and ", m b]
+    s [the, intersection', " ", m (a ∪ b), " of two sets ", m a, " and ", m b, " is the set of all elements of both ", m a, " and ", m b]
     ma $ a ∪ b =§= setcmpr x ((x ∈ a) ∧ (x ∈ b))
 
 intersectionAssociativityLabel :: Label

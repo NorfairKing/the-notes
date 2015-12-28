@@ -8,10 +8,7 @@ import           Probability.Intro.Terms
 import           Probability.ProbabilityMeasure.Macro
 
 distributions :: Note
-distributions = note "important-distributions" body
-
-body :: Note
-body = do
+distributions = note "important-distributions" $ do
     section "Important distributions"
 
     discreteDistributions

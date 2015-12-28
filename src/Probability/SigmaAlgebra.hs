@@ -7,6 +7,7 @@ import           Logic.PropositionalLogic.Macro
 import           Probability.Intro.Terms
 import           Sets.Algebra.Main              (secondLawOfDeMorganLabel, symmetricDifferenceITOUnionAndIntersectionLabel)
 import           Sets.Basics
+import           Sets.Basics.Terms
 import           Sets.Powerset.Terms
 
 import           Probability.Intro.Macro

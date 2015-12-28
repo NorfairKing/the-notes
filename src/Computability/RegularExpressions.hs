@@ -6,7 +6,7 @@ import           Computability.Languages.Macro
 import           Computability.Languages.Terms
 import           Computability.Symbols.Macro
 import           Computability.Symbols.Terms
-import           Sets.Basics                            (set)
+import           Sets.Basics.Terms
 
 import           Computability.RegularExpressions.Macro
 import           Computability.RegularExpressions.Terms
@@ -45,7 +45,7 @@ regularExpressionDefinition = de $ do
 
 regularExpressionsOverAlphabet :: Note
 regularExpressionsOverAlphabet = de $ do
-      s [the, set, " of ", regularExpression, "s over an ", alphabet, " ", m alph_, " is de:: Noted as ", m reoa_]
+      s [the, set, " of ", regularExpression, "s over an ", alphabet, " ", m alph_, " is denoted as ", m reoa_]
 
 languageOfRegularExpression :: Note
 languageOfRegularExpression = de $ do
@@ -85,7 +85,7 @@ regularExpressionFiniteCriterium = do
 
 regularLanguagesDefinition :: Note
 regularLanguagesDefinition = de $ do
-    s [the, set, " of all ", regular, " languages is de:: Noted as ", m reglan]
+    s [the, set, " of all ", regular, " languages is denoted as ", m reglan]
 
 reglanSubalgebra :: Note
 reglanSubalgebra = de $ do

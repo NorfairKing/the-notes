@@ -16,7 +16,7 @@ import           Relations.Orders               (antisymmetric_,
                                                  poset_)
 import           Relations.Orders.Macro
 import           Relations.Preorders            (preorderDefinitionLabel)
-import           Sets.Basics                    (set)
+import           Sets.Basics.Terms
 
 import           Functions.Order.Macro
 

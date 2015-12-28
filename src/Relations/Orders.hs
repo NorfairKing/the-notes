@@ -10,7 +10,7 @@ import           Relations.Equivalence          (equivalenceRelation_)
 import           Relations.Equivalence.Macro
 import           Relations.Preorders            (preorder, preorder_)
 import           Relations.Preorders.Macro
-import           Sets.Basics
+import           Sets.Basics.Terms
 import           Sets.PointedSets.Macro
 
 import           Relations.Orders.Macro

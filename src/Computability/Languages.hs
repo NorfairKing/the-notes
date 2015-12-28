@@ -5,8 +5,8 @@ import           Notes
 import           Computability.Languages.Macro
 import           Computability.Languages.Terms
 import           Functions.BinaryOperation     (associative_)
-import           Sets.Algebra.Union            (union)
-import           Sets.Basics                   (set)
+import           Sets.Algebra.Union.Terms
+import           Sets.Basics.Terms
 
 import           Computability.Symbols.Macro
 import           Computability.Symbols.Terms   hiding (concatenation,

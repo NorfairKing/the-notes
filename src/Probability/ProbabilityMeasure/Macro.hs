@@ -24,7 +24,7 @@ boreals = borel reals
 
 -- | Probabilty space given a universe, sigma algebra and probability measure
 prspace :: Note -> Note -> Note -> Note
-prspace m n o = m <> ", " <> n <> ", " <> o
+prspace = triple
 
 -- | Concrete probability space
 prsp :: Note

@@ -7,13 +7,7 @@ import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
 
 import           Sets.Basics.Macro
-
-makeDefs [
-      "set"
-    , "element"
-    , "subset"
-    , "predicate"
-    ]
+import           Sets.Basics.Terms
 
 setBasics :: Note
 setBasics = note "basics" $ do

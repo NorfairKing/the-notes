@@ -7,7 +7,7 @@ import           Logic.AbstractLogic.Terms
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
 import           Relations.Orders.Macro
-import           Sets.Basics                       (predicate)
+import           Sets.Basics.Terms
 
 import           Logic.HoareLogic.ExamQuestion2014
 import           Logic.HoareLogic.Macro

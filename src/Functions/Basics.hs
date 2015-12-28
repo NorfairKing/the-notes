@@ -6,7 +6,7 @@ import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
 import           Relations.Basics               (relation_)
 import           Relations.Domain               (domain_, image_)
-import           Sets.Basics                    (subset)
+import           Sets.Basics.Terms
 
 
 import           Functions.Application.Macro

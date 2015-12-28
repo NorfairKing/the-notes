@@ -4,8 +4,8 @@ import           Notes
 
 import           Logic.PropositionalLogic.Macro
 
-difference :: Note
-difference = ix "difference"
+import           Sets.Algebra.Difference.Terms
+
 
 setDifference :: Note
 setDifference = note "difference" $ do
@@ -21,27 +21,27 @@ setDifference = note "difference" $ do
 
     intersectionOverDifference
 
-a, b, c, x, y :: Note
-a = "A"
-b = "B"
-c = "C"
-x = "x"
-y = "y"
 
 differenceDefinition :: Note
 differenceDefinition = de $ do
-    s ["The set ", term "difference", " between sets ", m a, and, m b, " is the set of all elements of ", m a, " that are not in ", m b]
+    let (a, b, c, x, y) = ("A", "B", "C", "x", "y")
+    s ["The set ", difference', " between sets ", m a, and, m b, " is the set of all elements of ", m a, " that are not in ", m b]
     ma $ a \\ b === setcmpr x ((x ∈ a) ∧ (x `nin` b))
 
 setsDec :: Note
-setsDec = s ["Let ", m a, and, m b, " be sets"]
+setsDec = do
+    let (a, b, c, x, y) = ("A", "B", "C", "x", "y")
+    s ["Let ", m a, and, m b, " be sets"]
 
 setssDec :: Note
-setssDec = s ["Let ", m a, ", ", m b, and, m c, " be sets"]
+setssDec = do
+    let (a, b, c, x, y) = ("A", "B", "C", "x", "y")
+    s ["Let ", m a, ", ", m b, and, m c, " be sets"]
 
 intersectionAndDifferenceDisjunct :: Note
 intersectionAndDifferenceDisjunct = thm $ do
     setsDec
+    let (a, b, c, x, y) = ("A", "B", "C", "x", "y")
     ma $ ((pars $ a ∩ b) ∩ (pars $ a \\ b)) =§= emptyset
 
     proof $ do
@@ -60,6 +60,7 @@ intersectionAndDifferenceDisjunct = thm $ do
 symmetricSetDifferencesDisjunct :: Note
 symmetricSetDifferencesDisjunct = thm $ do
     setsDec
+    let (a, b, c, x, y) = ("A", "B", "C", "x", "y")
     ma $ ((pars $ a \\ b) ∩ (pars $ b \\ a)) =§= emptyset
 
     proof $ do
@@ -78,12 +79,14 @@ symmetricSetDifferencesDisjunct = thm $ do
 
 symmetricDifferenceDefinition :: Note
 symmetricDifferenceDefinition = de $ do
+    let (a, b, c, x, y) = ("A", "B", "C", "x", "y")
     s [the, term "symmetric difference", " of two sets ", m a, and, m b, " is the set of all element that are in either ", m a, or, m b, " but not both"]
     ma $ a △ b === setcmpr x ((pars $ (x ∈ a) ∧ (x `nin` b)) ∨ (pars $ (x `nin` a) ∧ (x ∈ b)))
 
 symmetricDifferenceEquivalentDefinition :: Note
 symmetricDifferenceEquivalentDefinition = de $ do
     setsDec
+    let (a, b, c, x, y) = ("A", "B", "C", "x", "y")
     ma $ a △ b =§= (pars $ a \\ b) ∪ (pars $ b \\ a)
 
     proof $ do
@@ -103,6 +106,7 @@ symmetricDifferenceITOUnionAndIntersection :: Note
 symmetricDifferenceITOUnionAndIntersection = thm $ do
     lab symmetricDifferenceITOUnionAndIntersectionLabel
     setsDec
+    let (a, b, c, x, y) = ("A", "B", "C", "x", "y")
     ma $ a △ b =§= (pars $ a ∪ b) \\ (pars $ a ∩ b)
 
     proof $ do
@@ -124,6 +128,7 @@ intersectionOverDifference :: Note
 intersectionOverDifference = thm $ do
     lab intersectionOverDifferenceLabel
     setssDec
+    let (a, b, c, x, y) = ("A", "B", "C", "x", "y")
     ma $ a ∩ (pars $ b \\ c) =§= (pars $ a ∩ b) \\ c
 
     proof $ do

@@ -3,12 +3,12 @@ module Sets.Algebra.Complement where
 import           Notes
 
 import           Logic.PropositionalLogic.Macro
-import           Sets.Algebra.Difference        (intersectionOverDifferenceLabel)
-import           Sets.Algebra.Intersection      (intersection)
-import           Sets.Algebra.Union             (union)
+import           Sets.Algebra.Difference
+import           Sets.Algebra.Intersection.Terms
+import           Sets.Algebra.Union.Terms
+import           Sets.Basics.Terms
 
-complement :: Note
-complement = ix "complement"
+import           Sets.Algebra.Complement.Terms
 
 setComplement :: Note
 setComplement = note "complement" $ do
@@ -21,18 +21,10 @@ setComplement = note "complement" $ do
     secondLawOfDeMorgan
     setDifferenceEquivalentDefinition
 
-a, b, x, y :: Note
-a = "A"
-b = "B"
-x = "x"
-y = "y"
-
-setsDec :: Note
-setsDec = s ["Let ", m a, and, m b, " be sets"]
-
 complementDefinition :: Note
 complementDefinition = de $ do
-    s [the, term "complement", " of a set ", m a, " relative to a set ", m b, " is the set of all elements of ", m b, " that are not in ", m a]
+    let (a, b, x, y) = ("A", "B", "x", "y")
+    s [the, complement', " of a ", set, " ", m a, " relative to a set ", m b, " is the set of all elements of ", m b, " that are not in ", m a]
     ma $ setrelc b a === b \\ a
 
     s ["When ", m b, " is clear from the context (i.e. there is a universe in play), we just speak about the ", term "complement"]
@@ -41,6 +33,7 @@ complementDefinition = de $ do
 
 doubleComplement :: Note
 doubleComplement = thm $ do
+    let (a, b, x, y) = ("A", "B", "x", "y")
     s ["Let ", m a, " be a set"]
     ma $ setc (setc a) =§= a
 
@@ -66,7 +59,8 @@ complementaryLawUnion :: Note
 complementaryLawUnion = thm $ do
     lab unionComplementaryLawLabel
     s [the, term "complementary law", " for the set ", union]
-    setsDec
+    let (a, b, x, y) = ("A", "B", "x", "y")
+    s ["Let ", m a, and, m b, " be sets"]
     ma $ a ∪ setc a =§= setuniv
 
     proof $ do
@@ -85,7 +79,8 @@ complementaryLawUnion = thm $ do
 complementaryLawIntersection :: Note
 complementaryLawIntersection = thm $ do
     s [the, term "complementary law", " for the set ", intersection]
-    setsDec
+    let (a, b, x, y) = ("A", "B", "x", "y")
+    s ["Let ", m a, and, m b, " be sets"]
     ma $ a ∩ setc a =§= emptyset
 
     proof $ do
@@ -109,6 +104,7 @@ firstLawOfDeMorgan = thm $ do
     lab firstLawOfDeMorganLabel
     s [the, term "first law of De Morgan"]
 
+    let (a, b, x, y) = ("A", "B", "x", "y")
     ma $ setc (pars $ a ∪ b) =§= setc a ∩ setc b
 
     proof $ do
@@ -132,6 +128,7 @@ secondLawOfDeMorgan = thm $ do
     lab secondLawOfDeMorganLabel
     s [the, term "second law of De Morgan"]
 
+    let (a, b, x, y) = ("A", "B", "x", "y")
     ma $ setc (pars $ a ∩ b) =§= setc a ∪ setc b
 
     proof $ do
@@ -154,7 +151,8 @@ setDifferenceEquivalentDefinitionLabel = thmlab "set-difference-equivalent-defin
 setDifferenceEquivalentDefinition :: Note
 setDifferenceEquivalentDefinition = thm $ do
     lab setDifferenceEquivalentDefinitionLabel
-    setsDec
+    let (a, b, x, y) = ("A", "B", "x", "y")
+    s ["Let ", m a, and, m b, " be sets"]
 
     ma $ a \\ b =§= a ∩ setc b
 

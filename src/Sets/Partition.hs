@@ -4,7 +4,7 @@ import           Notes
 
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
-import           Sets.Basics                    (set)
+import           Sets.Basics.Terms
 
 makeDefs ["partition"]
 

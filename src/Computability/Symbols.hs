@@ -2,7 +2,7 @@ module Computability.Symbols where
 
 import           Notes
 
-import           Sets.Basics                 (set)
+import           Sets.Basics.Terms
 
 import           Functions.BinaryOperation   (associative_)
 

@@ -3,11 +3,11 @@ module Sets.Algebra.Union where
 import           Notes
 
 import           Logic.PropositionalLogic.Macro
-import           Sets.Basics                    (set)
+import           Sets.Basics.Terms
 
 import           Functions.BinaryOperation      (associative_)
 
-makeDef "union"
+import           Sets.Algebra.Union.Terms
 
 setUnion :: Note
 setUnion = note "union" $ do
@@ -21,22 +21,17 @@ setUnion = note "union" $ do
     unionIdentityLaw
     unionDominationLaw
 
-a, b, c, x, y :: Note
-a = "A"
-b = "B"
-c = "C"
-x = "x"
-y = "y"
-
 unionDefinition :: Note
 unionDefinition = de $ do
     lab unionDefinitionLabel
+    let (a, b, c, x, y) = ("A", "B", "C", "x", "y")
     s [the, union', " ", m (a `setun` b), " of two sets ", m a, " and ", m b, " is the set of all elements of both ", m a, " and ", m b]
     ma $ a ∪ b =§= setcmpr x ((x ∈ a) ∨ (x ∈ b))
 
 unionAssociative :: Note
 unionAssociative = prop $ do
     s [the, set, " ", union, " is ", associative_]
+    let (a, b, c, x, y) = ("A", "B", "C", "x", "y")
     ma $ a ∪ (pars $ b ∪ c) =§= (pars $ a ∪ b) ∪ c
 
     proof $ do
@@ -54,6 +49,7 @@ unionAssociative = prop $ do
 unionCommutative :: Note
 unionCommutative = prop $ do
     s ["The ", set, " ", union, " is ", commutative]
+    let (a, b, c, x, y) = ("A", "B", "C", "x", "y")
     ma $ a ∪ b =§= b ∪ a
 
     proof $ do
@@ -65,6 +61,7 @@ unionCommutative = prop $ do
 unionIdempotent :: Note
 unionIdempotent = prop $ do
     s ["The ", set, " ", union, " is ", idempotent ,""]
+    let (a, b, c, x, y) = ("A", "B", "C", "x", "y")
     ma $ a ∪ a =§= a
 
     proof $ do
@@ -76,8 +73,8 @@ unionIdempotent = prop $ do
 
 unionSupset :: Note
 unionSupset = thm $ do
+    let (a, b, c, x, y) = ("A", "B", "C", "x", "y")
     s ["The ", set, " ", union, " of two sets ", m a, and, m b, " is a superset of ", m a]
-
     ma $ a ⊆ a ∪ b
 
     proof $ do
@@ -88,6 +85,7 @@ unionSupset = thm $ do
 
 unionSubsetDefinition :: Note
 unionSubsetDefinition = thm $ do
+    let (a, b, c, x, y) = ("A", "B", "C", "x", "y")
     ma $ a ⊆ b ⇔ (a ∪ b =§= a)
 
     proof $ do
@@ -99,6 +97,7 @@ unionSubsetDefinition = thm $ do
 unionIdentityLaw :: Note
 unionIdentityLaw = thm $ do
     s [the, term "identity law", " for the ", set, " ", union]
+    let (a, b, c, x, y) = ("A", "B", "C", "x", "y")
     ma $ a ∪ emptyset =§= a
 
     proof $ do
@@ -111,6 +110,7 @@ unionIdentityLaw = thm $ do
 unionDominationLaw :: Note
 unionDominationLaw = thm $ do
     s [the, term "domination law", " for the ", set, " ", union]
+    let (a, b, c, x, y) = ("A", "B", "C", "x", "y")
     ma $ a ∪ setuniv =§= setuniv
 
     proof $ do

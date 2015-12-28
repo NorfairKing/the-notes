@@ -2,7 +2,7 @@ module Probability.Intro where
 
 import           Notes
 
-import           Sets.Basics
+import           Sets.Basics.Terms
 
 import           Probability.Intro.Macro
 import           Probability.Intro.Terms
