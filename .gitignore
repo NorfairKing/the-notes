@@ -5,6 +5,7 @@ current
 graph.dot
 
 dist/
+tmp/
 Setup.hs
 
 

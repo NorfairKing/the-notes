@@ -64,6 +64,7 @@ data Args = Args {
     , args_texFileName           :: String
     , args_bibFileName           :: String
     , args_pdfFileName           :: String
+    , args_tempDir               :: FilePath
     } deriving (Show, Eq)
 
 data Config = Config {
@@ -76,6 +77,7 @@ data Config = Config {
     , conf_texFileName           :: FilePath
     , conf_bibFileName           :: FilePath
     , conf_pdfFileName           :: FilePath
+    , conf_tempDir               :: FilePath
     } deriving (Show, Eq)
 
 data Label = Label RefKind Text

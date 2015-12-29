@@ -1,16 +1,28 @@
 module Parser (getConfig) where
 
 import           Options.Applicative
-import           Prelude             (fmap, null, return)
+import           Prelude               (null, return, (>>=))
+
+import           System.Directory      (getCurrentDirectory)
+import           System.FilePath.Posix (isAbsolute, (</>))
 import           Types
 
 getConfig :: IO (Maybe Config)
-getConfig = fmap config getArgs
+getConfig = getArgs >>= config
 
-config :: Args -> Maybe Config
+config :: Args -> IO (Maybe Config)
 config args = do
     let ss = constructSelection $ args_selectionString args
-    return Config {
+
+    let tda = args_tempDir args
+    tempdir <- if isAbsolute tda
+                then return tda
+                else do
+                    dir <- getCurrentDirectory
+                    return $ dir </> tda
+
+
+    return $ Just $ Config {
           conf_selection                = ss
         , conf_visualDebug              = args_visualDebug args
         , conf_verbose                  = args_verbose args
@@ -20,6 +32,7 @@ config args = do
         , conf_texFileName              = args_texFileName args
         , conf_bibFileName              = args_bibFileName args
         , conf_pdfFileName              = args_pdfFileName args
+        , conf_tempDir                  = tempdir
         }
   where st = args_subtitle args
 
@@ -74,3 +87,9 @@ argParser = Args
             <> value "the-notes"
             <> metavar "NAME"
             <> help "The name of the output .pdf file to generate")
+    <*> strOption
+        (long "tmp-dir"
+            <> short 'd'
+            <> value "tmp"
+            <> metavar "DIR"
+            <> help "The working directory for note generating")

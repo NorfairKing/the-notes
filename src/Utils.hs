@@ -5,8 +5,14 @@ import           Types
 import           Prelude
 
 import           Control.Exception
-import           System.Directory  (removeFile)
-import           System.IO.Error   (isDoesNotExistError)
+import           System.Directory  (createDirectory, removeFile)
+import           System.IO.Error   (isAlreadyExistsError, isDoesNotExistError)
+
+makeDir :: FilePath -> IO ()
+makeDir fp = createDirectory fp `catch` handleExists
+  where handleExists e
+          | isAlreadyExistsError e = return ()
+          | otherwise = throwIO e
 
 removeIfExists :: FilePath -> IO ()
 removeIfExists fileName = removeFile fileName `catch` handleExists

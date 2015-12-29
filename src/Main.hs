@@ -5,9 +5,11 @@ import           Prelude              as P
 import qualified Data.Text            as T
 
 import           Control.Monad.Reader (asks)
+import           System.Directory     (setCurrentDirectory)
 import           System.Exit          (ExitCode (..), die)
 import           System.Process       (CreateProcess (..),
                                        readCreateProcessWithExitCode, shell)
+import           Utils
 
 import           Notes
 
@@ -47,6 +49,11 @@ main = do
                 , projectTexFileName = conf_texFileName cf
                 , projectBibFileName = conf_bibFileName cf
                 }
+
+            let dir = conf_tempDir cf
+            makeDir dir
+            setCurrentDirectory dir
+
 
             -- This is where the magic happens
             (eet, _) <- runNote entireDocument cf pconf startState
