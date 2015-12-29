@@ -104,7 +104,7 @@ proofUnsatisfiable height s1 s2 = proofFig cap height $ graph_ directed $ do
         ids <- mapM (disjunctNode [color =: "green"]) $ map simplify ds
         go [] $ zip ids ds
   where
-    cap = (s ["A diagram of the proof of ", m $ renderSentence s2, " from ", m $ renderSentence s1])
+    cap = (s ["A diagram of the proof of ", m $ renderSentence s2, " from ", dquoted $ m $ renderCNFSentence s1])
     go :: [NodeId] -> [(NodeId, Disjunction)] -> DotGen ()
     go _ [] = return ()
     go _ [(_, Disjunct [])] = return ()

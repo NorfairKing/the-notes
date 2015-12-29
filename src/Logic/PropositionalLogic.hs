@@ -322,11 +322,27 @@ conjunctiveNormalFormS = note "cnf" $ do
                 s ["Use the distributive laws to obtain a formula in CNF"]
         np
     ex $ do
+        let (p, q) = ("P", "Q")
+            sen = Equiv (Implies p q) (Implies (Not q) (Not p))
         renderTransformation sen
         s ["The Tseitin transformation, applied to ", m $ renderSentence sen]
-  where
-    (p, q) = ("P", "Q")
-    sen = Equiv (Implies p q) (Implies (Not q) (Not p))
+    de $ do
+        let n = "n"
+        s ["A sentence is said to be in ", m n, "-CNF if it is in ", conjunctiveNormalForm, " where each disjunction contains exactly ", m n, " literals"]
+    thm $ do
+        let n = "n"
+        s ["Given ", m n, " distinct propositional symbols, there exist ", m $ 2 * n ^ 2 + 1, " semantically distinct ", m 2, "-CNF sentences"]
+
+        proof $ do
+            s ["Each of the ", m n, " symbols can occur as-is or negated"]
+            s ["This gives us ", m $ 2 * n, " symbols to choose from"]
+            s ["In each clause, exactly ", m 2, " literals can be chosen"]
+            s ["There are ", m $ (2 * n) `choose` 2, " ways to do so if we consider distinct literals in each clause"]
+            let a = "A"
+            s ["Count ", m $ 2 * n, " more literals for clauses of the form ", m $ a ∨ a]
+            s ["Clauses of the form ", m $ a ∨ neg a, " all evaluate to true and should therefore not be counted"]
+            s ["In total this leaves ", m $ pars (2 * n ^ 2 - n) + (2 * n) - pars (n - 1), " possible semantically distinct ", m 2, "-CNF expressions"]
+
 
 tseitinTransformation :: Reference
 tseitinTransformation = Reference article "tseitin68" $
@@ -419,5 +435,12 @@ resolutionProofs = do
         renderTransformation s11
         s ["Now we add ", m $ neg alpha, " in conjunction with the sentences in the knowledge base and prove that the resulting sentence is unsatisfiable"]
         proofUnsatisfiable 10 s1 s2
+
+    ex $ do
+        let [a, b, c, d, g] = map (Literal . Symbol) ["A", "B", "C", "D", "G"]
+        let s1 = And (And (And (And (Or a b) (Or (Not a) c)) (Or (Not b) d)) (Or (Not c) g)) (Or (Not d) g)
+        let s2 = g
+        proofUnsatisfiable 10 s1 s2
+
 
 

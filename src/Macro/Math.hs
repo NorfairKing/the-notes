@@ -229,3 +229,7 @@ lst n m = commaSeparated [n, dotsc, m]
 
 list :: Note -> Note -> Note -> Note
 list n m o = commaSeparated [n, m, dotsc, o]
+
+-- Combinatorics
+choose :: Note -> Note -> Note
+choose = comm2 "binom"
