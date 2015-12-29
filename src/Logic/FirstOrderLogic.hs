@@ -63,7 +63,9 @@ quantifiers = note "quantifiers" $ do
     s ["Quantifiers bind free variables"]
     existentialQuantifierDefinition
     universalQuantifierDefinition
-    compositeSentence
+    note "composite-sentence" $ do
+        compositeSentence
+        compositeSentenceExamples
 
     propertiesOfQuantifiers
 
@@ -97,9 +99,23 @@ compositeSentence = do
     great = fn "Great"
     greater = fn2 "Greater"
 
+compositeSentenceExamples :: Note
+compositeSentenceExamples = do
+    ex $ do
+        let (mom, mmoc) = ("ManOnMoon", "MoonMadeOfCheese")
+        s ["The following is the transation to ", firstOrderLogic, " of the ", composite, " sentence ", dquoted $ s ["If there is a man on the moon, then the moon is maedo of cheese"]]
+        ma $ mom ⇒ mmoc
+    ex $ do
+        let (x, par, joan, fem) = ("x", fn2 "Parent", "Joan", fn "Female")
+        s ["The following is the transation to ", firstOrderLogic, " of the ", composite, " sentence ", dquoted $ s ["Joan has a daughter"]]
+        ma $ te x $ par joan x ∧ fem x
+
+
+
 
 propertiesOfQuantifiers :: Note
 propertiesOfQuantifiers = note "properties" $ do
+    subsubsection "Properties of quantifiers"
     switchExistentials
     switchUniversals
     switchMixed
