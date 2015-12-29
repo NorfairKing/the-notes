@@ -24,7 +24,7 @@ setUnion = note "union" $ do
 unionDefinition :: Note
 unionDefinition = de $ do
     lab unionDefinitionLabel
-    let (a, b, c, x, y) = ("A", "B", "C", "x", "y")
+    let (a, b, x) = ("A", "B", "x")
     s [the, union', " ", m (a `setun` b), " of two sets ", m a, " and ", m b, " is the set of all elements of both ", m a, " and ", m b]
     ma $ a ∪ b =§= setcmpr x ((x ∈ a) ∨ (x ∈ b))
 
@@ -49,7 +49,7 @@ unionAssociative = prop $ do
 unionCommutative :: Note
 unionCommutative = prop $ do
     s ["The ", set, " ", union, " is ", commutative]
-    let (a, b, c, x, y) = ("A", "B", "C", "x", "y")
+    let (a, b, x) = ("A", "B", "x")
     ma $ a ∪ b =§= b ∪ a
 
     proof $ do
@@ -61,7 +61,7 @@ unionCommutative = prop $ do
 unionIdempotent :: Note
 unionIdempotent = prop $ do
     s ["The ", set, " ", union, " is ", idempotent ,""]
-    let (a, b, c, x, y) = ("A", "B", "C", "x", "y")
+    let (a, x) = ("A", "x")
     ma $ a ∪ a =§= a
 
     proof $ do
@@ -73,7 +73,7 @@ unionIdempotent = prop $ do
 
 unionSupset :: Note
 unionSupset = thm $ do
-    let (a, b, c, x, y) = ("A", "B", "C", "x", "y")
+    let (a, b, x) = ("A", "B", "x")
     s ["The ", set, " ", union, " of two sets ", m a, and, m b, " is a superset of ", m a]
     ma $ a ⊆ a ∪ b
 
@@ -85,7 +85,7 @@ unionSupset = thm $ do
 
 unionSubsetDefinition :: Note
 unionSubsetDefinition = thm $ do
-    let (a, b, c, x, y) = ("A", "B", "C", "x", "y")
+    let (a, b, x) = ("A", "B", "x")
     ma $ a ⊆ b ⇔ (a ∪ b =§= a)
 
     proof $ do
@@ -97,7 +97,7 @@ unionSubsetDefinition = thm $ do
 unionIdentityLaw :: Note
 unionIdentityLaw = thm $ do
     s [the, term "identity law", " for the ", set, " ", union]
-    let (a, b, c, x, y) = ("A", "B", "C", "x", "y")
+    let (a, x) = ("A", "x")
     ma $ a ∪ emptyset =§= a
 
     proof $ do
@@ -110,7 +110,7 @@ unionIdentityLaw = thm $ do
 unionDominationLaw :: Note
 unionDominationLaw = thm $ do
     s [the, term "domination law", " for the ", set, " ", union]
-    let (a, b, c, x, y) = ("A", "B", "C", "x", "y")
+    let (a, x) = ("A", "x")
     ma $ a ∪ setuniv =§= setuniv
 
     proof $ do

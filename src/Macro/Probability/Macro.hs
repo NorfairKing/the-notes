@@ -10,8 +10,6 @@ import           Functions.Application.Macro
 import           Functions.Basics.Macro
 
 import           Probability.Intro.Macro
-import           Probability.ProbabilityMeasure.Macro
-import           Probability.SigmaAlgebra.Macro
 
 
 --[ Probability random variable

@@ -4,7 +4,6 @@ import           Prelude              as P
 
 import qualified Data.Text            as T
 
-import           Control.Monad        (unless)
 import           Control.Monad.Reader (asks)
 import           System.Exit          (ExitCode (..), die)
 import           System.Process       (CreateProcess (..),

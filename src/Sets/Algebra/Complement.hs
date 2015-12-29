@@ -23,7 +23,7 @@ setComplement = note "complement" $ do
 
 complementDefinition :: Note
 complementDefinition = de $ do
-    let (a, b, x, y) = ("A", "B", "x", "y")
+    let (a, b) = ("A", "B")
     s [the, complement', " of a ", set, " ", m a, " relative to a set ", m b, " is the set of all elements of ", m b, " that are not in ", m a]
     ma $ setrelc b a === b \\ a
 
@@ -33,7 +33,7 @@ complementDefinition = de $ do
 
 doubleComplement :: Note
 doubleComplement = thm $ do
-    let (a, b, x, y) = ("A", "B", "x", "y")
+    let (a, x, y) = ("A", "x", "y")
     s ["Let ", m a, " be a set"]
     ma $ setc (setc a) =§= a
 
@@ -151,7 +151,7 @@ setDifferenceEquivalentDefinitionLabel = thmlab "set-difference-equivalent-defin
 setDifferenceEquivalentDefinition :: Note
 setDifferenceEquivalentDefinition = thm $ do
     lab setDifferenceEquivalentDefinitionLabel
-    let (a, b, x, y) = ("A", "B", "x", "y")
+    let (a, b) = ("A", "B")
     s ["Let ", m a, and, m b, " be sets"]
 
     ma $ a \\ b =§= a ∩ setc b

@@ -66,6 +66,7 @@ fromSentence = go . cnfTransform
     go s@(Or _ _)       = Conjunction $ [go2 s]
     go s@(Not _)        = Conjunction $ [go2 s]
     go (And s1 s2)      = go s1 `mappend` go s2
+    go _ = error "CNF transformation didn't result in a CNF sentence."
 
     go2 :: Sentence -> Disjunction
     go2 (Literal (Lit True)) = Disjunct [JustLit "T", NotLit "T"] -- Something that works. In practice this won't be necessary.
@@ -73,6 +74,7 @@ fromSentence = go . cnfTransform
     go2 (Literal (Symbol s)) = Disjunct [JustLit s]
     go2 (Not (Literal (Symbol s))) = Disjunct [NotLit s]
     go2 (Or s1 s2)  = go2 s1 `mappend` go2 s2
+    go2 _ = error "CNF transformation didn't result in a CNF sentence."
 
 disjunctNode :: [Attribute] -> Disjunction -> DotGen NodeId
 disjunctNode as (Disjunct []) = namelessNode $ [color =: "red", label =: tableCells ["False"]] ++ as

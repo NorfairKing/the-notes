@@ -13,15 +13,9 @@ SOURCES = $(shell find $(SRC_DIR) -type f -name '*.hs')
 GHC = ghc
 GHC_FLAGS = \
 	-j8 \
-	-fwarn-unused-imports \
-	-fwarn-incomplete-patterns \
-	-fwarn-unused-do-bind \
-	-fno-warn-name-shadowing \
-	-fno-warn-orphans \
 	-XOverloadedStrings \
 	-XNoImplicitPrelude \
 	-XTemplateHaskell
-	# -Wall -Werror \
 
 GHC_SRC_DIRS = \
 	-i$(SRC_DIR)
@@ -34,8 +28,16 @@ all: bin doc
 bin: $(SOURCES)
 	$(GHC) $(GHC_OPTIONS) -o $(BIN) --make $(MAIN_SRC)
 
-thorough: $(SOURCES)
-	$(GHC) $(GHC_OPTIONS) -fforce-recomp -o $(BIN) --make $(MAIN_SRC)
+WARNINGS = \
+	-Wall -Werror \
+	-fwarn-unused-imports \
+	-fwarn-incomplete-patterns \
+	-fwarn-unused-do-bind \
+	-fno-warn-name-shadowing \
+	-fno-warn-orphans \
+
+pedantic:
+	$(GHC) $(GHC_OPTIONS) $(WARNINGS) -fforce-recomp -o $(BIN) --make $(MAIN_SRC)
 
 doc: $(SOURCES)
 	cabal haddock --executables --haddock-options="--no-warnings --no-print-missing-docs --pretty-html"

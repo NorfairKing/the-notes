@@ -9,7 +9,7 @@ import           Probability.ProbabilityMeasure.Terms
 import           Probability.SigmaAlgebra.Macro
 import           Sets.Basics.Terms
 
-import           Probability.Independence.Macro
+-- import           Probability.Independence.Macro
 import           Probability.Independence.Terms
 
 
