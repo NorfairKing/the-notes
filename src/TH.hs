@@ -1,7 +1,5 @@
-module TH (
-      module TH.LitFile
-    , module TH.Definition
-    ) where
+module TH (module X) where
 
-import           TH.Definition
-import           TH.LitFile
+import           TH.Command    as X
+import           TH.Definition as X
+import           TH.LitFile    as X
