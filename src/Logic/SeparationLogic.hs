@@ -90,7 +90,7 @@ separationLogicDefinition = de $ do
 satisfiesDefinition :: Note
 satisfiesDefinition = de $ do
     s ["Assertion satisfaction needs to be redefined in ", separationLogic, " to incorporate the heap"]
-    s ["The expression that represents ", dquoted $ s ["A program state ", m st, ", together with a heap ", m hp, ", ", satisfies', " an ", assertion, " ", m p], " is de:: Noted as ",  m $ satis "s" "h" "P"]
+    s ["The expression that represents ", dquoted $ s ["A program state ", m st, ", together with a heap ", m hp, ", ", satisfies', " an ", assertion, " ", m p], " is denoted as ",  m $ satis "s" "h" "P"]
     s ["It is inductively defined as follows"]
     itemize $ do
         item $ s [m $ ss false, " never holds"]

@@ -57,7 +57,7 @@ concatenationNotCommutative = thm $ do
 
 selfConcatenationDefinition :: Note
 selfConcatenationDefinition = de $ do
-    s [the, concatenation, " of a ", language, " ", m lan_, " with itself ", m n, " times is de:: Noted as ", m (lan_ ^@: n)]
+    s [the, concatenation, " of a ", language, " ", m lan_, " with itself ", m n, " times is denoted as ", m (lan_ ^@: n)]
     s [m (lan_ ^@: 0), " is defined as ", m (setof estr)]
     ma $ lan_ ^@: n === (lan_ <@@> (lan_ ^@: (n - 1)))
   where n = "n"
@@ -75,7 +75,7 @@ languagePlusDefinition = de $ do
 
 languesOverAlphabetDefinition :: Note
 languesOverAlphabetDefinition = de $ do
-    s ["The ", set, " of all languages over an ", alphabet, " ", m alph_, " is de:: Noted as follows"]
+    s ["The ", set, " of all languages over an ", alphabet, " ", m alph_, " is denoted as follows"]
     ma $ loa_ === powset strsof_
 
 infiniteLanguagesCountable :: Note
