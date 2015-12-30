@@ -23,8 +23,8 @@ rvfunc_ = fun rv_ univ_ reals
 -- FIXME fix variable name
 
 -- | Probability value from random variable
-prvrv :: Note -> Note
-prvrv = fn rv_
+vrv :: Note -> Note
+vrv = fn rv_
 -- FIXME fix variable name
 
 -- * Distribution function

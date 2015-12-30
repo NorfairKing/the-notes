@@ -81,7 +81,7 @@ borealMeasurableInducesProbabilityMeasure :: Note
 borealMeasurableInducesProbabilityMeasure = thm $ do
     s ["A Borel-measurable function induces a ", probabilityMeasure, " ", m (prpm !: rv_), on, m boreals, " in ", m prbsp, " as follows"]
     ma $ px b =: prob (x ∈ b) =: prob (inv x `fn` b)
-    ma $ px b =: prob (setcmpr (omega ∈ univ_) (prvrv omega ∈ b))
+    ma $ px b =: prob (setcmpr (omega ∈ univ_) (vrv omega ∈ b))
     toprove
   where
     b = "B"
@@ -104,7 +104,7 @@ cumulativeDistributionFunctionDefinition = de $ do
     psDec
     s ["Let ", m rvfunc_, " be a ", randomVariable]
     s ["The ", cumulativeDistributionFunction', " (", term "CDF", ") or ", distributionFunction', " as follows"]
-    ma $ func prdf reals reals a $ prd (ocint minfty a) =: prob (setcmpr o (prvrv o)) =: prob (rv_ <= a)
+    ma $ func prdf reals reals a $ prd (ocint minfty a) =: prob (setcmpr o (vrv o)) =: prob (rv_ <= a)
     s ["Sometimes the term ", distribution', " is also used as-is"]
   where
     a = "a"
@@ -205,7 +205,7 @@ discreteRandomVariables = note "discrete" $ do
 discreteRandomVariableDefinition :: Note
 discreteRandomVariableDefinition = de $ do
     s ["A ", randomVariable, " ", m rv_, " in a ", probabilitySpace, " ", m prsp, " is called ", discrete', " if the ", image, " under ", m rv_, " is non-zero in just a countable number of points"] --FIXME index countable
-    ma $ pi =: prob (setcmpr (omega ∈ univ_) (prvrv omega =: xi)) =: prob (rv_ =: xi)
+    ma $ pi =: prob (setcmpr (omega ∈ univ_) (vrv omega =: xi)) =: prob (rv_ =: xi)
 
   where
     i = "i"
