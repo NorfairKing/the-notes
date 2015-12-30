@@ -28,20 +28,20 @@ prsp = triple
 
 -- | Concrete probability space
 prsp_ :: Note
-prsp_ = prsp univ_ sa_ prpm
+prsp_ = prsp univ_ sa_ prm_
 
 prbsp :: Note
-prbsp = prsp reals boreals prpm
+prbsp = prsp reals boreals prm_
 
 
 --[ Probability probability measure
-prpm :: Note
-prpm = "P"
+prm_ :: Note
+prm_ = "P"
 
 --[ Probability
 prm :: Note -> Note -> Note
 prm = app -- probability with custom measure
 
 prob :: Note -> Note
-prob = prm prpm
+prob = prm prm_
 

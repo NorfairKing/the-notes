@@ -49,8 +49,8 @@ probabilityMeasureDefinition = de $ do
     lab probabilityDefinitionLabel
 
     msDec
-    s ["A ", probabilityMeasure', " is a ", function_, " ", m prpm, " with the following three properties:"]
-    ma $ fun prpm sa_ $ ccint 0 1
+    s ["A ", probabilityMeasure', " is a ", function_, " ", m prm_, " with the following three properties:"]
+    ma $ fun prm_ sa_ $ ccint 0 1
 
     enumerate $ do
         item $ m $ (prob univ_) =: 1
@@ -67,7 +67,7 @@ probabilityMeasureDefinition = de $ do
     an = "A" !: "n"
 
 msppsDec :: Note
-msppsDec = s ["Let ", m mspace_, " be a ", measurableSpace, " and ", m prpm, " a ", probabilityMeasure]
+msppsDec = s ["Let ", m mspace_, " be a ", measurableSpace, " and ", m prm_, " a ", probabilityMeasure]
 
 probabilitySpaceDefinition :: Note
 probabilitySpaceDefinition = de $ do
@@ -212,13 +212,13 @@ uniformeProbabilityMeasureDefinition :: Note
 uniformeProbabilityMeasureDefinition = de $ do
     lab uniformeProbabilityMeasureDefinitionLabel
     s ["The ", uniformeProbabilityMeasure', " is a ", probabilityMeasure, " that is only defined for measurable spaces with a finite ", universe]
-    ma $ func prpm sa_ (ccint 0 1 ⊆ reals) "A" (setsize "A" / setsize univ_)
+    ma $ func prm_ sa_ (ccint 0 1 ⊆ reals) "A" (setsize "A" / setsize univ_)
 
 
 discreteProbabilityMeasureDefinition :: Note
 discreteProbabilityMeasureDefinition = de $ do
     lab discreteProbabilityMeasureDefinitionLabel
     s ["The ", discreteProbabilityMeasure', " is a ", probabilityMeasure, " that is only defined for measure spaces with a countable ", universe]
-    ma $ func prpm sa_ (ccint 0 1 ⊆ reals) ("A" !: "i") ("p" !: "i")
+    ma $ func prm_ sa_ (ccint 0 1 ⊆ reals) ("A" !: "i") ("p" !: "i")
 
 

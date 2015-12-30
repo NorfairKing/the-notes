@@ -79,14 +79,14 @@ randomVariableCondition = thm $ do
 
 borealMeasurableInducesProbabilityMeasure :: Note
 borealMeasurableInducesProbabilityMeasure = thm $ do
-    s ["A Borel-measurable function induces a ", probabilityMeasure, " ", m (prpm !: rv_), on, m boreals, " in ", m prbsp, " as follows"]
+    s ["A Borel-measurable function induces a ", probabilityMeasure, " ", m (prm_ !: rv_), on, m boreals, " in ", m prbsp, " as follows"]
     ma $ px b =: prob (x ∈ b) =: prob (inv x `fn` b)
     ma $ px b =: prob (setcmpr (omega ∈ univ_) (vrv omega ∈ b))
     toprove
   where
     b = "B"
     x = "X"
-    px = fn (prpm !: rv_)
+    px = fn (prm_ !: rv_)
 
 distributionFunctions :: Note
 distributionFunctions = note "distribution-functions" $ do
