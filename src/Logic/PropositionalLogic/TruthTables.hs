@@ -32,7 +32,7 @@ renderCNFSentence s = if isCNF s
                         else renderSentence s
   where
     go (Or s1 s2)           = go s1 ∨ go s2
-    go (And s1 s2)          = (go s1 <> quad) ∧ (quad <> go s2)
+    go (And s1 s2)          = (go s1 <> commS " ") ∧ (commS " " <> go s2)
     go s = renderSentence s
 
 

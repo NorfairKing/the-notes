@@ -321,14 +321,17 @@ conjunctiveNormalFormS = note "cnf" $ do
             item $ do
                 s ["Use the distributive laws to obtain a formula in CNF"]
         np
+
     ex $ do
         let (p, q) = ("P", "Q")
             sen = Equiv (Implies p q) (Implies (Not q) (Not p))
         renderTransformation sen
         s ["The Tseitin transformation, applied to ", m $ renderSentence sen]
+
     de $ do
         let n = "n"
         s ["A sentence is said to be in ", m n, "-CNF if it is in ", conjunctiveNormalForm, " where each disjunction contains exactly ", m n, " literals"]
+
     thm $ do
         let n = "n"
         s ["Given ", m n, " distinct propositional symbols, there exist ", m $ 2 * n ^ 2 + 1, " semantically distinct ", m 2, "-CNF sentences"]
@@ -342,6 +345,20 @@ conjunctiveNormalFormS = note "cnf" $ do
             s ["Count ", m $ 2 * n, " more literals for clauses of the form ", m $ a ∨ a]
             s ["Clauses of the form ", m $ a ∨ neg a, " all evaluate to true and should therefore not be counted"]
             s ["In total this leaves ", m $ pars (2 * n ^ 2 - n) + (2 * n) - pars (n - 1), " possible semantically distinct ", m 2, "-CNF expressions"]
+
+    thm $ do
+        s ["Resolution of ", m 2, "-CNF sentences is decidable in polynomial time"]
+        refneeded "polynomial time"
+
+        proof $ do
+            let n = "n"
+            s ["Each resolution step creates a new ", m 2, "-CNF clause or a literal"]
+            s ["Because there are only ", m $ 2 * n ^ 2 + 1, ", a polynomial amount, possible ", m 2, "-CNF clauses, this guarantees that resolution terminates in a polynomiall amount of time"]
+    nte $ do
+        let n = "n"
+        s ["This immediately explains why resolution of CNF sentences in general is not decidable in polynomial time but instead requires exponential time"]
+        s ["A resolution step of ", m n, "-CNF clauses results in a ", m $ 2 * n - 2, "-CNF clause"]
+        s ["Only for ", m $ n =: 2, " that is a smaller clause"]
 
 
 tseitinTransformation :: Reference
@@ -441,6 +458,17 @@ resolutionProofs = do
         let s1 = And (And (And (And (Or a b) (Or (Not a) c)) (Or (Not b) d)) (Or (Not c) g)) (Or (Not d) g)
         let s2 = g
         proofUnsatisfiable 10 s1 s2
+
+
+
+
+
+
+
+
+
+
+
 
 
 
