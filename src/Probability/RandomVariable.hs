@@ -52,7 +52,7 @@ randomVariableDefinition = de $ do
 
     s ["A real ", function, " as follows is called a ", randomVariable', or, stochasticVariable']
     -- FIXME use realFunction instead of function once that's defined.
-    ma $ prrvfunc
+    ma $ rvfunc_
     ma $ fa (b ∈ boreals) $ inv x `fn` b =: setcmpr omega (x `fn` omega ∈ b)
 
   where
@@ -102,7 +102,7 @@ distributionFunctions = note "distribution-functions" $ do
 cumulativeDistributionFunctionDefinition :: Note
 cumulativeDistributionFunctionDefinition = de $ do
     psDec
-    s ["Let ", m prrvfunc, " be a ", randomVariable]
+    s ["Let ", m rvfunc_, " be a ", randomVariable]
     s ["The ", cumulativeDistributionFunction', " (", term "CDF", ") or ", distributionFunction', " as follows"]
     ma $ func prdf reals reals a $ prd (ocint minfty a) =: prob (setcmpr o (prvrv o)) =: prob (rv_ <= a)
     s ["Sometimes the term ", distribution', " is also used as-is"]

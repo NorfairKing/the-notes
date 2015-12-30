@@ -18,8 +18,8 @@ rv_ = "X"
 -- FIXME fix variable name
 
 -- | Function declaration for concrete random variable
-prrvfunc :: Note
-prrvfunc = fun rv_ univ_ reals
+rvfunc_ :: Note
+rvfunc_ = fun rv_ univ_ reals
 -- FIXME fix variable name
 
 -- | Probability value from random variable
