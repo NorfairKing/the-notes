@@ -31,11 +31,11 @@ vrv = fn rv_
 prdfsign :: Note
 prdfsign = "F"
 
-prdfm :: Note -> Note
-prdfm n = prdfsign !: n -- probability distribution function modified
+df :: Note -> Note
+df n = prdfsign !: n -- probability distribution function modified
 
 df_ :: Note
-df_ = prdfm rv_  -- probability distribution function
+df_ = df rv_  -- probability distribution function
 
 prd :: Note -> Note
 prd = app df_ -- probability distribution at point argument
