@@ -27,8 +27,8 @@ prspace :: Note -> Note -> Note -> Note
 prspace = triple
 
 -- | Concrete probability space
-prsp :: Note
-prsp = prspace univ_ sa_ prpm
+prsp_ :: Note
+prsp_ = prspace univ_ sa_ prpm
 
 prbsp :: Note
 prbsp = prspace reals boreals prpm

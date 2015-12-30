@@ -40,7 +40,7 @@ b = "B"
 ai = a ∈ sa_
 
 psDec :: Note
-psDec = s ["Let ", m prsp, " be a ", probabilitySpace]
+psDec = s ["Let ", m prsp_, " be a ", probabilitySpace]
 
 conditionalProbabilityDefinition :: Note
 conditionalProbabilityDefinition = de $ do

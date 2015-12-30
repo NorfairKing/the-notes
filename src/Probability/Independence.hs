@@ -25,7 +25,7 @@ independenceS = note "independence" $ do
     infiniteMutalIndependenceDefinition
 
 psDec :: Note
-psDec = s ["Let ", m prsp, " be a ", probabilitySpace]
+psDec = s ["Let ", m prsp_, " be a ", probabilitySpace]
 
 independenceDefinition :: Note
 independenceDefinition = de $ do

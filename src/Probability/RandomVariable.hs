@@ -29,7 +29,7 @@ randomVariableS = note "random-variable" $ do
     typesOfRandomVariables
 
 psDec :: Note
-psDec = s ["Let ", m prsp, " be a ", probabilitySpace]
+psDec = s ["Let ", m prsp_, " be a ", probabilitySpace]
 
 introS :: Note
 introS = note "intro" $ do
@@ -204,7 +204,7 @@ discreteRandomVariables = note "discrete" $ do
 
 discreteRandomVariableDefinition :: Note
 discreteRandomVariableDefinition = de $ do
-    s ["A ", randomVariable, " ", m rv_, " in a ", probabilitySpace, " ", m prsp, " is called ", discrete', " if the ", image, " under ", m rv_, " is non-zero in just a countable number of points"] --FIXME index countable
+    s ["A ", randomVariable, " ", m rv_, " in a ", probabilitySpace, " ", m prsp_, " is called ", discrete', " if the ", image, " under ", m rv_, " is non-zero in just a countable number of points"] --FIXME index countable
     ma $ pi =: prob (setcmpr (omega ∈ univ_) (vrv omega =: xi)) =: prob (rv_ =: xi)
 
   where
@@ -214,7 +214,7 @@ discreteRandomVariableDefinition = de $ do
 
 discreteDistributionDefinition :: Note
 discreteDistributionDefinition = de $ do
-    s ["A ", discreteDistribution', " ", m (sequ pi i), " of a ", discrete, " ", randomVariable, " ", m rv_, " in a ", probabilitySpace, " ", m prsp, " is a ", sequence, " with the following properties"]
+    s ["A ", discreteDistribution', " ", m (sequ pi i), " of a ", discrete, " ", randomVariable, " ", m rv_, " in a ", probabilitySpace, " ", m prsp_, " is a ", sequence, " with the following properties"]
     enumerate $ do
         item $ m $ fa (i ∈ naturals) (pi >= 0)
         item $ m $ sumcmp i pi =: 1
@@ -225,7 +225,7 @@ discreteDistributionDefinition = de $ do
 
 discreteCumulativeDistribution :: Note
 discreteCumulativeDistribution = thm $ do
-    s [the, distributionFunction, " ", m df_, " of a ", discrete, " ", randomVariable, " ", m rv_, " in a ", probabilitySpace, " ", m prsp, " has a simpler formula"]
+    s [the, distributionFunction, " ", m df_, " of a ", discrete, " ", randomVariable, " ", m rv_, " in a ", probabilitySpace, " ", m prsp_, " has a simpler formula"]
     ma $ prd a =: prob (rv_ <= a) =: sumcmp (xi <= a) pi
 
     toprove
@@ -245,7 +245,7 @@ continuousRandomVariables = note "continuous" $ do
 
 continuousRandomVariableDefinition :: Note
 continuousRandomVariableDefinition = de $ do
-    s ["A ", randomVariable, " ", m rv_, " in a ", probabilitySpace, " ", m prsp, " is called ", continuous', " if the image of every point under ", m rv_, " is zero.."]
+    s ["A ", randomVariable, " ", m rv_, " in a ", probabilitySpace, " ", m prsp_, " is called ", continuous', " if the image of every point under ", m rv_, " is zero.."]
     ma $ fa (x ∈ univ_) (prob (setof x) =: 0)
     s ["... and the distribution function ", m df_, " is a continuous function"]
     refneeded "continuous function"
@@ -253,7 +253,7 @@ continuousRandomVariableDefinition = de $ do
   where x = "x"
 
 prdsDec :: Note
-prdsDec = s ["Let ", m df_, " be a ", distributionFunction, " of a ", continuous, " ", randomVariable, " ", m rv_, " in a ", probabilitySpace, " ", m prsp, " that is ", continuous, " with a ", continuous, " derivative"] -- FIXME index derivative
+prdsDec = s ["Let ", m df_, " be a ", distributionFunction, " of a ", continuous, " ", randomVariable, " ", m rv_, " in a ", probabilitySpace, " ", m prsp_, " that is ", continuous, " with a ", continuous, " derivative"] -- FIXME index derivative
 
 probabilityDensitySSS :: Note
 probabilityDensitySSS = note "density" $ do
@@ -295,7 +295,7 @@ probabilityDensityDistributionBetween = thm $ do
 
 intervalOpenCloseDistribution :: Note
 intervalOpenCloseDistribution = thm $ do
-    s ["Let ", m rv_, " be a ", continuous, " ", randomVariable, " in a ", probabilitySpace, " ", m prsp, " and let ", m df_, " be the ", distributionFunction, " of ", m rv_]
+    s ["Let ", m rv_, " be a ", continuous, " ", randomVariable, " in a ", probabilitySpace, " ", m prsp_, " and let ", m df_, " be the ", distributionFunction, " of ", m rv_]
     ma $ prd (ooint a b)
       =: prd (ocint a b)
       =: prd (coint a b)

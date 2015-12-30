@@ -72,7 +72,7 @@ msppsDec = s ["Let ", m mspace_, " be a ", measurableSpace, " and ", m prpm, " a
 probabilitySpaceDefinition :: Note
 probabilitySpaceDefinition = de $ do
     lab probabilitySpaceDefinitionLabel
-    s [msppsDec, m prsp, " is called a ", probabilitySpace']
+    s [msppsDec, m prsp_, " is called a ", probabilitySpace']
 
 probabilityMeasureFiniteAdditivityLabel :: Label
 probabilityMeasureFiniteAdditivityLabel = thmlab "probability-measure-finite-additivity"
@@ -81,7 +81,7 @@ probabilityMeasureFiniteAdditivity :: Note
 probabilityMeasureFiniteAdditivity = thm $ do
     lab probabilityMeasureFiniteAdditivityLabel
 
-    s ["Let ", m prsp, " be a ", probabilitySpace', " and let ", m (setcmpr an $ "n" ∈ setlst "1" "N"), " be ", m "N", " pairwise disjunct events of ", m sa_]
+    s ["Let ", m prsp_, " be a ", probabilitySpace', " and let ", m (setcmpr an $ "n" ∈ setlst "1" "N"), " be ", m "N", " pairwise disjunct events of ", m sa_]
     ma $ prob (setuncmpr (n =: 1) "N" an) =: sumcmpr (n =: 1) "N" (prob an)
 
     proof $ s ["Use the ", countableAdditivity, " property of ", probabilityMeasure, "s", ref probabilityMeasureDefinitionLabel, " where only ", m n, " sets are non-empty"]
@@ -90,7 +90,7 @@ probabilityMeasureFiniteAdditivity = thm $ do
     an = "A" !: n
 
 psDec :: Note
-psDec = s ["Let ", m prsp, " be a ", probabilitySpace]
+psDec = s ["Let ", m prsp_, " be a ", probabilitySpace]
 
 probabilitySpaceProbabilityOfComplement :: Note
 probabilitySpaceProbabilityOfComplement = thm $ do
