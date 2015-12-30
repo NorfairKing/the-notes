@@ -42,11 +42,11 @@ prd = app df_ -- probability distribution at point argument
 
 
 -- * Density function
-prdsfsign :: Note
-prdsfsign = "f"
+dsfsign_ :: Note
+dsfsign_ = "f"
 
 dsf :: Note -> Note
-dsf n = prdsfsign !: n --  probability density function modified
+dsf n = dsfsign_ !: n --  probability density function modified
 
 dsf_ :: Note
 dsf_ = dsf rv_ -- probability density function
