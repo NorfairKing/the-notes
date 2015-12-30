@@ -28,11 +28,11 @@ vrv = fn rv_
 -- FIXME fix variable name
 
 -- * Distribution function
-prdfsign :: Note
-prdfsign = "F"
+dfsign_ :: Note
+dfsign_ = "F"
 
 df :: Note -> Note
-df n = prdfsign !: n -- probability distribution function modified
+df n = dfsign_ !: n -- probability distribution function modified
 
 df_ :: Note
 df_ = df rv_  -- probability distribution function
