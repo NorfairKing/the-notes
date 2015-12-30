@@ -25,7 +25,6 @@ import           Macro.Groups.Macro          as X
 import           Macro.LinearAlgebra.Macro   as X
 import           Macro.MachineLearning.Macro as X
 import           Macro.Numbers.Macro         as X
-import           Macro.Probability.Macro     as X
 import           Macro.Sets.Macro            as X
 import           Macro.Topology.Macro        as X
 

@@ -8,7 +8,7 @@ import           Probability.Intro.Terms
 import           Probability.ProbabilityMeasure.Macro
 import           Probability.RandomVariable.Terms
 
--- import           Probability.Distributions.Macro
+import           Probability.Distributions.Macro
 import           Probability.Distributions.Terms
 
 distributions :: Note
@@ -27,7 +27,7 @@ discreteDistributions = do
 
 discreteUniform :: Note
 discreteUniform = de $ do
-    s [the, term "discrete uniform distribution", " is defined only on a finite universe: ", m (univ_ =: setlist (x 1) (x 2) (x n))]
+    s [the, discreteUniformDistribution', " is defined only on a ", finite, " ", universe, ": ", m (univ_ =: setlist (x 1) (x 2) (x n))]
     ma $ fa (i ∈ setlst 1 n) $ p i =: prob (setof $ x i) =: 1 /: n
 
   where
@@ -38,13 +38,13 @@ discreteUniform = de $ do
 
 bernoulli :: Note
 bernoulli = de $ do
-    s ["A ", term "Bernoulli distribution", " is defined for a Bernoulli experiment", ref bernoulliExperimentDefinitionLabel]
+    s ["A ", bernouilliDistribution', " is defined for a ", bernoulliExperiment_]
     ma $ x ~. bernoulliD p
     ma $ cases $ do
         prob (x =: 1) & "" =: p
         lnbk
         prob (x =: 0) & "" =: q =: 1 - p
-    s [m p, " is called the ", term "probability of success"]
+    s [m p, " is called the ", probabilityOfSuccess]
   where
     x = "X"
     p = "p"
@@ -52,7 +52,7 @@ bernoulli = de $ do
 
 binomial :: Note
 binomial = de $ do
-    s ["A ", term "binomial distribution", " is the distribution of the sum ", m y, " of ", m n, " times the same Bernoulli-distributed random variable ", m x, " with probability of success ", m p]
+    s ["A ", binomialDistribution', " is the ", distribution, " of the sum ", m y, " of ", m n, " times the same Bernoulli-distributed ", randomVariable, " ", m x, " with ", probabilityOfSuccess, " ", m p]
     ma $ y ~. binomialD n p
     ma $ y =: sumcmpr (i =: 1) n (x !: i)
   where
@@ -70,3 +70,4 @@ continuousDistributions = do
 gaussianDistribution :: Note
 gaussianDistribution = de $ do
     s ["A ", gaussian', " ", distribution]
+    todo gaussian

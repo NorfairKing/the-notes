@@ -3,5 +3,9 @@ module Probability.Distributions.Terms where
 import           Notes
 
 makeDefs [
-      "gaussian"
+      "discrete uniform distribution"
+    , "Bernouilli distribution"
+    , "gaussian"
+    , "probability of success"
+    , "binomial distribution"
     ]

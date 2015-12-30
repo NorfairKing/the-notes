@@ -16,7 +16,7 @@ import           Probability.SigmaAlgebra.Macro
 import           Probability.SigmaAlgebra.Terms
 import           Relations.Domain
 
--- import           Probability.RandomVariable.Macro
+import           Probability.RandomVariable.Macro
 import           Probability.RandomVariable.Terms
 
 

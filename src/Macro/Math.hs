@@ -158,6 +158,12 @@ distributive = ix "distributive"
 sequence :: Note
 sequence = ix "sequence"
 
+finite :: Note
+finite = ix "finite"
+
+infinite :: Note
+infinite = ix "infinite"
+
 -- Proofs
 proof :: Note -> Note
 proof = liftL $ TeXEnv "proof" []
