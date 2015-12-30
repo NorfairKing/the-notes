@@ -23,15 +23,15 @@ boreals = borel reals
 -- * Probability space
 
 -- | Probabilty space given a universe, sigma algebra and probability measure
-prspace :: Note -> Note -> Note -> Note
-prspace = triple
+prsp :: Note -> Note -> Note -> Note
+prsp = triple
 
 -- | Concrete probability space
 prsp_ :: Note
-prsp_ = prspace univ_ sa_ prpm
+prsp_ = prsp univ_ sa_ prpm
 
 prbsp :: Note
-prbsp = prspace reals boreals prpm
+prbsp = prsp reals boreals prpm
 
 
 --[ Probability probability measure
