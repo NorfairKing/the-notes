@@ -48,11 +48,11 @@ prdsfsign = "f"
 prdsfm :: Note -> Note
 prdsfm n = prdsfsign !: n --  probability density function modified
 
-prdsf :: Note
-prdsf = prdsfm rv_ -- probability density function
+dsf_ :: Note
+dsf_ = prdsfm rv_ -- probability density function
 
 prds :: Note -> Note
-prds = app prdsf -- probability density
+prds = app dsf_ -- probability density
 
 
 -- * Quantile function

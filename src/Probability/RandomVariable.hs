@@ -265,14 +265,14 @@ probabilityDensitySSS = note "density" $ do
 probabilityDensitiyFunctionDefinition :: Note
 probabilityDensitiyFunctionDefinition = de $ do
     prdsDec
-    s ["The ", probabilityDensityFunction', or, probabilityDensity', " ", m prdsf, " is the following ", function]
-    ma $ func prdsf reals reals x $ prds x =: deriv (prd x) x
+    s ["The ", probabilityDensityFunction', or, probabilityDensity', " ", m dsf_, " is the following ", function]
+    ma $ func dsf_ reals reals x $ prds x =: deriv (prd x) x
   where x = "x"
 
 probabilityDensityDistribution :: Note
 probabilityDensityDistribution = thm $ do
     prdsDec
-    s ["Let ", m prdsf, " be the ", probabilityDensityFunction, " of ", m rv_]
+    s ["Let ", m dsf_, " be the ", probabilityDensityFunction, " of ", m rv_]
     ma $ prd a =: prob (x <= a) =: int minfty a (prds x) x
 
     toprove
@@ -284,7 +284,7 @@ probabilityDensityDistribution = thm $ do
 probabilityDensityDistributionBetween :: Note
 probabilityDensityDistributionBetween = thm $ do
     prdsDec
-    s ["Let ", m prdsf, " be the ", probabilityDensityFunction, " of ", m rv_]
+    s ["Let ", m dsf_, " be the ", probabilityDensityFunction, " of ", m rv_]
     ma $ prd x - prd a =: prob (a < rv_ <= b) =: int a b (prds x) x
 
     toprove
