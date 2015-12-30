@@ -62,8 +62,8 @@ randomVariableDefinition = de $ do
 saMeasureDefinition :: Note
 saMeasureDefinition = de $ do
     psDec
-    s ["Let ", m prrv, " be a ", randomVariable]
-    s [m prrv, " is called a ", m sa_, "-", measure]
+    s ["Let ", m rv_, " be a ", randomVariable]
+    s [m rv_, " is called a ", m sa_, "-", measure]
 
 borealMesureDefinition :: Note
 borealMesureDefinition = de $ do
@@ -72,21 +72,21 @@ borealMesureDefinition = de $ do
 randomVariableCondition :: Note
 randomVariableCondition = thm $ do
     s ["A ", function, " ", m (fun x reals reals), " is a ", randomVariable, " in the ", measurableSpace, " ", m (mspace reals boreals), " if and only if the following holds"]
-    ma $ fa (a ∈ reals) $ inv x `fn` (ocint minfty a) =: setcmpr omega (prrv `fn` omega <= a) ∈ sa_
+    ma $ fa (a ∈ reals) $ inv x `fn` (ocint minfty a) =: setcmpr omega (rv_ `fn` omega <= a) ∈ sa_
   where
     a = "A"
     x = "X"
 
 borealMeasurableInducesProbabilityMeasure :: Note
 borealMeasurableInducesProbabilityMeasure = thm $ do
-    s ["A Borel-measurable function induces a ", probabilityMeasure, " ", m (prpm !: prrv), on, m boreals, " in ", m prbsp, " as follows"]
+    s ["A Borel-measurable function induces a ", probabilityMeasure, " ", m (prpm !: rv_), on, m boreals, " in ", m prbsp, " as follows"]
     ma $ px b =: prob (x ∈ b) =: prob (inv x `fn` b)
     ma $ px b =: prob (setcmpr (omega ∈ univ_) (prvrv omega ∈ b))
     toprove
   where
     b = "B"
     x = "X"
-    px = fn (prpm !: prrv)
+    px = fn (prpm !: rv_)
 
 distributionFunctions :: Note
 distributionFunctions = note "distribution-functions" $ do
@@ -104,7 +104,7 @@ cumulativeDistributionFunctionDefinition = de $ do
     psDec
     s ["Let ", m prrvfunc, " be a ", randomVariable]
     s ["The ", cumulativeDistributionFunction', " (", term "CDF", ") or ", distributionFunction', " as follows"]
-    ma $ func prdf reals reals a $ prd (ocint minfty a) =: prob (setcmpr o (prvrv o)) =: prob (prrv <= a)
+    ma $ func prdf reals reals a $ prd (ocint minfty a) =: prob (setcmpr o (prvrv o)) =: prob (rv_ <= a)
     s ["Sometimes the term ", distribution', " is also used as-is"]
   where
     a = "a"
@@ -112,7 +112,7 @@ cumulativeDistributionFunctionDefinition = de $ do
 
 distributionFunctionCondition :: Note
 distributionFunctionCondition = thm $ do
-    s ["Let ", m prrv, " be a random variable in ", m prbsp]
+    s ["Let ", m rv_, " be a random variable in ", m prbsp]
     s ["A function ", m (fun prdf reals reals), " is a ", cumulativeDistributionFunction, " if and only if it has the following three properties"]
     enumerate $ do
         item $ do
@@ -138,7 +138,7 @@ bdfDec = s ["Let ", m prdf, " be a distribution function in ", m prbsp]
 distributionBetweenValues :: Note
 distributionBetweenValues = thm $ do
     bdfDec
-    ma $ fa (cs [a, b] ∈ reals) $ prob (a < prrv <= b) =: prd b - prd a
+    ma $ fa (cs [a, b] ∈ reals) $ prob (a < rv_ <= b) =: prd b - prd a
 
     toprove
   where
@@ -148,7 +148,7 @@ distributionBetweenValues = thm $ do
 distributionAfterValue :: Note
 distributionAfterValue = thm $ do
     bdfDec
-    ma $ fa (a ∈ reals) $ prob (prrv > a) =: 1 - prd a
+    ma $ fa (a ∈ reals) $ prob (rv_ > a) =: 1 - prd a
 
     toprove
   where a = "a"
@@ -204,8 +204,8 @@ discreteRandomVariables = note "discrete" $ do
 
 discreteRandomVariableDefinition :: Note
 discreteRandomVariableDefinition = de $ do
-    s ["A ", randomVariable, " ", m prrv, " in a ", probabilitySpace, " ", m prsp, " is called ", discrete', " if the ", image, " under ", m prrv, " is non-zero in just a countable number of points"] --FIXME index countable
-    ma $ pi =: prob (setcmpr (omega ∈ univ_) (prvrv omega =: xi)) =: prob (prrv =: xi)
+    s ["A ", randomVariable, " ", m rv_, " in a ", probabilitySpace, " ", m prsp, " is called ", discrete', " if the ", image, " under ", m rv_, " is non-zero in just a countable number of points"] --FIXME index countable
+    ma $ pi =: prob (setcmpr (omega ∈ univ_) (prvrv omega =: xi)) =: prob (rv_ =: xi)
 
   where
     i = "i"
@@ -214,7 +214,7 @@ discreteRandomVariableDefinition = de $ do
 
 discreteDistributionDefinition :: Note
 discreteDistributionDefinition = de $ do
-    s ["A ", discreteDistribution', " ", m (sequ pi i), " of a ", discrete, " ", randomVariable, " ", m prrv, " in a ", probabilitySpace, " ", m prsp, " is a ", sequence, " with the following properties"]
+    s ["A ", discreteDistribution', " ", m (sequ pi i), " of a ", discrete, " ", randomVariable, " ", m rv_, " in a ", probabilitySpace, " ", m prsp, " is a ", sequence, " with the following properties"]
     enumerate $ do
         item $ m $ fa (i ∈ naturals) (pi >= 0)
         item $ m $ sumcmp i pi =: 1
@@ -225,8 +225,8 @@ discreteDistributionDefinition = de $ do
 
 discreteCumulativeDistribution :: Note
 discreteCumulativeDistribution = thm $ do
-    s [the, distributionFunction, " ", m prdf, " of a ", discrete, " ", randomVariable, " ", m prrv, " in a ", probabilitySpace, " ", m prsp, " has a simpler formula"]
-    ma $ prd a =: prob (prrv <= a) =: sumcmp (xi <= a) pi
+    s [the, distributionFunction, " ", m prdf, " of a ", discrete, " ", randomVariable, " ", m rv_, " in a ", probabilitySpace, " ", m prsp, " has a simpler formula"]
+    ma $ prd a =: prob (rv_ <= a) =: sumcmp (xi <= a) pi
 
     toprove
   where
@@ -245,7 +245,7 @@ continuousRandomVariables = note "continuous" $ do
 
 continuousRandomVariableDefinition :: Note
 continuousRandomVariableDefinition = de $ do
-    s ["A ", randomVariable, " ", m prrv, " in a ", probabilitySpace, " ", m prsp, " is called ", continuous', " if the image of every point under ", m prrv, " is zero.."]
+    s ["A ", randomVariable, " ", m rv_, " in a ", probabilitySpace, " ", m prsp, " is called ", continuous', " if the image of every point under ", m rv_, " is zero.."]
     ma $ fa (x ∈ univ_) (prob (setof x) =: 0)
     s ["... and the distribution function ", m prdf, " is a continuous function"]
     refneeded "continuous function"
@@ -253,7 +253,7 @@ continuousRandomVariableDefinition = de $ do
   where x = "x"
 
 prdsDec :: Note
-prdsDec = s ["Let ", m prdf, " be a ", distributionFunction, " of a ", continuous, " ", randomVariable, " ", m prrv, " in a ", probabilitySpace, " ", m prsp, " that is ", continuous, " with a ", continuous, " derivative"] -- FIXME index derivative
+prdsDec = s ["Let ", m prdf, " be a ", distributionFunction, " of a ", continuous, " ", randomVariable, " ", m rv_, " in a ", probabilitySpace, " ", m prsp, " that is ", continuous, " with a ", continuous, " derivative"] -- FIXME index derivative
 
 probabilityDensitySSS :: Note
 probabilityDensitySSS = note "density" $ do
@@ -272,7 +272,7 @@ probabilityDensitiyFunctionDefinition = de $ do
 probabilityDensityDistribution :: Note
 probabilityDensityDistribution = thm $ do
     prdsDec
-    s ["Let ", m prdsf, " be the ", probabilityDensityFunction, " of ", m prrv]
+    s ["Let ", m prdsf, " be the ", probabilityDensityFunction, " of ", m rv_]
     ma $ prd a =: prob (x <= a) =: int minfty a (prds x) x
 
     toprove
@@ -284,8 +284,8 @@ probabilityDensityDistribution = thm $ do
 probabilityDensityDistributionBetween :: Note
 probabilityDensityDistributionBetween = thm $ do
     prdsDec
-    s ["Let ", m prdsf, " be the ", probabilityDensityFunction, " of ", m prrv]
-    ma $ prd x - prd a =: prob (a < prrv <= b) =: int a b (prds x) x
+    s ["Let ", m prdsf, " be the ", probabilityDensityFunction, " of ", m rv_]
+    ma $ prd x - prd a =: prob (a < rv_ <= b) =: int a b (prds x) x
 
     toprove
   where
@@ -295,7 +295,7 @@ probabilityDensityDistributionBetween = thm $ do
 
 intervalOpenCloseDistribution :: Note
 intervalOpenCloseDistribution = thm $ do
-    s ["Let ", m prrv, " be a ", continuous, " ", randomVariable, " in a ", probabilitySpace, " ", m prsp, " and let ", m prdf, " be the ", distributionFunction, " of ", m prrv]
+    s ["Let ", m rv_, " be a ", continuous, " ", randomVariable, " in a ", probabilitySpace, " ", m prsp, " and let ", m prdf, " be the ", distributionFunction, " of ", m rv_]
     ma $ prd (ooint a b)
       =: prd (ocint a b)
       =: prd (coint a b)

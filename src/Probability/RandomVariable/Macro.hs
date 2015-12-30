@@ -13,18 +13,18 @@ import           Probability.Intro.Macro
 -- * Random variable
 
 -- | Concrete random variable
-prrv :: Note
-prrv = "X"
+rv_ :: Note
+rv_ = "X"
 -- FIXME fix variable name
 
 -- | Function declaration for concrete random variable
 prrvfunc :: Note
-prrvfunc = fun prrv univ_ reals
+prrvfunc = fun rv_ univ_ reals
 -- FIXME fix variable name
 
 -- | Probability value from random variable
 prvrv :: Note -> Note
-prvrv = fn prrv
+prvrv = fn rv_
 -- FIXME fix variable name
 
 -- * Distribution function
@@ -35,7 +35,7 @@ prdfm :: Note -> Note
 prdfm n = prdfsign !: n -- probability distribution function modified
 
 prdf :: Note
-prdf = prdfm prrv  -- probability distribution function
+prdf = prdfm rv_  -- probability distribution function
 
 prd :: Note -> Note
 prd = app prdf -- probability distribution at point argument
@@ -49,7 +49,7 @@ prdsfm :: Note -> Note
 prdsfm n = prdsfsign !: n --  probability density function modified
 
 prdsf :: Note
-prdsf = prdsfm prrv -- probability density function
+prdsf = prdsfm rv_ -- probability density function
 
 prds :: Note -> Note
 prds = app prdsf -- probability density
@@ -63,7 +63,7 @@ prqfm :: Note -> Note
 prqfm n = prqfsign !: n
 
 prqf :: Note
-prqf = prqfm prrv
+prqf = prqfm rv_
 
 prq :: Note -> Note
 prq = app prqf
