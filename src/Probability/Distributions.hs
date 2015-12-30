@@ -6,6 +6,10 @@ import           Logic.FirstOrderLogic.Macro
 import           Probability.Intro.Macro
 import           Probability.Intro.Terms
 import           Probability.ProbabilityMeasure.Macro
+import           Probability.RandomVariable.Terms
+
+-- import           Probability.Distributions.Macro
+import           Probability.Distributions.Terms
 
 distributions :: Note
 distributions = note "important-distributions" $ do
@@ -61,3 +65,8 @@ binomial = de $ do
 continuousDistributions :: Note
 continuousDistributions = do
     subsection "Continuous distributions"
+    gaussianDistribution
+
+gaussianDistribution :: Note
+gaussianDistribution = de $ do
+    s ["A ", gaussian', " ", distribution]

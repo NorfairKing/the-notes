@@ -3,6 +3,7 @@ module Probability.RandomVariable where
 import           Notes
 
 import           Functions.Application.Macro
+import           Functions.Basics
 import           Functions.Basics.Macro
 import           Functions.Inverse.Macro
 import           Logic.FirstOrderLogic.Macro
@@ -12,14 +13,19 @@ import           Probability.Intro.Macro
 import           Probability.ProbabilityMeasure.Macro
 import           Probability.ProbabilityMeasure.Terms
 import           Probability.SigmaAlgebra.Macro
+import           Probability.SigmaAlgebra.Terms
+import           Relations.Domain
+
+-- import           Probability.RandomVariable.Macro
+import           Probability.RandomVariable.Terms
 
 
-randomVariable :: Note
-randomVariable = note "random-variable" $ do
+randomVariableS :: Note
+randomVariableS = note "random-variable" $ do
     section "Random Variables"
     introS
     distributionFunctions
-    quantileFunction
+    quantileFunctionSS
     typesOfRandomVariables
 
 psDec :: Note
@@ -44,7 +50,8 @@ randomVariableDefinition :: Note
 randomVariableDefinition = de $ do
     psDec
 
-    s ["A real function as follows is called a ", term "random variable", or, term "stochastic variable"]
+    s ["A real ", function, " as follows is called a ", randomVariable', or, stochasticVariable']
+    -- FIXME use realFunction instead of function once that's defined.
     ma $ prrvfunc
     ma $ fa (b ∈ boreals) $ inv x `fn` b =: setcmpr omega (x `fn` omega ∈ b)
 
@@ -55,16 +62,16 @@ randomVariableDefinition = de $ do
 saMeasureDefinition :: Note
 saMeasureDefinition = de $ do
     psDec
-    s ["Let ", m prrv, " be a random variable"]
-    s [m prrv, " is called a ", m sa_, "-", term "measure"]
+    s ["Let ", m prrv, " be a ", randomVariable]
+    s [m prrv, " is called a ", m sa_, "-", measure]
 
 borealMesureDefinition :: Note
 borealMesureDefinition = de $ do
-    s ["A ", m boreals, "-measure in the measurable space ", m (mspace reals boreals), " is called ", term "Borel-measure"]
+    s ["A ", m boreals, "-", measure, " in the ", measurableSpace, " ", m (mspace reals boreals), " is called ", borelMeasure]
 
 randomVariableCondition :: Note
 randomVariableCondition = thm $ do
-    s ["A function ", m (fun x reals reals), " is a random variable in the measurable space ", m (mspace reals boreals), " if and only if the following holds"]
+    s ["A ", function, " ", m (fun x reals reals), " is a ", randomVariable, " in the ", measurableSpace, " ", m (mspace reals boreals), " if and only if the following holds"]
     ma $ fa (a ∈ reals) $ inv x `fn` (ocint minfty a) =: setcmpr omega (prrv `fn` omega <= a) ∈ sa_
   where
     a = "A"
@@ -72,7 +79,7 @@ randomVariableCondition = thm $ do
 
 borealMeasurableInducesProbabilityMeasure :: Note
 borealMeasurableInducesProbabilityMeasure = thm $ do
-    s ["A Borel-measurable function induces a probability measure ", m (prpm !: prrv), on, m boreals, " in ", m prbsp, " as follows"]
+    s ["A Borel-measurable function induces a ", probabilityMeasure, " ", m (prpm !: prrv), on, m boreals, " in ", m prbsp, " as follows"]
     ma $ px b =: prob (x ∈ b) =: prob (inv x `fn` b)
     ma $ px b =: prob (setcmpr (omega ∈ univ_) (prvrv omega ∈ b))
     toprove
@@ -95,9 +102,10 @@ distributionFunctions = note "distribution-functions" $ do
 cumulativeDistributionFunctionDefinition :: Note
 cumulativeDistributionFunctionDefinition = de $ do
     psDec
-    s ["Let ", m prrvfunc, " be a random variable"]
-    s ["The ", term "cumulative distribution function", " (", term "CDF", ") or ", term "termdistribution function", " as follows"]
+    s ["Let ", m prrvfunc, " be a ", randomVariable]
+    s ["The ", cumulativeDistributionFunction', " (", term "CDF", ") or ", distributionFunction', " as follows"]
     ma $ func prdf reals reals a $ prd (ocint minfty a) =: prob (setcmpr o (prvrv o)) =: prob (prrv <= a)
+    s ["Sometimes the term ", distribution', " is also used as-is"]
   where
     a = "a"
     o = omega
@@ -105,7 +113,7 @@ cumulativeDistributionFunctionDefinition = de $ do
 distributionFunctionCondition :: Note
 distributionFunctionCondition = thm $ do
     s ["Let ", m prrv, " be a random variable in ", m prbsp]
-    s ["A function ", m (fun prdf reals reals), " is a ", ix "cumulative distribution function", " if and only if it has the following three properties"]
+    s ["A function ", m (fun prdf reals reals), " is a ", cumulativeDistributionFunction, " if and only if it has the following three properties"]
     enumerate $ do
         item $ do
             s [m prdf, " is monotonically increasing"]
@@ -116,7 +124,7 @@ distributionFunctionCondition = thm $ do
         item $ do
             s [m prdf, " is right-continuous"]
             ma $ fa (a ∈ reals) $ rlim h 0 (prd $ a + h) =: prd a
-            refneeded "right-continuous"
+            refneeded "right-continuous" -- Also use the proper index
     noproof
 
   where
@@ -149,7 +157,7 @@ distributionAfterValue = thm $ do
 independenceOfRandomVariables :: Note
 independenceOfRandomVariables = de $ do
     s ["Let ", m x, and, m y, " be random variables in ", m prbsp]
-    s [m x, and, m y, " are called ", term "independent", " if and only if every two events ", m (x <= a), and, m (y <= b), " are ", independent_, " events"]
+    s [m x, and, m y, " are called ", independent', " if and only if every two events ", m (x <= a), and, m (y <= b), " are ", independent_, " events"]
   where
     a = "a"
     b = "b"
@@ -157,8 +165,8 @@ independenceOfRandomVariables = de $ do
     y = "Y"
 
 
-quantileFunction :: Note
-quantileFunction = note "quantile" $ do
+quantileFunctionSS :: Note
+quantileFunctionSS = note "quantile" $ do
     subsection "The quantile function"
     quantileFunctionDefinition
     quartileDefinition
@@ -166,19 +174,19 @@ quantileFunction = note "quantile" $ do
 
 quantileFunctionDefinition :: Note
 quantileFunctionDefinition = de $ do
-    s ["The ", term "quantile function", for, m prbsp, " is the inverse of the distribution function ", m prdf]
-    s ["The value ", m (prq p), " is the smallest value ", m (a ∈ reals), " for which ", m (prd a >= p), " holds"]
+    s ["The ", quantileFunction', for, m prbsp, " is the inverse of the ", distributionFunction, " ", m prdf]
+    s ["The value ", m (prq p), " is the smallest value ", m (a ∈ reals), " for which ", m (prd a >= p), " holds"] -- FIXME index smallest
   where
     a = "a"
     p = "p"
 
 quartileDefinition :: Note
 quartileDefinition = de $ do
-    s ["The ", m "0.25", ", ", m "0.5", and, m "0.75", " quantile are respectively called the first, second and third ", term "quartile"]
+    s ["The ", m "0.25", ", ", m "0.5", and, m "0.75", " ", quantile, " are respectively called the first, second and third ", quartile]
 
 medianDefinition :: Note
 medianDefinition = de $ do
-    s ["The second quartile is called the ", term "median"]
+    s ["The second ", quartile, " is called the ", median]
 
 
 typesOfRandomVariables :: Note
@@ -194,12 +202,9 @@ discreteRandomVariables = note "discrete" $ do
     discreteDistributionDefinition
     discreteCumulativeDistribution
 
-discrete :: Note
-discrete = ix "discrete"
-
 discreteRandomVariableDefinition :: Note
 discreteRandomVariableDefinition = de $ do
-    s ["A random variable ", m prrv, " in a probability space ", m prsp, " is called ", term "discrete", " if the image under ", m prrv, " is non-zero in just a countable number of points"]
+    s ["A ", randomVariable, " ", m prrv, " in a ", probabilitySpace, " ", m prsp, " is called ", discrete', " if the ", image, " under ", m prrv, " is non-zero in just a countable number of points"] --FIXME index countable
     ma $ pi =: prob (setcmpr (omega ∈ univ_) (prvrv omega =: xi)) =: prob (prrv =: xi)
 
   where
@@ -209,7 +214,7 @@ discreteRandomVariableDefinition = de $ do
 
 discreteDistributionDefinition :: Note
 discreteDistributionDefinition = de $ do
-    s ["A ", term "discrete distribution", " ", m (sequ pi i), " of a ", discrete, " random variable ", m prrv, " in a probability space ", m prsp, " is a sequence with the following properties"]
+    s ["A ", discreteDistribution', " ", m (sequ pi i), " of a ", discrete, " ", randomVariable, " ", m prrv, " in a ", probabilitySpace, " ", m prsp, " is a ", sequence, " with the following properties"]
     enumerate $ do
         item $ m $ fa (i ∈ naturals) (pi >= 0)
         item $ m $ sumcmp i pi =: 1
@@ -220,7 +225,7 @@ discreteDistributionDefinition = de $ do
 
 discreteCumulativeDistribution :: Note
 discreteCumulativeDistribution = thm $ do
-    s ["The distribution function ", m prdf, " of a ", discrete, " random variable ", m prrv, " in a probability space ", m prsp, " has a simpler formula"]
+    s [the, distributionFunction, " ", m prdf, " of a ", discrete, " ", randomVariable, " ", m prrv, " in a ", probabilitySpace, " ", m prsp, " has a simpler formula"]
     ma $ prd a =: prob (prrv <= a) =: sumcmp (xi <= a) pi
 
     toprove
@@ -234,15 +239,13 @@ continuousRandomVariables :: Note
 continuousRandomVariables = note "continuous" $ do
     subsubsection "Continuous random variables"
     continuousRandomVariableDefinition
-    probabilityDensity
+    probabilityDensitySSS
     intervalOpenCloseDistribution
 
-continuous :: Note
-continuous = ix "continuous"
 
 continuousRandomVariableDefinition :: Note
 continuousRandomVariableDefinition = de $ do
-    s ["A random variable ", m prrv, " in a probability space ", m prsp, " is called ", term "continuous", " if the image of every point under ", m prrv, " is zero.."]
+    s ["A ", randomVariable, " ", m prrv, " in a ", probabilitySpace, " ", m prsp, " is called ", continuous', " if the image of every point under ", m prrv, " is zero.."]
     ma $ fa (x ∈ univ_) (prob (setof x) =: 0)
     s ["... and the distribution function ", m prdf, " is a continuous function"]
     refneeded "continuous function"
@@ -250,10 +253,10 @@ continuousRandomVariableDefinition = de $ do
   where x = "x"
 
 prdsDec :: Note
-prdsDec = s ["Let ", m prdf, " be a distribution function of a ", continuous, " random variable ", m prrv, " in a probability space ", m prsp, " that is continuous with a continuous derivative"]
+prdsDec = s ["Let ", m prdf, " be a ", distributionFunction, " of a ", continuous, " ", randomVariable, " ", m prrv, " in a ", probabilitySpace, " ", m prsp, " that is ", continuous, " with a ", continuous, " derivative"] -- FIXME index derivative
 
-probabilityDensity :: Note
-probabilityDensity = do
+probabilityDensitySSS :: Note
+probabilityDensitySSS = note "density" $ do
     probabilityDensitiyFunctionDefinition
     probabilityDensityDistribution
     probabilityDensityDistributionBetween
@@ -262,14 +265,14 @@ probabilityDensity = do
 probabilityDensitiyFunctionDefinition :: Note
 probabilityDensitiyFunctionDefinition = de $ do
     prdsDec
-    s ["The ", term "probability density function", or, term "probability density", " ", m prdsf, " is the following function"]
+    s ["The ", probabilityDensityFunction', or, probabilityDensity', " ", m prdsf, " is the following ", function]
     ma $ func prdsf reals reals x $ prds x =: deriv (prd x) x
   where x = "x"
 
 probabilityDensityDistribution :: Note
 probabilityDensityDistribution = thm $ do
     prdsDec
-    s ["Let ", m prdsf, " be the probability density function of ", m prrv]
+    s ["Let ", m prdsf, " be the ", probabilityDensityFunction, " of ", m prrv]
     ma $ prd a =: prob (x <= a) =: int minfty a (prds x) x
 
     toprove
@@ -281,7 +284,7 @@ probabilityDensityDistribution = thm $ do
 probabilityDensityDistributionBetween :: Note
 probabilityDensityDistributionBetween = thm $ do
     prdsDec
-    s ["Let ", m prdsf, " be the probability density function of ", m prrv]
+    s ["Let ", m prdsf, " be the ", probabilityDensityFunction, " of ", m prrv]
     ma $ prd x - prd a =: prob (a < prrv <= b) =: int a b (prds x) x
 
     toprove
@@ -292,7 +295,7 @@ probabilityDensityDistributionBetween = thm $ do
 
 intervalOpenCloseDistribution :: Note
 intervalOpenCloseDistribution = thm $ do
-    s ["Let ", m prrv, " be a ", continuous, " random variable in a probability space ", m prsp, " and let ", m prdf, " be the distribution function of ", m prrv]
+    s ["Let ", m prrv, " be a ", continuous, " ", randomVariable, " in a ", probabilitySpace, " ", m prsp, " and let ", m prdf, " be the ", distributionFunction, " of ", m prrv]
     ma $ prd (ooint a b)
       =: prd (ocint a b)
       =: prd (coint a b)

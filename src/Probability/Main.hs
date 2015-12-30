@@ -18,6 +18,6 @@ probability = note "probability" $ do
     probabilityMeasureS
     conditionalProbabilityS
     independenceS
-    randomVariable
+    randomVariableS
     distributions
 
