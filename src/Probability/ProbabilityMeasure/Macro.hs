@@ -39,9 +39,9 @@ prpm :: Note
 prpm = "P"
 
 --[ Probability
-probm :: Note -> Note -> Note
-probm = app -- probability with custom measure
+prm :: Note -> Note -> Note
+prm = app -- probability with custom measure
 
 prob :: Note -> Note
-prob = probm prpm
+prob = prm prpm
 
