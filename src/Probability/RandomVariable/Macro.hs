@@ -56,11 +56,11 @@ prds = app dsf_ -- probability density
 
 
 -- * Quantile function
-prqfsign :: Note
-prqfsign = "Q"
+qfsign_ :: Note
+qfsign_ = "Q"
 
 prqfm :: Note -> Note
-prqfm n = prqfsign !: n
+prqfm n = qfsign_ !: n
 
 prqf :: Note
 prqf = prqfm rv_
