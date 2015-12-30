@@ -34,11 +34,11 @@ prdfsign = "F"
 prdfm :: Note -> Note
 prdfm n = prdfsign !: n -- probability distribution function modified
 
-prdf :: Note
-prdf = prdfm rv_  -- probability distribution function
+df_ :: Note
+df_ = prdfm rv_  -- probability distribution function
 
 prd :: Note -> Note
-prd = app prdf -- probability distribution at point argument
+prd = app df_ -- probability distribution at point argument
 
 
 -- * Density function

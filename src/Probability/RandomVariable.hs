@@ -104,7 +104,7 @@ cumulativeDistributionFunctionDefinition = de $ do
     psDec
     s ["Let ", m rvfunc_, " be a ", randomVariable]
     s ["The ", cumulativeDistributionFunction', " (", term "CDF", ") or ", distributionFunction', " as follows"]
-    ma $ func prdf reals reals a $ prd (ocint minfty a) =: prob (setcmpr o (vrv o)) =: prob (rv_ <= a)
+    ma $ func df_ reals reals a $ prd (ocint minfty a) =: prob (setcmpr o (vrv o)) =: prob (rv_ <= a)
     s ["Sometimes the term ", distribution', " is also used as-is"]
   where
     a = "a"
@@ -113,16 +113,16 @@ cumulativeDistributionFunctionDefinition = de $ do
 distributionFunctionCondition :: Note
 distributionFunctionCondition = thm $ do
     s ["Let ", m rv_, " be a random variable in ", m prbsp]
-    s ["A function ", m (fun prdf reals reals), " is a ", cumulativeDistributionFunction, " if and only if it has the following three properties"]
+    s ["A function ", m (fun df_ reals reals), " is a ", cumulativeDistributionFunction, " if and only if it has the following three properties"]
     enumerate $ do
         item $ do
-            s [m prdf, " is monotonically increasing"]
+            s [m df_, " is monotonically increasing"]
             ma $ fa (cs [a, b] ∈ reals) $ (a <= b) ⇒ (prd a <= prd b)
         item $ do
             ma $ lim a minfty (prd a) =: 0
             ma $ lim a pinfty (prd a) =: 1
         item $ do
-            s [m prdf, " is right-continuous"]
+            s [m df_, " is right-continuous"]
             ma $ fa (a ∈ reals) $ rlim h 0 (prd $ a + h) =: prd a
             refneeded "right-continuous" -- Also use the proper index
     noproof
@@ -133,7 +133,7 @@ distributionFunctionCondition = thm $ do
     h = "h"
 
 bdfDec :: Note
-bdfDec = s ["Let ", m prdf, " be a distribution function in ", m prbsp]
+bdfDec = s ["Let ", m df_, " be a distribution function in ", m prbsp]
 
 distributionBetweenValues :: Note
 distributionBetweenValues = thm $ do
@@ -174,7 +174,7 @@ quantileFunctionSS = note "quantile" $ do
 
 quantileFunctionDefinition :: Note
 quantileFunctionDefinition = de $ do
-    s ["The ", quantileFunction', for, m prbsp, " is the inverse of the ", distributionFunction, " ", m prdf]
+    s ["The ", quantileFunction', for, m prbsp, " is the inverse of the ", distributionFunction, " ", m df_]
     s ["The value ", m (prq p), " is the smallest value ", m (a ∈ reals), " for which ", m (prd a >= p), " holds"] -- FIXME index smallest
   where
     a = "a"
@@ -225,7 +225,7 @@ discreteDistributionDefinition = de $ do
 
 discreteCumulativeDistribution :: Note
 discreteCumulativeDistribution = thm $ do
-    s [the, distributionFunction, " ", m prdf, " of a ", discrete, " ", randomVariable, " ", m rv_, " in a ", probabilitySpace, " ", m prsp, " has a simpler formula"]
+    s [the, distributionFunction, " ", m df_, " of a ", discrete, " ", randomVariable, " ", m rv_, " in a ", probabilitySpace, " ", m prsp, " has a simpler formula"]
     ma $ prd a =: prob (rv_ <= a) =: sumcmp (xi <= a) pi
 
     toprove
@@ -247,13 +247,13 @@ continuousRandomVariableDefinition :: Note
 continuousRandomVariableDefinition = de $ do
     s ["A ", randomVariable, " ", m rv_, " in a ", probabilitySpace, " ", m prsp, " is called ", continuous', " if the image of every point under ", m rv_, " is zero.."]
     ma $ fa (x ∈ univ_) (prob (setof x) =: 0)
-    s ["... and the distribution function ", m prdf, " is a continuous function"]
+    s ["... and the distribution function ", m df_, " is a continuous function"]
     refneeded "continuous function"
 
   where x = "x"
 
 prdsDec :: Note
-prdsDec = s ["Let ", m prdf, " be a ", distributionFunction, " of a ", continuous, " ", randomVariable, " ", m rv_, " in a ", probabilitySpace, " ", m prsp, " that is ", continuous, " with a ", continuous, " derivative"] -- FIXME index derivative
+prdsDec = s ["Let ", m df_, " be a ", distributionFunction, " of a ", continuous, " ", randomVariable, " ", m rv_, " in a ", probabilitySpace, " ", m prsp, " that is ", continuous, " with a ", continuous, " derivative"] -- FIXME index derivative
 
 probabilityDensitySSS :: Note
 probabilityDensitySSS = note "density" $ do
@@ -295,7 +295,7 @@ probabilityDensityDistributionBetween = thm $ do
 
 intervalOpenCloseDistribution :: Note
 intervalOpenCloseDistribution = thm $ do
-    s ["Let ", m rv_, " be a ", continuous, " ", randomVariable, " in a ", probabilitySpace, " ", m prsp, " and let ", m prdf, " be the ", distributionFunction, " of ", m rv_]
+    s ["Let ", m rv_, " be a ", continuous, " ", randomVariable, " in a ", probabilitySpace, " ", m prsp, " and let ", m df_, " be the ", distributionFunction, " of ", m rv_]
     ma $ prd (ooint a b)
       =: prd (ocint a b)
       =: prd (coint a b)
