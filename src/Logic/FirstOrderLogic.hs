@@ -26,6 +26,7 @@ firstOrderLogicS = note "first-order-logic" $ do
     atomicSentence
     quantifiers
     modelFOL
+    translationExamples
     situationalCalculusSS
     inferenceInFOL
 
@@ -156,6 +157,38 @@ modelFOL :: Note
 modelFOL = de $ do
     s ["A ", model, " in first order logic consists of instantiations of objects, relations and functions and their interpretations in terms of their symbols"]
     s ["Often any constants not in the model is asserted to be false"]
+
+translationExamples :: Note
+translationExamples = do
+    ex $ do
+        examq eth "Probabillistic Artificial Intelligence" "January 2014"
+        let mh = fn "StudiesMath"
+            cs = fn "StudiesCS"
+            ts = fn2 "Teaches"
+        itemize $ do
+            item $ do
+                s ["Given that all elements of the universe are students, express the following facts in first-order logic"]
+                enumerate $ do
+                    let t = "t"
+                    let u = "u"
+                    let v = "v"
+                    item $ do
+                        s ["Every student teaches some student"]
+                        ma $ fa u $ te t $ ts u t
+                    item $ do
+                        s ["Every student teaches exactly one student"]
+                        ma $ fa u $ te t $ (ts u t) ∧ (pars $ fa v (ts u v) ⇒ t =: v)
+                    item $ do
+                        s ["No one is both a maths student and a computer science student"]
+                        ma $ fa t $ neg $ (pars $ mh t ∧ cs t)
+
+            item $ do
+                s ["Describe a model that satisfies the above statements and the following"]
+                ma $ do
+                    let (x, y, z) = ("x", "y", "z")
+                    fa x $ fa y $ fa z $ pars $ (((ts x z) ∧ (ts y z)) ⇒ x =: y)
+                s ["In this model, every student is taught by at most one student"]
+
 
 
 situationalCalculusSS :: Note
