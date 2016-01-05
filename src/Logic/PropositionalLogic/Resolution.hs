@@ -96,15 +96,27 @@ proofFig cap height g = do
         includegraphics [KeepAspectRatio True, IGHeight (Cm height), IGWidth (CustomMeasure $ textwidth)] fp
         caption cap
 
-proofUnsatisfiable :: Double -> Sentence -> Sentence -> Note
-proofUnsatisfiable height s1 s2 = proofFig cap height $ graph_ directed $ do
-        let (Conjunction ds) = fromSentence s1 `mappend` fromSentence (Not s2)
-        nodeDec [shape =: none]
-        rankdir leftRight
-        ids <- mapM (disjunctNode [color =: "green"]) $ map simplify ds
-        go [] $ zip ids ds
+proofUnsatisfiable :: Double -> [Sentence] -> Sentence -> Note
+proofUnsatisfiable height kb query = do
+    proofFig cap height $ proofGraph kb query
+  where cap = do
+            "A diagram of the proof of "
+            m $ renderSentence query
+            " from " <> commS " "
+            mapM_ (\n -> newline <> m n) $ map renderCNFSentence kb
+
+
+proofGraph :: [Sentence] -> Sentence -> DotGraph
+proofGraph kb query = graph_ directed $ proofGraphGen cnfSen
+  where cnfSen = mconcat $ fromSentence (Not query) : map fromSentence kb
+
+proofGraphGen :: CNFSentence -> DotGen ()
+proofGraphGen (Conjunction ds) = do
+    nodeDec [shape =: none]
+    rankdir leftRight
+    ids <- mapM (disjunctNode [color =: "green"]) $ map simplify ds
+    go [] $ zip ids ds
   where
-    cap = (s ["A diagram of the proof of ", m $ renderSentence s2, " from ", dquoted $ m $ renderCNFSentence s1])
     go :: [NodeId] -> [(NodeId, Disjunction)] -> DotGen ()
     go _ [] = return ()
     go _ [(_, Disjunct [])] = return ()

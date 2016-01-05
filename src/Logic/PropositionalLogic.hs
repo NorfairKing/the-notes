@@ -438,7 +438,7 @@ resolutionProofs = do
         let s1 = And (Or as bs) (Not as)
         let s2 = bs
         s ["We can prove ", m $ renderSentence s2, " from ", m $ renderSentence s1 , " as follows"]
-        proofUnsatisfiable 3 s1 s2
+        proofUnsatisfiable 3 [s1] s2
     ex $ do
         let (a, b, c) = ("A", "B", "C")
         let [as, bs, cs] = map (Literal . Symbol) [a, b, c]
@@ -451,13 +451,13 @@ resolutionProofs = do
         s ["First we convert all sentences to CNF"]
         renderTransformation s11
         s ["Now we add ", m $ neg alpha, " in conjunction with the sentences in the knowledge base and prove that the resulting sentence is unsatisfiable"]
-        proofUnsatisfiable 10 s1 s2
+        proofUnsatisfiable 10 [s1] s2
 
     ex $ do
         let [a, b, c, d, g] = map (Literal . Symbol) ["A", "B", "C", "D", "G"]
         let s1 = And (And (And (And (Or a b) (Or (Not a) c)) (Or (Not b) d)) (Or (Not c) g)) (Or (Not d) g)
         let s2 = g
-        proofUnsatisfiable 10 s1 s2
+        proofUnsatisfiable 10 [s1] s2
 
 
 

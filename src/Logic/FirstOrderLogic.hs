@@ -2,13 +2,16 @@ module Logic.FirstOrderLogic where
 
 import           Notes
 
-import qualified Prelude                        as P (map)
+import qualified Prelude                              as P (map)
 
 import           Functions.Application.Macro
 import           Logic.AbstractLogic.Macro
 import           Logic.AbstractLogic.Terms
 import           Logic.PropositionalLogic.Macro
+import           Logic.PropositionalLogic.Resolution
+import           Logic.PropositionalLogic.Sentence
 import           Logic.PropositionalLogic.Terms
+import           Logic.PropositionalLogic.TruthTables
 import           Sets.Basics.Terms
 
 import           Logic.FirstOrderLogic.Macro
@@ -204,6 +207,7 @@ propositionalisationSS = note "propositionalisation" $ do
         s ["This turns the problem into a propositional logic problem and it can then be solved as discussed before"]
     s ["The problem with proportionalisation is that the solver may need to create a lot of unnecessary symbols"]
     s ["Even worse, the amount of created symbols could be infinite"]
+    propositionalisationExample
 
     herbrandTheorem
 
@@ -223,6 +227,78 @@ herbrandReference = Reference article "herbrand-theorem" $
     , ("volume" , "3")
     , ("number" , "33")
     ]
+
+propositionalisationExample :: Note
+propositionalisationExample = ex $ do
+    s ["Suppose we are given this set of facts"]
+    itemize $ do
+        item $ s ["Birds are winged animals"]
+        item $ s ["Birds are characterized by feathers and beaks"]
+        item $ s ["Bob is a bird watcher, but he doesn't like birds with long beaks"]
+        item $ s ["All woodpeckers have long beaks"]
+        item $ s ["A bird with a read beak is either a woodpecker or a cardinal"]
+    s ["One day, Bob finds a read-beaked bird"]
+    s ["He likes it very much and names it Aly"]
+
+    s ["To find out whether Aly is a Cardinal, we first have to transform these sentences into a ", firstOrderLogic, " ", knowledgeBase]
+    let x = "x"
+        bird = fn "Bird"
+        bob = "Bob"
+        likes = fn2 "Likes"
+        lb = fn "LongBeak"
+        rb = fn "RedBeak"
+        wp = fn "Woodpecker"
+        cd = fn "Cardinal"
+        aly = "Aly"
+    itemize $ do
+        item $ m $ neg $ bird bob
+        item $ m $ fa x $ bird x ∧ lb x ⇒ neg (bob `likes` x)
+        item $ m $ fa x $ bird x ∧ wp x ⇒ lb x
+        item $ m $ fa x $ bird x ∧ rb x ⇒ (wp x ∨ cd x)
+        item $ m $ bird aly
+        item $ m $ rb aly
+        item $ m $ bob `likes` aly
+
+    s ["Next, we apply ", propositionalisation, " to obtain sentences in propositonal logic"]
+    s ["Remember: quantified variables must be replaced by all possible constants"]
+    s ["However, for the sake of the example, we will not try to replace the quantified variables by ", m bob, " as all of the resulting sentences would evaluate to ", m true]
+    s ["A system without this knowledge would still have to try replacing the variables with ", m bob]
+    s ["Sentences without quantifiers stay the same"]
+    enumerate $ do
+        item $ m $ bird aly ∧ lb aly ⇒ neg (bob `likes` aly)
+        item $ m $ bird aly ∧ wp aly ⇒ lb aly
+        item $ m $ bird aly ∧ rb aly ⇒ (wp aly ∨ cd aly)
+
+    s ["Now we are left with the following propositional knowledge base"]
+    let sym = Literal . Symbol
+        s1 = Implies (And (sym "B(A)") (sym "LB(A)")) (Not (sym "L(Bob, A)"))
+        s2 = Implies (And (sym "B(A)") (sym "WP(A)")) (sym "LB(A)")
+        s3 = Implies (And (sym "B(A)") (sym "RB(A)")) (Or (sym "WP(A)") (sym "C(A)"))
+        s4 = sym "B(A)"
+        s5 = sym "RB(A)"
+        s6 = sym "L(Bob, A)"
+        query = sym "C(A)"
+    itemize $ do
+        item $ m $ renderSentence s1 --bird aly ∧ lb aly ⇒ neg (bob `likes` aly)
+        item $ m $ renderSentence s2
+        item $ m $ renderSentence s3
+        item $ m $ renderSentence s4
+        item $ m $ renderSentence s5
+        item $ m $ renderSentence s6
+
+    s ["The query is ", m $ renderSentence query]
+    s ["To answer it, we first have to tranfrom the sentences in the ", knowledgeBase, " to ", conjunctiveNormalForm]
+
+    renderTransformation s1
+    renderTransformation s2
+    renderTransformation s3
+
+    let kb = [s1, s2, s3, s4, s5, s6]
+
+    s ["Now we can solve this with resolution"]
+    proofUnsatisfiable 20.0 kb query
+
+
 
 herbrandTheorem :: Note
 herbrandTheorem = thm $ do
