@@ -26,6 +26,11 @@ renderSentence (And s1 s2)          = pars $ renderSentence s1 ∧ renderSentenc
 renderSentence (Implies s1 s2)      = pars $ renderSentence s1 ⇒ renderSentence s2
 renderSentence (Equiv s1 s2)        = pars $ renderSentence s1 ⇔ renderSentence s2
 
+tseitinTransformationExample :: Sentence -> Note
+tseitinTransformationExample sen = ex $ do
+    renderTransformation sen
+    s ["The Tseitin transformation, applied to ", m $ renderSentence sen]
+
 renderCNFSentence :: Sentence -> Note
 renderCNFSentence s = if isCNF s
                         then go s

@@ -322,11 +322,16 @@ conjunctiveNormalFormS = note "cnf" $ do
                 s ["Use the distributive laws to obtain a formula in CNF"]
         np
 
-    ex $ do
+
+    tseitinTransformationExample $
+        let (a, b, c ) = ("A", "B", "C")
+        in Implies (Or a b) c
+    tseitinTransformationExample $
+        let (a, b) = ("A", "B")
+        in Not (Implies a b)
+    tseitinTransformationExample $
         let (p, q) = ("P", "Q")
-            sen = Equiv (Implies p q) (Implies (Not q) (Not p))
-        renderTransformation sen
-        s ["The Tseitin transformation, applied to ", m $ renderSentence sen]
+        in Equiv (Implies p q) (Implies (Not q) (Not p))
 
     de $ do
         let n = "n"
@@ -432,6 +437,7 @@ resolutionProofs = do
         let a = "A"
         s ["Given a ", knowledgeBase, " ", m lkb, and, " a ", sentence, " ", m alpha, " we can prove or disprove ", m alpha, " by showing that ", m $ not alpha ∧ andcomp (a ∈ lkb) a, " is ", unsatisfiable]
         toprove
+
     ex $ do
         let (a, b) = ("A", "B")
         let [as, bs] = map (Literal . Symbol) [a, b]
@@ -439,6 +445,7 @@ resolutionProofs = do
         let s2 = bs
         s ["We can prove ", m $ renderSentence s2, " from ", m $ renderSentence s1 , " as follows"]
         proofUnsatisfiable 3 [s1] s2
+
     ex $ do
         let (a, b, c) = ("A", "B", "C")
         let [as, bs, cs] = map (Literal . Symbol) [a, b, c]
@@ -451,13 +458,21 @@ resolutionProofs = do
         s ["First we convert all sentences to CNF"]
         renderTransformation s11
         s ["Now we add ", m $ neg alpha, " in conjunction with the sentences in the knowledge base and prove that the resulting sentence is unsatisfiable"]
-        proofUnsatisfiable 10 [s1] s2
+        proofUnsatisfiable 3 [s1] s2
 
     ex $ do
         let [a, b, c, d, g] = map (Literal . Symbol) ["A", "B", "C", "D", "G"]
         let s1 = And (And (And (And (Or a b) (Or (Not a) c)) (Or (Not b) d)) (Or (Not c) g)) (Or (Not d) g)
         let s2 = g
-        proofUnsatisfiable 10 [s1] s2
+        proofUnsatisfiable 3 [s1] s2
+
+    ex $ do
+        examq eth "Probabillistic Artificial Intelligence" "January 2014"
+        let [a, b, c] = map (Literal . Symbol) ["A", "B", "C"]
+        let s1 = Implies (Or a b) c
+        let s2 = Implies a c
+        s [m $ renderSentence s2, " can be obtained from ", m $ renderSentence s1, " using resolution in propositional logic"]
+        proofUnsatisfiable 3 [s1] s2
 
 
 

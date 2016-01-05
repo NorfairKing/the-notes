@@ -1,6 +1,6 @@
 module Logic.PropositionalLogic.Resolution where
 
-import           Control.Monad                        (forM_)
+import           Control.Monad                        (forM_, unless)
 import           Notes                                hiding (color, not, (=:))
 
 import           Data.Maybe                           (fromJust)
@@ -10,7 +10,7 @@ import           Utils
 import           Text.Dot
 
 import           Data.List                            (find, intercalate, nub,
-                                                       sort)
+                                                       sort, sortBy)
 import           Data.Ord                             (comparing)
 
 import qualified Data.Text                            as T
@@ -39,6 +39,9 @@ data Disjunction = Disjunct [CNFLit]
 
 instance Show Disjunction where
     show (Disjunct ls) = intercalate " ∧ " $ map show ls
+
+instance Ord Disjunction where
+    compare (Disjunct ls1) (Disjunct ls2) = compare (length ls1) (length ls2)
 
 instance Monoid Disjunction where
     mempty = Disjunct []
@@ -138,8 +141,8 @@ proofGraphGen (Conjunction ds) = do
                         n3 <- disjunctNode [] d3
                         n1 --> n3
                         n2 --> n3
-                        let rest = (n3, d3) : ds
-                        go ts rest
+                        let rest = sortBy (comparing snd) $ (n3, d3) : ds
+                        unless (d3 == Disjunct []) $ go ts rest
       where
         cp :: [((NodeId, Disjunction), (NodeId, Disjunction))]
         cp = pairs ds
