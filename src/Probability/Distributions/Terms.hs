@@ -5,7 +5,8 @@ import           Notes
 makeDefs [
       "discrete uniform distribution"
     , "Bernouilli distribution"
-    , "gaussian"
+    , "Gaussian distribution"
+    , "Normal distribution"
     , "probability of success"
     , "binomial distribution"
     ]

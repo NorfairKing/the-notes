@@ -239,3 +239,7 @@ list n m o = commaSeparated [n, m, dotsc, o]
 -- Combinatorics
 choose :: Note -> Note -> Note
 choose = comm2 "binom"
+
+-- | Pi
+pi :: Note
+pi = comm0 "pi"

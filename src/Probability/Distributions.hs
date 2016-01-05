@@ -6,6 +6,7 @@ import           Logic.FirstOrderLogic.Macro
 import           Probability.Intro.Macro
 import           Probability.Intro.Terms
 import           Probability.ProbabilityMeasure.Macro
+import           Probability.RandomVariable.Macro
 import           Probability.RandomVariable.Terms
 
 import           Probability.Distributions.Macro
@@ -55,6 +56,10 @@ binomial = de $ do
     s ["A ", binomialDistribution', " is the ", distribution, " of the sum ", m y, " of ", m n, " times the same Bernoulli-distributed ", randomVariable, " ", m x, " with ", probabilityOfSuccess, " ", m p]
     ma $ y ~. binomialD n p
     ma $ y =: sumcmpr (i =: 1) n (x !: i)
+    ma $ do
+        let x = "x"
+        let k = "k"
+        prob (x =: k) =: (n `choose` k) * p ^ k * (pars $ 1 - p) ^ (n - k)
   where
     i = "i"
     x = "X"
@@ -65,9 +70,11 @@ binomial = de $ do
 continuousDistributions :: Note
 continuousDistributions = do
     subsection "Continuous distributions"
-    gaussianDistribution
+    gaussianDistributionDefinition
 
-gaussianDistribution :: Note
-gaussianDistribution = de $ do
-    s ["A ", gaussian', " ", distribution]
-    todo gaussian
+gaussianDistributionDefinition :: Note
+gaussianDistributionDefinition = de $ do
+    s ["A ", gaussianDistribution', or, normalDistribution', " with parameters ", m mean_, " and ", m variance_, " is given by the following ", probabilityDensity]
+    ma $ do
+        let x = "x"
+        prds x =: exp (- ((pars $ x - mean_) ^ 2) /: (2 * variance_ ^ 2)) /: (variance_ * sqrt (2 * pi))

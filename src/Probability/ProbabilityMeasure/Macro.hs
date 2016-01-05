@@ -45,3 +45,11 @@ prm = app -- probability with custom measure
 prob :: Note -> Note
 prob = prm prm_
 
+
+-- | Mean
+mean_ :: Note
+mean_ = mu
+
+-- | Variance
+variance_ :: Note
+variance_ = sigma
