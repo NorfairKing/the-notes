@@ -11,7 +11,12 @@ vectorSpaces :: Note
 vectorSpaces = note "vector-spaces" $ do
     section "Vector Spaces"
     vectorSpaceDefinition
-    euclideanVectorSpaceDefinition
+    note "linear-subspaces" $ do
+        subsection "Linear Subspaces"
+        linearSubspaceDefinition
+    note "euclidean-vector-spaces" $ do
+        subsection "Euclidean Vector Spaces"
+        euclideanVectorSpaceDefinition
 
 vectorSpaceDefinition :: Note
 vectorSpaceDefinition = de $ do
@@ -50,6 +55,14 @@ vectorSpaceDefinition = de $ do
     rr = "r"
     ss = "s"
     vv = vec "v"
+
+linearSubspaceDefinition :: Note
+linearSubspaceDefinition = de $ do
+    lab linearSubspaceDefinitionLabel
+    let vs = lavs_ lafield laset laadd lamul
+    s ["Let ", m vs, " be a ", vectorSpace]
+    let w = "W"
+    s ["A vector space ", m $ lavs_ lafield w laadd lamul, " is called a ", linearSubspace', " of ", m vs, " if ", m w, " is a subset of ", m laset]
 
 
 euclideanVectorSpaceDefinition :: Note

@@ -24,6 +24,7 @@ import           Computability.Main
 import           DataMining.Main
 import           Fields.Main
 import           Functions.Main
+import           Geometry.Main
 import           Groups.Main
 import           LinearAlgebra.Main
 import           Logic.Main
@@ -138,6 +139,7 @@ allNotes = do
     rings
     fields
     linearAlgebra
+    geometry
     topology
     computability
     probability

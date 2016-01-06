@@ -74,10 +74,10 @@ inproductSpaceDefinition = de $ do
 inproductSpaceExamples :: Note
 inproductSpaceExamples = do
     ex $ do
-      s ["The field ", m (realVectorsSpace p), ", equipped with the vector dotproduct, is an inner product space"]
-      ma $ euclideanInnerProductSpace p
-      toprove
-      s ["This is called the ", term "Euclidean vector space", " of dimension ", m p]
+        s ["The field ", m (realVectorsSpace p), ", equipped with the vector dotproduct, is an inner product space"]
+        ma $ euclideanInnerProductSpace p
+        s ["This is called the ", term "Euclidean inner product space", " of dimension ", m p]
+        toprove_ "This is, in fact, an inproduct space"
 
   where
     p = "p"

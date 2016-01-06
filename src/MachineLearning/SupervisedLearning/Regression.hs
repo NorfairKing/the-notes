@@ -18,8 +18,6 @@ y = "Y"
 
 intro :: Note
 intro = do
-    subsection "Regression"
-
     s ["Regression is a supervised learning technique"]
     s ["It assumes that the input space is ", m (realVecSpace "p"), " and the output space is ", m reals]
 
