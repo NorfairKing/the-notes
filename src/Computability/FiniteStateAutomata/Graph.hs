@@ -1,6 +1,6 @@
 module Computability.FiniteStateAutomata.Graph where
 
-import           Notes         hiding (label, true, (=:))
+import           Notes         hiding ((=:))
 
 import           Prelude
 
@@ -32,7 +32,7 @@ fsaGraph :: [Text] -- ^ Set of states
           -> [Text] -- Accepting states
           -> [(Text, Text, Text)] -- ^ Edges: From, To, Symbol(s)
           -> Note' FilePath
-fsaGraph states initial accepting edges = dot2tex $ renderGraph $ graph_ directed $ do
+fsaGraph states initial accepting edges = dot2tex $ graph_ directed $ do
     nodeDec [width =: "0", height =: "0"] -- Nodes as small as possible
     rankdir leftRight
 

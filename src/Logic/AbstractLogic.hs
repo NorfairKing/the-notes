@@ -3,23 +3,11 @@ module Logic.AbstractLogic where
 import           Notes
 
 import           Functions.Application.Macro
+import           Logic.FirstOrderLogic.Macro
+import           Logic.PropositionalLogic.Macro
 
-makeDefs [
-      "formula"
-    , "axiom", "axiom schema"
-    , "theory"  , "logic"
-    , "grammar"
-    , "semantics"
-    , "sentence"
-    , "world"   , "model"
-    , "theorem"
-    , "knowledge base"
-    , "entails"
-    , "inference"
-    , "sound"
-    , "complete"
-    , "modus ponens"
-    ]
+import           Logic.AbstractLogic.Macro
+import           Logic.AbstractLogic.Terms
 
 abstractLogic :: Note
 abstractLogic = note "abstract-logic" body
@@ -30,14 +18,10 @@ body = do
     s ["It is hard to speak about logic in a pure mathematical fashion as it originated, and still borders on, philosophy"]
     formulaDefinition
     theoryDefinition
-    worldDefinition
     axiomSchemaDefinition
-    knowledgeBaseDefinition
     theoremNotation
+    knowledgeBaseDefinition
     entailmentDefinition
-    modelDefinition
-    modelsOfDefinition
-    equivalentDefinitionEntailment
     inferenceDefinition
     inferenceNotation
     soundDefinition
@@ -78,56 +62,31 @@ theoryDefinition = do
     nte $ do
         s ["Theorems are obtained from the axioms by a finite amount of applications of the inference rules"]
 
-worldDefinition :: Note
-worldDefinition = de $ do
-    lab worldDefinitionLabel
-    s ["A logical ", world', " is a set of boolean expressions that are true within the framework of certain theory"]
-
-    refneeded "boolean expression"
-
-
-knowledgeBaseDefinition :: Note
-knowledgeBaseDefinition = de $ do
-    lab knowledgeBaseDefinitionLabel
-    s ["A ", knowledgeBase', " is a set of boolean expressions in the context of a certain logical world"]
-    s ["In a given world, a valid ", knowledgeBase, " is a subset of that world"]
 
 theoremNotation :: Note
 theoremNotation = de $ do
     lab theoremDefinitionLabel
-    s ["A ", theorem' , " ", m logicf, " is a well-formed formula that is provable in a theory ", m logict]
-    s ["This is de:: Noted as ", m (la logicf)]
+    s ["A ", theorem' , " ", m logicf, " is a well-formed formula that is provable in a ", theory, " ", m logict]
+    s ["This is denoted as ", m (la logicf)]
+
+knowledgeBaseDefinition :: Note
+knowledgeBaseDefinition = de $ do
+    lab knowledgeBaseDefinitionLabel
+    s ["A ", knowledgeBase', " is a set of formulae"]
+    s ["A ", knowledgeBase, " is called valid if all its formula are theorems in the given ", theory]
 
 entailmentDefinition :: Note
 entailmentDefinition = de $ do
     lab entailsDefinitionLabel
     s ["Let ", m logict , " be a ", theory, and, m lkb, " a ", knowledgeBase]
-    s ["We say that a ", knowledgeBase, " ", m lkb, " ", entails', " a boolean expression ", m alpha, " if ", m alpha, " is ", true, " in all worlds where ", m lkb, " is a valid ", knowledgeBase]
-
-modelDefinition :: Note
-modelDefinition = de $ do
-    lab modelDefinitionLabel
-    s ["We say a world ", m "m", " is a ", model', " of an expression ", m alpha, " if ", m alpha, " is true in ", m "m"]
-
-modelsOfDefinition :: Note
-modelsOfDefinition = do
-    de $ s ["The set of all models of an expression ", m alpha, " is de:: Noted as ", m (lmo alpha), "."]
-
-    nte $ do
-        s ["With a little notation overloading we also de:: Note ", dquoted (s ["The intersection of the set of all models of the expressions in a set ", m "S"]), " as ", m (lmo "S")]
-        ma $ lmo "S" `eq` setincmp ("s" ∈ "S") (lmo "s")
-
-
-equivalentDefinitionEntailment :: Note
-equivalentDefinitionEntailment = de $ do
-    s ["Another way of expressing the fact that an expression ", m alpha, " is entailed by a ", knowledgeBase, " ", m lkb, ": ", m (lkb `lent` alpha), " is using models"]
-    ma $ lmo lkb ⊆ lmo alpha
+    s ["We say that a ", knowledgeBase, " ", m lkb, " ", entails', " a formula ", m alpha, " if ", m alpha, " is ", true, " for all valid ", knowledgeBase, "s ", m lkb]
+    ma $ lkb `lent` alpha
 
 inferenceDefinition :: Note
 inferenceDefinition = de $ do
     lab inferenceDefinitionLabel
     s ["An ", inference', " ", m logicir, " in a theory ", m logict, " is a procedure for proving sentences from a ", knowledgeBase]
-    s ["If a theorem ", m logict, " can be proven using ", m logicir, " we de:: Note this as ", m (lpvm logicir "" logicf)]
+    s ["If a theorem ", m logict, " can be proven using ", m logicir, " we denote this as ", m (lpvm logicir "" logicf)]
 
 
 inferenceNotation :: Note

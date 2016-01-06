@@ -7,5 +7,5 @@ import           Notes
 dataMining :: Note
 dataMining = note "data-mining" $ do
     chapter "Data Mining"
-    mapReduce
+    mapReduceS
     approximateRetrieval

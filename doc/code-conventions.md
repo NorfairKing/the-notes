@@ -9,6 +9,13 @@
 - Macro's go into `Chapter.Section.Macro`.
 - Terms go into `Chapter.Section.Terms`.
 
+## Terms
+
+- `term` is the indexed version
+- `term'` indexed and bold
+- `termDefinitionLabel` label for the definition of the term
+- `term_` indexed term with reference with a reference to the definition
+
 ## Variables
 Make local variables if necessary
 

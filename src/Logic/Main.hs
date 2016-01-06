@@ -15,7 +15,7 @@ logica = note "logic" $ do
     chapter "Logic"
     abstractLogic
     propositionalLogicS
-    firstOrderLogic
+    firstOrderLogicS
     hoareLogicS
     separationLogicS
     temporalLogicS

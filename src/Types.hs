@@ -2,35 +2,37 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE UndecidableInstances  #-}
 module Types (
-    module Types
+      module Types
 
-  , module P
+    , module P
+    , module Debug.Trace
 
-  , module Text.LaTeX
-  , module Text.LaTeX.Base.Class
-  , module Text.LaTeX.Base.Pretty
-  , module Text.LaTeX.Base.Syntax
-  , module Text.LaTeX.Packages.AMSFonts
-  , module Text.LaTeX.Packages.AMSMath
-  , module Text.LaTeX.Packages.AMSThm
-  , module Text.LaTeX.Packages.Fancyhdr
-  , module Text.LaTeX.Packages.Color
-  , module Text.LaTeX.Packages.Graphicx
+    , module Text.LaTeX.LambdaTeX
 
-  , ask, asks
-  ) where
+    , module Text.LaTeX
+    , module Text.LaTeX.Base.Class
+    , module Text.LaTeX.Base.Pretty
+    , module Text.LaTeX.Base.Syntax
+    , module Text.LaTeX.Packages.AMSFonts
+    , module Text.LaTeX.Packages.AMSMath
+    , module Text.LaTeX.Packages.AMSThm
+    , module Text.LaTeX.Packages.Fancyhdr
+    , module Text.LaTeX.Packages.Color
+    , module Text.LaTeX.Packages.Graphicx
+    ) where
 
-import           Prelude                      (Bool (..), Ord (..))
+import           Prelude                      (Bool (..))
 import           Prelude                      as P (Double, Eq (..), FilePath,
                                                     Fractional (..), IO,
                                                     Maybe (..), Num (..),
                                                     Show (..), mempty, ($),
                                                     (&&), (++), (.))
 
-import           Data.Set
+import           Debug.Trace
 
 import           Text.LaTeX                   hiding (Label, alph_, article,
-                                               cite, item, ref, rule)
+                                               cite, item, label, pageref, ref,
+                                               ref, rule, usepackage)
 import           Text.LaTeX.Base.Class
 import           Text.LaTeX.Base.Pretty
 import           Text.LaTeX.Base.Syntax
@@ -42,68 +44,43 @@ import           Text.LaTeX.Packages.Color
 import           Text.LaTeX.Packages.Fancyhdr
 import           Text.LaTeX.Packages.Graphicx
 
-import           Control.Monad.Reader         (MonadReader (..), ReaderT, ask,
-                                               asks)
-import           Control.Monad.State          (MonadState (..), StateT, get,
-                                               put)
+import           Control.Monad.Reader         (ReaderT)
+import           Control.Monad.State          (StateT)
 
+import           Text.LaTeX.LambdaTeX         hiding (label, note, pageref, ref)
 
-type Note = LaTeXT_ (StateT State (ReaderT Config IO))
-type Note' = LaTeXT (StateT State (ReaderT Config IO))
+type Note  = Note' ()
+type Note' = ΛTeXT (StateT State (ReaderT Config IO))
 
-data State = State {
-      state_refs        :: Set Reference
-    , state_packages    :: Set PackageDep
-    , state_currentPart :: [String]
-    } deriving (Show, Eq)
+data State = State
 
 data Args = Args {
-      args_selectionStrings      :: [String]
+      args_selectionString       :: String
     , args_visualDebug           :: Bool
     , args_verbose               :: Bool
     , args_ignoreReferenceErrors :: Bool
-    , args_omitTodos             :: Bool
+    , args_todos                 :: Bool
     , args_subtitle              :: String
     , args_texFileName           :: String
     , args_bibFileName           :: String
     , args_pdfFileName           :: String
+    , args_tempDir               :: FilePath
     } deriving (Show, Eq)
 
 data Config = Config {
-      conf_selections            :: [Selection]
+      conf_selection             :: Selection
     , conf_visualDebug           :: Bool
     , conf_verbose               :: Bool
     , conf_ignoreReferenceErrors :: Bool
-    , conf_omitTodos             :: Bool
+    , conf_todos                 :: Bool
     , conf_subtitle              :: Maybe String
     , conf_texFileName           :: FilePath
     , conf_bibFileName           :: FilePath
     , conf_pdfFileName           :: FilePath
+    , conf_tempDir               :: FilePath
     } deriving (Show, Eq)
 
-data Selection = All
-               | Match [String]
-               | Ignore [String]
-    deriving (Show, Eq)
-
-data Part = Part String Note
-
-instance Eq Part where
-    (Part n1 _) == (Part n2 _) = n1 == n2
-
-
-instance MonadReader r m => MonadReader r (LaTeXT m) where
-    ask   = lift ask
-    local = local
-    reader = lift . reader
-
-instance MonadState s m => MonadState s (LaTeXT m) where
-    get = lift get
-    put = lift . put
-    state = lift . state
-
-
-data Label = Label RefKind Note
+data Label = Label RefKind Text
 
 data RefKind = Definition
              | Theorem
@@ -111,18 +88,4 @@ data RefKind = Definition
              | Property
              | Example
              | Figure
-  deriving (Show, Eq)
-
-type ReferenceType = String
-
-data Reference = Reference ReferenceType String [(String, String)] -- Type Label
-  deriving (Show, Eq)
-
-instance Ord Reference where
-    compare (Reference _ r1 _) (Reference _ r2 _) = compare r1 r2
-
-data PackageDep = PackageDep String [LaTeX]
-  deriving (Show, Eq)
-
-instance Ord PackageDep where
-    compare (PackageDep n1 _) (PackageDep n2 _) = compare n1 n2
+    deriving (Show, Eq)

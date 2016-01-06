@@ -2,7 +2,9 @@ module Sets.Partition where
 
 import           Notes
 
-import           Sets.Basics (set)
+import           Logic.FirstOrderLogic.Macro
+import           Logic.PropositionalLogic.Macro
+import           Sets.Basics.Terms
 
 makeDefs ["partition"]
 

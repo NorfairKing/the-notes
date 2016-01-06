@@ -1,6 +1,6 @@
 module Rings.Main (
-    rings
-  ) where
+      rings
+    ) where
 
 import           Notes
 

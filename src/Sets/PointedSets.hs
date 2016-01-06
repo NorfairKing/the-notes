@@ -4,7 +4,7 @@ import           Notes
 
 import           Sets.PointedSets.Macro
 
-import           Sets.Basics            (element, set)
+import           Sets.Basics.Terms
 
 makeDefs [
     "pointed set"

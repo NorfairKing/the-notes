@@ -7,10 +7,26 @@ COL_BLUE=$ESC_SEQ"34;11m"
 COL_MAGENTA=$ESC_SEQ"35;11m"
 COL_CYAN=$ESC_SEQ"36;11m"
 print_colored_text () {
-  color=$1
-  text=$2
-  color_code="COL_$color"
+  local color="$1"
+  local text="$2"
+  local color_code="COL_$color"
   echo -n -e "${!color_code}$text$COL_RESET"
+}
+
+error () {
+  local text="$1"
+  print_colored_text RED "ERROR: $text\n"
+  exit 1
+}
+
+warning () {
+  local text="$1"
+  print_colored_text YELLOW "WARNING: $text\n"
+}
+
+good () {
+  local text="$1"
+  print_colored_text GREEN "CHECK: $text\n"
 }
 
 check () {
@@ -33,3 +49,41 @@ check () {
     return -1
   fi
 }
+
+promptY () {
+  prompt="$1"
+  print_colored_text BLUE "$prompt [Y/n] > "
+  read answer
+  if [[ "$answer" == "n" ]]
+  then
+    return -1
+  else
+    return 0
+  fi
+}
+
+promptN () {
+  prompt="$1"
+  print_colored_text BLUE "$prompt [y/N] > "
+  read answer
+  if [[ "$answer" == "y" ]]
+  then
+    return 0
+  else
+    return -1
+  fi
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

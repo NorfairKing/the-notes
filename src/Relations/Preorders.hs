@@ -12,9 +12,9 @@ makeDefs [
 
 preorders :: Note
 preorders = note "preorders" $ do
-  section "Preorders"
+    section "Preorders"
 
-  preorderDefinition
+    preorderDefinition
 
 preorderDefinition :: Note
 preorderDefinition = de $ do

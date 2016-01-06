@@ -1,8 +1,14 @@
-module Sets.Powerset (powerset) where
+module Sets.Powerset where
 
 import           Notes
 
-powerset :: Note
-powerset = note "powerset" $ do
-    mempty
+import           Sets.Powerset.Terms
 
+powersetS :: Note
+powersetS = note "powerset" $ do
+    powersetDefinition
+
+powersetDefinition :: Note
+powersetDefinition = de $ do
+    lab powersetDefinitionLabel
+    todo "powerset definition"

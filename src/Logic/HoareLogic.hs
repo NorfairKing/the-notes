@@ -2,14 +2,16 @@ module Logic.HoareLogic where
 
 import           Notes
 
-import           Logic.AbstractLogic               (axiomSchema, formula,
-                                                    inference, theory)
-import           Sets.Basics                       (predicate)
+import           Logic.AbstractLogic.Macro
+import           Logic.AbstractLogic.Terms
+import           Logic.FirstOrderLogic.Macro
+import           Logic.PropositionalLogic.Macro
+import           Relations.Orders.Macro
+import           Sets.Basics.Terms
 
 import           Logic.HoareLogic.ExamQuestion2014
 import           Logic.HoareLogic.Macro
 import           Logic.HoareLogic.Terms
-import           Relations.Orders.Macro
 
 hoareLogicS :: Note
 hoareLogicS = note "hoare-logic" $ do
@@ -46,7 +48,7 @@ hoareLogicS = note "hoare-logic" $ do
 
     nocite softwareVerificationAxiomaticSemanticsSlides
 
-    examQuestion2014
+    note "exam-question-2014" examQuestion2014
 
 a, b, c, i, p, q, r, e, x, y, z :: Note
 a = "A"
@@ -439,10 +441,10 @@ exampleProof = ex $ do
 
 softwareVerificationAxiomaticSemanticsSlides :: Reference
 softwareVerificationAxiomaticSemanticsSlides = Reference lectureSlides "software-verification-axiomatic-semantics-part1"
-  [
-    ("author", "Bertrand Meyer")
-  , ("title", "Lecture 2: Axiomatic Semantics")
-  , ("year", "2015")
-  , ("month", "September")
-  , ("note", "Lecture Slides")
-  ]
+    [
+      ("author", "Bertrand Meyer")
+    , ("title", "Lecture 2: Axiomatic Semantics")
+    , ("year", "2015")
+    , ("month", "September")
+    , ("note", "Lecture Slides")
+    ]

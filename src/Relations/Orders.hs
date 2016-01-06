@@ -2,18 +2,18 @@ module Relations.Orders where
 
 import           Notes
 
-import           Relations.Basics            (relation, total_, transitive_)
-import           Relations.Equivalence       (equivalenceRelation_)
-import           Relations.Preorders         (preorder, preorder_)
-
-import           Sets.Basics
-
+import           Logic.FirstOrderLogic.Macro
+import           Logic.PropositionalLogic.Macro
+import           Relations.Basics               (relation, total_, transitive_)
+import           Relations.Basics.Macro
+import           Relations.Equivalence          (equivalenceRelation_)
+import           Relations.Equivalence.Macro
+import           Relations.Preorders            (preorder, preorder_)
+import           Relations.Preorders.Macro
+import           Sets.Basics.Terms
 import           Sets.PointedSets.Macro
 
-import           Relations.Basics.Macro
-import           Relations.Equivalence.Macro
 import           Relations.Orders.Macro
-import           Relations.Preorders.Macro
 
 makeDefs [
       "antisymmetric"
@@ -368,7 +368,7 @@ flatLatticeDefinition = de $ do
     xs = latset_ .!: bot .^: top
 
 orderTheoryForComputerScientists :: Reference
-orderTheoryForComputerScientists = Reference online "order-theory-for-computer-scientists" $
+orderTheoryForComputerScientists = makeReference online "order-theory-for-computer-scientists" $
     [
         ("author", "Matt Might")
       , ("title", "Order theory for computer scientists")

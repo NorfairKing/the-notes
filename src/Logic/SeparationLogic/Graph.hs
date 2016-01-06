@@ -1,6 +1,6 @@
 module Logic.SeparationLogic.Graph where
 
-import           Notes                              hiding (true, (=:))
+import           Notes                              hiding (sequence, (=:))
 
 import           Prelude
 
@@ -47,7 +47,7 @@ storeHeap :: [Text] -- ^ Store as list of variables
           -> [(Text, [Text])] -- ^ Heap as lists of consequtive locations with names
           -> [(Either Text (Text, Int), (Text, Int))] -- ^ Edges
           -> Note' FilePath
-storeHeap store heap edges = dot2tex $ renderGraph $ graph_ directed $ do
+storeHeap store heap edges = dot2tex $ graph_ directed $ do
     graphDec [compound =: true]
     rankdir leftRight
     nodeDec [width =: "0", height =: "0"] -- Nodes as small as possible

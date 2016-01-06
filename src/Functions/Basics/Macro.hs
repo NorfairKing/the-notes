@@ -2,7 +2,7 @@ module Functions.Basics.Macro where
 
 import           Types
 
-import           Macro.Math
+import           Macro.Arrows
 import           Macro.Tuple
 
 import           Functions.Application.Macro

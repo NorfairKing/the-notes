@@ -1,34 +1,40 @@
 module Parser (getConfig) where
 
 import           Options.Applicative
-import           Prelude             (fmap, map, null, return)
+import           Prelude               (null, return, (>>=))
+
+import           System.Directory      (getCurrentDirectory)
+import           System.FilePath.Posix (isAbsolute, (</>))
 import           Types
-import           Utils
 
 getConfig :: IO (Maybe Config)
-getConfig = fmap config getArgs
+getConfig = getArgs >>= config
 
-config :: Args -> Maybe Config
+config :: Args -> IO (Maybe Config)
 config args = do
-  let ss = map constructSelection $ args_selectionStrings args
-  return Config {
-      conf_selections               = ss
-    , conf_visualDebug              = args_visualDebug args
-    , conf_verbose                  = args_verbose args
-    , conf_ignoreReferenceErrors    = args_ignoreReferenceErrors args
-    , conf_omitTodos                = args_omitTodos args
-    , conf_subtitle                 = if null st then Nothing else Just st
-    , conf_texFileName              = args_texFileName args
-    , conf_bibFileName              = args_bibFileName args
-    , conf_pdfFileName              = args_pdfFileName args
-    }
+    let ss = constructSelection $ args_selectionString args
+
+    let tda = args_tempDir args
+    tempdir <- if isAbsolute tda
+                then return tda
+                else do
+                    dir <- getCurrentDirectory
+                    return $ dir </> tda
+
+
+    return $ Just $ Config {
+          conf_selection                = ss
+        , conf_visualDebug              = args_visualDebug args
+        , conf_verbose                  = args_verbose args
+        , conf_ignoreReferenceErrors    = args_ignoreReferenceErrors args
+        , conf_todos                    = args_todos args
+        , conf_subtitle                 = if null st then Nothing else Just st
+        , conf_texFileName              = args_texFileName args
+        , conf_bibFileName              = args_bibFileName args
+        , conf_pdfFileName              = args_pdfFileName args
+        , conf_tempDir                  = tempdir
+        }
   where st = args_subtitle args
-
-constructSelection :: String -> Selection
-constructSelection "all" = All
-constructSelection ('-':s) = Ignore $ split s
-constructSelection s = Match $ split s
-
 
 getArgs :: IO Args
 getArgs = execParser opts
@@ -38,8 +44,8 @@ getArgs = execParser opts
     description = "\"The Notes\" generator"
 
 
-parseSelection :: Parser [String]
-parseSelection = words <$> strArgument (
+parseSelection :: Parser String
+parseSelection = strArgument (
        metavar "SELECTION"
     <> help "The selection of parts to generate"
     <> value "all")
@@ -59,8 +65,8 @@ argParser = Args
         (long "ignore-reference-errors"
             <> help "Ignore reference errors, compile anyway.")
     <*> switch
-        (long "omit-todos"
-            <> help "Omit all todo's left in the text.")
+        (long "todos"
+            <> help "Render all todo's left in the text.")
     <*> strOption
         (long "subtitle"
             <> value []
@@ -81,3 +87,9 @@ argParser = Args
             <> value "the-notes"
             <> metavar "NAME"
             <> help "The name of the output .pdf file to generate")
+    <*> strOption
+        (long "tmp-dir"
+            <> short 'd'
+            <> value "tmp"
+            <> metavar "DIR"
+            <> help "The working directory for note generating")

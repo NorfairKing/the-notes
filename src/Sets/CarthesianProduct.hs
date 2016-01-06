@@ -6,6 +6,8 @@ module Sets.CarthesianProduct (
 
 import           Notes
 
+import           Logic.PropositionalLogic.Macro
+
 makeDefs ["Carthesian product"]
 
 carthesianProducts :: Note

@@ -2,7 +2,9 @@ module Relations.Basics where
 
 import           Notes
 
-import           Sets.CarthesianProduct (carthesianProduct_)
+import           Logic.FirstOrderLogic.Macro
+import           Logic.PropositionalLogic.Macro
+import           Sets.CarthesianProduct         (carthesianProduct_)
 
 import           Relations.Basics.Macro
 
@@ -19,24 +21,24 @@ makeDefs [
 
 basicDefinitions :: Note
 basicDefinitions = note "definitions" $ do
-  section "Basics"
+    section "Basics"
 
-  relationDefinition
-  binaryRelationDefinition
-  ternaryRelationDefinition
-  unitRelationDefinition
-  inverseRelationDefinition
+    relationDefinition
+    binaryRelationDefinition
+    ternaryRelationDefinition
+    unitRelationDefinition
+    inverseRelationDefinition
 
-  inverseOfInverseIsNormal
+    inverseOfInverseIsNormal
 
-  subsection "Properties of relations"
+    subsection "Properties of relations"
 
-  reflexiveDefinition
-  transitiveDefinition
-  symmetricDefinition
-  totalDefinition
+    reflexiveDefinition
+    transitiveDefinition
+    symmetricDefinition
+    totalDefinition
 
-  totalityImpliesReflexivity
+    totalityImpliesReflexivity
 
 
 relationDefinition :: Note
@@ -49,8 +51,8 @@ relationDefinition = de $ do
 
 binaryRelationDefinition :: Note
 binaryRelationDefinition = de $ do
-  s ["A binary ", relation, " " , m rel_, " is a relation between two sets"]
-  s ["If a binary relation ", m rel_, " between sets ", m a, and, m b, " contains a tuple ", m $ tuple v w, " then that is often denoted as ", m $ elem_ v w]
+    s ["A binary ", relation, " " , m rel_, " is a relation between two sets"]
+    s ["If a binary relation ", m rel_, " between sets ", m a, and, m b, " contains a tuple ", m $ tuple v w, " then that is often denoted as ", m $ elem_ v w]
   where
     a = "A"
     b = "B"
@@ -150,9 +152,9 @@ totalityImpliesReflexivity = thm $ do
     s ["Every total relation is reflexive"]
 
     proof $ do
-      s ["Let ", m rel_, " be a total relation on a set ", m xx, " and ", m x, " an element of ", m xx]
-      s ["Because ", m rel_, " is total, either ", m (x `elem_` x), or, m (x `elem_` x), " must be true"]
-      s ["This means that ", m (x `elem_` x), " must hold and ", m rel_, " must therefore be reflexive"]
+        s ["Let ", m rel_, " be a total relation on a set ", m xx, " and ", m x, " an element of ", m xx]
+        s ["Because ", m rel_, " is total, either ", m (x `elem_` x), or, m (x `elem_` x), " must be true"]
+        s ["This means that ", m (x `elem_` x), " must hold and ", m rel_, " must therefore be reflexive"]
     toprove
 
   where

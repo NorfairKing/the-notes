@@ -11,11 +11,11 @@ import           Sets.Powerset
 
 sets :: Note
 sets = note "sets" $ do
-   chapter "Sets"
-   setBasics
-   partitions
-   algebra
-   powerset
-   carthesianProducts
-   pointedSets
+     chapter "Sets"
+     setBasics
+     partitions
+     algebra
+     powersetS
+     carthesianProducts
+     pointedSets
 

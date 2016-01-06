@@ -1,18 +1,20 @@
+{-# LANGUAGE QuasiQuotes #-}
 module Titlepage (myTitlePage) where
 
-import           Control.Monad (forM_)
+import           Control.Monad        (forM_)
+import           Control.Monad.Reader (asks)
 
-import           Prelude       (return)
+import           Prelude              (return)
 
-import qualified Data.Text     as T
+import qualified Data.Text            as T
 
 import           Notes
 
-titlepageE :: LaTeXC l => l -> l
+titlepageE :: Note -> Note
 titlepageE = liftL $ TeXEnv "titlepage" []
 
 myTitlePage :: Note
-myTitlePage =
+myTitlePage = do
     titlepageE $ do
         raw "\n"
         comm1 "thispagestyle" "empty"
@@ -54,7 +56,7 @@ myTitlePage =
                     lnbk
                     "Compiled" & commS "today"
                     lnbk
-                    "Commit" & input "commit.tex" -- Make this compile-time.
+                    "Commit" & raw (T.pack $(commitHash))
                     lnbk
                 comm1 "vspace" $ raw "0.5\\textheight"
 

@@ -2,10 +2,12 @@ module Functions.Basics where
 
 import           Notes
 
-import           Sets.Basics                 (subset)
+import           Logic.FirstOrderLogic.Macro
+import           Logic.PropositionalLogic.Macro
+import           Relations.Basics               (relation_)
+import           Relations.Domain               (domain_, image_)
+import           Sets.Basics.Terms
 
-import           Relations.Basics            (relation_)
-import           Relations.Domain            (domain_, image_)
 
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
@@ -38,6 +40,8 @@ basics = note "basics" $ do
 
 partialFunctionDefinition :: Note
 partialFunctionDefinition = de $ do
+    lab functionDefinitionLabel
+    lab partialFunctionDefinitionLabel
     s ["A ", partialFunction', or, function', " ", m fun_, " is a triple ", m t , " where ", m dom_, and, img_, " are sets and ", m fun_, " is a single-valued binary ", relation_, " between ", m dom_, and, m img_]
     s ["Each of the sets ", m dom_, and, img_, " have an equivalence relation defined on them, both written as ", m (eqsign)]
     ma $ fa (cs [x, y 1, y 2]) $ (pars $ tuple x (y 1) ∈ fun_ ∧ tuple x (y 2) ∈ fun_) ⇒ (y 1 =: y 2)

@@ -1,9 +1,11 @@
 module Logic.HoareLogic.ExamQuestion2014 where
 
-import           Logic.HoareLogic.Macro
-import           Logic.HoareLogic.Terms
 import           Notes
 
+import           Logic.FirstOrderLogic.Macro
+import           Logic.HoareLogic.Macro
+import           Logic.HoareLogic.Terms
+import           Logic.PropositionalLogic.Macro
 
 examQuestion2014 :: Note
 examQuestion2014 = ex $ do

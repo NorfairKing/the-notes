@@ -1,6 +1,6 @@
 module MachineLearning.UnsupervisedLearning (
-    unsupervisedLearning
-  ) where
+      unsupervisedLearning
+    ) where
 
 import           Notes
 
@@ -9,10 +9,10 @@ unsupervisedLearning = note "unsupervised-learning" body
 
 body :: Note
 body = do
-  section "Unsupervised Learning"
-  learningProblem
+    section "Unsupervised Learning"
+    learningProblem
 
 learningProblem :: Note
 learningProblem = do
-  subsection "The learning problem"
+    subsection "The learning problem"
 

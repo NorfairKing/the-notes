@@ -14,14 +14,14 @@ compositeRelations = note "composite-relations" body
 
 body :: Note
 body = do
-  subsection "Composite relations"
+    subsection "Composite relations"
 
-  compositeRelationDefinition
-  compositeAssociative
-  compositeDistributiveWrtInverse
+    compositeRelationDefinition
+    compositeAssociative
+    compositeDistributiveWrtInverse
 
-  domainAfterComposition
-  imageAfterComposition
+    domainAfterComposition
+    imageAfterComposition
 
 
 compositeRelationDefinition :: Note

@@ -3,8 +3,9 @@ module Functions.BinaryOperation where
 import           Notes
 
 import           Functions.Basics                (binaryFunction)
-
 import           Functions.Basics.Macro
+import           Logic.FirstOrderLogic.Macro
+
 import           Functions.BinaryOperation.Macro
 
 makeDefs [
@@ -19,6 +20,7 @@ binaryOperations = note "binary-operations" $ do
 
     associativeDefinition
 
+-- TODO(binary operation can go to other set than dom_
 binaryOperationDefinition :: Note
 binaryOperationDefinition = de $ do
     lab binaryOperationDefinitionLabel

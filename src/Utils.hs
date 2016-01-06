@@ -2,11 +2,17 @@ module Utils where
 
 import           Types
 
-import           Prelude           (Char, otherwise, return)
+import           Prelude
 
 import           Control.Exception
-import           System.Directory  (removeFile)
-import           System.IO.Error   (isDoesNotExistError)
+import           System.Directory  (createDirectory, removeFile)
+import           System.IO.Error   (isAlreadyExistsError, isDoesNotExistError)
+
+makeDir :: FilePath -> IO ()
+makeDir fp = createDirectory fp `catch` handleExists
+  where handleExists e
+          | isAlreadyExistsError e = return ()
+          | otherwise = throwIO e
 
 removeIfExists :: FilePath -> IO ()
 removeIfExists fileName = removeFile fileName `catch` handleExists
@@ -14,14 +20,19 @@ removeIfExists fileName = removeFile fileName `catch` handleExists
           | isDoesNotExistError e = return ()
           | otherwise = throwIO e
 
-split :: String -> [String]
-split = splitOn '.'
-
-
-splitOn :: Char -> String -> [String]
-splitOn c s = go s []
+pairs :: [a] -> [(a,a)]
+pairs [] = []
+pairs as = go as $ tail as
   where
-    go :: String -> String -> [String]
-    go [] s = [s]
-    go (sc:ss) acc | sc == c   = acc : go [] ss
-                   | otherwise = go ss (acc ++ [sc])
+    go [] [] = []
+    go _  [] = []
+    go [] _  = []
+    go (a:as) bss@(_:bs) = map (\b -> (a, b)) bss ++ go as bs
+
+crossproduct :: [a] -> [b] -> [(a,b)]
+crossproduct [] [] = []
+crossproduct [] _  = []
+crossproduct _  [] = []
+crossproduct (a:as) bs = map (\b -> (a,b)) bs ++ crossproduct as bs
+
+

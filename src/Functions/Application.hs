@@ -2,7 +2,7 @@ module Functions.Application where
 
 import           Notes
 
-import           Sets.Basics                 (subset)
+import           Sets.Basics.Terms
 
 import           Functions.Basics            (function)
 
