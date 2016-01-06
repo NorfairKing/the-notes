@@ -34,22 +34,23 @@ prbsp :: Note
 prbsp = prsp reals boreals prm_
 
 
---[ Probability probability measure
+-- | Concrete probability measure
 prm_ :: Note
 prm_ = "P"
 
---[ Probability
+-- | Probability with given probability measure
 prm :: Note -> Note -> Note
-prm = app -- probability with custom measure
+prm = fn -- probability with custom measure
 
+-- | Probability
 prob :: Note -> Note
 prob = prm prm_
 
 
--- | Mean
+-- | Concrete mean
 mean_ :: Note
 mean_ = mu
 
--- | Variance
+-- | Concrete variance
 variance_ :: Note
 variance_ = sigma

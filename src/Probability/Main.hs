@@ -6,6 +6,7 @@ import           Probability.ConditionalProbability
 import           Probability.Distributions
 import           Probability.Independence
 import           Probability.Intro
+import           Probability.LanguageModel
 import           Probability.ProbabilityMeasure
 import           Probability.RandomVariable
 import           Probability.SigmaAlgebra
@@ -20,4 +21,4 @@ probability = note "probability" $ do
     independenceS
     randomVariableS
     distributions
-
+    languageModels
