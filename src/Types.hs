@@ -31,8 +31,10 @@ import           Prelude                      as P (Double, Eq (..), FilePath,
 import           Debug.Trace
 
 import           Text.LaTeX                   hiding (Label, alph_, article,
-                                               cite, item, label, pageref, ref,
-                                               ref, rule, usepackage)
+                                               chapter, cite, item, label,
+                                               pageref, ref, ref, rule, section,
+                                               subsection, subsubsection,
+                                               usepackage)
 import           Text.LaTeX.Base.Class
 import           Text.LaTeX.Base.Pretty
 import           Text.LaTeX.Base.Syntax

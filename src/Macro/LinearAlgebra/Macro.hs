@@ -100,6 +100,14 @@ lain v w = autoBrackets langle rangle $ cs [v, w]
 realVectorInproduct :: Note
 realVectorInproduct = lainprod
 
+-- | Dotproduct
+(/.\) :: Note -> Note -> Note
+(/.\) = binop $ comm0 "cdot"
+
+-- | Addition of euclidean vectors
+(/+\) :: Note -> Note -> Note
+(/+\) = (<+>)
+
 
 -- Linear Algebra Inner Product Space
 laips :: Note

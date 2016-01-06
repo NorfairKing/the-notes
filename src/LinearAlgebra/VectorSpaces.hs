@@ -51,6 +51,7 @@ vectorSpaceDefinition = de $ do
             "Mixed associativity:"
             ma $ fa (cs [rr, ss] ∈ lafield) $ (pars $ rr *. ss) <*> vv =: rr <*> (pars $ ss <*> vv)
     s ["An element of ", m laset, " is called a ", vector']
+    s ["In the context of a ", vectorSpace, " the neutral element of ", m $ pars laadd, " is call the ", origin']
   where
     rr = "r"
     ss = "s"

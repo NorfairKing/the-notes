@@ -243,3 +243,7 @@ choose = comm2 "binom"
 -- | Pi
 pi :: Note
 pi = comm0 "pi"
+
+-- | Sign
+sign :: Note -> Note
+sign n = "sign" <> autoParens n
