@@ -17,8 +17,8 @@ packages = do
     packageDep_ "proof"
 
     -- For a nice font with math support
-    packageDep_ "libertine"
-    packageDep  ["libertine"] "newtxmath"
+    packageDep ["mono=false"] "libertine" -- Don't load the monospace font, otherwise verbatim will be messed up.
+    packageDep ["libertine"] "newtxmath"
 
     -- To count pages
     packageDep_ "lastpage"

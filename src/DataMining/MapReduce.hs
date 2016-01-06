@@ -1,20 +1,19 @@
 {-# LANGUAGE QuasiQuotes #-}
-module DataMining.MapReduce (
-      mapReduce
-    ) where
+module DataMining.MapReduce where
 
 import           Notes
 
 import           Functions.Basics.Macro
+import           Probability.LanguageModel.Terms
 
-mapReduce :: Note
-mapReduce = note "MapReduce" body
+import           DataMining.MapReduce.Terms
 
-body :: Note
-body = do
+mapReduceS :: Note
+mapReduceS = note "map-reduce" $ do
     section "MapReduce"
     mapReduceConcept
     mapReduceExamples
+    mapReduce1GramMarkovModel
     mapReduceReferences
 
 mapReduceConcept :: Note
@@ -30,7 +29,7 @@ mapReduceConcept = do
     s ["A new way of processing data is required"]
 
     subsubsection "The solution"
-    s ["In a MapReduce framework, the computation is distributed accross multiple machines and the data is distributed on a distributed filesystem for those machines"]
+    s ["In a ", mapReduce', " framework, the computation is distributed accross multiple machines and the data is distributed on a distributed filesystem for those machines"]
     s ["The concept of MapReduce is is based on three key ideas"]
     enumerate $ do
       item $ s ["Data is stored redundantly for reliability"]
@@ -80,8 +79,8 @@ mapReduceExamples = do
 wordCountExample :: Note
 wordCountExample = ex $ do
     s ["Counting the number of occurrences of every word in a large corpus of documents is the prime example of a problem that can be solved using mapreduce"]
-    minted "python" wordCountMap
-    minted "python" wordCountReduce
+    python wordCountMap
+    python wordCountReduce
 
 wordCountMap :: Note
 wordCountMap = raw [litFile|src/DataMining/wordcountmap.py|]
@@ -91,6 +90,25 @@ wordCountReduce = raw [litFile|src/DataMining/wordcountreduce.py|]
 
 mapReduceReferences :: Note
 mapReduceReferences = nocite dataMiningMapReduceSlides
+
+
+mapReduce1GramMarkovModel :: Note
+mapReduce1GramMarkovModel = ex $ do
+    examq eth "Data Mining" "January 2014"
+
+    let n = "n"
+    s ["The task at hand is to estimate a ", nGramMarkovModel, " with ", m $ n =: 1, " with a ", mapReduce, " job"]
+    s ["Given a list of documents, given by a list of words, the job should output, for each word in the corpus, a list of tuples where the first element is a word and the second element is the fraction of times the first word was followed by the second in the entire corpus"]
+
+    python markovModelMap
+    python markovModelReduce
+
+
+markovModelMap :: Note
+markovModelMap = raw [litFile|src/DataMining/markovmodelmap.py|]
+
+markovModelReduce :: Note
+markovModelReduce = raw [litFile|src/DataMining/markovmodelreduce.py|]
 
 dataMiningMapReduceSlides :: Reference
 dataMiningMapReduceSlides = Reference lectureSlides "data-mining-mapreduce" $

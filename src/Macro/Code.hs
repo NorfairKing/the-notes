@@ -13,4 +13,7 @@ minted lang cont = do
 pseudocode :: Note -> Note
 pseudocode = minted "raw"
 
+python :: Note -> Note
+python = minted "python"
+
 
