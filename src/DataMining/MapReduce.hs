@@ -14,6 +14,7 @@ mapReduceS = note "map-reduce" $ do
     mapReduceConcept
     mapReduceExamples
     mapReduce1GramMarkovModel
+    mapReduceFrequentItemSets
     mapReduceReferences
 
 mapReduceConcept :: Note
@@ -79,14 +80,8 @@ mapReduceExamples = do
 wordCountExample :: Note
 wordCountExample = ex $ do
     s ["Counting the number of occurrences of every word in a large corpus of documents is the prime example of a problem that can be solved using mapreduce"]
-    python wordCountMap
-    python wordCountReduce
-
-wordCountMap :: Note
-wordCountMap = raw [litFile|src/DataMining/wordcountmap.py|]
-
-wordCountReduce :: Note
-wordCountReduce = raw [litFile|src/DataMining/wordcountreduce.py|]
+    python $ raw [litFile|src/DataMining/wordcountmap.py|]
+    python $ raw [litFile|src/DataMining/wordcountreduce.py|]
 
 mapReduceReferences :: Note
 mapReduceReferences = nocite dataMiningMapReduceSlides
@@ -100,15 +95,29 @@ mapReduce1GramMarkovModel = ex $ do
     s ["The task at hand is to estimate a ", nGramMarkovModel, " with ", m $ n =: 1, " with a ", mapReduce, " job"]
     s ["Given a list of documents, given by a list of words, the job should output, for each word in the corpus, a list of tuples where the first element is a word and the second element is the fraction of times the first word was followed by the second in the entire corpus"]
 
-    python markovModelMap
-    python markovModelReduce
+    python $ raw [litFile|src/DataMining/markovmodelmap.py|]
+    python $ raw [litFile|src/DataMining/markovmodelreduce.py|]
 
+mapReduceFrequentItemSets :: Note
+mapReduceFrequentItemSets = ex $ do
+    examq eth "Data Mining" "January 2013"
 
-markovModelMap :: Note
-markovModelMap = raw [litFile|src/DataMining/markovmodelmap.py|]
+    let n = "n"
+        k = "K"
+        p = "P"
+    s ["In a supermarket are ", m n, " items available"]
+    s ["Given a list of transactions, a set of items that were bought together, you are tasked with finding all frequently bought itemsets with price greater than or equal to a given price ", m p]
+    s ["Here, an itemset is a subset of a transaction and ", quoted "frequently bought", " is defined as ", quoted ("more than " <> m k), " where ", m k, " is given"]
+    s ["You are given three functions"]
+    itemize $ do
+        item $ s [inlinePython "hash(s)", " returns a unique hash value for the itemset s"]
+        item $ s [inlinePython "cost(s)", " returns the price of the itemset s"]
+        item $ s [inlinePython "subsets(s)", " returns a list of all subsets of the set s with size greater than one"]
+    s ["The ", mapReduce, " job that solves this problem should output a list of tuples of hash-values and number of occurrences of frequent itemsets with cost at least ", m p]
 
-markovModelReduce :: Note
-markovModelReduce = raw [litFile|src/DataMining/markovmodelreduce.py|]
+    python $ raw [litFile|src/DataMining/frequentitemsetsmap.py|]
+    python $ raw [litFile|src/DataMining/frequentitemsetsreduce.py|]
+
 
 dataMiningMapReduceSlides :: Reference
 dataMiningMapReduceSlides = Reference lectureSlides "data-mining-mapreduce" $
