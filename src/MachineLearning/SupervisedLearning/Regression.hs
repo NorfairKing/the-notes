@@ -1,17 +1,13 @@
-module MachineLearning.Regression (
-      regression
-    ) where
+module MachineLearning.SupervisedLearning.Regression where
 
 import           Notes
 
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
 
-regression :: Note
-regression = note "regression" body
-
-body :: Note
-body = do
+regressionS :: Note
+regressionS = note "regression" $ do
+    subsection "Regression"
     intro
     linearRegression
     linearModelAndLeastSquares

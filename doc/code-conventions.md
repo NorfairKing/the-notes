@@ -1,13 +1,17 @@
 # Code conventions
 
+The code is not always consistent with these conventions but any additions should be.
+
 ## Modules
 
 `Macro.Chapter.Macro` is deprecated.
 
-
 - 'text' goes into `Chapter.Section`.
+  Text modules can import other Text modules, Macro's and Terms.
 - Macro's go into `Chapter.Section.Macro`.
-- Terms go into `Chapter.Section.Terms`.
+  Macro modules can only import other Macro modules
+- Terms, references and labels go into `Chapter.Section.Terms`.
+  Term modules cannot import modules other than Types.
 
 ## Terms
 

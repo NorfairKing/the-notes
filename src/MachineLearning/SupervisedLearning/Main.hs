@@ -1,7 +1,4 @@
-module MachineLearning.SupervisedLearning (
-        supervisedLearning
-      ,
-    ) where
+module MachineLearning.SupervisedLearning.Main where
 
 import           Notes
 
@@ -9,12 +6,12 @@ import           Functions.Application.Macro
 import           Functions.Basics.Macro
 import           Logic.FirstOrderLogic.Macro
 
-supervisedLearning :: Note
-supervisedLearning = note "supervised-learning" body
+import           MachineLearning.SupervisedLearning.Regression            (regressionS)
+import           MachineLearning.SupervisedLearning.SupportVectorMachines (supportVectorMachinesS)
 
-body :: Note
-body = do
-    section "Supervised Learning"
+supervisedLearningS :: Note
+supervisedLearningS = note "supervised-learning" $ do
+    section "Supervized learning"
     learningProblem
     taxonomyOfData
     scales
@@ -23,6 +20,9 @@ body = do
     trainingErrorDefinition
     generalisationError
     lossfunctions
+
+    regressionS
+    supportVectorMachinesS
 
 
 learningProblem :: Note
@@ -102,7 +102,6 @@ taxonomyOfData = do
         ma $ fun mlmes (mlos !: 1 ⨯ mlos !: 2 ⨯ mlos !: 2) (setofs ["left", "right"])
 
 
-
 scales :: Note
 scales = do
     subsection "Scales"
@@ -130,6 +129,7 @@ scales = do
 
     de $ s [the, term "absolute scale", " describes data where also the measurement unit carries information"]
     ex $ "The amount of questions you got right on an exam is an absolute scale"
+
 
 transformationInvariances :: Note
 transformationInvariances = do

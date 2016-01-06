@@ -1,28 +1,22 @@
-module LinearAlgebra.VectorSpaces (
-      vectorSpaces
-
-    , vectorSpaceDefinitionLabel
-    ) where
+module LinearAlgebra.VectorSpaces where
 
 import           Notes
 
 import           Functions.Basics.Macro
 import           Logic.FirstOrderLogic.Macro
 
-vectorSpaces :: Note
-vectorSpaces = note "vector-spaces" body
+import           LinearAlgebra.VectorSpaces.Terms
 
-body :: Note
-body = do
+vectorSpaces :: Note
+vectorSpaces = note "vector-spaces" $ do
     section "Vector Spaces"
     vectorSpaceDefinition
-
-vectorSpaceDefinitionLabel :: Label
-vectorSpaceDefinitionLabel = Label Definition "vector-space"
+    euclideanVectorSpaceDefinition
 
 vectorSpaceDefinition :: Note
 vectorSpaceDefinition = de $ do
     lab vectorSpaceDefinitionLabel
+    lab vectorDefinitionLabel
     noindent
     enumerate $ do
         item $ do
@@ -51,8 +45,17 @@ vectorSpaceDefinition = de $ do
         item $ do
             "Mixed associativity:"
             ma $ fa (cs [rr, ss] ∈ lafield) $ (pars $ rr *. ss) <*> vv =: rr <*> (pars $ ss <*> vv)
+    s ["An element of ", m laset, " is called a ", vector']
   where
     rr = "r"
     ss = "s"
     vv = vec "v"
 
+
+euclideanVectorSpaceDefinition :: Note
+euclideanVectorSpaceDefinition = de $ do
+    lab euclideanVectorSpaceDefinitionLabel
+    lab euclideanVectorDefinitionLabel
+    let p = "p"
+    s ["A ", euclideanVectorSpace', " is a ", vectorSpace, " of the form ", m $ realVectorsSpace p, " with ", m $ natural p]
+    s ["An element of ", m $ reals ^ p, " is called a ", euclideanVector']

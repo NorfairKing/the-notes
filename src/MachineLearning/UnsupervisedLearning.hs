@@ -1,14 +1,9 @@
-module MachineLearning.UnsupervisedLearning (
-      unsupervisedLearning
-    ) where
+module MachineLearning.UnsupervisedLearning where
 
 import           Notes
 
-unsupervisedLearning :: Note
-unsupervisedLearning = note "unsupervised-learning" body
-
-body :: Note
-body = do
+unsupervisedLearningS :: Note
+unsupervisedLearningS = note "unsupervised-learning" $ do
     section "Unsupervised Learning"
     learningProblem
 
