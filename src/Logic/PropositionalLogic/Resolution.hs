@@ -105,9 +105,6 @@ proofUnsatisfiable height kb query = do
   where cap = do
             "A diagram of the proof of "
             m $ renderSentence query
-            " from " <> commS " "
-            mapM_ (\n -> newline <> m n) $ map renderCNFSentence kb
-
 
 proofGraph :: [Sentence] -> Sentence -> DotGraph
 proofGraph kb query = graph_ directed $ proofGraphGen cnfSen

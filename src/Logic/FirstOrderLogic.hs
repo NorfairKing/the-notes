@@ -86,12 +86,12 @@ ppp x y = fn p $ cs [x, y]
 
 existentialQuantifierDefinition :: Note
 existentialQuantifierDefinition = de $ do
-    s ["The ", existentialQuantifier', " ", m existentialQuantifier, " "]
+    s ["The ", existentialQuantifier', " ", m thereExistsSign, " "]
     s ["A sentence ", m (te x $ pp x), ", in the context of a model ", m "m", " is defined to hold true if there exists a ", m x, " in ", m "m", " such that the predicate ", m p, " holds for ", m x]
 
 universalQuantifierDefinition :: Note
 universalQuantifierDefinition = de $ do
-    s ["The ", universalQuantifier', " ", m universalQuantifier, " "]
+    s ["The ", universalQuantifier', " ", m forallSign, " "]
     s ["A sentence ", m (fa x $ pp x), ", in the context of a model ", m "m", " is defined to hold true if the predicate ", m p, " holds for every instantiation of ", m x, " in ", m "m"]
 
 compositeSentence :: Note
@@ -240,7 +240,7 @@ propositionalisationSS = note "propositionalisation" $ do
         s ["This turns the problem into a propositional logic problem and it can then be solved as discussed before"]
     s ["The problem with proportionalisation is that the solver may need to create a lot of unnecessary symbols"]
     s ["Even worse, the amount of created symbols could be infinite"]
-    propositionalisationExample
+    propositionalisationExamples
 
     herbrandTheorem
 
@@ -261,8 +261,13 @@ herbrandReference = Reference article "herbrand-theorem" $
     , ("number" , "33")
     ]
 
-propositionalisationExample :: Note
-propositionalisationExample = ex $ do
+propositionalisationExamples :: Note
+propositionalisationExamples = do
+    propositionalisationExampleBirds
+    propositionalisationExampleCompany
+
+propositionalisationExampleBirds :: Note
+propositionalisationExampleBirds = ex $ do
     s ["Suppose we are given this set of facts"]
     itemize $ do
         item $ s ["Birds are winged animals"]
@@ -330,6 +335,61 @@ propositionalisationExample = ex $ do
 
     s ["Now we can solve this with resolution"]
     proofUnsatisfiable 20.0 kb query
+
+propositionalisationExampleCompany :: Note
+propositionalisationExampleCompany = ex $ do
+    examq eth "Probabillistic Artificial Intelligence" "January 2013"
+    s ["James, Henry and David are working in a company"]
+    s ["We know that they hold the jobs of manager, programmer and engineer; but we don’t know which person has which job"]
+
+    itemize $ do
+        let james = "James"
+            henry = "Henry"
+            david = "David"
+            bor   = fn2 "Borrowed"
+            mar   = fn "Married"
+            job   = fn2 "Job"
+            prog  = "Programmer"
+            man   = "Manager"
+            x = "x"
+        item $ do
+            s ["Generate a ", firstOrderLogic, " ", knowledgeBase, " considering the information below"]
+            itemize $ do
+                item $ do
+                    s ["James has borrowed money from the programmer"]
+                    ma $ bor james prog
+                item $ do
+                    s ["The manager is married"]
+                    ma $ fa x $ job x man ⇒ mar x
+                item $ do
+                    s ["The Manager doesn’t like to borrow money from somebody else"]
+                    newline
+                    s ["There is no useful translation of this sentence"]
+                item $ do
+                    s ["David is single"]
+                    ma $ neg $ mar $ david
+        item $ do
+            s ["Prove, using resolution, that David is not the manager"]
+
+            s ["First we propositionalise the sentence with quantifiers"]
+            s [m $ fa x $ job x man ⇒ mar x, " becomes the conjunction of the following three sentences"]
+            itemize $ do
+                item $ m $ job david man ⇒ mar david
+                item $ m $ job henry man ⇒ mar henry
+                item $ m $ job james man ⇒ mar james
+
+            let kb =
+                    [
+                      "B(J,P)"
+                    , Implies "Job(D, M)" "M(D)"
+                    -- , Implies "Job(H, M)" "M(H)"
+                    -- , Implies "Job(J, M)" "M(J)"
+                    , Not "M(D)"
+                    ]
+            let query = Not "Job(D, M)"
+            s ["Now we can apply resolution to prove ", m $ renderSentence query]
+            s ["Two of the propositionalised sentences are omited for the sake of brevity"]
+            proofUnsatisfiable 3 kb query
 
 
 
