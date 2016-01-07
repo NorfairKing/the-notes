@@ -5,5 +5,6 @@ import           Notes
 makeDefs [
       "supervised learning"
     , "gradient descent"
+    , "stochastic gradient descent"
     ]
 

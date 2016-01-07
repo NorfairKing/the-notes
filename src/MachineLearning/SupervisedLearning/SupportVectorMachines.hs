@@ -25,11 +25,13 @@ supportVectorMachinesS = note "support-vector-machines" $ do
 
 
 gradientDescentS :: Note
-gradientDescentS = do
+gradientDescentS = note "gradient-descent" $ do
     subsection "Gradient descent"
-    let differentiable = ix "differentiable"
-        localMinimum = ix "local minimum" -- of a function
-        localMaximum = ix "local maximum"
+    regularGradientDescentSS
+    stochasticGradientDescentSS
+
+regularGradientDescentSS :: Note
+regularGradientDescentSS = do
     let ff = "F"
         f = fn ff
         (a, b) = ("a", "b")
@@ -51,6 +53,16 @@ gradientDescentS = do
     todo "define a gradient"
     todo $ s ["flesh out what the exact requirements are on ", m ff, and, m gamma, " so that this process actually gets us a, ", localMinimum]
     nte $ s ["The ", localMaximum, " can analogously be obtained by going in the direction of the positive gradient"]
+
+stochasticGradientDescentSS :: Note
+stochasticGradientDescentSS = note "stochastic-gradient-descent" $ do
+    subsubsection "Stochastic gradient descent"
+    let ff = "F"
+    de $ do
+        s ["When the function to minimize can be written as the sum of ", differentiable, " functions, the process of ", gradientDescent, " can be sped up by adding an element of randomness"]
+        s ["Instead of taking the gradient of the entire function ", m ff, ", we instead take the gradient of just one term of the sum that comprises ", m ff, " and take a step in the opposite direction"]
+        s ["This process is called ", stochasticGradientDescent']
+    todo "This is also a first draft, the real deal is much more complicated"
 
 
 normalVector :: Note
@@ -202,4 +214,38 @@ computingMargin = note "computing-the-margin" $ do
     s ["We can do better, however, if we are content with an arbitrarily good approxmation"]
     s ["The objective function is a nicely continuous function in two variables: ", m w, and, m b]
     s ["This means that we can perform gradient descent to find the minimum"]
+
+    let ff = "f"
+        f = fn2 ff
+        w = vec "w"
+        b = "b"
+        c = "C"
+        i = "i"
+        j = "j"
+        n = "n"
+        x = vec "x"
+        y = "y"
+    s ["In essence, we just trying to minimize the function ", m ff, " as follows"]
+    ma $ f w b =: (1 /: 2) * (norm w) ^2 + c * sumcmpr (i =: 1) n (maxof (setofs [0, 1 - (pars $ (y !: i) * (w /.\ x !: i + b) )]))
+    s ["The ", m j, "th coordinate of the gradiant ", m $ grad ff, " can be computed as follows"]
+    ma $ grad ff !: j
+      =: fn2 (partial ff) w b /: partial (w !: j)
+      =: (cases $ do
+            (w !: j) & " if " <> (pars $ (y !: i) * (w /.\ x !: i + b)) >= 1
+            lnbk
+            (w !: j) + c * sumcmpr (i =: 1) n (pars $ - (y !: i) * (x !: (cs [i, j]))) & " otherwise"
+         )
+
+    s ["The problem with this approach is that we have to go over the entire set in each iteration step"]
+
+    newline
+    s ["For really large datasets, we can do even better in terms of time"]
+    s ["Using ", stochasticGradientDescent, " we can also obtain the ", localMinimum, " by evaluating the gradient for each individual training example instead of over the entire dataset"]
+    s ["For a given datapoint ", m $ x !: i, " the gradient we use will look as follows"]
+    ma $ grad ff !: j
+      =: (cases $ do
+            (w !: j) & " if " <> (pars $ (y !: i) * (w /.\ x !: i + b)) >= 1
+            lnbk
+            (w !: j) + c * (pars $ - (y !: i) * (x !: (cs [i, j]))) & " otherwise"
+         )
 

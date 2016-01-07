@@ -164,6 +164,16 @@ finite = ix "finite"
 infinite :: Note
 infinite = ix "infinite"
 
+differentiable :: Note
+differentiable = ix "differentiable"
+
+localMinimum :: Note
+localMinimum = ix "local minimum"
+
+localMaximum :: Note
+localMaximum = ix "local maximum"
+
+
 -- Proofs
 proof :: Note -> Note
 proof = liftL $ TeXEnv "proof" []
@@ -276,3 +286,7 @@ mp n = comm0 "mp" <> n
 -- | Gradient
 grad :: Note -> Note
 grad n = comm0 "nabla" <> n
+
+-- | Partial derivative
+partial :: Note -> Note
+partial n = comm0 "partial" <> n
