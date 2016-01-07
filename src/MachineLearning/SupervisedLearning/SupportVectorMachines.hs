@@ -2,6 +2,7 @@ module MachineLearning.SupervisedLearning.SupportVectorMachines where
 
 import           Notes
 
+import           Functions.Application.Macro
 import           Functions.Distances.Macro
 import           Geometry.AffineSpaces.Terms
 import           LinearAlgebra.VectorSpaces.Terms
@@ -14,12 +15,42 @@ import           MachineLearning.SupervisedLearning.SupportVectorMachines.Terms
 
 supportVectorMachinesS :: Note
 supportVectorMachinesS = note "support-vector-machines" $ do
+    gradientDescentS
     subsection "Support vector machines"
     svmContext
     hardConstraintsSVM
     softConstraintsSVM
     naturalForm
     computingMargin
+
+
+gradientDescentS :: Note
+gradientDescentS = do
+    subsection "Gradient descent"
+    let differentiable = ix "differentiable"
+        localMinimum = ix "local minimum" -- of a function
+        localMaximum = ix "local maximum"
+    let ff = "F"
+        f = fn ff
+        (a, b) = ("a", "b")
+    de $ do
+        lab gradientDescentDefinitionLabel
+        s ["Given a multi-variable function ", m ff, " that is everywhere ", differentiable, " we can find a ", localMinimum, " (and analogously a ", localMaximum, ") using the gradient of that function, starting at a point ", m a]
+        newline
+        s ["The first insight is that, at a point ", m a, ", ", m ff, " decreases fastest when going in the direction of the negative gradient of ", m ff, " at ", m a]
+        let grf = fn $ grad ff
+        s ["This means that, for ", m gamma, " small enough, ", m $ f a >= f b, " holds where ", m $ b =: a - gamma * grf a]
+        s ["Repeating this step gets us a sequence of points with a decreasing value under ", m ff]
+        s [m gamma, " is called the ", term "step size", " and it can change every step"]
+        s ["If ", m gamma, " is small enough in each step, this means that the sequence of poince will converge to a local minimum"]
+        newline
+        s ["This process is called ", gradientDescent']
+
+    nte $ s ["It is of course imperative that the gradient can be computed (efficiently)"]
+    todo "This is very much a first draft of this section. It should be moved to a better place as this is not machine learning but ... optimisation?"
+    todo "define a gradient"
+    todo $ s ["flesh out what the exact requirements are on ", m ff, and, m gamma, " so that this process actually gets us a, ", localMinimum]
+    nte $ s ["The ", localMaximum, " can analogously be obtained by going in the direction of the positive gradient"]
 
 
 normalVector :: Note

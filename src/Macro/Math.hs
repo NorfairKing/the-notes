@@ -272,3 +272,7 @@ pm n = comm0 "pm" <> n
 -- | Plus-or-minus
 mp :: Note -> Note
 mp n = comm0 "mp" <> n
+
+-- | Gradient
+grad :: Note -> Note
+grad n = comm0 "nabla" <> n
