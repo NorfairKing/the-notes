@@ -191,9 +191,26 @@ sqrt = tsqrt Nothing
 nrt :: Note -> Note -> Note
 nrt n = tsqrt (Just n)
 
--- Extrema
+-- * Extrema
+-- | Maximum accross value
 max :: Note -> Note -> Note
-max sub body = commS "max" !: sub <> body
+max sub body = commS "max" .!: sub <> body
+
+-- | Maximum of
+maxof :: Note -> Note
+maxof body = commS "max" <> body
+
+-- | Minimum accross value
+min :: Note -> Note -> Note
+min sub body = commS "min" .!: sub <> body
+
+-- | Minimum of
+minof :: Note -> Note
+minof body = commS "min" <> body
+
+-- | Arguments at minumum
+argmin :: Note -> Note -> Note
+argmin arg body = underset arg ("arg" <> commS "," <> commS "min") <> body
 
 -- Infinity
 minfty :: Note
@@ -247,3 +264,11 @@ pi = comm0 "pi"
 -- | Sign
 sign :: Note -> Note
 sign n = "sign" <> autoParens n
+
+-- | Plus-or-minus
+pm :: Note -> Note
+pm n = comm0 "pm" <> n
+
+-- | Plus-or-minus
+mp :: Note -> Note
+mp n = comm0 "mp" <> n

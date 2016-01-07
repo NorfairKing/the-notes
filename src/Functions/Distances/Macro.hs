@@ -31,3 +31,5 @@ norm_ :: Note -- ^ N
       -> Note
 norm_ n b = autoBrackets dblPipe dblPipe b !: n
 
+norm :: Note -> Note
+norm = norm_ ""

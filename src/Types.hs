@@ -39,7 +39,8 @@ import           Text.LaTeX.Base.Class
 import           Text.LaTeX.Base.Pretty
 import           Text.LaTeX.Base.Syntax
 import           Text.LaTeX.Packages.AMSFonts
-import           Text.LaTeX.Packages.AMSMath  hiding (subset, (!:), (^:))
+import           Text.LaTeX.Packages.AMSMath  hiding (mp, pm, subset, (!:),
+                                               (^:))
 import           Text.LaTeX.Packages.AMSThm   hiding (TheoremStyle (..), proof,
                                                theorem)
 import           Text.LaTeX.Packages.Color
