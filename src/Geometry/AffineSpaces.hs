@@ -2,7 +2,13 @@ module Geometry.AffineSpaces where
 
 import           Notes
 
+import           Functions.Application.Macro
+import           Functions.Basics
+import           Functions.Basics.Macro
 import           LinearAlgebra.VectorSpaces.Terms
+import           Logic.FirstOrderLogic.Macro
+import           Logic.PropositionalLogic.Macro
+import           Sets.Basics.Terms
 
 import           Geometry.AffineSpaces.Macro
 import           Geometry.AffineSpaces.Terms
@@ -12,6 +18,12 @@ affineSpaces = note "affine-spaces" $ do
     section "Affine Spaces"
     pointDefinition
     affineSpaceDefinition
+
+    affineSetDefinition
+    convexSetDefinition
+    convexFunctionDefinition
+    concaveFunctionDefinition
+    strictlyConvexFunctionDefinition
 
     affineSubspaces
 
@@ -26,6 +38,54 @@ affineSpaceDefinition = de $ do
     lab affineSpaceDefinitionLabel
     let n = "n"
     s ["An ", m n, "-dimensional ", affineSpace', " ", m $ aspace n, " is the set of all ", m n, "-dimensional ", point, "s"]
+
+affineSetDefinition :: Note
+affineSetDefinition = de $ do
+    lab affineSetDefinitionLabel
+    let a = "A"
+    s ["An ", affineSet', " ", m a, " is a set that contains the line through any two distinct points in the ", set]
+    ma $ do
+        let (x, y) = ("x", "y")
+        fa (x ∈ a) $ fa (y ∈ a) $ fa (theta ∈ reals) $ x ≠ y ⇒ theta * x + (pars $ 1 - theta) * y ∈ a
+
+convexSetDefinition :: Note
+convexSetDefinition = de $ do
+    lab convexSetDefinitionLabel
+    let a = "A"
+    s ["An ", convexSet', " ", m a, " is a set that contains the line segment through any two distinct points in the ", set]
+    ma $ do
+        let (x, y) = ("x", "y")
+        fa (x ∈ a) $ fa (y ∈ a) $ fa (theta ∈ ccint 0 1) $ x ≠ y ⇒ theta * x + (pars $ 1 - theta) * y ∈ a
+
+convexFunctionDefinition :: Note
+convexFunctionDefinition = de $ do
+    lab convexFunctionDefinitionLabel
+    let f = fun_
+        n = "n"
+        rn = reals ^ n
+    s ["A ", function, " ", m $ fun f rn reals, " is called a ", convexFunction', " if ", m $ dom f, " is a ", convexSet, " and the following property holds"]
+    ma $ do
+        let (x, y) = ("x", "y")
+        fa (x ∈ rn) $ fa (y ∈ rn) $ fn f (theta * x + (pars $ 1 - theta) * y) <= theta * fn f x + (pars $ 1 - theta) * fn f y
+
+    todo "Are we sure that this is the right place to put this definition?"
+
+concaveFunctionDefinition :: Note
+concaveFunctionDefinition = de $ do
+    lab concaveFunctionDefinitionLabel
+    s ["A ", function, " ", m fun_, " is called a ", concaveFunction', " if ", m $ - fun_, " is a ", convexFunction]
+
+
+strictlyConvexFunctionDefinition :: Note
+strictlyConvexFunctionDefinition = de $ do
+    lab strictlyConvexFunctionDefinitionLabel
+    let f = fun_
+        n = "n"
+        rn = reals ^ n
+    s ["A ", function, " ", m $ fun f rn reals, " is called a ", strictlyConvexFunction', " if ", m $ dom f, " is a ", convexSet, " and the following property holds"]
+    ma $ do
+        let (x, y) = ("x", "y")
+        fa (x ∈ rn) $ fa (y ∈ rn) $ fn f (theta * x + (pars $ 1 - theta) * y) < theta * fn f x + (pars $ 1 - theta) * fn f y
 
 affineSubspaces :: Note
 affineSubspaces = do

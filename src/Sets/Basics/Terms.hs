@@ -5,6 +5,7 @@ import           Notes
 makeDefs [
       "set"
     , "element"
+    , "singleton"
     , "subset"
     , "predicate"
     ]

@@ -16,7 +16,7 @@ setBasics = note "basics" $ do
     subsetsS
     universalSet
     emptySet
-    singleton
+    singletonDefinition
     predicates
 
 setsS :: Note
@@ -48,8 +48,10 @@ predicates :: Note
 predicates = do
     predicateDefinition
 
-singleton :: Note
-singleton = de $ s ["A ", ix "set", " with exactly one element is called a ", term "singleton"]
+singletonDefinition :: Note
+singletonDefinition = do
+    lab singletonDefinitionLabel
+    de $ s ["A ", set, " with exactly one element is called a ", singleton']
 
 setDefinition :: Note
 setDefinition = de $ do
