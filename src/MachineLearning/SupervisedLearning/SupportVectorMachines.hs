@@ -186,7 +186,7 @@ softConstraintsSVM = note "soft-svm" $ do
         ]
     s ["Here ", m xii, " could be any ", ix "loss function"]
     s ["In the case of SVM, this will be ", ix "hinge loss"]
-    ma $ xii =: maxof (setofs [0, 1 - (pars $ (y !: i) * (w /.\ x !: i + b) )])
+    ma $ xii =: maxof (setofs [0, 1 - (pars $ (y !: i) * (pars $ w /.\ x !: i + b) )])
     nte $ do
         s ["When we set ", m c, " to ", m pinfty, " the result will be a hyperplane that separates the hyperplane"]
         s ["When we set ", m c, " to ", m 0, " then the result will ignore the data"]
@@ -202,7 +202,7 @@ naturalForm = note "natural-form" $ do
     let i = "i"
         n = "n"
     s ["The problem can be rewritten one last time"]
-    ma $ argmin (w <> ", " <> b) $ (1 /: 2) * (norm w) ^2 + c * sumcmpr (i =: 1) n (maxof (setofs [0, 1 - (pars $ (y !: i) * (w /.\ x !: i + b) )]))
+    ma $ argmin (w <> ", " <> b) $ (1 /: 2) * (norm w) ^2 + c * sumcmpr (i =: 1) n (maxof (setofs [0, 1 - (pars $ (y !: i) * (pars $ w /.\ x !: i + b) )]))
     s ["This formulation is called ", term "SVM in its natural form"]
 
 computingMargin :: Note
@@ -226,12 +226,12 @@ computingMargin = note "computing-the-margin" $ do
         x = vec "x"
         y = "y"
     s ["In essence, we just trying to minimize the function ", m ff, " as follows"]
-    ma $ f w b =: (1 /: 2) * (norm w) ^2 + c * sumcmpr (i =: 1) n (maxof (setofs [0, 1 - (pars $ (y !: i) * (w /.\ x !: i + b) )]))
+    ma $ f w b =: (1 /: 2) * (norm w) ^2 + c * sumcmpr (i =: 1) n (maxof (setofs [0, 1 - (pars $ (y !: i) * (pars $ w /.\ x !: i + b) )]))
     s ["The ", m j, "th coordinate of the gradiant ", m $ grad ff, " can be computed as follows"]
     ma $ grad ff !: j
       =: fn2 (partial ff) w b /: partial (w !: j)
       =: (cases $ do
-            (w !: j) & " if " <> (pars $ (y !: i) * (w /.\ x !: i + b)) >= 1
+            (w !: j) & " if " <> (pars $ (y !: i) * (pars $ w /.\ x !: i + b)) >= 1
             lnbk
             (w !: j) + c * sumcmpr (i =: 1) n (pars $ - (y !: i) * (x !: (cs [i, j]))) & " otherwise"
          )
@@ -244,7 +244,7 @@ computingMargin = note "computing-the-margin" $ do
     s ["For a given datapoint ", m $ x !: i, " the gradient we use will look as follows"]
     ma $ grad ff !: j
       =: (cases $ do
-            (w !: j) & " if " <> (pars $ (y !: i) * (w /.\ x !: i + b)) >= 1
+            (w !: j) & " if " <> (pars $ (y !: i) * (pars $ w /.\ x !: i + b)) >= 1
             lnbk
             (w !: j) + c * (pars $ - (y !: i) * (x !: (cs [i, j]))) & " otherwise"
          )
