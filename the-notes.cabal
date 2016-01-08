@@ -34,6 +34,7 @@ executable the-notes
                         , base16-bytestring     >= 0.1       && < 0.2
                         , bytestring            >= 0.10      && < 0.11
                         , cryptohash            >= 0.11      && < 0.12
+                        , gitrev                >= 1.1       && < 1.2
   ghc-options:        -Wall
                       -fwarn-unused-imports
                       -fwarn-incomplete-patterns
@@ -74,6 +75,7 @@ test-suite the-notes-test
                      , base16-bytestring     >= 0.1       && < 0.2
                      , bytestring            >= 0.10      && < 0.11
                      , cryptohash            >= 0.11      && < 0.12
+                     , gitrev                >= 1.1       && < 1.2
   default-extensions: OverloadedStrings
                       NoImplicitPrelude
                       TemplateHaskell
