@@ -114,10 +114,9 @@ entireDocument = do
 
     document $ do
         myTitlePage
-        tableofcontents
-        newpage
         renderConfig
         license
+        tableofcontents
         allNotes
 
         bibfn <- asks conf_bibFileName
