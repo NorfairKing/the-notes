@@ -2,8 +2,8 @@ module Probability.ProbabilityMeasure where
 
 import           Notes
 
-import           Functions.Basics
 import           Functions.Basics.Macro
+import           Functions.Basics.Terms
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
 import           Probability.Intro.Macro

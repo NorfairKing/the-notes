@@ -8,21 +8,11 @@ import           Relations.Basics               (relation_)
 import           Relations.Domain               (domain_, image_)
 import           Sets.Basics.Terms
 
-
 import           Functions.Application.Macro
-import           Functions.Basics.Macro
+import           Functions.Application.Terms
 
-makeDefs [
-      "function"
-    , "partial function"
-    , "corange"
-    , "codomain"
-    , "total"
-    , "surjective"
-    , "binary function"
-    , "ternary function"
-    , "member-wise application"
-    ]
+import           Functions.Basics.Macro
+import           Functions.Basics.Terms
 
 basics :: Note
 basics = note "basics" $ do

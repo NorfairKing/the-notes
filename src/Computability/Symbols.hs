@@ -2,9 +2,8 @@ module Computability.Symbols where
 
 import           Notes
 
+import           Functions.BinaryOperation.Terms
 import           Sets.Basics.Terms
-
-import           Functions.BinaryOperation   (associative_)
 
 import           Computability.Symbols.Macro
 import           Computability.Symbols.Terms

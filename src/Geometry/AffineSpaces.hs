@@ -3,8 +3,8 @@ module Geometry.AffineSpaces where
 import           Notes
 
 import           Functions.Application.Macro
-import           Functions.Basics
 import           Functions.Basics.Macro
+import           Functions.Basics.Terms
 import           LinearAlgebra.VectorSpaces.Terms
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro

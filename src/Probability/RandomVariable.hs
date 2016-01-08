@@ -3,8 +3,8 @@ module Probability.RandomVariable where
 import           Notes
 
 import           Functions.Application.Macro
-import           Functions.Basics
 import           Functions.Basics.Macro
+import           Functions.Basics.Terms
 import           Functions.Inverse.Macro
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro

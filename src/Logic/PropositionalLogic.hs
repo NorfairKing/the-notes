@@ -4,8 +4,8 @@ import           Notes
 
 import           Prelude                              (map)
 
-import           Functions.Basics
-import           Functions.BinaryOperation
+import           Functions.Basics.Terms
+import           Functions.BinaryOperation.Terms
 
 import           Logic.AbstractLogic.Macro
 import           Logic.AbstractLogic.Terms

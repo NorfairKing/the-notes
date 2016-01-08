@@ -2,16 +2,13 @@ module Functions.BinaryOperation where
 
 import           Notes
 
-import           Functions.Basics                (binaryFunction)
-import           Functions.Basics.Macro
 import           Logic.FirstOrderLogic.Macro
 
-import           Functions.BinaryOperation.Macro
+import           Functions.Basics.Macro
+import           Functions.Basics.Terms
 
-makeDefs [
-      "binary operation"
-    , "associative"
-    ]
+import           Functions.BinaryOperation.Macro
+import           Functions.BinaryOperation.Terms
 
 binaryOperations :: Note
 binaryOperations = note "binary-operations" $ do

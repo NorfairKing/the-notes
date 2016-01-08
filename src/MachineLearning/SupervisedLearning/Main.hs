@@ -4,15 +4,18 @@ import           Notes
 
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
+import           Functions.Basics.Terms
 import           Logic.FirstOrderLogic.Macro
 
 import           MachineLearning.SupervisedLearning.Regression            (regressionS)
 import           MachineLearning.SupervisedLearning.SupportVectorMachines (supportVectorMachinesS)
 
+import           MachineLearning.SupervisedLearning.Terms
+
 supervisedLearningS :: Note
 supervisedLearningS = note "supervised-learning" $ do
     section "Supervized learning"
-    learningProblem
+    learningProblemSS
     taxonomyOfData
     scales
     transformationInvariances
@@ -24,12 +27,15 @@ supervisedLearningS = note "supervised-learning" $ do
     regressionS
     supportVectorMachinesS
 
-
-learningProblem :: Note
-learningProblem = do
+learningProblemSS :: Note
+learningProblemSS = note "learning-problem" $ do
     subsection "The learning problem"
-    s ["Given a set of data points in an input space ", m x, ", all tagged with a value in a certain output space ", m y, ", we search a function ", m (fun f x y), " that accurately predicts the output feature corresponding to the input value of new data points"]
-    newline
+    learningProblemDefinition
+    learningProblemExamples
+
+learningProblemDefinition :: Note
+learningProblemDefinition = de $ do
+    s ["Given a set of ", dataPoint, "s in an ", inputSpace, " ", m x, ", all tagged with a value in a certain ", outputSpace, " ", m y, ", we search a ", function, " ", m $ fun f x y , " that accurately predicts the ", outputFeature, " corresponding to the ", inputFeature, "s of new ", dataPoint, "s"]
     s [dquoted "Inputs", " is what they are called in machine learning"]
     s ["In statistical literature they are ofter called ", term "predictors"]
     s ["In pattern recognition, these are called ", term "feature", "s"]
@@ -40,6 +46,9 @@ learningProblem = do
     y = "Y"
     f = "f"
 
+learningProblemExamples :: Note
+learningProblemExamples = mempty
+
 trainingErrorDefinition :: Note
 trainingErrorDefinition = mempty
     -- Number of errors on training data
@@ -48,11 +57,12 @@ generalisationError :: Note
 generalisationError = mempty
     -- Number of mistakes on _unknown_ test data
 
--- NYI
 lossfunctions :: Note
 lossfunctions = do
+    subsection "Loss functions"
     s ["The quality of the estimation is assessed using a ", term "loss function", " ", m (fun l x realsp ), " that measures the difference between the actual output for a given data point and the predicted output"]
 
+    lossFunctionDefinition
     "Examples of loss functions: "
     itemize $ do
         item $ do
@@ -74,6 +84,11 @@ lossfunctions = do
     y = "Y"
     f = "f"
     l = "l" !: f
+
+lossFunctionDefinition :: Note
+lossFunctionDefinition = de $ mempty
+    -- s ["Given a ", learningProblem
+    -- s ["A ", lossFunction', " is a function
 
 taxonomyOfData :: Note
 taxonomyOfData = do

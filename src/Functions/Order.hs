@@ -2,9 +2,6 @@ module Functions.Order where
 
 import           Notes
 
-import           Functions.Application.Macro
-import           Functions.Basics               (function)
-import           Functions.Basics.Macro
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
 import           Relations.Basics               (reflexive_)
@@ -18,25 +15,15 @@ import           Relations.Orders.Macro
 import           Relations.Preorders            (preorderDefinitionLabel)
 import           Sets.Basics.Terms
 
-import           Functions.Order.Macro
+import           Functions.Application.Macro
+import           Functions.Basics.Macro
+import           Functions.Basics.Terms
 
-makeDefs [
-      "monotonic"
-    , "Scott continuous"
-    , "fixed point"
-    , "fixed point region"
-    , "ascending region"
-    , "descending region"
-    , "least fixed point"
-    , "greatest fixed point"
-    , "Kleene chain"
-    ]
+import           Functions.Order.Macro
+import           Functions.Order.Terms
 
 order :: Note
-order = note "orders" body
-
-body :: Note
-body = do
+order = note "orders" $ do
     section "Functions and orders"
 
     monotonicDefinition

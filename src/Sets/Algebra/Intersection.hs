@@ -2,8 +2,9 @@ module Sets.Algebra.Intersection where
 
 import           Notes
 
-import           Functions.BinaryOperation       (associative_)
+import           Functions.BinaryOperation.Terms
 import           Logic.PropositionalLogic.Macro
+
 import           Sets.Algebra.Union.Terms
 
 import           Sets.Algebra.Intersection.Terms
