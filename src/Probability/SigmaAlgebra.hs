@@ -16,13 +16,12 @@ import           Probability.SigmaAlgebra.Macro
 import           Probability.SigmaAlgebra.Terms
 
 sigmaAlgebraS :: Note
-sigmaAlgebraS = note "sigma-algebra" $ do
-    section "Sigma Algebra's"
+sigmaAlgebraS = section "Sigma Algebra's" $ do
     sigmaAlgebraBasics
     generatedSigmaAlgebra
 
 sigmaAlgebraBasics :: Note
-sigmaAlgebraBasics = note "basics" $ do
+sigmaAlgebraBasics = subsection "Basics" $ do
     sigmaAlgebraDefinition
     trivialSigmaAlgebraDefinition
     measurableSpaceDefinition
@@ -36,8 +35,7 @@ sigmaAlgebraBasics = note "basics" $ do
     unionIsNotSigmaAlgebraExample
 
 generatedSigmaAlgebra :: Note
-generatedSigmaAlgebra = note "generated-sigma-algebra" $ do
-    subsection $ "Generating " <> sa <> "s"
+generatedSigmaAlgebra = subsection "Generating sigma algebra's" $ do
     generatedSigmaAlgebraDefinition
     generatedSigmaAlgebraIsUnique
     generatedSigmaAlgebraExists

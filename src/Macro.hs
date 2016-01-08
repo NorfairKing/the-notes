@@ -14,6 +14,7 @@ import           Macro.Graphviz              as X
 import           Macro.Index                 as X
 import           Macro.Math                  as X
 import           Macro.MetaMacro             as X
+import           Macro.Note                  as X
 import           Macro.Reference             as X
 import           Macro.Section               as X
 import           Macro.Text                  as X

@@ -1,25 +1,32 @@
 module Macro.Section where
 
-import qualified Text.LaTeX as HT (chapter, section, subsection, subsubsection)
-
+import           Prelude
 import           Types
 
-chapter :: Note -> Note
+import           Macro.Note
+
+import qualified Text.LaTeX as HT (chapter, section, subsection, subsubsection)
+
+
+chapter :: Text -> Note
 chapter n = do
     raw "\n"
-    HT.chapter n
+    note (escape n) $ HT.chapter $ raw n
 
-section :: Note -> Note
+section :: Text -> Note
 section n = do
     raw "\n"
-    HT.section n
+    note (escape n) $ HT.section $ raw n
 
-subsection :: Note -> Note
+subsection :: Text -> Note
 subsection n = do
     raw "\n"
-    HT.subsection n
+    note (escape n) $ HT.subsection $ raw n
 
-subsubsection :: Note -> Note
+subsubsection :: Text -> Note
 subsubsection n = do
     raw "\n"
-    HT.subsubsection n
+    note (escape n) $ HT.subsubsection $ raw n
+
+escape :: Text -> Text
+escape = id
