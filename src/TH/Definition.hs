@@ -19,7 +19,7 @@ makeDefs strs = fmap concat $ sequenceQ $ map makeDef strs
 makeDef :: String -> Q [Dec]
 makeDef concept = do
     labDecs <- makeDe concept
-    return $ labDecs ++ [termSig, termFun, indexSig, indexFun, refSig, refFun, pluralIndexSig, pluralIndexFun]
+    return $ labDecs ++ [termSig, termFun, indexSig, indexFun, refSig, refFun, pluralTermSig, pluralTermFun, pluralIndexSig, pluralIndexFun]
   where
     baseName :: String
     baseName = camelCase $ sanitize concept
@@ -58,26 +58,30 @@ makeDef concept = do
     refSig = SigD refName (ConT noteName)
 
     refFun :: Dec
-    refFun = FunD
-                refName
-                [
-                  Clause
-                    [] -- No arguments
-                    (
-                      NormalB $
-                        AppE
-                          (AppE
-                            (VarE $ mkName "mappend")
-                            (VarE indexName))
-                          (AppE
-                            (VarE $ mkName "ref")
-                            (VarE labelDefName))
-                    )
-                    [] -- No wheres
-                ]
+    refFun =
+        FunD
+          refName
+          [
+            Clause
+              [] -- No arguments
+              (
+                NormalB $
+                  AppE
+                    (AppE
+                      (VarE $ mkName "mappend")
+                      (VarE indexName))
+                    (AppE
+                      (VarE $ mkName "ref")
+                      (VarE labelDefName))
+              )
+              [] -- No wheres
+          ]
 
     pluralConcept :: String
     pluralConcept = pluralOf concept
+
+    pluralConceptLit :: Exp
+    pluralConceptLit = LitE $ StringL pluralConcept
 
     pluralBaseName :: String
     pluralBaseName = camelCase . sanitize $ pluralConcept
@@ -89,4 +93,43 @@ makeDef concept = do
     pluralIndexSig = SigD pluralIndexName (ConT noteName)
 
     pluralIndexFun :: Dec
-    pluralIndexFun = FunD pluralIndexName [Clause [] (NormalB $ AppE (VarE $ mkName "ix") conceptLit) []]
+    pluralIndexFun =
+        FunD
+          pluralIndexName
+          [
+            Clause
+              []
+              (
+                NormalB $
+                  AppE
+                    (AppE
+                      (VarE $ mkName "ix_")
+                      pluralConceptLit)
+                    conceptLit
+              )
+              []
+          ]
+
+    pluralTermName :: Name
+    pluralTermName = mkName $ pluralBaseName ++ "'"
+
+    pluralTermSig :: Dec
+    pluralTermSig = SigD pluralTermName (ConT noteName)
+
+    pluralTermFun :: Dec
+    pluralTermFun =
+        FunD
+          pluralTermName
+            [
+              Clause
+                []
+                (
+                  NormalB $
+                      AppE
+                        (AppE
+                          (VarE $ mkName "term_")
+                          pluralConceptLit)
+                        conceptLit
+                )
+                []
+            ]

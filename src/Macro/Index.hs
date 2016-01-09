@@ -18,12 +18,21 @@ index n = do
     comm1 "index" n
 
 ix :: Note -> Note
-ix text = do
-    index text
+ix text = ix_ text text
+
+ix_ :: Note -> Note -> Note
+ix_ text ind = do
+    index ind
     text
 
+emphTerm :: Note -> Note
+emphTerm = textbf
+
 term :: Note -> Note
-term text = do
-    index text
-    textbf text
+term text = term_ text text
+
+term_ :: Note -> Note -> Note
+term_ text ind = do
+    index ind
+    emphTerm text
 
