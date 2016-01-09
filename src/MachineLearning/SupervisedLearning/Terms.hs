@@ -5,10 +5,12 @@ import           Notes
 makeDefs [
       "supervised learning"
     , "data point"
+    , "dataset"
     , "input space"
     , "output space"
     , "input feature"
     , "output feature"
+    , "hypothesis"
     , "predictor"
     , "feature"
     , "dependent variable"

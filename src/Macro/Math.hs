@@ -173,6 +173,9 @@ localMinimum = ix "local minimum"
 localMaximum :: Note
 localMaximum = ix "local maximum"
 
+mean :: Note
+mean = ix "mean"
+
 
 -- Proofs
 proof :: Note -> Note

@@ -132,13 +132,15 @@ learningProblemDefinition = de $ do
     lab featureDefinitionLabel
     lab dependentVariableDefinitionLabel
     lab responseDefinitionLabel
-    s ["Given a set of ", dataPoint, "s in an ", inputSpace, " ", m mmis_, ", all tagged with a value in a certain ", outputSpace, " ", m mmos_, ", we search a ", function, " ", m $ fun f mmis_ mmos_ , " that accurately predicts the ", outputFeature, " corresponding to the ", inputFeature, "s of new ", dataPoint, "s"]
-    s ["This is called a ", learningProblem']
+    lab hypothesisDefinitionLabel
+    s ["Given a set of ", dataPoint', "s, also called a ", dataset', " in an ", inputSpace', " ", m mmis_, ", all tagged with a value in a certain ", outputSpace', " ", m mmos_, ", we search a ", function, " ", m $ fun f mmis_ mmos_ , " that accurately predicts the ", outputFeature', " corresponding to the ", inputFeature', "s of new ", dataPoint, "s"]
+    s ["Such a function is called a ", hypothesis']
     s [dquoted "Inputs", " is what they are called in machine learning"]
     s ["In statistical literature they are ofter called ", predictor', "s"]
     s ["In pattern recognition, these are called ", feature', "s"]
     s [dquoted "Outputs", " are called ", dependentVariable', "s in statistics and ", response, "s in pattern recognition"]
     s ["The ", measurementSpace', " is the tuple ", m (tuple mmis_ mmos_)]
+    s ["The problem of finding a ", hypothesis, " given dataset is called a ", learningProblem']
   where
     f = "f"
 
@@ -147,11 +149,12 @@ trainingAndTestSets = de $ do
     lab trainingDataDefinitionLabel
     lab testDataDefinitionLabel
     lab validationDataDefinitionLabel
-    s ["To find such a ", function, ", the set of ", dataPoint, "s is split into three sets"]
+    s ["To find such a ", function, ", the ", dataset, " ", m ds_, " is usually split into three sets"]
     itemize $ do
-        item $ trainingData'
-        item $ validationData'
-        item $ testData'
+        item $ trainingData'   <> " " <> m trds_
+        item $ validationData' <> " " <> m vds_
+        item $ testData'       <> " " <> m tds_
+    ma $ ds_ =: trds_ ∪ vds_ ∪ tds_
     s [the, trainingData, " is used to find such a ", function, ", the ", validationData, " is used to improve the process of finding that ", function, " and the ", testData, " is used to assess how good the ", function, " is at prediction"]
 
 learningProblemExamples :: Note
@@ -167,6 +170,8 @@ lossFunctionDefinition = de $ do
     s ["Given a ", learningProblem, " with ", measurementSpace, " ", m mms_, " and a prediction function ", m "f"]
     s ["A ", lossFunction', " is a ", distanceFunction_, " ", m $ fun2 lf_ mmos_ mmos_ realsp, " on the ", outputSpace]
     s ["It is used to measure how far predictions are off from the real output"]
+    let f = "f"
+    s ["Often, given a function ", m $ fun f mmis_ mmos_, ", ",  m $ lf_ !: f, " is used to denote the difference between the actual label of a given datapoint ", m "x", " and the predicted label"]
 
 lossFunctionExamples :: Note
 lossFunctionExamples = do
@@ -175,7 +180,7 @@ lossFunctionExamples = do
         s [the, quadraticLoss', " ", function]
         ma $ func2 lf_ reals reals realsp x y $ (pars $ (y - x)) ^: 2
     ex $ do
-        s [the, term "0-1 loss", " ", function]
+        s [the, term "0-1 loss", " ", function, " is ", m 1, " whenever the arguments differ and ", m 0, " otherwise"]
         ma $ func2 lf_ mmos_ mmos_ (ccint 0 1 ⊆ realsp) x y $ mathbb "I" !: (x ≠ y)
     ex $ do
         s [the, exponentialLoss', " ", function, " with parameter ", m beta]
@@ -185,10 +190,18 @@ lossFunctionExamples = do
 trainingErrorDefinition :: Note
 trainingErrorDefinition = de $ do
     lab trainingErrorDefinitionLabel
-    s [the, trainingError', " is the sum of the losses over the training set"]
-    -- TODO define training/test set first
-    -- Number of errors on training data
+    s ["Given a ", learningProblem, " with ", measurementSpace, " ", m mms_, ", ", dataset, " ", m ds_, ", a ", lossFunction, " ", m lf_, " and a ", hypothesis, " ", m hyp_]
+    s [the, trainingError', " is the ", mean, " of the losses over the ", trainingData]
+    ma $ do
+        let (x, y) = ("x", "y")
+        (1 /: setsize trds_) * sumcmp (tuple x y ∈ trds_) (loss (pred x) y)
 
 generalisationErrorDefinition :: Note
-generalisationErrorDefinition = mempty
-    -- Number of mistakes on _unknown_ test data
+generalisationErrorDefinition = de $ do
+    lab trainingErrorDefinitionLabel
+    s ["Given a ", learningProblem, " with ", measurementSpace, " ", m mms_, ", ", dataset, " ", m ds_, ", a ", lossFunction, " ", m lf_, " and a ", hypothesis, " ", m hyp_]
+    s [the, trainingError', " is the ", mean, " of the losses over the ", testData]
+    ma $ do
+        let (x, y) = ("x", "y")
+        (1 /: setsize tds_) * sumcmp (tuple x y ∈ tds_) (loss (pred x) y)
+
