@@ -16,13 +16,13 @@ wordOf Example        = "example"
 wordOf Figure         = "figure"
 
 refKind :: Label -> RefKind
-refKind (Label kind _) = kind
+refKind (MkLabel kind _) = kind
 
 wordFor :: Label -> Text
 wordFor = wordOf . refKind
 
 labelOf :: Label -> Text
-labelOf (Label _ n) = n
+labelOf (MkLabel _ n) = n
 
 labelFor :: Label -> Text
 labelFor l = wordFor l <> ":" <> labelOf l
@@ -51,18 +51,3 @@ lab l = do
     let ll = labelFor l
     when debug $ labelBox l <> lnbk
     T.label ll
-
-delab :: Text -> Label
-delab = Label Definition
-
-thmlab :: Text -> Label
-thmlab = Label Theorem
-
-proplab :: Text -> Label
-proplab = Label Property
-
-prolab :: Text -> Label
-prolab = Label Proposition
-
-figlab :: Text -> Label
-figlab = Label Figure

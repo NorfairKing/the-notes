@@ -14,8 +14,7 @@ import           Probability.Independence.Terms
 
 
 independenceS :: Note
-independenceS = note "independence" $ do
-    section "Independence"
+independenceS = section "Independence" $ do
     independenceDefinition
     dependenceDefinition
     conditionalProbabilityIndependentEvents

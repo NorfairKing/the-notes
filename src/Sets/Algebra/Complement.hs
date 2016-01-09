@@ -3,7 +3,8 @@ module Sets.Algebra.Complement where
 import           Notes
 
 import           Logic.PropositionalLogic.Macro
-import           Sets.Algebra.Difference
+
+import           Sets.Algebra.Difference.Terms
 import           Sets.Algebra.Intersection.Terms
 import           Sets.Algebra.Union.Terms
 import           Sets.Basics.Terms
@@ -11,8 +12,7 @@ import           Sets.Basics.Terms
 import           Sets.Algebra.Complement.Terms
 
 setComplement :: Note
-setComplement = note "complement" $ do
-    subsection "Set complement"
+setComplement = subsection "Set complement" $ do
     complementDefinition
     doubleComplement
     complementaryLawUnion
@@ -52,12 +52,9 @@ doubleComplement = thm $ do
             , "" & "" =§= a
             ]
 
-unionComplementaryLawLabel :: Label
-unionComplementaryLawLabel = thmlab "complementary-law-union"
-
 complementaryLawUnion :: Note
 complementaryLawUnion = thm $ do
-    lab unionComplementaryLawLabel
+    lab unionComplementaryLawTheoremLabel
     s [the, term "complementary law", " for the set ", union]
     let (a, b, x, y) = ("A", "B", "x", "y")
     s ["Let ", m a, and, m b, " be sets"]
@@ -96,12 +93,9 @@ complementaryLawIntersection = thm $ do
               , "" & "" =§= emptyset
             ]
 
-firstLawOfDeMorganLabel :: Label
-firstLawOfDeMorganLabel = thmlab "first-law-of-de-morgan"
-
 firstLawOfDeMorgan :: Note
 firstLawOfDeMorgan = thm $ do
-    lab firstLawOfDeMorganLabel
+    lab firstLawOfDeMorganTheoremLabel
     s [the, term "first law of De Morgan"]
 
     let (a, b, x, y) = ("A", "B", "x", "y")
@@ -120,12 +114,9 @@ firstLawOfDeMorgan = thm $ do
             , "" & "" =§= setc a ∩ setc b
             ]
 
-secondLawOfDeMorganLabel :: Label
-secondLawOfDeMorganLabel = thmlab "second-law-of-de-morgan"
-
 secondLawOfDeMorgan :: Note
 secondLawOfDeMorgan = thm $ do
-    lab secondLawOfDeMorganLabel
+    lab secondLawOfDeMorganTheoremLabel
     s [the, term "second law of De Morgan"]
 
     let (a, b, x, y) = ("A", "B", "x", "y")
@@ -145,12 +136,9 @@ secondLawOfDeMorgan = thm $ do
             ]
 
 
-setDifferenceEquivalentDefinitionLabel :: Label
-setDifferenceEquivalentDefinitionLabel = thmlab "set-difference-equivalent-definition"
-
 setDifferenceEquivalentDefinition :: Note
 setDifferenceEquivalentDefinition = thm $ do
-    lab setDifferenceEquivalentDefinitionLabel
+    lab intersectionOverDifferenceTheoremLabel
     let (a, b) = ("A", "B")
     s ["Let ", m a, and, m b, " be sets"]
 
@@ -158,4 +146,4 @@ setDifferenceEquivalentDefinition = thm $ do
 
     proof $ do
         m $ a \\ b =§= a ∩ (setuniv \\ b) =§= a \\ b
-        ref intersectionOverDifferenceLabel
+        ref intersectionOverDifferenceTheoremLabel

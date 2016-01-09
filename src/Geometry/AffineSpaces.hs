@@ -14,8 +14,7 @@ import           Geometry.AffineSpaces.Macro
 import           Geometry.AffineSpaces.Terms
 
 affineSpaces :: Note
-affineSpaces = note "affine-spaces" $ do
-    section "Affine Spaces"
+affineSpaces = section "Affine Spaces" $ do
     pointDefinition
     affineSpaceDefinition
 
@@ -88,8 +87,7 @@ strictlyConvexFunctionDefinition = de $ do
         fa (x ∈ rn) $ fa (y ∈ rn) $ fn f (theta * x + (pars $ 1 - theta) * y) < theta * fn f x + (pars $ 1 - theta) * fn f y
 
 affineSubspaces :: Note
-affineSubspaces = do
-    subsection "Affine subspaces"
+affineSubspaces = subsection "Affine subspaces" $ do
     affineSubspaceDefinition
     hyperplaneDefinition
 

@@ -2,6 +2,7 @@
 
 The code is not always consistent with these conventions but any additions should be.
 
+
 ## Modules
 
 `Macro.Chapter.Macro` is deprecated.
@@ -13,12 +14,28 @@ The code is not always consistent with these conventions but any additions shoul
 - Terms, references and labels go into `Chapter.Section.Terms`.
   Term modules cannot import modules other than Types.
 
+## Imports
+
+Modules should be imported in this order:
+
+- Notes
+- Any non-chapter modules
+- Chapter modules
+- The modules' terms and macros
+
 ## Terms
 
 - `term` is the indexed version
 - `term'` indexed and bold
 - `termDefinitionLabel` label for the definition of the term
 - `term_` indexed term with reference with a reference to the definition
+
+## Top level function
+
+Use the suffix
+- S for sections
+- SS for subsections
+- SSS for subsubsections
 
 ## Variables
 Make local variables if necessary

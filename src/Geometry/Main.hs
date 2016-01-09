@@ -5,8 +5,7 @@ import           Notes
 import           Geometry.AffineSpaces
 
 geometry :: Note
-geometry = note "geometry" $ do
-    chapter "Geometry"
+geometry = chapter "Geometry" $ do
     affineSpaces
 
 

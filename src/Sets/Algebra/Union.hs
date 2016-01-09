@@ -10,8 +10,7 @@ import           Sets.Basics.Terms
 import           Sets.Algebra.Union.Terms
 
 setUnion :: Note
-setUnion = note "union" $ do
-    subsection "Set union"
+setUnion = subsection "Union" $ do
     unionDefinition
     unionAssociative
     unionCommutative

@@ -2,35 +2,26 @@ module Functions.Distances where
 
 import           Notes
 
-import           Functions.Application.Macro
-import           Functions.Basics.Macro
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
 
+import           Functions.Application.Macro
+import           Functions.Basics.Macro
+
 import           Functions.Distances.Macro
-
-makeDefs [
-      "distance"
-    , "pseudometric"
-    , "metric"
-
-    , "Jaccard similarity"
-    , "Jaccard distance"
-    ]
+import           Functions.Distances.Terms
 
 distances :: Note
-distances = note "distances" $ do
-    section "Distances"
+distances = section "Distances" $ do
+    subsection "Pseudometrics" $ do
+        distanceDefinition
+        distanceExamples
+        jaccardSimilarityDefinition
+        jaccardSimilarityEquivalentDefinition
 
-    subsection "Pseudometrics"
-    distanceDefinition
-    distanceExamples
-    jaccardSimilarityDefinition
-    jaccardSimilarityEquivalentDefinition
-
-    subsection "Metrics"
-    metricDefinition
-    metricExamples
+    subsection "Metrics" $ do
+        metricDefinition
+        metricExamples
 
 distanceDefinition :: Note
 distanceDefinition = de $ do

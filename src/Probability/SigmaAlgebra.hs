@@ -4,13 +4,13 @@ import           Notes
 
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
-import           Probability.Intro.Terms
-import           Sets.Algebra.Main              (secondLawOfDeMorganLabel, symmetricDifferenceITOUnionAndIntersectionLabel)
-import           Sets.Basics
+import           Sets.Algebra.Complement.Terms
+import           Sets.Algebra.Difference.Terms
 import           Sets.Basics.Terms
 import           Sets.Powerset.Terms
 
 import           Probability.Intro.Macro
+import           Probability.Intro.Terms
 
 import           Probability.SigmaAlgebra.Macro
 import           Probability.SigmaAlgebra.Terms
@@ -86,12 +86,9 @@ emptysetInSigmaAlgebra = thm $ do
     proof $ do
         s ["The first two axioms", ref sigmaAlgebraDefinitionLabel, " together with ", m (setc univ_ =§= emptyset), " give the theorem"]
 
-sigmaAlgebraFiniteUnionLabel :: Label
-sigmaAlgebraFiniteUnionLabel = thmlab "sigma-algebra-finite-union"
-
 sigmaAlgebraFiniteUnion :: Note
 sigmaAlgebraFiniteUnion = thm $ do
-    lab sigmaAlgebraFiniteUnionLabel
+    lab sigmaAlgebraFiniteUnionTheoremLabel
     s ["Let ", m sa_, " be a ", sigmaAlgebra]
     ma $ pars (fa iInList $ ai ∈ sa_)
          ⇒
@@ -103,35 +100,29 @@ sigmaAlgebraFiniteUnion = thm $ do
     ai = "A" !: "i"
     iInList = "i" ∈ (setlst "1" "n")
 
-sigmaAlgebraInfiniteIntersectionLabel :: Label
-sigmaAlgebraInfiniteIntersectionLabel = thmlab "sigma-algebra-infinite-intersection"
-
 sigmaAlgebraInfiniteIntersection :: Note
 sigmaAlgebraInfiniteIntersection = thm $ do
-    lab sigmaAlgebraInfiniteIntersectionLabel
+    lab sigmaAlgebraInfiniteIntersectionTheoremLabel
     s ["Let ", m sa_, " be a ", sigmaAlgebra]
     ma $ pars (fa (natural "n") (an ∈ sa_))
          ⇒
          setuncmp (natural "n") an ∈ sa_
 
-    proof $ s ["The first axiom", ref sigmaAlgebraDefinitionLabel, ", together with the finite union of events of a ", sa, ref sigmaAlgebraFiniteUnionLabel, " and the second law of De Morgan", ref secondLawOfDeMorganLabel, " give the proof"]
+    proof $ s ["The first axiom", ref sigmaAlgebraDefinitionLabel, ", together with the finite union of events of a ", sa, ref sigmaAlgebraFiniteUnionTheoremLabel, " and the second law of De Morgan", ref secondLawOfDeMorganTheoremLabel, " give the proof"]
 
   where
     an = "A" !: "n"
 
-sigmaAlgebraFiniteIntersectionLabel :: Label
-sigmaAlgebraFiniteIntersectionLabel = thmlab "sigma-algebra-finite-intersection"
-
 sigmaAlgebraFiniteIntersection :: Note
 sigmaAlgebraFiniteIntersection = thm $ do
-    lab sigmaAlgebraFiniteIntersectionLabel
+    lab sigmaAlgebraFiniteIntersectionTheoremLabel
     s ["Let ", m sa_, " be a ", sigmaAlgebra]
 
     ma $ pars (fa iInList $ ai ∈ sa_)
          ⇒
          (setincmp iInList ai) ∈ sa_
 
-    proof $ s ["Use the infinite intersection of events in a ", sa , ref sigmaAlgebraInfiniteIntersectionLabel, " where only ", m "n", " sets ", m ai, " are not ", m univ_]
+    proof $ s ["Use the infinite intersection of events in a ", sa , ref sigmaAlgebraInfiniteIntersectionTheoremLabel, " where only ", m "n", " sets ", m ai, " are not ", m univ_]
 
   where
     ai = "A" !: "i"
@@ -144,13 +135,8 @@ sigmaAlgebraSetDifference = thm $ do
     ma $ fa ("A, B" ∈ sa_) (("A" `setsdiff` "B") ∈ sa_)
 
     proof $ do
-        "The symmetric difference "
-        m $ "A" \\ "B"
-        " is equal to "
-        m $ pars ("A" ∪ setc "B") ∩ pars (setc "A" ∪ "B")
-        "."
-        ref symmetricDifferenceITOUnionAndIntersectionLabel
-        s ["Now use the finite union", ref sigmaAlgebraFiniteUnionLabel, " and the finite intersection", ref sigmaAlgebraFiniteIntersectionLabel, " of sets in a ", sa, " together with the second axiom", ref sigmaAlgebraDefinitionLabel]
+        s ["The symmetric difference ", m $ "A" \\ "B", " is equal to ", m $ pars ("A" ∪ setc "B") ∩ pars (setc "A" ∪ "B"), ref symmetricDifferenceInTermsOfUnionAndIntersectionTheoremLabel]
+        s ["Now use the finite union", ref sigmaAlgebraFiniteUnionTheoremLabel, " and the finite intersection", ref sigmaAlgebraFiniteIntersectionTheoremLabel, " of sets in a ", sa, " together with the second axiom", ref sigmaAlgebraDefinitionLabel]
 
 unionIsNotSigmaAlgebraExample :: Note
 unionIsNotSigmaAlgebraExample = cex $ do
@@ -166,7 +152,7 @@ unionIsNotSigmaAlgebraExample = cex $ do
         s ["The union of ", m "B", " and ", m "C", " is ", emph "not", " a ", sa]
         ma $ "B" ∪ "C" =§= setof (emptyset <> ", " <> setof "0" <> ", " <> setof "1" <> ", " <> setof "0,2" <> ", " <> setof "1,2" <> ", " <> setof "0,1,2")
 
-        s ["The union of ", m (setof "0"), " and ", m (setof "1"), ", for example, is not in ", m ("B" ∪ "C"), ".", ref sigmaAlgebraFiniteUnionLabel]
+        s ["The union of ", m (setof "0"), " and ", m (setof "1"), ", for example, is not in ", m ("B" ∪ "C"), ".", ref sigmaAlgebraFiniteUnionTheoremLabel]
 
 
 sagb :: Note

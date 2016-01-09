@@ -7,7 +7,6 @@ import           Prelude                        (Either (..))
 import           Functions.Application.Macro
 import           Logic.AbstractLogic.Terms
 import           Logic.FirstOrderLogic.Macro
-import           Logic.HoareLogic               (forwardAssignmentDefinitionLabel)
 import           Logic.HoareLogic.Macro         hiding (satis)
 import           Logic.HoareLogic.Terms         hiding (satisfies, satisfies')
 import           Logic.PropositionalLogic.Macro
@@ -17,54 +16,53 @@ import           Logic.SeparationLogic.Macro
 import           Logic.SeparationLogic.Terms
 
 separationLogicS :: Note
-separationLogicS = note "separation-logic" $ do
-    section "Separation Logic"
-    subsection "Predicates"
+separationLogicS = section "Separation Logic" $ do
+    subsection "Predicates" $ do
 
-    heapDefinition
+        heapDefinition
 
-    separationLogicDefinition
+        separationLogicDefinition
 
-    satisfiesDefinition
+        satisfiesDefinition
 
-    emptyHeapSemanticsDefinition
-    emptyHeapExample
+        emptyHeapSemanticsDefinition
+        emptyHeapExample
 
-    pointsToSemanticsDefinition
-    pointsToExample
+        pointsToSemanticsDefinition
+        pointsToExample
 
-    separatingConjunctionSemanticsDefinition
-    separatingConjunctionExample
-    separatingConjunctionTheorems
+        separatingConjunctionSemanticsDefinition
+        separatingConjunctionExample
+        separatingConjunctionTheorems
 
-    chainedPointsToDefinition
-    chainedPointsToExample
+        chainedPointsToDefinition
+        chainedPointsToExample
 
-    separatingImplicationSemanticsDefinition
-    separatingImplicationExample
+        separatingImplicationSemanticsDefinition
+        separatingImplicationExample
 
-    satisfactionExamples
+        satisfactionExamples
 
-    subsection "Heap operations"
-    fetchAssignmentDefinition
-    fetchAssignmentExamples
+    subsection "Heap operations" $ do
+        fetchAssignmentDefinition
+        fetchAssignmentExamples
 
-    heapMutationDefinition
-    heapMutationExample
+        heapMutationDefinition
+        heapMutationExample
 
-    allocationAssignmentDefinition
-    allocationAssignmentExample
+        allocationAssignmentDefinition
+        allocationAssignmentExample
 
-    disposalDefinition
-    disposalExample
+        disposalDefinition
+        disposalExample
 
-    exampleProgram
+        exampleProgram
 
 
-    separationLogicAxioms
+        separationLogicAxioms
 
-    tripleInterpretiation
-    programProofExample
+        tripleInterpretiation
+        programProofExample
 
 
 heapDefinition :: Note
@@ -175,12 +173,9 @@ separatingConjunctionTheorems :: Note
 separatingConjunctionTheorems = do
     emptyHeapSeparatingConjunction
 
-emptyHeapSeparatingConjunctionLabel :: Label
-emptyHeapSeparatingConjunctionLabel = Label Theorem "empty-heap-separating-conjunction"
-
 emptyHeapSeparatingConjunction :: Note
 emptyHeapSeparatingConjunction = thm $ do
-    lab emptyHeapSeparatingConjunctionLabel
+    lab emptyHeapSeparatingConjunctionTheoremLabel
     s ["The empty heap can be separatingly conjuncted with any assertion"]
     ma $ p ⇒ p .* emp
     toprove
@@ -459,12 +454,9 @@ disposalExample = ex $ do
         ] $
         s ["An example situation before and after a ", m $ dispose "x", " instruction"]
 
-exampleProgramLabel :: Label
-exampleProgramLabel = Label Example "separation-logic-example-program"
-
 exampleProgram :: Note
 exampleProgram = ex $ do
-    lab exampleProgramLabel
+    lab separationLogicProgramExampleLabel
     s ["In this example, we'll look at the following simple program and what it does to its store/heap situation"]
     ma $ seqins
         [
@@ -516,8 +508,7 @@ exampleProgram = ex $ do
     y = "y"
 
 separationLogicAxioms :: Note
-separationLogicAxioms = do
-    subsection "Axioms and inference rules"
+separationLogicAxioms = subsection "Axioms and inference rules" $ do
     heapMutationAxiomSchemaDefinition
     disposalAxiomSchemaDefinition
     fetchAssignmentAxiomSchemaDefinition
@@ -596,7 +587,7 @@ tripleInterpretiation = de $ do
 
 programProofExample :: Note
 programProofExample = ex $ do
-    s ["Retaking the program from an earlier example", ref exampleProgramLabel, ", we will now prove the following triple"]
+    s ["Retaking the program from an earlier example", ref separationLogicProgramExampleLabel, ", we will now prove the following triple"]
     ma $ htrip p_ prog q_
     s ["In ", separationLogic, " proofs we reason forwards rather than backwards like in ", hoareLogic]
     s ["We start with an empty heap and see the first instruction: ", m prog1]
@@ -607,7 +598,7 @@ programProofExample = ex $ do
     let prog2q_ = (y ..-> [4, 4])
     ma $ htrip p_ prog2 prog2q_
     s ["But now these need to be combined before we can go on"]
-    s ["Note first that we can separatingly conjoin an empty heap to the postcondition of the first triple as follows", ref emptyHeapSeparatingConjunctionLabel]
+    s ["Note first that we can separatingly conjoin an empty heap to the postcondition of the first triple as follows", ref emptyHeapSeparatingConjunctionTheoremLabel]
     let prog1q_' = (x ..-> [3, 3] .* emp)
     ma $ prog1q_ ⇒ prog1q_'
     s ["We can then apply the rule of ", consequence_]

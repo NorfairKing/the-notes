@@ -14,15 +14,14 @@ import           Probability.ProbabilityMeasure.Macro
 import           Probability.ProbabilityMeasure.Terms
 import           Probability.SigmaAlgebra.Macro
 import           Probability.SigmaAlgebra.Terms
-import           Relations.Domain
+import           Relations.Domain.Terms
 
 import           Probability.RandomVariable.Macro
 import           Probability.RandomVariable.Terms
 
 
 randomVariableS :: Note
-randomVariableS = note "random-variable" $ do
-    section "Random Variables"
+randomVariableS = section "Random Variables" $ do
     introS
     distributionFunctions
     quantileFunctionSS
@@ -32,7 +31,7 @@ psDec :: Note
 psDec = s ["Let ", m prsp_, " be a ", probabilitySpace]
 
 introS :: Note
-introS = note "intro" $ do
+introS = section "Intro" $ do
     borealsDefinition
     randomVariableDefinition
     saMeasureDefinition
@@ -89,8 +88,7 @@ borealMeasurableInducesProbabilityMeasure = thm $ do
     px = fn (prm_ !: rv_)
 
 distributionFunctions :: Note
-distributionFunctions = note "distribution-functions" $ do
-    subsection "Cumulative distribution function"
+distributionFunctions = subsection "Cumulative distribution function" $ do
     cumulativeDistributionFunctionDefinition
     distributionFunctionCondition
     distributionBetweenValues
@@ -166,8 +164,7 @@ independenceOfRandomVariables = de $ do
 
 
 quantileFunctionSS :: Note
-quantileFunctionSS = note "quantile" $ do
-    subsection "The quantile function"
+quantileFunctionSS = subsection "The quantile function" $ do
     quantileFunctionDefinition
     quartileDefinition
     medianDefinition
@@ -190,14 +187,12 @@ medianDefinition = de $ do
 
 
 typesOfRandomVariables :: Note
-typesOfRandomVariables = note "types" $ do
-    subsection "Types of random variables"
+typesOfRandomVariables = subsection "Types of random variables" $ do
     discreteRandomVariables
     continuousRandomVariables
 
 discreteRandomVariables :: Note
-discreteRandomVariables = note "discrete" $ do
-    subsubsection "Discrete random variables"
+discreteRandomVariables = subsubsection "Discrete random variables" $ do
     discreteRandomVariableDefinition
     discreteDistributionDefinition
     discreteCumulativeDistribution
@@ -236,8 +231,7 @@ discreteCumulativeDistribution = thm $ do
     pi = "p" !: i
 
 continuousRandomVariables :: Note
-continuousRandomVariables = note "continuous" $ do
-    subsubsection "Continuous random variables"
+continuousRandomVariables = subsubsection "Continuous random variables" $ do
     continuousRandomVariableDefinition
     probabilityDensitySSS
     intervalOpenCloseDistribution

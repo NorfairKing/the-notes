@@ -17,3 +17,9 @@ salgebra = m (comm0 "sigma") <> "-algebra"
 sa :: Note
 sa = ix salgebra
 
+
+makeThms [
+      "Sigma algebra finite union"
+    , "Sigma algebra infinite intersection"
+    , "Sigma algebra finite intersection"
+    ]

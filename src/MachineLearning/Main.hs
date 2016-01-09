@@ -6,8 +6,7 @@ import           MachineLearning.SupervisedLearning.Main (supervisedLearningS)
 import           MachineLearning.UnsupervisedLearning    (unsupervisedLearningS)
 
 machineLearning :: Note
-machineLearning = note "machine-learning" $ do
-    chapter "Machine Learning"
+machineLearning = chapter "Machine Learning" $ do
     note "learn-definition" learnDefinition
     supervisedLearningS
     unsupervisedLearningS

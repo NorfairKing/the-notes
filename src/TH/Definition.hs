@@ -4,6 +4,7 @@ module TH.Definition (
     ) where
 
 import           Types
+import           Utils
 
 import           Prelude                    (Char, concat, concatMap, fmap, map,
                                              return)
@@ -14,14 +15,18 @@ import           Data.List                  (intercalate)
 import           Language.Haskell.TH
 import           Language.Haskell.TH.Syntax (sequenceQ)
 
+import           TH.Label
+
 makeDefs :: [String] -> Q [Dec]
 makeDefs strs = fmap concat $ sequenceQ $ map makeDef strs
 
 makeDef :: String -> Q [Dec]
-makeDef concept = return $ [termSig, termFun, indexSig, indexFun, labelSig, labelFun, refSig, refFun]
+makeDef concept = do
+    labDecs <- makeDe concept
+    return $ labDecs ++ [termSig, termFun, indexSig, indexFun, refSig, refFun]
   where
     baseName :: String
-    baseName = constructName concept
+    baseName = camelCase $ sanitize concept
 
     conceptLit :: Exp
     conceptLit = LitE $ StringL concept
@@ -50,20 +55,17 @@ makeDef concept = return $ [termSig, termFun, indexSig, indexFun, labelSig, labe
     labelDefName :: Name
     labelDefName = mkName $ baseName ++ "DefinitionLabel"
 
-    labelName :: Name
-    labelName = mkName "Label"
-
     definitionName :: Name
     definitionName = mkName "Definition"
 
     labelConceptLit :: Exp
-    labelConceptLit = LitE $ StringL $ interdashed concept
+    labelConceptLit = LitE $ StringL $ kebabCase $ sanitize concept
 
     labelSig :: Dec
-    labelSig = SigD labelDefName (ConT labelName)
+    labelSig = SigD labelDefName (ConT ''Label)
 
     labelFun :: Dec
-    labelFun = FunD labelDefName [Clause [] (NormalB $ AppE (AppE (ConE labelName) (ConE definitionName)) labelConceptLit) []]
+    labelFun = FunD labelDefName [Clause [] (NormalB $ AppE (AppE (ConE 'MkLabel) (ConE definitionName)) labelConceptLit) []]
 
     refName :: Name
     refName = mkName $ baseName ++ "_"
@@ -90,19 +92,3 @@ makeDef concept = return $ [termSig, termFun, indexSig, indexFun, labelSig, labe
                     [] -- No wheres
                 ]
 
-constructName :: String -> String
-constructName = camelCase . sanitize
-
-sanitize :: String -> String
-sanitize = concatMap replaceBad
-  where
-    replaceBad :: Char -> String
-    replaceBad '-' = " "
-    replaceBad '\'' = ""
-    replaceBad c = [c]
-
-camelCase :: String -> String
-camelCase str = (\(s:ss) -> toLower s : ss) $ concatMap (\(s:ss) -> toUpper s : ss) $ words str
-
-interdashed :: String -> String
-interdashed str = intercalate "-" $ words $ map toLower str

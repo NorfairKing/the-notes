@@ -1,8 +1,4 @@
-module LinearAlgebra.InproductSpaces (
-      inproductSpaces
-
-    , inproductSpaceDefinitionLabel
-    ) where
+module LinearAlgebra.InproductSpaces where
 
 import           Notes
 
@@ -10,12 +6,10 @@ import           Functions.Basics.Macro
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
 
-inproductSpaces :: Note
-inproductSpaces = note "inproduct-spaces" body
+import           LinearAlgebra.InproductSpaces.Terms
 
-body :: Note
-body = do
-    section "Inproduct Spaces"
+inproductSpaces :: Note
+inproductSpaces = section "Inproduct Spaces" $ do
     semiInnerProductDefinition
     innerProductDefinition
     innerProductExamples
@@ -61,9 +55,6 @@ innerProductExamples = do
     p = "p"
     i = "i"
 
-
-inproductSpaceDefinitionLabel :: Label
-inproductSpaceDefinitionLabel = Label Definition "inproduct-space"
 
 inproductSpaceDefinition :: Note
 inproductSpaceDefinition = de $ do

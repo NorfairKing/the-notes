@@ -83,7 +83,7 @@ data Config = Config {
     , conf_tempDir               :: FilePath
     } deriving (Show, Eq)
 
-data Label = Label RefKind Text
+data Label = MkLabel RefKind Text
 
 data RefKind = Definition
              | Theorem

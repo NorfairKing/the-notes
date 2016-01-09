@@ -14,9 +14,7 @@ import           Computability.Symbols.Terms     hiding (concatenation,
                                                   concatenationDefinitionLabel)
 
 languages :: Note
-languages = note "languages" $ do
-    section "Languages"
-
+languages = section "Languages" $ do
     languageDefinition
     languageConcatenationDefinition
     concatenationAssociative

@@ -6,8 +6,7 @@ import           Functions.Application.Macro
 import           Functions.Basics.Macro
 
 regressionS :: Note
-regressionS = note "regression" $ do
-    subsection "Regression"
+regressionS = subsection "Regression" $ do
     intro
     linearRegression
     linearModelAndLeastSquares
@@ -35,12 +34,10 @@ intro = do
     -- evidence: P(data)
 
 linearRegression :: Note
-linearRegression = do
-    subsubsection "Linear Regression"
+linearRegression = subsubsection "Linear Regression" $ mempty
 
 linearModelAndLeastSquares :: Note
-linearModelAndLeastSquares = do
-    subsection "Linear Model and Least Squares"
+linearModelAndLeastSquares = subsection "Linear Model and Least Squares" $ do
     s ["Let a data point be a ", m p, "-dimensional vector of real numbers and let the output be a real number"]
     s ["Given a vector of inputs ", m (trans x =: veclist (x_ 1) (x_ 2) (x_ p)), ", we predict the output ", m y, " via the following model"]
     ma $ hat y =: b_ 0 + sumcmpr (j =: 1) p (x_ j * b_ j)

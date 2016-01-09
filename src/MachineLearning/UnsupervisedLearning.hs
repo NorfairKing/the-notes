@@ -3,11 +3,9 @@ module MachineLearning.UnsupervisedLearning where
 import           Notes
 
 unsupervisedLearningS :: Note
-unsupervisedLearningS = note "unsupervised-learning" $ do
-    section "Unsupervised Learning"
+unsupervisedLearningS = section "Unsupervised Learning" $ do
     learningProblem
 
 learningProblem :: Note
-learningProblem = do
-    subsection "The learning problem"
+learningProblem = subsection "The learning problem" $ mempty
 

@@ -4,82 +4,62 @@ import           Notes
 
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
-import           Relations.Basics               (relation, total_, transitive_)
-import           Relations.Basics.Macro
-import           Relations.Equivalence          (equivalenceRelation_)
-import           Relations.Equivalence.Macro
-import           Relations.Preorders            (preorder, preorder_)
-import           Relations.Preorders.Macro
 import           Sets.Basics.Terms
 import           Sets.PointedSets.Macro
 
-import           Relations.Orders.Macro
+import           Relations.Basics.Macro
+import           Relations.Basics.Terms
+import           Relations.Equivalence.Macro
+import           Relations.Equivalence.Terms
+import           Relations.Preorders.Macro
+import           Relations.Preorders.Terms
 
-makeDefs [
-      "antisymmetric"
-    , "partial order"
-    , "total order"
-    , "greatest element"
-    , "smallest element"
-    , "maximal element"
-    , "minimal element"
-    , "upper bound"
-    , "lower bound"
-    , "supremum", "join"
-    , "infimum", "meet"
-    , "meet semilattice"
-    , "join semilattice"
-    , "bounded lattice"
-    , "complete lattice"
-    , "poset"
-    , "lattice"
-    , "flat lattice"]
+import           Relations.Orders.Macro
+import           Relations.Orders.Terms
 
 orders :: Note
-orders = note "orders" $ do
+orders = section "Orders" $ do
     nocite orderTheoryForComputerScientists
-
-    section "Orders"
 
     antisymmetricDefinition
 
-    subsection "Partial orders"
-    partialOrderDefinition
-    posetDefinition
-    crossPosetLift
-    powsetPosetPreorder
-    partialOrdersFromPreorders
+    subsection "Partial orders" $ do
+        partialOrderDefinition
+        posetDefinition
+        crossPosetLift
+        powsetPosetPreorder
+        partialOrdersFromPreorders
 
-    subsection "Total orders"
-    totalOrderDefinition
+    subsection "Total orders" $ do
+        totalOrderDefinition
 
-    subsection "Extremes"
-    greatestElementDefinition
-    smallestElementDefinition
+    subsection "Extremes" $ do
+        greatestElementDefinition
+        smallestElementDefinition
 
-    maximalElementDefinition
-    minimalElementDefinition
+        maximalElementDefinition
+        minimalElementDefinition
 
-    upperBoundDefinition
-    lowerBoundDefinition
+        upperBoundDefinition
+        lowerBoundDefinition
 
-    supremumDefinition
-    infimumDefinition
+        supremumDefinition
+        infimumDefinition
 
-    uniqueBounds
+        uniqueBounds
 
-    subsection "Lattices"
-    meetSemilatticeDefinition
-    joinSemilatticeDefinition
-    latticeDefinition
-    latticeExamples
-    crossLatticeLift
-    boundedLatticeDefinition
-    completeLatticeDefinition
-    completeLatticeIsBounded
+    subsection "Lattices" $ do
+        meetSemilatticeDefinition
+        joinSemilatticeDefinition
+        latticeDefinition
+        latticeExamples
+        crossLatticeLift
+        boundedLatticeDefinition
+        completeLatticeDefinition
+        completeLatticeIsBounded
 
-    pointedLatticeDefinitions
-    flatLatticeDefinition
+        pointedLatticeDefinitions
+        flatLatticeDefinition
 
 
 antisymmetricDefinition :: Note
@@ -99,13 +79,10 @@ partialOrderDefinition = de $ do
     lab partialOrderDefinitionLabel
     s ["A ", partialOrder', " is an ", antisymmetric, " ", preorder_]
 
-powsetPosetPreorderLabel :: Label
-powsetPosetPreorderLabel = Label Theorem "powerset-poset-induces-preorder"
-
 powsetPosetPreorder :: Note
 powsetPosetPreorder = do
     thm $ do
-        lab powsetPosetPreorderLabel
+        lab powersetPosetInducesPreorderTheoremLabel
         s ["Let ", m relposet_, " be a poset"]
         s [m $ relpreord (powset posetset_) partord_, ", where ", m partord_, " is defined as follows, is a ", preorder_]
         ma $ p ⊆: q ⇔ (fa (x ∈ p) $ te (y ∈ q) $ x ⊆: y)
@@ -123,12 +100,9 @@ powsetPosetPreorder = do
     p = "P"
     q = "Q"
 
-partialOrdersFromPreordersLabel :: Label
-partialOrdersFromPreordersLabel = Label Theorem "partial-orders-from-preorders"
-
 partialOrdersFromPreorders :: Note
 partialOrdersFromPreorders = thm $ do
-    lab partialOrdersFromPreordersLabel
+    lab partialOrdersFromPreordersTheoremLabel
     s ["Given a preordered set ", m relpreord_, ", it is possible to lift the ", preorder, " ", m preord_, " to a ", partialOrder, " ", m $ relposet (eqcls_ preordset_) partord_]
     s ["Here, ", m eqrel_, " is defined naturally"]
     ma $ x .~ y ⇔ (x ⊆: y ∧ y ⊆: x)
@@ -146,12 +120,10 @@ posetDefinition = de $ do
     lab posetDefinitionLabel
     s ["A ", term "partially ordered set", or, poset', " is a tuple ", m relposet_, " of a set and a partial order on that set"]
 
-crossPosetLiftLabel :: Label
-crossPosetLiftLabel = Label Theorem "cross-poset-lift"
 
 crossPosetLift :: Note
 crossPosetLift = thm $ do
-    lab crossPosetLiftLabel
+    lab crossproductLiftedPosetTheoremLabel
     s ["Let ", m $ list (relposet (x !: 1) (o !: 1)) (relposet (x !: 2) (o !: 2)) (relposet (x !: n) (o !: n)), " be ", poset, "s"]
     s [m $ relposet ((x !: 1) ⨯ (x !: 2) ⨯ dotsb ⨯ (x !: n)) o, " is a ", poset, " where ", m o, " is defined as follows"]
     ma $ a ⊆: b ⇔ fa i (a !: i `oi` b !: i)
@@ -299,14 +271,11 @@ latticeExamples = do
   where
     ss = "S"
 
-crossLatticeLiftLabel :: Label
-crossLatticeLiftLabel = Label Theorem "cross-lattice-lift"
-
 crossLatticeLift :: Note
 crossLatticeLift = thm $ do
-    lab crossLatticeLiftLabel
+    lab crossproductLiftedLatticeTheoremLabel
     s ["Let ", m $ list (relposet (x !: 1) (o !: 1)) (relposet (x !: 2) (o !: 2)) (relposet (x !: n) (o !: n)), " be ", lattice, "s"]
-    s ["The poset ", m $ relposet ((x !: 1) ⨯ (x !: 2) ⨯ dotsb ⨯ (x !: n)) o, ref crossPosetLiftLabel, " is a ", lattice, " where the following properties hold"]
+    s ["The poset ", m $ relposet ((x !: 1) ⨯ (x !: 2) ⨯ dotsb ⨯ (x !: n)) o, ref crossproductLiftedPosetTheoremLabel, " is a ", lattice, " where the following properties hold"]
 
     ma $ (a ⊔ b =: supcomp i (a !: i ⊔ b !: i)) <> quad <> text "and" <> quad <> (a ⊓ b =: infcomp i (a !: i ⊓ b !: i))
     ma $ (bot =: tuplelist (bot !: (x !: 1)) (bot !: (x !: 2)) (bot !: (x !: n)))  <> quad <> text "and" <> quad <> (top =: tuplelist (top !: (x !: 1)) (top !: (x !: 2)) (top !: (x !: n)))

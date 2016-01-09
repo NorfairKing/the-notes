@@ -3,6 +3,7 @@ module Probability.Distributions where
 import           Notes
 
 import           Logic.FirstOrderLogic.Macro
+
 import           Probability.Intro.Macro
 import           Probability.Intro.Terms
 import           Probability.ProbabilityMeasure.Macro
@@ -13,15 +14,12 @@ import           Probability.Distributions.Macro
 import           Probability.Distributions.Terms
 
 distributions :: Note
-distributions = note "important-distributions" $ do
-    section "Important distributions"
-
+distributions = section "Important distributions" $ do
     discreteDistributions
     continuousDistributions
 
 discreteDistributions :: Note
-discreteDistributions = do
-    subsection "Discrete distributions"
+discreteDistributions = subsection "Discrete distributions" $ do
     discreteUniform
     bernoulli
     binomial
@@ -68,8 +66,7 @@ binomial = de $ do
     p = "p"
 
 continuousDistributions :: Note
-continuousDistributions = do
-    subsection "Continuous distributions"
+continuousDistributions = subsection "Continuous distributions" $ do
     gaussianDistributionDefinition
 
 gaussianDistributionDefinition :: Note

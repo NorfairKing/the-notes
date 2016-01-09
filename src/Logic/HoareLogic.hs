@@ -14,8 +14,7 @@ import           Logic.HoareLogic.Macro
 import           Logic.HoareLogic.Terms
 
 hoareLogicS :: Note
-hoareLogicS = note "hoare-logic" $ do
-    section "Hoare Logic"
+hoareLogicS = section "Hoare Logic" $ do
     s [hoareLogic', " is used to reason about imperative computer programs in abstract machines that have a ", state]
 
     stateDefinition
@@ -241,9 +240,6 @@ assignmentDefinition = do
         s ["It is assumed that the assigned expression is side-effect-free"]
         s ["This always holds in mathematics, but infrequently in real machines"]
 
-forwardAssignmentDefinitionLabel :: Label
-forwardAssignmentDefinitionLabel = Label Definition "forward-assignment"
-
 forwardAssignmentDefinition :: Note
 forwardAssignmentDefinition = de $ do
     lab forwardAssignmentDefinitionLabel
@@ -307,9 +303,6 @@ conditionalRule = do
 conditionalRuleGcdProof :: Note
 conditionalRuleGcdProof = todo "gcd proof"
 
-loopRuleExampleLabel :: Label
-loopRuleExampleLabel = Label Example "loop-rule-example"
-
 loopRuleDefinition :: Note
 loopRuleDefinition = do
     de $ do
@@ -347,8 +340,7 @@ loopRuleDefinition = do
     i_ = y > 3 + i
 
 termination :: Note
-termination = do
-    subsection "Termination"
+termination = subsection "Termination" $ do
     s ["To show total correctness, rather than just partial correctness, termination must also be proven"]
     s ["Termination is asserted for all but the loop triples if all the antecedents terminate"]
 

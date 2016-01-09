@@ -12,8 +12,7 @@ import           Probability.RandomVariable
 import           Probability.SigmaAlgebra
 
 probability :: Note
-probability = note "probability" $ do
-    chapter "Probability"
+probability = chapter "Probability" $ do
     intro
     sigmaAlgebraS
     probabilityMeasureS

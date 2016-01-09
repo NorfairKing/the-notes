@@ -4,6 +4,9 @@ import           Types
 
 import           Prelude
 
+import           Data.Char         (toLower, toUpper)
+import           Data.List         (intercalate)
+
 import           Control.Exception
 import           System.Directory  (createDirectory, removeFile)
 import           System.IO.Error   (isAlreadyExistsError, isDoesNotExistError)
@@ -35,4 +38,21 @@ crossproduct [] _  = []
 crossproduct _  [] = []
 crossproduct (a:as) bs = map (\b -> (a,b)) bs ++ crossproduct as bs
 
+
+sanitize :: String -> String
+sanitize = concatMap replaceBad
+  where
+    replaceBad :: Char -> String
+    replaceBad '-' = " "
+    replaceBad '\'' = ""
+    replaceBad c = [c]
+
+camelCase :: String -> String
+camelCase str = (\(s:ss) -> toLower s : ss) $ concatMap (\(s:ss) -> toUpper s : ss) $ words str
+
+pascalCase :: String -> String
+pascalCase str = concatMap (\(s:ss) -> toUpper s : ss) $ words str
+
+kebabCase :: String -> String
+kebabCase str = intercalate "-" $ words $ map toLower str
 

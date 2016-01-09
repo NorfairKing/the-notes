@@ -5,3 +5,5 @@ import           Notes
 makeDefs [
       "conditional probability"
     ]
+
+makeThm "Law of total probability"

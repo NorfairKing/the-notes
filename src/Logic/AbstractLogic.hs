@@ -3,6 +3,7 @@ module Logic.AbstractLogic where
 import           Notes
 
 import           Functions.Application.Macro
+
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
 
@@ -10,11 +11,7 @@ import           Logic.AbstractLogic.Macro
 import           Logic.AbstractLogic.Terms
 
 abstractLogic :: Note
-abstractLogic = note "abstract-logic" body
-
-body :: Note
-body = do
-    section "Abstract Logic"
+abstractLogic = section "Abstract Logic" $ do
     s ["It is hard to speak about logic in a pure mathematical fashion as it originated, and still borders on, philosophy"]
     formulaDefinition
     theoryDefinition

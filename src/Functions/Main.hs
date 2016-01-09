@@ -10,8 +10,7 @@ import           Functions.Order           (order)
 
 
 functions :: Note
-functions = note  "functions" $ do
-    chapter "Functions"
+functions = chapter "Functions" $ do
     basics
     application
     binaryOperations

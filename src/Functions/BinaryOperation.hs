@@ -11,8 +11,7 @@ import           Functions.BinaryOperation.Macro
 import           Functions.BinaryOperation.Terms
 
 binaryOperations :: Note
-binaryOperations = note "binary-operations" $ do
-    section "Binary operations"
+binaryOperations = section "Binary operations" $ do
     binaryOperationDefinition
 
     associativeDefinition

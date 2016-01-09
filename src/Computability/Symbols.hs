@@ -9,8 +9,7 @@ import           Computability.Symbols.Macro
 import           Computability.Symbols.Terms
 
 symbols :: Note
-symbols = note "symbols-and-strings" $ do
-    section "Symbols and strings"
+symbols = section "Symbols and strings" $ do
     symbolDefinition
     alphabetDefinition
     stringDefinition

@@ -1,18 +1,17 @@
-module Logic.Main (logica) where
+module Logic.Main where
 
 import           Notes
 
-import           Logic.AbstractLogic      (abstractLogic)
+import           Logic.AbstractLogic
 import           Logic.FirstOrderLogic
-import           Logic.HoareLogic         (hoareLogicS)
-import           Logic.PropositionalLogic (propositionalLogicS)
-import           Logic.SeparationLogic    (separationLogicS)
-import           Logic.TemporalLogic      (temporalLogicS)
+import           Logic.HoareLogic
+import           Logic.PropositionalLogic
+import           Logic.SeparationLogic
+import           Logic.TemporalLogic
 
 
 logica :: Note
-logica = note "logic" $ do
-    chapter "Logic"
+logica = chapter "Logic" $ do
     abstractLogic
     propositionalLogicS
     firstOrderLogicS

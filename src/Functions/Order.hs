@@ -4,15 +4,10 @@ import           Notes
 
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
-import           Relations.Basics               (reflexive_)
-import           Relations.Orders               (antisymmetric_,
-                                                 boundedLattice_,
-                                                 completeLattice_, lattice,
-                                                 lattice_,
-                                                 partialOrderDefinitionLabel,
-                                                 poset_)
+import           Relations.Basics.Terms
 import           Relations.Orders.Macro
-import           Relations.Preorders            (preorderDefinitionLabel)
+import           Relations.Orders.Terms
+import           Relations.Preorders.Terms
 import           Sets.Basics.Terms
 
 import           Functions.Application.Macro
@@ -23,9 +18,7 @@ import           Functions.Order.Macro
 import           Functions.Order.Terms
 
 order :: Note
-order = note "orders" $ do
-    section "Functions and orders"
-
+order = section "Functions and orders" $ do
     monotonicDefinition
     scottContinuousDefinition
     fixedPointDefinition
@@ -40,9 +33,7 @@ order = note "orders" $ do
 
 
 regions :: Note
-regions = do
-    subsection "Regions"
-
+regions = subsection "Regions" $ do
     fixedPointRegionDefinition
     ascendingRegionDefinition
     descendingRegionDefinition
@@ -157,12 +148,9 @@ descendingRegionDefinition = de $ do
     a = "x"
     x = posetset_
 
-ascendingRegionIsClosedUnderApplicationLabel :: Label
-ascendingRegionIsClosedUnderApplicationLabel = Label Theorem "ascending-region-is-closed-under-application"
-
 ascendingRegionIsClosedUnderApplication :: Note
 ascendingRegionIsClosedUnderApplication = thm $ do
-    lab ascendingRegionIsClosedUnderApplicationLabel
+    lab ascendingRegionIsClosedUnderApplicationTheoremLabel
     s ["Let ", m relposet_, " be a ", poset_, and, m $ fun f x x, " a ", monotonic, " ", function]
     ma $ fa (a ∈ x) $ x ∈ asc f ⇒ f_ x ∈ asc f
 
@@ -176,12 +164,9 @@ ascendingRegionIsClosedUnderApplication = thm $ do
     a = "x"
     x = posetset_
 
-descendingRegionIsClosedUnderApplicationLabel :: Label
-descendingRegionIsClosedUnderApplicationLabel = Label Theorem "descending-region-is-closed-under-application"
-
 descendingRegionIsClosedUnderApplication :: Note
 descendingRegionIsClosedUnderApplication = thm $ do
-    lab descendingRegionIsClosedUnderApplicationLabel
+    lab descendingRegionIsClosedUnderApplicationTheoremLabel
     s ["Let ", m relposet_, " be a ", poset_, and, m $ fun f x x, " a ", monotonic, " ", function]
     ma $ fa (a ∈ x) $ x ∈ desc f ⇒ f_ x ∈ desc f
 
@@ -195,12 +180,9 @@ descendingRegionIsClosedUnderApplication = thm $ do
     a = "x"
     x = posetset_
 
-topInDescendingRegionLabel :: Label
-topInDescendingRegionLabel = Label Theorem "top-element-is-in-descending-region"
-
 topInDescendingRegion :: Note
 topInDescendingRegion = thm $ do
-    lab topInDescendingRegionLabel
+    lab topElementIsInDescendingRegionTheoremLabel
     s ["Let ", m lat_, " be a ", boundedLattice_, " and let ", m $ fun f x x, " a ", monotonic, " ", function]
     ma $ bot ∈ asc f
 
@@ -212,12 +194,9 @@ topInDescendingRegion = thm $ do
     f = fun_
     x = latset_
 
-botInAscendingRegionLabel :: Label
-botInAscendingRegionLabel = Label Theorem "bot-element-is-in-ascending-region"
-
 botInAscendingRegion :: Note
 botInAscendingRegion = thm $ do
-    lab botInAscendingRegionLabel
+    lab bottomElementIsInAscendingRegionTheoremLabel
     s ["Let ", m lat_, " be a ", boundedLattice_, " and let ", m $ fun f x x, " a ", monotonic, " ", function]
     ma $ top ∈ desc f
 
@@ -230,12 +209,9 @@ botInAscendingRegion = thm $ do
     x = latset_
 
 
-fixedPointRegionIsIntersectionOfAscAndDescLabel :: Label
-fixedPointRegionIsIntersectionOfAscAndDescLabel = Label Theorem "fixed-point-region-is-intersection-of-ascending-region-and-descending-region"
-
 fixedPointRegionIsIntersectionOfAscAndDesc :: Note
 fixedPointRegionIsIntersectionOfAscAndDesc = thm $ do
-    lab fixedPointRegionIsIntersectionOfAscAndDescLabel
+    lab fixedPointRegionIsIntersectionOfAscendingRegionAndDescendingRegionTheoremLabel
     s ["Let ", m relposet_, " be a ", poset_, and, m $ fun f x x, " a ", monotonic, " ", function]
     ma $ fix f =: asc f ∩ desc f
 
@@ -295,12 +271,9 @@ kleenesFixedPointTheorem = do
     x = latset_
 
 
-latticesOverFunctionsLabel :: Label
-latticesOverFunctionsLabel = Label Theorem "lattices-over-functions"
-
 latticesOverFunctions :: Note
 latticesOverFunctions = thm $ do
-    lab latticesOverFunctionsLabel
+    lab latticesOverFunctionsTheoremLabel
     s ["Let ", m lat_, " be a ", lattice, and, m y, " a set"]
     s [m $ lat (funt x y) partord_, " is a ", lattice, " where ", m partord_, " is defined as follows"]
     ma $ f ⊆: g ⇔ fa (a ∈ dom f) (f -: a ⊆: g -: a)

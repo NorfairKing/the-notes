@@ -9,8 +9,7 @@ import           Probability.ConditionalProbability.Macro
 import           Probability.ProbabilityMeasure.Macro
 
 languageModels :: Note
-languageModels = note "language-model" $ do
-    section "Language Models"
+languageModels = section "Language Models" $ do
 
     languageModelDefinition
 

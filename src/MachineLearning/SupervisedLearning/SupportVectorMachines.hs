@@ -14,9 +14,8 @@ import           MachineLearning.SupervisedLearning.SupportVectorMachines.Macro
 import           MachineLearning.SupervisedLearning.SupportVectorMachines.Terms
 
 supportVectorMachinesS :: Note
-supportVectorMachinesS = note "support-vector-machines" $ do
+supportVectorMachinesS = subsection "Support vector machines" $ do
     gradientDescentS
-    subsection "Support vector machines"
     svmContext
     hardConstraintsSVM
     softConstraintsSVM
@@ -25,8 +24,7 @@ supportVectorMachinesS = note "support-vector-machines" $ do
 
 
 gradientDescentS :: Note
-gradientDescentS = note "gradient-descent" $ do
-    subsection "Gradient descent"
+gradientDescentS = subsection "Gradient descent" $ do
     regularGradientDescentSS
     stochasticGradientDescentSS
 
@@ -55,8 +53,7 @@ regularGradientDescentSS = do
     nte $ s ["The ", localMaximum, " can analogously be obtained by going in the direction of the positive gradient"]
 
 stochasticGradientDescentSS :: Note
-stochasticGradientDescentSS = note "stochastic-gradient-descent" $ do
-    subsubsection "Stochastic gradient descent"
+stochasticGradientDescentSS = subsubsection "Stochastic gradient descent" $ do
     let ff = "F"
     de $ do
         s ["When the function to minimize can be written as the sum of ", differentiable, " functions, the process of ", gradientDescent, " can be sped up by adding an element of randomness"]
@@ -74,8 +71,7 @@ svmContext = note "context" $ do
     s [supportVectorMachines', " are ", supervisedLearning, " models with associated learning algorithms that are trained to perform binary classification"]
 
 hardConstraintsSVM :: Note
-hardConstraintsSVM = note "hard-svm" $ do
-    subsubsection "SVM with hard constraints"
+hardConstraintsSVM = subsubsection "SVM with hard constraints" $ do
     let (b, p, w, x, y) = ("b", vec "p", vec "w", vec "x", "y")
         labs = setofs [1, -1]
     s ["Given a dataset of tuples ", m $ tuple x y, " with ", m x, " a ", euclideanVector_, " and ", m $ y ∈ labs]
@@ -158,9 +154,8 @@ hardConstraintsSVM = note "hard-svm" $ do
 
 
 softConstraintsSVM :: Note
-softConstraintsSVM = note "soft-svm" $ do
+softConstraintsSVM = subsubsection "SVM with soft constraints" $ do
     let (b, w, x, y) = ("b", vec "w", vec "x", "y")
-    subsubsection "SVM with soft constraints"
 
     s ["If the data is not ", ix "linearly separable", " then this optimisation problem is not feasable"]
     s ["It can however be adapted to account for the ", quoted "mistakes"]
@@ -195,8 +190,7 @@ softConstraintsSVM = note "soft-svm" $ do
 
 
 naturalForm :: Note
-naturalForm = note "natural-form" $ do
-    subsubsection "SVM in natural form"
+naturalForm = subsubsection "SVM in natural form" $ do
     let (b, w, x, y) = ("b", vec "w", vec "x", "y")
     let c = "C"
     let i = "i"
@@ -206,8 +200,7 @@ naturalForm = note "natural-form" $ do
     s ["This formulation is called ", term "SVM in its natural form"]
 
 computingMargin :: Note
-computingMargin = note "computing-the-margin" $ do
-    subsubsection "Finding the margin"
+computingMargin = subsubsection "Computing the margin" $ do
     let (b, w) = ("b", vec "w")
     s ["Since the problem is a quadratic optimisation problem, we could just use a quadratic solver"]
     newline

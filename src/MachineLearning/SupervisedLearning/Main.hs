@@ -7,14 +7,13 @@ import           Functions.Basics.Macro
 import           Functions.Basics.Terms
 import           Logic.FirstOrderLogic.Macro
 
-import           MachineLearning.SupervisedLearning.Regression            (regressionS)
-import           MachineLearning.SupervisedLearning.SupportVectorMachines (supportVectorMachinesS)
+import           MachineLearning.SupervisedLearning.Regression
+import           MachineLearning.SupervisedLearning.SupportVectorMachines
 
 import           MachineLearning.SupervisedLearning.Terms
 
 supervisedLearningS :: Note
-supervisedLearningS = note "supervised-learning" $ do
-    section "Supervized learning"
+supervisedLearningS = section "Supervized learning" $ do
     learningProblemSS
     taxonomyOfData
     scales
@@ -28,8 +27,7 @@ supervisedLearningS = note "supervised-learning" $ do
     supportVectorMachinesS
 
 learningProblemSS :: Note
-learningProblemSS = note "learning-problem" $ do
-    subsection "The learning problem"
+learningProblemSS = subsection "The learning problem" $ do
     learningProblemDefinition
     learningProblemExamples
 
@@ -58,8 +56,7 @@ generalisationError = mempty
     -- Number of mistakes on _unknown_ test data
 
 lossfunctions :: Note
-lossfunctions = do
-    subsection "Loss functions"
+lossfunctions = subsection "Loss functions" $ do
     s ["The quality of the estimation is assessed using a ", term "loss function", " ", m (fun l x realsp ), " that measures the difference between the actual output for a given data point and the predicted output"]
 
     lossFunctionDefinition
@@ -91,8 +88,7 @@ lossFunctionDefinition = de $ mempty
     -- s ["A ", lossFunction', " is a function
 
 taxonomyOfData :: Note
-taxonomyOfData = do
-    subsection "Taxonomy of data"
+taxonomyOfData = subsection "Taxonomy of data" $ do
     s ["We are given an object space ", m mlos]
     s ["A ", term "measurement", " is a partial function from the object space to a ", term "domain", " ", m mldom]
     s ["This measurement is used to gather data about the objects"]
@@ -118,8 +114,7 @@ taxonomyOfData = do
 
 
 scales :: Note
-scales = do
-    subsection "Scales"
+scales = subsection "Scales" $ do
     s ["Data are of different scales"]
     s ["This means that they have to be treated in different ways"]
     s ["Eventhough most measurements will be represented by numbers eventually, we cannot just treat them as numbers with all their properties depending on what the numbers represent"]
@@ -147,8 +142,7 @@ scales = do
 
 
 transformationInvariances :: Note
-transformationInvariances = do
-    subsection "Transformation Invariances"
+transformationInvariances = subsection "Transformation Invariances" $ do
     s ["Data is sometimes transformed for various reasons"]
     s ["It is important that we realise that some transformations alter the data and some don't"]
     s ["If data is not altered by a transformation ", m "t", " then that data is called ", m "t", "-invariant"]

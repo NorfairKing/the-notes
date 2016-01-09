@@ -8,14 +8,11 @@ import           Logic.FirstOrderLogic.Macro
 import           LinearAlgebra.VectorSpaces.Terms
 
 vectorSpaces :: Note
-vectorSpaces = note "vector-spaces" $ do
-    section "Vector Spaces"
+vectorSpaces = section "Vector Spaces" $ do
     vectorSpaceDefinition
-    note "linear-subspaces" $ do
-        subsection "Linear Subspaces"
+    subsection "Linear Subspaces" $ do
         linearSubspaceDefinition
-    note "euclidean-vector-spaces" $ do
-        subsection "Euclidean Vector Spaces"
+    subsection "Euclidean Vector Spaces" $ do
         euclideanVectorSpaceDefinition
 
 vectorSpaceDefinition :: Note

@@ -4,25 +4,13 @@ import           Notes
 
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
-import           Sets.CarthesianProduct         (carthesianProduct_)
+import           Sets.CarthesianProduct.Terms
 
 import           Relations.Basics.Macro
-
-makeDefs [
-      "relation"
-    , "unit relation"
-    , "inverse relation"
-
-    , "reflexive"
-    , "transitive"
-    , "symmetric"
-    , "total"
-    ]
+import           Relations.Basics.Terms
 
 basicDefinitions :: Note
-basicDefinitions = note "definitions" $ do
-    section "Basics"
-
+basicDefinitions = section "Basics" $ do
     relationDefinition
     binaryRelationDefinition
     ternaryRelationDefinition
@@ -31,14 +19,13 @@ basicDefinitions = note "definitions" $ do
 
     inverseOfInverseIsNormal
 
-    subsection "Properties of relations"
+    subsection "Properties of relations" $ do
+        reflexiveDefinition
+        transitiveDefinition
+        symmetricDefinition
+        totalDefinition
 
-    reflexiveDefinition
-    transitiveDefinition
-    symmetricDefinition
-    totalDefinition
-
-    totalityImpliesReflexivity
+        totalityImpliesReflexivity
 
 
 relationDefinition :: Note
@@ -84,12 +71,9 @@ inverseRelationDefinition = de $ do
     x = "x"
     y = "y"
 
-inverseOfInverseIsNormalLabel :: Label
-inverseOfInverseIsNormalLabel = Label Theorem "inverse-of-inverse-relation-is-normal"
-
 inverseOfInverseIsNormal :: Note
 inverseOfInverseIsNormal = thm $ do
-    lab inverseOfInverseIsNormalLabel
+    lab inverseOfInverseRelationIsNormalTheoremLabel
     s ["Let ", m rel_, " be a binary relation on the sets ", m a, and, m b]
     ma $ inv (inv rel_) =: rel_
 

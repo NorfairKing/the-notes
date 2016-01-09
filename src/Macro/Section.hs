@@ -8,25 +8,30 @@ import           Macro.Note
 import qualified Text.LaTeX as HT (chapter, section, subsection, subsubsection)
 
 
-chapter :: Text -> Note
-chapter n = do
+chapter :: Text -> Note -> Note
+chapter n func = do
     raw "\n"
-    note (escape n) $ HT.chapter $ raw n
+    note n $ do
+        HT.chapter (raw n)
+        func
 
-section :: Text -> Note
-section n = do
+section :: Text -> Note -> Note
+section n func = do
     raw "\n"
-    note (escape n) $ HT.section $ raw n
+    note n $ do
+        HT.section (raw n)
+        func
 
-subsection :: Text -> Note
-subsection n = do
+subsection :: Text -> Note -> Note
+subsection n func = do
     raw "\n"
-    note (escape n) $ HT.subsection $ raw n
+    note n $ do
+        HT.subsection (raw n)
+        func
 
-subsubsection :: Text -> Note
-subsubsection n = do
+subsubsection :: Text -> Note -> Note
+subsubsection n func = do
     raw "\n"
-    note (escape n) $ HT.subsubsection $ raw n
-
-escape :: Text -> Text
-escape = id
+    note n $ do
+        HT.subsubsection (raw n)
+        func

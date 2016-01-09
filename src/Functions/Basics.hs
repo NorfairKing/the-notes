@@ -4,8 +4,8 @@ import           Notes
 
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
-import           Relations.Basics               (relation_)
-import           Relations.Domain               (domain_, image_)
+import           Relations.Basics.Terms         hiding (total')
+import           Relations.Domain.Terms
 import           Sets.Basics.Terms
 
 import           Functions.Application.Macro
@@ -15,9 +15,7 @@ import           Functions.Basics.Macro
 import           Functions.Basics.Terms
 
 basics :: Note
-basics = note "basics" $ do
-    section "Basics"
-
+basics = section "Basics" $ do
     partialFunctionDefinition
     totalFunctionDefinition
     surjectiveDefinition
