@@ -175,7 +175,7 @@ examQuestion2014 = ex $ do
                                 constancy
                                     (assumption $ m $ htrip_ inv2e_ body2_ inv2_)
                                     (assumption $ m $ centeredBelowEachOther
-                                        [freevars inv1_, "" ∩ "", modifies body2_, "" =§= emptyset])
+                                        [freevars inv1_, "" ∩ "", mods body2_, "" =§= emptyset])
                                     (m $ htrip_ inb_ body2_ inv_)
                             lab figlabel
                             caption "Application of the rule of constancy"

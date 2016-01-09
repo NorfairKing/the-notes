@@ -23,7 +23,7 @@ import           Probability.RandomVariable.Terms
 randomVariableS :: Note
 randomVariableS = section "Random Variables" $ do
     introS
-    distributionFunctions
+    distributionFunctionSS
     quantileFunctionSS
     typesOfRandomVariables
 
@@ -87,8 +87,8 @@ borealMeasurableInducesProbabilityMeasure = thm $ do
     x = "X"
     px = fn (prm_ !: rv_)
 
-distributionFunctions :: Note
-distributionFunctions = subsection "Cumulative distribution function" $ do
+distributionFunctionSS :: Note
+distributionFunctionSS = subsection "Cumulative distribution function" $ do
     cumulativeDistributionFunctionDefinition
     distributionFunctionCondition
     distributionBetweenValues

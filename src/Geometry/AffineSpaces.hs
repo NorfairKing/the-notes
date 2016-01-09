@@ -24,7 +24,7 @@ affineSpaces = section "Affine Spaces" $ do
     concaveFunctionDefinition
     strictlyConvexFunctionDefinition
 
-    affineSubspaces
+    affineSubspaceSS
 
 pointDefinition :: Note
 pointDefinition = de $ do
@@ -86,8 +86,8 @@ strictlyConvexFunctionDefinition = de $ do
         let (x, y) = ("x", "y")
         fa (x ∈ rn) $ fa (y ∈ rn) $ fn f (theta * x + (pars $ 1 - theta) * y) < theta * fn f x + (pars $ 1 - theta) * fn f y
 
-affineSubspaces :: Note
-affineSubspaces = subsection "Affine subspaces" $ do
+affineSubspaceSS :: Note
+affineSubspaceSS = subsection "Affine subspaces" $ do
     affineSubspaceDefinition
     hyperplaneDefinition
 

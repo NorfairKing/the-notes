@@ -4,7 +4,7 @@ import           Notes
 
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
-import           Sets.Partition                           (partition)
+import           Sets.Partition.Terms
 
 import           Probability.Intro.Macro
 import           Probability.Intro.Terms

@@ -41,10 +41,10 @@ propositionalLogicS = section "Propositional Logic" $ do
         logicallyEquivalentExample
 
     truthTables
-    equivalences
+    equivalenceSS
 
     normalForms
-    inferences
+    inferenceSS
 
 propositionalLogicDefinition :: Note
 propositionalLogicDefinition = do
@@ -213,8 +213,8 @@ truthTables = subsection "Truth tables" $ do
             truthTableOf $ Equiv (Implies p q) (Implies (Not r) (Not s))
             caption "Truth tables quickly become very large"
 
-equivalences :: Note
-equivalences =  note "equivalences" $ do
+equivalenceSS :: Note
+equivalenceSS =  note "equivalences" $ do
     andCommutativity
     andAssociativity
     orCommutativity
@@ -373,8 +373,8 @@ tseitinTransformation = Reference article "tseitin68" $
     , ("year", "1968")
     ]
 
-inferences :: Note
-inferences = subsection "Inference in propositional logic" $ do
+inferenceSS :: Note
+inferenceSS = subsection "Inference in propositional logic" $ do
     modusPonensInProp
     resolution
 

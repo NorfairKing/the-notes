@@ -15,11 +15,11 @@ import           Probability.Distributions.Terms
 
 distributions :: Note
 distributions = section "Important distributions" $ do
-    discreteDistributions
-    continuousDistributions
+    discreteDistributionSS
+    continuousDistributionSS
 
-discreteDistributions :: Note
-discreteDistributions = subsection "Discrete distributions" $ do
+discreteDistributionSS :: Note
+discreteDistributionSS = subsection "Discrete distributions" $ do
     discreteUniform
     bernoulli
     binomial
@@ -65,8 +65,8 @@ binomial = de $ do
     n = "n"
     p = "p"
 
-continuousDistributions :: Note
-continuousDistributions = subsection "Continuous distributions" $ do
+continuousDistributionSS :: Note
+continuousDistributionSS = subsection "Continuous distributions" $ do
     gaussianDistributionDefinition
 
 gaussianDistributionDefinition :: Note

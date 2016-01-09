@@ -12,7 +12,7 @@ import           Sets.Powerset
 sets :: Note
 sets = chapter "Sets" $ do
      setBasics
-     partitions
+     partitionS
      algebra
      powersetS
      carthesianProducts

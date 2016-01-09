@@ -19,7 +19,7 @@ makeDefs strs = fmap concat $ sequenceQ $ map makeDef strs
 makeDef :: String -> Q [Dec]
 makeDef concept = do
     labDecs <- makeDe concept
-    return $ labDecs ++ [termSig, termFun, indexSig, indexFun, refSig, refFun]
+    return $ labDecs ++ [termSig, termFun, indexSig, indexFun, refSig, refFun, pluralIndexSig, pluralIndexFun]
   where
     baseName :: String
     baseName = camelCase $ sanitize concept
@@ -76,3 +76,17 @@ makeDef concept = do
                     [] -- No wheres
                 ]
 
+    pluralConcept :: String
+    pluralConcept = pluralOf concept
+
+    pluralBaseName :: String
+    pluralBaseName = camelCase . sanitize $ pluralConcept
+
+    pluralIndexName :: Name
+    pluralIndexName = mkName pluralBaseName
+
+    pluralIndexSig :: Dec
+    pluralIndexSig = SigD pluralIndexName (ConT noteName)
+
+    pluralIndexFun :: Dec
+    pluralIndexFun = FunD pluralIndexName [Clause [] (NormalB $ AppE (VarE $ mkName "ix") conceptLit) []]

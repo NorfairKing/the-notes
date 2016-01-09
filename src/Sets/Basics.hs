@@ -11,23 +11,23 @@ import           Sets.Basics.Terms
 
 setBasics :: Note
 setBasics = section "Set Basics" $ do
-    setsS
-    subsetsS
+    setsSS
+    subsetsSS
     universalSet
     emptySet
     singletonDefinition
-    predicates
+    predicateSS
 
-setsS :: Note
-setsS = do
+setsSS :: Note
+setsSS = do
     setDefinition
     setElementNotation
     setComprehensionDefinition
     setEqualityDefinition
     setEqTransitivity
 
-subsetsS :: Note
-subsetsS = do
+subsetsSS :: Note
+subsetsSS = do
     subsetDefinition
     subsetAntiSymmetry
     subsetTransitivity
@@ -43,14 +43,14 @@ emptySet = do
     emptySetDefinition
     emptySetSubsetOfAllSets
 
-predicates :: Note
-predicates = do
+predicateSS :: Note
+predicateSS = do
     predicateDefinition
 
 singletonDefinition :: Note
 singletonDefinition = do
     lab singletonDefinitionLabel
-    de $ s ["A ", set, " with exactly one element is called a ", singleton']
+    de $ s ["A ", set, " with exactly one ", element, " is called a ", singleton']
 
 setDefinition :: Note
 setDefinition = de $ do
@@ -61,11 +61,11 @@ setDefinition = de $ do
 
 setElementNotation :: Note
 setElementNotation = de $ do
-    s ["The fact that a ", set, " ", m "A", " contains a certain ", ix "element", " ", m "a", " is denoted as ", m $ "a" ∈ "A"]
+    s ["The fact that a ", set, " ", m "A", " contains a certain ", element, " ", m "a", " is denoted as ", m $ "a" ∈ "A"]
 
 setComprehensionDefinition :: Note
 setComprehensionDefinition = de $ do
-    s ["A formal description of a ", set, " using a ", ix "predicate", " ", m "p", " is written as follows"]
+    s ["A formal description of a ", set, " using a ", predicate, " ", m "p", " is written as follows"]
     ma $ setcmpr "x" $ app "p" "x"
     s ["This is the ", set, " of all objects that have the ", ix "property", " ", m "P"]
 
