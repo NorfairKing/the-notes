@@ -12,7 +12,7 @@ import           Sets.Basics.Terms
 import           Sets.Algebra.Complement.Terms
 
 setComplement :: Note
-setComplement = subsection "Set complement" $ do
+setComplement = subsection "Complement" $ do
     complementDefinition
     doubleComplement
     complementaryLawUnion
@@ -138,7 +138,7 @@ secondLawOfDeMorgan = thm $ do
 
 setDifferenceEquivalentDefinition :: Note
 setDifferenceEquivalentDefinition = thm $ do
-    lab intersectionOverDifferenceTheoremLabel
+    lab setDifferenceEquivalentDefinitionTheoremLabel
     let (a, b) = ("A", "B")
     s ["Let ", m a, and, m b, " be sets"]
 

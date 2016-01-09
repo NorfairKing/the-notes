@@ -8,7 +8,7 @@ import           Sets.Algebra.Difference.Terms
 
 
 setDifference :: Note
-setDifference = subsection "Set difference" $ do
+setDifference = subsection "Difference" $ do
     differenceDefinition
     intersectionAndDifferenceDisjunct
     symmetricSetDifferencesDisjunct

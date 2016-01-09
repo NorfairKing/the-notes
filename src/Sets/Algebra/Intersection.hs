@@ -10,7 +10,7 @@ import           Sets.Algebra.Union.Terms
 import           Sets.Algebra.Intersection.Terms
 
 setIntersection :: Note
-setIntersection = subsection "Set intersection" $ do
+setIntersection = subsection "Intersection" $ do
     intersectionDefinition
     intersectionAssociative
     intersectionCommutative
