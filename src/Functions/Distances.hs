@@ -26,9 +26,10 @@ distances = section "Distances" $ do
 distanceDefinition :: Note
 distanceDefinition = de $ do
     lab distanceDefinitionLabel
+    lab distanceFunctionDefinitionLabel
     lab pseudometricDefinitionLabel
     s ["Let ", m ss, " be a set"]
-    s ["A ", term "distance function", " ", m d, " for ", m ss, " is a function ", m (fun d tups realsp), " with the following four properties"]
+    s ["A ", distanceFunction', " ", m d, " for ", m ss, " is a function ", m (fun d tups realsp), " with the following four properties"]
     enumerate $ do
         item $ m $ fa rxy $ dxy =: 0
         item $ m $ fa rxy $ dxy =: dyx

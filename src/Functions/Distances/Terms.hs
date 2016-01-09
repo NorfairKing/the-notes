@@ -4,6 +4,7 @@ import           Notes
 
 makeDefs [
       "distance"
+    , "distance function"
     , "pseudometric"
     , "metric"
 

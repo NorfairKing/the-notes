@@ -5,87 +5,29 @@ import           Notes
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
 import           Functions.Basics.Terms
+import           Functions.Distances.Terms
 import           Logic.FirstOrderLogic.Macro
 
 import           MachineLearning.SupervisedLearning.Regression
 import           MachineLearning.SupervisedLearning.SupportVectorMachines
 
+import           MachineLearning.SupervisedLearning.Macro
 import           MachineLearning.SupervisedLearning.Terms
 
 supervisedLearningS :: Note
 supervisedLearningS = section "Supervized learning" $ do
-    learningProblemSS
     taxonomyOfData
     scales
     transformationInvariances
 
+    learningProblemSS
+    trainingAndTestSets
+    lossFunctionSS
     trainingErrorDefinition
-    generalisationError
-    lossfunctions
+    generalisationErrorDefinition
 
     regressionS
     supportVectorMachinesS
-
-learningProblemSS :: Note
-learningProblemSS = subsection "The learning problem" $ do
-    learningProblemDefinition
-    learningProblemExamples
-
-learningProblemDefinition :: Note
-learningProblemDefinition = de $ do
-    s ["Given a set of ", dataPoint, "s in an ", inputSpace, " ", m x, ", all tagged with a value in a certain ", outputSpace, " ", m y, ", we search a ", function, " ", m $ fun f x y , " that accurately predicts the ", outputFeature, " corresponding to the ", inputFeature, "s of new ", dataPoint, "s"]
-    s [dquoted "Inputs", " is what they are called in machine learning"]
-    s ["In statistical literature they are ofter called ", term "predictors"]
-    s ["In pattern recognition, these are called ", term "feature", "s"]
-    s [dquoted "Outputs", " are called ", term "dependent variables", " in statistics and ", term "responses", " in pattern recognition"]
-    s ["The ", term "measurement space", " is the tuple ", m (tuple x y)]
-  where
-    x = "X"
-    y = "Y"
-    f = "f"
-
-learningProblemExamples :: Note
-learningProblemExamples = mempty
-
-trainingErrorDefinition :: Note
-trainingErrorDefinition = mempty
-    -- Number of errors on training data
-
-generalisationError :: Note
-generalisationError = mempty
-    -- Number of mistakes on _unknown_ test data
-
-lossfunctions :: Note
-lossfunctions = subsection "Loss functions" $ do
-    s ["The quality of the estimation is assessed using a ", term "loss function", " ", m (fun l x realsp ), " that measures the difference between the actual output for a given data point and the predicted output"]
-
-    lossFunctionDefinition
-    "Examples of loss functions: "
-    itemize $ do
-        item $ do
-            term "quadratic loss"
-            " (regression): "
-            m $ l `fn` "x" =: (pars $ ("y" `fn` "x" - f `fn` "x")) ^: 2
-        item $ do
-            term "0-1 loss"
-            " (classification): "
-            m $ l `fn` "x" =: mathbb "I" !: ("y" ≠ "x")
-        item $ do
-            term "exponential loss"
-            " (classification): "
-            m $ l `fn` "x" =: exp (- beta * y * (f `fn` "x"))
-            " for some "
-            m beta
-  where
-    x = "X"
-    y = "Y"
-    f = "f"
-    l = "l" !: f
-
-lossFunctionDefinition :: Note
-lossFunctionDefinition = de $ mempty
-    -- s ["Given a ", learningProblem
-    -- s ["A ", lossFunction', " is a function
 
 taxonomyOfData :: Note
 taxonomyOfData = subsection "Taxonomy of data" $ do
@@ -178,3 +120,75 @@ transformationInvariances = subsection "Transformation Invariances" $ do
     c = "c"
 
 
+learningProblemSS :: Note
+learningProblemSS = subsection "Learning problems" $ do
+    learningProblemDefinition
+    learningProblemExamples
+
+learningProblemDefinition :: Note
+learningProblemDefinition = de $ do
+    lab learningProblemDefinitionLabel
+    lab predictorDefinitionLabel
+    lab featureDefinitionLabel
+    lab dependentVariableDefinitionLabel
+    lab responseDefinitionLabel
+    s ["Given a set of ", dataPoint, "s in an ", inputSpace, " ", m mmis_, ", all tagged with a value in a certain ", outputSpace, " ", m mmos_, ", we search a ", function, " ", m $ fun f mmis_ mmos_ , " that accurately predicts the ", outputFeature, " corresponding to the ", inputFeature, "s of new ", dataPoint, "s"]
+    s ["This is called a ", learningProblem']
+    s [dquoted "Inputs", " is what they are called in machine learning"]
+    s ["In statistical literature they are ofter called ", predictor', "s"]
+    s ["In pattern recognition, these are called ", feature', "s"]
+    s [dquoted "Outputs", " are called ", dependentVariable', "s in statistics and ", response, "s in pattern recognition"]
+    s ["The ", measurementSpace', " is the tuple ", m (tuple mmis_ mmos_)]
+  where
+    f = "f"
+
+trainingAndTestSets :: Note
+trainingAndTestSets = de $ do
+    lab trainingDataDefinitionLabel
+    lab testDataDefinitionLabel
+    lab validationDataDefinitionLabel
+    s ["To find such a ", function, ", the set of ", dataPoint, "s is split into three sets"]
+    itemize $ do
+        item $ trainingData'
+        item $ validationData'
+        item $ testData'
+    s [the, trainingData, " is used to find such a ", function, ", the ", validationData, " is used to improve the process of finding that ", function, " and the ", testData, " is used to assess how good the ", function, " is at prediction"]
+
+learningProblemExamples :: Note
+learningProblemExamples = mempty
+
+lossFunctionSS :: Note
+lossFunctionSS = subsection "Loss functions" $ do
+    lossFunctionDefinition
+    lossFunctionExamples
+
+lossFunctionDefinition :: Note
+lossFunctionDefinition = de $ do
+    s ["Given a ", learningProblem, " with ", measurementSpace, " ", m mms_, " and a prediction function ", m "f"]
+    s ["A ", lossFunction', " is a ", distanceFunction_, " ", m $ fun2 lf_ mmos_ mmos_ realsp, " on the ", outputSpace]
+    s ["It is used to measure how far predictions are off from the real output"]
+
+lossFunctionExamples :: Note
+lossFunctionExamples = do
+    let (x, y) = ("x", "y")
+    ex $ do
+        s [the, quadraticLoss', " ", function]
+        ma $ func2 lf_ reals reals realsp x y $ (pars $ (y - x)) ^: 2
+    ex $ do
+        s [the, term "0-1 loss", " ", function]
+        ma $ func2 lf_ mmos_ mmos_ (ccint 0 1 ⊆ realsp) x y $ mathbb "I" !: (x ≠ y)
+    ex $ do
+        s [the, exponentialLoss', " ", function, " with parameter ", m beta]
+        let sp = setofs [-1, 1]
+        ma $ func2 lf_ sp sp realsp x y $ exp (- beta * x * y)
+
+trainingErrorDefinition :: Note
+trainingErrorDefinition = de $ do
+    lab trainingErrorDefinitionLabel
+    s [the, trainingError', " is the sum of the losses over the training set"]
+    -- TODO define training/test set first
+    -- Number of errors on training data
+
+generalisationErrorDefinition :: Note
+generalisationErrorDefinition = mempty
+    -- Number of mistakes on _unknown_ test data
