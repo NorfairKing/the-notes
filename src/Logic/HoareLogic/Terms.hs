@@ -30,3 +30,8 @@ makeDefs [
     , "free variable"
     , "modify"
     ]
+
+makeDe "Forward Assignment"
+makeEx "Loop rule"
+makeThm "Empty heap separating conjunction"
+makeEx "Separation Logic Program"

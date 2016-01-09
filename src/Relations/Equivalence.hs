@@ -2,20 +2,17 @@ module Relations.Equivalence where
 
 import           Notes
 
-import           Relations.Basics            (symmetric_)
-import           Relations.Preorders         (preorder)
+import           Logic.PropositionalLogic.Macro
+
+import           Relations.Basics.Terms
+import           Relations.Preorders.Macro
+import           Relations.Preorders.Terms
 
 import           Relations.Equivalence.Macro
-import           Relations.Preorders.Macro
+import           Relations.Equivalence.Terms
 
-makeDefs [
-      "equivalence relation"
-    ]
-
-equivalenceRelations :: Note
-equivalenceRelations = note "equivalence-relations" $ do
-    section "Equivalence Relations"
-
+equivalenceRelationS :: Note
+equivalenceRelationS = section "Equivalence Relations" $ do
     equivalenceRelationDefinition
     equivalenceClasses
 
@@ -25,19 +22,17 @@ equivalenceRelationDefinition = de $ do
     s ["A ", symmetric_, " ", preorder, " is called an ", equivalenceRelation']
 
 equivalenceClasses :: Note
-equivalenceClasses = do
-  subsection "Equivalence Classes"
+equivalenceClasses = subsection "Equivalence Classes" $ do
+    equivalenceClassDefinition
 
-  equivalenceClassDefinition
+    totheorem "The equivalence class of an element contains that element"
+    totheorem "If two elements are equivalent, then their equivalence classes are equal"
 
-  totheorem "The equivalence class of an element contains that element"
-  totheorem "If two elements are equivalent, then their equivalence classes are equal"
+    inducedEquivalenceRelation
 
-  inducedEquivalenceRelation
-
-  quotientSetDefinition
-  totheorem "The quotient set is a partition"
-  totheorem "A partition induces an equivalence relation"
+    quotientSetDefinition
+    totheorem "The quotient set is a partition"
+    totheorem "A partition induces an equivalence relation"
 
 
 equivalenceClass :: Note

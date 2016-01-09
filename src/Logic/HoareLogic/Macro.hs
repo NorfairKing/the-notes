@@ -11,9 +11,8 @@ import           Macro.Math
 import           Macro.MetaMacro
 import           Macro.Text
 
-
 import           Functions.Application.Macro
-import           Macro.Logic.Macro
+import           Logic.AbstractLogic.Macro
 
 -- * Program states
 
@@ -85,8 +84,8 @@ lass = between ":="
 freevars :: Note ->  Note
 freevars = app "FV"
 
-modifies :: Note -> Note
-modifies = app "modifies"
+mods :: Note -> Note
+mods = app "mods"
 
 -- * Conditionals
 

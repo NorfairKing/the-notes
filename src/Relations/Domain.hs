@@ -2,26 +2,22 @@ module Relations.Domain where
 
 import           Notes
 
-import           Relations.Basics       (relation)
+import           Logic.FirstOrderLogic.Macro
 
 import           Relations.Basics.Macro
-import           Relations.Domain.Macro
+import           Relations.Basics.Terms
 
-makeDefs [
-      "domain"
-    , "image"
-    ]
+import           Relations.Domain.Macro
+import           Relations.Domain.Terms
 
 
 domainAndImage :: Note
-domainAndImage = note "domain-and-image" $ do
-  subsection "Domain and Image"
+domainAndImage = subsection "Domain and Image" $ do
+    domainDefinition
+    imageDefinition
 
-  domainDefinition
-  imageDefinition
-
-  domainIsInversesImage
-  imageIsInversesDomain
+    domainIsInversesImage
+    imageIsInversesDomain
 
 
 domainDefinition :: Note
@@ -49,34 +45,34 @@ imageDefinition = de $ do
 
 domainIsInversesImage :: Note
 domainIsInversesImage = thm $ do
-  s [the, domain, " of a ", relation, " is the image of its inverse"]
-  ma $ dom rel_ =: img (inv rel_)
+    s [the, domain, " of a ", relation, " is the image of its inverse"]
+    ma $ dom rel_ =: img (inv rel_)
 
-  proof $ align_
-    [
-      img (inv rel_)
-      & "" =: setcmpr y (te x $ tuple x y ∈ inv rel_)
-      , "" & "" =: setcmpr y (te x $ tuple x y ∈ setcmpr (tuple y x) (tuple x y ∈ rel_))
-      , "" & "" =: setcmpr x (te y $ tuple x y ∈ rel_)
-      , "" & "" =: dom rel_
-    ]
+    proof $ align_
+        [
+          img (inv rel_)
+          & "" =: setcmpr y (te x $ tuple x y ∈ inv rel_)
+          , "" & "" =: setcmpr y (te x $ tuple x y ∈ setcmpr (tuple y x) (tuple x y ∈ rel_))
+          , "" & "" =: setcmpr x (te y $ tuple x y ∈ rel_)
+          , "" & "" =: dom rel_
+        ]
   where
     x = "x"
     y = "y"
 
 imageIsInversesDomain :: Note
 imageIsInversesDomain = thm $ do
-  s [the, image, " of a ", relation, " is the ", domain, " of its inverse"]
-  ma $ img rel_ =: dom (inv rel_)
+    s [the, image, " of a ", relation, " is the ", domain, " of its inverse"]
+    ma $ img rel_ =: dom (inv rel_)
 
-  proof $ align_
-    [
-      dom (inv rel_)
-      & "" =: setcmpr x (te y $ tuple x y ∈ inv rel_)
-      , "" & "" =: setcmpr x (te y $ tuple x y ∈ setcmpr (tuple y x) (tuple x y ∈ rel_))
-      , "" & "" =: setcmpr y (te x $ tuple x y ∈ rel_)
-      , "" & "" =: img rel_
-    ]
+    proof $ align_
+        [
+          dom (inv rel_)
+          & "" =: setcmpr x (te y $ tuple x y ∈ inv rel_)
+          , "" & "" =: setcmpr x (te y $ tuple x y ∈ setcmpr (tuple y x) (tuple x y ∈ rel_))
+          , "" & "" =: setcmpr y (te x $ tuple x y ∈ rel_)
+          , "" & "" =: img rel_
+        ]
   where
     x = "x"
     y = "y"

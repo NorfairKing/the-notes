@@ -5,7 +5,6 @@ import           DataMining.MapReduce
 import           Notes
 
 dataMining :: Note
-dataMining = note "data-mining" $ do
-    chapter "Data Mining"
-    mapReduce
+dataMining = chapter "Data Mining" $ do
+    mapReduceS
     approximateRetrieval

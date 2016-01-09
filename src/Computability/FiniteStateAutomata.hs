@@ -2,29 +2,24 @@ module Computability.FiniteStateAutomata where
 
 import           Notes
 
+import           Computability.Symbols.Macro
+import           Functions.Application.Macro
+import           Functions.Basics.Macro
+import           Logic.FirstOrderLogic.Macro
+
 import           Computability.FiniteStateAutomata.Graph
 import           Computability.FiniteStateAutomata.Macro
 import           Computability.FiniteStateAutomata.Terms
---import           Computability.Languages.Macro
---import           Computability.Languages.Terms
-import           Computability.Symbols.Macro
---import           Computability.Symbols.Terms
-
-import           Functions.Application.Macro
-import           Functions.Basics.Macro
 
 finiteStateAutomata :: Note
-finiteStateAutomata = note "finite-state-automata" $ do
-    section "Finite state automata"
-    subsection "NFSA"
-    nonDeterministicFiniteStateAutomatonDefinition
-    nfsaExample
-    acceptanceDefinition
-    todo "language of NFSA"
-
-
-    subsection "DFSA"
-    deterministicFiniteStateAutomatonDefinition
+finiteStateAutomata = section "Finite state automata" $ do
+    subsection "NFSA" $ do
+        nonDeterministicFiniteStateAutomatonDefinition
+        nfsaExample
+        acceptanceDefinition
+        todo "language of NFSA"
+    subsection "DFSA" $ do
+        deterministicFiniteStateAutomatonDefinition
 
 
 nonDeterministicFiniteStateAutomatonDefinition :: Note
@@ -96,5 +91,5 @@ acceptanceDefinition = do
 
 deterministicFiniteStateAutomatonDefinition :: Note
 deterministicFiniteStateAutomatonDefinition = mempty
-  -- s ["A ", term "deterministic finite state automaton", " (", term "DFSA", ") is a tuple "]
+    -- s ["A ", term "deterministic finite state automaton", " (", term "DFSA", ") is a tuple "]
 

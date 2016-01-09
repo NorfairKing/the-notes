@@ -2,16 +2,14 @@ module Computability.Symbols where
 
 import           Notes
 
-import           Sets.Basics                 (set)
-
-import           Functions.BinaryOperation   (associative_)
+import           Functions.BinaryOperation.Terms
+import           Sets.Basics.Terms
 
 import           Computability.Symbols.Macro
 import           Computability.Symbols.Terms
 
 symbols :: Note
-symbols = note "symbols-and-strings" $ do
-    section "Symbols and strings"
+symbols = section "Symbols and strings" $ do
     symbolDefinition
     alphabetDefinition
     stringDefinition

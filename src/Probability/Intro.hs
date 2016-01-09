@@ -1,41 +1,40 @@
-module Probability.Intro (
-    intro
-
-  , bernoulliExperimentDefinitionLabel
-  ) where
+module Probability.Intro where
 
 import           Notes
+
+import           Sets.Basics.Terms
+
+import           Probability.Intro.Macro
+import           Probability.Intro.Terms
 
 intro :: Note
 intro = note "intro" introBody
 
 introBody :: Note
 introBody = do
-  experimentDefinition
-  universeDefinition
-  eventDefinition
-  bernoulliExperimentDefinition
+    experimentDefinition
+    universeDefinition
+    eventDefinition
+    bernoulliExperimentDefinition
 
 
 experimentDefinition :: Note
 experimentDefinition = de $ do
-  s ["A ", term "stochastic experiment", " is an ", ix "experiment", " of which the outcome is not known beforehand"]
+    s ["A ", stochasticExperiment', " is an ", experiment', " of which the outcome is not known beforehand"]
 
 universeDefinition :: Note
 universeDefinition = de $ do
-  s ["The ", term "universe", " of a ", ix "stochastic experiment", " is the set of all possible outcomes"]
-  s ["It is de:: Noted as ", m pruniv]
+    lab universeDefinitionLabel
+    s ["The ", universe', " of a ", stochasticExperiment', " is the set of all possible outcomes"]
+    s ["It is denoted as ", m univ_]
 
 eventDefinition :: Note
 eventDefinition = de $ do
-  s ["An ", term "event", " of a ", ix "stochastic experiment", " is a ", ix "subset", " of the ", ix "univers"]
-
-bernoulliExperimentDefinitionLabel :: Label
-bernoulliExperimentDefinitionLabel = Label Definition "bernoulli-experiment"
+    s ["An ", event', " of a ", stochasticExperiment', " is a ", subset, " of the ", universe]
 
 bernoulliExperimentDefinition :: Note
 bernoulliExperimentDefinition = de $ do
-  lab bernoulliExperimentDefinitionLabel
-  s ["A ", term "Bernoulli experiment", " is a ", ix "stochastic experiment", " with only two possible outcomes"]
+    lab bernoulliExperimentDefinitionLabel
+    s ["A ", bernoulliExperiment', " is a ", stochasticExperiment, " with only two possible outcomes"]
 
 

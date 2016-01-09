@@ -1,2 +1,2 @@
 source bin/lib.sh
-check "Build" make bin
+check "Build" stack build --jobs=8

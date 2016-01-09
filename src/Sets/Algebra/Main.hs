@@ -1,12 +1,4 @@
-module Sets.Algebra.Main (
-    algebra
-
-  , symmetricDifferenceITOUnionAndIntersectionLabel
-  , unionComplementaryLawLabel
-  , setDifferenceEquivalentDefinitionLabel
-  , firstLawOfDeMorganLabel
-  , secondLawOfDeMorganLabel
-  ) where
+module Sets.Algebra.Main where
 
 import           Notes
 
@@ -17,8 +9,7 @@ import           Sets.Algebra.Union
 
 
 algebra :: Note
-algebra = note "algebra" $ do
-    section "The algebra of sets"
+algebra = section "The algebra of sets" $ do
     setUnion
     setIntersection
     setDifference

@@ -1,9 +1,9 @@
 module Notes (
-    module Types
-  , module Notes
-  , module Macro
-  , module TH
-  ) where
+       module Types
+     , module Notes
+     , module Macro
+     , module TH
+     ) where
 
 import           Macro
 import           Prelude

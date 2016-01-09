@@ -7,7 +7,8 @@ import           Control.Monad.Reader (asks)
 import           Prelude              (return)
 
 import qualified Data.Text            as T
-import           System.ShQQ          (sh)
+
+import           Development.GitRev
 
 import           Notes
 
@@ -16,7 +17,6 @@ titlepageE = liftL $ TeXEnv "titlepage" []
 
 myTitlePage :: Note
 myTitlePage = do
-    commit <- liftIO $ [sh| git rev-parse HEAD |]
     titlepageE $ do
         raw "\n"
         comm1 "thispagestyle" "empty"
@@ -58,7 +58,7 @@ myTitlePage = do
                     lnbk
                     "Compiled" & commS "today"
                     lnbk
-                    "Commit" & raw (T.pack commit)
+                    "Commit" & raw (T.pack $(gitHash))
                     lnbk
                 comm1 "vspace" $ raw "0.5\\textheight"
 

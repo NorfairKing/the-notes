@@ -30,7 +30,7 @@ linedTable header notes = m $ array (Just Center) specs $ do
     hline
   where
     specs :: [TableSpec]
-    specs = VerticalLine : P.concat (P.replicate (P.length notes) [CenterColumn, VerticalLine])
+    specs = VerticalLine : P.concat (P.replicate (P.length header) [CenterColumn, VerticalLine])
 
     row :: [Note] -> Note
     row [] = mempty

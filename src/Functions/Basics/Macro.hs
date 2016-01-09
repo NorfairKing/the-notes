@@ -2,7 +2,7 @@ module Functions.Basics.Macro where
 
 import           Types
 
-import           Macro.Math
+import           Macro.Arrows
 import           Macro.Tuple
 
 import           Functions.Application.Macro
@@ -39,6 +39,14 @@ fun m n o = m <> negspace <> ":" <> raw "\\, " <> funt n o
     negspace :: Note
     negspace = commS "kern" <> raw "-2pt"
 
+-- | Shorthand function definition
+fun2 :: Note -- ^ Name
+     -> Note -- ^ Corange, part 1
+     -> Note -- ^ Corange, part 2
+     -> Note -- ^ Codomain
+     -> Note
+fun2 m n1 n2 = fun m (n1 ⨯ n2)
+
 -- | Longhand function definition
 func :: Note -- ^ Name
      -> Note -- ^ Corange
@@ -57,7 +65,7 @@ func2 :: Note -- ^ Name
       -> Note -- ^ Element, part 2
       -> Note -- ^ Image
       -> Note
-func2  m n1 n2 o p1 p2 = func m (n1 ⨯ n2) o (tuple p1 p2)
+func2 m n1 n2 o p1 p2 = func m (n1 ⨯ n2) o (tuple p1 p2)
 
 -- * Domain
 

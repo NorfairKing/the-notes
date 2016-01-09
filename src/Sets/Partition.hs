@@ -2,12 +2,14 @@ module Sets.Partition where
 
 import           Notes
 
-import           Sets.Basics (set)
+import           Logic.FirstOrderLogic.Macro
+import           Logic.PropositionalLogic.Macro
+import           Sets.Basics.Terms
 
-makeDefs ["partition"]
+import           Sets.Partition.Terms
 
-partitions :: Note
-partitions = note "partition" $ do
+partitionS :: Note
+partitionS = note "partition" $ do
     partitionDefinition
 
 partitionDefinition :: Note

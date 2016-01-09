@@ -2,19 +2,15 @@ module Relations.Preorders where
 
 import           Notes
 
-import           Relations.Basics          (reflexive_, relation, transitive_)
+import           Relations.Basics.Terms
 
 import           Relations.Preorders.Macro
-
-makeDefs [
-      "preorder"
-    ]
+import           Relations.Preorders.Terms
 
 preorders :: Note
-preorders = note "preorders" $ do
-  section "Preorders"
+preorders = section "Preorders" $ do
 
-  preorderDefinition
+    preorderDefinition
 
 preorderDefinition :: Note
 preorderDefinition = de $ do

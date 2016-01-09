@@ -2,6 +2,7 @@ module Macro.Math where
 
 import           Types
 
+import           Macro.Arrows
 import           Macro.Index
 import           Macro.MetaMacro
 import           Macro.Text      (commaSeparated)
@@ -20,24 +21,6 @@ brac = autoBraces
 
 sqbrac :: Note -> Note
 sqbrac = autoSquareBrackets
-
-leftRightarrow :: Note
-leftRightarrow = comm0 "Leftrightarrow"
-
-leftrightarrow :: Note
-leftrightarrow = comm0 "leftrightarrow"
-
-leftarrow :: Note
-leftarrow = comm0 "leftarrow"
-
-leftArrow :: Note
-leftArrow = comm0 "Leftarrow"
-
-rightarrow :: Note
-rightarrow = comm0 "rightarrow"
-
-rightArrow :: Note
-rightArrow = comm0 "Rightarrow"
 
 mod :: Note -> Note -> Note
 mod = between $ text " mod "
@@ -73,50 +56,6 @@ overset = comm2 "overset"
 underset :: Note -> Note -> Note
 underset = comm2 "underset"
 
--- Logic
-mand :: Note -> Note -> Note
-mand = wedge
-
-(&:) :: Note -> Note -> Note
-(&:) = mand
-
-mor :: Note -> Note -> Note
-mor = vee
-
-(|:) :: Note -> Note -> Note
-(|:) = mor
-
-iffsign :: Note
-iffsign = leftRightarrow
-
-iff :: Note -> Note -> Note
-iff m n = m <> iffsign <> n
-
--- C-k ==
-(⇔) :: Note -> Note -> Note
-(⇔) = iff
-
-impliessign :: Note
-impliessign = rightArrow
-
-mimplies :: Note -> Note -> Note
-mimplies m n = m <> impliessign <> n
-
-
--- C-k =>
-(⇒) :: Note -> Note -> Note
-(⇒) = mimplies
-
-proof :: Note -> Note
-proof = liftL $ TeXEnv "proof" []
-
-subseteqsign :: Note
-subseteqsign = comm0 "subseteq"
-
-subseteq :: Note -> Note -> Note
-subseteq m n = m <> subseteqsign <> n
-
-
 -- Intervals
 interval :: LaTeXC l => [TeXArg] -> l -> l -> l
 interval args = liftL2 $ (\l1 l2 -> TeXComm "interval" (args ++ [FixArg l1, FixArg l2]))
@@ -141,8 +80,8 @@ sequ m n = pars m !: n
 --[ Exam questions
 examq :: Note -> Note -> Note -> Note
 examq s m n = do
-  textbf $ "Exam Question: " <> m <> " @ " <> s <> ", " <> n
-  newline
+    textbf $ "Exam Question: " <> m <> " @ " <> s <> ", " <> n
+    newline
 
 
 --[ Sums
@@ -216,12 +155,36 @@ idempotent = ix "idempotent"
 distributive :: Note
 distributive = ix "distributive"
 
+sequence :: Note
+sequence = ix "sequence"
+
+finite :: Note
+finite = ix "finite"
+
+infinite :: Note
+infinite = ix "infinite"
+
+differentiable :: Note
+differentiable = ix "differentiable"
+
+localMinimum :: Note
+localMinimum = ix "local minimum"
+
+localMaximum :: Note
+localMaximum = ix "local maximum"
+
+mean :: Note
+mean = ix "mean"
+
+
 -- Proofs
+proof :: Note -> Note
+proof = liftL $ TeXEnv "proof" []
+
 np :: Note
 np = do
-  newline
-  textit "no proof"
-  newline
+    noindent
+    textit "no proof"
 
 
 -- Absolute value
@@ -241,9 +204,26 @@ sqrt = tsqrt Nothing
 nrt :: Note -> Note -> Note
 nrt n = tsqrt (Just n)
 
--- Extrema
+-- * Extrema
+-- | Maximum accross value
 max :: Note -> Note -> Note
-max sub body = commS "max" !: sub <> body
+max sub body = commS "max" .!: sub <> body
+
+-- | Maximum of
+maxof :: Note -> Note
+maxof body = commS "max" <> body
+
+-- | Minimum accross value
+min :: Note -> Note -> Note
+min sub body = commS "min" .!: sub <> body
+
+-- | Minimum of
+minof :: Note -> Note
+minof body = commS "min" <> body
+
+-- | Arguments at minumum
+argmin :: Note -> Note -> Note
+argmin arg body = underset arg ("arg" <> commS "," <> commS "min") <> body
 
 -- Infinity
 minfty :: Note
@@ -285,3 +265,31 @@ lst n m = commaSeparated [n, dotsc, m]
 
 list :: Note -> Note -> Note -> Note
 list n m o = commaSeparated [n, m, dotsc, o]
+
+-- Combinatorics
+choose :: Note -> Note -> Note
+choose = comm2 "binom"
+
+-- | Pi
+pi :: Note
+pi = comm0 "pi"
+
+-- | Sign
+sign :: Note -> Note
+sign n = "sign" <> autoParens n
+
+-- | Plus-or-minus
+pm :: Note -> Note
+pm n = comm0 "pm" <> n
+
+-- | Plus-or-minus
+mp :: Note -> Note
+mp n = comm0 "mp" <> n
+
+-- | Gradient
+grad :: Note -> Note
+grad n = comm0 "nabla" <> n
+
+-- | Partial derivative
+partial :: Note -> Note
+partial n = comm0 "partial" <> n

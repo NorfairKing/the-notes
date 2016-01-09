@@ -2,17 +2,13 @@ module Sets.PointedSets where
 
 import           Notes
 
+import           Sets.Basics.Terms
+
 import           Sets.PointedSets.Macro
-
-import           Sets.Basics            (element, set)
-
-makeDefs [
-    "pointed set"
-    ]
+import           Sets.PointedSets.Terms
 
 pointedSets :: Note
-pointedSets = note "pointed-set" $ do
-    section "Pointed Sets"
+pointedSets = section "Pointed Sets" $ do
     pointedSetDefinition
 
 pointedSetDefinition :: Note

@@ -5,6 +5,7 @@ module Logic.SeparationLogic.Macro (
 
 import           Functions.Application.Macro
 import qualified Logic.HoareLogic.Macro      as HL
+import           Macro.Arrows
 import           Macro.BussProofs
 import           Macro.Math
 import           Macro.MetaMacro
