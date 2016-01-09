@@ -7,7 +7,6 @@ import           Functions.Basics.Terms
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
 import           Sets.Algebra.Complement.Terms
-import           Sets.Algebra.Difference.Terms
 import           Sets.Basics.Terms
 
 import           Probability.Intro.Macro

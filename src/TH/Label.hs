@@ -3,11 +3,7 @@ module TH.Label where
 import           Types
 import           Utils
 
-import           Prelude                    (Char, concat, concatMap, fmap, map,
-                                             return)
-
-import           Data.Char                  (toLower, toUpper)
-import           Data.List                  (intercalate)
+import           Prelude
 
 import           Language.Haskell.TH
 import           Language.Haskell.TH.Syntax (sequenceQ)

@@ -8,10 +8,6 @@ import           Utils
 
 import           Prelude
 
-import           Data.Char                  (toLower, toUpper)
-import           Data.List                  (intercalate)
-import           Data.String
-
 import           Language.Haskell.TH
 import           Language.Haskell.TH.Syntax (sequenceQ)
 

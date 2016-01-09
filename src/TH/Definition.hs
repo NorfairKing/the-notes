@@ -6,11 +6,7 @@ module TH.Definition (
 import           Types
 import           Utils
 
-import           Prelude                    (Char, concat, concatMap, fmap, map,
-                                             return)
-
-import           Data.Char                  (toLower, toUpper)
-import           Data.List                  (intercalate)
+import           Prelude
 
 import           Language.Haskell.TH
 import           Language.Haskell.TH.Syntax (sequenceQ)
@@ -54,18 +50,6 @@ makeDef concept = do
 
     labelDefName :: Name
     labelDefName = mkName $ baseName ++ "DefinitionLabel"
-
-    definitionName :: Name
-    definitionName = mkName "Definition"
-
-    labelConceptLit :: Exp
-    labelConceptLit = LitE $ StringL $ kebabCase $ sanitize concept
-
-    labelSig :: Dec
-    labelSig = SigD labelDefName (ConT ''Label)
-
-    labelFun :: Dec
-    labelFun = FunD labelDefName [Clause [] (NormalB $ AppE (AppE (ConE 'MkLabel) (ConE definitionName)) labelConceptLit) []]
 
     refName :: Name
     refName = mkName $ baseName ++ "_"
