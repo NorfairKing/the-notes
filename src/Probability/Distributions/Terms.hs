@@ -6,7 +6,7 @@ makeDefs [
       "discrete uniform distribution"
     , "Bernouilli distribution"
     , "Gaussian distribution"
-    , "Normal distribution"
+    , "normal distribution"
     , "probability of success"
     , "binomial distribution"
     ]

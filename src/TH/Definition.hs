@@ -27,9 +27,6 @@ makeDef concept = do
     conceptLit :: Exp
     conceptLit = LitE $ StringL $ concept
 
-    conceptLit_ :: Exp
-    conceptLit_ = LitE $ StringL $ concept ++ " "
-
     noteName :: Name
     noteName = mkName "Note"
 
@@ -48,11 +45,9 @@ makeDef concept = do
                 []
                 (
                   NormalB $
-                      AppE
-                        (AppE
-                          (VarE $ mkName "term_")
-                          conceptLit_)
-                        conceptLit
+                    AppE
+                      (VarE $ mkName "term")
+                      conceptLit
                 )
                 []
             ]
@@ -72,11 +67,9 @@ makeDef concept = do
               []
               (
                 NormalB $
-                  AppE
-                    (AppE
-                      (VarE $ mkName "ix_")
-                      conceptLit_)
-                    conceptLit
+                  (AppE
+                    (VarE $ mkName "ix")
+                    conceptLit)
               )
               []
           ]

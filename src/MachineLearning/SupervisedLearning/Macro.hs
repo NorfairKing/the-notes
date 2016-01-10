@@ -37,6 +37,10 @@ hyp_ = "h"
 pred :: Note -> Note
 pred = fn hyp_
 
+-- | Concrete hypothesis class
+hypc_ :: Note
+hypc_ = mathcal "H"
+
 -- * Loss functions
 
 -- | Concrete loss function

@@ -83,6 +83,8 @@ mn_ = mu
 
 
 -- * Variance
+
+-- | Variance
 var :: Note -> Note
 var n = "Var" <> sqbrac n
 
@@ -90,4 +92,8 @@ var n = "Var" <> sqbrac n
 var_ :: Note
 var_ = sigma
 
+-- * Standard deviation
 
+-- | Concrete standard deviation
+sd_ :: Note
+sd_ = var_ ^: 2

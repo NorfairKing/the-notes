@@ -102,7 +102,8 @@ realVectorInproduct = lainprod
 
 -- | Dotproduct
 (/.\) :: Note -> Note -> Note
-(/.\) = binop $ comm0 "cdot"
+(/.\) = binop $ negsp <> comm0 "cdot" <> negsp
+  where negsp = commS "kern" <> raw "-2px"
 
 -- | Addition of euclidean vectors
 (/+\) :: Note -> Note -> Note

@@ -33,6 +33,11 @@ spec = do
               , ("city"         , "cities")
               , ("daisy"        , "daisies")
             ]
+        it "works for these examples that need \"ses\"" $ pluralExamples
+            [
+                ("hypothesis"   , "hypotheses")
+              , ("parenthesis"  , "parentheses")
+            ]
         it "works for these irregulars" $ pluralExamples
             [
                 ("woman"      , "women")

@@ -42,21 +42,25 @@ learningProblemSS = subsection "Learning problems" $ do
     learningProblemExamples
 
 learningProblemDefinition :: Note
-learningProblemDefinition = de $ do
-    lab learningProblemDefinitionLabel
-    lab predictorDefinitionLabel
-    lab featureDefinitionLabel
-    lab dependentVariableDefinitionLabel
-    lab responseDefinitionLabel
-    lab hypothesisDefinitionLabel
-    s ["Given a ", set, " of ", dataPoints', ", also called a ", dataset', " in an ", inputSpace', " ", m mmis_, ", all tagged with a value in a certain ", outputSpace', " ", m mmos_, ", we search a ", function, " ", m $ fun f mmis_ mmos_ , " that accurately predicts the ", outputFeature', " corresponding to the ", inputFeatures', " of new ", dataPoints]
-    s ["Such a function is called a ", hypothesis']
-    s [dquoted "Inputs", " is what they are called in machine learning"]
-    s ["In statistical literature they are ofter called ", predictors']
-    s ["In pattern recognition, these are called ", features']
-    s [dquoted "Outputs", " are called ", dependentVariables', " in statistics and ", responses, " in pattern recognition"]
-    s ["The ", measurementSpace', " is the tuple ", m (tuple mmis_ mmos_)]
-    s ["The problem of finding a ", hypothesis, " given a ", dataset, " is called a ", learningProblem']
+learningProblemDefinition = do
+    de $ do
+        lab learningProblemDefinitionLabel
+        lab predictorDefinitionLabel
+        lab featureDefinitionLabel
+        lab dependentVariableDefinitionLabel
+        lab responseDefinitionLabel
+        lab hypothesisDefinitionLabel
+        s ["Given a ", set, " of ", dataPoints', ", also called a ", dataset', " in an ", inputSpace', " ", m mmis_, ", all tagged with a value in a certain ", outputSpace', " ", m mmos_, ", we search a ", function, " ", m $ fun f mmis_ mmos_ , " that accurately predicts the ", outputFeature', " corresponding to the ", inputFeatures', " of new ", dataPoints]
+        s ["Such a function is called a ", hypothesis']
+        s [dquoted "Inputs", " is what they are called in machine learning"]
+        s ["In statistical literature they are ofter called ", predictors']
+        s ["In pattern recognition, these are called ", features']
+        s [dquoted "Outputs", " are called ", dependentVariables', " in statistics and ", responses, " in pattern recognition"]
+        s ["The ", measurementSpace', " is the tuple ", m (tuple mmis_ mmos_)]
+        s ["The problem of finding a ", hypothesis, " given a ", dataset, " is called a ", learningProblem']
+    nte $ do
+        s ["In most ", supervisedLearning, " techniques, only one set of ", hypotheses, " is considered"]
+        s ["This is called the ", hypothesisClass', " for that technique"]
   where
     f = "f"
 
@@ -218,7 +222,7 @@ conditionalExpectedRiskDefinition = de $ do
 totalExpectedRiskDefinition :: Note
 totalExpectedRiskDefinition = de $ do
     lab totalExpectedRiskDefinitionLabel
-    s [the, totalExpectedRisk, " of a ", hypothesis, m hyp_, " with respect to a ", lossFunction, m lf_, " is the ", expectedValue, " of the ", conditionalExpectedRisk, " over all possible ", distributions, " of ", mmis_]
+    s [the, totalExpectedRisk', " of a ", hypothesis, m hyp_, " with respect to a ", lossFunction, m lf_, " is the ", expectedValue, " of the ", conditionalExpectedRisk, " over all possible ", distributions, " of ", mmis_]
     ma $ ter_ === ev cer_ =: int_ mmis_ (cer_ * prob mmis_) mmis_
 
 errorSS :: Note
@@ -237,13 +241,17 @@ trainingErrorDefinition = de $ do
         (1 /: setsize trds_) * sumcmp (tuple x y ∈ trds_) (loss (pred x) y)
 
 testErrorDefinition :: Note
-testErrorDefinition = de $ do
-    lab testErrorDefinitionLabel
-    s ["Given a ", learningProblem, " with ", measurementSpace, " ", m mms_, ", ", dataset, " ", m ds_, ", a ", lossFunction, " ", m lf_, " and a ", hypothesis, " ", m hyp_]
-    s [the, testError', " is the ", mean, " of the losses over the ", testData]
-    ma $ do
-        let (x, y) = ("x", "y")
-        (1 /: setsize tds_) * sumcmp (tuple x y ∈ tds_) (loss (pred x) y)
+testErrorDefinition = do
+    de $ do
+        lab testErrorDefinitionLabel
+        s ["Given a ", learningProblem, " with ", measurementSpace, " ", m mms_, ", ", dataset, " ", m ds_, ", a ", lossFunction, " ", m lf_, " and a ", hypothesis, " ", m hyp_]
+        s [the, testError', " is the ", mean, " of the losses over the ", testData]
+        ma $ do
+            let (x, y) = ("x", "y")
+            (1 /: setsize tds_) * sumcmp (tuple x y ∈ tds_) (loss (pred x) y)
+    nte $ do
+        s ["Make sure to distinguish between ", testError, and, totalExpectedRisk]
+        s [the, testError, " only empirically estimates the expected risk"]
 
 
 generalisationErrorDefinition :: Note

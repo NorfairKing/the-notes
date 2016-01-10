@@ -8,7 +8,7 @@ import           Macro.MetaMacro
 import           Macro.Text      (commaSeparated)
 
 m :: Note -> Note
-m = math
+m n = math n <> " "
 
 ma :: Note -> Note
 ma = mathDisplay
@@ -175,6 +175,15 @@ localMaximum = ix "local maximum"
 
 derivative :: Note
 derivative = ix "derivative"
+
+homogenous :: Note
+homogenous = ix "homogenous"
+
+matrix :: Note
+matrix = ix "matrix"
+
+additive :: Note
+additive = ix "additive"
 
 -- Proofs
 proof :: Note -> Note

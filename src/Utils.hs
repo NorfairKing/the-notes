@@ -60,12 +60,14 @@ kebabCase str = intercalate "-" $ words $ map toLower str
 
 pluralOf :: String -> String
 pluralOf s | isIrregular = fromJust $ lookup s irregulars
+           | needsSes    = (init . init $ s) ++ "es"
            | needsEs     = s ++ "es"
            | needsIes    = init s ++ "ies"
            | otherwise   = s ++ "s"
   where
     isIrregular = s `elem` (map fst irregulars)
     needsEs = any (`isSuffixOf` s) ["s","x","z","ch","sh"]
+    needsSes = "sis" `isSuffixOf` s
     needsIes = last s == 'y' && isConsonant (last $ init s)
     isVowel :: Char -> Bool
     isVowel = (`elem` ("aeiouy" :: String))
