@@ -26,12 +26,13 @@ randomVariableS = section "Random Variables" $ do
     distributionFunctionSS
     quantileFunctionSS
     typesOfRandomVariables
+    momentsOfRandomVariables
 
 psDec :: Note
 psDec = s ["Let ", m prsp_, " be a ", probabilitySpace]
 
 introS :: Note
-introS = section "Intro" $ do
+introS = subsection "Intro" $ do
     borealsDefinition
     randomVariableDefinition
     saMeasureDefinition
@@ -247,7 +248,7 @@ continuousRandomVariableDefinition = de $ do
   where x = "x"
 
 prdsDec :: Note
-prdsDec = s ["Let ", m df_, " be a ", distributionFunction, " of a ", continuous, " ", randomVariable, " ", m rv_, " in a ", probabilitySpace, " ", m prsp_, " that is ", continuous, " with a ", continuous, " derivative"] -- FIXME index derivative
+prdsDec = s ["Let ", m df_, " be a ", distributionFunction, " of a ", continuous, " ", randomVariable, " ", m rv_, " in a ", probabilitySpace, " ", m prsp_, " that is ", continuous, " with a ", continuous, derivative]
 
 probabilityDensitySSS :: Note
 probabilityDensitySSS = note "density" $ do
@@ -301,10 +302,40 @@ intervalOpenCloseDistribution = thm $ do
     b = "b"
 
 
+momentsOfRandomVariables :: Note
+momentsOfRandomVariables = subsection "Moments of random variables" $ do
+    expectedValueDefinition
+    varianceDefinition
+    standardDeviationDefinition
 
+expectedValueDefinition :: Note
+expectedValueDefinition = de $ do
+    lab expectedValueDefinitionLabel
+    s ["Let ", m df_, " be a ", distributionFunction, " of a ", continuous, " ", randomVariable, m rv_, " in a ", probabilitySpace, m prsp_, " that is ", continuous, " with a ", continuous, derivative]
+    s [the, expectedValue', " of ", m rv_, " is defined as follows"]
+    ma $ ev rv_ === int_ univ_ rv_ prm_ -- TODO two cases
+    s ["For a ", discrete, randomVariable, m rv_, " this comes down to the following"]
+    ma $ do
+        let (i, p, x) = ("i", "p", "x")
+        ev rv_ =: sumcmp i (x !: i * p !: i)
+    s ["For a ", continuous, randomVariable, m rv_, " this comes down to the following"]
+    ma $ do
+        let x = "x"
+        ev rv_ =: int minfty pinfty (x * prds x) x
 
+varianceDefinition :: Note
+varianceDefinition = de $ do
+    lab varianceDefinitionLabel
+    s ["Let ", m rv_, " be a ", randomVariable]
+    s [the, variance', " of ", m rv_, " is defined as follows"]
+    ma $ ev $ (rv_ - ev rv_) ^ 2
 
-
+standardDeviationDefinition :: Note
+standardDeviationDefinition = de $ do
+    lab standardDeviationDefinitionLabel
+    s ["Let ", m rv_, " be a ", randomVariable]
+    s [the, standardDeviation', " of ", m rv_, " is defined as the square root of the ", variance, " of ", m rv_]
+    ma $ sqrt $ var rv_
 
 
 

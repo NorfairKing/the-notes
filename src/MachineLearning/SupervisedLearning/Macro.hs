@@ -64,4 +64,32 @@ vds_ = ds_ !: "validation"
 tds_ :: Note
 tds_ = ds_ !: "test"
 
--- * Hypothesis
+-- * Risk
+
+-- ** Conditional expected risk
+
+-- | Risk function
+risk_ :: Note
+risk_ = "R"
+
+-- | Conditional expected risk, given:
+cer :: Note -- ^ Hypothesis
+    -> Note -- ^ Loss function
+    -> Note -- ^ Distribution of the input space
+    -> Note
+cer = fn3 risk_
+
+-- | Concrede conditional expected risk
+cer_ :: Note
+cer_ = cer hyp_ lf_ mmis_
+
+-- ** Total expected risk
+ter :: Note -- ^ Hypothesis
+    -> Note -- ^ Loss function
+    -> Note
+ter = fn2 risk_
+
+-- | Total expected risk
+ter_ :: Note
+ter_ = ter hyp_ lf_
+

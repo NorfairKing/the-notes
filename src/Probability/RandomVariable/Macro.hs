@@ -69,11 +69,25 @@ prq :: Note -> Note
 prq = app prqf
 
 -- * Expected value
-prev :: Note -> Note
-prev n = "E" <> sqbrac n
+ev :: Note -> Note
+ev n = "E" <> sqbrac n
 -- FIXME move this
 
+-- | Mean
+mn :: Note -> Note
+mn = ev
+
+-- | Concrete mean
+mn_ :: Note
+mn_ = mu
+
+
 -- * Variance
-prvar :: Note -> Note
-prvar n = "Var" <> sqbrac n
--- FIXME move this
+var :: Note -> Note
+var n = "Var" <> sqbrac n
+
+-- | Concrete variance
+var_ :: Note
+var_ = sigma
+
+

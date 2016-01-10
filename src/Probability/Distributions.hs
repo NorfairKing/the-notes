@@ -71,7 +71,7 @@ continuousDistributionSS = subsection "Continuous distributions" $ do
 
 gaussianDistributionDefinition :: Note
 gaussianDistributionDefinition = de $ do
-    s ["A ", gaussianDistribution', or, normalDistribution', " with parameters ", m mean_, " and ", m variance_, " is given by the following ", probabilityDensity]
+    s ["A ", gaussianDistribution', or, normalDistribution', " with parameters ", m mn_, " and ", m var_, " is given by the following ", probabilityDensity]
     ma $ do
         let x = "x"
-        prds x =: exp (- ((pars $ x - mean_) ^ 2) /: (2 * variance_ ^ 2)) /: (variance_ * sqrt (2 * pi))
+        prds x =: exp (- ((pars $ x - mn_) ^ 2) /: (2 * var_ ^ 2)) /: (var_ * sqrt (2 * pi))

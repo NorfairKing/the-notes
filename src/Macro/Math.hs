@@ -173,9 +173,8 @@ localMinimum = ix "local minimum"
 localMaximum :: Note
 localMaximum = ix "local maximum"
 
-mean :: Note
-mean = ix "mean"
-
+derivative :: Note
+derivative = ix "derivative"
 
 -- Proofs
 proof :: Note -> Note
@@ -250,23 +249,25 @@ llim m n o = (commS "lim" !: (m <> overset "<" rightarrow) <> n) <> o
 deriv :: Note -> Note -> Note
 deriv top to = ("d" <> commS ";" <> top) /: ("d" <> to)
 
--- Integrals
+-- * Integrals
 int :: Note -> Note -> Note -> Note -> Note
-int a b c dx = commS "int" !: a ^: b <> c <> commS "," <> dx
+int a b c dx = commS "int" .!: a .^: b <> c <> commS "," <> "d" <> dx
 
--- Cases
--- | Environment of unordered lists. Use 'item' to start each list item.
+int_ :: Note -> Note -> Note -> Note
+int_ a = int a ""
+
+-- | Cases
 cases :: LaTeXC l => l -> l
 cases = liftL $ TeXEnv "cases" []
 
--- Lists
+-- | Lists
 lst :: Note -> Note -> Note
 lst n m = commaSeparated [n, dotsc, m]
 
 list :: Note -> Note -> Note -> Note
 list n m o = commaSeparated [n, m, dotsc, o]
 
--- Combinatorics
+-- | Combination
 choose :: Note -> Note -> Note
 choose = comm2 "binom"
 

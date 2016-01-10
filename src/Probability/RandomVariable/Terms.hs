@@ -20,4 +20,8 @@ makeDefs [
     , "continuous distribution"
     , "probability density function"
     , "probability density"
+    , "expected value"
+    , "mean"
+    , "variance"
+    , "standard deviation"
     ]

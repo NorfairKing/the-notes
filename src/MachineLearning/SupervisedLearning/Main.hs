@@ -7,6 +7,11 @@ import           Functions.Basics.Macro
 import           Functions.Basics.Terms
 import           Functions.Distances.Terms
 import           Logic.FirstOrderLogic.Macro
+import           Probability.ConditionalProbability.Macro
+import           Probability.ProbabilityMeasure.Macro
+import           Probability.ProbabilityMeasure.Terms
+import           Probability.RandomVariable.Macro
+import           Probability.RandomVariable.Terms
 import           Relations.Domain.Terms
 import           Sets.Basics.Terms
 import           Sets.CarthesianProduct.Terms
@@ -25,6 +30,7 @@ supervisedLearningS = section "Supervized learning" $ do
     transformationInvariancesSS
     trainingAndTestSets
     lossFunctionSS
+    riskSS
     errorSS
 
     regressionS
@@ -194,9 +200,31 @@ lossFunctionExamples = do
         let sp = setofs [-1, 1]
         ma $ func2 lf_ sp sp realsp x y $ exp (- beta * x * y)
 
+riskSS :: Note
+riskSS = do
+    conditionalExpectedRiskDefinition
+    totalExpectedRiskDefinition
+
+conditionalExpectedRiskDefinition :: Note
+conditionalExpectedRiskDefinition = de $ do
+    lab conditionalExpectedRiskDefinitionLabel
+    s ["Given a ", learningProblem, " with ", measurementSpace, " ", m mms_, ", a ", hypothesis, " ", m hyp_, " and a ", lossFunction, " ", m lf_]
+    s ["Instead of looking at ", mmis_, and, mmos_," as ", sets, ", look at them now as ", randomVariables, " from which ", dataPoints, " are drawn"]
+    s ["The ", conditionalExpectedRisk', " of ", m hyp_, " with respect to ", m lf_, ", for a given distribution ", m mmis_, " of the ", inputSpace, " is defined as follows"]
+    ma $ cer_ === int_ reals (loss mmos_ (pred mmis_) * cprob mmos_ mmis_) mmos_
+    let (x, y) = ("x", "y")
+    s ["For clarity: ", m $ cprob y x, " is the ", probability, " that a ", dataPoint, " has label ", m y, " given that it has ", inputFeatures, " ", m x]
+
+totalExpectedRiskDefinition :: Note
+totalExpectedRiskDefinition = de $ do
+    lab totalExpectedRiskDefinitionLabel
+    s [the, totalExpectedRisk, " of a ", hypothesis, m hyp_, " with respect to a ", lossFunction, m lf_, " is the ", expectedValue, " of the ", conditionalExpectedRisk, " over all possible ", distributions, " of ", mmis_]
+    ma $ ter_ === ev cer_ =: int_ mmis_ (cer_ * prob mmis_) mmis_
+
 errorSS :: Note
 errorSS = do
     trainingErrorDefinition
+    testErrorDefinition
     generalisationErrorDefinition
 
 trainingErrorDefinition :: Note
@@ -208,12 +236,18 @@ trainingErrorDefinition = de $ do
         let (x, y) = ("x", "y")
         (1 /: setsize trds_) * sumcmp (tuple x y ∈ trds_) (loss (pred x) y)
 
-generalisationErrorDefinition :: Note
-generalisationErrorDefinition = de $ do
-    lab trainingErrorDefinitionLabel
+testErrorDefinition :: Note
+testErrorDefinition = de $ do
+    lab testErrorDefinitionLabel
     s ["Given a ", learningProblem, " with ", measurementSpace, " ", m mms_, ", ", dataset, " ", m ds_, ", a ", lossFunction, " ", m lf_, " and a ", hypothesis, " ", m hyp_]
-    s [the, trainingError', " is the ", mean, " of the losses over the ", testData]
+    s [the, testError', " is the ", mean, " of the losses over the ", testData]
     ma $ do
         let (x, y) = ("x", "y")
         (1 /: setsize tds_) * sumcmp (tuple x y ∈ tds_) (loss (pred x) y)
+
+
+generalisationErrorDefinition :: Note
+generalisationErrorDefinition = de $ do
+    lab generalisationErrorDefinitionLabel
+    s [the, generalisationError', " is the ", expectedValue, " of the losses over unseen data"]
 

@@ -25,7 +25,10 @@ makeDef concept = do
     baseName = camelCase $ sanitize concept
 
     conceptLit :: Exp
-    conceptLit = LitE $ StringL concept
+    conceptLit = LitE $ StringL $ concept
+
+    conceptLit_ :: Exp
+    conceptLit_ = LitE $ StringL $ concept ++ " "
 
     noteName :: Name
     noteName = mkName "Note"
@@ -37,7 +40,22 @@ makeDef concept = do
     termSig = SigD termName (ConT noteName)
 
     termFun :: Dec
-    termFun = FunD termName [Clause [] (NormalB $ AppE (VarE $ mkName "term") conceptLit) []]
+    termFun =
+        FunD
+          termName
+            [
+              Clause
+                []
+                (
+                  NormalB $
+                      AppE
+                        (AppE
+                          (VarE $ mkName "term_")
+                          conceptLit_)
+                        conceptLit
+                )
+                []
+            ]
 
     indexName :: Name
     indexName = mkName baseName
@@ -46,7 +64,22 @@ makeDef concept = do
     indexSig = SigD indexName (ConT noteName)
 
     indexFun :: Dec
-    indexFun = FunD indexName [Clause [] (NormalB $ AppE (VarE $ mkName "ix") conceptLit) []]
+    indexFun =
+        FunD
+          indexName
+          [
+            Clause
+              []
+              (
+                NormalB $
+                  AppE
+                    (AppE
+                      (VarE $ mkName "ix_")
+                      conceptLit_)
+                    conceptLit
+              )
+              []
+          ]
 
     labelDefName :: Name
     labelDefName = mkName $ baseName ++ "DefinitionLabel"

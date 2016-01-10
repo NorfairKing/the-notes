@@ -39,4 +39,4 @@ ngramMarkovModelExamples = ex $ do
         w = ("w" !:)
         beg = "BEG"
     ma $ prob (list (w 1) (w 2) (w n)) =: cprob (w 1) beg * cprob (w 2) (w 1) * dotsb * cprob (w n) (w (n - 1))
-    s ["Here we defined ", m beg, " to mean ", dquoted "the beginning of the sequence/document"]
+    s ["Here we defined ", m beg, " to mn ", dquoted "the beginning of the sequence/document"]

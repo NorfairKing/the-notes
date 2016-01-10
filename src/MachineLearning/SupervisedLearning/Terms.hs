@@ -34,6 +34,8 @@ makeDefs [
     , "loss function"
     , "quadratic loss"
     , "exponential loss"
+    , "conditional expected risk"
+    , "total expected risk"
     , "training error"
     , "test error"
     , "generalisation error"
