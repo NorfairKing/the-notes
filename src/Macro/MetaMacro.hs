@@ -19,7 +19,7 @@ renewcommand1 = liftL2 $ \l1 l2 -> TeXComm "renewcommand" [FixArg $ raw "\\" <> 
 
 -- Binary operation
 binop :: Note -> Note -> Note -> Note
-binop = between
+binop a b c = b <> a <> c
 
 -- * Subscript
 

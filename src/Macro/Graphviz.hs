@@ -29,7 +29,7 @@ dotFig cap g = do
     fp <- dot2tex g
     noindent
     hereFigure $ do
-        includegraphics [KeepAspectRatio True, IGHeight (Cm 3.0), IGWidth (CustomMeasure $ "0.5" <> textwidth)] fp
+        includegraphics [KeepAspectRatio True, IGHeight (Cm 3.0), IGWidth (CustomMeasure $ TeXRaw "0.5\\textwidth")] fp
         caption cap
 
 

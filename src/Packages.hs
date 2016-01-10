@@ -77,7 +77,7 @@ myHdrSettings =  HdrSettings
     , rightHeader   = mempty
     , leftFooter    = "Tom Sydney Kerckhove"
     , centerFooter  = mempty
-    , rightFooter   = thePage
+    , rightFooter   = thepage
     , headRuleWidth = Pt 0.4
     , footRuleWidth = Pt 0.4
     }

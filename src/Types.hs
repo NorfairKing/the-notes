@@ -8,6 +8,7 @@ module Types (
     , module Debug.Trace
 
     , module Text.LaTeX.LambdaTeX
+    , module Text.LaTeX.Commands.Base
 
     , module Text.LaTeX
     , module Text.LaTeX.Base.Class
@@ -19,22 +20,26 @@ module Types (
     , module Text.LaTeX.Packages.Fancyhdr
     , module Text.LaTeX.Packages.Color
     , module Text.LaTeX.Packages.Graphicx
+
+    , module Control.Monad.IO.Class
     ) where
 
 import           Prelude                      (Bool (..))
 import           Prelude                      as P (Double, Eq (..), FilePath,
                                                     Fractional (..), IO,
                                                     Maybe (..), Num (..),
-                                                    Show (..), mempty, ($),
-                                                    (&&), (++), (.))
+                                                    Show (..), String, mempty,
+                                                    ($), (&&), (++), (.))
 
 import           Debug.Trace
 
-import           Text.LaTeX                   hiding (Label, alph_, article,
-                                               chapter, cite, item, label,
-                                               pageref, ref, ref, rule, section,
-                                               subsection, subsubsection,
-                                               usepackage)
+import           Text.LaTeX                   (raw)
+import           Text.LaTeX.Commands.Base
+-- import           Text.LaTeX                   hiding (Label, alph_, article,
+--                                                chapter, cite, item, label,
+--                                                pageref, ref, ref, rule, section,
+--                                                subsection, subsubsection,
+--                                                usepackage)
 import           Text.LaTeX.Base.Class
 import           Text.LaTeX.Base.Pretty
 import           Text.LaTeX.Base.Syntax
@@ -47,6 +52,7 @@ import           Text.LaTeX.Packages.Color
 import           Text.LaTeX.Packages.Fancyhdr
 import           Text.LaTeX.Packages.Graphicx
 
+import           Control.Monad.IO.Class       (liftIO)
 import           Control.Monad.Reader         (ReaderT)
 import           Control.Monad.State          (StateT)
 
