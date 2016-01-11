@@ -22,30 +22,30 @@ setsSS :: Note
 setsSS = do
     setDefinition
     setElementNotation
-    setComprehensionDefinition
     setEqualityDefinition
     setEqTransitivity
 
 subsetsSS :: Note
-subsetsSS = do
+subsetsSS = subsection "Subsets" $ do
     subsetDefinition
     subsetAntiSymmetry
     subsetTransitivity
     strictSubsetDefinition
 
 universalSet :: Note
-universalSet = do
+universalSet = subsection "The universal set" $ do
     universalSetDefinition
     universalSetSupsetOfAllSets
 
 emptySet :: Note
-emptySet = do
+emptySet = subsection "The empty set" $ do
     emptySetDefinition
     emptySetSubsetOfAllSets
 
 predicateSS :: Note
-predicateSS = do
+predicateSS = subsection "Predicates" $ do
     predicateDefinition
+    setComprehensionDefinition
 
 singletonDefinition :: Note
 singletonDefinition = do
@@ -62,12 +62,6 @@ setDefinition = de $ do
 setElementNotation :: Note
 setElementNotation = de $ do
     s ["The fact that a ", set, " ", m "A", " contains a certain ", element, " ", m "a", " is denoted as ", m $ "a" ∈ "A"]
-
-setComprehensionDefinition :: Note
-setComprehensionDefinition = de $ do
-    s ["A formal description of a ", set, " using a ", predicate, " ", m "p", " is written as follows"]
-    ma $ setcmpr "x" $ app "p" "x"
-    s ["This is the ", set, " of all objects that have the ", ix "property", " ", m "P"]
 
 
 setEqualityDefinition :: Note
@@ -203,12 +197,12 @@ universalSetDefinition = do
         s ["The ", term "universal set", " is the ", set, " of all objects"]
         ma $ setuniv === setcmpr "x" "true"
     nte $ do
-        s ["Note that this is well defined as this ", set, " would have to include itself.", " We will ignore this for now as the ", ix "universal set ", " is usually restricted to a domain that will be clear from the context"]
+        s ["Note that this is not well defined as this ", set, " would have to include itself.", " We will ignore this for now as the ", ix "universal set ", " is usually restricted to a domain that will be clear from the context"]
 
 universalSetSupsetOfAllSets :: Note
 universalSetSupsetOfAllSets = thm $ do
     lab everySetIsASubsetOfTheUniverseTheoremLabel
-    s ["Every set ", m "A", " is a ", ix "subset", " of the ", ix "universal set", " ", m "setuniv"]
+    s ["Every set ", m "A", " is a ", ix "subset", " of the ", ix "universal set", " ", m setuniv]
     ma $ fa "A" $ "A" ⊆ setuniv
 
     proof $ do
@@ -243,3 +237,10 @@ predicateDefinition = de $ do
     p = "P"
     a = "a"
     aa = "A"
+
+setComprehensionDefinition :: Note
+setComprehensionDefinition = de $ do
+    s ["A formal description of a ", set, " using a ", predicate, " ", m "p", " is written as follows"]
+    ma $ setcmpr ("x" ∈ "A") $ app "p" "x"
+    s ["This is the ", set, " of all objects in ", m "A", " that satisfy the ", predicate, " ", m "P"]
+

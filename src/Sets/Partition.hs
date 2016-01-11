@@ -9,7 +9,7 @@ import           Sets.Basics.Terms
 import           Sets.Partition.Terms
 
 partitionS :: Note
-partitionS = note "partition" $ do
+partitionS = section "Partitions" $ do
     partitionDefinition
 
 partitionDefinition :: Note
