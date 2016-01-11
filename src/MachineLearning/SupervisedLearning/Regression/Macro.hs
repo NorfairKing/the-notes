@@ -8,3 +8,9 @@ import           Functions.Application.Macro
 rss :: Note -- ^ Beta parameter
     -> Note
 rss = fn "RSS"
+
+-- | Ridge cost
+ridge :: Note -- ^ Beta parameter
+      -> Note -- ^ Lambda parameter
+      -> Note
+ridge = fn2 "Ridge"

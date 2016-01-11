@@ -34,6 +34,7 @@ makeDefs [
     , "validation data"
     , "test data"
     , "loss function"
+    , "cost function"
     , "quadratic loss"
     , "exponential loss"
     , "conditional expected risk"

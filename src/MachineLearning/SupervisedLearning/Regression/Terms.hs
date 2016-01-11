@@ -8,4 +8,5 @@ makeDefs [
     , "intercept"
     , "bias"
     , "residual sum of squares"
+    , "ridge cost"
     ]

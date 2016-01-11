@@ -15,7 +15,6 @@ import           MachineLearning.SupervisedLearning.SupportVectorMachines.Terms
 
 supportVectorMachinesS :: Note
 supportVectorMachinesS = subsection "Support vector machines" $ do
-    gradientDescentS
     svmContext
     hardConstraintsSVM
     softConstraintsSVM
@@ -35,7 +34,7 @@ regularGradientDescentSS = do
         (a, b) = ("a", "b")
     de $ do
         lab gradientDescentDefinitionLabel
-        s ["Given a multi-variable function ", m ff, " that is everywhere ", differentiable, " we can find a ", localMinimum, " (and analogously a ", localMaximum, ") using the gradient of that function, starting at a point ", m a]
+        s ["Given a multi-variable function ", m ff, " that is everywhere ", differentiable, "with a continuous", derivative, " we can find a ", localMinimum, " (and analogously a ", localMaximum, ") using the gradient of that function, starting at a point ", m a]
         newline
         s ["The first insight is that, at a point ", m a, ", ", m ff, " decreases fastest when going in the direction of the negative gradient of ", m ff, " at ", m a]
         let grf = fn $ grad ff

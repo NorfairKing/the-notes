@@ -125,3 +125,10 @@ laips_ = quintuple
 euclideanInnerProductSpace :: Note -> Note
 euclideanInnerProductSpace p = laips_ reals (reals ^: p) realVecAddition realVecScalarMultiplication lainprod
 
+
+-- Identity matrix
+id :: Note -> Note
+id n = mathbb "I" !: n
+
+id_ :: Note
+id_ = mathbb "I"

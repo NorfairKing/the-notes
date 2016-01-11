@@ -29,11 +29,13 @@ supervisedLearningS = section "Supervized learning" $ do
     scalesSS
     transformationInvariancesSS
     trainingAndTestSets
+    costFunctionSS
     lossFunctionSS
     riskSS
     errorSS
 
     regressionS
+    gradientDescentS
     supportVectorMachinesS
 
 learningProblemSS :: Note
@@ -175,20 +177,53 @@ trainingAndTestSets = de $ do
     ma $ ds_ =: trds_ ∪ vds_ ∪ tds_
     s [the, trainingData, " is used to find such a ", function, ", the ", validationData, " is used to improve the process of finding that ", function, " and the ", testData, " is used to assess how good the ", function, " is at prediction"]
 
+
+costFunctionSS :: Note
+costFunctionSS = subsection "Cost functions" $ do
+    costFunctionDefinition
+    costFunctionExamples
+
+costFunctionDefinition :: Note
+costFunctionDefinition = de $ do
+    lab costFunctionDefinitionLabel
+    s ["Given a ", learningProblem, " with ", measurementSpace, " ", m mms_]
+    s ["A ", lossFunction', " is a ", distanceFunction_, " on a power of the ", outputSpace]
+    ma $ do
+        let n = "n"
+        fun2 cf_ (mmos_ ^ n) (mmos_ ^ n) realsp
+    s ["It is used to measure how far all the predictions are off from all the real output"]
+    s ["Often, given a", hypothesis, m hyp_, ", ",  m $ cf_ !: hyp_, " is used to denote the distance between the actual labels of a given ", dataset, " ", m ds_, " and the predicted label"]
+
+
+costFunctionExamples :: Note
+costFunctionExamples = mempty
+
+
 lossFunctionSS :: Note
 lossFunctionSS = subsection "Loss functions" $ do
     lossFunctionDefinition
+    lossFunctionInducesCostFunction
     lossFunctionExamples
 
 lossFunctionDefinition :: Note
 lossFunctionDefinition = de $ do
-    s ["Given a ", learningProblem, " with ", measurementSpace, " ", m mms_, " and a ", hypothesis, " ", m "f"]
-    s ["A ", lossFunction', " is a ", distanceFunction_, " on the ", outputSpace]
+    s ["Given a", learningProblem, with , measurementSpace, m mms_]
+    s ["A", lossFunction', "is a", distanceFunction_, "on the", outputSpace]
     ma $ fun2 lf_ mmos_ mmos_ realsp
-    s ["It is used to measure how far predictions are off from the real output"]
+    s ["It is used to measure how far any single prediction is off from the real label"]
     newline
-    let f = "f"
-    s ["Often, given a ", function, " ", m $ fun f mmis_ mmos_, ", ",  m $ lf_ !: f, " is used to denote the difference between the actual label of a given ", dataPoint, " ", m "x", " and the predicted label"]
+    s ["Often, given a", hypothesis, m hyp_, ", ",  m $ lf_ !: hyp_, " is used to denote the distance between the actual label of a given", dataPoint, "and the predicted label"]
+
+lossFunctionInducesCostFunction :: Note
+lossFunctionInducesCostFunction = thm $ do
+    let i = "i"
+        n = "n"
+        y = "y"
+        z = "z"
+    s ["For any", m $ natural n, ", every", lossFunction, m lf_, "induces a", costFunction, m $ cf_ !: lf_]
+    s [m $ cf_ !: lf_, "can be defined as any non-zero factor", m alpha, "of the sum of all losses over the dataset"]
+    ma $ cost y z =: alpha * sumcmpr (i =: 1) n (loss (y !: i) (z !: i))
+    s ["Often, ", m alpha, " is chosen to be ", m $ 1 /: n, ", that is, the cost is the average of all losses"]
 
 lossFunctionExamples :: Note
 lossFunctionExamples = do

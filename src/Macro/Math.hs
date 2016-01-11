@@ -185,6 +185,9 @@ matrix = ix "matrix"
 additive :: Note
 additive = ix "additive"
 
+invertible :: Note
+invertible = ix "invertible"
+
 -- Proofs
 proof :: Note -> Note
 proof = liftL $ TeXEnv "proof" []

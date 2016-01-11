@@ -41,6 +41,15 @@ pred = fn hyp_
 hypc_ :: Note
 hypc_ = mathcal "H"
 
+-- * Cost functions
+
+-- | Concrete cost function
+cf_ :: Note
+cf_ = "c"
+
+cost :: Note -> Note -> Note
+cost = fn2 cf_
+
 -- * Loss functions
 
 -- | Concrete loss function

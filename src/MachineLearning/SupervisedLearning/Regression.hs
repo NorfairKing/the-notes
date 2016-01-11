@@ -6,7 +6,6 @@ import           Functions.Application.Macro
 import           Functions.Basics.Terms
 import           LinearAlgebra.VectorSpaces.Terms
 import           Probability.ConditionalProbability.Macro
-import           Probability.Distributions.Terms
 import           Probability.Intro.Macro
 import           Probability.RandomVariable.Macro
 import           Probability.RandomVariable.Terms
@@ -22,6 +21,8 @@ regressionS = subsection "Regression" $ do
     intro
     optimalRegression
     linearRegressionSS
+    leastSquaresSS
+    ridgeRegressionSS
 
 intro :: Note
 intro = do
@@ -78,30 +79,80 @@ linearRegressionSS = subsubsection "Linear Regression" $ do
     ma $ pred x =: trans x /.\ b
     s ["For a given parameter vector", m b, ",", m $ b !: 0, "is often called the", intercept', or, bias']
 
-    s ["Using the", quadraticLoss, function, "we define the", residualSumOfSquares, "as the sum of all the losses"]
-    s ["Concretely that looks as follows for ", m n, " ", dataPoints]
-    ma $ rss b === sumcmpr (i =: 1) n ((pars $ (y !: i) - trans (x !: i) /.\ b) ^ 2)
+    de $ do
+        s ["Using the", quadraticLoss, function, "we define a", costFunction, "called the", residualSumOfSquares', "as the sum of all the losses"]
+        s ["Concretely that looks as follows for ", m n, " ", dataPoints]
+        ma $ rss b === sumcmpr (i =: 1) n ((pars $ (y !: i) - trans (x !: i) /.\ b) ^ 2)
     let xs = "X"
         ys = "Y"
     s ["If we put all the datapoints in a ", m $ n `times` (pars $ p + 1), matrix, m xs, "and all the labels in a", vector, m ys, ", then this can be written as follows"]
     ma $ rss b =: trans (pars $ ys - xs /.\ b) /.\ (pars $ ys - xs /.\ b)
 
+leastSquaresSS :: Note
+leastSquaresSS = subsubsection "Least squares" $ do
+    let b = beta
+    let xs = "X"
+        ys = "Y"
     s ["The so-called method of least squares consists of building a model ", m b, " that minimizes ", m $ rss b]
-    s ["Differentiating the equation for ", m $ rss b, " with respect to ", m b, " gives us the following"]
-    ma $ trans xs /.\ (pars $ ys - xs /.\ b) =: 0
-    s ["For invertible", m $ trans xs /.\ xs, "this means that the following value for", m b, "minimizes", m $ rss b]
-    ma $ hat b =: (matinv $ pars $ trans xs /.\ xs) /.\ (trans x) /.\ ys
-    let xsp = xs <> "'"
-    s ["The entire prediction", m $ hat ys, "for a given matrix", m xsp, "of", inputFeatures, "is then computed as follows"]
-    ma $ hat ys =: xsp /.\ hat b
-                =: xsp /.\ (matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ ys
+    thm $ do
+        s ["The value of", m b, " that minimizes", m $ rss b, "can be described as follows as long as", m $ trans xs /.\ xs, is, invertible]
+        ma $ hat b =: (matinv $ pars $ trans xs /.\ xs) /.\ (trans xs) /.\ ys
+        proof $ do
+            s ["Differentiating the equation for ", m $ rss b, " with respect to ", m b, " gives us the following"]
+            ma $ trans xs /.\ (pars $ ys - xs /.\ b) =: 0
+            s ["We can rewrite this to find the value of", m b, "for which", m $ rss b, "reaches its minimum"]
+            align_
+                [
+                  trans xs /.\ (pars $ ys - xs /.\ b) & "" =: 0
+                , trans xs /.\ ys - trans xs /.\ xs /.\ b & "" =: 0
+                , trans xs /.\ xs /.\ b & "" =: trans xs /.\ ys
+                , b & "" =: (matinv $ pars $ trans xs /.\ xs)  /.\ trans xs /.\ ys
+                ]
+            toprove_ $ s ["We've only proven that this value of ", m b, " gives an extremum for this value, it's not necessarily a minimum yet, prove that too!"]
+            -- s ["For invertible", m $ trans xs /.\ xs, "this means that the following value for", m b, "minimizes", m $ rss b]
+            -- ma $ hat b =: (matinv $ pars $ trans xs /.\ xs) /.\ (trans x) /.\ ys
 
-    s ["Under the statistical assumption that", noise, m epsilon, "in", measurement, is, additive, and, "has a", normalDistribution, " with a ", mean, " of ", m 0, " and a ", standardDeviation, "of", m sd_, "it follows from the linearity of expectation that the predictions will be off with the same noise"]
-    ma $ ys =: xs /.\ b + epsilon
+    let xsp = xs <> "'"
+    s ["The entire prediction", m $ hat ys, "for a given matrix", m xsp, "of", inputFeatures, "is computed as follows"]
+    ma $ hat ys =: xsp /.\ hat b
+
+    -- s ["Under the statistical assumption that", noise, m epsilon, "in", measurement, is, additive, and, "has a", normalDistribution, " with a ", mean, " of ", m 0, " and a ", standardDeviation, "of", m sd_, "it follows from the linearity of expectation that the predictions will be off with the same noise"]
+    -- ma $ ys =: xs /.\ b + epsilon
 
     thm $ do
         textbf "Optimality of the least squares estimate"
         newline
         s ["The least squares estimate of the parameter", m b, "has the smallest", variance, " among all linear unbiased estimates"]
         toprove
+
+ridgeRegressionSS :: Note
+ridgeRegressionSS = subsubsection "Ridge Regression" $ do
+    s ["Ridge regression, like the least squares method, also minimizes a cost function"]
+    de $ do
+        let xs = "X"
+            ys = "Y"
+        s ["Let", m xs, "be a", matrix, "of", inputFeatures, and, m ys, "a", matrix, "of labels"]
+        s [the, ridgeCost, "is a", costFunction, "defined as follows with a parameter", m lambda]
+        let b = beta
+            j = "j"
+            p = "p"
+        ma $ ridge b lambda ===
+             rss b
+             +
+             (lambda * sumcmpr (j =: 1) p (b !: j ^ 2))
+        s ["In", matrix, "notation, this can be rewritten as follows"]
+        ma $ ridge b lambda =: rss b + lambda * trans b /.\ b
+
+    thm $ do
+        let xs = "X"
+            ys = "Y"
+        let b = beta
+            p = "p"
+        s ["The value of", m b, " that minimizes", m $ ridge b lambda, "can be described as follows as long as", m $ trans xs /.\ xs + lambda * id (p + 1), is, invertible]
+        ma $ hat b =: (matinv $ pars $ trans xs /.\ xs + lambda * id (p + 1)) /.\ (trans xs) /.\ ys
+        toprove
+
+    -- SVD of ridge regression solution
+
+
 
