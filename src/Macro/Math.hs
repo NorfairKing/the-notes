@@ -197,6 +197,18 @@ sum = ix "sum"
 product :: Note
 product = ix "product"
 
+increasing :: Note
+increasing = ix "increasing"
+
+decreasing :: Note
+decreasing = ix "decreasing"
+
+rightCongruent :: Note
+rightCongruent = ix "right congruent"
+
+leftCongruent :: Note
+leftCongruent = ix "left congruent"
+
 -- Proofs
 proof :: Note -> Note
 proof = liftL $ TeXEnv "proof" []
@@ -255,6 +267,9 @@ pinfty = "+" <> infty
 -- Limits
 lim :: Note -> Note -> Note -> Note
 lim m n o = (commS "lim" !: (m → n)) <> o
+
+lim2 :: Note -> Note -> Note -> Note -> Note -> Note
+lim2 a x b y c = (commS "lim" !: (commaSeparated [a → x, b → y])) <> c
 
 -- C-k ->
 (→) :: Note -> Note ->Note

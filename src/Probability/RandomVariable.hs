@@ -96,8 +96,6 @@ distributionFunctionSS = subsection "Cumulative distribution function" $ do
     distributionBetweenValues
     distributionAfterValue
 
-    independenceOfRandomVariables
-
 
 cumulativeDistributionFunctionDefinition :: Note
 cumulativeDistributionFunctionDefinition = de $ do
@@ -152,18 +150,6 @@ distributionAfterValue = thm $ do
 
     toprove
   where a = "a"
-
-
-independenceOfRandomVariables :: Note
-independenceOfRandomVariables = de $ do
-    s ["Let ", m x, and, m y, " be random variables in ", m prbsp]
-    s [m x, and, m y, " are called ", independent', " if and only if every two events ", m (x <= a), and, m (y <= b), " are ", independent_, " events"]
-  where
-    a = "a"
-    b = "b"
-    x = "X"
-    y = "Y"
-
 
 quantileFunctionSS :: Note
 quantileFunctionSS = subsection "The quantile function" $ do

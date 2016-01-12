@@ -31,14 +31,17 @@ vrv = fn rv_
 dfsign_ :: Note
 dfsign_ = "F"
 
+-- | A distribution function given a random varable
 df :: Note -> Note
-df n = dfsign_ !: n -- probability distribution function modified
+df n = dfsign_ !: n
 
+-- | A concrete distribution function
 df_ :: Note
 df_ = df rv_  -- probability distribution function
 
+-- | The probability distribution at point argument
 prd :: Note -> Note
-prd = app df_ -- probability distribution at point argument
+prd = app df_
 
 
 -- * Density function

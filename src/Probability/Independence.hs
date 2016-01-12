@@ -6,13 +6,15 @@ import qualified Prelude                                  as P
 
 import           Functions.Basics.Macro
 import           Logic.FirstOrderLogic.Macro
+import           Logic.PropositionalLogic.Macro
+import           Sets.Basics.Terms
+
 import           Probability.ConditionalProbability.Macro
 import           Probability.Intro.Terms
 import           Probability.ProbabilityMeasure.Macro
 import           Probability.ProbabilityMeasure.Terms
 import           Probability.SigmaAlgebra.Macro
 import           Probability.SigmaAlgebra.Terms
-import           Sets.Basics.Terms
 
 -- import           Probability.Independence.Macro
 import           Probability.Independence.Terms
@@ -45,6 +47,11 @@ independenceDefinition = de $ do
 
 independenceExamples :: Note
 independenceExamples = ex $ do
+    longhandIndependenceExample
+    coinTossExample
+
+longhandIndependenceExample :: Note
+longhandIndependenceExample = ex $ do
     let h = "H"
         t = "T"
         hh = h <> h
@@ -84,6 +91,20 @@ independenceExamples = ex $ do
   where
     mapstofun :: [(Note, Note)] -> Note
     mapstofun = P.sequence_ . P.map (<> lnbk) . P.map (\(a, b) -> a & mapsto <> b)
+
+coinTossExample :: Note
+coinTossExample = ex $ do
+    let h = "H"
+        t = "T"
+        p = "p"
+        n = "n"
+    s ["A coin is tossed independently and repeatedly with a", probability, "of", m p, "of", m h]
+    s [the, probability, "of only", m h, "in the first", m n, "tosses is", m (p ^ n)]
+    ma $ prob (h !: 1 ∧ h !: 2 ∧ dotsb ∧ h !: n) =: prob (h !: 1) * prob (h !: 2) * dotsb * prob (h !: n) =: p ^ n
+    s [the, probability, "of obtaining the first", m t, "on the", m n, "-th toss"]
+    ma $ prob (h !: 1 ∧ h !: 2 ∧ dotsb ∧ h !: (n - 1) ∧ t !: n) =: prob (h !: 1) * prob (h !: 2) * dotsb * prob (h !: (n - 1)) * prob (t !: n) =: p ^ (n - 1) * (pars $ 1 - p)
+
+
 
 dependenceDefinition :: Note
 dependenceDefinition = de $ do

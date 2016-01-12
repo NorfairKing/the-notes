@@ -2,6 +2,7 @@ module Probability.Main (probability) where
 
 import           Notes
 
+import           Probability.BivariateDistributions
 import           Probability.ConditionalProbability
 import           Probability.Distributions
 import           Probability.Independence
@@ -20,4 +21,5 @@ probability = chapter "Probability" $ do
     independenceS
     randomVariableS
     distributions
+    bivariateDistributionS
     languageModels
