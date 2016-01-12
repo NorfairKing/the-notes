@@ -52,6 +52,7 @@ sigmaAlgebraDefinition = de $ do
         item $ m $ univ_ ∈ sa_
         item $ m $ fa "A" $ ("A" ∈ sa_) ⇒ (setc "A" ∈ sa_)
         item $ m $ (fa (natural "n") (an ∈ sa_)) ⇒ ((setuncmp (natural "n") an) ∈ an)
+    s ["The elements of a", salgebra, "are called", events']
 
   where
     an = "A" !: "n"

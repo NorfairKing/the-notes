@@ -188,6 +188,9 @@ additive = ix "additive"
 invertible :: Note
 invertible = ix "invertible"
 
+transformation :: Note
+transformation = ix "transformation"
+
 -- Proofs
 proof :: Note -> Note
 proof = liftL $ TeXEnv "proof" []
@@ -306,3 +309,4 @@ grad n = comm0 "nabla" <> n
 -- | Partial derivative
 partial :: Note -> Note
 partial n = comm0 "partial" <> n
+

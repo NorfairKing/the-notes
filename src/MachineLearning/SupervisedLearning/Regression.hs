@@ -3,6 +3,7 @@ module MachineLearning.SupervisedLearning.Regression where
 import           Notes
 
 import           Functions.Application.Macro
+import           Functions.Basics.Macro
 import           Functions.Basics.Terms
 import           LinearAlgebra.VectorSpaces.Terms
 import           Probability.ConditionalProbability.Macro
@@ -19,10 +20,9 @@ import           MachineLearning.SupervisedLearning.Regression.Terms
 regressionS :: Note
 regressionS = subsection "Regression" $ do
     intro
-    optimalRegression
+    optimalRegressionSS
     linearRegressionSS
-    leastSquaresSS
-    ridgeRegressionSS
+    nonlinearRegressionSS
 
 intro :: Note
 intro = do
@@ -54,8 +54,8 @@ homogenousCoondinates = subsubsection "Homogenous coordinates" $ do
         veclst (x 1) (x p) <> mapsto <> veclist 1 (x 1) (x p)
     s ["Note that this changes the ", inputSpace, " to ", m $ realVecSpace (p + 1)]
 
-optimalRegression :: Note
-optimalRegression = subsubsection "Optimal estimate" $ do
+optimalRegressionSS :: Note
+optimalRegressionSS = subsubsection "Optimal estimate" $ do
     s ["The optimal estimate for the ", hypothesis, " in ", regression, " looks as follows"]
     let x = "x"
         y = "y"
@@ -88,8 +88,14 @@ linearRegressionSS = subsubsection "Linear Regression" $ do
     s ["If we put all the datapoints in a ", m $ n `times` (pars $ p + 1), matrix, m xs, "and all the labels in a", vector, m ys, ", then this can be written as follows"]
     ma $ rss b =: trans (pars $ ys - xs /.\ b) /.\ (pars $ ys - xs /.\ b)
 
+    leastSquaresSS
+    ridgeRegressionSS
+    lassoRegressionSS
+    generalRidgeRegression
+
+
 leastSquaresSS :: Note
-leastSquaresSS = subsubsection "Least squares" $ do
+leastSquaresSS = do
     let b = beta
     let xs = "X"
         ys = "Y"
@@ -126,20 +132,20 @@ leastSquaresSS = subsubsection "Least squares" $ do
         toprove
 
 ridgeRegressionSS :: Note
-ridgeRegressionSS = subsubsection "Ridge Regression" $ do
+ridgeRegressionSS = do
     s ["Ridge regression, like the least squares method, also minimizes a cost function"]
     de $ do
         let xs = "X"
             ys = "Y"
         s ["Let", m xs, "be a", matrix, "of", inputFeatures, and, m ys, "a", matrix, "of labels"]
-        s [the, ridgeCost, "is a", costFunction, "defined as follows with a parameter", m lambda]
+        s [the, ridgeCost', "is a", costFunction, "defined as follows with a parameter", m lambda]
         let b = beta
             j = "j"
             p = "p"
         ma $ ridge b lambda ===
              rss b
              +
-             (lambda * sumcmpr (j =: 1) p (b !: j ^ 2))
+             lambda * sumcmpr (j =: 1) p (b !: j ^ 2)
         s ["In", matrix, "notation, this can be rewritten as follows"]
         ma $ ridge b lambda =: rss b + lambda * trans b /.\ b
 
@@ -155,4 +161,45 @@ ridgeRegressionSS = subsubsection "Ridge Regression" $ do
     -- SVD of ridge regression solution
 
 
+lassoRegressionSS :: Note
+lassoRegressionSS = do
+    s ["Least absolute shrinkage and selector operator (LASSO) regression, like the other methods above, also minimizes a cost function"]
+    de $ do
+        let xs = "X"
+            ys = "Y"
+        s ["Let", m xs, "be a", matrix, "of", inputFeatures, and, m ys, "a", matrix, "of labels"]
+        s [the, lASSOCost', "is a", costFunction, "defined as follows with a parameter", m lambda]
+        let b = beta
+            j = "j"
+            p = "p"
+        ma $ ridge b lambda ===
+             rss b
+             +
+             lambda * sumcmpr (j =: 1) p (abs $ b !: j)
 
+
+generalRidgeRegression :: Note
+generalRidgeRegression = do
+    let q = "q"
+    s ["Ridge regression can be generalized to have a shrinkage term parametrized by ", m q]
+    de $ do
+        s ["The generalized ", ridgeCost, " is a cost function with parameter ", m q]
+        let b = beta
+            j = "j"
+            p = "p"
+        ma $ ridge b lambda ===
+             rss b
+             +
+             lambda * sumcmpr (j =: 1) p (abs (b !: j) ^ q)
+
+nonlinearRegressionSS :: Note
+nonlinearRegressionSS = subsection "Nonlinear Regression" $ do
+    s ["The idea of", nonlinearRegression, "is to apply a nonlinear", transformation, "to the", inputFeatures, and, outputFeatures, "and performing", linearRegression, "on the result"]
+
+    let b = beta
+        f = "f"
+        j = "j"
+        p = "p"
+        x = "x"
+    s ["Given a nonlinear transformation ", m $ fun f (reals ^ p) reals, the, hypothesisClass, "of",the, nonlinearRegression, "method is the following set"]
+    ma $ setcmpr (hyp_ !: b) (b ∈ reals ^ (p + 1)) <> quad <> text "where" <> quad <> pred x =: sumcmpr (j =: 1) p (fn f x * b !: j)

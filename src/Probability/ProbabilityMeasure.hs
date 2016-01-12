@@ -20,6 +20,7 @@ import           Probability.ProbabilityMeasure.Terms
 probabilityMeasureS :: Note
 probabilityMeasureS = section "Probability Measures" $ do
     probabilityMeasureDefinition
+    probabilityMeasureExample
     probabilitySpaceDefinition
     probabilityMeasureFiniteAdditivity
     probabilitySpaceProbabilityOfComplement
@@ -64,6 +65,26 @@ probabilityMeasureDefinition = de $ do
   where
     a = "A"
     an = "A" !: "n"
+
+probabilityMeasureExample :: Note
+probabilityMeasureExample = ex $ do
+    let h = "Heads"
+        t = "Tails"
+        p = "p"
+        u = setofs [h, t]
+    s ["Let", m u, "be the universe of the", stochasticExperiment, "of throwing up a flipping an unfair coin"]
+    s ["Let", m $ powset u, "be a", sigmaAlgebra]
+    s [the, function, m prm_, "as follows is a", probabilityMeasure]
+    ma $ fun prm_ (powset u) (ccint 0 1)
+    ma $ cases $ do
+        u & mapsto <> 1
+        lnbk
+        h & mapsto <> p
+        lnbk
+        t & mapsto <> (1 - p)
+        lnbk
+        emptyset & mapsto <> 0
+
 
 msppsDec :: Note
 msppsDec = s ["Let ", m mspace_, " be a ", measurableSpace, " and ", m prm_, " a ", probabilityMeasure]

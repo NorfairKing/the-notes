@@ -9,4 +9,6 @@ makeDefs [
     , "bias"
     , "residual sum of squares"
     , "ridge cost"
+    , "LASSO cost"
+    , "nonlinear regression"
     ]

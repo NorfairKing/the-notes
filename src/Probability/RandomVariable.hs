@@ -10,6 +10,7 @@ import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
 import           Probability.Independence.Terms
 import           Probability.Intro.Macro
+import           Probability.Intro.Terms
 import           Probability.ProbabilityMeasure.Macro
 import           Probability.ProbabilityMeasure.Terms
 import           Probability.SigmaAlgebra.Macro
@@ -197,6 +198,7 @@ discreteRandomVariables = subsubsection "Discrete random variables" $ do
     discreteRandomVariableDefinition
     discreteDistributionDefinition
     discreteCumulativeDistribution
+    discreteRandomVariableExamples
 
 discreteRandomVariableDefinition :: Note
 discreteRandomVariableDefinition = de $ do
@@ -230,6 +232,32 @@ discreteCumulativeDistribution = thm $ do
     i = "i"
     xi = "x" !: i
     pi = "p" !: i
+
+discreteRandomVariableExamples :: Note
+discreteRandomVariableExamples = do
+    ex $ do
+        let h = "Heads"
+            t = "Tails"
+            p = "p"
+            u = setofs [h, t]
+        s ["Let", m u, "be the universe of the", stochasticExperiment, "of throwing up a flipping an unfair coin"]
+        s ["Let", m $ powset u, "be a", sigmaAlgebra]
+        s ["Let the following", function, m prm_, "be a", probabilityMeasure]
+        ma $ fun prm_ (powset u) (ccint 0 1)
+        ma $ cases $ do
+            u & mapsto <> 1
+            lnbk
+            h & mapsto <> p
+            lnbk
+            t & mapsto <> (1 - p)
+            lnbk
+            emptyset & mapsto <> 0
+        let x = "X"
+        s ["If we were to bet that the coin would come up heads with a fifty units payoff, then that payoff could be modeled as a", discrete, randomVariable, m x, "in the", probabilitySpace, m prsp_, "as follows"]
+        ma $ cases $ do
+            fn x h =: 50
+            lnbk
+            fn x t =: 0
 
 continuousRandomVariables :: Note
 continuousRandomVariables = subsubsection "Continuous random variables" $ do
