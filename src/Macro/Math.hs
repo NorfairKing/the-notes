@@ -191,6 +191,12 @@ invertible = ix "invertible"
 transformation :: Note
 transformation = ix "transformation"
 
+sum :: Note
+sum = ix "sum"
+
+product :: Note
+product = ix "product"
+
 -- Proofs
 proof :: Note -> Note
 proof = liftL $ TeXEnv "proof" []

@@ -332,9 +332,22 @@ intervalOpenCloseDistribution = thm $ do
 
 momentsOfRandomVariables :: Note
 momentsOfRandomVariables = subsection "Moments of random variables" $ do
-    expectedValueDefinition
-    varianceDefinition
-    standardDeviationDefinition
+    subsubsection "Expected value and variance" $ do
+        expectedValueDefinition
+        varianceDefinition
+        standardDeviationDefinition
+
+    subsubsection "Sum and product of random variables" $ do
+        sumOfRandomVariablesDefinition
+        sumOfRandomVariablesIsRandomVariableTheorem
+        expectedValueOfSumTheorem
+        varianceOfSumTheorem
+        productOfRandomVariablesDefinition
+        productOfRandomVariablesIsRandomVariableTheorem
+        expectedValueOfProductTheorem
+
+    subsubsection "Inequalities involving random variables" $ todo "TODO"
+    subsubsection "Higher moments" $ todo "TODO"
 
 expectedValueDefinition :: Note
 expectedValueDefinition = de $ do
@@ -366,12 +379,58 @@ standardDeviationDefinition = de $ do
     ma $ sqrt $ var rv_
 
 
+sumOfRandomVariablesDefinition :: Note
+sumOfRandomVariablesDefinition = de $ do
+    let x = "X"
+        y = "Y"
+    s ["Let ", m x, and, m y, "be", randomVariables]
+    s [the, "sum", m $ x + y, "of", m x, and, m y, " is defined as follows"]
+    ma $ fn (pars $ x + y) omega =: fn x omega + fn y omega
+
+sumOfRandomVariablesIsRandomVariableTheorem :: Note
+sumOfRandomVariablesIsRandomVariableTheorem = thm $ do
+    s [the, sum, "of two", randomVariables, "is a", randomVariable]
+    toprove
+
+expectedValueOfSumTheorem :: Note
+expectedValueOfSumTheorem = thm $ do
+    let x = "X"
+        y = "Y"
+    s ["Let ", m x, and, m y, "be", randomVariables, "in a", probabilitySpace, m prsp_]
+    ma $ ev (x + y) =: ev x + ev y
+    proof $ toprove
+
+varianceOfSumTheorem :: Note
+varianceOfSumTheorem = thm $ do
+    let x = "X"
+        y = "Y"
+    s ["Let ", m x, and, m y, "be", randomVariables, "in a", probabilitySpace, m prsp_]
+    ma $ var (x + y) =: var x + var y
+    proof $ toprove
 
 
+productOfRandomVariablesDefinition :: Note
+productOfRandomVariablesDefinition = de $ do
+    let x = "X"
+        y = "Y"
+    s ["Let ", m x, and, m y, "be", randomVariables]
+    s [the, "product", m $ x * y, "of", m x, and, m y, " is defined as follows"]
+    ma $ fn (pars $ x * y) omega =: fn x omega * fn y omega
 
 
+productOfRandomVariablesIsRandomVariableTheorem :: Note
+productOfRandomVariablesIsRandomVariableTheorem = thm $ do
+    s [the, product, "of two", randomVariables, "is a", randomVariable]
+    toprove
 
 
+expectedValueOfProductTheorem :: Note
+expectedValueOfProductTheorem = thm $ do
+    let x = "X"
+        y = "Y"
+    s ["Let ", m x, and, m y, "be", independent, randomVariables, "in a", probabilitySpace, m prsp_]
+    ma $ ev (x * y) =: ev x * ev y
+    proof $ toprove
 
 
 
