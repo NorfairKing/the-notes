@@ -320,10 +320,13 @@ momentsOfRandomVariables :: Note
 momentsOfRandomVariables = subsection "Moments of random variables" $ do
     subsubsection "Expected value and variance" $ do
         expectedValueDefinition
+        covarianceDefinition
         varianceDefinition
         standardDeviationDefinition
+        correlationDefinition
 
     subsubsection "Sum and product of random variables" $ do
+        independenceOfRandomVariables
         sumOfRandomVariablesDefinition
         sumOfRandomVariablesIsRandomVariableTheorem
         expectedValueOfSumTheorem
@@ -350,12 +353,21 @@ expectedValueDefinition = de $ do
         let x = "x"
         ev rv_ =: int minfty pinfty (x * prds x) x
 
+covarianceDefinition :: Note
+covarianceDefinition = de $ do
+    lab covarianceDefinitionLabel
+    let x = "X"
+        y = "Y"
+    s ["Let", m x, and, m y, "be two", randomVariables, "in a", probabilitySpace, m prsp_]
+    s ["The", covariance', "of", m x, and, m y, "is defined as follows"]
+    ma $ cov x y === ev (pars (x - ev x) * pars (y - ev y))
+
 varianceDefinition :: Note
 varianceDefinition = de $ do
     lab varianceDefinitionLabel
     s ["Let ", m rv_, " be a ", randomVariable]
     s [the, variance', " of ", m rv_, " is defined as follows"]
-    ma $ ev $ (rv_ - ev rv_) ^ 2
+    ma $ var rv_ === cov rv_ rv_ =: (ev $ (pars $ rv_ - ev rv_) ^ 2)
 
 standardDeviationDefinition :: Note
 standardDeviationDefinition = de $ do
@@ -363,6 +375,25 @@ standardDeviationDefinition = de $ do
     s ["Let ", m rv_, " be a ", randomVariable]
     s [the, standardDeviation', " of ", m rv_, " is defined as the square root of the ", variance, " of ", m rv_]
     ma $ sqrt $ var rv_
+
+correlationDefinition :: Note
+correlationDefinition = de $ do
+    lab correlationDefinitionLabel
+    let x = "X"
+        y = "Y"
+    s ["Let", m x, and, m y, "be two", randomVariables, "in a", probabilitySpace, m prsp_]
+    s [the, correlation', "of", m x, and, m y, "is defined as follows"]
+    ma $ cor x y === (cov x y /: sqrt (var x * var y))
+
+independenceOfRandomVariables :: Note
+independenceOfRandomVariables = de $ do
+    s ["Let ", m x, and, m y, " be random variables in ", m prbsp]
+    s [m x, and, m y, " are called ", independent', " if and only if every two events ", m (x <= a), and, m (y <= b), " are ", independent_, " events"]
+  where
+    a = "a"
+    b = "b"
+    x = "X"
+    y = "Y"
 
 
 sumOfRandomVariablesDefinition :: Note
@@ -416,7 +447,6 @@ expectedValueOfProductTheorem = thm $ do
         y = "Y"
     s ["Let ", m x, and, m y, "be", independent, randomVariables, "in a", probabilitySpace, m prsp_]
     ma $ ev (x * y) =: ev x * ev y
-    proof $ toprove
 
 
 

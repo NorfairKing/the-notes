@@ -84,6 +84,11 @@ mn = ev
 mn_ :: Note
 mn_ = mu
 
+-- * Covariance
+
+-- | Covariance of two random variables
+cov :: Note -> Note -> Note
+cov = fn2 "Cov"
 
 -- * Variance
 
@@ -94,6 +99,12 @@ var n = "Var" <> sqbrac n
 -- | Concrete variance
 var_ :: Note
 var_ = sigma
+
+-- * Correlation
+
+-- | Correlation of two random variables
+cor :: Note -> Note -> Note
+cor = fn2 "Cor"
 
 -- * Standard deviation
 

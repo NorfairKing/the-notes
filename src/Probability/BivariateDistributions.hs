@@ -9,7 +9,6 @@ import           Functions.Basics.Terms
 import           Functions.Inverse.Macro
 import           Logic.PropositionalLogic.Macro
 
-import           Probability.Independence.Terms
 import           Probability.Intro.Macro
 import           Probability.ProbabilityMeasure.Macro
 import           Probability.ProbabilityMeasure.Terms
@@ -24,7 +23,6 @@ bivariateDistributionS = section "Bivariate distributions" $ do
     stochasticTupleInducesProbabilityMeasure
     bivariateDistributionFunctionDefinition
     bivariateDistributionFunctionProperties
-    independenceOfRandomVariables
 
 stochasticTupleDefinition :: Note
 stochasticTupleDefinition = de $ do
@@ -72,12 +70,3 @@ bivariateDistributionFunctionProperties = prop $ do
         item $ m $ lim2 a pinfty b pinfty (fn2 d a b) =: 1
 
 
-independenceOfRandomVariables :: Note
-independenceOfRandomVariables = de $ do
-    s ["Let ", m x, and, m y, " be random variables in ", m prbsp]
-    s [m x, and, m y, " are called ", independent', " if and only if every two events ", m (x <= a), and, m (y <= b), " are ", independent_, " events"]
-  where
-    a = "a"
-    b = "b"
-    x = "X"
-    y = "Y"

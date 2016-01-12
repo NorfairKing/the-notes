@@ -22,6 +22,8 @@ makeDefs [
     , "probability density"
     , "expected value"
     , "mean"
+    , "covariance"
+    , "correlation"
     , "variance"
     , "standard deviation"
     ]
