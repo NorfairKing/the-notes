@@ -9,6 +9,7 @@ import           Geometry.AffineSpaces.Terms
 import           LinearAlgebra.VectorSpaces.Terms
 import           Probability.ConditionalProbability.Macro
 import           Probability.Distributions.Terms
+import           Probability.Independence.Terms
 import           Probability.Intro.Macro
 import           Probability.ProbabilityMeasure.Terms
 import           Probability.RandomVariable.Macro
@@ -251,8 +252,14 @@ leastSquaresSS = do
               , inverseOfSymmetricMatrixIsSymmetricTheoremLabel
               ]
             s ["Here we used", m $ ev (nois_ /.\ trans nois_) =: var_ ^ 2 * id (p + 1)]
-            why
+            aligneqs
+                (ev $ nois_ /.\ trans nois_)
+                [
+                    var nois_ + (ev nois_)^2
+                  , sigma ^ 2 * id_
+                ]
 
+            s ["In the last step we used that, because the coordinates of ", m nois_, "are", independent, ", the", covariance, "of", "any two coordinates of the", noise, vector, "is zero, if they are different coordinates and one otherwise"]
     thm $ do
         textbf "Optimality of the least squares estimate"
         newline

@@ -341,7 +341,7 @@ grad n = comm0 "nabla" <> n
 
 -- | Nicely aligned equalities
 aligns :: (Note -> Note -> Note) -> Note -> [Note] -> Note
-aligns _ _ [] = mempty
+aligns _ f [] = f
 aligns eq f (r:rs) = align_ $ (f & eq "" r) : P.map (\n -> "" & eq "" n) rs
 
 aligneqs :: Note -> [Note] -> Note
