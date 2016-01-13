@@ -3,12 +3,17 @@ module Probability.Distributions where
 import           Notes
 
 import           Logic.FirstOrderLogic.Macro
+--import           Sets.Basics.Terms
+import           LinearAlgebra.VectorSpaces.Terms
 
 import           Probability.Intro.Macro
 import           Probability.Intro.Terms
 import           Probability.ProbabilityMeasure.Macro
+import           Probability.ProbabilityMeasure.Terms
 import           Probability.RandomVariable.Macro
 import           Probability.RandomVariable.Terms
+import           Probability.SigmaAlgebra.Macro
+import           Probability.SigmaAlgebra.Terms
 
 import           Probability.Distributions.Macro
 import           Probability.Distributions.Terms
@@ -21,6 +26,7 @@ distributions = section "Important distributions" $ do
 discreteDistributionSS :: Note
 discreteDistributionSS = subsection "Discrete distributions" $ do
     discreteUniform
+    empiricalDistributionDefinition
     bernoulli
     binomial
 
@@ -34,6 +40,17 @@ discreteUniform = de $ do
     p = subsc "p"
     n = "n"
     i = "i"
+
+empiricalDistributionDefinition :: Note
+empiricalDistributionDefinition = de $ do
+    let x = "X"
+    s ["Let ", m x, "be a", vector, "of values"]
+    s [m x, "viewed as the", universe, "of a", measurableSpace, m $ mspace x $ powset x, "induces a", probabilityMeasure, m prm_, "as follows"]
+    let a = "a"
+        b = "b"
+    ma $ prob a =: (1 /: setsize x) * setsize (setcmpr (b ∈ x) (a =: b))
+    s ["This is called the", empiricalDistribution', "defined by the vector", m x]
+
 
 bernoulli :: Note
 bernoulli = de $ do
