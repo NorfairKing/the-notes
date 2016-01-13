@@ -339,10 +339,6 @@ mp n = comm0 "mp" <> n
 grad :: Note -> Note
 grad n = comm0 "nabla" <> n
 
--- | Partial derivative
-partial :: Note -> Note
-partial n = comm0 "partial" <> n
-
 -- | Nicely aligned equalities
 aligns :: (Note -> Note -> Note) -> Note -> [Note] -> Note
 aligns _ _ [] = mempty
@@ -357,3 +353,21 @@ cancel :: Note -> Note
 cancel n = do
     packageDep_ "cancel"
     comm1 "cancel" n
+
+
+-- * Partial derivatives
+partial' :: Note
+partial' = comm0 "partial"
+
+-- | Shorthand partial derivative
+partd :: Note -> Note -> Note
+partd a b = (partial' <> a) /: (partial' <> b)
+
+-- | Longhand partial derivative
+partiald :: Note -> Note -> Note
+partiald a b = (partial' /: (partial' <> b)) <> a
+
+
+
+
+

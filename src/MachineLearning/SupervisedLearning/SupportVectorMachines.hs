@@ -221,7 +221,7 @@ computingMargin = subsubsection "Computing the margin" $ do
     ma $ f w b =: (1 /: 2) * (norm w) ^2 + c * sumcmpr (i =: 1) n (maxof (setofs [0, 1 - (pars $ (y !: i) * (pars $ w /.\ x !: i + b) )]))
     s ["The ", m j, "th coordinate of the gradiant ", m $ grad ff, " can be computed as follows"]
     ma $ grad ff !: j
-      =: fn2 (partial ff) w b /: partial (w !: j)
+      =: partd (fn2 ff w b) (w !: j)
       =: (cases $ do
             (w !: j) & " if " <> (pars $ (y !: i) * (pars $ w /.\ x !: i + b)) >= 1
             lnbk

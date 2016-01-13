@@ -128,8 +128,33 @@ leastSquaresSS = do
         ma $ hat b =: (matinv $ pars $ trans xs /.\ xs) /.\ (trans xs) /.\ ys
         proof $ do
             s ["Differentiating the equation for ", m $ rss b, " with respect to ", m b, " gives us the following"]
+            let b = beta
+                i = "i"
+                j = "j"
+                k = "k"
+                n = "n"
+                p = "p"
+                x = "x"
+                y = "y"
+            aligneqs
+                (partiald (sumcmpr (i =: 1) n ((pars $ (y !: i) - trans (x !: i) /.\ b) ^ 2)) (b !: j))
+                [
+                    sumcmpr (i =: 1) n (partiald ((pars $ (y !: i) - trans (x !: i) /.\ b) ^ 2) (b !: j))
+                  , sumcmpr (i =: 1) n (2 * (pars $ (y !: i) - trans (x !: i) /.\ b)
+                                     * partiald (pars $ (y !: i) - trans (x !: i) /.\ b) (b !: j))
+                  , 2 * sumcmpr (i =: 1) n ((pars $ (y !: i) - trans (x !: i) /.\ b)
+                                         * (pars $ - partiald (trans (x !: i) /.\ b) (b !: j)))
+                  , 2 * sumcmpr (i =: 1) n ((pars $ (y !: i) - trans (x !: i) /.\ b)
+                                         * (pars $ - partiald (sumcmpr (k =: 0) p (xs !: cs [i, k]) * (b !: k)) (b !: j)))
+                  , 2 * sumcmpr (i =: 1) n ((pars $ - (xs !: cs [i, j])) * (pars $ (y !: i) - trans (x !: i) /.\ b))
+                  , 2 * sumcmpr (i =: 1) n ((pars $ - (xs !: cs [i, j])) * (pars $ (y !: i) - sumcmpr (k =: 0) p (xs !: cs [i, k]) * (b !: k)))
+                  , 2 * sumcmpr (i =: 1) n ((pars $ - (xs !: cs [i, j])) * (pars $ (y !: i) - (pars $ xs  /.\ b) !: i))
+                  , 2 * sumcmpr (i =: 1) n ((pars $ - (trans xs !: cs [j, i])) * (pars $ (y !: i) - (pars $ xs  /.\ b) !: i))
+                  , 2 * sumcmpr (i =: 1) n ((pars $ - (trans xs !: cs [j, i])) * (pars $ (y !: i) - xs  /.\ b) !: i)
+                  , 2 * (pars $ - (trans xs) /.\ (pars $ ys - xs /.\ b)) !: j
+                ]
+            s ["For the minimizing value of", m beta, ", this expression must equal zero"]
             ma $ trans xs /.\ (pars $ ys - xs /.\ b) =: 0
-            s ["We can rewrite this to find the value of", m b, "for which", m $ rss b, "reaches its minimum"]
             align_
                 [
                   trans xs /.\ (pars $ ys - xs /.\ b) & "" =: 0
@@ -137,9 +162,21 @@ leastSquaresSS = do
                 , trans xs /.\ xs /.\ b & "" =: trans xs /.\ ys
                 , b & "" =: (matinv $ pars $ trans xs /.\ xs)  /.\ trans xs /.\ ys
                 ]
-            toprove_ $ s ["We've only proven that this value of ", m b, " gives an extremum for this value, it's not necessarily a minimum yet, prove that too!"]
-            -- s ["For invertible", m $ trans xs /.\ xs, "this means that the following value for", m b, "minimizes", m $ rss b]
-            -- ma $ hat b =: (matinv $ pars $ trans xs /.\ xs) /.\ (trans x) /.\ ys
+
+            s ["To prove that this value of", m b, "really does give a minimum value for", m $ rss b, "we still have to prove that the second derivative with respect to", m $ beta !: j, "is positive in every direction (for every j)"]
+            aligneqs
+                (partiald
+                    (2 * sumcmpr (i =: 1) n ((pars $ - (xs !: cs [i, j])) * (pars $ (y !: i) - sumcmpr (k =: 0) p (xs !: cs [i, k]) * (b !: k))))
+                    (b !: j))
+                [
+                    2 * sumcmpr (i =: 1) n (partiald ((pars $ - (xs !: cs [i, j])) * (pars $ (y !: i) - sumcmpr (k =: 0) p (xs !: cs [i, k]) * (b !: k)))
+                                            (b !: j))
+                  , 2 * sumcmpr (i =: 1) n ((pars $ - (xs !: cs [i, j])) * partiald (pars $ (y !: i) - sumcmpr (k =: 0) p (xs !: cs [i, k]) * (b !: k))
+                                                                            (b !: j))
+                  , 2 * sumcmpr (i =: 1) n ((pars $ - (xs !: cs [i, j])) * (pars $ - sumcmpr (k =: 0) p (partiald ((xs !: cs [i, k]) * (b !: k)) (b !: j))))
+                  , 2 * sumcmpr (i =: 1) n ((pars $ - (xs !: cs [i, j])) * (pars $ - (xs !: cs [i, j])))
+                  , 2 * sumcmpr (i =: 1) n ((xs !: cs [i, j]) ^ 2)
+                ]
 
     let xsp = xs <> "'"
     s ["The entire prediction", m $ hat ys, "for a given matrix", m xsp, "of", inputFeatures, "is computed as follows"]
