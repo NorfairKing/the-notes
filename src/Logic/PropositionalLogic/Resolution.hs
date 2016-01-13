@@ -96,6 +96,7 @@ proofFig cap height g = do
     fp <- dot2tex g
     noindent
     hereFigure $ do
+        packageDep_ "graphicx"
         includegraphics [KeepAspectRatio True, IGHeight (Cm height), IGWidth (CustomMeasure $ textwidth)] fp
         caption cap
 
