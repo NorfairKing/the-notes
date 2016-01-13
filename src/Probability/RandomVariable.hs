@@ -273,6 +273,9 @@ probabilityDensitySSS = note "density" $ do
 
 probabilityDensitiyFunctionDefinition :: Note
 probabilityDensitiyFunctionDefinition = de $ do
+    lab probabilityDensityFunctionDefinitionLabel
+    lab probabilityDensityDefinitionLabel
+    lab densityDefinitionLabel
     prdsDec
     s ["The ", probabilityDensityFunction', or, probabilityDensity', " ", m dsf_, " is the following ", function]
     ma $ func dsf_ reals reals x $ prds x =: deriv (prd x) x

@@ -20,6 +20,7 @@ makeDefs [
     , "continuous distribution"
     , "probability density function"
     , "probability density"
+    , "density"
     , "expected value"
     , "mean"
     , "covariance"

@@ -15,5 +15,6 @@
   linear-algebra
   geometry
   probability
+  statistics
   machine-learning
   "

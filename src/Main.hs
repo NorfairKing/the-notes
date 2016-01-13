@@ -33,6 +33,7 @@ import           Probability.Main
 import           Relations.Main
 import           Rings.Main
 import           Sets.Main
+import           Statistics.Main
 import           Topology.Main
 
 
@@ -142,5 +143,6 @@ allNotes = do
     topology
     computability
     probability
+    statisticsC
     machineLearning
     dataMining

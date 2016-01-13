@@ -370,4 +370,9 @@ partiald a b = (partial' /: (partial' <> b)) <> a
 
 
 
+-- * Math font
+mathfrak :: Note -> Note
+mathfrak n = do
+    packageDep_ "eufrak"
+    comm1 "mathfrak" n
 
