@@ -4,6 +4,7 @@ import           Notes
 
 import           Probability.BivariateDistributions
 import           Probability.ConditionalProbability
+import           Probability.Convergence
 import           Probability.Distributions
 import           Probability.Independence
 import           Probability.Intro
@@ -21,5 +22,6 @@ probability = chapter "Probability" $ do
     independenceS
     randomVariableS
     distributions
+    convergenceS
     bivariateDistributionS
     languageModels

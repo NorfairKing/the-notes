@@ -2,9 +2,8 @@ module Probability.Distributions where
 
 import           Notes
 
-import           Logic.FirstOrderLogic.Macro
---import           Sets.Basics.Terms
 import           LinearAlgebra.VectorSpaces.Terms
+import           Logic.FirstOrderLogic.Macro
 
 import           Probability.Intro.Macro
 import           Probability.Intro.Terms
