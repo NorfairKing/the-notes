@@ -15,6 +15,11 @@ vectorSpaces = section "Vector Spaces" $ do
     subsection "Euclidean Vector Spaces" $ do
         euclideanVectorSpaceDefinition
 
+    placeholder $ do
+        lab matrixTimesTransposeIsSymmetricTheoremLabel
+        lab inverseOfSymmetricMatrixIsSymmetricTheoremLabel
+
+
 vectorSpaceDefinition :: Note
 vectorSpaceDefinition = de $ do
     lab vectorSpaceDefinitionLabel

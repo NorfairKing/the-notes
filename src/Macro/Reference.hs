@@ -1,11 +1,11 @@
 module Macro.Reference where
 
-import           Control.Monad        (when)
+import           Types
+
+import           Control.Monad        (mapM_, when)
 import           Control.Monad.Reader (asks)
 
 import qualified Text.LaTeX.LambdaTeX as T (label, pageref, ref)
-
-import           Types
 
 wordOf :: RefKind -> Text
 wordOf Definition     = "definition"
@@ -40,6 +40,9 @@ ref l = footnote $ do
     "."
     " "
     when debug $ labelBox l
+
+refs :: [Label] -> Note
+refs rs = (<> newline) $ mapM_ ref rs
 
 labelBox :: Label -> Note
 labelBox l = colorbox (ModColor $ RGB 0.5 0.5 0.5) $ textcolor (ModColor $ RGB 0 1 0) ll

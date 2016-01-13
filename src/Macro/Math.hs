@@ -2,13 +2,16 @@ module Macro.Math where
 
 import           Types
 
+import qualified Prelude         as P
+
 import           Macro.Arrows
 import           Macro.Index
 import           Macro.MetaMacro
 import           Macro.Text      (commaSeparated)
 
+
 m :: Note -> Note
-m n = math n <> " "
+m n = math n
 
 ma :: Note -> Note
 ma = mathDisplay
@@ -209,6 +212,12 @@ rightCongruent = ix "right congruent"
 leftCongruent :: Note
 leftCongruent = ix "left congruent"
 
+constant :: Note
+constant = ix "constant"
+
+constants :: Note
+constants = ix_ "constant" "constants"
+
 -- Proofs
 proof :: Note -> Note
 proof = liftL $ TeXEnv "proof" []
@@ -331,3 +340,17 @@ grad n = comm0 "nabla" <> n
 partial :: Note -> Note
 partial n = comm0 "partial" <> n
 
+-- | Nicely aligned equalities
+aligns :: (Note -> Note -> Note) -> Note -> [Note] -> Note
+aligns _ _ [] = mempty
+aligns eq f (r:rs) = align_ $ (f & eq "" r) : P.map (\n -> "" & eq "" n) rs
+
+aligneqs :: Note -> [Note] -> Note
+aligneqs = aligns (=:)
+
+
+-- | Cancel out an expression
+cancel :: Note -> Note
+cancel n = do
+    packageDep_ "cancel"
+    comm1 "cancel" n

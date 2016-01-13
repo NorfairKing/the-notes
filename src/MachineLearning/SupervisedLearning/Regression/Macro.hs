@@ -4,6 +4,10 @@ import           Types
 
 import           Functions.Application.Macro
 
+-- | Concrete noise modeling random variable
+nois_ :: Note
+nois_ = epsilon
+
 -- | Residual sum of squares
 rss :: Note -- ^ Beta parameter
     -> Note

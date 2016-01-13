@@ -319,11 +319,19 @@ intervalOpenCloseDistribution = thm $ do
 momentsOfRandomVariables :: Note
 momentsOfRandomVariables = subsection "Moments of random variables" $ do
     subsubsection "Expected value and variance" $ do
-        expectedValueDefinition
-        covarianceDefinition
-        varianceDefinition
-        standardDeviationDefinition
-        correlationDefinition
+        note "Expected Value" $ do
+            expectedValueDefinition
+            expectationOfConstant
+            linearityOfExpectation
+        note "Covariance" $ do
+            covarianceDefinition
+        note "Variance" $ do
+            varianceDefinition
+            varianceInTermsOfExpectation
+        note "Standard deviation" $ do
+            standardDeviationDefinition
+        note "Correlation" $ do
+            correlationDefinition
 
     subsubsection "Sum and product of random variables" $ do
         independenceOfRandomVariables
@@ -353,6 +361,22 @@ expectedValueDefinition = de $ do
         let x = "x"
         ev rv_ =: int minfty pinfty (x * prds x) x
 
+expectationOfConstant :: Note
+expectationOfConstant = thm $ do
+    lab expectationOfConstantTheoremLabel
+    let b = "b"
+    s ["Let" , m rv_, "be a", randomVariable, and, m b, "a", constant]
+    ma $ ev b =: b
+    toprove
+
+linearityOfExpectation :: Note
+linearityOfExpectation = thm $ do
+    lab linearityOfExpectationTheoremLabel
+    let (a, b) = ("a", "b")
+    s ["Let", m rv_, "be a", randomVariable, and, m a, and, m b, constants]
+    ma $ ev (a * rv_ + b) =: a * ev rv_ + b
+    toprove
+
 covarianceDefinition :: Note
 covarianceDefinition = de $ do
     lab covarianceDefinitionLabel
@@ -368,6 +392,27 @@ varianceDefinition = de $ do
     s ["Let ", m rv_, " be a ", randomVariable]
     s [the, variance', " of ", m rv_, " is defined as follows"]
     ma $ var rv_ === cov rv_ rv_ =: (ev $ (pars $ rv_ - ev rv_) ^ 2)
+
+varianceInTermsOfExpectation :: Note
+varianceInTermsOfExpectation = thm $ do
+    lab varianceInTermsOfExpectationTheoremLabel
+    s ["Let ", m rv_, " be a ", randomVariable]
+    ma $ var rv_ =: ev (rv_ ^ 2) - (ev rv_) ^ 2
+    proof $ do
+        aligneqs
+            (var rv_)
+            [
+              ev $ (pars $ rv_ - ev rv_) ^ 2
+            , ev $ rv_ ^ 2 + (ev rv_) ^ 2 - 2 * rv_ * ev rv_
+            , ev (rv_ ^ 2) + ev ((ev rv_) ^ 2) + ev (- 2 * rv_ * ev rv_)
+            , ev (rv_ ^ 2) + (ev rv_) ^ 2 - 2 * ev rv_ * ev rv_
+            , ev (rv_ ^ 2) - (ev rv_) ^ 2
+            ]
+    refs [
+        linearityOfExpectationTheoremLabel
+      , expectationOfConstantTheoremLabel
+      ]
+    toprove
 
 standardDeviationDefinition :: Note
 standardDeviationDefinition = de $ do

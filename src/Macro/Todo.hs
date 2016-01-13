@@ -2,6 +2,9 @@ module Macro.Todo where
 
 import           Types
 
+import           Macro.Text
+import           Macro.Theorem
+
 import           Control.Monad        (when)
 import           Control.Monad.Reader (asks)
 
@@ -61,3 +64,10 @@ why = todo $ "Why? More of an explanation is missing here."
 
 why_ :: Note -> Note
 why_ n = todo $ "Why " <> n <> "?" <> "More of an explanation is missing here."
+
+
+-- | Placeholder for future references
+placeholder :: Note -> Note
+placeholder n = thm $ do
+    s ["This is a placeholder for future references"]
+    n

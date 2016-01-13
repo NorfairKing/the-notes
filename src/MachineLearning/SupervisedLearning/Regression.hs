@@ -5,8 +5,10 @@ import           Notes
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
 import           Functions.Basics.Terms
+import           Geometry.AffineSpaces.Terms
 import           LinearAlgebra.VectorSpaces.Terms
 import           Probability.ConditionalProbability.Macro
+import           Probability.Distributions.Terms
 import           Probability.Intro.Macro
 import           Probability.RandomVariable.Macro
 import           Probability.RandomVariable.Terms
@@ -28,11 +30,19 @@ intro :: Note
 intro = do
     let x = "X"
         y = "Y"
+        f = "f"
     s ["Regression is a ", supervisedLearning, " technique"]
     s ["It assumes that the ", inputSpace, is, m (realVecSpace "p"), " and the ", outputSpace, is, m reals]
+    s ["It also assumes that there exists a function ", m f, " such that labels can be predicted perfectly using", m f, "as follows"]
+    ma $ do
+        let x = "x"
+            y = "y"
+        fn y x =: fn f x
 
-    s ["It also assumes that the input ", m x, " the output ", m y, " and the noise on the observations ", m mlnv, " can be modelled as ", randomVariables , " as folows"]
-    ma $ y =: fn mlm x + mlnv
+    s ["In reality,", measurement, " is not perfect"]
+    s ["There is noise on", measurements, "and it is modeled as a", randomVariable, m nois_]
+    s ["In this model, ", dataPoints, " can be viewed as ", randomVariables, "drawn from the following distribution"]
+    ma $ y =: fn f x + nois_
 
     homogenousCoondinates
 
@@ -67,16 +77,26 @@ optimalRegressionSS = subsubsection "Optimal estimate" $ do
 linearRegressionSS :: Note
 linearRegressionSS = subsubsection "Linear Regression" $ do
     let p = "p"
-    s ["In ", linearRegression, " the hypothesis class looks as follows"]
+    s ["In ", linearRegression, " we assume that there is a perfect linear relation between the labels and the", inputFeatures, "(assuming a homogenous representation of input features)"]
+    let x = "x"
+        y = "y"
+    ma $ fn y x =: trans x * alpha
+    s ["If", measurement, "was perfect, we could just draw a", hyperplane, "through the first", m (p + 1), dataPoints, " and find ", m alpha]
+    s ["In reality, there is noise on the", measurement]
+    s ["Assuming that", noise, m epsilon, "in", measurement, is, additive, and, "has a", normalDistribution, "with a", mean, "of", m 0, "and a", standardDeviation, "of", m sd_, ", we can model", dataPoints, "as normally distributed", randomVariables]
+    let x = "x"
+        y = "y"
+    ma $ fn y x =: trans x * alpha + epsilon
+    -- ma $ ys =: xs /.\ b + epsilon
+    s ["As such, the hypothesis class looks as follows"]
     let b = beta
         i = "i"
         j = "j"
         n = "n"
-        x = "x"
-        y = "y"
-    ma $ setcmpr (hyp_ !: b) (b ∈ reals ^ (p + 1)) <> quad <> text "where" <> quad <> pred x =: b !: 0 + sumcmpr (j =: 1) p (x !: j * b !: j)
-    s ["... or, with a", homogenous, "representation of", inputFeatures, ".."]
-    ma $ pred x =: trans x /.\ b
+    ma $ setcmpr (hyp_ !: b) (b ∈ reals ^ (p + 1))
+         <> quad <> text "where" <> quad <>
+         pred x =: b !: 0 + sumcmpr (j =: 1) p (x !: j * b !: j)
+         =: trans x /.\ b
     s ["For a given parameter vector", m b, ",", m $ b !: 0, "is often called the", intercept', or, bias']
 
     de $ do
@@ -122,8 +142,76 @@ leastSquaresSS = do
     s ["The entire prediction", m $ hat ys, "for a given matrix", m xsp, "of", inputFeatures, "is computed as follows"]
     ma $ hat ys =: xsp /.\ hat b
 
-    -- s ["Under the statistical assumption that", noise, m epsilon, "in", measurement, is, additive, and, "has a", normalDistribution, " with a ", mean, " of ", m 0, " and a ", standardDeviation, "of", m sd_, "it follows from the linearity of expectation that the predictions will be off with the same noise"]
-    -- ma $ ys =: xs /.\ b + epsilon
+    thm $ do
+        s [m $ hat b, " is an unbiased estimation of", m alpha]
+        todo "define unbiased estimation"
+        proof $ do
+            aligneqs
+                (ev $ hat b)
+                [
+                    ev $ (matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ ys
+                  , ev $ (matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ (pars $ xs /.\ alpha + nois_)
+                  , ev $ (matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ xs /.\ alpha
+                       + (matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ nois_
+                  , ev $ alpha + (matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ nois_
+                  , ev alpha + ev ((matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ nois_)
+                  , alpha + (matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ ev nois_
+                  , alpha + (matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ 0
+                  , alpha
+                ]
+            s ["Note that all but", m nois_, "is constant in the above derivation and that we use the assumption that the", expectedValue, "of the", noise, "is", m 0]
+            refs [
+                expectationOfConstantTheoremLabel
+              , linearityOfExpectationTheoremLabel
+              ]
+
+    thm $ do
+        let p = "p"
+        ma $ (var $ hat b) =: (var_ ^ 2) * (matinv $ pars $ trans xs /.\ xs)
+        proof $ do
+            aligneqs
+                (var $ hat b)
+                [
+                  ev ((hat b) ^ 2) - (ev (hat b)) ^ 2
+                , ev ((matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ ys) - alpha ^ 2
+                , ev (pars $ ((matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ (pars $ xs /.\ alpha + nois_)) ^ 2) - alpha ^ 2
+                , ev ((pars $ alpha + ((matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ nois_)) ^ 2) - alpha ^ 2
+                , ev (alpha ^ 2
+                    + 2 * alpha * ((matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ nois_)
+                    + (pars $ (matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ nois_) ^ 2)
+                  - alpha ^ 2
+                , ev (alpha ^ 2)
+                  + 2 * alpha * ((matinv $ pars $ trans xs /.\ xs) /.\ trans xs) * ev nois_
+                  + ev ((pars $ (matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ nois_) ^ 2)
+                  - alpha ^ 2
+                , cancel (alpha ^ 2)
+                  + cancel (2 * alpha * ((matinv $ pars $ trans xs /.\ xs) /.\ trans xs) * 0)
+                  + ev ((pars $ (matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ nois_) ^ 2)
+                  - cancel (alpha ^ 2)
+                , ev $ (matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ nois_
+                    /.\ trans nois_ /.\ xs /.\ trans (matinv $ pars $ trans xs /.\ xs)
+                , (matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\
+                  ev (nois_ /.\ trans nois_)
+                  /.\ xs /.\ trans (matinv $ pars $ trans xs /.\ xs)
+                , (matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\
+                  (var_ ^ 2) * id (p + 1)
+                  /.\ xs /.\ trans (matinv $ pars $ trans xs /.\ xs)
+                , (var_ ^ 2) *
+                  cancel (matinv $ pars $ trans xs /.\ xs)
+                  /.\ cancel (pars $ trans xs /.\ xs)
+                  /.\ trans (matinv $ pars $ trans xs /.\ xs)
+                , (var_ ^ 2) * trans (matinv $ pars $ trans xs /.\ xs)
+                , (var_ ^ 2) * (matinv $ pars $ trans xs /.\ xs)
+                ]
+            refs [
+                expectationOfConstantTheoremLabel
+              , linearityOfExpectationTheoremLabel
+              , varianceInTermsOfExpectationTheoremLabel
+              , matrixTimesTransposeIsSymmetricTheoremLabel
+              , inverseOfSymmetricMatrixIsSymmetricTheoremLabel
+              ]
+            s ["Here we used", m $ ev (nois_ /.\ trans nois_) =: var_ ^ 2 * id (p + 1)]
+            why
 
     thm $ do
         textbf "Optimality of the least squares estimate"

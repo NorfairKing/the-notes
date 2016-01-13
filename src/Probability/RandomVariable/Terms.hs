@@ -27,3 +27,9 @@ makeDefs [
     , "variance"
     , "standard deviation"
     ]
+
+makeThms [
+      "Expectation of constant"
+    , "Linearity of expectation"
+    , "Variance in terms of expectation"
+    ]

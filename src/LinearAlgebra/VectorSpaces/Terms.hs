@@ -10,3 +10,7 @@ makeDefs [
     , "Euclidean vector space"
     , "Euclidean vector"
     ]
+
+makeThm "Matrix times transpose is symmetric"
+makeThm "Inverse of symmetric matrix is symmetric"
+
