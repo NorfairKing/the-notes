@@ -10,8 +10,10 @@ import           LinearAlgebra.VectorSpaces.Terms
 import           Probability.ConditionalProbability.Macro
 import           Probability.Distributions.Terms
 import           Probability.Intro.Macro
+import           Probability.ProbabilityMeasure.Terms
 import           Probability.RandomVariable.Macro
 import           Probability.RandomVariable.Terms
+import           Sets.Basics.Terms
 
 import           MachineLearning.SupervisedLearning.Macro
 import           MachineLearning.SupervisedLearning.Terms
@@ -25,6 +27,7 @@ regressionS = subsection "Regression" $ do
     optimalRegressionSS
     linearRegressionSS
     nonlinearRegressionSS
+    densityEstimationSS
 
 intro :: Note
 intro = do
@@ -291,3 +294,25 @@ nonlinearRegressionSS = subsection "Nonlinear Regression" $ do
         x = "x"
     s ["Given a nonlinear transformation ", m $ fun f (reals ^ p) reals, the, hypothesisClass, "of",the, nonlinearRegression, "method is the following set"]
     ma $ setcmpr (hyp_ !: b) (b ∈ reals ^ (p + 1)) <> quad <> text "where" <> quad <> pred x =: sumcmpr (j =: 1) p (fn f x * b !: j)
+
+
+densityEstimationSS :: Note
+densityEstimationSS = subsection "Density estimation" $ do
+    lab densityEstimationDefinitionLabel
+    s ["Recall the optimal solution to the", regression, "problem"]
+    s ["In", densityEstimation_, "the goal is to estimate", m $ cprob "y" ("X" =: "x")]
+    s ["That is the", probability, "that a", dataPoint, m "x", "gets labeled as", m "y", "given its features"]
+    maximumLikelyhoodEstimationSS
+
+maximumLikelyhoodEstimationSS :: Note
+maximumLikelyhoodEstimationSS = do
+    de $ do
+        s [maximumLikelihoodEstimation', "is a technique used in", densityEstimation]
+        let f = "f"
+            x = "X"
+        s ["Given a", set, "of", probabilityDensityFunctions, ", indexed by some  parameter", m theta, "and a", dataset, ", ", maximumLikelihoodEstimation, " works by selecting the", probabilityDensityFunction, m f, "that maximizes the likelihood that the observed", dataPoints, "are to occur", "given that they come from a distribution with", probabilityDensityFunction, m f]
+        ma $ hat theta =: argmax theta (cprob x theta)
+
+bayesianLearningSS :: Note
+bayesianLearningSS = do
+    todo "bayesian learning"

@@ -263,8 +263,11 @@ minof :: Note -> Note
 minof body = commS "min" <> body
 
 -- | Arguments at minumum
+argmax :: Note -> Note -> Note
+argmax arg body = underset arg ("arg" <> commS "," <> commS "max") <> commS " " <> body
+
 argmin :: Note -> Note -> Note
-argmin arg body = underset arg ("arg" <> commS "," <> commS "min") <> body
+argmin arg body = underset arg ("arg" <> commS "," <> commS "min") <> commS " " <> body
 
 -- Infinity
 minfty :: Note

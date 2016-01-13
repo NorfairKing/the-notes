@@ -11,4 +11,6 @@ makeDefs [
     , "ridge cost"
     , "LASSO cost"
     , "nonlinear regression"
+    , "density estimation"
+    , "maximum likelihood estimation"
     ]
