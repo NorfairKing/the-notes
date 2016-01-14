@@ -3,6 +3,7 @@ module MachineLearning.SupervisedLearning.SupportVectorMachines where
 import           Notes
 
 import           Functions.Application.Macro
+import           Functions.Basics.Macro
 import           Functions.Distances.Macro
 import           Geometry.AffineSpaces.Terms
 import           LinearAlgebra.VectorSpaces.Terms
@@ -20,6 +21,8 @@ supportVectorMachinesS = subsection "Support vector machines" $ do
     softConstraintsSVM
     naturalForm
     computingMargin
+
+    preferentialChoiceExample
 
 
 gradientDescentS :: Note
@@ -240,4 +243,46 @@ computingMargin = subsubsection "Computing the margin" $ do
             lnbk
             (w !: j) + c * (pars $ - (y !: i) * (x !: (cs [i, j]))) & " otherwise"
          )
+
+
+
+
+preferentialChoiceExample :: Note
+preferentialChoiceExample = ex $ do
+    examq eth "Data Mining" "January 2013"
+    s ["In this problem, we will develop a strategy of learning to rank objects through pairwise comparisons using", supportVectorMachines]
+
+    let n = "n"
+        xs = "X"
+        x = "x"
+        i = "i"
+        j = "j"
+        d = "d"
+    s ["Let there be", m n, "objects that each have a feature vector", m $ x !: i ∈ reals ^ d]
+    ma $ xs =: setlist (x !: 1) (x !: 2) (x !: n)
+
+    let w = "w"
+        w' = w ^: "*"
+        f_' = "f" ^: "*"
+        f' = fn f_'
+        (<*) = binop $ comm0 "prec"
+    let xi = x !: i
+        xj = x !: j
+    s ["We operate under the assumtion that there is an underlying ", textbf "linear", " ranking function", m f_', "of the following form"]
+    ma $ f' x =: w' /.\ x
+    s ["This function ranks objects", textbf "uniquely", ", that is, for any pair of obects", m $ tuple xi xj, "it satisfies", m $ f' xi > f' xj, "if the rank of", m xi, "is higher than the rank of", m xj]
+    ma $ xi <* xj === f' xi > f' xj
+    s [m w', "is called the", term "optimal preference vector"]
+
+    newline
+
+    let h = "h"
+    s ["Show that the problem of determining the optimal preference vector", m w', "can be reduced to a problem af learning a classifier", m $ fun h (reals ^ d) (setofs [-1, 1]), ", which, for any given pair of objects", m i, and, m j, "predicts whether ", m xi, "has a higher rank than", m xj]
+    proof $ do
+        s ["We need to find a way to label certain vectors (not necessarily the feature vectors) with either", m 1, or, m (-1), "such that, given the solution to a linear classification problem, we can figure out the optimal preference vector"]
+        s ["For any pairwise comparison ", m $ xi <* xj, "we label the vector", m (xi <-> xj), "as", m 1, "and the vector", m (xj <-> xi), "as", m (-1)]
+
+        s ["Because the underlying ranking function is linear, this means that we now have a whole bunch of plusses and minusses at both sides of a hyperplane through the origin"]
+        s ["Training a linear classifier on this constructed dataset will give us a normal vector", m w]
+        s ["Given enough datapoints, this normal vector will be close to linearly dependent on the real underlying optimal preference vector"]
 

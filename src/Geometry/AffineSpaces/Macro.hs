@@ -15,6 +15,8 @@ aspace n = mathbb "A" ^: n
 (<+>) :: Note -> Note -> Note
 (<+>) = (LA.<+>)
 
+-- | Substraction of two vectors
+
 -- | Affine subspace given a point and a linear subspace
 --
 -- Mnemonic: (Directed) affine subspace

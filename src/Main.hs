@@ -63,7 +63,9 @@ main = do
             case eet of
                 Left err -> if conf_ignoreReferenceErrors cf
                             then P.print err
-                            else error $ show err
+                            else do
+                                P.print $ show err
+                                error "Pdf not built."
                 Right () -> return ()
 
             (ec, out, err) <- liftIO $ readCreateProcessWithExitCode

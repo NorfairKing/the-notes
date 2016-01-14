@@ -64,6 +64,13 @@ laadd = bm "+"
 (<+>) :: Note -> Note -> Note
 (<+>) = binop laadd
 
+-- Linear Algebra Vector Space Substraction
+lasub :: Note
+lasub = bm "-"
+
+(<->) :: Note -> Note -> Note
+(<->) = binop lasub
+
 -- Linear Algebra Vector Space Scalar Multiplication
 lamul :: Note
 lamul = bm $ comm0 "cdot"
