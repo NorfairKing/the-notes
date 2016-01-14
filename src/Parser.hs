@@ -90,6 +90,6 @@ argParser = Args
     <*> strOption
         (long "tmp-dir"
             <> short 'd'
-            <> value "tmp"
+            <> value "out"
             <> metavar "DIR"
             <> help "The working directory for note generating")
