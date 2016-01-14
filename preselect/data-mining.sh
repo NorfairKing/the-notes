@@ -17,5 +17,6 @@
   topology
   probability
   statistics
+  machine-learning
   data-mining
   "
