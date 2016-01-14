@@ -5,7 +5,8 @@ import           Types
 
 import           Macro.Note
 
-import qualified Text.LaTeX as HT (chapter, section, subsection, subsubsection)
+import qualified Text.LaTeX as HT (chapter, paragraph, section, subsection,
+                                   subsubsection)
 
 
 chapter :: Text -> Note -> Note
@@ -35,3 +36,11 @@ subsubsection n func = do
     note n $ do
         HT.subsubsection (raw n)
         func
+
+paragraph :: Text -> Note -> Note
+paragraph n func = do
+    raw "\n"
+    note n $ do
+        HT.paragraph (raw n)
+        func
+

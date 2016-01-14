@@ -15,6 +15,8 @@ import           Probability.ProbabilityMeasure.Terms
 import           Probability.RandomVariable.Macro
 import           Probability.RandomVariable.Terms
 import           Sets.Basics.Terms
+import           Statistics.Macro
+import           Statistics.Terms
 
 import           MachineLearning.SupervisedLearning.Macro
 import           MachineLearning.SupervisedLearning.Terms
@@ -35,15 +37,16 @@ intro = do
     let x = "X"
         y = "Y"
         f = "f"
-    s ["Regression is a ", supervisedLearning, " technique"]
-    s ["It assumes that the ", inputSpace, is, m (realVecSpace "p"), " and the ", outputSpace, is, m reals]
-    s ["It also assumes that there exists a function ", m f, " such that labels can be predicted perfectly using", m f, "as follows"]
+    s ["Regression is a", supervisedLearning, "technique"]
+    let p = "p"
+    s ["It assumes that the", inputSpace, is, m $ realVecSpace p, "for some", m $ natural p, "and the", outputSpace, is, m reals]
+    s ["It also assumes that there exists a", function, m f, " such that labels can be predicted perfectly using", m f, "as follows"]
     ma $ do
         let x = "x"
             y = "y"
         fn y x =: fn f x
 
-    s ["In reality,", measurement, " is not perfect"]
+    s ["In reality", measurement, "is not perfect"]
     s ["There is noise on", measurements, "and it is modeled as a", randomVariable, m nois_]
     s ["In this model, ", dataPoints, " can be viewed as ", randomVariables, "drawn from the following distribution"]
     ma $ y =: fn f x + nois_
@@ -59,18 +62,19 @@ intro = do
     -- likelihood: P(data|model)
     -- posterior: P(model|data)
     -- evidence: P(data)
+
 homogenousCoondinates :: Note
 homogenousCoondinates = subsubsection "Homogenous coordinates" $ do
-    s ["Often, in the case of ", regression, " it comes in handy for the sake of brevity to transform ", inputFeatures, " to be ", ix "homogenous", " with the following transformation"]
+    s ["Often, in the case of", regression, "it comes in handy for the sake of brevity to transform", inputFeatures, " to be", homogenous, " with the following transformation"]
     let p = "p"
     ma $ do
         let x = ("x" !:)
         veclst (x 1) (x p) <> mapsto <> veclist 1 (x 1) (x p)
-    s ["Note that this changes the ", inputSpace, " to ", m $ realVecSpace (p + 1)]
+    s ["Note that this changes the", inputSpace, "to", m $ realVecSpace (p + 1)]
 
 optimalRegressionSS :: Note
 optimalRegressionSS = subsubsection "Optimal estimate" $ do
-    s ["The optimal estimate for the ", hypothesis, " in ", regression, " looks as follows"]
+    s ["The optimal", hypothesis, "in", regression, "looks as follows"]
     let x = "x"
         y = "y"
     ma $ fn y x =: ev (y <> mid <> mlmes =: x)
@@ -81,7 +85,7 @@ optimalRegressionSS = subsubsection "Optimal estimate" $ do
 linearRegressionSS :: Note
 linearRegressionSS = subsubsection "Linear Regression" $ do
     let p = "p"
-    s ["In ", linearRegression, " we assume that there is a perfect linear relation between the labels and the", inputFeatures, "(assuming a homogenous representation of input features)"]
+    s ["In", linearRegression, "we assume that there is a perfect linear relation between the labels and the", inputFeatures, "(assuming a", homogenous, "representation of input features)"]
     let x = "x"
         y = "y"
     ma $ fn y x =: trans x * alpha
@@ -91,8 +95,8 @@ linearRegressionSS = subsubsection "Linear Regression" $ do
     let x = "x"
         y = "y"
     ma $ fn y x =: trans x * alpha + epsilon
-    -- ma $ ys =: xs /.\ b + epsilon
-    s ["As such, the hypothesis class looks as follows"]
+
+    s ["As such, the", hypothesisClass, "looks as follows"]
     let b = beta
         i = "i"
         j = "j"
@@ -101,7 +105,6 @@ linearRegressionSS = subsubsection "Linear Regression" $ do
          <> quad <> text "where" <> quad <>
          pred x =: b !: 0 + sumcmpr (j =: 1) p (x !: j * b !: j)
          =: trans x /.\ b
-    s ["For a given parameter vector", m b, ",", m $ b !: 0, "is often called the", intercept', or, bias']
 
     de $ do
         s ["Using the", quadraticLoss, function, "we define a", costFunction, "called the", residualSumOfSquares', "as the sum of all the losses"]
@@ -112,23 +115,22 @@ linearRegressionSS = subsubsection "Linear Regression" $ do
     s ["If we put all the datapoints in a ", m $ n `times` (pars $ p + 1), matrix, m xs, "and all the labels in a", vector, m ys, ", then this can be written as follows"]
     ma $ rss b =: trans (pars $ ys - xs /.\ b) /.\ (pars $ ys - xs /.\ b)
 
-    leastSquaresSS
-    ridgeRegressionSS
-    lassoRegressionSS
-    generalRidgeRegression
+    leastSquaresP
+    ridgeRegressionP
+    lassoRegressionP
+    generalRidgeRegressionP
 
 
-leastSquaresSS :: Note
-leastSquaresSS = do
+leastSquaresP :: Note
+leastSquaresP = paragraph "Least squares" $ do
     let b = beta
     let xs = "X"
         ys = "Y"
     s ["The so-called method of least squares consists of building a model ", m b, " that minimizes ", m $ rss b]
     thm $ do
         s ["The value of", m b, " that minimizes", m $ rss b, "can be described as follows as long as", m $ trans xs /.\ xs, is, invertible]
-        ma $ hat b =: (matinv $ pars $ trans xs /.\ xs) /.\ (trans xs) /.\ ys
+        ma $ pest b =: (matinv $ pars $ trans xs /.\ xs) /.\ (trans xs) /.\ ys
         proof $ do
-            s ["Differentiating the equation for ", m $ rss b, " with respect to ", m b, " gives us the following"]
             let b = beta
                 i = "i"
                 j = "j"
@@ -137,6 +139,7 @@ leastSquaresSS = do
                 p = "p"
                 x = "x"
                 y = "y"
+            s ["Differentiating the equation for ", m $ rss b, " with respect to ", m $ b !: j, " gives us the following"]
             aligneqs
                 (partiald (sumcmpr (i =: 1) n ((pars $ (y !: i) - trans (x !: i) /.\ b) ^ 2)) (b !: j))
                 [
@@ -180,15 +183,15 @@ leastSquaresSS = do
                 ]
 
     let xsp = xs <> "'"
-    s ["The entire prediction", m $ hat ys, "for a given matrix", m xsp, "of", inputFeatures, "is computed as follows"]
-    ma $ hat ys =: xsp /.\ hat b
+        ysp = ys <> "'"
+    s ["The entire prediction", m ysp, "for a given", matrix, m xsp, "of", inputFeatures, "is computed as follows"]
+    ma $ ysp =: xsp /.\ hat b
 
     thm $ do
-        s [m $ hat b, " is an unbiased estimation of", m alpha]
-        todo "define unbiased estimation"
+        s [m $ pest b, " is an", unbiased_, pointEstimator, "of", m alpha]
         proof $ do
             aligneqs
-                (ev $ hat b)
+                (ev $ pest b)
                 [
                     ev $ (matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ ys
                   , ev $ (matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ (pars $ xs /.\ alpha + nois_)
@@ -200,20 +203,20 @@ leastSquaresSS = do
                   , alpha + (matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ 0
                   , alpha
                 ]
-            s ["Note that all but", m nois_, "is constant in the above derivation and that we use the assumption that the", expectedValue, "of the", noise, "is", m 0]
             refs [
                 expectationOfConstantTheoremLabel
               , linearityOfExpectationTheoremLabel
               ]
+            s ["Note that all but", m nois_, "is constant in the above derivation and that we use the assumption that the", expectedValue, "of the", noise, "is", m 0]
 
     thm $ do
         let p = "p"
-        ma $ (var $ hat b) =: (var_ ^ 2) * (matinv $ pars $ trans xs /.\ xs)
+        ma $ (var $ pest b) =: (var_ ^ 2) * (matinv $ pars $ trans xs /.\ xs)
         proof $ do
             aligneqs
-                (var $ hat b)
+                (var $ pest b)
                 [
-                  ev ((hat b) ^ 2) - (ev (hat b)) ^ 2
+                  ev ((pest b) ^ 2) - (ev (pest b)) ^ 2
                 , ev ((matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ ys) - alpha ^ 2
                 , ev (pars $ ((matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ (pars $ xs /.\ alpha + nois_)) ^ 2) - alpha ^ 2
                 , ev ((pars $ alpha + ((matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ nois_)) ^ 2) - alpha ^ 2
@@ -263,20 +266,24 @@ leastSquaresSS = do
     thm $ do
         textbf "Optimality of the least squares estimate"
         newline
-        s ["The least squares estimate of the parameter", m b, "has the smallest", variance, " among all linear unbiased estimates"]
+        s ["The least squares estimate of the ", parameter, m b, "has the smallest", variance, "among all linear unbiased estimates"]
         toprove
 
-ridgeRegressionSS :: Note
-ridgeRegressionSS = do
-    s ["Ridge regression, like the least squares method, also minimizes a cost function"]
+    s ["If", m $ trans xs /.\ xs, "is not", invertible, ", for example when some", dataPoints, "are linearly dependent, then", m $ matinv $ pars $ trans xs /.\ xs, "does not exist"]
+    s ["If we use the ", pseudoInverse, "instead of the", inverse, "we risk overfitting"]
+    s ["The symptoms of this problem are very large coordinates in", m b]
+
+ridgeRegressionP :: Note
+ridgeRegressionP = paragraph "Ridge Regression" $ do
+    s [ridgeRegression', ", like the least squares method, also minimizes a", costFunction]
+    let b = beta
+        p = "p"
+        xs = "X"
+        ys = "Y"
     de $ do
-        let xs = "X"
-            ys = "Y"
         s ["Let", m xs, "be a", matrix, "of", inputFeatures, and, m ys, "a", matrix, "of labels"]
-        s [the, ridgeCost', "is a", costFunction, "defined as follows with a parameter", m lambda]
-        let b = beta
-            j = "j"
-            p = "p"
+        s [the, ridgeCost', "is a", costFunction, "defined as follows with a", parameter, m lambda]
+        let j = "j"
         ma $ ridge b lambda ===
              rss b
              +
@@ -290,20 +297,30 @@ ridgeRegressionSS = do
         let b = beta
             p = "p"
         s ["The value of", m b, " that minimizes", m $ ridge b lambda, "can be described as follows as long as", m $ trans xs /.\ xs + lambda * id (p + 1), is, invertible]
-        ma $ hat b =: (matinv $ pars $ trans xs /.\ xs + lambda * id (p + 1)) /.\ (trans xs) /.\ ys
+        ma $ pest b =: (matinv $ pars $ trans xs /.\ xs + lambda * id (p + 1)) /.\ (trans xs) /.\ ys
         toprove
 
+    let w = matinv $ pars $ trans xs /.\ xs + lambda /.\ id (p + 1)
+    thm $ do
+        s [the, bias, "of", m $ pest b, "in", ridgeRegression]
+        ma $ bs (pest b) =: - lambda * w /.\ b
+        toprove
+
+    thm $ do
+        s [the, variance, "of", m $ pest b, "in", ridgeRegression]
+        ma $ var (pest b) =: var_ ^ 2 * w /.\ trans xs /.\ xs /.\ w
+        toprove
     -- SVD of ridge regression solution
 
 
-lassoRegressionSS :: Note
-lassoRegressionSS = do
+lassoRegressionP :: Note
+lassoRegressionP = paragraph "LASSO Regression" $ do
     s ["Least absolute shrinkage and selector operator (LASSO) regression, like the other methods above, also minimizes a cost function"]
     de $ do
         let xs = "X"
             ys = "Y"
         s ["Let", m xs, "be a", matrix, "of", inputFeatures, and, m ys, "a", matrix, "of labels"]
-        s [the, lASSOCost', "is a", costFunction, "defined as follows with a parameter", m lambda]
+        s [the, lASSOCost', "is a", costFunction, "defined as follows with a", parameter, m lambda]
         let b = beta
             j = "j"
             p = "p"
@@ -313,12 +330,12 @@ lassoRegressionSS = do
              lambda * sumcmpr (j =: 1) p (abs $ b !: j)
 
 
-generalRidgeRegression :: Note
-generalRidgeRegression = do
+generalRidgeRegressionP :: Note
+generalRidgeRegressionP = paragraph "Generalized Ridge Regression" $ do
     let q = "q"
-    s ["Ridge regression can be generalized to have a shrinkage term parametrized by ", m q]
+    s ["Ridge regression can be generalized to have a shrinkage term parametrized by", m q]
     de $ do
-        s ["The generalized ", ridgeCost, " is a cost function with parameter ", m q]
+        s ["The generalized", ridgeCost, "is a", costFunction, "with", parameter, m q]
         let b = beta
             j = "j"
             p = "p"
@@ -336,7 +353,7 @@ nonlinearRegressionSS = subsection "Nonlinear Regression" $ do
         j = "j"
         p = "p"
         x = "x"
-    s ["Given a nonlinear transformation ", m $ fun f (reals ^ p) reals, the, hypothesisClass, "of",the, nonlinearRegression, "method is the following set"]
+    s ["Given a nonlinear transformation", m $ fun f (reals ^ p) reals, the, hypothesisClass, "of", the, nonlinearRegression, "method is the following set"]
     ma $ setcmpr (hyp_ !: b) (b ∈ reals ^ (p + 1)) <> quad <> text "where" <> quad <> pred x =: sumcmpr (j =: 1) p (fn f x * b !: j)
 
 
@@ -355,7 +372,7 @@ maximumLikelyhoodEstimationSS = do
         let f = "f"
             x = "X"
         s ["Given a", set, "of", probabilityDensityFunctions, ", indexed by some  parameter", m theta, "and a", dataset, ", ", maximumLikelihoodEstimation, " works by selecting the", probabilityDensityFunction, m f, "that maximizes the likelihood that the observed", dataPoints, "are to occur", "given that they come from a distribution with", probabilityDensityFunction, m f]
-        ma $ hat theta =: argmax theta (cprob x theta)
+        ma $ pest theta =: argmax theta (cprob x theta)
 
 bayesianLearningSS :: Note
 bayesianLearningSS = do

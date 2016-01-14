@@ -218,6 +218,14 @@ constant = ix "constant"
 constants :: Note
 constants = ix_ "constant" "constants"
 
+-- Matrix pseudo inverse
+pseudoInverse :: Note
+pseudoInverse = ix "pseudo inverse"
+
+-- Matrix inverse
+inverse :: Note
+inverse = ix "inverse"
+
 -- Proofs
 proof :: Note -> Note
 proof = liftL $ TeXEnv "proof" []

@@ -32,9 +32,9 @@ import           Debug.Trace
 
 import           Text.LaTeX                   hiding (Label, alph_, article,
                                                chapter, cite, item, label,
-                                               pageref, ref, ref, rule, section,
-                                               subsection, subsubsection,
-                                               usepackage)
+                                               pageref, paragraph, ref, ref,
+                                               rule, section, subsection,
+                                               subsubsection, usepackage)
 import           Text.LaTeX.Base.Class
 import           Text.LaTeX.Base.Pretty
 import           Text.LaTeX.Base.Syntax

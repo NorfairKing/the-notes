@@ -56,6 +56,7 @@ pointEstimateDefinition = de $ do
 biasDefinition :: Note
 biasDefinition = de $ do
     lab biasDefinitionLabel
+    lab unbiasedDefinitionLabel
     s ["Let", m pest_, "be a", pointEstimator]
     s ["We define the", bias', m $ bs pest_, "of", m pest_, "as follows"]
     ma $ bs pest_ === ev pest_ - par_
