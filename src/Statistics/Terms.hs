@@ -7,4 +7,9 @@ makeDefs [
     , "parameter space"
     , "parameter"
     , "parametric model"
+    , "nonparametric model"
+    , "point estimate"
+    , "point estimator"
+    , "bias"
+    , "unbiased"
     ]

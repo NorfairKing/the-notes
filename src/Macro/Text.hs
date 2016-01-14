@@ -59,6 +59,9 @@ for = "for"
 with :: Note
 with = "with"
 
+be :: Note
+be = "be"
+
 kul :: Note
 kul = "KU Leuven"
 

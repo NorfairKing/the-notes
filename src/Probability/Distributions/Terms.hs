@@ -10,4 +10,5 @@ makeDefs [
     , "normal distribution"
     , "probability of success"
     , "binomial distribution"
+    , "identically distributed"
     ]
