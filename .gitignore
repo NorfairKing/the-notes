@@ -6,6 +6,7 @@ graph.dot
 
 dist/
 tmp/
+out/
 Setup.hs
 
 

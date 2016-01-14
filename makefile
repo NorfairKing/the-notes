@@ -23,7 +23,9 @@ GHC_OPTIONS = \
 	$(GHC_FLAGS) \
 	$(GHC_SRC_DIRS)
 
-all: bin doc
+all: bin
+	./the-notes --tmp-dir out
+	./bin/all_preselects.sh
 
 bin: $(SOURCES)
 	$(GHC) $(GHC_OPTIONS) -o $(BIN) --make $(MAIN_SRC)
