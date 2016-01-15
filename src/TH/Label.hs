@@ -17,6 +17,7 @@ makeMakeLabels [
     , ("prop"   , "Property"    )
     , ("ex"     , "Example"     )
     , ("fig"    , "Figure"      )
+    , ("nte"    , "Note"        )
     ]
 
 makeLabels :: String -> [String] -> Q [Dec]

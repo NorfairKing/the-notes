@@ -226,6 +226,12 @@ pseudoInverse = ix "pseudo inverse"
 inverse :: Note
 inverse = ix "inverse"
 
+objectiveFunction :: Note
+objectiveFunction = ix "objective function"
+
+subgradient :: Note
+subgradient = ix "subgradient"
+
 -- Proofs
 proof :: Note -> Note
 proof = liftL $ TeXEnv "proof" []

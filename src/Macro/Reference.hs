@@ -14,6 +14,7 @@ wordOf Property       = "property"
 wordOf Proposition    = "proposition"
 wordOf Example        = "example"
 wordOf Figure         = "figure"
+wordOf Note           = "note"
 
 refKind :: Label -> RefKind
 refKind (MkLabel kind _) = kind

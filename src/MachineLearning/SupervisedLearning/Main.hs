@@ -205,15 +205,19 @@ lossFunctionSS = subsection "Loss functions" $ do
     lossFunctionDefinition
     lossFunctionInducesCostFunction
     lossFunctionExamples
+    hingeLossDefinition
 
 lossFunctionDefinition :: Note
 lossFunctionDefinition = de $ do
     s ["Given a", learningProblem, with , measurementSpace, m mms_]
-    s ["A", lossFunction', "is a", distanceFunction_, "on the", outputSpace]
-    ma $ fun2 lf_ mmos_ mmos_ realsp
+    s ["A", lossFunction', "is a", binaryFunction_, "where the one of the arguments is an element of the", outputSpace]
+    let a = "A"
+    ma $ fun2 lf_ mmos_ a realsp
     s ["It is used to measure how far any single prediction is off from the real label"]
     newline
-    s ["Often, given a", hypothesis, m hyp_, ", ",  m $ lf_ !: hyp_, " is used to denote the distance between the actual label of a given", dataPoint, "and the predicted label"]
+    s ["Often, given a", hypothesis, m hyp_, ", ",  m $ lf_ !: hyp_, " is used to denote the distance between the cost of labeling a given ", dataPoint, "given its actual label"]
+
+    s ["Usually loss functions are symmetric in their arguments but in general they are not"]
 
 lossFunctionInducesCostFunction :: Note
 lossFunctionInducesCostFunction = thm $ do
@@ -221,7 +225,7 @@ lossFunctionInducesCostFunction = thm $ do
         n = "n"
         y = "y"
         z = "z"
-    s ["For any", m $ natural n, ", every", lossFunction, m lf_, "induces a", costFunction, m $ cf_ !: lf_]
+    s ["For any", m $ natural n, ", every symmetric", lossFunction, m lf_, "induces a", costFunction, m $ cf_ !: lf_]
     s [m $ cf_ !: lf_, "can be defined as any non-zero factor", m alpha, "of the sum of all losses over the dataset"]
     ma $ cost y z =: alpha * sumcmpr (i =: 1) n (loss (y !: i) (z !: i))
     s ["Often, ", m alpha, " is chosen to be ", m $ 1 /: n, ", that is, the cost is the average of all losses"]
@@ -239,6 +243,26 @@ lossFunctionExamples = do
         s [the, exponentialLoss', function, "with parameter", m beta]
         let sp = setofs [-1, 1]
         ma $ func2 lf_ sp sp realsp x y $ exp (- beta * x * y)
+
+hingeLossDefinition :: Note
+hingeLossDefinition = de $ do
+    lab hingeLossDefinitionLabel
+    s [the, hingeLoss', function, "is an assymetric", lossFunction, "as follows"]
+    let (x, y) = ("x", "y")
+    ma $ func2 "hinge" (setofs [-1, 1]) reals realsp x y $ hinge x y =: maxof (setofs [0, 1 - x * y])
+
+    hereFigure $ do
+        tikzpicture ["scale" =- 0.5] $ axis [
+              "xlabel" =- m gamma
+            , "ylabel" =- m "hinge"
+            , "ymin" =- (-0.1)
+            , "ymax" =- 4.1
+            , "xmin" =- (-1.1)
+            , "xmax" =- 3.1
+            ] $ do
+            addPlot ["ultra thick", "domain" =- "-5:1"] $ "1-x"
+            addPlot ["ultra thick", "domain" =-  "1:5"] $ "0"
+        caption $ "The hinge loss for a positive example, given its confidence " <> m gamma
 
 riskSS :: Note
 riskSS = do

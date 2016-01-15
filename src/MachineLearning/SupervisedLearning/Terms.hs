@@ -37,6 +37,7 @@ makeDefs [
     , "cost function"
     , "quadratic loss"
     , "exponential loss"
+    , "hinge loss"
     , "conditional expected risk"
     , "total expected risk"
     , "training error"
@@ -46,3 +47,5 @@ makeDefs [
     , "stochastic gradient descent"
     ]
 
+
+makeNte "SVM Symmetric Data"

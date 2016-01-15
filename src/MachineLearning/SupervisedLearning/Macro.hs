@@ -106,3 +106,7 @@ ter = fn2 risk_
 ter_ :: Note
 ter_ = ter hyp_ lf_
 
+
+-- | Hinge loss
+hinge :: Note -> Note -> Note
+hinge = fn2 "hinge"

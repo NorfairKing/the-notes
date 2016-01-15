@@ -91,4 +91,5 @@ data RefKind = Definition
              | Property
              | Example
              | Figure
+             | Note
     deriving (Show, Eq)

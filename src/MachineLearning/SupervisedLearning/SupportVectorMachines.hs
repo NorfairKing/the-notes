@@ -1,14 +1,17 @@
 module MachineLearning.SupervisedLearning.SupportVectorMachines where
 
-import           Notes
+import           Notes                                                          as N
 
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
+import           Functions.Basics.Terms
 import           Functions.Distances.Macro
 import           Geometry.AffineSpaces.Terms
 import           LinearAlgebra.VectorSpaces.Terms
 import           Logic.FirstOrderLogic.Macro
+import           Logic.PropositionalLogic.Macro
 
+import           MachineLearning.SupervisedLearning.Macro
 import           MachineLearning.SupervisedLearning.Terms
 
 import           MachineLearning.SupervisedLearning.SupportVectorMachines.Macro
@@ -23,6 +26,7 @@ supportVectorMachinesS = subsection "Support vector machines" $ do
     computingMargin
 
     preferentialChoiceExample
+    asymSVM
 
 
 gradientDescentS :: Note
@@ -37,7 +41,7 @@ regularGradientDescentSS = do
         (a, b) = ("a", "b")
     de $ do
         lab gradientDescentDefinitionLabel
-        s ["Given a multi-variable function ", m ff, " that is everywhere ", differentiable, "with a continuous", derivative, " we can find a ", localMinimum, " (and analogously a ", localMaximum, ") using the gradient of that function, starting at a point ", m a]
+        s ["Given a multi-variable", function, m ff, " that is everywhere ", differentiable, "with a continuous", derivative, " we can find a ", localMinimum, " (and analogously a ", localMaximum, ") using the gradient of that", function, ", starting at a point ", m a]
         newline
         s ["The first insight is that, at a point ", m a, ", ", m ff, " decreases fastest when going in the direction of the negative gradient of ", m ff, " at ", m a]
         let grf = fn $ grad ff
@@ -58,8 +62,8 @@ stochasticGradientDescentSS :: Note
 stochasticGradientDescentSS = subsubsection "Stochastic gradient descent" $ do
     let ff = "F"
     de $ do
-        s ["When the function to minimize can be written as the sum of ", differentiable, " functions, the process of ", gradientDescent, " can be sped up by adding an element of randomness"]
-        s ["Instead of taking the gradient of the entire function ", m ff, ", we instead take the gradient of just one term of the sum that comprises ", m ff, " and take a step in the opposite direction"]
+        s ["When the ", function, " to minimize can be written as the sum of ", differentiable, functions, ", the process of ", gradientDescent, " can be sped up by adding an element of randomness"]
+        s ["Instead of taking the gradient of the entire ", function, m ff, ", we instead take the gradient of just one term of the sum that comprises ", m ff, " and take a step in the opposite direction"]
         s ["This process is called ", stochasticGradientDescent']
     todo "This is also a first draft, the real deal is much more complicated"
 
@@ -109,7 +113,7 @@ hardConstraintsSVM = subsubsection "SVM with hard constraints" $ do
     s ["The problem of finding the maximum-margin ", hyperplane, " can now be rewritten as follows"]
     ma $ do
         let i = "i"
-        max w $ min i $ conf_ !: i
+        conf_ =: (max w $ min i $ conf_ !: i)
 
     s ["The margin is the greatest minimal confidence and is also written as ", m conf_]
 
@@ -140,13 +144,13 @@ hardConstraintsSVM = subsubsection "SVM with hard constraints" $ do
             , norm w /: (w /.\ w) & "" =: conf_
             ]
 
-    s ["This means that maximising the margin ", m conf_, " is equivalent to minimizing ", m $ norm w, " or (for technical reasons) ", m $ (1 /: 2) * (norm w) ^2]
+    s ["This means that maximising the margin ", m conf_, " is equivalent to minimizing ", m $ norm w, " or equivalently ", m $ w /.\ w]
     s ["Now the rewritten optimisation problem looks as follows"]
     align_ $
         let i = "i" in
         [
-          "" & (min w $ (1 /: 2) * (norm w) ^2)
-        , text "such that " & (fa i $ conf_ !: i * (w /.\ x !: i + b) >= 1)
+          "" & (min w $ w /.\ w)
+        , text "such that " & (fa i $ y !: i * (pars $ w /.\ x !: i + b) >= 1)
         ]
     s ["This problem is called ", term "SVM with hard constraints"]
 
@@ -162,28 +166,39 @@ softConstraintsSVM = subsubsection "SVM with soft constraints" $ do
     s ["If the data is not ", ix "linearly separable", " then this optimisation problem is not feasable"]
     s ["It can however be adapted to account for the ", quoted "mistakes"]
     let c = "C"
+    let i = "i"
+    let n = "n"
+    let xi = x !: i
+    let yi = y !: i
+    let ii = mathbb "I" !: (text "point " <> i <> text " is misclassified")
     align_ $
-        let i = "i" in
         [
-          "" & (min w $ (1 /: 2) * (norm w) ^2 + c)
-        , text "such that " & (fa i $ conf_ !: i * (w /.\ x !: i + b) >= 1)
+          "" & (min w $ w /.\ w + c `cdot` sumcmpr (i =: 1) n ii)
+        , text "such that " & (fa i $ yi * (pars $ w /.\ xi + b) >= 1 - ii)
         ]
-    s ["Here ", m c, " is a parameter that controls the the number of mistakes that the ", hyperplane, " made"]
+    s ["Here ", m c, " is a parameter that controls the the number of mistakes that the", hyperplane, "is allowed to make"]
     s ["However, not all mistakes are of the same severity"]
 
     let i = "i"
         n = "n"
-        xii = xi !: i
+        xii = N.xi !: i
     s ["The margin can be used to penalize mistakes via the use of so-called ", term "slack variables", " ", m xii]
     align_ $
         let i = "i" in
         [
-          "" & (min w $ (1 /: 2) * (norm w) ^2 + c * sumcmpr (i =: 1) n xii)
-        , text "such that " & (fa i $ conf_ !: i * (w /.\ x !: i + b) >= 1 - xii)
+          "" & (min w $ w /.\ w + c * sumcmpr (i =: 1) n xii)
+        , text "such that " & (fa i $ yi * (pars $ w /.\ xi + b) >= 1 - xii)
         ]
-    s ["Here ", m xii, " could be any ", ix "loss function"]
-    s ["In the case of SVM, this will be ", ix "hinge loss"]
-    ma $ xii =: maxof (setofs [0, 1 - (pars $ (y !: i) * (pars $ w /.\ x !: i + b) )])
+    s ["Given an optimal", m w, "we can solve for", m xii, "as follows"]
+    ma $ cases $ do
+        yi * (pars $ w /.\ xi + b) >= 1 ⇒ xii =: 0
+        lnbk
+        yi * (pars $ w /.\ xi + b) <  1 ⇒ xii =: 1 - yi * (pars $ w /.\ xi + b)
+    ma $ xii =: maxof (setofs [0, 1 - (pars $ (yi) * (pars $ w /.\ xi + b) )])
+    nte $ do
+        lab sVMSymmetricDataNoteLabel
+        s ["We assume that the number of positively labeled examples is similar to the number of negatively labeled examples"]
+        s ["Otherwise we would have to penalize false positives and false negatives differently"]
     nte $ do
         s ["When we set ", m c, " to ", m pinfty, " the result will be a hyperplane that separates the hyperplane"]
         s ["When we set ", m c, " to ", m 0, " then the result will ignore the data"]
@@ -198,7 +213,7 @@ naturalForm = subsubsection "SVM in natural form" $ do
     let i = "i"
         n = "n"
     s ["The problem can be rewritten one last time"]
-    ma $ argmin (w <> ", " <> b) $ (1 /: 2) * (norm w) ^2 + c * sumcmpr (i =: 1) n (maxof (setofs [0, 1 - (pars $ (y !: i) * (pars $ w /.\ x !: i + b) )]))
+    ma $ argmin (w <> ", " <> b) $ w /.\ w + c * sumcmpr (i =: 1) n (maxof (setofs [0, 1 - (pars $ (y !: i) * (pars $ w /.\ x !: i + b) )]))
     s ["This formulation is called ", term "SVM in its natural form"]
 
 computingMargin :: Note
@@ -207,7 +222,7 @@ computingMargin = subsubsection "Computing the margin" $ do
     s ["Since the problem is a quadratic optimisation problem, we could just use a quadratic solver"]
     newline
     s ["We can do better, however, if we are content with an arbitrarily good approxmation"]
-    s ["The objective function is a nicely continuous function in two variables: ", m w, and, m b]
+    s [the, objectiveFunction, "is a nicely continuous", function, "in two variables: ", m w, and, m b]
     s ["This means that we can perform gradient descent to find the minimum"]
 
     let ff = "f"
@@ -220,8 +235,8 @@ computingMargin = subsubsection "Computing the margin" $ do
         n = "n"
         x = vec "x"
         y = "y"
-    s ["In essence, we just trying to minimize the function ", m ff, " as follows"]
-    ma $ f w b =: (1 /: 2) * (norm w) ^2 + c * sumcmpr (i =: 1) n (maxof (setofs [0, 1 - (pars $ (y !: i) * (pars $ w /.\ x !: i + b) )]))
+    s ["In essence, we just trying to minimize the", function, m ff, " as follows"]
+    ma $ f w b =: w /.\ w + c * sumcmpr (i =: 1) n (maxof (setofs [0, 1 - (pars $ (y !: i) * (pars $ w /.\ x !: i + b) )]))
     s ["The ", m j, "th coordinate of the gradiant ", m $ grad ff, " can be computed as follows"]
     ma $ grad ff !: j
       =: partd (fn2 ff w b) (w !: j)
@@ -246,7 +261,6 @@ computingMargin = subsubsection "Computing the margin" $ do
 
 
 
-
 preferentialChoiceExample :: Note
 preferentialChoiceExample = ex $ do
     examq eth "Data Mining" "January 2013"
@@ -265,12 +279,12 @@ preferentialChoiceExample = ex $ do
         w' = w ^: "*"
         f_' = "f" ^: "*"
         f' = fn f_'
-        (<*) = binop $ comm0 "prec"
+        (<*) = binop $ comm0 "succ"
     let xi = x !: i
         xj = x !: j
-    s ["We operate under the assumtion that there is an underlying ", textbf "linear", " ranking function", m f_', "of the following form"]
+    s ["We operate under the assumtion that there is an underlying ", textbf "linear", "ranking", function, m f_', "of the following form"]
     ma $ f' x =: w' /.\ x
-    s ["This function ranks objects", textbf "uniquely", ", that is, for any pair of obects", m $ tuple xi xj, "it satisfies", m $ f' xi > f' xj, "if the rank of", m xi, "is higher than the rank of", m xj]
+    s ["This", function, "ranks objects", textbf "uniquely", ", that is, for any pair of obects", m $ tuple xi xj, "it satisfies", m $ f' xi > f' xj, "if the rank of", m xi, "is higher than the rank of", m xj]
     ma $ xi <* xj === f' xi > f' xj
     s [m w', "is called the", term "optimal preference vector"]
 
@@ -286,3 +300,99 @@ preferentialChoiceExample = ex $ do
         s ["Training a linear classifier on this constructed dataset will give us a normal vector", m w]
         s ["Given enough datapoints, this normal vector will be close to linearly dependent on the real underlying optimal preference vector"]
 
+
+asymSVM :: Note
+asymSVM = subsubsection "Assymmetric SVM" $ do
+    examq eth "Data Mining" "January 2013"
+
+    s [supportVectorMachines, "usually assume that data is labeled symmetrically", ref sVMSymmetricDataNoteLabel, "by using the", hingeLoss, function]
+
+    s ["Assymetric", supportVectorMachines, "are a variant of", supportVectorMachines, "in which the number of positive examples is much greater than the number of negative examples in the data"]
+    s ["The goal is to design a variant with an assymetric", hingeLoss, function, "so that more weight is placed on misclassifications of negative examples"]
+    let a = alpha
+    s ["For a given", m $ a >= 1, "we can formulate the asymmetric", supportVectorMachines, "as the following optimization problem"]
+    let w = vec "w"
+        x = vec "x"
+        y = "y"
+        i = "i"
+        n = "n"
+        xi = x !: i
+        yi = y !: i
+    align_ $
+        [
+          ""                & (min w $ w /.\ w)
+        , text "such that " & fa (yi =: 1)  (yi * w /.\ x >= 1)
+        , ""                & fa (yi =: -1) (yi * w /.\ x >= a)
+        ]
+
+    let la_ = lf_ !: "asym" !: w
+        la = fn2 la_
+        c = "C"
+
+    s ["Note that for", m $ a =: 1, "the problem reduces to the classic", supportVectorMachines]
+    s ["By introducing slack variables to handle", noise, "we can reformulate the above optimisation problem into an online convex program using an assymetric", hingeLoss, function, "as follows"]
+    ma $ min w $ w /.\ w + c * sumcmpr (i =: 1) n (la yi xi)
+
+    itemize $ do
+        item $ do
+            s ["Derive the assymetric", hingeLoss, function, "for this assymetric variant of", supportVectorMachines]
+            newline
+
+            s ["Adding slack variables, analogously to the way we did for soft", supportVectorMachines, ", results in the following optimisation problem"]
+            let n = "n"
+                i = "i"
+                xii = N.xi !: i
+            align_ $
+                [
+                  ""                & (min w $ w /.\ w) + c * sumcmpr (i =: 1) n xii
+                , text "such that " & fa (yi =: 1)  (yi * w /.\ x >= 1 - xii)
+                , ""                & fa (yi =: -1) (yi * w /.\ x >= a - xii)
+                ]
+            s ["We distinguish two cases"]
+            s ["For positive examples, we solve for", m xii, "as follows, just like for regular", supportVectorMachines]
+            ma $ cases $ do
+                yi * w /.\ xi >= 1 ⇒ xii =: 0
+                lnbk
+                yi * w /.\ xi <  1 ⇒ xii =: 1 - yi * w /.\ xi
+            s ["For negative examples, we solve for", m xii, "as follows"]
+            ma $ cases $ do
+                yi * w /.\ xi >= a ⇒ xii =: 0
+                lnbk
+                yi * w /.\ xi <  a ⇒ xii =: a - yi * w /.\ xi
+
+            s ["This means that the assymetric", hingeLoss, function, "looks as follows"]
+            let la' = cases $ do
+                        maxof (setofs [0, 1 - yi * w /.\ xi]) & text "if " <> yi =: 1
+                        lnbk
+                        maxof (setofs [0, a - yi * w /.\ xi]) & text "if " <> yi =: -1
+            ma $ la yi xi =: la'
+            s ["The resulting optimisation problem in primal form looks as follows"]
+            ma $ min w $ w /.\ w + c * sumcmpr (i =: 1) n la'
+
+        item $ do
+            s ["Plot the assymmetric", hingeLoss, function, "seperately for a positive example and for a negative example as a function of the confidence ", m $ eta =: y * w /.\ x]
+            newline
+
+            s ["Just for the plot, as an example, ", m a, "has been chosen to be", m 2]
+
+            hereFigure $ do
+                tikzpicture ["scale" =- 0.5] $ axis [
+                      "xlabel" =- m eta
+                    , "ylabel" =- m la_
+                    , "ymin" =- (-0.1)
+                    , "ymax" =- 4.1
+                    , "xmin" =- (-1.1)
+                    , "xmax" =- 3.1
+                    ] $ do
+                    addPlot ["color" =- "red",  "ultra thick", "domain" =- "-5:1"] $ "1-x"
+                    addPlot ["color" =- "red",  "ultra thick", "domain" =-  "1:5"] $ "0"
+                    addPlot ["color" =- "blue", "ultra thick", "domain" =- "-5:2"] $ "2-x"
+                    addPlot ["color" =- "blue", "ultra thick", "domain" =-  "2:5"] $ "0"
+                caption $ do
+                    "The assymetrix hinge loss for a datapoint, given its confidence " <> m eta <> ". "
+                    "The red line is for a positive example and the blue line for a negative example."
+
+
+        item $ do
+            s ["Derive the", subgradient, "of the assymetric", hingeLoss, function, "with respect to the weight vector", m w]
+            newline

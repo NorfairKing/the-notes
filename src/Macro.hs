@@ -19,6 +19,7 @@ import           Macro.Reference             as X
 import           Macro.Section               as X
 import           Macro.Text                  as X
 import           Macro.Theorem               as X
+import           Macro.Tikz                  as X
 import           Macro.Todo                  as X
 import           Macro.Tuple                 as X
 
