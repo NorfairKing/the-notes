@@ -238,6 +238,9 @@ projection = ix "projection"
 closed :: Note
 closed = ix "closed"
 
+algorithm :: Note
+algorithm = ix "algorithm"
+
 -- Proofs
 proof :: Note -> Note
 proof = liftL $ TeXEnv "proof" []
@@ -298,10 +301,10 @@ pinfty = "+" <> infty
 
 -- Limits
 lim :: Note -> Note -> Note -> Note
-lim m n o = (commS "lim" !: (m → n)) <> o
+lim m n o = (commS "lim" .!: (m → n)) <> o
 
 lim2 :: Note -> Note -> Note -> Note -> Note -> Note
-lim2 a x b y c = (commS "lim" !: (commaSeparated [a → x, b → y])) <> c
+lim2 a x b y c = (commS "lim" .!: (commaSeparated [a → x, b → y])) <> c
 
 -- C-k ->
 (→) :: Note -> Note ->Note

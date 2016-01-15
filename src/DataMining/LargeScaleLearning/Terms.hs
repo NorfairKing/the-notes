@@ -7,5 +7,7 @@ makeDefs [
     , "regret"
     , "optimal feasable fixed point"
     , "average regret"
+    , "no regret"
     , "online convex programming problem"
+    , "greedy projection"
     ]

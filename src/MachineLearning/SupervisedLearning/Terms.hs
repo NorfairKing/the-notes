@@ -44,6 +44,7 @@ makeDefs [
     , "test error"
     , "generalisation error"
     , "gradient descent"
+    , "learning rate"
     , "stochastic gradient descent"
     ]
 
