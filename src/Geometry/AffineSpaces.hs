@@ -5,6 +5,8 @@ import           Notes
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
 import           Functions.Basics.Terms
+import           Functions.Distances.Macro
+import           Functions.Distances.Terms
 import           LinearAlgebra.VectorSpaces.Terms
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
@@ -20,6 +22,7 @@ affineSpaces = section "Affine Spaces" $ do
 
     affineSetDefinition
     convexSetDefinition
+    convexProjection
     convexFunctionDefinition
     concaveFunctionDefinition
     strictlyConvexFunctionDefinition
@@ -51,10 +54,21 @@ convexSetDefinition :: Note
 convexSetDefinition = de $ do
     lab convexSetDefinitionLabel
     let a = "A"
-    s ["An ", convexSet', " ", m a, " is a set that contains the line segment through any two distinct points in the ", set]
+    s ["A ", convexSet', " ", m a, " is a set that contains the line segment through any two distinct points in the ", set]
     ma $ do
         let (x, y) = ("x", "y")
         fa (x ∈ a) $ fa (y ∈ a) $ fa (theta ∈ ccint 0 1) $ x ≠ y ⇒ theta * x + (pars $ 1 - theta) * y ∈ a
+
+convexProjection :: Note
+convexProjection = de $ do
+    let a = "A"
+        as = mathbb "A"
+        x = "x"
+        y = "y"
+    s ["Let", m a, "be a", closed, ", ", convexSet, "and a", subset, "of", m as, "and let", m metr_, "be a", metric, "on", m as]
+    s ["The projection onto", m a, "is defined as follows"]
+    ma $ func ("Proj" !: a) as a x $ proj a x =: argmin (y ∈ a) (metrapp_ x y)
+    todo "defined closed"
 
 convexFunctionDefinition :: Note
 convexFunctionDefinition = de $ do

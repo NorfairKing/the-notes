@@ -2,10 +2,14 @@ module Geometry.AffineSpaces.Macro where
 
 import           Types
 
+import           Functions.Application.Macro
 import           Macro.MetaMacro
 
-import qualified Macro.LinearAlgebra.Macro as LA
+import qualified Macro.LinearAlgebra.Macro   as LA
 
+-- | Projection onto a convex set
+proj :: Note -> Note -> Note
+proj a = fn $ "Proj" !: a
 
 -- | Affine space with given dimension
 aspace :: Note -> Note

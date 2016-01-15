@@ -23,6 +23,14 @@ distapp = app2
 distapp_ :: Note -> Note -> Note
 distapp_ = distapp dist_
 
+-- | Application of given metric
+metrapp :: Note -> Note -> Note -> Note
+metrapp = distapp
+
+-- | Application of standard metric
+metrapp_ :: Note -> Note -> Note
+metrapp_ = metrapp metr_
+
 -- * Norms
 
 -- | N-norm of an element

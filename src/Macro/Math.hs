@@ -232,6 +232,12 @@ objectiveFunction = ix "objective function"
 subgradient :: Note
 subgradient = ix "subgradient"
 
+projection :: Note
+projection = ix "projection"
+
+closed :: Note
+closed = ix "closed"
+
 -- Proofs
 proof :: Note -> Note
 proof = liftL $ TeXEnv "proof" []
