@@ -25,6 +25,9 @@ todo n = do
         packageDep_ "todonotes"
         todo' n
 
+clarify :: Note -> Note
+clarify n = todo $ "Clarify: " <> n
+
 toprove :: Note
 toprove = todo $ "There is a proof missing here."
 

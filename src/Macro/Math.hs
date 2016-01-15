@@ -229,8 +229,14 @@ inverse = ix "inverse"
 objectiveFunction :: Note
 objectiveFunction = ix "objective function"
 
+gradient :: Note
+gradient = ix "gradient"
+
 subgradient :: Note
 subgradient = ix "subgradient"
+
+subgradients :: Note
+subgradients = ix_ "subgradients" "subgradient"
 
 projection :: Note
 projection = ix "projection"
