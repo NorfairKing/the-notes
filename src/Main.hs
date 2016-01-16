@@ -58,7 +58,7 @@ main = do
 
 
             -- This is where the magic happens
-            (eet, _) <- runNote entireDocument cf pconf startState
+            (eet, _) <- buildNote entireDocument cf pconf startState
 
             case eet of
                 Left err -> if conf_ignoreReferenceErrors cf

@@ -13,6 +13,6 @@ import           Types
 import           Control.Monad.Reader (runReaderT)
 import           Control.Monad.State  (runStateT)
 
-runNote :: Note -> Config -> ProjectConfig -> State -> IO (Either [ΛError] (), State)
-runNote note conf λconf state = runReaderT (runStateT (buildLaTeXProject note λconf) state) conf
+buildNote :: Note -> Config -> ProjectConfig -> State -> IO (Either [ΛError] (), State)
+buildNote note conf λconf state = runReaderT (runStateT (buildLaTeXProject note λconf) state) conf
 

@@ -257,18 +257,17 @@ hingeLossDefinition = de $ do
     let (x, y) = ("x", "y")
     ma $ func2 "hinge" (setofs [-1, 1]) reals realsp x y $ hinge x y =: maxof (setofs [0, 1 - x * y])
 
-    hereFigure $ do
-        tikzpicture ["scale" =- 0.5] $ axis [
-              "xlabel" =- m gamma
-            , "ylabel" =- m "hinge"
-            , "ymin" =- (-0.1)
-            , "ymax" =- 4.1
-            , "xmin" =- (-1.1)
-            , "xmax" =- 3.1
-            ] $ do
-            addPlot ["ultra thick", "domain" =- "-5:1"] $ "1-x"
-            addPlot ["ultra thick", "domain" =-  "1:5"] $ "0"
-        caption $ "The hinge loss for a positive example, given its confidence " <> m gamma
+    let cap = "The hinge loss for a positive example, given its confidence " <> m gamma
+    tikzFig cap ["scale" =- 0.5] $ axis [
+          "xlabel" =- m gamma
+        , "ylabel" =- m "hinge"
+        , "ymin" =- (-0.1)
+        , "ymax" =- 4.1
+        , "xmin" =- (-1.1)
+        , "xmax" =- 3.1
+        ] $ do
+        addPlot ["ultra thick", "domain" =- "-5:1"] $ "1-x"
+        addPlot ["ultra thick", "domain" =-  "1:5"] $ "0"
 
 hingeLossIsConvexTheorem :: Note
 hingeLossIsConvexTheorem = thm $ do

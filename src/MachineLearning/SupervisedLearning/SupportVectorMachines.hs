@@ -375,22 +375,21 @@ asymSVM = subsubsection "Assymmetric SVM" $ do
 
             s ["Just for the plot, as an example, ", m a, "has been chosen to be", m 2]
 
-            hereFigure $ do
-                tikzpicture ["scale" =- 0.5] $ axis [
-                      "xlabel" =- m eta
-                    , "ylabel" =- m la_
-                    , "ymin" =- (-0.1)
-                    , "ymax" =- 4.1
-                    , "xmin" =- (-1.1)
-                    , "xmax" =- 3.1
-                    ] $ do
-                    addPlot ["color" =- "red",  "ultra thick", "domain" =- "-5:1"] $ "1-x"
-                    addPlot ["color" =- "red",  "ultra thick", "domain" =-  "1:5"] $ "0"
-                    addPlot ["color" =- "blue", "ultra thick", "domain" =- "-5:2"] $ "2-x"
-                    addPlot ["color" =- "blue", "ultra thick", "domain" =-  "2:5"] $ "0"
-                caption $ do
+            let cap = do
                     "The assymetrix hinge loss for a datapoint, given its confidence " <> m eta <> ". "
                     "The red line is for a positive example and the blue line for a negative example."
+            tikzFig cap ["scale" =- 0.5] $ axis [
+                  "xlabel" =- m eta
+                , "ylabel" =- m la_
+                , "ymin" =- (-0.1)
+                , "ymax" =- 4.1
+                , "xmin" =- (-1.1)
+                , "xmax" =- 3.1
+                ] $ do
+                addPlot ["color" =- "red",  "ultra thick", "domain" =- "-5:1"] $ "1-x"
+                addPlot ["color" =- "red",  "ultra thick", "domain" =-  "1:5"] $ "0"
+                addPlot ["color" =- "blue", "ultra thick", "domain" =- "-5:2"] $ "2-x"
+                addPlot ["color" =- "blue", "ultra thick", "domain" =-  "2:5"] $ "0"
 
 
         item $ do

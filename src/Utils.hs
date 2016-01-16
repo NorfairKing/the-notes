@@ -4,13 +4,22 @@ import           Types
 
 import           Prelude
 
-import           Data.Char         (toLower, toUpper)
-import           Data.List         (intercalate, isSuffixOf)
-import           Data.Maybe        (fromJust)
+import           Data.Char              (toLower, toUpper)
+import           Data.List              (intercalate, isSuffixOf)
+import           Data.Maybe             (fromJust)
 
 import           Control.Exception
-import           System.Directory  (createDirectory, removeFile)
-import           System.IO.Error   (isAlreadyExistsError, isDoesNotExistError)
+import           System.Directory       (createDirectory, removeFile)
+import           System.IO.Error        (isAlreadyExistsError,
+                                         isDoesNotExistError)
+
+import qualified Crypto.Hash.MD5        as MD5
+import qualified Data.ByteString        as SB
+import qualified Data.ByteString.Base16 as B16
+import qualified Data.ByteString.Char8  as SB8
+import qualified Data.Text.Encoding     as T
+
+
 
 makeDir :: FilePath -> IO ()
 makeDir fp = createDirectory fp `catch` handleExists
@@ -107,3 +116,6 @@ pluralOf s | isIrregular = fromJust $ lookup s irregulars
           , ("criterion"  , "criteria")
           , ("datum"      , "data")
         ]
+
+hashContent :: Text -> FilePath
+hashContent = SB8.unpack . SB.take 16 . B16.encode . MD5.hash . T.encodeUtf8
