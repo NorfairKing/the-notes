@@ -181,3 +181,83 @@ onlineConvexSupportVectorMachines = subsection "Online convex programming for su
 
         clarify "what is this w star?"
 
+    onlineConvexAssymetricSupportVectorMachines
+
+
+onlineConvexAssymetricSupportVectorMachines :: Note
+onlineConvexAssymetricSupportVectorMachines = subsubsection "Online convex programming for support vector machines" $ do
+    s ["Recall the formulation of assymetric",  supportVectorMachines]
+    let w = vec "w"
+        -- t = "t"
+        -- n = "n"
+        i = "i"
+        -- d = "d"
+        -- e = eta
+        yi = "y" !: i
+        xi = vec "x" !: i
+        a = alpha
+        -- ws = mathcal "W"
+    s ["For a given vector normal vector", m w, "and example", m $ tuple xi yi, "the assymetric", hingeLoss, function, "is the following", function, "for some given", m a]
+    let ahinge_ = "hinge" !: "asym" !: w
+        ahinge = fn2 ahinge_
+    ma $ (=:) (ahinge xi yi) $ cases $ do
+        maxof (setofs [0, 1 - yi * w /.\ xi]) & text "if " <> yi =: 1
+        lnbk
+        maxof (setofs [0, a - yi * w /.\ xi]) & text "if " <> yi =: -1
+    s ["Note that this", function, "is a", convexFunction_]
+
+    s [the, set, "of", subgradients, "of this function is also split into two cases"]
+    let o = omega
+    s ["Any", function, "as follows with", m $ o ∈ ccint (-1) 0, "is a", subgradient, "of", m ahinge_]
+    s ["For", m $ yi =: 1, "it is just the same as for the regular", hingeLoss, function]
+    let col = textcolor (DefColor Red)
+    ma $ cases $ do
+        0           & text " if " <> yi * w /.\ xi >  1
+        lnbk
+        omega       & text " if " <> yi * w /.\ xi =: 1
+        lnbk
+        (- yi * xi) & text " if " <> yi * w /.\ xi <  1
+        lnbk
+    s ["But for", m $ yi =: -1, "there is a difference"]
+    ma $ cases $ do
+        0           & text " if " <> yi * w /.\ xi >  col a
+        lnbk
+        omega       & text " if " <> yi * w /.\ xi =: col a
+        lnbk
+        (- yi * xi) & text " if " <> yi * w /.\ xi <  col a
+        lnbk
+
+    let e = eta
+    s [the, onlineConvexProgrammingProblem, "algorithm for assymetric", supportVectorMachines, "then looks as follows"]
+    hereFigure $ renderAlgorithm $ do
+        w !: 0 <-. vec 0
+        lnbk
+        i <-. 0
+        lnbk
+        whileS true $ do
+            i <-. i + 1
+            lnbk
+            let wi = w !: i
+                ei = e !: i
+            ifElseS (yi >= 1)
+                (
+                    ifElseS (wi /.\ xi >= 1)
+                        (wi <-. w !: (i - 1)) $ do
+                            let w' = w <> "'"
+                            w' <-. w !: (i - 1) + ei * yi /.\ xi
+                            lnbk
+                            wi <-. w' * minof (setofs [1, (1 /: (sqrt lambda * norm w'))])
+                )
+                (
+                    ifElseS ( wi /.\ xi <= col a)
+                        (wi <-. w !: (i - 1)) $ do
+                            let w' = w <> "'"
+                            w' <-. w !: (i - 1) + ei * yi /.\ xi
+                            lnbk
+                            wi <-. w' * minof (setofs [1, (1 /: (sqrt lambda * norm w'))])
+                )
+
+        caption "OCP SVM-ASYM"
+
+
+

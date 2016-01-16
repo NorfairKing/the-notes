@@ -6,6 +6,7 @@ import           Functions.Application.Macro
 import           Functions.Basics.Macro
 import           Functions.Basics.Terms
 import           Functions.Distances.Terms
+import           Geometry.AffineSpaces.Terms
 import           Logic.FirstOrderLogic.Macro
 import           Probability.ConditionalProbability.Macro
 import           Probability.ProbabilityMeasure.Macro
@@ -205,7 +206,7 @@ lossFunctionSS = subsection "Loss functions" $ do
     lossFunctionDefinition
     lossFunctionInducesCostFunction
     lossFunctionExamples
-    hingeLossDefinition
+    hingeLossSS
 
 lossFunctionDefinition :: Note
 lossFunctionDefinition = de $ do
@@ -244,6 +245,11 @@ lossFunctionExamples = do
         let sp = setofs [-1, 1]
         ma $ func2 lf_ sp sp realsp x y $ exp (- beta * x * y)
 
+hingeLossSS :: Note
+hingeLossSS = subsubsection "Hinge loss" $ do
+    hingeLossDefinition
+    hingeLossIsConvexTheorem
+
 hingeLossDefinition :: Note
 hingeLossDefinition = de $ do
     lab hingeLossDefinitionLabel
@@ -263,6 +269,11 @@ hingeLossDefinition = de $ do
             addPlot ["ultra thick", "domain" =- "-5:1"] $ "1-x"
             addPlot ["ultra thick", "domain" =-  "1:5"] $ "0"
         caption $ "The hinge loss for a positive example, given its confidence " <> m gamma
+
+hingeLossIsConvexTheorem :: Note
+hingeLossIsConvexTheorem = thm $ do
+    s [the, hingeLoss, function, "is a", convexFunction_]
+    toprove
 
 riskSS :: Note
 riskSS = do
