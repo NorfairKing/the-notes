@@ -9,6 +9,7 @@ import           Functions.Distances.Macro
 import           Functions.Distances.Terms
 import           Geometry.AffineSpaces.Macro
 import           Geometry.AffineSpaces.Terms
+import           Logic.PropositionalLogic.Macro
 import           MachineLearning.SupervisedLearning.Macro
 import           MachineLearning.SupervisedLearning.SupportVectorMachines.Terms
 import           MachineLearning.SupervisedLearning.Terms
@@ -61,7 +62,7 @@ regretDefinition = de $ do
     s [the, averageRegret', "is defined as follows"]
     ma $ areg n === (reg n /: n)
     s [m $ sequ x t, "is said to have", noRegret', "if the following holds for any", sequence, "of cost functons", m $ sequ c t]
-    ma $ lim n pinfty (reg n) =: 0
+    ma $ lim n pinfty (areg n) =: 0
 
 
 onlineConvexProgrammingProblemDefinition :: Note
@@ -73,7 +74,7 @@ onlineConvexProgrammingProblemDefinition = de $ do
         t = "t"
         x = "x"
     s ["Let", m xs, "be a", convexSet, "and a", subset, "of", m $ reals ^ d, "and let", m $ sequ c t, "be a", sequence, "of", convexFunctions]
-    s ["A", onlineConvexProgrammingProblem', "consists of, for each", m t, "sequentially, picking a point", m $ x ∈ xs, "that minimizes", m $ reg t]
+    s ["A", onlineConvexProgrammingProblem', "consists of, for each", m t, "sequentially, picking a point", m $ x ∈ xs, "that, ideally,  minimizes", m $ reg t]
 
 greedyProjectionSS :: Note
 greedyProjectionSS = subsubsection "Greedy projection" $ do
@@ -113,6 +114,7 @@ onlineConvexSupportVectorMachines = subsection "Online convex programming for su
         n = "n"
         i = "i"
         d = "d"
+        e = eta
         yi = "y" !: i
         xi = vec "x" !: i
         ws = mathcal "W"
@@ -125,6 +127,9 @@ onlineConvexSupportVectorMachines = subsection "Online convex programming for su
     s ["Projection on to the feasable set is the following function"]
     ma $ func ("Proj" !: ws) (reals ^ d) ws w $ (1 /: (sqrt lambda * norm w)) * w
     s ["Note that this function is very efficiently computable"]
+
+    s [the, learningRate, "in each round is the confidence in the prediction"]
+
 
     s ["All that's left to complete the description of an", onlineConvexProgrammingProblem, "is the", gradient, "of the cost functions"]
     s ["The problem is that the", hingeLoss, function, "is not differentiable for", m $ yi * w /.\ xi =: 1]
@@ -142,6 +147,26 @@ onlineConvexSupportVectorMachines = subsection "Online convex programming for su
         lnbk
 
     todo "full algorithm here, in algorithm style"
+    s [the, greedyProjection, algorithm, "for", supportVectorMachines, "then looks as follows"]
+
+    hereFigure $ renderAlgorithm $ do
+        w !: 0 <-. vec 0
+        lnbk
+        i <-. 0
+        lnbk
+        whileS true $ do
+            i <-. i + 1
+            lnbk
+            let wi = w !: i
+                ei = e !: i
+            ifElseS (yi * wi /.\ xi >= 1)
+                (wi <-. w !: (i - 1)) $ do
+                    let w' = w <> "'"
+                    w' <-. w !: (i - 1) + ei * yi /.\ xi
+                    lnbk
+                    wi <-. w' * minof (setofs [1, (1 /: (sqrt lambda * norm w'))])
+
+        caption "OCP SVM"
 
 
     s ["This concept can also be used to train", supportVectorMachines, "with batches of data"]

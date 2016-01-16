@@ -5,6 +5,7 @@ module Macro (
 
 import           Types
 
+import           Macro.Algorithm             as X
 import           Macro.Array                 as X
 import           Macro.Arrows                as X
 import           Macro.Code                  as X
