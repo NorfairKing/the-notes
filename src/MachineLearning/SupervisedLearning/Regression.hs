@@ -188,20 +188,23 @@ leastSquaresP = paragraph "Least squares" $ do
     ma $ ysp =: xsp /.\ hat b
 
     thm $ do
-        s [m $ pest b, " is an", unbiased_, pointEstimator, "of", m alpha]
+        let a = alpha
+        s [m $ pest b, " is an", unbiased_, pointEstimator, "of", m a]
         proof $ do
             aligneqs
-                (ev $ pest b)
+                (bs a $ pest b)
                 [
-                    ev $ (matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ ys
-                  , ev $ (matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ (pars $ xs /.\ alpha + nois_)
-                  , ev $ (matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ xs /.\ alpha
-                       + (matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ nois_
-                  , ev $ alpha + (matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ nois_
-                  , ev alpha + ev ((matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ nois_)
-                  , alpha + (matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ ev nois_
-                  , alpha + (matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ 0
-                  , alpha
+                    ev (pest b) - a
+                  , ev ((matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ ys) - a
+                  , ev ((matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ (pars $ xs /.\ alpha + nois_)) - a
+                  , ev ((matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ xs /.\ alpha
+                       + (matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ nois_) - a
+                  , ev (alpha + (matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ nois_) - a
+                  , ev alpha + ev ((matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ nois_) - a
+                  , alpha + (matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ ev nois_ - a
+                  , alpha + (matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\ 0 - a
+                  , alpha - a
+                  , 0
                 ]
             refs [
                 expectationOfConstantTheoremLabel
@@ -303,7 +306,7 @@ ridgeRegressionP = paragraph "Ridge Regression" $ do
     let w = matinv $ pars $ trans xs /.\ xs + lambda /.\ id (p + 1)
     thm $ do
         s [the, bias, "of", m $ pest b, "in", ridgeRegression]
-        ma $ bs (pest b) =: - lambda * w /.\ b
+        ma $ bs alpha (pest b) =: - lambda * w /.\ b
         toprove
 
     thm $ do

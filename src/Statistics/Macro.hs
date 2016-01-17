@@ -3,8 +3,10 @@ module Statistics.Macro where
 import           Types
 
 import           Macro.Math
+import           Macro.MetaMacro
 
 import           Functions.Application.Macro
+import           Probability.ProbabilityMeasure.Macro
 
 -- | Statistical model
 smod_ :: Note
@@ -31,7 +33,30 @@ pest_ :: Note
 pest_ = pest par_
 
 
--- | Bias of estimator
-bs :: Note -> Note
-bs = fn "bias"
+-- | Bias of estimator with respect to the true value
+bs :: Note -> Note -> Note
+bs n = fn ("bias" !: n)
+
+-- | Standard error, given a point estimator
+se :: Note -> Note
+se = fn "SE"
+
+
+-- | Means squared error of estimator
+mse :: Note -> Note
+mse = fn "MSE"
+
+
+-- | Probability given a parameter
+probm :: Note -> Note -> Note
+probm n = prm (prm_ !: n)
+
+-- | Expected value given a parameter
+evm :: Note -> Note -> Note
+evm n m = "E" !: n <> sqbrac m
+
+
+-- | Variance given a parameter
+varm :: Note -> Note -> Note
+varm n m = "Var" !: n <> sqbrac m
 

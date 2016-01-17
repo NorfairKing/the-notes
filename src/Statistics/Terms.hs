@@ -10,6 +10,10 @@ makeDefs [
     , "nonparametric model"
     , "point estimate"
     , "point estimator"
+    , "consistent"
+    , "sampling distribution"
+    , "standard error"
     , "bias"
     , "unbiased"
+    , "mean squared error"
     ]

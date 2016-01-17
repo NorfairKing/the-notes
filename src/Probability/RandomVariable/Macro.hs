@@ -74,7 +74,7 @@ prq = app prqf
 -- * Expected value
 ev :: Note -> Note
 ev n = "E" <> sqbrac n
--- FIXME move this
+-- FIXME move this?
 
 -- | Mean
 mn :: Note -> Note
