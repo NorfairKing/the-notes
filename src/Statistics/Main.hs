@@ -4,6 +4,7 @@ import           Notes
 
 import           Functions.Application.Macro
 import           Functions.Basics.Terms
+import           Logic.PropositionalLogic.Macro
 import           Probability.Distributions.Terms
 import           Probability.Independence.Terms
 import           Probability.RandomVariable.Macro
@@ -58,6 +59,8 @@ pointEstimation = do
     note "Mean squared error" $ do
         meanSquaredErrorDefinition
         meanSquaredErrorEquivalentDefinition
+    biasOfAverageOfEstimators
+    varianceOfAverageOfEstimators
 
 pointEstimateDefinition :: Note
 pointEstimateDefinition = de $ do
@@ -127,5 +130,51 @@ meanSquaredErrorEquivalentDefinition = thm $ do
         + (pars $ evm par_ pest_ - par_) ^ 2
         , varm par_ pest_ + (bs par_ pest_) ^ 2
         ]
+
+
+biasOfAverageOfEstimators :: Note
+biasOfAverageOfEstimators = thm $ do
+    let t n = pest_ !: n
+        u = "a"
+        p = par_
+        b = "B"
+    s ["Let", m $ setlist (t 1) (t 2) (t b), "be a", set, "of", m b, pointEstimates, "of a", parameter, m p]
+    s ["Constructing a new", pointEstimate, m u, "by averaging the", pointEstimates, m $ setlist (t 1) (t 2) (t b), "results in a", pointEstimate, "with the average", bias]
+    let i = "i"
+    ma $ u =: (1 /: b) * sumcmpr (i =: 1) b (t i)
+    ma $ bs p u =: (1 /: b) * sumcmpr (i =: 1) b (bs p (t i))
+    proof $ do
+        aligneqs (bs p u)
+            [
+              evm p u - p
+            , evm p ((1 /: b) * sumcmpr (i =: 1) b (t i)) - p
+            , (1 /: b) * sumcmpr (i =: 1) b (evm p (t i)) - (1 /: b) * (sumcmpr (i =: 1) b p)
+            , (1 /: b) * sumcmpr (i =: 1) b (pars $ (evm p (t i)) - p)
+            , (1 /: b) * sumcmpr (i =: 1) b (bs p (t i))
+            ]
+
+varianceOfAverageOfEstimators :: Note
+varianceOfAverageOfEstimators = thm $ do
+    let t n = pest_ !: n
+        u = "a"
+        p = par_
+        b = "B"
+    s ["Let", m $ setlist (t 1) (t 2) (t b), "be a", set, "of", m b, pointEstimates, "of a", parameter, m p]
+    s ["Constructing a new", pointEstimate, m u, "by averaging the", pointEstimates, m $ setlist (t 1) (t 2) (t b), "results in a", pointEstimate, "with a", variance, "as follows"]
+    let (i, j) = ("i", "j")
+    ma $ u =: (1 /: b) * sumcmpr (i =: 1) b (t i)
+    ma $ varm p u =: (1 /: (b ^ 2)) * (pars $ sumcmpr (i =: 1) b (varm p (t i)) + (sumcmpr (i =: 1) b $ sumcmpr (j =: 1 ∧ i ≠ j) b $ covm p (t i) (t j)))
+    s ["Assuming that", covariances, "are small and", variances, "similar, this means that averaging", pointEstimates, "reduces decreases the", variance]
+    proof $ do
+        aligneqs (varm p u)
+            [
+              -- varm p $ (1 /: b) * sumcmpr (i =: 1) b (t i)
+              evm p ((pars $ u - evm p u) ^ 2)
+            , evm p ((pars $ ((1 /: b) * sumcmpr (i =: 1) b (t i)) - evm p ((1 /: b) * sumcmpr (i =: 1) b (t i))) ^ 2)
+            , evm p (pars $ ((1 /: b) * sumcmpr (i =: 1) b ((t i) - evm p (t i))) ^ 2)
+            , (1 /: (b ^ 2)) * (pars $ sumcmpr (i =: 1) b (varm p (t i)) + (sumcmpr (i =: 1) b $ sumcmpr (j =: 1 ∧ i ≠ j) b $ covm p (t i) (t j)))
+            ]
+        why_ "does this last step work"
+
 
 

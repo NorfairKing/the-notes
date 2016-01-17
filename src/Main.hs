@@ -62,9 +62,9 @@ main = do
 
             case eet of
                 Left err -> if conf_ignoreReferenceErrors cf
-                            then P.print err
+                            then printErrors err
                             else do
-                                P.print $ show err
+                                printErrors err
                                 error "Pdf not built."
                 Right () -> return ()
 
@@ -81,6 +81,9 @@ main = do
                 ExitSuccess -> return ()
 
             return ()
+
+printErrors :: [ΛError] -> IO ()
+printErrors = putStr . unlines . map show
 
 latexMkJob :: Config -> CreateProcess
 latexMkJob cf = shell $ "latexmk " ++ unwords latexMkArgs

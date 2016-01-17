@@ -463,7 +463,7 @@ expectedValueOfSumTheorem = thm $ do
         y = "Y"
     s ["Let ", m x, and, m y, "be", randomVariables, "in a", probabilitySpace, m prsp_]
     ma $ ev (x + y) =: ev x + ev y
-    proof $ toprove
+    toprove
 
 varianceOfSumTheorem :: Note
 varianceOfSumTheorem = thm $ do
@@ -471,7 +471,7 @@ varianceOfSumTheorem = thm $ do
         y = "Y"
     s ["Let ", m x, and, m y, "be", randomVariables, "in a", probabilitySpace, m prsp_]
     ma $ var (x + y) =: var x + var y
-    proof $ toprove
+    toprove
 
 
 productOfRandomVariablesDefinition :: Note

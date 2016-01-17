@@ -66,7 +66,7 @@ why :: Note
 why = todo $ "Why? More of an explanation is missing here."
 
 why_ :: Note -> Note
-why_ n = todo $ "Why " <> n <> "?" <> "More of an explanation is missing here."
+why_ n = todo $ "Why " <> n <> "?" <> " " <> "More of an explanation is missing here."
 
 
 -- | Placeholder for future references

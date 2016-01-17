@@ -60,3 +60,6 @@ evm n m = "E" !: n <> sqbrac m
 varm :: Note -> Note -> Note
 varm n m = "Var" !: n <> sqbrac m
 
+-- | Covariance given a parameter
+covm :: Note -> Note -> Note -> Note
+covm n = fn2 $ "Cov" !: n
