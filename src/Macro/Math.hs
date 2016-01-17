@@ -406,3 +406,10 @@ mathfrak n = do
     comm1 "mathfrak" n
 
 
+-- * Logarithms
+
+log :: Note -> Note
+log n = commS "log" <> n
+
+logn :: Note -> Note -> Note
+logn n m = commS "log" !: n <> m

@@ -63,3 +63,24 @@ varm n m = "Var" !: n <> sqbrac m
 -- | Covariance given a parameter
 covm :: Note -> Note -> Note -> Note
 covm n = fn2 $ "Cov" !: n
+
+
+-- * Maximum likelihood
+llhSign :: Note
+llhSign = mathcal "L"
+
+llh :: Note -- ^ parameter
+    -> Note
+llh = fn llhSign
+
+-- * Log likelihood
+lllhSign :: Note
+lllhSign = "ll"
+
+lllh :: Note -- ^ parameter
+     -> Note
+lllh = fn lllhSign
+
+-- | Maximum likelihood estimate
+mle :: Note
+mle = "MLE"

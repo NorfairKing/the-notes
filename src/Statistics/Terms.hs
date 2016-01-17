@@ -16,4 +16,7 @@ makeDefs [
     , "bias"
     , "unbiased"
     , "mean squared error"
+    , "likelihood function"
+    , "log-likelihood function"
+    , "maxmimum likelihood estimate"
     ]

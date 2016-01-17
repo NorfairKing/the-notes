@@ -21,6 +21,7 @@ statisticsC = chapter "Statistics" $ do
     parametricModelDefinition
     modifiedMeasuresDefinition
     pointEstimation
+    maximumLikelihood
 
 statisticalModelDefinition :: Note
 statisticalModelDefinition = de $ do
@@ -177,4 +178,41 @@ varianceOfAverageOfEstimators = thm $ do
         why_ "does this last step work"
 
 
+maximumLikelihood :: Note
+maximumLikelihood = do
+    likelihoodFunctionDefinition
+    likelihoodNotes
+    maximumLikelihoodEstimate
 
+likelihoodFunctionDefinition :: Note
+likelihoodFunctionDefinition = de $ do
+    lab likelihoodFunctionDefinitionLabel
+    s ["Let", m parsp_, "be the", parameterSpace, "of a", parametricModel, m parmod_]
+    let x = ("X" !:)
+        n = "n"
+    s ["Let", m $ lst (x 1) (x n), "be", m n, independent, and, identicallyDistributed, randomVariables, "from some distribution", m df_]
+    s [the, likelihoodFunction', m llhSign, "is defined as follows"]
+    let t = theta
+        i = "1"
+    ma $ llh t === prodcmpr (i =: 1) n (prds $ x i)
+    s [the, logLikelihoodFunction', "is defined as the logarithm of the", likelihoodFunction]
+    ma $ lllh t === log (llh t)
+
+
+likelihoodNotes :: Note
+likelihoodNotes = do
+    nte $ do
+        s ["The value of the", likelihoodFunction, "for a given", parameter, "represents the probability that the given data occurs assuming that the parameter was the true", parameter, "of the distribution of the data"]
+        s ["It is ", textbf "not", "the probability that the", parameter, "is the true", parameter, "of the distribution of the data"]
+    nte $ do
+        s [the, likelihoodFunction, "is not a", density, function]
+        s ["In general it does not integrate to", m 1]
+
+maximumLikelihoodEstimate :: Note
+maximumLikelihoodEstimate = do
+    de $ do
+        s [the, maxmimumLikelihoodEstimate', m mle, "is the", parameter, m par_, "that maximizes", m $ llh par_]
+        ma $ pest_ =: max par_ (llh par_)
+    nte $ do
+        s ["This value is also the value that maximizes", m $ lllh par_]
+        s ["In practice, that's more often what we'll do to calculate the", mle]
