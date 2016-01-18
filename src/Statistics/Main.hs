@@ -216,3 +216,4 @@ maximumLikelihoodEstimate = do
     nte $ do
         s ["This value is also the value that maximizes", m $ lllh par_]
         s ["In practice, that's more often what we'll do to calculate the", mle]
+        todo "prove that this is the case for every transformation"

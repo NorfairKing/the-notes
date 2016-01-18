@@ -39,9 +39,14 @@ df n = dfsign_ !: n
 df_ :: Note
 df_ = df rv_  -- probability distribution function
 
+-- | Probability distribution at point argument with modified symbol
+prdm :: Note -> Note -> Note
+prdm = fn
+
 -- | The probability distribution at point argument
 prd :: Note -> Note
-prd = app df_
+prd = prdm df_
+
 
 
 -- * Density function
