@@ -12,7 +12,6 @@ mapReduceS :: Note
 mapReduceS = section "MapReduce" $ do
     mapReduceConcept
     mapReduceExamples
-    mapReduceReferences
 
 mapReduceConcept :: Note
 mapReduceConcept = subsection "The Concept" $ do
@@ -80,10 +79,6 @@ wordCountExample = ex $ do
     python $ raw [litFile|src/DataMining/wordcountmap.py|]
     python $ raw [litFile|src/DataMining/wordcountreduce.py|]
 
-mapReduceReferences :: Note
-mapReduceReferences = nocite dataMiningMapReduceSlides
-
-
 mapReduce1GramMarkovModel :: Note
 mapReduce1GramMarkovModel = ex $ do
     examq eth "Data Mining" "January 2014"
@@ -116,12 +111,3 @@ mapReduceFrequentItemSets = ex $ do
     python $ raw [litFile|src/DataMining/frequentitemsetsreduce.py|]
 
 
-dataMiningMapReduceSlides :: Reference
-dataMiningMapReduceSlides = Reference lectureSlides "data-mining-mapreduce" $
-    [
-      ("author", "Andreas Krause")
-    , ("title", "Data Mining: Introduction")
-    , ("year", "2015")
-    , ("month", "September")
-    , ("note", "Lecture Slides")
-    ]

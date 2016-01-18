@@ -90,4 +90,4 @@ gaussianDistributionDefinition = de $ do
     s ["A ", gaussianDistribution', or, normalDistribution', " with parameters ", m mn_, " and ", m var_, " is given by the following ", probabilityDensity]
     ma $ do
         let x = "x"
-        prds x =: exp (- ((pars $ x - mn_) ^ 2) /: (2 * var_ ^ 2)) /: (var_ * sqrt (2 * pi))
+        prds x =: exp (- ((pars $ x - mn_) ^ 2) /: (2 * var_)) /: (sd_ * sqrt (2 * pi))

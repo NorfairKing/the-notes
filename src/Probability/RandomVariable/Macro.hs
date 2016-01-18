@@ -60,7 +60,11 @@ dsf_ :: Note
 dsf_ = dsf rv_ -- probability density function
 
 prds :: Note -> Note
-prds = app dsf_ -- probability density
+prds = prdsm dsf_ -- probability density
+
+-- | Probabilty density at point argument with modified symbol
+prdsm :: Note -> Note -> Note
+prdsm = fn
 
 
 -- * Quantile function
@@ -103,7 +107,7 @@ var n = "Var" <> sqbrac n
 
 -- | Concrete variance
 var_ :: Note
-var_ = sigma
+var_ = sd_ ^: 2
 
 -- * Correlation
 
@@ -115,4 +119,4 @@ cor = fn2 "Cor"
 
 -- | Concrete standard deviation
 sd_ :: Note
-sd_ = var_ ^: 2
+sd_ = sigma

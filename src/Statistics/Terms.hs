@@ -18,5 +18,9 @@ makeDefs [
     , "mean squared error"
     , "likelihood function"
     , "log-likelihood function"
-    , "maxmimum likelihood estimate"
+    , "maximum likelihood estimate"
+    ]
+
+makeThms [
+      "MLE constant factor invariant"
     ]

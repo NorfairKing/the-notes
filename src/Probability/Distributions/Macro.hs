@@ -28,3 +28,9 @@ binomialD = fn2 $ mathcal "B"
 binomialD_ :: Note
 binomialD_ = binomialD "n" "p"
 
+
+-- * Normal
+normalD :: Note -- Mean
+        -> Note -- Variance
+        -> Note
+normalD = fn2 $ mathcal "N"

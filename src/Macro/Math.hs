@@ -191,9 +191,6 @@ additive = ix "additive"
 invertible :: Note
 invertible = ix "invertible"
 
-transformation :: Note
-transformation = ix "transformation"
-
 sum :: Note
 sum = ix "sum"
 
@@ -246,6 +243,9 @@ closed = ix "closed"
 
 algorithm :: Note
 algorithm = ix "algorithm"
+
+transformation :: Note
+transformation = ix "transformation"
 
 -- Proofs
 proof :: Note -> Note

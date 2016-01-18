@@ -214,7 +214,7 @@ leastSquaresP = paragraph "Least squares" $ do
 
     thm $ do
         let p = "p"
-        ma $ (var $ pest b) =: (var_ ^ 2) * (matinv $ pars $ trans xs /.\ xs)
+        ma $ (var $ pest b) =: (var_) * (matinv $ pars $ trans xs /.\ xs)
         proof $ do
             aligneqs
                 (var $ pest b)
@@ -241,14 +241,14 @@ leastSquaresP = paragraph "Least squares" $ do
                   ev (nois_ /.\ trans nois_)
                   /.\ xs /.\ trans (matinv $ pars $ trans xs /.\ xs)
                 , (matinv $ pars $ trans xs /.\ xs) /.\ trans xs /.\
-                  (var_ ^ 2) * id (p + 1)
+                  (var_) * id (p + 1)
                   /.\ xs /.\ trans (matinv $ pars $ trans xs /.\ xs)
-                , (var_ ^ 2) *
+                , (var_) *
                   cancel (matinv $ pars $ trans xs /.\ xs)
                   /.\ cancel (pars $ trans xs /.\ xs)
                   /.\ trans (matinv $ pars $ trans xs /.\ xs)
-                , (var_ ^ 2) * trans (matinv $ pars $ trans xs /.\ xs)
-                , (var_ ^ 2) * (matinv $ pars $ trans xs /.\ xs)
+                , (var_) * trans (matinv $ pars $ trans xs /.\ xs)
+                , (var_) * (matinv $ pars $ trans xs /.\ xs)
                 ]
             refs [
                 expectationOfConstantTheoremLabel
@@ -257,7 +257,7 @@ leastSquaresP = paragraph "Least squares" $ do
               , matrixTimesTransposeIsSymmetricTheoremLabel
               , inverseOfSymmetricMatrixIsSymmetricTheoremLabel
               ]
-            s ["Here we used", m $ ev (nois_ /.\ trans nois_) =: var_ ^ 2 * id (p + 1)]
+            s ["Here we used", m $ ev (nois_ /.\ trans nois_) =: var_ * id (p + 1)]
             aligneqs
                 (ev $ nois_ /.\ trans nois_)
                 [
@@ -311,7 +311,7 @@ ridgeRegressionP = paragraph "Ridge Regression" $ do
 
     thm $ do
         s [the, variance, "of", m $ pest b, "in", ridgeRegression]
-        ma $ var (pest b) =: var_ ^ 2 * w /.\ trans xs /.\ xs /.\ w
+        ma $ var (pest b) =: var_ * w /.\ trans xs /.\ xs /.\ w
         toprove
     -- SVD of ridge regression solution
 

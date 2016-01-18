@@ -10,7 +10,7 @@ app :: Note -> Note -> Note
 app n m = n <> negspace <> pars m
   where
     negspace :: Note
-    negspace = commS "kern" <> raw "-2pt"
+    negspace = commS "kern" <> raw "-2px"
 
 -- |
 -- > fn = app

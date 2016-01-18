@@ -146,7 +146,6 @@ onlineConvexSupportVectorMachines = subsection "Online convex programming for su
         (- yi * xi) & text " if " <> yi * w /.\ xi <  1
         lnbk
 
-    todo "full algorithm here, in algorithm style"
     s [the, greedyProjection, algorithm, "for", supportVectorMachines, "then looks as follows"]
 
     hereFigure $ renderAlgorithm $ do
@@ -185,7 +184,7 @@ onlineConvexSupportVectorMachines = subsection "Online convex programming for su
 
 
 onlineConvexAssymetricSupportVectorMachines :: Note
-onlineConvexAssymetricSupportVectorMachines = subsubsection "Online convex programming for support vector machines" $ do
+onlineConvexAssymetricSupportVectorMachines = subsubsection "Online convex programming for support assymmetric vector machines" $ do
     s ["Recall the formulation of assymetric",  supportVectorMachines]
     let w = vec "w"
         -- t = "t"

@@ -3,8 +3,13 @@ module Statistics.Main where
 import           Notes
 
 import           Functions.Application.Macro
+import           Functions.Basics.Macro
 import           Functions.Basics.Terms
+import           Functions.Composition.Macro
+import           Functions.Inverse.Macro
+import           Functions.Jections.Terms
 import           Logic.PropositionalLogic.Macro
+import           Probability.Distributions.Macro
 import           Probability.Distributions.Terms
 import           Probability.Independence.Terms
 import           Probability.RandomVariable.Macro
@@ -78,8 +83,7 @@ pointEstimateDefinition = de $ do
 consistentDefinition :: Note
 consistentDefinition = de $ do
     lab consistentDefinitionLabel
-    s ["A", pointEstimate, m pest_, "of a", parameter, m par_, "is called", consistent', "if it converges to", m par_, "in probability"]
-    todo "Define convergence in probability"
+    s ["A", pointEstimate, m pest_, "of a", parameter, m par_, "is called", consistent', "if it converges to", m par_, "in probability", "for inscreasingly large amounts of", randomVariables]
 
 samplingDistributionDefinition :: Note
 samplingDistributionDefinition = de $ do
@@ -182,7 +186,8 @@ maximumLikelihood :: Note
 maximumLikelihood = do
     likelihoodFunctionDefinition
     likelihoodNotes
-    maximumLikelihoodEstimate
+    maximumLikelihoodEstimateSS
+    maximumLikelihoodEstimateOfMeanOfNormalDistribution
 
 likelihoodFunctionDefinition :: Note
 likelihoodFunctionDefinition = de $ do
@@ -193,8 +198,8 @@ likelihoodFunctionDefinition = de $ do
     s ["Let", m $ lst (x 1) (x n), "be", m n, independent, and, identicallyDistributed, randomVariables, "from some distribution", m df_]
     s [the, likelihoodFunction', m llhSign, "is defined as follows"]
     let t = theta
-        i = "1"
-    ma $ llh t === prodcmpr (i =: 1) n (prds $ x i)
+        i = "i"
+    ma $ func llhSign parsp_ reals t (llh t =: prodcmpr (i =: 1) n (prdsm (dsf t) $ x i))
     s [the, logLikelihoodFunction', "is defined as the logarithm of the", likelihoodFunction]
     ma $ lllh t === log (llh t)
 
@@ -208,12 +213,131 @@ likelihoodNotes = do
         s [the, likelihoodFunction, "is not a", density, function]
         s ["In general it does not integrate to", m 1]
 
-maximumLikelihoodEstimate :: Note
-maximumLikelihoodEstimate = do
-    de $ do
-        s [the, maxmimumLikelihoodEstimate', m mle, "is the", parameter, m par_, "that maximizes", m $ llh par_]
-        ma $ pest_ =: max par_ (llh par_)
+maximumLikelihoodEstimateSS :: Note
+maximumLikelihoodEstimateSS = do
+    maximumLikelihoodEstimateDefinition
     nte $ do
         s ["This value is also the value that maximizes", m $ lllh par_]
         s ["In practice, that's more often what we'll do to calculate the", mle]
         todo "prove that this is the case for every transformation"
+    maximumLikelihoodEstimateIsConsitent
+    maximumLikelihoodEstimateParameterTransformation
+    maximumLikelihoodEstimateConstantScalar
+    -- maximumLikelihoodEstimateIncreasingTransformationOfData
+    thm $ do
+        s [the, maximumLikelihoodEstimate, "is asymptotically normal"]
+        todo "define asymptotically normal"
+    thm $ do
+        s ["For well-behaved", pointEstimates, "the", maximumLikelihoodEstimate, "has the smallest", variance, "for large numbers of", randomVariables]
+        todo "what does well-behaved mean?"
+        toprove
+
+maximumLikelihoodEstimateDefinition :: Note
+maximumLikelihoodEstimateDefinition = de $ do
+    s [the, maximumLikelihoodEstimate', m mle, "is the", parameter, m par_, "that maximizes", m $ llh par_]
+    ma $ pest_ =: max par_ (llh par_)
+
+maximumLikelihoodEstimateIsConsitent :: Note
+maximumLikelihoodEstimateIsConsitent = thm $ do
+    s [the, maximumLikelihoodEstimate, "is a consistent", pointEstimate]
+    toprove
+
+maximumLikelihoodEstimateParameterTransformation :: Note
+maximumLikelihoodEstimateParameterTransformation = thm $ do
+    let x = ("X" !:)
+        n = "n"
+    s ["Let", m $ lst (x 1) (x n), "be", m n, independent, and, identicallyDistributed, randomVariables, "from some distribution", m df_]
+    let g' = "g"
+        g = fn g'
+        q = comm0 "Xi"
+    s ["Let", m pest_, "be the", maximumLikelihoodEstimate, "of a parameter", m par_, "and let", m $ fun g' parsp_ q, "be a",bijective, function, "of", m par_]
+    s [the, maximumLikelihoodEstimate, "of", m $ g par_, "is given by", m $ g pest_]
+    proof $ do
+        let l = llhSign <> "'"
+        s ["Define", m $ fun l q reals, "as follows"]
+        ma $ l =: llhSign ● inv g'
+        s ["It represents the", likelihoodFunction, "for any", m $ g par_]
+        s ["For any estimate", m $ g pest_, ", the following then holds by definition"]
+        ma $ fn l (g pest_) =: llh pest_
+        s ["For a value", m pest_, "that maximizes", m llhSign, ", ", m $ g pest_, "will maxmize", m l, "with the same value"]
+        s ["This means that the", maximumLikelihoodEstimate, "of", m $ g par_, "is equal to", m $ g pest_]
+
+
+-- maximumLikelihoodEstimateIncreasingTransformationOfData :: Note
+-- maximumLikelihoodEstimateIncreasingTransformationOfData = thm $ do
+--     let x' = "X"
+--         x = (x' !:)
+--         n = "n"
+--     s ["Let", m $ lst (x 1) (x n), "be", m n, independent, and, identicallyDistributed, randomVariables, "from some distribution", m df_]
+--     let g' = "g"
+--         g = fn g'
+--     s ["Let", m pest_, "be the", maximumLikelihoodEstimate, "of a parameter", m par_]
+--     let g' = "g"
+--         g = fn g'
+--     s ["Let ", m $ fun g' reals reals, "be an", increasing, transformation, "of", m x', "that is independent of", m par_]
+--     s [the, maximumLikelihoodEstimate, "of", m $ lst (g $ x 1) (g $ x n), "is equal to that of", m $ lst (x 1) (x n)]
+--     toprove
+
+
+
+maximumLikelihoodEstimateConstantScalar :: Note
+maximumLikelihoodEstimateConstantScalar = thm $ do
+    lab mLEConstantFactorInvariantTheoremLabel
+    let x' = "X"
+        x = (x' !:)
+        n = "n"
+    s ["Let", m $ lst (x 1) (x n), "be", m n, independent, and, identicallyDistributed, randomVariables, "from some distribution", m df_]
+    s ["Let", m pest_, "be the", maximumLikelihoodEstimate, "of a parameter", m par_]
+    let g' = "g"
+        g = fn g'
+    let a = "a"
+    s ["Let ", m $ func g' reals reals a $ lambda * a, "be a scaling", function]
+    s [the, maximumLikelihoodEstimate, "of", m $ lst (g $ x 1) (g $ x n), "is equal to that of", m $ lst (x 1) (x n)]
+
+    let t = theta
+        i = "i"
+    proof $ do
+        aligneqs (llh t)
+            [
+              prodcmpr (i =: 1) n (prdsm (dsf $ cs [t, g x']) $ x i)
+            , prodcmpr (i =: 1) n (prdsm (dsf $ cs [t, lambda * x']) $ x i)
+            , prodcmpr (i =: 1) n (prdsm (dsf $ cs [t, x']) $ x i /: lambda)
+            , 1 /: (lambda ^ n) * prodcmpr (i =: 1) n (prdsm (dsf $ cs [t, x']) $ x i)
+            ]
+        s ["This function achieves a maximum in the same point as", m llhSign, "does for", m x']
+        todo "This is significantly vague. Write it out."
+        todo "This can be more generally proven for any monotonically increasing function g, do that."
+
+
+maximumLikelihoodEstimateOfMeanOfNormalDistribution :: Note
+maximumLikelihoodEstimateOfMeanOfNormalDistribution = thm $ do
+    let x = ("X" !:)
+        n = "n"
+        i = "i"
+        nD = normalD mn_ var_
+    s ["Let", m $ lst (x 1) (x n), "be", m n, independent, and, identicallyDistributed, randomVariables, "from some a", normalDistribution, m nD]
+    ma $ x i ~. nD
+    s ["Assume that", m mn_, and, m var_, "are unknown"]
+    s [the, maximumLikelihoodEstimate, "of", m mn_, "is the sample mean"]
+    ma $ pest mn_ =: (1 /: n) * (sumcmpr (i =: 1) n $ x i)
+    proof $ do
+        s ["Let", m $ pest mn_, "be the", maximumLikelihoodEstimate, "of the mean", m mn_, "of", m nD]
+        s ["It is defined as follows"]
+        aligneqs (fn mle mn_)
+            [
+              argmax mn_ $ prodcmpr (i =: 1) n (prdsm (dsf $ normalD mn_ var_) (x i))
+            , argmax mn_ $ prodcmpr (i =: 1) n (exp (- ((pars $ x i - mn_) ^ 2) /: (2 * var_)) /: (sd_ * sqrt (2 * pi)))
+            , argmax mn_ $ prodcmpr (i =: 1) n (exp (- ((pars $ x i - mn_) ^ 2) /: (2 * var_)))
+            , argmax mn_ $ sumcmpr (i =: 1) n (- ((pars $ x i - mn_) ^ 2) /: (2 * var_))
+            , argmax mn_ $ (1 / (2 * var_)) * sumcmpr (i =: 1) n (- ((pars $ x i - mn_) ^ 2))
+            ]
+        s ["This means that ", m $ fn mle mn_, "is the solution to the following equation"]
+        aligneqs 0
+            [
+              partiald (pars $ (1 / (2 * var_)) * sumcmpr (i =: 1) n (- (pars $ x i - mn_) ^ 2)) mn_
+            , (1 / (2 * var_)) * sumcmpr (i =: 1) n (2 * (pars $ x i - mn_))
+            , pars (sumcmpr (i =: 1) n $ x i) - n * mn_
+            ]
+        s ["The solution to this equation is the sample mean"]
+        ma $ pest mn_ =: (1 /: n) * (sumcmpr (i =: 1) n $ x i)
+
