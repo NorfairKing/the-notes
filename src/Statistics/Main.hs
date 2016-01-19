@@ -28,6 +28,18 @@ statisticsC = chapter "Statistics" $ do
     pointEstimation
     maximumLikelihood
 
+    nocite statisticsReference
+
+statisticsReference :: Reference
+statisticsReference = Reference "book" "all-of-statistics" $
+    [
+      ("author", "Wasserman, Larry")
+    , ("title", "All of Statistics: A Concise Course in Statistical Inference")
+    , ("year", "2010")
+    , ("isbn", "1441923225, 9781441923226")
+    , ("publisher", "Springer Publishing Company, Incorporated")
+    ]
+
 statisticalModelDefinition :: Note
 statisticalModelDefinition = de $ do
     lab statisticalModelDefinitionLabel
