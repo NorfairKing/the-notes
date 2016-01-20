@@ -9,6 +9,7 @@ import           Functions.Distances       (distances)
 import           Functions.Inverse         (inverseS)
 import           Functions.Jections        (jectionsS)
 import           Functions.Order           (order)
+import           Functions.SetFunctions    (setFunctionsS)
 
 
 functions :: Note
@@ -20,5 +21,6 @@ functions = chapter "Functions" $ do
     binaryOperations
     order
     distances
+    setFunctionsS
 
 

@@ -39,3 +39,6 @@ ifS a = comm2 "If" (m a)
 -- | If - else statement
 ifElseS :: Note -> Note -> Note -> Note
 ifElseS a = comm3 "eIf" (m a)
+
+forS :: Note -> Note -> Note
+forS a = comm2 "For" (m a)
