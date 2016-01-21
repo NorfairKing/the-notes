@@ -120,6 +120,10 @@ entireDocument = do
 
     document $ do
         myTitlePage
+
+        -- Ensure that pdf numbers coincide with the page numbers in the document
+        comm2 "addtocounter" "page" "1"
+
         renderConfig
         license
         tableofcontents
