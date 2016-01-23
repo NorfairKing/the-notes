@@ -1,4 +1,4 @@
-./the-notes \
+the-notes \
   --subtitle "Probabillistic Artificial Intelligence" \
   --pdf-name probabillistic-artificial-intelligence \
   --tex-name probabillistic-artificial-intelligence \

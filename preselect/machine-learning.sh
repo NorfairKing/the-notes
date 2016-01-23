@@ -1,4 +1,4 @@
-./the-notes \
+the-notes \
   --subtitle "Machine Learning" \
   --pdf-name machine-learning \
   --tex-name machine-learning \

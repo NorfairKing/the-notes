@@ -1,4 +1,4 @@
-./the-notes \
+the-notes \
   --subtitle "Software Verification" \
   --pdf-name software-verification \
   --tex-name software-verification \

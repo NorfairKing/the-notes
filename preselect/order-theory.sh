@@ -1,4 +1,4 @@
-./the-notes \
+the-notes \
   --subtitle "Order theory" \
   --pdf-name order-theory \
   --tex-name order-theory \

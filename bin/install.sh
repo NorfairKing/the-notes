@@ -1,2 +1,5 @@
 source bin/lib.sh
-check "Install" stack install
+install () {
+  stack install
+}
+check "Install" install

@@ -1,4 +1,4 @@
-./the-notes \
+the-notes \
   --subtitle "Data Mining" \
   --pdf-name data-mining \
   --tex-name data-mining \
