@@ -35,6 +35,14 @@ test:
 install:
 	stack install
 
+fast:
+	stack install \
+		--fast \
+		--jobs=8 \
+		--ghc-options="\
+				-O0 \
+				"
+
 love:
 	@echo "not war"
 	

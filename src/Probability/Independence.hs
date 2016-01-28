@@ -16,7 +16,7 @@ import           Probability.ProbabilityMeasure.Terms
 import           Probability.SigmaAlgebra.Macro
 import           Probability.SigmaAlgebra.Terms
 
--- import           Probability.Independence.Macro
+import           Probability.Independence.Macro
 import           Probability.Independence.Terms
 
 
@@ -31,6 +31,8 @@ independenceS = section "Independence" $ do
     mutualIndependenceImpliesPairwiseIndependence
     infiniteMutalIndependenceDefinition
 
+    conditionalIndependenceSS
+
 psDec :: Note
 psDec = s ["Let ", m prsp_, " be a ", probabilitySpace]
 
@@ -39,7 +41,7 @@ independenceDefinition = de $ do
     lab independentDefinitionLabel
     psDec
     s ["Two events ", m a, and, m b, " in ", m sa_, " are called ", independent', " if the following equality holds"]
-    ma $ prob (a ∩ b) =: prob a * prob b
+    ma $ ind a b === (prob (a ∩ b) =: prob a * prob b)
 
   where
     a = "A"
@@ -157,4 +159,14 @@ infiniteMutalIndependenceDefinition = de $ do
 
 
 
+conditionalIndependenceSS :: Note
+conditionalIndependenceSS = subsection "Conditional Independence" $ do
+    conditionalIndenpendenceDefinition
+
+conditionalIndenpendenceDefinition :: Note
+conditionalIndenpendenceDefinition = de $ do
+    lab conditionallyIndependentDefinitionLabel
+    let (a, b, c) = ("A", "B", "C")
+    s ["Two", events, m a, and, m b, "are", conditionallyIndependent, "given a third", event, m c, "precisely if the occurrence or non-occurrence of", m a, "and the occurrence or non-occurrence of", m b, "are", independent, events, ", given", m c]
+    ma $ cind a b c === (cprob (a ∩ b) c =: cprob a c * cprob b c)
 
