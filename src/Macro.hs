@@ -18,6 +18,7 @@ import           Macro.MetaMacro             as X
 import           Macro.Note                  as X
 import           Macro.Reference             as X
 import           Macro.Section               as X
+import           Macro.Temp                  as X
 import           Macro.Text                  as X
 import           Macro.Theorem               as X
 import           Macro.Tikz                  as X

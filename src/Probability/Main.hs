@@ -2,6 +2,7 @@ module Probability.Main (probability) where
 
 import           Notes
 
+import           Probability.BayesianNetwork
 import           Probability.BivariateDistributions
 import           Probability.ConditionalProbability
 import           Probability.Convergence
@@ -25,3 +26,4 @@ probability = chapter "Probability" $ do
     convergenceS
     bivariateDistributionS
     languageModels
+    bayesianNetworkS

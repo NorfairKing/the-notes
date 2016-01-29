@@ -2,13 +2,18 @@ module Probability.RandomVariable.Macro where
 
 import           Types
 
+import           Prelude                                  (error)
+
 import           Macro.Math
 import           Macro.MetaMacro
+import           Macro.Text
 
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
 
+import           Probability.ConditionalProbability.Macro
 import           Probability.Intro.Macro
+import           Probability.ProbabilityMeasure.Macro
 
 -- * Random variable
 
@@ -120,3 +125,17 @@ cor = fn2 "Cor"
 -- | Concrete standard deviation
 sd_ :: Note
 sd_ = sigma
+
+
+-- * Joint distribution
+probs :: [Note] -> Note
+probs vs = prob $ cs vs
+
+cprobs :: Note -> [Note] -> Note
+cprobs n [] = prob n
+cprobs v cvs = cprob v (cs cvs)
+
+cprobss :: [Note] -> [Note] -> Note
+cprobss [] [] = error "Can't have conditional probability of no variables"
+cprobss n [] = probs n
+cprobss vs cvs = cprob (cs vs) (cs cvs)

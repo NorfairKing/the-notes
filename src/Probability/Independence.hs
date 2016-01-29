@@ -163,10 +163,64 @@ conditionalIndependenceSS :: Note
 conditionalIndependenceSS = subsection "Conditional Independence" $ do
     conditionalIndenpendenceDefinition
 
+
+    conditionalIndependenceSymmetry
+    conditionalIndependenceDecomposition
+    conditionalIndependenceContraction
+    conditionalIndependenceWeakUnion
+    conditionalIndependenceIntersection
+
 conditionalIndenpendenceDefinition :: Note
-conditionalIndenpendenceDefinition = de $ do
-    lab conditionallyIndependentDefinitionLabel
+conditionalIndenpendenceDefinition = do
     let (a, b, c) = ("A", "B", "C")
-    s ["Two", events, m a, and, m b, "are", conditionallyIndependent, "given a third", event, m c, "precisely if the occurrence or non-occurrence of", m a, "and the occurrence or non-occurrence of", m b, "are", independent, events, ", given", m c]
-    ma $ cind a b c === (cprob (a ∩ b) c =: cprob a c * cprob b c)
+    de $ do
+        lab conditionallyIndependentDefinitionLabel
+        s ["Two", events, m a, and, m b, "are", conditionallyIndependent, "given a third", event, m c, "precisely if the occurrence or non-occurrence of", m a, "and the occurrence or non-occurrence of", m b, "are", independent, events, ", given", m c]
+        ma $ cind a b c === (cprob (a ∩ b) c =: cprob a c * cprob b c)
+
+    nte $ do
+        s ["There is an intuitive way to go about imagining this concept"]
+        s [m a, and, m b, "are not", independent, "but if it is given that", m c, "has happened, then", m a, and, m b, "will seem independent"]
+
+
+
+conditionalIndependenceSymmetry :: Note
+conditionalIndependenceSymmetry = thm $ do
+    psDec
+    let (a, b, c) = ("A", "B", "C")
+    s ["Let", m a, ", ", m b, and, m c, "be events in", m sa_]
+    ma $ cind a b c ⇔ cind b a c
+    toprove
+
+conditionalIndependenceDecomposition :: Note
+conditionalIndependenceDecomposition = thm $ do
+    psDec
+    let (a, b, c, d) = ("A", "B", "C", "D")
+    s ["Let", m a, ", ", m b, and, m c, "be events in", m sa_]
+    ma $ cind a (b ∩ d) c ⇒ cind a b c
+    toprove
+
+conditionalIndependenceContraction :: Note
+conditionalIndependenceContraction = thm $ do
+    psDec
+    let (a, b, c, d) = ("A", "B", "C", "D")
+    s ["Let", m a, ", ", m b, and, m c, "be events in", m sa_]
+    ma $ cind a b c ∧ cind a d (b ∩ c) ⇒ cind a b (c ∩ d)
+    toprove
+
+conditionalIndependenceWeakUnion :: Note
+conditionalIndependenceWeakUnion = thm $ do
+    psDec
+    let (a, b, c, d) = ("A", "B", "C", "D")
+    s ["Let", m a, ", ", m b, and, m c, "be events in", m sa_]
+    ma $ cind a (b ∩ d) c ⇒ cind a b (c ∩ d)
+    toprove
+
+conditionalIndependenceIntersection :: Note
+conditionalIndependenceIntersection = thm $ do
+    psDec
+    let (a, b, c, d) = ("A", "B", "C", "D")
+    s ["Let", m a, ", ", m b, and, m c, "be events in", m sa_, "with a strictly positive probability"]
+    ma $ cind a b (c ∩ d) ∧ cind a d (b ∩ c) ⇒ cind a b (c ∩ d)
+    toprove
 

@@ -1,7 +1,8 @@
 module Logic.PropositionalLogic.Resolution where
 
 import           Control.Monad                        (forM_, unless)
-import           Notes                                hiding (color, not, (=:))
+import           Notes                                hiding (color, directed,
+                                                       not, (=:))
 
 import           Data.Maybe                           (fromJust)
 import           Prelude
