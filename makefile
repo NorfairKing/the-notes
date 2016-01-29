@@ -24,10 +24,11 @@ pedantic:
 				-fno-warn-name-shadowing \
 				-fno-warn-orphans"
 
+SPSPDB=$(shell stack path --snapshot-pkg-db)
+SPLPDB=$(shell stack path --local-pkg-db)
 doc: $(SOURCES)
-	cabal haddock \
-		--executables \
-		--haddock-options="--no-warnings --no-print-missing-docs --pretty-html"
+	cabal configure --package-db=clear --package-db=global --package-db=$(SPSPDB) --package-db=$(SPLPDB)
+	cabal haddock --executables --haddock-options="--no-warnings --no-print-missing-docs --pretty-html"
 
 test:
 	stack test --jobs=8
