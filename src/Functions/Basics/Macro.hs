@@ -47,6 +47,15 @@ fun2 :: Note -- ^ Name
      -> Note
 fun2 m n1 n2 = fun m (n1 ⨯ n2)
 
+-- | Shorthand function definition
+fun3 :: Note -- ^ Name
+     -> Note -- ^ Corange, part 1
+     -> Note -- ^ Corange, part 2
+     -> Note -- ^ Corange, part 3
+     -> Note -- ^ Codomain
+     -> Note
+fun3 m n1 n2 n3 = fun m (n1 ⨯ n2 ⨯ n3)
+
 -- | Longhand function definition
 func :: Note -- ^ Name
      -> Note -- ^ Corange

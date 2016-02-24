@@ -21,6 +21,7 @@ import           Parser
 import           Titlepage
 
 import           Computability.Main
+import           Cryptography.Main
 import           DataMining.Main
 import           Fields.Main
 import           Functions.Main
@@ -153,5 +154,6 @@ allNotes = do
     computability
     probability
     statisticsC
+    cryptography
     machineLearning
     dataMining
