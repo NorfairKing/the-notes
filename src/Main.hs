@@ -26,6 +26,7 @@ import           DataMining.Main
 import           Fields.Main
 import           Functions.Main
 import           Geometry.Main
+import           GraphTheory.Main
 import           Groups.Main
 import           LinearAlgebra.Main
 import           Logic.Main
@@ -145,6 +146,7 @@ allNotes = do
     sets
     relations
     functions
+    graphTheory
     groups
     rings
     fields

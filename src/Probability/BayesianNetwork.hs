@@ -2,6 +2,8 @@ module Probability.BayesianNetwork where
 
 import           Notes
 
+import           GraphTheory.Terms
+
 import           Probability.ConditionalProbability.Macro
 import           Probability.Independence.Terms
 import           Probability.ProbabilityMeasure.Macro

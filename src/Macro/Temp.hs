@@ -107,12 +107,3 @@ directed = ix "directed"
 
 acyclic :: Note
 acyclic = ix "acyclic"
-
-graph :: Note
-graph = ix "graph"
-
-vertex :: Note
-vertex = ix "vertex"
-
-edge :: Note
-edge = ix "edge"
