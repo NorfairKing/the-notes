@@ -13,6 +13,8 @@ makeDefs [
     , "randomness space"
     , "encryption function"
     , "decryption function"
+    , "deterministic"
+    , "cipher"
     ]
 
 

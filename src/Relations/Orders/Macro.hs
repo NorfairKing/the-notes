@@ -67,8 +67,8 @@ bot = comm0 "bot"
 inf :: Note -> Note
 inf = fn "Inf"
 
-infcomp :: Note -> Note -> Note
-infcomp = comp $ commS "bigsqcap"
+supcomp :: Note -> Note -> Note
+supcomp = comp $ commS "bigsqcup"
 
 
 -- | Greatest lower bound
@@ -78,8 +78,8 @@ infcomp = comp $ commS "bigsqcap"
 sup :: Note -> Note
 sup = fn "Sup"
 
-supcomp :: Note -> Note -> Note
-supcomp = comp $ commS "bigsqcup"
+infcomp :: Note -> Note -> Note
+infcomp = comp $ commS "bigsqcap"
 
 -- * Lattices
 

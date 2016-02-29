@@ -43,8 +43,8 @@ orders = section "Orders" $ do
         upperBoundDefinition
         lowerBoundDefinition
 
-        supremumDefinition
         infimumDefinition
+        supremumDefinition
 
         uniqueBounds
 
@@ -53,8 +53,8 @@ orders = section "Orders" $ do
         joinSemilatticeDefinition
         latticeDefinition
         latticeExamples
-        crossLatticeLift
         boundedLatticeDefinition
+        crossLatticeLift
         completeLatticeDefinition
         completeLatticeIsBounded
 
@@ -125,14 +125,42 @@ crossPosetLift :: Note
 crossPosetLift = thm $ do
     lab crossproductLiftedPosetTheoremLabel
     s ["Let ", m $ list (relposet (x !: 1) (o !: 1)) (relposet (x !: 2) (o !: 2)) (relposet (x !: n) (o !: n)), " be ", poset, "s"]
-    s [m $ relposet ((x !: 1) ⨯ (x !: 2) ⨯ dotsb ⨯ (x !: n)) o, " is a ", poset, " where ", m o, " is defined as follows"]
+    s [m cps, " is a ", poset, " where ", m o, " is defined as follows"]
     ma $ a ⊆: b ⇔ fa i (a !: i `oi` b !: i)
 
-    toprove
-
+    proof $ do
+        s ["We prove that ", m o, "is", reflexive, antisymmetric, and, transitive]
+        itemize $ do
+            item $ do
+                s ["Let", m $ list (a !: 1) (a !: 2) (a !: n), "be n elements respectively of the sets", m $ list (x !: 1) (x !: 2) (x !: n)]
+                s ["Because every ", m $ oi "" "", "is", reflexive, ", the following holds"]
+                ma $ a !: i `oi` a !: i
+                let e = tuplelist (a !: 1) (a !: 2) (a !: n)
+                s ["This means that", m $ e ⊆: e, "holds and therefore that", m o, "is", reflexive]
+            item $ do
+                s ["Let", m $ list (a !: 1) (a !: 2) (a !: n), and, m $ list (b !: 1) (b !: 2) (b !: n), "be n elements respectively of the sets", m $ list (x !: 1) (x !: 2) (x !: n), "such that the following holds"]
+                ma $ fa i $ a !: i `oi` b !: i  ∧  b !: i `oi` a !: i
+                s ["Because every", m $ oi "" "", "is", antisymmetric, ", this implies the following"]
+                ma $ fa i $ a !: i =: b !: i
+                let ea = tuplelist (a !: 1) (a !: 2) (a !: n)
+                let eb = tuplelist (b !: 1) (b !: 2) (b !: n)
+                s ["This exactly means that ", m $ ea =: eb, "holds"]
+                s ["Because", m o, "is", reflexive, ", this means that", m $ ea ⊆: eb, "holds"]
+                s ["This proves that", m o, "is", antisymmetric]
+            item $ do
+                s ["Let", m $ list (a !: 1) (a !: 2) (a !: n), m $ list (b !: 1) (b !: 2) (b !: n), m $ list (c !: 1) (c !: 2) (c !: n), "be n elements respectively of the sets", m $ list (x !: 1) (x !: 2) (x !: n), "such that the following holds"]
+                ma $ fa i $ a !: i `oi` b !: i ∧ b !: i `oi` c !: i
+                s ["Because every", m $ oi "" "", "is", transitive, ", this implies the following"]
+                ma $ fa i $ a !: i `oi` c !: i
+                let ea = tuplelist (a !: 1) (a !: 2) (a !: n)
+                let ec = tuplelist (c !: 1) (c !: 2) (c !: n)
+                s ["As such,", m $ ea ⊆: ec, "also holds and therefore", m o, "is transitive"]
   where
+    cps = relposet cp o
+    cp = (x !: 1) ⨯ (x !: 2) ⨯ dotsb ⨯ (x !: n)
     a = "a"
     b = "b"
+    c = "c"
     i = "i"
     o = partord_
     oi = binop $ raw "\\ " <> o !: "i" <> raw "\\ "
@@ -217,6 +245,11 @@ supremumDefinition = de $ do
     psDec
     s ["A ", supremum', or, join', " of ", m posetset_, " is a smallest ", upperBound, " of ", m posetset_]
     s ["That is to say, all other upper bounds of ", m posetset_, " are larger"]
+    ma $ sup posetset_ =: supcomp "" posetset_
+    s [m $ a ⊔ b, "is the notation for the", supremum, "of two element"]
+  where
+    a = "a"
+    b = "b"
 
 infimumDefinition :: Note
 infimumDefinition = de $ do
@@ -225,6 +258,11 @@ infimumDefinition = de $ do
     psDec
     s ["A ", infimum', or, meet', " of ", m posetset_, " is a greatest ", lowerBound, " of ", m posetset_]
     s ["That is to say, all other lower bounds of ", m posetset_, " are smaller"]
+    ma $ inf posetset_ =: infcomp "" posetset_
+    s [m $ a ⊓ b, "is the notation for the", infimum, "of two element"]
+  where
+    a = "a"
+    b = "b"
 
 uniqueBounds :: Note
 uniqueBounds = thm $ do
@@ -236,10 +274,10 @@ uniqueBounds = thm $ do
 meetSemilatticeDefinition :: Note
 meetSemilatticeDefinition = de $ do
     lab meetSemilatticeDefinitionLabel
-    s ["A ", meetSemilattice', " is a ", poset, " ", m relposet_, " for which any two elements ", m a, and, m b, " have an ", infimum, " ", m (a ⊔ b), " as follows"]
+    s ["A ", meetSemilattice', " is a ", poset, " ", m relposet_, " for which any two elements ", m a, and, m b, " have an ", infimum, " ", m (a ⊓ b), " as follows"]
     itemize $ do
-        item $ m $ ((a ⊔ b) ⊆: a) ∧ ((a ⊔ b) ⊆: b)
-        item $ m $ fa (c ∈ posetset_) $ ((c ⊆: a) ∧ (c ⊆: b)) ⇒ (c ⊆: (a ⊔ b))
+        item $ m $ ((a ⊓ b) ⊆: a) ∧ ((a ⊓ b) ⊆: b)
+        item $ m $ fa (c ∈ posetset_) $ ((c ⊆: a) ∧ (c ⊆: b)) ⇒ (c ⊆: (a ⊓ b))
   where
     a = "a"
     b = "b"
@@ -248,10 +286,10 @@ meetSemilatticeDefinition = de $ do
 joinSemilatticeDefinition :: Note
 joinSemilatticeDefinition = de $ do
     lab joinSemilatticeDefinitionLabel
-    s ["A ", joinSemilattice', " is a ", poset, " ", m relposet_, " for which any two elements ", m a, and, m b, " have a ", supremum, " ", m (a ⊓ b), " as follows"]
+    s ["A ", joinSemilattice', " is a ", poset, " ", m relposet_, " for which any two elements ", m a, and, m b, " have a ", supremum, " ", m (a ⊔ b), " as follows"]
     itemize $ do
-        item $ m $ (a ⊆: (a ⊓ b)) ∧ (b ⊆: (a ⊓ b))
-        item $ m $ fa (c ∈ posetset_) $ ((a ⊆: c) ∧ (b ⊆: c)) ⇒ ((a ⊓ b) ⊆: c)
+        item $ m $ (a ⊆: (a ⊔ b)) ∧ (b ⊆: (a ⊔ b))
+        item $ m $ fa (c ∈ posetset_) $ ((a ⊆: c) ∧ (b ⊆: c)) ⇒ ((a ⊔ b) ⊆: c)
   where
     a = "a"
     b = "b"
@@ -277,8 +315,14 @@ crossLatticeLift = thm $ do
     s ["Let ", m $ list (relposet (x !: 1) (o !: 1)) (relposet (x !: 2) (o !: 2)) (relposet (x !: n) (o !: n)), " be ", lattice, "s"]
     s ["The poset ", m $ relposet ((x !: 1) ⨯ (x !: 2) ⨯ dotsb ⨯ (x !: n)) o, ref crossproductLiftedPosetTheoremLabel, " is a ", lattice, " where the following properties hold"]
 
-    ma $ (a ⊔ b =: supcomp i (a !: i ⊔ b !: i)) <> quad <> text "and" <> quad <> (a ⊓ b =: infcomp i (a !: i ⊓ b !: i))
-    ma $ (bot =: tuplelist (bot !: (x !: 1)) (bot !: (x !: 2)) (bot !: (x !: n)))  <> quad <> text "and" <> quad <> (top =: tuplelist (top !: (x !: 1)) (top !: (x !: 2)) (top !: (x !: n)))
+    ma $ do
+        a ⊔ b =: supcomp i (a !: i ⊔ b !: i)
+        quad <> text "and" <> quad
+        a ⊓ b =: infcomp i (a !: i ⊓ b !: i)
+    ma $ do
+        top =: tuplelist (top !: (x !: 1)) (top !: (x !: 2)) (top !: (x !: n))
+        quad <> text "and" <> quad
+        bot =: tuplelist (bot !: (x !: 1)) (bot !: (x !: 2)) (bot !: (x !: n))
 
     toprove
 
@@ -293,7 +337,7 @@ crossLatticeLift = thm $ do
 boundedLatticeDefinition :: Note
 boundedLatticeDefinition = de $ do
     lab boundedLatticeDefinitionLabel
-    s ["A ", lattice, m relposet_, " is called a ", boundedLattice, " if there exists both a ", maximalElement, " ", m top, " and a ", minimalElement, " ", m bot, " in ", m posetset_, " as follows"]
+    s ["A ", lattice, m relposet_, " is called a ", boundedLattice', " if there exists both a ", maximalElement, " ", m top, " and a ", minimalElement, " ", m bot, " in ", m posetset_, " as follows"]
     ma $ fa (x ∈ posetset_) $ (x ⊆: top) ∧ (bot ⊆: x)
   where
     x = "x"
@@ -301,7 +345,7 @@ boundedLatticeDefinition = de $ do
 completeLatticeDefinition :: Note
 completeLatticeDefinition = de $ do
     lab completeLatticeDefinitionLabel
-    s ["A " , lattice, m relposet_, " is called a ", completeLattice, " if every (possibly infinite) subset ", m l, " of ", m (posetset_), " has an ", infimum, " ", m (inf l), " and a ", supremum, " ", m (sup l)]
+    s ["A " , lattice, m relposet_, " is called a ", completeLattice', " if every (possibly infinite) subset ", m l, " of ", m (posetset_), " has an ", infimum, " ", m (inf l), " and a ", supremum, " ", m (sup l)]
   where
     l = "L"
 

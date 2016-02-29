@@ -13,13 +13,18 @@ import           Sets.Basics.Terms
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
 import           Functions.Basics.Terms
+import           Functions.Composition.Macro
+import           Functions.Composition.Terms
 
 import           Functions.Order.Macro
 import           Functions.Order.Terms
 
 order :: Note
 order = section "Functions and orders" $ do
-    monotonicDefinition
+    subsection "Monotonic functions" $ do
+        monotonicDefinition
+        monotonicFunctionsClosedUnderComposition
+
     scottContinuousDefinition
     fixedPointDefinition
     leastFixedPointDefinition
@@ -63,6 +68,36 @@ monotonicDefinition = de $ do
     y = "Y"
     ry = partord_ !: y
 
+monotonicFunctionsClosedUnderComposition :: Note
+monotonicFunctionsClosedUnderComposition = thm $ do
+    lab monotonicFunctionsClosedUnderCompositionTheoremLabel
+    s [the, composition, "of two", monotonic, functions, "is", monotonic]
+    s ["Let ", m f1, and, m f2, "be", monotonic, functions]
+    s [m $ f2 ● f1, "is a", monotonic, function]
+
+    proof $ do
+        let a = "A"
+            b = "B"
+            c = "C"
+            ra = partord_ !: a
+            rb = partord_ !: b
+        s ["Let ", m $ fun f1 a b, and, m $ fun f2 b c, "be", monotonic, functions, "on the", posets, m $ relposet a ra, and, m $ relposet b rb]
+        let x = "x"
+            y = "y"
+            oa = binop $ raw "\\ " <> partord_ !: "a" <> raw "\\ "
+        s ["Let ", m x, and, m y, "be elements of", m a, and, m b, "respectively, such that the following holds"]
+        ma $ x `oa` y
+        let ob = binop $ raw "\\ " <> partord_ !: "b" <> raw "\\ "
+        s ["Because ", m f1, "is", monotonic, "the following must hold as well"]
+        ma $ fn f1 x `ob` fn f1 y
+        s ["Because ", m f2, "is", monotonic, "the following must hold as well"]
+        ma $ fn f2 (fn f1 x) `ob` fn f2 (fn f1 y)
+        ma $ fn (pars $ f2 ● f1) x `ob` fn (pars $ f2 ● f1) y
+        s ["This means that", m $ f2 ● f1, "is monotonic"]
+
+  where
+    f1 = fun_ !: 1
+    f2 = fun_ !: 2
 
 scottContinuousDefinition :: Note
 scottContinuousDefinition = de $ do

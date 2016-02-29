@@ -15,7 +15,8 @@ makeDefs [
     ]
 
 makeThms [
-      "Descending region is closed under application"
+      "Monotonic functions closed under composition"
+    , "Descending region is closed under application"
     , "Ascending region is closed under application"
     , "Top element is in descending region"
     , "Bottom element is in ascending region"
