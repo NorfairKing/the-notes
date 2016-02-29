@@ -18,18 +18,21 @@ import           Macro.Figure
 
 import           Utils
 
-
-tikzFig :: Note -> [Note] -> Note -> Note
+-- | Tikz figure
+tikzFig :: Note -- ^ Caption
+        -> [Note] -- ^ Arguments to to the tikzpicture
+        -> Note -- ^ Content
+        -> Note
 tikzFig cap args content = do
-    fp <- tikzpicture args content
+    fp <- tikzpic args content
     noindent
     hereFigure $ do
         packageDep_ "standalone"
         fromLaTeX $ TeXComm "includestandalone" [OptArg "mode=image", FixArg (TeXRaw $ T.pack $ dropExtension fp)]
         caption cap
 
-tikzpicture :: [Note] -> Note -> Note' FilePath
-tikzpicture args l = do
+tikzpic :: [Note] -> Note -> Note' FilePath
+tikzpic args l = do
     -- packageDep_ "tikz" -- Not even needed?
 
     lt <- extractΛLaTeX_ $ tikzpicture' args l

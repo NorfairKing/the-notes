@@ -9,10 +9,10 @@ import           Macro.MetaMacro
 import           Macro.Text      (commaSeparated)
 
 
-m :: Note -> Note
-m n = math n
+m :: LaTeXC l => l -> l
+m = math
 
-ma :: Note -> Note
+ma :: LaTeXC l => l -> l
 ma = mathDisplay
 
 pars :: Note -> Note
