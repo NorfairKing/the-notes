@@ -63,6 +63,9 @@ executable the-notes
       Computability.Symbols.Macro
       Computability.Symbols.Terms
       Config
+      Cryptography.Macro
+      Cryptography.Main
+      Cryptography.Terms
       DataMining.ApproximateRetrieval
       DataMining.LargeScaleLearning
       DataMining.LargeScaleLearning.Macro
@@ -81,6 +84,7 @@ executable the-notes
       Functions.BinaryOperation.Macro
       Functions.BinaryOperation.Terms
       Functions.Composition.Macro
+      Functions.Composition.Terms
       Functions.Distances
       Functions.Distances.Macro
       Functions.Distances.Terms
@@ -99,6 +103,9 @@ executable the-notes
       Geometry.AffineSpaces.Macro
       Geometry.AffineSpaces.Terms
       Geometry.Main
+      GraphTheory.Macro
+      GraphTheory.Main
+      GraphTheory.Terms
       Groups.Main
       Header
       License

@@ -35,6 +35,21 @@ makeDefs [
     , "IND-CCA secure"
 
     , "one-time pad"
+    , "key-stream generator"
+    , "additive stream cipher"
+
+    , "pseudo-random generator"
+    , "PRG"
+
+    , "block cipher"
+    , "block length"
+
+    , "message authentication code"
+    , "MAC"
+    , "tag space"
+
+    , "MAC-forgery"
+    , "CMA secure"
     ]
 
 

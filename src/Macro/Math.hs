@@ -314,3 +314,8 @@ log n = commS "log" <> n
 
 logn :: Note -> Note -> Note
 logn n m = commS "log" !: n <> m
+
+-- * Cdot
+
+cdot_ :: Note
+cdot_ = comm0 "cdot"

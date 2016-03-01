@@ -5,6 +5,8 @@ import           Types
 import           Macro.MetaMacro
 
 import           Functions.Application.Macro
+import           Macro.Sets.Macro
+-- import           Sets.Macro
 
 -- | Encryption function
 enc_ :: Note
@@ -51,3 +53,27 @@ xor_ = comm0 "oplus"
 
 xorBig_ :: Note
 xorBig_ = comm0 "bigoplus"
+
+-- * Pseudorandom generator
+
+gen_ :: Note
+gen_ = "g"
+
+gen :: Note -> Note
+gen = fn gen_
+
+-- * Bitfield
+
+-- | bit set
+bits :: Note
+bits = setofs [0, 1]
+
+-- | bits set
+bitss :: Note -> Note
+bitss n = bits ^: n
+
+-- * MAC
+
+-- | Tag space
+tsp_ :: Note
+tsp_ = mathcal "T"

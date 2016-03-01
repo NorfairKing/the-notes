@@ -1,13 +1,16 @@
 {-# LANGUAGE QuasiQuotes #-}
 module Cryptography.Main where
 
-import           Notes
+import           Notes                                hiding (inverse)
 
+import           Functions.Application.Macro
 import           Functions.Basics.Macro
 import           Functions.Basics.Terms
+import           Functions.Inverse.Terms
 import           Logic.FirstOrderLogic.Macro
 import           Probability.Independence.Terms
 import           Probability.ProbabilityMeasure.Macro
+import           Probability.ProbabilityMeasure.Terms
 import           Sets.Basics.Terms
 
 import           Cryptography.Macro
@@ -23,6 +26,7 @@ cryptography = chapter "Cryptography" $ do
         cipherDefinition
 
         oneTimePadDefinition
+        additiveStreamCipherDefinition
 
         subsection "IND-CPA" $ do
             indcpaDefinition
@@ -31,6 +35,16 @@ cryptography = chapter "Cryptography" $ do
         subsection "IND-CCA" $ do
             indccaDefinition
             indccaSecurityDefinition
+
+        subsection "pseudorandomness" $ do
+            pseudoRandomGeneratorDefinition
+
+        subsection "block ciphers" $ do
+            blockCipherDefinition
+
+    section "Message Authentication Codes" $ do
+        messageAuthenticationCodeDefinition
+        messageAuthenticationCodeSecurityDefinition
 
 
 cryptographicSchemeDefinition :: Note
@@ -47,7 +61,10 @@ symmetricCryptosystemDefinition :: Note
 symmetricCryptosystemDefinition = do
     de $ do
         lab symmetricCryptosystemDefinitionLabel
-        s ["A", symmetricCryptosystem', "for a", messageSpace, m msp_, ", ", ciphertextSpace, m csp_, ", ", keySpace, m ksp_, and, randomnessSpace, m rsp_, "is a pair of", functions, m $ tuple enc_ dec_, "as follows"]
+        lab messageSpaceDefinitionLabel
+        lab ciphertextSpaceDefinitionLabel
+        lab keySpaceDefinitionLabel
+        s ["A", symmetricCryptosystem', "for a", messageSpace', m msp_, ", ", ciphertextSpace', m csp_, ", ", keySpace', m ksp_, and, randomnessSpace, m rsp_, "is a pair of", functions, m $ tuple enc_ dec_, "as follows"]
         itemize $ do
             item $ do
                 s [m enc_, "is called an", encryptionFunction', "and must be a", total, function]
@@ -97,6 +114,23 @@ oneTimePadSecure = prop $ do
     s [the, oneTimePad <> "'s", ciphertexts, "are", independent, "of their", messages, "for a given message length", m n]
     toprove_ "page 17 of crypto"
 
+additiveStreamCipherDefinition :: Note
+additiveStreamCipherDefinition = de $ do
+    let f_ = "f"
+        f = fn f_
+    s ["Let ", m f_, "be a", keyStreamGenerator]
+    todo "define keystreamgenerator"
+    s [the, additiveStreamCipher, "is a", cipher, "with the following", encryptionFunction, and, decryptionFunction]
+
+    let mesg = "m"
+        k = "k"
+    ma $ enc' mesg k =: mesg ⊕ (f k)
+    let c = "c"
+    ma $ dec c k =: c ⊕ (f k)
+
+    tikzFig "Additive Key-Stream Generator" [] $ raw $ [litFile|src/Cryptography/AKSGTikZ.tex|]
+
+    toprove_ "prove that this is in fact a cipher, that the functions invert each other."
 
 indcpaDefinition :: Note
 indcpaDefinition = de $ do
@@ -162,4 +196,58 @@ indccaSecurityDefinition = de $ do
     lab iNDCCASecureDefinitionLabel
     let t = "t"
     s ["A", symmetricCryptosystem, "is called", iNDCCASecure', "if no feasible", adversary, "has a non-negligible", advantage, "in a", m t <> "-message", indistinguishabilityChosenCiphertextAttack, "game", "where", m t, "is only bounded by the adversary's running time"]
+
+
+pseudoRandomGeneratorDefinition :: Note
+pseudoRandomGeneratorDefinition = de $ do
+    lab pseudoRandomGeneratorDefinitionLabel
+    lab pRGDefinitionLabel
+    let k = "k"
+        n = "n"
+    s ["A", pseudoRandomGenerator', "(" <> pRG' <> ")", "is a function", m $ fun gen_ (bitss k) (bitss n), "for", m $ n > k, "such that no feasible algorithm has a non-negligible advantage in distinguishing pseudo-randomly generated bits from actually random bits"]
+
+
+blockCipherDefinition :: Note
+blockCipherDefinition = do
+    let f_ = "F"
+    de $ do
+        lab blockCipherDefinitionLabel
+        lab blockLengthDefinitionLabel
+        let n_ = "n"
+            m_ = "m"
+            f  = fn2 f_
+            k_ = "k"
+        s ["A", blockCipher', "with", blockLength', m n_, "and key length", m m_, "is a", function, m $ fun2 f_ (bitss n_) (bitss m_) (bitss n_), "such that for every key", m k_ <> ", ", m $ f cdot_ k_, "is a bijection"]
+    nte $ do
+        s ["Practicality requires that one knows efficient algorithms for computing ", m f_, "and its", inverse, "given the key"]
+
+messageAuthenticationCodeDefinition :: Note
+messageAuthenticationCodeDefinition = de $ do
+    lab messageAuthenticationCodeDefinitionLabel
+    lab mACDefinitionLabel
+    lab tagSpaceDefinitionLabel
+    let f = "f"
+    s ["A", messageAuthenticationCode', "(" <> mAC' <> ")", "for a message space", m msp_, ", " <> keySpace, m ksp_, and, tagSpace', m tsp_, "is a", function, m $ fun2 f msp_ ksp_ tsp_]
+
+messageAuthenticationCodeSecurityDefinition :: Note
+messageAuthenticationCodeSecurityDefinition = de $ do
+    lab cMASecureDefinitionLabel
+    let t = "t"
+        f_ = "f"
+        f = fn2 f_
+    s ["A", m t <> "-message", mACForgery', "game", "for a", mAC, m f_, "between an", adversary, "and a", challenger, "is played as follows"]
+    let k = "k"
+    enumerate $ do
+        item $ s [the, challenger, "chooses a secret key", m $ k ∈ ksp_, "uniformly at random"]
+        let i = "i"
+            mi = "m" !: i
+        item $ s [the, adversary, "can choose up to", m t, messages, m mi, "and receive their", mAC <> "-values", m $ f mi k]
+        let m' = "m'"
+            z = "z"
+        item $ do
+            s [the, adversary, "chooses a", message, m m', "and a", mAC <> "-value", m z]
+            s ["He wins the game if", m $ z =: f m' k, and, m m', "was not asked as a query in step 2"]
+
+    s ["A", mAC, function, "is called", cMASecure', "if no feasible", adversary, "wins this game with a non negligible", probability]
+
 
