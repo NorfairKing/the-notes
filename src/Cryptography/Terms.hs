@@ -6,6 +6,7 @@ makeDefs [
       "cryptographic scheme"
     , "cryptosystem"
     , "cryptographic protocol"
+    , "protocol"
 
     , "symmetric cryptosystem"
 
@@ -50,6 +51,13 @@ makeDefs [
 
     , "MAC-forgery"
     , "CMA secure"
+
+    , "Diffie-Hellman"
+    , "DH"
+    , "halfkey"
+
+    , "discrete logarithm"
+    , "DL"
     ]
 
 

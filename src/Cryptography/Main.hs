@@ -46,6 +46,9 @@ cryptography = chapter "Cryptography" $ do
         messageAuthenticationCodeDefinition
         messageAuthenticationCodeSecurityDefinition
 
+    section "Key agreement" $ do
+        diffieHellmanProtocolDefinition
+
 
 cryptographicSchemeDefinition :: Note
 cryptographicSchemeDefinition = de $ do
@@ -55,6 +58,7 @@ cryptographicSchemeDefinition = de $ do
 cryptographicProtocolDefinition :: Note
 cryptographicProtocolDefinition = de $ do
     lab cryptographicProtocolDefinitionLabel
+    lab protocolDefinitionLabel
     s ["A", cryptographicProtocol', "for a given", set, "of parties consists of, for each party, a precicely specified behavior in the interaction with the other parties"]
 
 symmetricCryptosystemDefinition :: Note
@@ -250,4 +254,39 @@ messageAuthenticationCodeSecurityDefinition = de $ do
 
     s ["A", mAC, function, "is called", cMASecure', "if no feasible", adversary, "wins this game with a non negligible", probability]
 
+diffieHellmanProtocolDefinition :: Note
+diffieHellmanProtocolDefinition = de $ do
+    lab diffieHellmanDefinitionLabel
+    lab dHDefinitionLabel
+    let a = "Alice"
+        b = "Bob"
+    s [the, "famous", diffieHellman', cryptographicProtocol, "for two parties", m a, and, m b, "goes as follows"]
+    enumerate $ do
+        let p = "p"
+            g = "g"
+        item $ s [m a, and, m b, "publicly agree on a prime", m p, "and a basis", m g]
+        let x = "x"
+            xa = x !: a
+            xb = x !: b
+            y = "y"
+            ya = y !: a
+            yb = y !: b
+        item $ s [m a, "selects an exponent", m xa, "at random and computes", m $ ya =: g ^ (xa) `mod` p]
+        item $ do
+            s [m b, "selects an exponent", m xb, "at random and computes", m $ yb =: g ^ (xb) `mod` p]
+            s [m ya, and, m yb, "are called the", halfkeys', "of the", diffieHellman, protocol]
+        item $ s [m a, and, m b, "send their respective", halfkeys, "to eachother", "over an authenticated but otherwise insecure channel"]
+        let kab = "K" !: (a <> b)
+        item $ s [m a, "computes", m $ kab =: yb ^ xa]
+        let kba = "K" !: (b <> a)
+        item $ do
+            s [m b, "computes", m $ kba =: ya ^ xb]
+            s ["Because", m kab, "equals", m kba, ", " <> m a, and, m b, "now both have the same shared secret value"]
+        ma $ kab =: yb ^ xa =: (g ^ xb) ^ xa =: (g ^ xa) ^ xb =: ya ^ xb =: kba
 
+    todo "generalisation to arbitrary cyclic groups"
+
+
+-- discreteLogarithmProblemDefinition :: Note
+-- discreteLogarithmProblemDefinition = de $ do
+--     s [the, discreteLogarithm', "problem", "for a", cyclic, group,

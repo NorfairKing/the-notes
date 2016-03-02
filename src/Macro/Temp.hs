@@ -107,3 +107,10 @@ directed = ix "directed"
 
 acyclic :: Note
 acyclic = ix "acyclic"
+
+-- Groups
+group :: Note
+group = ix "group"
+
+cyclic :: Note
+cyclic = ix "cyclic"
