@@ -106,7 +106,9 @@ executable the-notes
       GraphTheory.Macro
       GraphTheory.Main
       GraphTheory.Terms
+      Groups.Macro
       Groups.Main
+      Groups.Terms
       Header
       License
       LinearAlgebra.InproductSpaces
@@ -159,7 +161,6 @@ executable the-notes
       Macro.Figure
       Macro.Framed
       Macro.Graphviz
-      Macro.Groups.Macro
       Macro.Index
       Macro.LinearAlgebra.Macro
       Macro.MachineLearning.Macro

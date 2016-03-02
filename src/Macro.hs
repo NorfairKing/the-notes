@@ -26,7 +26,6 @@ import           Macro.Todo                  as X
 import           Macro.Tuple                 as X
 
 import           Macro.Fields.Macro          as X
-import           Macro.Groups.Macro          as X
 import           Macro.LinearAlgebra.Macro   as X
 import           Macro.MachineLearning.Macro as X
 import           Macro.Numbers.Macro         as X
@@ -45,18 +44,3 @@ bra = boxed rightArrow
 
 item :: Note -> Note
 item n = comm0 "item" <> n
-
-(<=) :: Note -> Note -> Note
-(<=) = (<=:)
-
-(>=) :: Note -> Note -> Note
-(>=) = (>=:)
-
-(>) :: Note -> Note -> Note
-(>) = (>:)
-
-(<) :: Note -> Note -> Note
-(<) = (<:)
-
-(^) :: Note -> Note -> Note
-(^) = (^:)

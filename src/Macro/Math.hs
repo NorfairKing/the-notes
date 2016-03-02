@@ -319,3 +319,20 @@ logn n m = commS "log" !: n <> m
 
 cdot_ :: Note
 cdot_ = comm0 "cdot"
+
+-- * Standard operations
+(<=) :: Note -> Note -> Note
+(<=) = (<=:)
+
+(>=) :: Note -> Note -> Note
+(>=) = (>=:)
+
+(>) :: Note -> Note -> Note
+(>) = (>:)
+
+(<) :: Note -> Note -> Note
+(<) = (<:)
+
+(^) :: Note -> Note -> Note
+(^) = (^:)
+

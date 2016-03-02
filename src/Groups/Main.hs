@@ -1,6 +1,6 @@
 module Groups.Main where
 
-import           Notes
+import           Notes                           hiding (inverse)
 
 import           Functions.Basics.Macro
 import           Functions.BinaryOperation.Terms
@@ -15,6 +15,7 @@ groups = chapter "Groups" $ do
     magmaDefinition
     semigroupDefinition
     monoidDefinition
+    groupDefinition
 
 magmaDefinition :: Note
 magmaDefinition = de $ do
@@ -34,3 +35,11 @@ monoidDefinition = de $ do
     s ["A", semigroup, m mnd_, "is called a", monoid', "if it has an", identity, m mid_]
     let a = "a"
     ma $ fa (a ∈ mnds_) $ a ˚ mid_ =: a =: mid_ ˚ a
+
+groupDefinition :: Note
+groupDefinition = de $ do
+    lab inverseDefinitionLabel
+    s ["A", monoid, m grp_, "is called a", group', "if every element has an", inverse', "with respect to the", identity, m gid_]
+    let a = "a"
+        ai = ginv a
+    ma $ fa (a ∈ grps_) $ te (ai ∈ grps_) $ a ** ai =: gid_ =: ai ** a

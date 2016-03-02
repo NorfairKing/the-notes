@@ -3,7 +3,11 @@ module LinearAlgebra.VectorSpaces where
 import           Notes
 
 import           Functions.Basics.Macro
+import           Functions.BinaryOperation.Terms
+import           Groups.Macro
+import           Groups.Terms
 import           Logic.FirstOrderLogic.Macro
+import           Sets.Basics.Terms
 
 import           LinearAlgebra.VectorSpaces.Terms
 
@@ -27,24 +31,21 @@ vectorSpaceDefinition = de $ do
     noindent
     enumerate $ do
         item $ do
-            s ["Let ", m (fie_ lafield lafadd lafmul), " be a field and let ", m laset, " be a set"]
+            s ["Let ", m (fie_ lafield lafadd lafmul), " be a field and let ", m laset, " be a", set]
             refneeded "field"
-            refneeded "set"
         item $ do
-            s ["Let ", m (pars laadd), " be an internal binary operation on ", m laset]
+            s ["Let", m (pars laadd), "be an internal", binaryOperation, "on", m laset]
             ma $ fun (pars laadd) (laset ⨯ laset) laset
-            refneeded "binary operation"
         item $ do
-            s ["Let ", m (pars lamul), " be a binary operation"]
+            s ["Let ", m (pars lamul), "be a", binaryOperation]
             ma $ fun (pars lamul) (lafield ⨯ laset) laset
     s [m lavs, " is a ", term "vector space", over, m lafield, " if the following properties hold"]
     enumerate $ do
         item $ do
-            s [m (grp_ laset laadd), " is a commutative group"]
+            s [m (grp laset laadd), " is a commutative group"]
             refneeded "commutative group"
         item $ do
-            s [m (grp_ laset lamul), " is a monoid"]
-            refneeded "monoid"
+            s [m (grp laset lamul), "is a", monoid]
         item $ do
             s [m (pars laadd), is, distributive, wrt, m (pars $ lamul)]
         item $ do
@@ -65,7 +66,7 @@ linearSubspaceDefinition = de $ do
     let vs = lavs_ lafield laset laadd lamul
     s ["Let ", m vs, " be a ", vectorSpace]
     let w = "W"
-    s ["A vector space ", m $ lavs_ lafield w laadd lamul, " is called a ", linearSubspace', " of ", m vs, " if ", m w, " is a subset of ", m laset]
+    s ["A", vectorSpace, m $ lavs_ lafield w laadd lamul, " is called a ", linearSubspace', " of ", m vs, " if ", m w, " is a subset of ", m laset]
 
 
 euclideanVectorSpaceDefinition :: Note

@@ -1,12 +1,14 @@
 module Groups.Terms where
 
-import           Notes
+import           Notes hiding (inverse)
 
 makeDefs
     [ "magma"
     , "semigroup"
     , "monoid"
     , "identity"
+    , "group"
+    , "inverse"
     ]
 
 
