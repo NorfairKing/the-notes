@@ -38,6 +38,7 @@ monoidDefinition = de $ do
 
 groupDefinition :: Note
 groupDefinition = de $ do
+    lab groupDefinitionLabel
     lab inverseDefinitionLabel
     s ["A", monoid, m grp_, "is called a", group', "if every element has an", inverse', "with respect to the", identity, m gid_]
     let a = "a"

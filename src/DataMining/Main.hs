@@ -1,6 +1,7 @@
 module DataMining.Main where
 
 import           DataMining.ApproximateRetrieval
+import           DataMining.ExamQuestions
 import           DataMining.LargeScaleLearning
 import           DataMining.MapReduce
 import           Notes
@@ -10,6 +11,7 @@ dataMining = chapter "Data Mining" $ do
     mapReduceS
     approximateRetrieval
     largeScaleLearningS
+    extraExamQuestions
 
     nocite dataMiningMapReduceSlides
 
