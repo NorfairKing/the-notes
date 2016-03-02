@@ -1,0 +1,26 @@
+\usetikzlibrary{positioning}
+
+\tikzstyle{every node}=[transform shape];
+\tikzstyle{every node}=[node distance=1.2cm];
+
+% data path
+\node (XOR-1)[scale=1] {$\bigoplus$};
+\node [left of=XOR-1] (p) {$m$};
+\draw[->] (p) edge (XOR-1);
+  
+\node (c)[right of=XOR-1,scale=1] {$c$};
+\draw[-] (XOR-1) edge (c);
+
+\node (XOR-2)[right of=c,scale=1] {$\bigoplus$};
+\draw[->] (c) edge (XOR-2);
+
+\node (f-2) [right of=XOR-2] {};
+\draw[->] (XOR-2) edge (f-2) ;
+\node [right of=XOR-2,node distance=1.5cm] {$m$};
+
+%% Subkeys
+\node (k-0) [above=0.6cm of XOR-1] {};
+\draw[->] (k-0) node[above] {\small $k$} edge (XOR-1);
+
+\node (k-1) [above=0.6cm of XOR-2] {};
+\draw[->] (k-1) node[above] {\small $k$} edge (XOR-2);
