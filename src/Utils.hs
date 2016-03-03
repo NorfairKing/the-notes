@@ -9,9 +9,11 @@ import           Data.List              (intercalate, isSuffixOf)
 import           Data.Maybe             (fromJust)
 
 import           Control.Exception
+import           Control.Monad.State    (gets, modify)
 import           System.Directory       (createDirectory, removeFile)
 import           System.IO.Error        (isAlreadyExistsError,
                                          isDoesNotExistError)
+import qualified System.Random          as R (Random (..))
 
 import qualified Crypto.Hash.MD5        as MD5
 import qualified Data.ByteString        as SB
@@ -120,3 +122,10 @@ pluralOf s | isIrregular = fromJust $ lookup s irregulars
 
 hashContent :: Text -> FilePath
 hashContent = SB8.unpack . SB.take 16 . B16.encode . MD5.hash . T.encodeUtf8
+
+random :: R.Random a => Note' a
+random = do
+    rng <- gets state_rng
+    let (a, rng') = R.random rng
+    modify $ \s -> s { state_rng = rng' }
+    return a

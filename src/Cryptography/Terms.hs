@@ -15,6 +15,7 @@ makeDefs [
     , "ciphertext space"
     , "ciphertext"
     , "key space"
+    , "key"
     , "randomness space"
 
     , "encryption function"
@@ -25,6 +26,7 @@ makeDefs [
 
     , "adversary"
     , "challenger"
+    , "attacker"
     , "advantage"
 
     , "indistinguishability chosen plaintext attack"

@@ -29,6 +29,7 @@ import           Prelude                      as P (Double, Eq (..), FilePath,
                                                     (&&), (++), (.))
 
 import           Debug.Trace
+import           System.Random
 
 import           Text.LaTeX                   hiding (Label, alph_, article,
                                                chapter, cite, item, label,
@@ -56,6 +57,8 @@ type Note  = Note' ()
 type Note' = ΛTeXT (StateT State (ReaderT Config IO))
 
 data State = State
+    { state_rng :: StdGen
+    }
 
 data Args = Args {
       args_selectionString       :: String

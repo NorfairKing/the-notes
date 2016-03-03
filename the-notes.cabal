@@ -36,6 +36,8 @@ executable the-notes
                         , cryptohash            >= 0.11      && < 0.12
                         , gitrev                >= 1.1       && < 1.2
                         , random                >= 1.1       && < 1.2
+                        , JuicyPixels           >= 3.2       && < 3.3
+                        , file-embed            >= 0.0.9     && < 0.1
   ghc-options:        -Wall
                       -fwarn-unused-imports
                       -fwarn-incomplete-patterns

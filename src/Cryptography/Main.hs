@@ -3,11 +3,25 @@ module Cryptography.Main where
 
 import           Notes                                hiding (inverse)
 
-import           Control.Monad                        (replicateM)
+import           Codec.Picture.Png                    (decodePng, writePng)
+import           Codec.Picture.Types                  (DynamicImage (..),
+                                                       Image (..), Pixel (..),
+                                                       PixelRGB8 (..),
+                                                       generateFoldImage,
+                                                       pixelMapXY)
+import           Control.Monad                        (replicateM, unless)
+import qualified Data.Bits                            as B (Bits (..))
 import qualified Data.ByteString                      as SB
 import qualified Data.ByteString.Char8                as SB8
+import           Data.FileEmbed                       (embedFile)
 import qualified Data.Text                            as T
-import           System.Random                        (Random (..))
+import           System.Directory                     (doesFileExist)
+import           Utils
+
+import           Prelude                              (Bool (..), Either (..),
+                                                       Int, error, mapM, snd,
+                                                       (<$>))
+import qualified Prelude                              as P (and)
 
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
@@ -44,6 +58,8 @@ cryptography = chapter "Cryptography" $ do
         subsection "IND-CCA" $ do
             indccaDefinition
             indccaSecurityDefinition
+
+        manyTimePadInsecure
 
         subsection "pseudorandomness" $ do
             pseudoRandomGeneratorDefinition
@@ -132,14 +148,11 @@ oneTimePadExample = ex $ do
         mesgBS :: SB.ByteString
         mesgBS = SB8.pack mesg
 
-    key <- liftIO $ replicateM (SB.length mesgBS) randomIO :: Note' [Word8]
-
-    let keyBS :: SB.ByteString
-        keyBS = SB.pack key
+    keyBS <- getKeyFor mesgBS
 
     s ["Encrypting the message", quoted $ raw $ T.pack mesg, "(encoded with ASCII) with following the", oneTimePad, cipher, "with a random key, results in the following situation"]
 
-    let encryption = traceShowId $ otpEncrypt keyBS mesgBS
+    let encryption = otpEncrypt keyBS mesgBS
     let showNice = text . raw . T.pack
     ma $ belowEachOther [RightColumn, LeftColumn]
         [ "message"     & showNice (hexBS' mesgBS)
@@ -164,6 +177,8 @@ oneTimePadSecure = do
         let t = "t"
         s ["Note that we cannot say that the", oneTimePad, "is", iNDCPASecure, "nor", iNDCCASecure, "for any", m $ t >= 1, "because the", oneTimePad, "can, by definition, only be used once for the same key"]
 
+
+
 additiveStreamCipherDefinition :: Note
 additiveStreamCipherDefinition = de $ do
     let f_ = "f"
@@ -186,6 +201,9 @@ indcpaDefinition :: Note
 indcpaDefinition = de $ do
     lab iNDCPADefinitionLabel
     lab indistinguishabilityChosenPlaintextAttackDefinitionLabel
+    lab adversaryDefinitionLabel
+    lab challengerDefinitionLabel
+    lab attackerDefinitionLabel
     let t = "t"
         k = "k"
         i = "i"
@@ -193,7 +211,7 @@ indcpaDefinition = de $ do
         mb = "m" !: b
         c = "c"
     let b' = b <> "'"
-    s ["A", m t <> "-message", indistinguishabilityChosenPlaintextAttack', "game", "(" <> iNDCPA' <> ")", "between a", challenger, "and an", adversary, "goes as follows"]
+    s ["A", m t <> "-message", indistinguishabilityChosenPlaintextAttack', "game", "(" <> iNDCPA' <> ")", "between a", challenger', "and an", adversary', "(" <> attacker' <> ")", "goes as follows"]
     enumerate $ do
         item $ s ["The challenger chooses a secret key", m k, "uniformly at random"]
         let mi = "m" !: i
@@ -247,6 +265,141 @@ indccaSecurityDefinition = de $ do
     let t = "t"
     s ["A", symmetricCryptosystem, "is called", iNDCCASecure', "if no feasible", adversary, "has a non-negligible", advantage, "in a", m t <> "-message", indistinguishabilityChosenCiphertextAttack, "game", "where", m t, "is only bounded by the adversary's running time"]
 
+smileyImageBS :: SB.ByteString
+smileyImageBS = $(embedFile "src/Cryptography/smiley.png")
+
+sendCashImageBS :: SB.ByteString
+sendCashImageBS = $(embedFile "src/Cryptography/sendcash.png")
+
+manyTimePadInsecure :: Note
+manyTimePadInsecure = do
+    thm $ do
+        s ["Re-using the key for a", oneTimePad <> ", thus yielding a so-called", manyTimePad, "is not", iNDCPASecure]
+
+        proof $ do
+            s ["We will prove an even stronger statement, namely that the", manyTimePad, "is not even secure in a", iNDCPA, "game where the initial messages cannot be used during the challenge"]
+            enumerate $ do
+                item $ s ["An", attacker, "can gain an", advantage, "of", m 1, "by playing a", m 2 <> "-message", iNDCPA, "-game as follows"]
+                let m0 = "m" !: 0
+                    m1 = "m" !: 1
+                    m2 = "m" !: 2
+                    c = "c"
+                    c0 = c !: 0
+                    c1 = c !: 1
+                item $ s [the, attacker, "chooses two distinct", messages, m m0, and, m m1, "of the same length at random and asks for their encryptions", m c0, and, m c1]
+                item $ s [the, attacker, "then submits", m $ (c0 `xor` c1) =: (m0 `xor` m1), "as well as another random", message, m m2, "and receives a", ciphertext, m c, "from the", challenger]
+                item $ do
+                    s [the, attacker, "computes", m $ c `xor` c0]
+                    s [the, attacker, "checks whether this equals", m m1]
+                    s ["If so, he outputs the bit", m 0, ", otherwise he will output the bit", m 1]
+                    s ["This way the", attacker, "wins the game every time"]
+
+    ex $ do
+        -- We will asume everything stays fine
+        let fromRight (Right a) = a
+            fromRight _ = error "there was an error decoding the images"
+
+        -- Get the smiley image
+        let (ImageRGB8 smileyImg) = fromRight $ decodePng smileyImageBS
+
+        -- Get the sendCash image
+        let (ImageRGB8 sendCashImg) = fromRight $ decodePng sendCashImageBS
+
+        -- This is how you XOR images
+        let xorImages :: Image PixelRGB8 -> Image PixelRGB8 -> Image PixelRGB8
+            xorImages i1 i2 = pixelMapXY fun i1
+              where
+                fun :: Int -> Int -> PixelRGB8 -> PixelRGB8
+                fun x y p = p `xorPixel` pixelAt i2 x y
+
+                xorPixel :: PixelRGB8 -> PixelRGB8 -> PixelRGB8
+                xorPixel (PixelRGB8 r1 g1 b1) (PixelRGB8 r2 g2 b2)
+                    = (PixelRGB8 (r1 `B.xor` r2) (g1 `B.xor` g2) (b1 `B.xor` b2))
+
+        -- Width and height of our six images, they must all be the same.
+        let width = (imageWidth smileyImg)
+            height = (imageHeight smileyImg)
+
+        -- The total number of random bypes required.
+        -- One less would not work.
+        let pixels = 3 * width * height
+
+        -- Generate that amount of bytes
+        keyBS <- replicateM pixels random :: Note' [Word8]
+
+        -- Now generate an image with this data.
+        let keyImage :: Image PixelRGB8
+            keyImage = snd $ generateFoldImage fun keyBS width height
+              where
+                fun :: [Word8] -> Int -> Int -> ([Word8], PixelRGB8)
+                fun (r:g:b:rest) _ _ = (rest, PixelRGB8 r g b)
+                fun _ _ _ = error "incorrect number of random bytes supplied"
+
+        -- Encrypt both of our images with the key image
+        let encSmiley = xorImages keyImage smileyImg
+        let encSendCash = xorImages keyImage sendCashImg
+
+        -- Xor the encrypted messages for dramatic effect
+        let encXORImg = xorImages smileyImg sendCashImg
+
+        let keyFP = "key.png"
+            smileyFP = "smiley.png"
+            sendCashFP = "sendcash.png"
+            encSmileyFP = "smiley_enc.png"
+            encSendCashFP = "sendCash_enc.png"
+            encXORFP = "xor_enc.png"
+            allFiles =
+                [ keyFP
+                , smileyFP
+                , sendCashFP
+                , encSmileyFP
+                , encSendCashFP
+                , encXORFP
+                ]
+
+        doneAlready <- liftIO $ P.and <$> mapM doesFileExist allFiles
+        unless doneAlready $ do
+            registerAction smileyFP $ writePng smileyFP smileyImg
+            registerAction sendCashFP $ writePng sendCashFP sendCashImg
+            registerAction keyFP $ writePng keyFP keyImage
+            registerAction encSmileyFP $ writePng encSmileyFP encSmiley
+            registerAction encSmileyFP $ writePng encSendCashFP encSendCash
+            registerAction encXORFP $ writePng encXORFP encXORImg
+
+        -- Show it all to our reader
+        s ["The following is an application of the above theorem to a concrete situation with images"]
+        s ["Suppose we have messages in the form of images as follows"]
+        hereFigure $ do
+            include smileyFP
+            hspace $ Cm 1
+            include sendCashFP
+            caption "Two messages in the form of images"
+
+        s ["We decide to use the", oneTimePad, "so we generate a random", key]
+        hereFigure $ do
+            include keyFP
+            caption "The key"
+
+        s ["We forget about the requirement that the", oneTimePad, "can only be used once and use the key for both of our messages, thus making it a", manyTimePad]
+        s ["The resulting encryptions look inconspicuous"]
+        hereFigure $ do
+            include encSmileyFP
+            hspace $ Cm 1
+            include encSendCashFP
+            caption "The encrypted messages"
+
+        s ["When we XOR the encryptions, however, the result is far from unintelligible"]
+        hereFigure $ do
+            include encXORFP
+            caption "The XOR of the two encrypted messages"
+        s ["You can clearly see that this image is the XOR of the two original messages"]
+        s ["This is entirely insecure"]
+  where
+    include = includegraphics
+                [ KeepAspectRatio True
+                , IGHeight (Cm 3.0)
+                , IGWidth (CustomMeasure $ "0.5" <> textwidth)
+                ]
 
 pseudoRandomGeneratorDefinition :: Note
 pseudoRandomGeneratorDefinition = de $ do

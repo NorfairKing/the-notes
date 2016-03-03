@@ -25,6 +25,7 @@ orders = section "Orders" $ do
 
     subsection "Partial orders" $ do
         partialOrderDefinition
+        partialOrderExamples
         posetDefinition
         crossPosetLift
         powsetPosetPreorder
@@ -78,6 +79,13 @@ partialOrderDefinition :: Note
 partialOrderDefinition = de $ do
     lab partialOrderDefinitionLabel
     s ["A ", partialOrder', " is an ", antisymmetric, " ", preorder_]
+
+partialOrderExamples :: Note
+partialOrderExamples = do
+    ex $ do
+        s ["The set of natural numbers", m naturals, "equipped with the", relation, quoted "divides", "is a", partialOrder]
+        toprove
+        todo "prove that this is a relation"
 
 powsetPosetPreorder :: Note
 powsetPosetPreorder = do

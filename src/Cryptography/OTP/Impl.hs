@@ -2,11 +2,14 @@
 -- It should only be used to show examples of results
 module Cryptography.OTP.Impl where
 
+import           Control.Monad   (replicateM)
 import           Data.Bits
 import qualified Data.ByteString as SB
 import           Data.Word
 import           Numeric         (showHex, showIntAtBase)
 import           Prelude
+import           Types
+import           Utils
 
 liftBS :: (Word8 -> Word8) -> (SB.ByteString -> SB.ByteString)
 liftBS fun = SB.pack . map fun . SB.unpack
@@ -66,3 +69,10 @@ pad :: Int -> Char -> String -> String
 pad n c s
     | length s < n = replicate (n - length s) c ++ s
     | otherwise = s
+
+getKeyFor :: SB.ByteString -> Note' SB.ByteString
+getKeyFor mesg = SB.pack <$> replicateM (SB.length mesg) random
+
+
+
+

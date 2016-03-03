@@ -9,6 +9,7 @@ import           System.Directory     (setCurrentDirectory)
 import           System.Exit          (ExitCode (..), die)
 import           System.Process       (CreateProcess (..),
                                        readCreateProcessWithExitCode, shell)
+import           System.Random        (mkStdGen)
 import           Utils
 
 import           Notes
@@ -110,7 +111,7 @@ latexMkJob cf = shell $ "latexmk " ++ unwords latexMkArgs
 
 
 startState :: State
-startState = State
+startState = State { state_rng = mkStdGen 42 }
 
 entireDocument :: Note
 entireDocument = do
