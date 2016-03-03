@@ -3,6 +3,12 @@ module Cryptography.Main where
 
 import           Notes                                hiding (inverse)
 
+import           Control.Monad                        (replicateM)
+import qualified Data.ByteString                      as SB
+import qualified Data.ByteString.Char8                as SB8
+import qualified Data.Text                            as T
+import           System.Random                        (Random (..))
+
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
 import           Functions.Basics.Terms
@@ -14,6 +20,7 @@ import           Probability.ProbabilityMeasure.Terms
 import           Sets.Basics.Terms
 
 import           Cryptography.Macro
+import           Cryptography.OTP.Impl
 import           Cryptography.Terms
 
 cryptography :: Note
@@ -26,6 +33,8 @@ cryptography = chapter "Cryptography" $ do
         cipherDefinition
 
         oneTimePadDefinition
+        oneTimePadExample
+        oneTimePadSecure
         additiveStreamCipherDefinition
 
         subsection "IND-CPA" $ do
@@ -100,6 +109,8 @@ cipherDefinition = de $ do
 oneTimePadDefinition :: Note
 oneTimePadDefinition = de $ do
     lab oneTimePadDefinitionLabel
+    lab manyTimePadDefinitionLabel
+
     s [the, oneTimePad', "is a", cipher, "with the following", encryptionFunction, and, decryptionFunction]
     let mesg = "m"
         k = "k"
@@ -109,14 +120,49 @@ oneTimePadDefinition = de $ do
 
     tikzFig "One-Time Pad" [] $ raw $ [litFile|src/Cryptography/OTPTikZ.tex|]
 
+    s [the, oneTimePad, "must only be used at most once for every key, otherwise it is called a", manyTimePad']
+
     toprove_ "prove that this is in fact a cipher, that the functions invert each other."
+
+oneTimePadExample :: Note
+oneTimePadExample = ex $ do
+    let mesg :: String
+        mesg = "Hello!"
+
+        mesgBS :: SB.ByteString
+        mesgBS = SB8.pack mesg
+
+    key <- liftIO $ replicateM (SB.length mesgBS) randomIO :: Note' [Word8]
+
+    let keyBS :: SB.ByteString
+        keyBS = SB.pack key
+
+    s ["Encrypting the message", quoted $ raw $ T.pack mesg, "(encoded with ASCII) with following the", oneTimePad, cipher, "with a random key, results in the following situation"]
+
+    let encryption = traceShowId $ otpEncrypt keyBS mesgBS
+    let showNice = text . raw . T.pack
+    ma $ belowEachOther [RightColumn, LeftColumn]
+        [ "message"     & showNice (hexBS' mesgBS)
+        , "key"         & showNice (hexBS' keyBS)
+        , "ciphertext"  & showNice (hexBS' encryption)
+        ]
+
+    ma $ belowEachOther [RightColumn, LeftColumn]
+        [ "message"     & showNice (binBS' mesgBS)
+        , "key"         & showNice (binBS' keyBS)
+        , "ciphertext"  & showNice (binBS' encryption)
+        ]
 
 
 oneTimePadSecure :: Note
-oneTimePadSecure = prop $ do
-    let n = "n"
-    s [the, oneTimePad <> "'s", ciphertexts, "are", independent, "of their", messages, "for a given message length", m n]
-    toprove_ "page 17 of crypto"
+oneTimePadSecure = do
+    prop $ do
+        let n = "n"
+        s [the, oneTimePad <> "'s", ciphertexts, "are", independent, "of their", messages, "for a given message length", m n]
+        toprove_ "page 17 of crypto"
+    nte $ do
+        let t = "t"
+        s ["Note that we cannot say that the", oneTimePad, "is", iNDCPASecure, "nor", iNDCCASecure, "for any", m $ t >= 1, "because the", oneTimePad, "can, by definition, only be used once for the same key"]
 
 additiveStreamCipherDefinition :: Note
 additiveStreamCipherDefinition = de $ do

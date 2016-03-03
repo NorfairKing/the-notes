@@ -36,6 +36,7 @@ makeDefs [
     , "IND-CCA secure"
 
     , "one-time pad"
+    , "many-time pad"
     , "key-stream generator"
     , "additive stream cipher"
 

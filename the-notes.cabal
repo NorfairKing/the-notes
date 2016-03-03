@@ -35,6 +35,7 @@ executable the-notes
                         , bytestring            >= 0.10      && < 0.11
                         , cryptohash            >= 0.11      && < 0.12
                         , gitrev                >= 1.1       && < 1.2
+                        , random                >= 1.1       && < 1.2
   ghc-options:        -Wall
                       -fwarn-unused-imports
                       -fwarn-incomplete-patterns
