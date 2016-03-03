@@ -304,6 +304,7 @@ test-suite the-notes-test
                      , bytestring            >= 0.10      && < 0.11
                      , cryptohash            >= 0.11      && < 0.12
                      , gitrev                >= 1.1       && < 1.2
+                     , random                >= 1.1       && < 1.2
   default-extensions: OverloadedStrings
                       NoImplicitPrelude
                       TemplateHaskell
