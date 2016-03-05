@@ -4,6 +4,7 @@ import           Notes
 
 makeDefs [
       "monotonic"
+    , "monotone"
     , "Scott continuous"
     , "fixed point"
     , "fixed point region"

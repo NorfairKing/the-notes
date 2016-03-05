@@ -55,8 +55,9 @@ regions = subsection "Regions" $ do
 monotonicDefinition :: Note
 monotonicDefinition = de $ do
     lab monotonicDefinitionLabel
+    lab monotoneDefinitionLabel
     s ["Let ", m $ relposet x rx, and, m $ relposet y ry, " each be a ", poset_, and, m $ fun f x y, " a function"]
-    s [m $ fun f x y, " is said to be ", monotonic', " if it has the following property"]
+    s [m $ fun f x y, " is said to be ", monotonic', or, monotone, " if it has the following property"]
     ma $ fa (cs [x1, x2] ∈ x) $ inposet rx x1 x2 ⇒ inposet ry (f_ x1) (f_ x2)
   where
     x1 = x !: 1

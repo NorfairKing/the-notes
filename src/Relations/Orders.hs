@@ -107,20 +107,16 @@ partialOrderExamples = do
         let ts@[at, bt, ct] = ["a", "b", "c"]
         let [a, b, c] = P.map raw ts
         s ["Given the", set, m $ setofs [a, b, c, bot, top]]
-        hasseFig $ hasseDiagram
+        hasseFig 5 $ hasseDiagram
+            [ bott, at, bt, ct, topt]
             [ (bott, at)
+            , (bott, bt)
             , (bott, ct)
+            , (bott, topt)
             , (at, bt)
+            , (at, topt)
             , (bt, topt)
             , (ct, topt)
-            , (at, at)
-            , (bt, bt)
-            , (ct, ct)
-            , (topt, topt)
-            , (bott, bott)
-            , (bott, bt)
-            , (bott, topt)
-            , (at, topt)
             ]
 
     ex $ do
@@ -263,7 +259,7 @@ chainExamples :: Note
 chainExamples = ex $ do
     let (a, b, c) = ("a", "b", "c")
     s ["Consider the", poset, m $ relposet (setofs [a, b, c]) (setofs [tuple a b, tuple c b])]
-    hasseFig $ hasseDiagram [("a", "b"), ("c", "b")]
+    hasseFig 3 $ hasseDiagram ["a", "b", "c"] [("a", "b"), ("c", "b")]
     s ["Its", chains, "are", cs $ P.map m [setof a, setof b, setof c, setofs [a, b], setofs [b, c]], "so its", height, "is", m 2]
     s ["Its only", antichain, "is", m $ setofs [a, c], "so its", width, "is", m 2]
 
