@@ -60,7 +60,7 @@ underset = comm2 "underset"
 
 -- Intervals
 interval :: LaTeXC l => [TeXArg] -> l -> l -> l
-interval args = liftL2 $ (\l1 l2 -> TeXComm "interval" (args ++ [FixArg l1, FixArg l2]))
+interval args = liftL2 $ (\l1 l2 -> TeXComm "interval" (args P.++ [FixArg l1, FixArg l2]))
 
 ooint :: LaTeXC l => l -> l -> l
 ooint = interval [OptArg "open"]

@@ -47,6 +47,8 @@ makeDefs [
 
     , "block cipher"
     , "block length"
+    , "electronic codebook"
+    , "ECB"
 
     , "message authentication code"
     , "MAC"

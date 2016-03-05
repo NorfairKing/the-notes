@@ -405,7 +405,7 @@ resolutionDefinition = de $ do
         linf [vsep [a !: 1, a !: 2, dotsc, a !: k], vsep [b !: 1, b !: 2, dotsc, b !: l]] $
             vsep $
               [a !: 1, a !: 2, dotsc, a !: (i - 1), a !: (i + 1), dotsc, a !: k]
-              ++
+              <>
               [b !: 1, b !: 2, dotsc, b !: (j - 1), b !: (j + 1), dotsc, b !: k]
   where
     vsep = separated lorsign

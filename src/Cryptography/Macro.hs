@@ -6,7 +6,13 @@ import           Macro.MetaMacro
 
 import           Functions.Application.Macro
 import           Macro.Sets.Macro
--- import           Sets.Macro
+
+-- * Concatenation of messages
+(++) :: Note -> Note -> Note
+(++) = binop "|"
+
+-- conccmp :: Note -> Note -> Note
+-- conccmp =
 
 -- | Encryption function
 enc_ :: Note
@@ -77,3 +83,4 @@ bitss n = bits ^: n
 -- | Tag space
 tsp_ :: Note
 tsp_ = mathcal "T"
+

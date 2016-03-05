@@ -26,7 +26,7 @@ import           Prelude                      as P (Double, Eq (..), FilePath,
                                                     Fractional (..), IO,
                                                     Maybe (..), Num (..),
                                                     Show (..), mempty, ($),
-                                                    (&&), (++), (.))
+                                                    (&&), (.))
 
 import           Debug.Trace
 import           System.Random

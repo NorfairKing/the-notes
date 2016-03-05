@@ -7,8 +7,9 @@ import           Codec.Picture.Png                    (decodePng, writePng)
 import           Codec.Picture.Types                  (DynamicImage (..),
                                                        Image (..), Pixel (..),
                                                        PixelRGB8 (..),
+                                                       PixelRGBA8 (..),
                                                        generateFoldImage,
-                                                       pixelMapXY)
+                                                       pixelMap, pixelMapXY)
 import           Control.Monad                        (replicateM, unless)
 import qualified Data.Bits                            as B (Bits (..))
 import qualified Data.ByteString                      as SB
@@ -66,6 +67,8 @@ cryptography = chapter "Cryptography" $ do
 
         subsection "block ciphers" $ do
             blockCipherDefinition
+            eCBDefinition
+            eCBInsecure
 
     section "Message Authentication Codes" $ do
         messageAuthenticationCodeDefinition
@@ -423,6 +426,109 @@ blockCipherDefinition = do
         s ["A", blockCipher', "with", blockLength', m n_, "and key length", m m_, "is a", function, m $ fun2 f_ (bitss n_) (bitss m_) (bitss n_), "such that for every key", m k_ <> ", ", m $ f cdot_ k_, "is a bijection"]
     nte $ do
         s ["Practicality requires that one knows efficient algorithms for computing ", m f_, "and its", inverse, "given the key"]
+
+eCBDefinition :: Note
+eCBDefinition = de $ do
+    lab electronicCodebookDefinitionLabel
+    lab eCBDefinitionLabel
+    let f_ = "F"
+        k_ = "k"
+        n = "n"
+    s ["Let", m f_, "be a", blockCipher, "with", blockLength, m n, "and let", m k_, "be a key sampled uniformly from the key space"]
+    s [the, electronicCodebook', "(" <> eCB' <> ")", "mode for a", blockCipher, "is a", cipher, "as follows"]
+    let mesg = "m"
+        f = fn2 f_
+        l = "l"
+    s ["Let", m mesg, "be a", message, "with a length that is a multiple of", m n <> ": ", m $ l * n]
+    itemize $ do
+        item $ s ["Encryption: ", m $ enc' mesg k_ =: f (mesg !: 1) k_ ++ f (mesg !: 2) k_ ++ dotsc ++ f (mesg !: l) k_]
+        let c = "c"
+        item $ s ["Decryption: ", m $ dec c k_    =: f (c !: 1) k_ ++ f (c !: 2) k_ ++ dotsc ++ f (c !: l) k_]
+
+tuxImageBS :: SB.ByteString
+tuxImageBS = $(embedFile "src/Cryptography/tux.png")
+
+eCBInsecure :: Note
+eCBInsecure = do
+    thm $ do
+        let f_ = "F"
+            n = "n"
+        s ["Let", m f_, "be a", blockCipher, "with", blockLength, m n]
+        -- let k_ = "k"
+        s [the, electronicCodebook', "mode for a", blockCipher, "is not", iNDCCASecure]
+
+        proof $ do
+            s ["We will prove an even stronger statement, namely that the", electronicCodebook, "mode is not even secure in a", iNDCPA, "game where the initial messages cannot be used during the challenge"]
+            s ["An", attacker, "can gain an", advantage, "of", m 1, "by playing a", m 0 <> "-message", iNDCPA, "-game as follows"]
+            enumerate $ do
+                let m0 = "m" !: 0
+                    m1 = "m" !: 1
+                item $ s [the, attacker, "chooses two", messages, m m0, and, m m1, "of length", m $ 2 * n, "such that the following holds"]
+                itemize $ do
+                    item $ s ["In ", m m0, "both blocks are equal"]
+                    item $ s ["In ", m m1, "the blocks are distinct"]
+                let c = "c"
+                item $ s [the, attacker, "then submits", m m0, and, m m1, "and receives a", ciphertext, m c, "from the", challenger]
+                item $ s [the, attacker, "outputs the bit", m 0, "if the blocks of", m c, "are equal", and, m 1, "otherwise"]
+
+
+    ex $ do
+
+        -- We will asume everything stays fine
+        let fromRight (Right a) = a
+            fromRight _ = error "there was an error decoding the images"
+
+        -- Get the tux image
+        let (ImageRGBA8 tuxImg) = fromRight $ decodePng tuxImageBS
+
+        -- Generate 4 random bytes to build a single pixel key
+        r <- random
+        g <- random
+        b <- random
+        a <- random
+        let pixelKey = PixelRGBA8 r g b a
+
+        -- Now generate an image by xor-ing every pixel with this single pixel
+        let cipherImage :: Image PixelRGBA8
+            cipherImage = pixelMap fun tuxImg
+              where
+                fun :: PixelRGBA8 -> PixelRGBA8
+                fun p = p `xorPixel` pixelKey
+
+                xorPixel :: PixelRGBA8 -> PixelRGBA8 -> PixelRGBA8
+                xorPixel (PixelRGBA8 r1 g1 b1 a1) (PixelRGBA8 r2 g2 b2 a2)
+                    = (PixelRGBA8 (r1 `B.xor` r2) (g1 `B.xor` g2) (b1 `B.xor` b2) (a1 `B.xor` a2))
+
+        let tuxFP = "tux.png"
+            encTuxFP = "tux_enc.png"
+            allFiles =
+                [ tuxFP
+                , encTuxFP
+                ]
+
+        doneAlready <- liftIO $ P.and <$> mapM doesFileExist allFiles
+        unless doneAlready $ do
+            registerAction tuxFP $ writePng tuxFP tuxImg
+            registerAction encTuxFP $ writePng encTuxFP cipherImage
+
+        s ["The following is an application of the above theorem to a concrete situation with an image"]
+        s ["Suppose we have an image as a message"]
+        hereFigure $ do
+            include tuxFP
+            caption "An image as a message"
+        s ["If we use a", blockCipher, "in", electronicCodebook, "mode", "the result of the encryption will still resemble the message"]
+        hereFigure $ do
+            include encTuxFP
+            caption $ s ["The encryption with a", blockCipher, "in", eCB, "mode"]
+        s ["In this case we used a", blockCipher, "with", blockLength, "one pixel"]
+        s ["As the", encryptionFunction, "we used the XOR with a randomly chosen", key]
+  where
+    include = includegraphics
+                [ KeepAspectRatio True
+                , IGHeight (Cm 3.0)
+                , IGWidth (CustomMeasure $ "0.5" <> textwidth)
+                ]
+
 
 messageAuthenticationCodeDefinition :: Note
 messageAuthenticationCodeDefinition = de $ do
