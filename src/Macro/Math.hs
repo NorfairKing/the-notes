@@ -33,8 +33,8 @@ mid = comm0 "mid"
 divSign :: Note
 divSign = mid
 
-mdiv :: Note -> Note -> Note
-mdiv = binop divSign
+div :: Note -> Note -> Note
+div = binop divSign
 
 defineasSign :: Note
 defineasSign = quad <> comm0 "equiv" <> quad

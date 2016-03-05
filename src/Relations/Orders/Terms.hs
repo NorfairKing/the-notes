@@ -5,7 +5,12 @@ import           Notes
 makeDefs [
       "antisymmetric"
     , "partial order"
-    , "total order"
+    , "comparable"
+    , "incomparable"
+    , "chain"
+    , "height"
+    , "antichain"
+    , "width"
     , "greatest element"
     , "smallest element"
     , "maximal element"
@@ -21,6 +26,7 @@ makeDefs [
     , "poset"
     , "lattice"
     , "flat lattice"
+    , "total order"
     ]
 
 makeThms [

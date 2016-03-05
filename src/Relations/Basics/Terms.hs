@@ -13,4 +13,5 @@ makeDefs [
     , "total"
     ]
 
+makeEx "divides is relation"
 makeThm "Inverse of Inverse relation is normal"

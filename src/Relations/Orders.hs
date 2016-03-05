@@ -2,6 +2,8 @@ module Relations.Orders where
 
 import           Notes
 
+import qualified Prelude                        as P
+
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
 import           Sets.Basics.Terms
@@ -14,6 +16,7 @@ import           Relations.Equivalence.Terms
 import           Relations.Preorders.Macro
 import           Relations.Preorders.Terms
 
+import           Relations.Orders.Hasse
 import           Relations.Orders.Macro
 import           Relations.Orders.Terms
 
@@ -30,24 +33,38 @@ orders = section "Orders" $ do
         crossPosetLift
         powsetPosetPreorder
         partialOrdersFromPreorders
+        comparableDefinition
+
+        subsubsection "Chains" $ do
+            chainDefinition
+            heightDefinition
+            antiChainDefinition
+            widthDefinition
+            chainExamples
+
+    subsection "Extremes" $ do
+        subsubsection "Greatest and smallest" $ do
+            greatestElementDefinition
+            greatestElementUnique
+            smallestElementDefinition
+            smallestElementUnique
+
+        subsubsection "Maximal and minimal" $ do
+            maximalElementDefinition
+            minimalElementDefinition
+
+        subsubsection "Bounds" $ do
+            upperBoundDefinition
+            lowerBoundDefinition
+
+        subsubsection "Extreme bounds" $ do
+            infimumDefinition
+            infimumUnique
+            supremumDefinition
+            supremumUnique
 
     subsection "Total orders" $ do
         totalOrderDefinition
-
-    subsection "Extremes" $ do
-        greatestElementDefinition
-        smallestElementDefinition
-
-        maximalElementDefinition
-        minimalElementDefinition
-
-        upperBoundDefinition
-        lowerBoundDefinition
-
-        infimumDefinition
-        supremumDefinition
-
-        uniqueBounds
 
     subsection "Lattices" $ do
         meetSemilatticeDefinition
@@ -56,7 +73,10 @@ orders = section "Orders" $ do
         latticeExamples
         boundedLatticeDefinition
         crossLatticeLift
+
         completeLatticeDefinition
+        completeLatticeExamples
+
         completeLatticeIsBounded
 
         pointedLatticeDefinitions
@@ -83,9 +103,29 @@ partialOrderDefinition = de $ do
 partialOrderExamples :: Note
 partialOrderExamples = do
     ex $ do
-        s ["The set of natural numbers", m naturals, "equipped with the", relation, quoted "divides", "is a", partialOrder]
+        let (bott, topt) = ("bot","top")
+        let ts@[at, bt, ct] = ["a", "b", "c"]
+        let [a, b, c] = P.map raw ts
+        s ["Given the", set, m $ setofs [a, b, c, bot, top]]
+        hasseFig $ hasseDiagram
+            [ (bott, at)
+            , (bott, ct)
+            , (at, bt)
+            , (bt, topt)
+            , (ct, topt)
+            , (at, at)
+            , (bt, bt)
+            , (ct, ct)
+            , (topt, topt)
+            , (bott, bott)
+            , (bott, bt)
+            , (bott, topt)
+            , (at, topt)
+            ]
+
+    ex $ do
+        s ["The set of natural numbers", m naturals, "equipped with the", relation, quoted "divides", ref dividesIsRelationExampleLabel,"is a", partialOrder]
         toprove
-        todo "prove that this is a relation"
 
 powsetPosetPreorder :: Note
 powsetPosetPreorder = do
@@ -175,35 +215,87 @@ crossPosetLift = thm $ do
     x = posetset_
     n = "n"
 
-
-totalOrderDefinition :: Note
-totalOrderDefinition = de $ do
-    s ["A ", totalOrder', " is a binary relation that is ", total_, ", ", transitive_, and, antisymmetric]
-
-
 psDec :: Note
 psDec = s ["Let ", m relposet_, " be a ", poset]
+
+comparableDefinition :: Note
+comparableDefinition = de $ do
+    lab comparableDefinitionLabel
+    lab incomparableDefinitionLabel
+    psDec
+    let x = "x"
+        y = "y"
+    s ["Two", elements, "of", m relposet_, "are called", comparable', "if either", m $ x ⊆: y, or, m $ y ⊆: x, "holds"]
+    s ["Otherwise they are called", incomparable']
+
+chainDefinition :: Note
+chainDefinition = de $ do
+    lab chainDefinitionLabel
+    psDec
+    let y = "Y"
+    s ["A", subset, m y, "of", m posetset_, "is called a", chain', "if every two elements in", m y, "are", comparable]
+    let a = "a"
+        b = "b"
+    ma $ fa (a ∈ posetset_) $ fa (b ∈ posetset_) $ (a ⊆: b) ∨ (a ⊆: b)
+
+heightDefinition :: Note
+heightDefinition = de $ do
+    lab heightDefinitionLabel
+    s [the, height', "of a", poset, "is the size of its largest", chain]
+
+antiChainDefinition :: Note
+antiChainDefinition = de $ do
+    lab antichainDefinitionLabel
+    psDec
+    let y = "Y"
+    s ["A", subset, m y, "of", m posetset_, "is called an", antichain', "if every two elements in", m y, "are", incomparable]
+
+    let a = "a"
+        b = "b"
+    ma $ fa (a ∈ posetset_) $ fa (b ∈ posetset_) $ neg $ pars $ (a ⊆: b) ∨ (a ⊆: b)
+
+widthDefinition :: Note
+widthDefinition = de $ do
+    lab widthDefinitionLabel
+    s [the, width', "of a", poset, "is the size of its largest", antichain]
+
+chainExamples :: Note
+chainExamples = ex $ do
+    let (a, b, c) = ("a", "b", "c")
+    s ["Consider the", poset, m $ relposet (setofs [a, b, c]) (setofs [tuple a b, tuple c b])]
+    hasseFig $ hasseDiagram [("a", "b"), ("c", "b")]
+    s ["Its", chains, "are", cs $ P.map m [setof a, setof b, setof c, setofs [a, b], setofs [b, c]], "so its", height, "is", m 2]
+    s ["Its only", antichain, "is", m $ setofs [a, c], "so its", width, "is", m 2]
 
 greatestElementDefinition :: Note
 greatestElementDefinition = de $ do
     lab greatestElementDefinitionLabel
     psDec
-    s ["A ", greatestElement', " ", m (a ∈ posetset_), " is an element such that all other elements are smaller"]
-    ma $ fa (x ∈ posetset_) (x ⊆: a)
+    s ["A", greatestElement', " ", m (top ∈ posetset_), " is an element such that all other elements are smaller"]
+    ma $ fa (x ∈ posetset_) (x ⊆: top)
   where
     x = "x"
-    a = "a"
+
+greatestElementUnique :: Note
+greatestElementUnique = thm $ do
+    s ["A", greatestElement <> ", if it exists, is unique"]
+
+    toprove
 
 smallestElementDefinition :: Note
 smallestElementDefinition = de $ do
     lab smallestElementDefinitionLabel
     psDec
-    s ["A ", smallestElement', " ", m (a ∈ posetset_), " is an element such that all other elements are greater"]
-    ma $ fa (x ∈ posetset_) (a ⊆: x)
+    s ["A ", smallestElement', " ", m (bot ∈ posetset_), " is an element such that all other elements are greater"]
+    ma $ fa (x ∈ posetset_) (bot ⊆: x)
   where
     x = "x"
-    a = "a"
 
+smallestElementUnique :: Note
+smallestElementUnique = thm $ do
+    s ["A", smallestElement <> ", if it exists, is unique"]
+
+    toprove
 
 maximalElementDefinition :: Note
 maximalElementDefinition = de $ do
@@ -251,7 +343,7 @@ supremumDefinition = de $ do
     lab supremumDefinitionLabel
     lab joinDefinitionLabel
     psDec
-    s ["A ", supremum', or, join', " of ", m posetset_, " is a smallest ", upperBound, " of ", m posetset_]
+    s ["A ", supremum', or, join', " of (but not necessarily in)", m posetset_, " is a smallest ", upperBound, " of ", m posetset_]
     s ["That is to say, all other upper bounds of ", m posetset_, " are larger"]
     ma $ sup posetset_ =: supcomp "" posetset_
     s [m $ a ⊔ b, "is the notation for the", supremum, "of two element"]
@@ -264,7 +356,7 @@ infimumDefinition = de $ do
     lab infimumDefinitionLabel
     lab meetDefinitionLabel
     psDec
-    s ["A ", infimum', or, meet', " of ", m posetset_, " is a greatest ", lowerBound, " of ", m posetset_]
+    s ["A ", infimum', or, meet', " of (but not necessarily in) ", m posetset_, " is a greatest ", lowerBound, " of ", m posetset_]
     s ["That is to say, all other lower bounds of ", m posetset_, " are smaller"]
     ma $ inf posetset_ =: infcomp "" posetset_
     s [m $ a ⊓ b, "is the notation for the", infimum, "of two element"]
@@ -272,12 +364,23 @@ infimumDefinition = de $ do
     a = "a"
     b = "b"
 
-uniqueBounds :: Note
-uniqueBounds = thm $ do
-    s ["If an supremum/infimum exists for a poset ", m relposet_, ", then it is unique"]
-    -- TODO: maximal elements are greatest elements in totally ordered sets
+infimumUnique :: Note
+infimumUnique = thm $ do
+    s ["If an", infimum, "exists for a poset ", m relposet_, ", then it is unique"]
 
     toprove
+
+supremumUnique :: Note
+supremumUnique = thm $ do
+    s ["If a", supremum, "exists for a poset ", m relposet_, ", then it is unique"]
+
+    toprove
+-- TODO: maximal elements are greatest elements in totally ordered sets
+
+totalOrderDefinition :: Note
+totalOrderDefinition = de $ do
+    s ["A ", totalOrder', " is a binary relation that is ", total_, ", ", transitive_, and, antisymmetric]
+
 
 meetSemilatticeDefinition :: Note
 meetSemilatticeDefinition = de $ do
@@ -311,11 +414,10 @@ latticeDefinition = de $ do
 latticeExamples :: Note
 latticeExamples = do
     ex $ do
-        s ["Let ", m ss, " be a set"]
-        s [m $ lat (powset ss) subseteq_, " is a lattice"]
+        let l = "L"
+        s ["Let ", m l, " be a set"]
+        s [m $ lat (powset l) subseteq_, " is a lattice"]
         toprove
-  where
-    ss = "S"
 
 crossLatticeLift :: Note
 crossLatticeLift = thm $ do
@@ -353,9 +455,19 @@ boundedLatticeDefinition = de $ do
 completeLatticeDefinition :: Note
 completeLatticeDefinition = de $ do
     lab completeLatticeDefinitionLabel
-    s ["A " , lattice, m relposet_, " is called a ", completeLattice', " if every (possibly infinite) subset ", m l, " of ", m (posetset_), " has an ", infimum, " ", m (inf l), " and a ", supremum, " ", m (sup l)]
+    s ["A " , lattice, m lat_, " is called a ", completeLattice', " if every (possibly infinite) subset ", m l, " of ", m (posetset_), " has an ", infimum, " ", m (inf l), " and a ", supremum, " ", m (sup l)]
   where
     l = "L"
+
+completeLatticeExamples :: Note
+completeLatticeExamples = do
+    ex $ do
+        let l = "l"
+        s ["Let", m l, "be a", set]
+        s [m $ lat (powset l) ("" ⊆ ""), "is a", completeLattice]
+
+        toprove
+
 
 completeLatticeIsBounded :: Note
 completeLatticeIsBounded = thm $ do

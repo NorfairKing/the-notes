@@ -14,6 +14,7 @@ basicDefinitions = section "Basics" $ do
     relationDefinition
     binaryRelationDefinition
     ternaryRelationDefinition
+    relationExamples
     unitRelationDefinition
     inverseRelationDefinition
 
@@ -36,6 +37,8 @@ relationDefinition = de $ do
     n = "n"
     x i = "X" !: i
 
+
+
 binaryRelationDefinition :: Note
 binaryRelationDefinition = de $ do
     s ["A binary ", relation, " " , m rel_, " is a relation between two sets"]
@@ -48,6 +51,15 @@ binaryRelationDefinition = de $ do
 
 ternaryRelationDefinition :: Note
 ternaryRelationDefinition = de $ s ["A ternary ", relation, " is a relation between three sets"]
+
+relationExamples :: Note
+relationExamples = do
+    ex $ do
+        lab dividesIsRelationExampleLabel
+        s [quoted "divides", "of integers is a binary", relation]
+        ma $ do
+            let (x, y, z) = ("x", "y", "z")
+            divSign === setcmpr (tuple x y) (cs [x, y] ∈ integers ∧ (te z $ z * x =: y))
 
 unitRelationDefinition :: Note
 unitRelationDefinition = de $ do
