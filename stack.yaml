@@ -10,6 +10,7 @@ extra-deps:
 - JuicyPixels-3.2.7
 - QuickCheck-2.8.1
 - StateVar-1.1.0.2
+- ansi-terminal-0.6.2.3
 - ansi-wl-pprint-0.6.7.3
 - async-2.0.2
 - base-orphans-0.4.5
@@ -43,6 +44,7 @@ extra-deps:
 - quickcheck-io-0.1.2
 - quickcheck-text-0.1.0.1
 - random-1.1
+- safe-0.3.9
 - semigroupoids-5.0.0.4
 - semigroups-0.18.0.1
 - setenv-0.1.1.3
