@@ -4,6 +4,8 @@ import           Notes
 
 import qualified Prelude                        as P
 
+import qualified Data.Text                      as T
+
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
 import           Sets.Basics.Terms
@@ -106,7 +108,8 @@ partialOrderExamples = do
         let (bott, topt) = ("bot","top")
         let ts@[at, bt, ct] = ["a", "b", "c"]
         let [a, b, c] = P.map raw ts
-        s ["Given the", set, m $ setofs [a, b, c, bot, top]]
+            ss = setofs [a, b, c, bot, top]
+        s ["Given the", set, m ss]
         hasseFig 5 $ hasseDiagram
             [ bott, at, bt, ct, topt]
             [ (bott, at)
@@ -118,10 +121,28 @@ partialOrderExamples = do
             , (bt, topt)
             , (ct, topt)
             ]
+        let r = setofs
+                [ tuple bot bot
+                , tuple a a
+                , tuple b b
+                , tuple c c
+                , tuple top top
+                , tuple bot a
+                , tuple a b
+                , tuple b top
+                , tuple c top
+                ]
+        s [m r, "is a", partialOrder]
 
     ex $ do
-        s ["The set of natural numbers", m naturals, "equipped with the", relation, quoted "divides", ref dividesIsRelationExampleLabel,"is a", partialOrder]
-        toprove
+        s ["The set of natural numbers", m naturals, "equipped with the", relation, quoted "divides", ref dividesIsRelationExampleLabel, "is a", partialOrder, "on this set"]
+        let n = 32 :: P.Int
+        let tshow = T.pack . show
+        hasseFig 10 $ hasseDiagram (P.map tshow [1..n])
+                    $ [(tshow a, tshow b) | a <- [1..n], b <- [a..n], b `P.mod` a == 0]
+        s ["Of course this figure can only be shown partially"]
+        s ["Here it is show for the natural numbers up to", m $ raw $ tshow n]
+
 
 powsetPosetPreorder :: Note
 powsetPosetPreorder = do

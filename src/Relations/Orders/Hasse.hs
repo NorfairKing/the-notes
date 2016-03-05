@@ -80,5 +80,5 @@ hasseFig d hd = do
     fp <- dot2tex $ graph_ directed $ genDefault hd
     noindent
     hereFigure $ do
-        includegraphics [KeepAspectRatio True, IGHeight (Cm d), IGWidth (CustomMeasure $ "0.5" <> textwidth)] fp
+        includegraphics [KeepAspectRatio True, IGHeight (Cm d), IGWidth (CustomMeasure $ textwidth)] fp
 
