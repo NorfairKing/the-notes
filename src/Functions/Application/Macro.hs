@@ -41,7 +41,7 @@ fn3 = app3
 
 -- * Member wise function application
 mwapp :: Note -> Note -> Note
-mwapp m n = m <> commS "," <> comm0 "square" <> commS "," <> n
+mwapp m n = overset m (comm0 "square") <> commS "," <> n
 
 -- |
 -- > mwfn = mwfunapp

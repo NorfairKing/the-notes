@@ -8,7 +8,6 @@ makeDefs [
     , "corange"
     , "codomain"
     , "total"
-    , "surjective"
     , "binary function"
     , "ternary function"
     ]

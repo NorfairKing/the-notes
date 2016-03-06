@@ -15,6 +15,7 @@ import           Functions.Basics.Macro
 import           Functions.Basics.Terms
 import           Functions.Composition.Macro
 import           Functions.Composition.Terms
+import           Functions.Jections.Terms
 
 import           Functions.Order.Macro
 import           Functions.Order.Terms
@@ -31,10 +32,14 @@ order = section "Functions and orders" $ do
     greatestFixedPointDefinition
     regions
 
+    tarskiFixedPointTheorem
+
     kleeneChainDefinition
     kleenesFixedPointTheorem
 
     latticesOverFunctions
+
+    galoisConnectionS
 
 
 regions :: Note
@@ -51,13 +56,23 @@ regions = subsection "Regions" $ do
 
     fixedPointRegionIsIntersectionOfAscAndDesc
 
+galoisConnectionS :: Note
+galoisConnectionS = subsection "Galois connections" $ do
+    galoisConnectionDefinition
+    galoisConnectionEquivalentDefinition
+    galoisInsertionDefinition
+    galoisInsertionOtherJections
+
+
 
 monotonicDefinition :: Note
 monotonicDefinition = de $ do
     lab monotonicDefinitionLabel
     lab monotoneDefinitionLabel
+    lab isotoneDefinitionLabel
+    lab orderPreservingDefinitionLabel
     s ["Let ", m $ relposet x rx, and, m $ relposet y ry, " each be a ", poset_, and, m $ fun f x y, " a function"]
-    s [m $ fun f x y, " is said to be ", monotonic', or, monotone, " if it has the following property"]
+    s [m $ fun f x y, " is said to be ", monotonic' <> "," , monotone' <> ",", isotone', or, orderPreserving', " if it has the following property"]
     ma $ fa (cs [x1, x2] ∈ x) $ inposet rx x1 x2 ⇒ inposet ry (f_ x1) (f_ x2)
   where
     x1 = x !: 1
@@ -131,8 +146,9 @@ leastFixedPointDefinition :: Note
 leastFixedPointDefinition = de $ do
     lab leastFixedPointDefinitionLabel
     s ["Let ", m relposet_, " be a ", poset_, and, m $ fun f x x, " a ", function]
-    s ["The ", leastFixedPoint', " ", m $ lfp f, " of ", m f, " is defined as follows"]
-    ma $ lfp f === inf (fix f)
+    s [the, leastFixedPoint', m $ lfp f, "of", m f, "is a", fixedPoint, "such that the following holds"]
+    let a = "a"
+    ma $ fa (a ∈ x) $ (a =: (fn f a)) ⇒ lfp f ⊆: a
   where
     f = fun_
     x = posetset_
@@ -142,8 +158,9 @@ greatestFixedPointDefinition :: Note
 greatestFixedPointDefinition = de $ do
     lab greatestFixedPointDefinitionLabel
     s ["Let ", m relposet_, " be a ", poset_, and, m $ fun f x x, " a ", function]
-    s ["The ", greatestFixedPoint', " ", m $ gfp f, " of ", m f, " is defined as follows"]
-    ma $ gfp f === sup (fix f)
+    s [the, greatestFixedPoint', m $ lfp f, "of", m f, "is a", fixedPoint, "such that the following holds"]
+    let a = "a"
+    ma $ fa (a ∈ x) $ (a =: (fn f a)) ⇒ a ⊆: gfp f
   where
     f = fun_
     x = posetset_
@@ -278,12 +295,26 @@ fixedPointRegionIsIntersectionOfAscAndDesc = thm $ do
     a = "a"
     x = posetset_
 
+tarskiFixedPointTheorem :: Note
+tarskiFixedPointTheorem = thm $ do
+    term "Tarksi's fixed point theorem"
+    newline
+    s ["Let", m lat_, "be a", completeLattice_, "and let", m $ fun f x x, "be a", monotone, function]
+    s [the, fixedPointRegion, m $ fix f, "of", m f, "is a", completeLattice]
+    s ["Consequently, ", m f, "has a", greatestFixedPoint_, "and a", leastFixedPoint_]
+
+    toprove
+  where
+    f = fun_
+    x = latset_
+
 kleeneChainDefinition :: Note
 kleeneChainDefinition = de $ do
     lab kleeneChainDefinitionLabel
     s ["Let ",  m lat_, " be a ", lattice_, and, m $ fun f x x, " a ", scottContinuous, " function"]
-    s ["The ", kleeneChain', " starting at a point ", m $ a ∈ x, " is the set ", m $ kleeneCh a]
-    ma $ kleeneCh a === setcmpr (i ∈ naturals) (f !: i `fn` x)
+    s [the , kleeneChain', " starting at a point ", m $ a ∈ x, " is the set ", m $ kleeneCh a]
+    ma $ kleeneCh a === setcmpr (i ∈ naturals) (f ^: i `fn` x)
+    s [the, kleeneChain, "is sometimes also called the", set, "of", functionIterates]
   where
     i = "i"
     f = fun_
@@ -327,7 +358,71 @@ latticesOverFunctions = thm $ do
 
 
 
+galoisConnectionDefinition :: Note
+galoisConnectionDefinition = de $ do
+    lab galoisConnectionDefinitionLabel
+    lab reductiveDefinitionLabel
+    lab extensiveDefinitionLabel
+    s ["Let", m $ lat x rx, and, m $ lat y ry, "be", completeLattices]
+    s ["Let", m $ fun a x y, and, m $ fun g y x, "be", monotone, functions]
+    s [m a, and, m g, "form a", galoisConnection', "if the following hold"]
+    itemize $ do
+        item $ s [m $ a ● g, "is", reductive' <> ":", m $ fa (y_ ∈ y) $ inposet ry (fn a (fn g y_)) y_]
+        item $ s [m $ g ● a, "is", extensive' <> ":", m $ fa (x_ ∈ x) $ inposet rx x_ (fn g (fn a x_))]
+    s ["This is denoted as follows"]
+    ma $ gconn a g (lat x rx) (lat y ry)
+  where
+    a = alpha
+    g = gamma
+    x = "X"
+    x_ = "x"
+    rx = partord_ !: x
+    y = "Y"
+    y_ = "y"
+    ry = partord_ !: y
 
+galoisConnectionEquivalentDefinition :: Note
+galoisConnectionEquivalentDefinition = thm $ do
+    s ["The following is an equilavent definition of a", galoisConnection]
+    newline
 
+    s ["Let", m $ lat x rx, and, m $ lat y ry, "be", completeLattices]
+    s ["Let", m $ fun a x y, and, m $ fun g y x, "be", monotone, functions]
+    s [m a, and, m g, "form a", galoisConnection', "if the following hold"]
+    ma $ fa (x_ ∈ x) $ fa (y_ ∈ y) $ inposet ry (fn a x_) y_ ⇔ inposet rx x_ (fn g y_)
 
+    toprove
+  where
+    a = alpha
+    g = gamma
+    x = "X"
+    x_ = "x"
+    rx = partord_ !: x
+    y = "Y"
+    y_ = "y"
+    ry = partord_ !: y
 
+galoisInsertionDefinition :: Note
+galoisInsertionDefinition = de $ do
+    lab galoisInsertionDefinitionLabel
+    s ["Let", m a, and, m g, "form a", galoisConnection]
+    s ["This", galoisConnection, "is called a", galoisInsertion', "if", m g, "is", injective]
+    s ["This is denoted as follows"]
+    ma $ gins a g (lat x rx) (lat y ry)
+  where
+    a = alpha
+    g = gamma
+    x = "X"
+    rx = partord_ !: x
+    y = "Y"
+    ry = partord_ !: y
+
+galoisInsertionOtherJections :: Note
+galoisInsertionOtherJections = thm $ do
+    s ["Let", m a, and, m g, "form a", galoisInsertion]
+    s [m a, "is", surjective, and, m $ a ● g, "is the identity", function]
+
+    toprove
+  where
+    a = alpha
+    g = gamma

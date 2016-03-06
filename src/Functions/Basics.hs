@@ -10,6 +10,7 @@ import           Sets.Basics.Terms
 
 import           Functions.Application.Macro
 import           Functions.Application.Terms
+import           Functions.Jections.Terms
 
 import           Functions.Basics.Macro
 import           Functions.Basics.Terms

@@ -80,6 +80,7 @@ orders = section "Orders" $ do
         completeLatticeExamples
 
         completeLatticeIsBounded
+        finiteLatticeIsComplete
 
         pointedLatticeDefinitions
         flatLatticeDefinition
@@ -491,6 +492,14 @@ completeLatticeIsBounded = thm $ do
     s ["Every ", completeLattice, m relposet_, " is a ", boundedLattice, " where the ", maximalElement, " is the ", supremum, " of ", m posetset_, " and the ", minimalElement, " is the ", infimum, " of ", m posetset_]
 
     toprove
+
+
+finiteLatticeIsComplete :: Note
+finiteLatticeIsComplete = thm $ do
+    s ["Every", lattice, m lat_, "where", m latset_, "is", finite, and, "non-empty, is a", completeLattice]
+
+    toprove
+
 
 pointedLatticeDefinitions :: Note
 pointedLatticeDefinitions = de $ do

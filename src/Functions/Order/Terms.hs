@@ -5,6 +5,8 @@ import           Notes
 makeDefs [
       "monotonic"
     , "monotone"
+    , "isotone"
+    , "order preserving"
     , "Scott continuous"
     , "fixed point"
     , "fixed point region"
@@ -13,6 +15,12 @@ makeDefs [
     , "least fixed point"
     , "greatest fixed point"
     , "Kleene chain"
+    , "function iterates"
+
+    , "Galois connection"
+    , "reductive"
+    , "extensive"
+    , "Galois insertion"
     ]
 
 makeThms [
