@@ -5,10 +5,12 @@ import           Notes
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
 import           Relations.Basics.Terms
+import           Relations.Orders.Hasse
 import           Relations.Orders.Macro
 import           Relations.Orders.Terms
 import           Relations.Preorders.Terms
 import           Sets.Basics.Terms
+import           Sets.Powerset.Terms
 
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
@@ -16,6 +18,7 @@ import           Functions.Basics.Terms
 import           Functions.Composition.Macro
 import           Functions.Composition.Terms
 import           Functions.Jections.Terms
+import           Functions.Order.Diagrams
 
 import           Functions.Order.Macro
 import           Functions.Order.Terms
@@ -60,8 +63,10 @@ galoisConnectionS :: Note
 galoisConnectionS = subsection "Galois connections" $ do
     galoisConnectionDefinition
     galoisConnectionEquivalentDefinition
+    galoisConnectionExamples
     galoisInsertionDefinition
     galoisInsertionOtherJections
+    galoisConnectionsCompose
 
 
 
@@ -370,7 +375,7 @@ galoisConnectionDefinition = de $ do
         item $ s [m $ a ● g, "is", reductive' <> ":", m $ fa (y_ ∈ y) $ inposet ry (fn a (fn g y_)) y_]
         item $ s [m $ g ● a, "is", extensive' <> ":", m $ fa (x_ ∈ x) $ inposet rx x_ (fn g (fn a x_))]
     s ["This is denoted as follows"]
-    ma $ gconn a g (lat x rx) (lat y ry)
+    ma $ gcon a g (lat x rx) (lat y ry)
   where
     a = alpha
     g = gamma
@@ -402,6 +407,56 @@ galoisConnectionEquivalentDefinition = thm $ do
     y_ = "y"
     ry = partord_ !: y
 
+galoisConnectionExamples :: Note
+galoisConnectionExamples = do
+    let c1 = "red"
+        c2 = "blue"
+    s ["In the following examples, the", raw c1, "arrows correspond to", m alpha, "and the", raw c2, "arrows correspond to", m gamma]
+    ex $ do
+        s ["The following diagrams shows a simple non-trivial", galoisConnection]
+        let (a, b, c) = ("a", "b", "c")
+            hd1 = hasseDiagram [a, c] [(a, c)]
+            hd2 = hasseDiagram [b] []
+            fun1 = [(a, b), (c, b)]
+            fun2 = [(b, c)]
+        orderFunctionFig 3 dotsConfig $ OrderFunctionFig
+            [("A", hd1), ("B", hd2)]
+            [(c1, fun1), (c2, fun2)]
+    ex $ do
+        s ["The following diagrams shows another simple non-trivial", galoisConnection]
+        let (a, b, c, d) = ("a", "b", "c", "d")
+            hd1 = hasseDiagram [a, c] [(a, c)]
+            hd2 = hasseDiagram [b, d] [(b, d)]
+            fun1 = [(a, b), (c, b)]
+            fun2 = [(b, c), (d, c)]
+        orderFunctionFig 4 dotsConfig $ OrderFunctionFig
+            [("A", hd1), ("B", hd2)]
+            [(c1, fun1), (c2, fun2)]
+    ex $ do
+        s ["The following diagram shows a", galoisConnection, "between two", posets]
+        s ["One", poset, "is a", subset, "of the", powerset, "of", m integers]
+        s ["The other is the set of information we can have about the sign of an integer"]
+        s ["top means it could be anything, bot means it's impossible for this situation to occur, + means that the sign is positive and - means that the sign is negative"]
+        let hd1 = hasseDiagram [all1, pos1, neg1, zp1, zm1, zero1, none] [(none, zero1), (zero1, zm1), (zero1, zp1), (zp1, pos1), (zm1, neg1), (zero1, neg1), (zero1, pos1), (neg1, all1), (pos1, all1)]
+            hd2 = hasseDiagram [all2, pos2, neg2, zero2] [(zero2, neg2), (zero2, pos2), (neg2, all2), (pos2, all2)]
+            fun1 = [(none, zero2), (zero1, pos2), (zp1, pos2), (zm1, neg2), (neg1, neg2), (pos1, pos2), (all1, all2)]
+            fun2 = [(zero2, none), (neg2, neg1), (pos2, pos1), (all2, all1)]
+            all1 = "{..., -1, 0, 1, ...}"
+            pos1 = "{0, 1, ...}"
+            neg1 = "{... -1, 0}"
+            zm1 = "{-1, 0}"
+            zp1 = "{0, 1}"
+            zero1 = "{0}"
+            none = "{}"
+            all2 = "top"
+            pos2 = "+"
+            neg2 = "-"
+            zero2 = "bot"
+        orderFunctionFig 8 normalConfig $ OrderFunctionFig
+            [("Concrete", hd1), ("Abstract", hd2)]
+            [(c1, fun1), (c2, fun2)]
+
+
 galoisInsertionDefinition :: Note
 galoisInsertionDefinition = de $ do
     lab galoisInsertionDefinitionLabel
@@ -426,3 +481,26 @@ galoisInsertionOtherJections = thm $ do
   where
     a = alpha
     g = gamma
+
+galoisConnectionsCompose :: Note
+galoisConnectionsCompose = thm $ do
+    s ["Let", m a1, and, m g1 <> ", as well as", m a2, and, m g2, "form", galoisConnections]
+    ma $ gcon a1 g1 (lat x rx) (lat y ry)
+    ma $ gcon a2 g2 (lat y ry) (lat z rz)
+    s [m (a2 ● a1), and, m (g1 ● g2), "then form a", galoisConnection]
+    ma $ gcon (a2 ● a1) (g1 ● g2) (lat x rx) (lat z rz)
+
+    toprove
+  where
+    a = alpha
+    a1 = a !: 1
+    a2 = a !: 2
+    g = gamma
+    g1 = g !: 1
+    g2 = g !: 2
+    x = "X"
+    rx = partord_ !: x
+    y = "Y"
+    ry = partord_ !: y
+    z = "Z"
+    rz = partord_ !: z

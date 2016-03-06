@@ -27,7 +27,7 @@ extra-deps:
 - distributive-0.4.4
 - file-embed-0.0.9.1
 - gitrev-1.1.0
-- haphviz-0.1.2.1
+- haphviz-0.2.0.0
 - hashable-1.2.3.3
 - hspec-2.2.1
 - hspec-core-2.2.1

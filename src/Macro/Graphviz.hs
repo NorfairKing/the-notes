@@ -6,11 +6,14 @@ import           Types
 import           Control.Monad         (unless)
 import           Control.Monad.Reader  (asks)
 
+import           Data.Maybe            (fromMaybe)
+
 import           System.Directory      (doesFileExist)
 import           System.Exit           (ExitCode (..))
 import           System.FilePath.Posix ((<.>), (</>))
 import           System.Process        (readCreateProcessWithExitCode, shell)
 
+import qualified Data.Text             as T
 import qualified Data.Text.IO          as T
 
 import           Macro.Figure
@@ -56,5 +59,11 @@ dot2tex graph = do
     -- A unique filename based on content. In the odd case that the content is the same, it doesn't matter.
     filename = hashContent text
 
+
+drawEdge :: [(Text, NodeId)] -> (Text, Text) -> DotGen ()
+drawEdge nodes (from, to) = do
+    let fromN = fromMaybe (error $ "from node not found: " ++ T.unpack from) $ lookup from nodes
+    let toN = fromMaybe (error $ "to node not found: " ++ T.unpack to) $ lookup to nodes
+    unless (fromN == toN) $ fromN --> toN
 
 

@@ -38,12 +38,12 @@ kleeneCh = fn "K"
 -- * Galois connections
 
 -- | A galois connection
-gconn :: Note -- ^ bottom function
-      -> Note -- ^ top function
-      -> Note -- ^ 'from' lattice
-      -> Note -- ^ 'to' lattice
-      -> Note
-gconn b t from to = do
+gcon :: Note -- ^ bottom function
+     -> Note -- ^ top function
+     -> Note -- ^ 'from' lattice
+     -> Note -- ^ 'to' lattice
+     -> Note
+gcon b t from to = do
     packageDep_ "galois"
     binop (comm2 "galois" b t) from to
 

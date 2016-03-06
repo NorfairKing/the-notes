@@ -29,7 +29,7 @@ executable the-notes
                         , containers            >= 0.5       && < 0.6
                         , blaze-html            >= 0.8       && < 0.9
                         , blaze-markup          >= 0.7       && < 0.8
-                        , haphviz               >= 0.1.2.1   && < 0.2
+                        , haphviz               >= 0.2       && < 0.3
                         , filepath              >= 1.4       && < 1.5
                         , base16-bytestring     >= 0.1       && < 0.2
                         , bytestring            >= 0.10      && < 0.11
@@ -299,7 +299,7 @@ test-suite the-notes-test
                      , containers            >= 0.5       && < 0.6
                      , blaze-html            >= 0.8       && < 0.9
                      , blaze-markup          >= 0.7       && < 0.8
-                     , haphviz               >= 0.1.2     && < 0.2
+                     , haphviz               >= 0.2       && < 0.3
                      , filepath              >= 1.4       && < 1.5
                      , base16-bytestring     >= 0.1       && < 0.2
                      , bytestring            >= 0.10      && < 0.11
