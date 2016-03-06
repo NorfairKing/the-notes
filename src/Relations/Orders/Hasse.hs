@@ -49,6 +49,8 @@ drawHasseEdges nis hd = forM_ cleanEdges $ drawEdge nis
     cleanEdges
         = filter
           (\e@(from, to) ->
+            from /= to
+            &&
             null
                 [ (e1, e2)
                 | e1@(f1, t1) <- edges

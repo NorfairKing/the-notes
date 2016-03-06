@@ -2,6 +2,11 @@ module Functions.Order where
 
 import           Notes
 
+import           Data.List                      (intercalate, isSubsequenceOf,
+                                                 subsequences)
+import qualified Data.Text                      as T
+import qualified Prelude                        as P
+
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
 import           Relations.Basics.Terms
@@ -15,7 +20,7 @@ import           Sets.Powerset.Terms
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
 import           Functions.Basics.Terms
-import           Functions.Composition.Macro
+import           Functions.Composition.Macro    hiding (comp)
 import           Functions.Composition.Terms
 import           Functions.Jections.Terms
 import           Functions.Order.Diagrams
@@ -42,6 +47,10 @@ order = section "Functions and orders" $ do
 
     latticesOverFunctions
 
+    completelyMeetPreservingDefinition
+    completelyJoinPreservingDefinition
+    preservingExamples
+
     galoisConnectionS
 
 
@@ -67,7 +76,7 @@ galoisConnectionS = subsection "Galois connections" $ do
     galoisInsertionDefinition
     galoisInsertionOtherJections
     galoisConnectionsCompose
-
+    galoisConnectionsPreserves
 
 
 monotonicDefinition :: Note
@@ -362,6 +371,77 @@ latticesOverFunctions = thm $ do
     y = "Y"
 
 
+completelyMeetPreservingDefinition :: Note
+completelyMeetPreservingDefinition = de $ do
+    let f_ = fun_
+        f = fn f_
+        x = "X"
+        a = "A"
+        rx = partord_ !: x
+        infx n = (infsign !: x) <> n
+        y = "Y"
+        ry = partord_ !: y
+        infy n = (infsign !: y) <> n
+    s ["Let", m $ relposet x rx, and, m $ relposet y ry, "be", posets]
+    s ["A", function, m $ fun f_ x y, "is called", completelyMeetPreserving', "if the following holds"]
+
+    ma $ fa (a ⊆ x) $ f (infx a) =: infy (f_ □ a)
+
+
+completelyJoinPreservingDefinition :: Note
+completelyJoinPreservingDefinition = de $ do
+    let f_ = fun_
+        f = fn f_
+        x = "X"
+        a = "A"
+        rx = partord_ !: x
+        supx n = (supsign !: x) <> n
+        y = "Y"
+        ry = partord_ !: y
+        supy n = (supsign !: y) <> n
+    s ["Let", m $ relposet x rx, and, m $ relposet y ry, "be", posets]
+    s ["A", function, m $ fun f_ x y, "is called", completelyJoinPreserving', "if the following holds"]
+
+    ma $ fa (a ⊆ x) $ f (supx a) =: supy (f_ □ a)
+
+preservingExamples :: Note
+preservingExamples = do
+    ex $ do
+        let c1 = "darkgreen"
+        let (a, b, c, x, y, z) = ("a", "b", "c", "x", "y", "z")
+            hd1 = hasseDiagram [a, b, c] [(a, c), (b, c)]
+            hd2 = hasseDiagram [x, y, z] [(x, y), (y, z)]
+            fun1 = [(a, x), (b, y), (c, z)]
+        orderFunctionFig 7 normalConfig $ OrderFunctionFig
+            [("A", hd1),("B", hd2)]
+            [(c1, fun1)]
+        s ["In this case, the", function, "is", monotone, "but not", completelyJoinPreserving]
+        s ["The image of the join of", m "a", and, m "b", is, m "z" <> ", but the join of the images of", m "a", and, "b", "is", m "y"]
+    ex $ do
+        let c1 = "darkgreen"
+        let (a, b, c, x, y) = ("a", "b", "c", "x", "y")
+            hd1 = hasseDiagram [a, b, c] [(a, c), (b, c)]
+            hd2 = hasseDiagram [x, y] [(x, y)]
+            fun1 = [(a, x), (b, x), (c, x)]
+        orderFunctionFig 5 dotsConfig $ OrderFunctionFig
+            [("A", hd1),("B", hd2)]
+            [(c1, fun1)]
+        s ["In this case, the", function, "is both", monotone, "and", completelyJoinPreserving]
+    ex $ do
+        let c = "darkgreen"
+        let full = [1, 2, 3]
+            tshow :: [P.Int] -> Text
+            tshow ls = T.pack $ "{" P.++ intercalate ", " (P.map show ls) P.++ "}"
+            nodes = [ tshow ls | ls <- subsequences full ]
+            edges = [ (tshow l1, tshow l2) | l1 <- subsequences full, l2 <- subsequences full, l1 `isSubsequenceOf` l2]
+            hd = hasseDiagram nodes edges
+            fun = P.map (\(l1, l2) -> (tshow l1, tshow l2)) [([],[]), ([1],[1]), ([2], [1,2]), ([3],[3]), ([1, 2], [1, 2]), ([2,3], [1,2,3]), ([1,3], [1,2,3]), ([1,2,3],[1,2,3])]
+        orderFunctionFig 7 normalConfig $ OrderFunctionFig
+            [(tshow full, hd)]
+            [(c, fun)]
+        s ["In this case, the", function, "is both", monotone, "and", completelyJoinPreserving, "but not", completelyMeetPreserving]
+
+
 
 galoisConnectionDefinition :: Note
 galoisConnectionDefinition = de $ do
@@ -504,3 +584,22 @@ galoisConnectionsCompose = thm $ do
     ry = partord_ !: y
     z = "Z"
     rz = partord_ !: z
+
+galoisConnectionsPreserves :: Note
+galoisConnectionsPreserves = thm $ do
+    let a = alpha
+        g = gamma
+        x = "X"
+        rx = partord_ !: x
+        y = "Y"
+        ry = partord_ !: y
+    s ["Let", m a, and, m g, "form a", galoisConnection]
+
+    ma $ gcon a g (lat x rx) (lat y ry)
+
+    s [m a, "is", completelyJoinPreserving]
+    s [m g, "is", completelyMeetPreserving]
+
+    toprove
+
+    todo "how about the other way around?"

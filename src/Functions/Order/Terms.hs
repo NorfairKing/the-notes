@@ -17,6 +17,9 @@ makeDefs [
     , "Kleene chain"
     , "function iterates"
 
+    , "completely meet-preserving"
+    , "completely join-preserving"
+
     , "Galois connection"
     , "reductive"
     , "extensive"

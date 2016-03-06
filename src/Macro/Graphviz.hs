@@ -64,6 +64,6 @@ drawEdge :: [(Text, NodeId)] -> (Text, Text) -> DotGen ()
 drawEdge nodes (from, to) = do
     let fromN = fromMaybe (error $ "from node not found: " ++ T.unpack from) $ lookup from nodes
     let toN = fromMaybe (error $ "to node not found: " ++ T.unpack to) $ lookup to nodes
-    unless (fromN == toN) $ fromN --> toN
+    fromN --> toN
 
 
