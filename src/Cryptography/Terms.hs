@@ -47,8 +47,13 @@ makeDefs [
 
     , "block cipher"
     , "block length"
+
     , "electronic codebook"
     , "ECB"
+
+    , "cipher block chaining"
+    , "initialisation vector"
+    , "CBC"
 
     , "message authentication code"
     , "MAC"

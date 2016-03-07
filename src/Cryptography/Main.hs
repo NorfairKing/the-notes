@@ -27,6 +27,7 @@ import qualified Prelude                              as P (and)
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
 import           Functions.Basics.Terms
+import           Functions.Inverse.Macro
 import           Functions.Inverse.Terms
 import           Logic.FirstOrderLogic.Macro
 import           Probability.Independence.Terms
@@ -69,6 +70,7 @@ cryptography = chapter "Cryptography" $ do
             blockCipherDefinition
             eCBDefinition
             eCBInsecure
+            cBCDefinition
 
     section "Message Authentication Codes" $ do
         messageAuthenticationCodeDefinition
@@ -443,9 +445,11 @@ eCBDefinition = de $ do
     itemize $ do
         item $ s ["Encryption: ", m $ enc' mesg k_ =: f (mesg !: 1) k_ ++ f (mesg !: 2) k_ ++ dotsc ++ f (mesg !: l) k_]
         let c = "c"
-        item $ s ["Decryption: ", m $ dec c k_    =: f (c !: 1) k_ ++ f (c !: 2) k_ ++ dotsc ++ f (c !: l) k_]
+            fm = fn2 $ inv f_
+        item $ s ["Decryption: ", m $ dec c k_ =: fm (c !: 1) k_ ++ fm (c !: 2) k_ ++ dotsc ++ fm (c !: l) k_]
 
     tikzFig "ECB mode" [] $ raw $ [litFile|src/Cryptography/ECBTikZ.tex|]
+
 
 tuxImageBS :: SB.ByteString
 tuxImageBS = $(embedFile "src/Cryptography/tux.png")
@@ -457,7 +461,7 @@ eCBInsecure = do
             n = "n"
         s ["Let", m f_, "be a", blockCipher, "with", blockLength, m n]
         -- let k_ = "k"
-        s [the, electronicCodebook', "mode for a", blockCipher, "is not", iNDCCASecure]
+        s [the, electronicCodebook', "mode for a", blockCipher, "is not", iNDCCASecure, "on its own"]
 
         proof $ do
             s ["We will prove an even stronger statement, namely that the", electronicCodebook, "mode is not even secure in a", iNDCPA, "game where the initial messages cannot be used during the challenge"]
@@ -530,6 +534,49 @@ eCBInsecure = do
                 , IGHeight (Cm 3.0)
                 , IGWidth (CustomMeasure $ "0.5" <> textwidth)
                 ]
+
+
+cBCDefinition :: Note
+cBCDefinition = de $ do
+    lab cipherBlockChainingDefinitionLabel
+    lab cBCDefinitionLabel
+    let f_ = "F"
+        k_ = "k"
+        n = "n"
+    s ["Let", m f_, "be a", blockCipher, "with", blockLength, m n, "and let", m k_, "be a key sampled uniformly from the key space"]
+    s [the, cipherBlockChaining', "(" <> cBC' <> ")", "mode for a", blockCipher, "is a", cipher, "as follows"]
+    let mesg = "m"
+        f = fn2 f_
+        l = "l"
+    s ["Let", m mesg, "be a", message, "with a length that is a multiple of", m n <> ": ", m $ l * n]
+    itemize $ do
+        let c = "c"
+            c0 = c !: 0
+            c1 = c !: 1
+            cl = c !: l
+        item $ do
+            "Encryption:"
+            let iv = "IV"
+            s ["First a so-called", initialisationVector', m c0, "(also written as", m iv <> ")", "is chosen uniformly at random"]
+            ma $ enc mesg k_ c0
+                 =: c0
+                 ++ f (mesg !: 1 `xor` c0) k_
+                 ++ f (mesg !: 2 `xor` c1) k_
+                 ++ dotsc
+                 ++ f (mesg !: l `xor` cl) k_
+
+        let fm = fn2 $ inv f_
+        item $ do
+            s ["Decryption must be done sequentially"]
+            ma $ dec c k_
+                =: (fm (c !: 1) k_ `xor` c0)
+                ++ (fm (c !: 2) k_ `xor` c1)
+                ++ dotsc
+                ++ (fm (c !: l) k_ `xor` cl)
+
+
+    tikzFig "CBC mode" [] $ raw $ [litFile|src/Cryptography/CBCTikZ.tex|]
+
 
 
 messageAuthenticationCodeDefinition :: Note
