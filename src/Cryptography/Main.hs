@@ -445,6 +445,8 @@ eCBDefinition = de $ do
         let c = "c"
         item $ s ["Decryption: ", m $ dec c k_    =: f (c !: 1) k_ ++ f (c !: 2) k_ ++ dotsc ++ f (c !: l) k_]
 
+    tikzFig "ECB mode" [] $ raw $ [litFile|src/Cryptography/ECBTikZ.tex|]
+
 tuxImageBS :: SB.ByteString
 tuxImageBS = $(embedFile "src/Cryptography/tux.png")
 
