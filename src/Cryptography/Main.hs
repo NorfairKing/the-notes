@@ -71,6 +71,7 @@ cryptography = chapter "Cryptography" $ do
             eCBDefinition
             eCBInsecure
             cBCDefinition
+            counterDefinition
 
     section "Message Authentication Codes" $ do
         messageAuthenticationCodeDefinition
@@ -544,7 +545,7 @@ cBCDefinition = de $ do
         k_ = "k"
         n = "n"
     s ["Let", m f_, "be a", blockCipher, "with", blockLength, m n, "and let", m k_, "be a key sampled uniformly from the key space"]
-    s [the, cipherBlockChaining', "(" <> cBC' <> ")", "mode for a", blockCipher, "is a", cipher, "as follows"]
+    s [the, cipherBlockChaining', "(" <> cBC' <> ")", "mode for a", blockCipher, "is a", symmetricCryptosystem, "as follows"]
     let mesg = "m"
         f = fn2 f_
         l = "l"
@@ -576,6 +577,51 @@ cBCDefinition = de $ do
 
 
     tikzFig "CBC mode" [] $ raw $ [litFile|src/Cryptography/CBCTikZ.tex|]
+
+
+counterDefinition :: Note
+counterDefinition = de $ do
+    lab counterDefinitionLabel
+    lab cTRDefinitionLabel
+    let f_ = "F"
+        k_ = "k"
+        n = "n"
+    s ["Let", m f_, "be a", blockCipher, "with", blockLength, m n, "and let", m k_, "be a key sampled uniformly from the key space"]
+    s [the, counter', "(" <> cTR' <> ")", "mode for a", blockCipher, "is a", symmetricCryptosystem, "as follows"]
+    let mesg = "m"
+        f = fn2 f_
+        l = "l"
+    s ["Let", m mesg, "be a", message, "with a length that is a multiple of", m n <> ": ", m $ l * n]
+    itemize $ do
+        let c = "c"
+            c1 = c !: 1
+            c2 = c !: 1
+            cl = c !: l
+            i = "i"
+            r = "r"
+            bs = autoAngleBrackets
+        item $ do
+            "Encryption:"
+            let iv = "IV"
+            s ["First an", initialisationVector, m $ r ∈ bitss (n / 2), "(also written as", m iv <> ")", "is chosen uniformly at random"]
+            ma $ enc mesg k_ r
+                 =: r
+                 ++ mesg !: 1 `xor` (f (r ++ bs 1) k_)
+                 ++ mesg !: 2 `xor` (f (r ++ bs 2) k_)
+                 ++ dotsc
+                 ++ mesg !: l `xor` (f (r ++ bs l) k_)
+            s ["Here", m $ bs i, "is the representation of", m i, "as an", m $ n / 2, "bit string"]
+
+        item $ do
+            "Decryption:"
+            ma $ dec c k_
+                =: c1 `xor` (f (r ++ bs 1) k_)
+                ++ c2 `xor` (f (r ++ bs 2) k_)
+                ++ dotsc
+                ++ cl `xor` (f (r ++ bs l) k_)
+    s ["Note that", m $ inv f_, "is not needed for decryption"]
+
+    tikzFig "CTR mode" ["scale=1.5"] $ raw $ [litFile|src/Cryptography/CTRTikZ.tex|]
 
 
 

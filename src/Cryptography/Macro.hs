@@ -9,7 +9,7 @@ import           Macro.Sets.Macro
 
 -- * Concatenation of messages
 (++) :: Note -> Note -> Note
-(++) = binop "|"
+(++) = binop $ commS " " <> "|" <> commS " "
 
 -- conccmp :: Note -> Note -> Note
 -- conccmp =

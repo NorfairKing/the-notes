@@ -55,6 +55,9 @@ makeDefs [
     , "initialisation vector"
     , "CBC"
 
+    , "counter"
+    , "CTR"
+
     , "message authentication code"
     , "MAC"
     , "tag space"
