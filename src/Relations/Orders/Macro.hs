@@ -77,6 +77,8 @@ bigsupsign = commS "bigsqcup"
 supcomp :: Note -> Note -> Note
 supcomp = comp bigsupsign
 
+supof :: Note -> Note
+supof = (supsign <>)
 
 -- ** Greatest lower bound
 
@@ -94,6 +96,9 @@ biginfsign = commS "bigsqcap"
 
 infcomp :: Note -> Note -> Note
 infcomp = comp biginfsign
+
+infof :: Note -> Note
+infof = (infsign <>)
 
 -- * Lattices
 

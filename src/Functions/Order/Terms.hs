@@ -24,6 +24,8 @@ makeDefs [
     , "reductive"
     , "extensive"
     , "Galois insertion"
+
+    , "approximates"
     ]
 
 makeThms [

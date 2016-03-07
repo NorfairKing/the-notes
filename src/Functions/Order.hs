@@ -52,6 +52,7 @@ order = section "Functions and orders" $ do
     preservingExamples
 
     galoisConnectionS
+    approximationS
 
 
 regions :: Note
@@ -77,6 +78,16 @@ galoisConnectionS = subsection "Galois connections" $ do
     galoisInsertionOtherJections
     galoisConnectionsCompose
     galoisConnectionsPreserves
+    preservesNoGaloisConnection
+    galoisConnectionExistenceAlpha
+    galoisConnectionExistenceGamma
+
+approximationS :: Note
+approximationS = subsection "Approximations" $ do
+    approximationDefinition
+    approximationExamples
+    monotoneEquivalences
+    approximationExists
 
 
 monotonicDefinition :: Note
@@ -602,4 +613,144 @@ galoisConnectionsPreserves = thm $ do
 
     toprove
 
-    todo "how about the other way around?"
+preservesNoGaloisConnection :: Note
+preservesNoGaloisConnection = cex $ do
+    let a = alpha
+        g = gamma
+    s ["Let", m a, and, m g, "be", functions, "such that the following hold"]
+    itemize $ do
+        item $ s [m a, "is", completelyJoinPreserving]
+        item $ s [m g, "is", completelyMeetPreserving]
+    s [m a, and, m g, "do not necessarily form a",  galoisConnection]
+
+    proof $ do
+        let c1 = "red"
+            c2 = "blue"
+        s ["The following is a diagram of a counter example"]
+        let (a, b, c, d) = ("a", "b", "c", "d")
+            (e, f, g, h) = ("e", "f", "g", "h")
+            hd1 = hasseDiagram [a, b, c, d] [(a, b), (a, c), (b, d), (c, d)]
+            hd2 = hasseDiagram [e, f, g, h] [(e, f), (e, g), (f, h), (g, h)]
+            fun1 = [(a, e), (b, f), (c, g), (d, h)]
+            fun2 = [(e, a), (f, c), (g, b), (h, d)]
+        orderFunctionFig 7 normalConfig $ OrderFunctionFig
+            [("A", hd1), ("B", hd2)]
+            [(c1, fun1), (c2, fun2)]
+        s ["In this situation", m alpha, "is", completelyJoinPreserving, and, m gamma, "is", completelyMeetPreserving, "but they don't form a", galoisConnection]
+
+
+galoisConnectionExistenceAlpha :: Note
+galoisConnectionExistenceAlpha = thm $ do
+    let a = alpha
+        g = gamma
+        x = "X"
+        rx = partord_ !: x
+        y = "Y"
+        ry = partord_ !: y
+    s ["If", m $ fun a x y, "is a", completelyJoinPreserving, function <> ", then there exists a function", m $ fun g y x, "such that", m a, and, m g, "form a", galoisConnection]
+    ma $ gcon a g (lat x rx) (lat y ry)
+
+    toprove
+
+
+galoisConnectionExistenceGamma :: Note
+galoisConnectionExistenceGamma = thm $ do
+    let a = alpha
+        g = gamma
+        x = "X"
+        rx = partord_ !: x
+        y = "Y"
+        ry = partord_ !: y
+    s ["If", m $ fun g y x, "is a", completelyMeetPreserving, function <> ", then there exists a function", m $ fun a x y, "such that", m a, and, m g, "form a", galoisConnection]
+    ma $ gcon a g (lat x rx) (lat y ry)
+
+    toprove
+
+approximationDefinition :: Note
+approximationDefinition = de $ do
+    let a = alpha
+        g = gamma
+        x = "X"
+        rx = partord_ !: x
+        y = "Y"
+        ry = partord_ !: y
+    s ["Let", m $ fun a x y, and, m $ fun g y x, "form a", galoisConnection]
+    ma $ gcon a g (lat x rx) (lat y ry)
+    let f = "f"
+        h = "h"
+    s ["Let", m $ fun f x x, and, m $ fun h y y, "be", functions]
+    s ["We say that", m h, approximates', m f, "if the following holds"]
+
+    let x_ = "x"
+        y_ = "y"
+    ma $ fa (x_ ∈ x) $ fa (y_ ∈ y) $ inposet ry (fn a x_) y_ ⇒ inposet ry (fn a (fn f x_)) (fn h y_)
+
+
+approximationExamples :: Note
+approximationExamples = do
+    ex $ do
+        s ["In the following diagram, the blue arrow in the", set, m "A", approximates, "the blue arrow in the", set, m "B"]
+        let c1 = "blue"
+            c2 = "darkgreen"
+            (x, fx) = ("x", "f(x)")
+            (ax, afx, z, gz) = ("a(x)", "a(f(x))", "z", "g(z)")
+            hd1 = hasseDiagram [x, fx] [(x, fx)]
+            hd2 = hasseDiagram [ax, afx, z, gz] [(ax, z), (afx, gz)]
+            funf = [(x, fx)]
+            fung = [(z, gz)]
+            funa = [(x, ax), (fx, afx)]
+        orderFunctionFig 7 normalConfig $ OrderFunctionFig
+            [("A", hd1), ("B", hd2)]
+            [(c1, funf), (c1, fung), (c2, funa)]
+
+monotoneEquivalences :: Note
+monotoneEquivalences = do
+    let a = alpha
+        g = gamma
+        x = "X"
+        rx = partord_ !: x
+        y = "Y"
+        ry = partord_ !: y
+    s ["Let", m $ fun a x y, and, m $ fun g y x, "form a", galoisConnection]
+    ma $ gcon a g (lat x rx) (lat y ry)
+    let f = "f"
+        h = "h"
+    s ["Let", m $ fun f x x, and, m $ fun h y y, "be", monotone, functions]
+    s ["The following statements are equivalent"]
+
+    let x_ = "x"
+        y_ = "y"
+        (<<) = inposet ry
+        (<.) = inposet rx
+        a_ = fn a
+        g_ = fn g
+        f_ = fn f
+        h_ = fn h
+    enumerate $ do
+        item $ ma $ fa (x_ ∈ x) $ fa (y_ ∈ y) $ (a_ x_) << y_ ⇒ (a_ (f_ x_)) << (h_ y_)
+        item $ ma $ fa (y_ ∈ y) $ (a_ (f_ (g_ y_))) << (h_ y_)
+        item $ ma $ fa (x_ ∈ x) $ (a_ (f_ x_)) << (h_ (a_ x_))
+        item $ ma $ fa (y_ ⊆ y) $ (f_ (g_ y_)) <. (g_ (h_ y_))
+
+    toprove
+
+approximationExists :: Note
+approximationExists = thm $ do
+    let a = alpha
+        g = gamma
+        x = "X"
+        rx = partord_ !: x
+        y = "Y"
+        ry = partord_ !: y
+    s ["Let", m $ fun a x y, and, m $ fun g y x, "form a", galoisConnection]
+    ma $ gcon a g (lat x rx) (lat y ry)
+    let f = "f"
+    s ["Let", m $ fun f x x, "be a", monotone, function]
+
+    proof $ do
+        s ["Because", m x, "is a", completeLattice, "it must contain its", supremum]
+        let h = "h"
+            y_ = "y"
+        s [the, function, m $ func h y y y_ (supof x), "therefore", approximates, m f]
+
+
