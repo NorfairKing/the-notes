@@ -4,4 +4,5 @@ import           Notes hiding (inverse)
 
 makeDefs [
       "inverse"
+    , "inverse function"
     ]

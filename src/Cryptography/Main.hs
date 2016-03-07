@@ -29,6 +29,8 @@ import           Functions.Basics.Macro
 import           Functions.Basics.Terms
 import           Functions.Inverse.Macro
 import           Functions.Inverse.Terms
+import           Groups.Macro
+import           Groups.Terms
 import           Logic.FirstOrderLogic.Macro
 import           Probability.Independence.Terms
 import           Probability.ProbabilityMeasure.Macro
@@ -79,6 +81,11 @@ cryptography = chapter "Cryptography" $ do
 
     section "Key agreement" $ do
         diffieHellmanProtocolDefinition
+
+    section "Computational Problems" $ do
+        discreteLogarithmProblemDefinition
+        computationalDHProblemDefinition
+        decisionalDHProblemDefinition
 
 
 cryptographicSchemeDefinition :: Note
@@ -428,7 +435,7 @@ blockCipherDefinition = do
             k_ = "k"
         s ["A", blockCipher', "with", blockLength', m n_, "and key length", m m_, "is a", function, m $ fun2 f_ (bitss n_) (bitss m_) (bitss n_), "such that for every key", m k_ <> ", ", m $ f cdot_ k_, "is a bijection"]
     nte $ do
-        s ["Practicality requires that one knows efficient algorithms for computing ", m f_, "and its", inverse, "given the key"]
+        s ["Practicality requires that one knows efficient algorithms for computing ", m f_, "and its", inverseFunction, "given the key"]
 
 eCBDefinition :: Note
 eCBDefinition = de $ do
@@ -687,6 +694,15 @@ diffieHellmanProtocolDefinition = de $ do
     todo "generalisation to arbitrary cyclic groups"
 
 
--- discreteLogarithmProblemDefinition :: Note
--- discreteLogarithmProblemDefinition = de $ do
---     s [the, discreteLogarithm', "problem", "for a", cyclic, group,
+discreteLogarithmProblemDefinition :: Note
+discreteLogarithmProblemDefinition = de $ do
+    let aa = "A"
+        a = "a"
+        g = "g"
+    s [the, discreteLogarithm', "(" <> dL' <> ")", "problem", "for a", cyclic_, group, m $ grp_ =: grp (genby g) grpop_, "is the problem of computing, for a given", group, element, m $ aa ∈ grps_, "the exponent", m $ a ∈ ord grp_, " such that", m $ aa =: g ^ a, "holds"]
+
+computationalDHProblemDefinition :: Note
+computationalDHProblemDefinition = de $ mempty
+
+decisionalDHProblemDefinition :: Note
+decisionalDHProblemDefinition = de $ mempty

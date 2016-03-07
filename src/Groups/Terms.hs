@@ -1,6 +1,6 @@
 module Groups.Terms where
 
-import           Notes hiding (inverse)
+import           Notes hiding (cyclic, inverse)
 
 makeDefs
     [ "magma"
@@ -12,6 +12,8 @@ makeDefs
     , "subgroup"
     , "trivial subgroup"
     , "inverse"
+    , "cyclic"
+    , "generator"
     ]
 
 
