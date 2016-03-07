@@ -60,9 +60,6 @@ packages = do
     -- For colored text
     packageDep_ "color"
 
-    -- To cancel terms in math
-    packageDep_ "cancel"
-
     -- For fancy logic proofs
     packageDep_ "bussproofs"
 

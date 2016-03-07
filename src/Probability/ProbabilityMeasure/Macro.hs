@@ -45,12 +45,3 @@ prm = fn -- probability with custom measure
 -- | Probability
 prob :: Note -> Note
 prob = prm prm_
-
-
--- | Concrete mean
-mean_ :: Note
-mean_ = mu
-
--- | Concrete variance
-variance_ :: Note
-variance_ = sigma

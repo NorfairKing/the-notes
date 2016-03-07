@@ -2,26 +2,20 @@ module DataMining.ApproximateRetrieval where
 
 import           Notes
 
-import           Functions.Distances    (jaccardSimilarity,
-                                         jaccardSimilarityDefinitionLabel)
-import           Topology.MetricSpace   (pseudoMetricSpace,
-                                         pseudoMetricSpaceDefinitionLabel)
-
 import           Functions.Basics.Macro
+import           Functions.Distances.Terms
+import           Topology.MetricSpace.Terms
 
 approximateRetrieval :: Note
-approximateRetrieval = note "approximate-retrieval" $ do
-    section "Approximate Retrieval"
-
+approximateRetrieval = section "Approximate Retrieval" $ do
     theProblem
     nearDuplicate
 
 theProblem :: Note
-theProblem = do
-    subsection "The problem"
+theProblem = subsection "The problem" $ do
 
     s ["The general problem of approximate retrieval consists of retrieving items that are similar to a given query item"]
-    s ["Abstractly these items are elements of a ", pseudoMetricSpace, ref pseudoMetricSpaceDefinitionLabel]
+    s ["Abstractly these items are elements of a ", pseudometricSpace, ref pseudometricSpaceDefinitionLabel]
 
     -- s ["We will tackle two specific problems: Nearest Neigbor and Near duplicate."]
 
@@ -46,8 +40,7 @@ theProblem = do
 --   mempty
 
 nearDuplicate :: Note
-nearDuplicate = do
-    subsection "Near Duplicate Detection"
+nearDuplicate = subsection "Near Duplicate Detection" $ do
     s ["Given a set of items ", m v, " in a pseudometric space ", m toppms, " an item ", m w', " in ", m v, " and a distance ", m (e ∈ realsp), ", find all the items ", m w, " closer than ", m e, " to " , m w']
 
     s ["For arbitrary pseudometric spaces, this can be arbitrarily hard"]
@@ -61,9 +54,7 @@ nearDuplicate = do
     e = epsilon
 
 localitySensitiveHashing :: Note
-localitySensitiveHashing = do
-    subsubsection "Locality Sensitive Hashing"
-
+localitySensitiveHashing = subsubsection "Locality Sensitive Hashing" $ do
     s ["Locality sensitive hashing is an solution approach for the problem of near duplicate detection."]
     s ["It assumes that there exists a function ", m (fun f v (binfie_ ^: d)), " that transforms an item into a vector of bits"]
     s ["The ", jaccardSimilarity, ref jaccardSimilarityDefinitionLabel, " is then used as the distance between items (after applying ", m f, ")"]

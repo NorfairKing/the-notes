@@ -2,13 +2,16 @@ module Macro.Todo where
 
 import           Types
 
-import           Control.Monad        (unless)
+import           Macro.Text
+import           Macro.Theorem
+
+import           Control.Monad        (when)
 import           Control.Monad.Reader (asks)
 
 listoftodos :: Note
 listoftodos = do
     o <- asks conf_todos
-    unless o $ do
+    when o $ do
         packageDep_ "todonotes"
         comm0 "listoftodos"
 
@@ -18,9 +21,12 @@ todo' = liftL $ \l -> TeXComm "todo" [MOptArg ["color=red", "inline", raw "size=
 todo :: Note -> Note
 todo n = do
     o <- asks conf_todos
-    unless o $ do
+    when o $ do
         packageDep_ "todonotes"
         todo' n
+
+clarify :: Note -> Note
+clarify n = todo $ "Clarify: " <> n
 
 toprove :: Note
 toprove = todo $ "There is a proof missing here."
@@ -60,4 +66,11 @@ why :: Note
 why = todo $ "Why? More of an explanation is missing here."
 
 why_ :: Note -> Note
-why_ n = todo $ "Why " <> n <> "?" <> "More of an explanation is missing here."
+why_ n = todo $ "Why " <> n <> "?" <> " " <> "More of an explanation is missing here."
+
+
+-- | Placeholder for future references
+placeholder :: Note -> Note
+placeholder n = thm $ do
+    s ["This is a placeholder for future references"]
+    n

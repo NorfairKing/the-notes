@@ -1,7 +1,8 @@
 module Logic.PropositionalLogic.Resolution where
 
 import           Control.Monad                        (forM_, unless)
-import           Notes                                hiding (color, not, (=:))
+import           Notes                                hiding (color, directed,
+                                                       not, (=:))
 
 import           Data.Maybe                           (fromJust)
 import           Prelude
@@ -96,6 +97,7 @@ proofFig cap height g = do
     fp <- dot2tex g
     noindent
     hereFigure $ do
+        packageDep_ "graphicx"
         includegraphics [KeepAspectRatio True, IGHeight (Cm height), IGWidth (CustomMeasure $ textwidth)] fp
         caption cap
 

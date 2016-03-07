@@ -14,8 +14,7 @@ import           Logic.HoareLogic.Macro
 import           Logic.HoareLogic.Terms
 
 hoareLogicS :: Note
-hoareLogicS = note "hoare-logic" $ do
-    section "Hoare Logic"
+hoareLogicS = section "Hoare Logic" $ do
     s [hoareLogic', " is used to reason about imperative computer programs in abstract machines that have a ", state]
 
     stateDefinition
@@ -241,9 +240,6 @@ assignmentDefinition = do
         s ["It is assumed that the assigned expression is side-effect-free"]
         s ["This always holds in mathematics, but infrequently in real machines"]
 
-forwardAssignmentDefinitionLabel :: Label
-forwardAssignmentDefinitionLabel = Label Definition "forward-assignment"
-
 forwardAssignmentDefinition :: Note
 forwardAssignmentDefinition = de $ do
     lab forwardAssignmentDefinitionLabel
@@ -265,14 +261,14 @@ modifiesDefinition = de $ do
     lab modifyDefinitionLabel
     s ["A program ", m a, " is said to ", modify', " a variable ", m x, " if at any point, ", m a, " assigns to ", m x]
     newline
-    s [m (modifies a), " is the set of all variables that ", m a, " modifies"]
+    s [m (mods a), " is the set of all variables that ", m a, " mods"]
 
 ruleOfConstancy :: Note
 ruleOfConstancy = do
     de $ do
         s [the, term "rule of constancy", " is an ", inference, " in Hoare Logic"]
         s ["Let ", m r, " be an assertion"]
-        ma $ linf [htrip p a q, (freevars r) ∩ (modifies a) =§= emptyset] (htrip (p ∧ r) a (q ∧ r))
+        ma $ linf [htrip p a q, (freevars r) ∩ (mods a) =§= emptyset] (htrip (p ∧ r) a (q ∧ r))
         s ["This is known as ", dquoted (s ["Whatever ", m a, " doesn't modify, stays the same"])]
 
     ex $ ma $ e1
@@ -283,12 +279,12 @@ ruleOfConstancy = do
     e1 = linf [t1, t2] t3
       where
         t1 = htrip (x =: 0) (x =:= x + 1) (x =: 1)
-        t2 = (freevars $ y =: 3) ∩ (modifies $ x =:= x + 1) =§= emptyset
+        t2 = (freevars $ y =: 3) ∩ (mods $ x =:= x + 1) =§= emptyset
         t3 = htrip (x =: 0 ∧ y =: 3) (x =:= x + 1) (x =: 1 ∧ y =: 3)
     e2 = linf [t1, t2] t3
       where
         t1 = htrip (x =: 4) (x =:= sqrt y) (z =: 2)
-        t2 = (freevars $ y =: 3) ∩ (modifies $ x =:= sqrt y) =§= emptyset
+        t2 = (freevars $ y =: 3) ∩ (mods $ x =:= sqrt y) =§= emptyset
         t3 = htrip (x =: 4 ∧ y =: 3) (x =:= sqrt y) (z =: 2 ∧ y =: 3)
 
 conditionalRule :: Note
@@ -306,9 +302,6 @@ conditionalRule = do
 
 conditionalRuleGcdProof :: Note
 conditionalRuleGcdProof = todo "gcd proof"
-
-loopRuleExampleLabel :: Label
-loopRuleExampleLabel = Label Example "loop-rule-example"
 
 loopRuleDefinition :: Note
 loopRuleDefinition = do
@@ -347,8 +340,7 @@ loopRuleDefinition = do
     i_ = y > 3 + i
 
 termination :: Note
-termination = do
-    subsection "Termination"
+termination = subsection "Termination" $ do
     s ["To show total correctness, rather than just partial correctness, termination must also be proven"]
     s ["Termination is asserted for all but the loop triples if all the antecedents terminate"]
 

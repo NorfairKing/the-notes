@@ -1,8 +1,4 @@
-module LinearAlgebra.InproductSpaces (
-      inproductSpaces
-
-    , inproductSpaceDefinitionLabel
-    ) where
+module LinearAlgebra.InproductSpaces where
 
 import           Notes
 
@@ -10,12 +6,10 @@ import           Functions.Basics.Macro
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
 
-inproductSpaces :: Note
-inproductSpaces = note "inproduct-spaces" body
+import           LinearAlgebra.InproductSpaces.Terms
 
-body :: Note
-body = do
-    section "Inproduct Spaces"
+inproductSpaces :: Note
+inproductSpaces = section "Inproduct Spaces" $ do
     semiInnerProductDefinition
     innerProductDefinition
     innerProductExamples
@@ -62,9 +56,6 @@ innerProductExamples = do
     i = "i"
 
 
-inproductSpaceDefinitionLabel :: Label
-inproductSpaceDefinitionLabel = Label Definition "inproduct-space"
-
 inproductSpaceDefinition :: Note
 inproductSpaceDefinition = de $ do
     lab inproductSpaceDefinitionLabel
@@ -74,10 +65,10 @@ inproductSpaceDefinition = de $ do
 inproductSpaceExamples :: Note
 inproductSpaceExamples = do
     ex $ do
-      s ["The field ", m (realVectorsSpace p), ", equipped with the vector dotproduct, is an inner product space"]
-      ma $ euclideanInnerProductSpace p
-      toprove
-      s ["This is called the ", term "Euclidean vector space", " of dimension ", m p]
+        s ["The field ", m (realVectorsSpace p), ", equipped with the vector dotproduct, is an inner product space"]
+        ma $ euclideanInnerProductSpace p
+        s ["This is called the ", term "Euclidean inner product space", " of dimension ", m p]
+        toprove_ "This is, in fact, an inproduct space"
 
   where
     p = "p"

@@ -84,8 +84,8 @@ lass = between ":="
 freevars :: Note ->  Note
 freevars = app "FV"
 
-modifies :: Note -> Note
-modifies = app "modifies"
+mods :: Note -> Note
+mods = app "mods"
 
 -- * Conditionals
 

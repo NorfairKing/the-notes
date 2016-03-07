@@ -1,19 +1,16 @@
-module MachineLearning.Main (machineLearning) where
+module MachineLearning.Main where
 
 import           Notes
 
-import           MachineLearning.Regression           (regression)
-import           MachineLearning.SupervisedLearning   (supervisedLearning)
-import           MachineLearning.UnsupervisedLearning (unsupervisedLearning)
+import           MachineLearning.SupervisedLearning.Main (supervisedLearningS)
+import           MachineLearning.UnsupervisedLearning    (unsupervisedLearningS)
 
 machineLearning :: Note
-machineLearning = note "machine-learning" $ do
-    chapter "Machine Learning"
+machineLearning = chapter "Machine Learning" $ do
     note "learn-definition" learnDefinition
-    supervisedLearning
-    regression
-    unsupervisedLearning
-    note "test" test
+    supervisedLearningS
+    unsupervisedLearningS
+    learningProblemProcess
 
 
 learnDefinition :: Note
@@ -33,9 +30,6 @@ learnDefinition = de $ s ["A computer program is said to learn from experience "
 -- expected risk
 
 
-test :: Note
-test = do
-    learningProblemProcess
 
 learningProblemProcess :: Note
 learningProblemProcess = do

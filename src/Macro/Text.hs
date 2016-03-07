@@ -2,13 +2,14 @@ module Macro.Text where
 
 import           Types
 
-import           Prelude (sequence_)
+import           Data.List (intersperse)
+import           Prelude   (sequence_)
 
 -- Shorter than sequence_
 -- To model a sentence.
 s :: [Note] -> Note
 s ns = do
-    sequence_ ns
+    sequence_ $ intersperse " " ns
     ". "
 
 quoted :: Note -> Note
@@ -29,34 +30,37 @@ cs :: [Note] -> Note
 cs = commaSeparated
 
 and :: Note
-and = " and "
+and = "and"
 
 or :: Note
-or = " or "
+or = "or"
 
 is :: Note
-is = " is "
+is = "is"
 
 the :: Note
-the = "The "
+the = "The"
 
 by :: Note
-by = " by "
+by = "by"
 
 on :: Note
-on = " on "
+on = "on"
 
 over :: Note
-over = " over "
+over = "over"
 
 wrt :: Note
-wrt = " with respect to "
+wrt = "with respect to"
 
 for :: Note
-for = " for "
+for = "for"
 
 with :: Note
-with = " with "
+with = "with"
+
+be :: Note
+be = "be"
 
 kul :: Note
 kul = "KU Leuven"

@@ -5,6 +5,7 @@ module Macro (
 
 import           Types
 
+import           Macro.Algorithm             as X
 import           Macro.Array                 as X
 import           Macro.Arrows                as X
 import           Macro.Code                  as X
@@ -14,14 +15,17 @@ import           Macro.Graphviz              as X
 import           Macro.Index                 as X
 import           Macro.Math                  as X
 import           Macro.MetaMacro             as X
+import           Macro.Note                  as X
 import           Macro.Reference             as X
+import           Macro.Section               as X
+import           Macro.Temp                  as X
 import           Macro.Text                  as X
 import           Macro.Theorem               as X
+import           Macro.Tikz                  as X
 import           Macro.Todo                  as X
 import           Macro.Tuple                 as X
 
 import           Macro.Fields.Macro          as X
-import           Macro.Groups.Macro          as X
 import           Macro.LinearAlgebra.Macro   as X
 import           Macro.MachineLearning.Macro as X
 import           Macro.Numbers.Macro         as X
@@ -40,18 +44,3 @@ bra = boxed rightArrow
 
 item :: Note -> Note
 item n = comm0 "item" <> n
-
-(<=) :: Note -> Note -> Note
-(<=) = (<=:)
-
-(>=) :: Note -> Note -> Note
-(>=) = (>=:)
-
-(>) :: Note -> Note -> Note
-(>) = (>:)
-
-(<) :: Note -> Note -> Note
-(<) = (<:)
-
-(^) :: Note -> Note -> Note
-(^) = (^:)

@@ -8,8 +8,7 @@ import           Computability.RegularExpressions  (regularExpressions)
 import           Computability.Symbols             (symbols)
 
 computability :: Note
-computability = note "computability" $ do
-    chapter "Computability"
+computability = chapter "Computability" $ do
     symbols
     languages
     regularExpressions

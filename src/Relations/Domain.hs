@@ -3,21 +3,16 @@ module Relations.Domain where
 import           Notes
 
 import           Logic.FirstOrderLogic.Macro
-import           Relations.Basics            (relation)
 
 import           Relations.Basics.Macro
-import           Relations.Domain.Macro
+import           Relations.Basics.Terms
 
-makeDefs [
-      "domain"
-    , "image"
-    ]
+import           Relations.Domain.Macro
+import           Relations.Domain.Terms
 
 
 domainAndImage :: Note
-domainAndImage = note "domain-and-image" $ do
-    subsection "Domain and Image"
-
+domainAndImage = subsection "Domain and Image" $ do
     domainDefinition
     imageDefinition
 

@@ -2,84 +2,88 @@ module Relations.Orders where
 
 import           Notes
 
+import qualified Prelude                        as P
+
+import qualified Data.Text                      as T
+
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
-import           Relations.Basics               (relation, total_, transitive_)
-import           Relations.Basics.Macro
-import           Relations.Equivalence          (equivalenceRelation_)
-import           Relations.Equivalence.Macro
-import           Relations.Preorders            (preorder, preorder_)
-import           Relations.Preorders.Macro
 import           Sets.Basics.Terms
 import           Sets.PointedSets.Macro
 
-import           Relations.Orders.Macro
+import           Relations.Basics.Macro
+import           Relations.Basics.Terms
+import           Relations.Equivalence.Macro
+import           Relations.Equivalence.Terms
+import           Relations.Preorders.Macro
+import           Relations.Preorders.Terms
 
-makeDefs [
-      "antisymmetric"
-    , "partial order"
-    , "total order"
-    , "greatest element"
-    , "smallest element"
-    , "maximal element"
-    , "minimal element"
-    , "upper bound"
-    , "lower bound"
-    , "supremum", "join"
-    , "infimum", "meet"
-    , "meet semilattice"
-    , "join semilattice"
-    , "bounded lattice"
-    , "complete lattice"
-    , "poset"
-    , "lattice"
-    , "flat lattice"]
+import           Relations.Orders.Hasse
+import           Relations.Orders.Macro
+import           Relations.Orders.Terms
 
 orders :: Note
-orders = note "orders" $ do
+orders = section "Orders" $ do
     nocite orderTheoryForComputerScientists
-
-    section "Orders"
 
     antisymmetricDefinition
 
-    subsection "Partial orders"
-    partialOrderDefinition
-    posetDefinition
-    crossPosetLift
-    powsetPosetPreorder
-    partialOrdersFromPreorders
+    subsection "Partial orders" $ do
+        partialOrderDefinition
+        partialOrderExamples
+        posetDefinition
+        crossPosetLift
+        powsetPosetPreorder
+        partialOrdersFromPreorders
+        comparableDefinition
 
-    subsection "Total orders"
-    totalOrderDefinition
+        subsubsection "Chains" $ do
+            chainDefinition
+            heightDefinition
+            antiChainDefinition
+            widthDefinition
+            chainExamples
 
-    subsection "Extremes"
-    greatestElementDefinition
-    smallestElementDefinition
+    subsection "Extremes" $ do
+        subsubsection "Greatest and smallest" $ do
+            greatestElementDefinition
+            greatestElementUnique
+            smallestElementDefinition
+            smallestElementUnique
 
-    maximalElementDefinition
-    minimalElementDefinition
+        subsubsection "Maximal and minimal" $ do
+            maximalElementDefinition
+            minimalElementDefinition
 
-    upperBoundDefinition
-    lowerBoundDefinition
+        subsubsection "Bounds" $ do
+            upperBoundDefinition
+            lowerBoundDefinition
 
-    supremumDefinition
-    infimumDefinition
+        subsubsection "Extreme bounds" $ do
+            infimumDefinition
+            infimumUnique
+            supremumDefinition
+            supremumUnique
 
-    uniqueBounds
+    subsection "Total orders" $ do
+        totalOrderDefinition
 
-    subsection "Lattices"
-    meetSemilatticeDefinition
-    joinSemilatticeDefinition
-    latticeDefinition
-    latticeExamples
-    crossLatticeLift
-    boundedLatticeDefinition
-    completeLatticeDefinition
-    completeLatticeIsBounded
+    subsection "Lattices" $ do
+        meetSemilatticeDefinition
+        joinSemilatticeDefinition
+        latticeDefinition
+        latticeExamples
+        boundedLatticeDefinition
+        crossLatticeLift
 
-    pointedLatticeDefinitions
-    flatLatticeDefinition
+        completeLatticeDefinition
+        completeLatticeExamples
+
+        completeLatticeIsBounded
+        finiteLatticeIsComplete
+
+        pointedLatticeDefinitions
+        flatLatticeDefinition
 
 
 antisymmetricDefinition :: Note
@@ -99,13 +103,52 @@ partialOrderDefinition = de $ do
     lab partialOrderDefinitionLabel
     s ["A ", partialOrder', " is an ", antisymmetric, " ", preorder_]
 
-powsetPosetPreorderLabel :: Label
-powsetPosetPreorderLabel = Label Theorem "powerset-poset-induces-preorder"
+partialOrderExamples :: Note
+partialOrderExamples = do
+    ex $ do
+        let (bott, topt) = ("bot","top")
+        let ts@[at, bt, ct] = ["a", "b", "c"]
+        let [a, b, c] = P.map raw ts
+            ss = setofs [a, b, c, bot, top]
+        s ["Given the", set, m ss]
+        hasseFig 5 $ hasseDiagram
+            [ bott, at, bt, ct, topt]
+            [ (bott, at)
+            , (bott, bt)
+            , (bott, ct)
+            , (bott, topt)
+            , (at, bt)
+            , (at, topt)
+            , (bt, topt)
+            , (ct, topt)
+            ]
+        let r = setofs
+                [ tuple bot bot
+                , tuple a a
+                , tuple b b
+                , tuple c c
+                , tuple top top
+                , tuple bot a
+                , tuple a b
+                , tuple b top
+                , tuple c top
+                ]
+        s [m r, "is a", partialOrder]
+
+    ex $ do
+        s ["The set of natural numbers", m naturals, "equipped with the", relation, quoted "divides", ref dividesIsRelationExampleLabel, "is a", partialOrder, "on this set"]
+        let n = 32 :: P.Int
+        let tshow = T.pack . show
+        hasseFig 10 $ hasseDiagram (P.map tshow [1..n])
+                    $ [(tshow a, tshow b) | a <- [1..n], b <- [a..n], b `P.mod` a == 0]
+        s ["Of course this figure can only be shown partially"]
+        s ["Here it is show for the natural numbers up to", m $ raw $ tshow n]
+
 
 powsetPosetPreorder :: Note
 powsetPosetPreorder = do
     thm $ do
-        lab powsetPosetPreorderLabel
+        lab powersetPosetInducesPreorderTheoremLabel
         s ["Let ", m relposet_, " be a poset"]
         s [m $ relpreord (powset posetset_) partord_, ", where ", m partord_, " is defined as follows, is a ", preorder_]
         ma $ p ⊆: q ⇔ (fa (x ∈ p) $ te (y ∈ q) $ x ⊆: y)
@@ -123,12 +166,9 @@ powsetPosetPreorder = do
     p = "P"
     q = "Q"
 
-partialOrdersFromPreordersLabel :: Label
-partialOrdersFromPreordersLabel = Label Theorem "partial-orders-from-preorders"
-
 partialOrdersFromPreorders :: Note
 partialOrdersFromPreorders = thm $ do
-    lab partialOrdersFromPreordersLabel
+    lab partialOrdersFromPreordersTheoremLabel
     s ["Given a preordered set ", m relpreord_, ", it is possible to lift the ", preorder, " ", m preord_, " to a ", partialOrder, " ", m $ relposet (eqcls_ preordset_) partord_]
     s ["Here, ", m eqrel_, " is defined naturally"]
     ma $ x .~ y ⇔ (x ⊆: y ∧ y ⊆: x)
@@ -146,56 +186,134 @@ posetDefinition = de $ do
     lab posetDefinitionLabel
     s ["A ", term "partially ordered set", or, poset', " is a tuple ", m relposet_, " of a set and a partial order on that set"]
 
-crossPosetLiftLabel :: Label
-crossPosetLiftLabel = Label Theorem "cross-poset-lift"
 
 crossPosetLift :: Note
 crossPosetLift = thm $ do
-    lab crossPosetLiftLabel
+    lab crossproductLiftedPosetTheoremLabel
     s ["Let ", m $ list (relposet (x !: 1) (o !: 1)) (relposet (x !: 2) (o !: 2)) (relposet (x !: n) (o !: n)), " be ", poset, "s"]
-    s [m $ relposet ((x !: 1) ⨯ (x !: 2) ⨯ dotsb ⨯ (x !: n)) o, " is a ", poset, " where ", m o, " is defined as follows"]
+    s [m cps, " is a ", poset, " where ", m o, " is defined as follows"]
     ma $ a ⊆: b ⇔ fa i (a !: i `oi` b !: i)
 
-    toprove
-
+    proof $ do
+        s ["We prove that ", m o, "is", reflexive, antisymmetric, and, transitive]
+        itemize $ do
+            item $ do
+                s ["Let", m $ list (a !: 1) (a !: 2) (a !: n), "be n elements respectively of the sets", m $ list (x !: 1) (x !: 2) (x !: n)]
+                s ["Because every ", m $ oi "" "", "is", reflexive, ", the following holds"]
+                ma $ a !: i `oi` a !: i
+                let e = tuplelist (a !: 1) (a !: 2) (a !: n)
+                s ["This means that", m $ e ⊆: e, "holds and therefore that", m o, "is", reflexive]
+            item $ do
+                s ["Let", m $ list (a !: 1) (a !: 2) (a !: n), and, m $ list (b !: 1) (b !: 2) (b !: n), "be n elements respectively of the sets", m $ list (x !: 1) (x !: 2) (x !: n), "such that the following holds"]
+                ma $ fa i $ a !: i `oi` b !: i  ∧  b !: i `oi` a !: i
+                s ["Because every", m $ oi "" "", "is", antisymmetric, ", this implies the following"]
+                ma $ fa i $ a !: i =: b !: i
+                let ea = tuplelist (a !: 1) (a !: 2) (a !: n)
+                let eb = tuplelist (b !: 1) (b !: 2) (b !: n)
+                s ["This exactly means that ", m $ ea =: eb, "holds"]
+                s ["Because", m o, "is", reflexive, ", this means that", m $ ea ⊆: eb, "holds"]
+                s ["This proves that", m o, "is", antisymmetric]
+            item $ do
+                s ["Let", m $ list (a !: 1) (a !: 2) (a !: n), m $ list (b !: 1) (b !: 2) (b !: n), m $ list (c !: 1) (c !: 2) (c !: n), "be n elements respectively of the sets", m $ list (x !: 1) (x !: 2) (x !: n), "such that the following holds"]
+                ma $ fa i $ a !: i `oi` b !: i ∧ b !: i `oi` c !: i
+                s ["Because every", m $ oi "" "", "is", transitive, ", this implies the following"]
+                ma $ fa i $ a !: i `oi` c !: i
+                let ea = tuplelist (a !: 1) (a !: 2) (a !: n)
+                let ec = tuplelist (c !: 1) (c !: 2) (c !: n)
+                s ["As such,", m $ ea ⊆: ec, "also holds and therefore", m o, "is transitive"]
   where
+    cps = relposet cp o
+    cp = (x !: 1) ⨯ (x !: 2) ⨯ dotsb ⨯ (x !: n)
     a = "a"
     b = "b"
+    c = "c"
     i = "i"
     o = partord_
     oi = binop $ raw "\\ " <> o !: "i" <> raw "\\ "
     x = posetset_
     n = "n"
 
-
-totalOrderDefinition :: Note
-totalOrderDefinition = de $ do
-    s ["A ", totalOrder', " is a binary relation that is ", total_, ", ", transitive_, and, antisymmetric]
-
-
 psDec :: Note
 psDec = s ["Let ", m relposet_, " be a ", poset]
+
+comparableDefinition :: Note
+comparableDefinition = de $ do
+    lab comparableDefinitionLabel
+    lab incomparableDefinitionLabel
+    psDec
+    let x = "x"
+        y = "y"
+    s ["Two", elements, "of", m relposet_, "are called", comparable', "if either", m $ x ⊆: y, or, m $ y ⊆: x, "holds"]
+    s ["Otherwise they are called", incomparable']
+
+chainDefinition :: Note
+chainDefinition = de $ do
+    lab chainDefinitionLabel
+    psDec
+    let y = "Y"
+    s ["A", subset, m y, "of", m posetset_, "is called a", chain', "if every two elements in", m y, "are", comparable]
+    let a = "a"
+        b = "b"
+    ma $ fa (a ∈ posetset_) $ fa (b ∈ posetset_) $ (a ⊆: b) ∨ (a ⊆: b)
+
+heightDefinition :: Note
+heightDefinition = de $ do
+    lab heightDefinitionLabel
+    s [the, height', "of a", poset, "is the size of its largest", chain]
+
+antiChainDefinition :: Note
+antiChainDefinition = de $ do
+    lab antichainDefinitionLabel
+    psDec
+    let y = "Y"
+    s ["A", subset, m y, "of", m posetset_, "is called an", antichain', "if every two elements in", m y, "are", incomparable]
+
+    let a = "a"
+        b = "b"
+    ma $ fa (a ∈ posetset_) $ fa (b ∈ posetset_) $ neg $ pars $ (a ⊆: b) ∨ (a ⊆: b)
+
+widthDefinition :: Note
+widthDefinition = de $ do
+    lab widthDefinitionLabel
+    s [the, width', "of a", poset, "is the size of its largest", antichain]
+
+chainExamples :: Note
+chainExamples = ex $ do
+    let (a, b, c) = ("a", "b", "c")
+    s ["Consider the", poset, m $ relposet (setofs [a, b, c]) (setofs [tuple a b, tuple c b])]
+    hasseFig 3 $ hasseDiagram ["a", "b", "c"] [("a", "b"), ("c", "b")]
+    s ["Its", chains, "are", cs $ P.map m [setof a, setof b, setof c, setofs [a, b], setofs [b, c]], "so its", height, "is", m 2]
+    s ["Its only", antichain, "is", m $ setofs [a, c], "so its", width, "is", m 2]
 
 greatestElementDefinition :: Note
 greatestElementDefinition = de $ do
     lab greatestElementDefinitionLabel
     psDec
-    s ["A ", greatestElement', " ", m (a ∈ posetset_), " is an element such that all other elements are smaller"]
-    ma $ fa (x ∈ posetset_) (x ⊆: a)
+    s ["A", greatestElement', " ", m (top ∈ posetset_), " is an element such that all other elements are smaller"]
+    ma $ fa (x ∈ posetset_) (x ⊆: top)
   where
     x = "x"
-    a = "a"
+
+greatestElementUnique :: Note
+greatestElementUnique = thm $ do
+    s ["A", greatestElement <> ", if it exists, is unique"]
+
+    toprove
 
 smallestElementDefinition :: Note
 smallestElementDefinition = de $ do
     lab smallestElementDefinitionLabel
     psDec
-    s ["A ", smallestElement', " ", m (a ∈ posetset_), " is an element such that all other elements are greater"]
-    ma $ fa (x ∈ posetset_) (a ⊆: x)
+    s ["A ", smallestElement', " ", m (bot ∈ posetset_), " is an element such that all other elements are greater"]
+    ma $ fa (x ∈ posetset_) (bot ⊆: x)
   where
     x = "x"
-    a = "a"
 
+smallestElementUnique :: Note
+smallestElementUnique = thm $ do
+    s ["A", smallestElement <> ", if it exists, is unique"]
+
+    toprove
 
 maximalElementDefinition :: Note
 maximalElementDefinition = de $ do
@@ -243,31 +361,52 @@ supremumDefinition = de $ do
     lab supremumDefinitionLabel
     lab joinDefinitionLabel
     psDec
-    s ["A ", supremum', or, join', " of ", m posetset_, " is a smallest ", upperBound, " of ", m posetset_]
+    s ["A ", supremum', or, join', " of (but not necessarily in)", m posetset_, " is a smallest ", upperBound, " of ", m posetset_]
     s ["That is to say, all other upper bounds of ", m posetset_, " are larger"]
+    ma $ sup posetset_ =: supcomp "" posetset_
+    s [m $ a ⊔ b, "is the notation for the", supremum, "of two element"]
+  where
+    a = "a"
+    b = "b"
 
 infimumDefinition :: Note
 infimumDefinition = de $ do
     lab infimumDefinitionLabel
     lab meetDefinitionLabel
     psDec
-    s ["A ", infimum', or, meet', " of ", m posetset_, " is a greatest ", lowerBound, " of ", m posetset_]
+    s ["A ", infimum', or, meet', " of (but not necessarily in) ", m posetset_, " is a greatest ", lowerBound, " of ", m posetset_]
     s ["That is to say, all other lower bounds of ", m posetset_, " are smaller"]
+    ma $ inf posetset_ =: infcomp "" posetset_
+    s [m $ a ⊓ b, "is the notation for the", infimum, "of two element"]
+  where
+    a = "a"
+    b = "b"
 
-uniqueBounds :: Note
-uniqueBounds = thm $ do
-    s ["If an supremum/infimum exists for a poset ", m relposet_, ", then it is unique"]
-    -- TODO: maximal elements are greatest elements in totally ordered sets
+infimumUnique :: Note
+infimumUnique = thm $ do
+    s ["If an", infimum, "exists for a poset ", m relposet_, ", then it is unique"]
 
     toprove
+
+supremumUnique :: Note
+supremumUnique = thm $ do
+    s ["If a", supremum, "exists for a poset ", m relposet_, ", then it is unique"]
+
+    toprove
+-- TODO: maximal elements are greatest elements in totally ordered sets
+
+totalOrderDefinition :: Note
+totalOrderDefinition = de $ do
+    s ["A ", totalOrder', " is a binary relation that is ", total_, ", ", transitive_, and, antisymmetric]
+
 
 meetSemilatticeDefinition :: Note
 meetSemilatticeDefinition = de $ do
     lab meetSemilatticeDefinitionLabel
-    s ["A ", meetSemilattice', " is a ", poset, " ", m relposet_, " for which any two elements ", m a, and, m b, " have an ", infimum, " ", m (a ⊔ b), " as follows"]
+    s ["A ", meetSemilattice', " is a ", poset, " ", m relposet_, " for which any two elements ", m a, and, m b, " have an ", infimum, " ", m (a ⊓ b), " as follows"]
     itemize $ do
-        item $ m $ ((a ⊔ b) ⊆: a) ∧ ((a ⊔ b) ⊆: b)
-        item $ m $ fa (c ∈ posetset_) $ ((c ⊆: a) ∧ (c ⊆: b)) ⇒ (c ⊆: (a ⊔ b))
+        item $ m $ ((a ⊓ b) ⊆: a) ∧ ((a ⊓ b) ⊆: b)
+        item $ m $ fa (c ∈ posetset_) $ ((c ⊆: a) ∧ (c ⊆: b)) ⇒ (c ⊆: (a ⊓ b))
   where
     a = "a"
     b = "b"
@@ -276,10 +415,10 @@ meetSemilatticeDefinition = de $ do
 joinSemilatticeDefinition :: Note
 joinSemilatticeDefinition = de $ do
     lab joinSemilatticeDefinitionLabel
-    s ["A ", joinSemilattice', " is a ", poset, " ", m relposet_, " for which any two elements ", m a, and, m b, " have a ", supremum, " ", m (a ⊓ b), " as follows"]
+    s ["A ", joinSemilattice', " is a ", poset, " ", m relposet_, " for which any two elements ", m a, and, m b, " have a ", supremum, " ", m (a ⊔ b), " as follows"]
     itemize $ do
-        item $ m $ (a ⊆: (a ⊓ b)) ∧ (b ⊆: (a ⊓ b))
-        item $ m $ fa (c ∈ posetset_) $ ((a ⊆: c) ∧ (b ⊆: c)) ⇒ ((a ⊓ b) ⊆: c)
+        item $ m $ (a ⊆: (a ⊔ b)) ∧ (b ⊆: (a ⊔ b))
+        item $ m $ fa (c ∈ posetset_) $ ((a ⊆: c) ∧ (b ⊆: c)) ⇒ ((a ⊔ b) ⊆: c)
   where
     a = "a"
     b = "b"
@@ -293,23 +432,25 @@ latticeDefinition = de $ do
 latticeExamples :: Note
 latticeExamples = do
     ex $ do
-        s ["Let ", m ss, " be a set"]
-        s [m $ lat (powset ss) subseteq_, " is a lattice"]
+        let l = "L"
+        s ["Let ", m l, " be a set"]
+        s [m $ lat (powset l) subseteq_, " is a lattice"]
         toprove
-  where
-    ss = "S"
-
-crossLatticeLiftLabel :: Label
-crossLatticeLiftLabel = Label Theorem "cross-lattice-lift"
 
 crossLatticeLift :: Note
 crossLatticeLift = thm $ do
-    lab crossLatticeLiftLabel
+    lab crossproductLiftedLatticeTheoremLabel
     s ["Let ", m $ list (relposet (x !: 1) (o !: 1)) (relposet (x !: 2) (o !: 2)) (relposet (x !: n) (o !: n)), " be ", lattice, "s"]
-    s ["The poset ", m $ relposet ((x !: 1) ⨯ (x !: 2) ⨯ dotsb ⨯ (x !: n)) o, ref crossPosetLiftLabel, " is a ", lattice, " where the following properties hold"]
+    s ["The poset ", m $ relposet ((x !: 1) ⨯ (x !: 2) ⨯ dotsb ⨯ (x !: n)) o, ref crossproductLiftedPosetTheoremLabel, " is a ", lattice, " where the following properties hold"]
 
-    ma $ (a ⊔ b =: supcomp i (a !: i ⊔ b !: i)) <> quad <> text "and" <> quad <> (a ⊓ b =: infcomp i (a !: i ⊓ b !: i))
-    ma $ (bot =: tuplelist (bot !: (x !: 1)) (bot !: (x !: 2)) (bot !: (x !: n)))  <> quad <> text "and" <> quad <> (top =: tuplelist (top !: (x !: 1)) (top !: (x !: 2)) (top !: (x !: n)))
+    ma $ do
+        a ⊔ b =: supcomp i (a !: i ⊔ b !: i)
+        quad <> text "and" <> quad
+        a ⊓ b =: infcomp i (a !: i ⊓ b !: i)
+    ma $ do
+        top =: tuplelist (top !: (x !: 1)) (top !: (x !: 2)) (top !: (x !: n))
+        quad <> text "and" <> quad
+        bot =: tuplelist (bot !: (x !: 1)) (bot !: (x !: 2)) (bot !: (x !: n))
 
     toprove
 
@@ -324,7 +465,7 @@ crossLatticeLift = thm $ do
 boundedLatticeDefinition :: Note
 boundedLatticeDefinition = de $ do
     lab boundedLatticeDefinitionLabel
-    s ["A ", lattice, m relposet_, " is called a ", boundedLattice, " if there exists both a ", maximalElement, " ", m top, " and a ", minimalElement, " ", m bot, " in ", m posetset_, " as follows"]
+    s ["A ", lattice, m relposet_, " is called a ", boundedLattice', " if there exists both a ", maximalElement, " ", m top, " and a ", minimalElement, " ", m bot, " in ", m posetset_, " as follows"]
     ma $ fa (x ∈ posetset_) $ (x ⊆: top) ∧ (bot ⊆: x)
   where
     x = "x"
@@ -332,15 +473,33 @@ boundedLatticeDefinition = de $ do
 completeLatticeDefinition :: Note
 completeLatticeDefinition = de $ do
     lab completeLatticeDefinitionLabel
-    s ["A " , lattice, m relposet_, " is called a ", completeLattice, " if every (possibly infinite) subset ", m l, " of ", m (posetset_), " has an ", infimum, " ", m (inf l), " and a ", supremum, " ", m (sup l)]
+    s ["A " , lattice, m lat_, " is called a ", completeLattice', " if every (possibly infinite) subset ", m l, " of ", m (posetset_), " has an ", infimum, " ", m (inf l), " and a ", supremum, " ", m (sup l)]
   where
     l = "L"
+
+completeLatticeExamples :: Note
+completeLatticeExamples = do
+    ex $ do
+        let l = "l"
+        s ["Let", m l, "be a", set]
+        s [m $ lat (powset l) ("" ⊆ ""), "is a", completeLattice]
+
+        toprove
+
 
 completeLatticeIsBounded :: Note
 completeLatticeIsBounded = thm $ do
     s ["Every ", completeLattice, m relposet_, " is a ", boundedLattice, " where the ", maximalElement, " is the ", supremum, " of ", m posetset_, " and the ", minimalElement, " is the ", infimum, " of ", m posetset_]
 
     toprove
+
+
+finiteLatticeIsComplete :: Note
+finiteLatticeIsComplete = thm $ do
+    s ["Every", lattice, m lat_, "where", m latset_, "is", finite, and, "non-empty, is a", completeLattice]
+
+    toprove
+
 
 pointedLatticeDefinitions :: Note
 pointedLatticeDefinitions = de $ do

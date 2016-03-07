@@ -29,11 +29,16 @@ executable the-notes
                         , containers            >= 0.5       && < 0.6
                         , blaze-html            >= 0.8       && < 0.9
                         , blaze-markup          >= 0.7       && < 0.8
-                        , haphviz               >= 0.1.0.1   && < 0.2
+                        , haphviz               >= 0.2       && < 0.3
                         , filepath              >= 1.4       && < 1.5
                         , base16-bytestring     >= 0.1       && < 0.2
                         , bytestring            >= 0.10      && < 0.11
                         , cryptohash            >= 0.11      && < 0.12
+                        , gitrev                >= 1.1       && < 1.2
+                        , random                >= 1.1       && < 1.2
+                        , JuicyPixels           >= 3.2       && < 3.3
+                        , file-embed            >= 0.0.9     && < 0.1
+                        , safe                  >= 0.3       && < 0.4
   ghc-options:        -Wall
                       -fwarn-unused-imports
                       -fwarn-incomplete-patterns
@@ -46,6 +51,231 @@ executable the-notes
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   hs-source-dirs:      src
   default-language:    Haskell2010
+  other-modules: 
+      Computability.FiniteStateAutomata
+      Computability.FiniteStateAutomata.Graph
+      Computability.FiniteStateAutomata.Macro
+      Computability.FiniteStateAutomata.Terms
+      Computability.Languages
+      Computability.Languages.Macro
+      Computability.Languages.Terms
+      Computability.Main
+      Computability.RegularExpressions
+      Computability.RegularExpressions.Macro
+      Computability.RegularExpressions.Terms
+      Computability.Symbols
+      Computability.Symbols.Macro
+      Computability.Symbols.Terms
+      Config
+      Cryptography.Macro
+      Cryptography.Main
+      Cryptography.Terms
+      DataMining.ApproximateRetrieval
+      DataMining.LargeScaleLearning
+      DataMining.LargeScaleLearning.Macro
+      DataMining.LargeScaleLearning.Terms
+      DataMining.Main
+      DataMining.MapReduce
+      DataMining.MapReduce.Terms
+      Fields.Main
+      Functions.Application
+      Functions.Application.Macro
+      Functions.Application.Terms
+      Functions.Basics
+      Functions.Basics.Macro
+      Functions.Basics.Terms
+      Functions.BinaryOperation
+      Functions.BinaryOperation.Macro
+      Functions.BinaryOperation.Terms
+      Functions.Composition.Macro
+      Functions.Composition.Terms
+      Functions.Distances
+      Functions.Distances.Macro
+      Functions.Distances.Terms
+      Functions.Inverse
+      Functions.Inverse.Macro
+      Functions.Inverse.Terms
+      Functions.Jections
+      Functions.Jections.Terms
+      Functions.Main
+      Functions.Order
+      Functions.Order.Macro
+      Functions.Order.Terms
+      Functions.SetFunctions
+      Functions.SetFunctions.Terms
+      Geometry.AffineSpaces
+      Geometry.AffineSpaces.Macro
+      Geometry.AffineSpaces.Terms
+      Geometry.Main
+      GraphTheory.Macro
+      GraphTheory.Main
+      GraphTheory.Terms
+      Groups.Macro
+      Groups.Main
+      Groups.Terms
+      Header
+      License
+      LinearAlgebra.InproductSpaces
+      LinearAlgebra.InproductSpaces.Terms
+      LinearAlgebra.Main
+      LinearAlgebra.VectorSpaces
+      LinearAlgebra.VectorSpaces.Terms
+      Logic.AbstractLogic
+      Logic.AbstractLogic.Macro
+      Logic.AbstractLogic.Terms
+      Logic.FirstOrderLogic
+      Logic.FirstOrderLogic.Macro
+      Logic.FirstOrderLogic.Terms
+      Logic.HoareLogic
+      Logic.HoareLogic.ExamQuestion2014
+      Logic.HoareLogic.Macro
+      Logic.HoareLogic.Terms
+      Logic.Main
+      Logic.PropositionalLogic
+      Logic.PropositionalLogic.Macro
+      Logic.PropositionalLogic.Resolution
+      Logic.PropositionalLogic.Sentence
+      Logic.PropositionalLogic.Terms
+      Logic.PropositionalLogic.TruthTables
+      Logic.SeparationLogic
+      Logic.SeparationLogic.Graph
+      Logic.SeparationLogic.Macro
+      Logic.SeparationLogic.Terms
+      Logic.TemporalLogic
+      Logic.TemporalLogic.Macro
+      Logic.TemporalLogic.Terms
+      MachineLearning.Main
+      MachineLearning.SupervisedLearning.Macro
+      MachineLearning.SupervisedLearning.Main
+      MachineLearning.SupervisedLearning.Regression
+      MachineLearning.SupervisedLearning.Regression.Macro
+      MachineLearning.SupervisedLearning.Regression.Terms
+      MachineLearning.SupervisedLearning.SupportVectorMachines
+      MachineLearning.SupervisedLearning.SupportVectorMachines.Macro
+      MachineLearning.SupervisedLearning.SupportVectorMachines.Terms
+      MachineLearning.SupervisedLearning.Terms
+      MachineLearning.UnsupervisedLearning
+      Macro
+      Macro.Algorithm
+      Macro.Array
+      Macro.Arrows
+      Macro.BussProofs
+      Macro.Code
+      Macro.Fields.Macro
+      Macro.Figure
+      Macro.Framed
+      Macro.Graphviz
+      Macro.Index
+      Macro.LinearAlgebra.Macro
+      Macro.MachineLearning.Macro
+      Macro.Math
+      Macro.MetaMacro
+      Macro.Note
+      Macro.Numbers.Macro
+      Macro.Reference
+      Macro.Section
+      Macro.Sets.CarthesianProduct
+      Macro.Sets.Macro
+      Macro.Temp
+      Macro.Text
+      Macro.Theorem
+      Macro.Tikz
+      Macro.Todo
+      Macro.Topology.Macro
+      Macro.Tuple
+      Notes
+      Packages
+      Parser
+      Probability.BayesianNetwork
+      Probability.BayesianNetwork.Graph
+      Probability.BayesianNetwork.Terms
+      Probability.BivariateDistributions
+      Probability.BivariateDistributions.Terms
+      Probability.ConditionalProbability
+      Probability.ConditionalProbability.Macro
+      Probability.ConditionalProbability.Terms
+      Probability.Convergence
+      Probability.Convergence.Macro
+      Probability.Convergence.Terms
+      Probability.Distributions
+      Probability.Distributions.Macro
+      Probability.Distributions.Terms
+      Probability.Independence
+      Probability.Independence.Macro
+      Probability.Independence.Terms
+      Probability.Intro
+      Probability.Intro.Macro
+      Probability.Intro.Terms
+      Probability.LanguageModel
+      Probability.LanguageModel.Macro
+      Probability.LanguageModel.Terms
+      Probability.Main
+      Probability.ProbabilityMeasure
+      Probability.ProbabilityMeasure.Macro
+      Probability.ProbabilityMeasure.Terms
+      Probability.RandomVariable
+      Probability.RandomVariable.Macro
+      Probability.RandomVariable.Terms
+      Probability.SigmaAlgebra
+      Probability.SigmaAlgebra.Macro
+      Probability.SigmaAlgebra.Terms
+      Relations.Basics
+      Relations.Basics.Macro
+      Relations.Basics.Terms
+      Relations.Composite.Macro
+      Relations.Domain
+      Relations.Domain.Macro
+      Relations.Domain.Terms
+      Relations.Equivalence
+      Relations.Equivalence.Macro
+      Relations.Equivalence.Terms
+      Relations.Main
+      Relations.Orders
+      Relations.Orders.Macro
+      Relations.Orders.Terms
+      Relations.Preorders
+      Relations.Preorders.Macro
+      Relations.Preorders.Terms
+      Rings.Main
+      Sets.Algebra.Complement
+      Sets.Algebra.Complement.Terms
+      Sets.Algebra.Difference
+      Sets.Algebra.Difference.Terms
+      Sets.Algebra.Intersection
+      Sets.Algebra.Intersection.Terms
+      Sets.Algebra.Main
+      Sets.Algebra.Union
+      Sets.Algebra.Union.Terms
+      Sets.Basics
+      Sets.Basics.Macro
+      Sets.Basics.Terms
+      Sets.CarthesianProduct
+      Sets.CarthesianProduct.Terms
+      Sets.Main
+      Sets.Partition
+      Sets.Partition.Terms
+      Sets.PointedSets
+      Sets.PointedSets.Macro
+      Sets.PointedSets.Terms
+      Sets.Powerset
+      Sets.Powerset.Terms
+      Statistics.Macro
+      Statistics.Main
+      Statistics.Terms
+      TH
+      TH.Definition
+      TH.Label
+      TH.LitFile
+      TH.MetaLabel
+      Titlepage
+      Topology.Main
+      Topology.MetricSpace
+      Topology.MetricSpace.Terms
+      Topology.TopologicalSpace
+      Topology.TopologicalSpace.Terms
+      Types
+      Utils
+
 
 test-suite the-notes-test
   type:                exitcode-stdio-1.0
@@ -69,11 +299,13 @@ test-suite the-notes-test
                      , containers            >= 0.5       && < 0.6
                      , blaze-html            >= 0.8       && < 0.9
                      , blaze-markup          >= 0.7       && < 0.8
-                     , haphviz               >= 0.1.0.1   && < 0.2
+                     , haphviz               >= 0.2       && < 0.3
                      , filepath              >= 1.4       && < 1.5
                      , base16-bytestring     >= 0.1       && < 0.2
                      , bytestring            >= 0.10      && < 0.11
                      , cryptohash            >= 0.11      && < 0.12
+                     , gitrev                >= 1.1       && < 1.2
+                     , random                >= 1.1       && < 1.2
   default-extensions: OverloadedStrings
                       NoImplicitPrelude
                       TemplateHaskell

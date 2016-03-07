@@ -1,9 +1,6 @@
-module Rings.Main (
-      rings
-    ) where
+module Rings.Main where
 
 import           Notes
 
 rings :: Note
-rings = note "rings" $ do
-    chapter "Rings"
+rings = chapter "Rings" $ mempty

@@ -2,15 +2,13 @@ module Topology.Main where
 
 import           Notes
 
-import           Topology.MetricSpace      (metricSpace)
-import           Topology.TopologicalSpace (topologicalSpace)
-
+import           Topology.MetricSpace
+import           Topology.TopologicalSpace
 
 topology :: Note
-topology = note "topology" $ do
-    chapter "Topology"
-    topologicalSpace
-    metricSpace
+topology = chapter "Topology" $ do
+    topologicalSpaceS
+    metricSpaceS
 
 
 

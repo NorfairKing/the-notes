@@ -20,4 +20,17 @@ makeDefs [
     , "continuous distribution"
     , "probability density function"
     , "probability density"
+    , "density"
+    , "expected value"
+    , "mean"
+    , "covariance"
+    , "correlation"
+    , "variance"
+    , "standard deviation"
+    ]
+
+makeThms [
+      "Expectation of constant"
+    , "Linearity of expectation"
+    , "Variance in terms of expectation"
     ]

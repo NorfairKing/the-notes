@@ -3,20 +3,16 @@ module Relations.Equivalence where
 import           Notes
 
 import           Logic.PropositionalLogic.Macro
-import           Relations.Basics               (symmetric_)
-import           Relations.Equivalence.Macro
-import           Relations.Preorders            (preorder)
 
+import           Relations.Basics.Terms
 import           Relations.Preorders.Macro
+import           Relations.Preorders.Terms
 
-makeDefs [
-      "equivalence relation"
-    ]
+import           Relations.Equivalence.Macro
+import           Relations.Equivalence.Terms
 
-equivalenceRelations :: Note
-equivalenceRelations = note "equivalence-relations" $ do
-    section "Equivalence Relations"
-
+equivalenceRelationS :: Note
+equivalenceRelationS = section "Equivalence Relations" $ do
     equivalenceRelationDefinition
     equivalenceClasses
 
@@ -26,9 +22,7 @@ equivalenceRelationDefinition = de $ do
     s ["A ", symmetric_, " ", preorder, " is called an ", equivalenceRelation']
 
 equivalenceClasses :: Note
-equivalenceClasses = do
-    subsection "Equivalence Classes"
-
+equivalenceClasses = subsection "Equivalence Classes" $ do
     equivalenceClassDefinition
 
     totheorem "The equivalence class of an element contains that element"

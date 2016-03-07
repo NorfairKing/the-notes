@@ -26,18 +26,22 @@ import           Prelude                      as P (Double, Eq (..), FilePath,
                                                     Fractional (..), IO,
                                                     Maybe (..), Num (..),
                                                     Show (..), mempty, ($),
-                                                    (&&), (++), (.))
+                                                    (&&), (.))
 
 import           Debug.Trace
+import           System.Random
 
 import           Text.LaTeX                   hiding (Label, alph_, article,
-                                               cite, item, label, pageref, ref,
-                                               ref, rule, usepackage)
+                                               chapter, cite, item, label,
+                                               pageref, paragraph, ref, ref,
+                                               rule, section, subsection,
+                                               subsubsection, usepackage)
 import           Text.LaTeX.Base.Class
 import           Text.LaTeX.Base.Pretty
 import           Text.LaTeX.Base.Syntax
 import           Text.LaTeX.Packages.AMSFonts
-import           Text.LaTeX.Packages.AMSMath  hiding (subset, (!:), (^:))
+import           Text.LaTeX.Packages.AMSMath  hiding (mp, partial, pm, subset,
+                                               (!:), (^:))
 import           Text.LaTeX.Packages.AMSThm   hiding (TheoremStyle (..), proof,
                                                theorem)
 import           Text.LaTeX.Packages.Color
@@ -53,6 +57,8 @@ type Note  = Note' ()
 type Note' = ΛTeXT (StateT State (ReaderT Config IO))
 
 data State = State
+    { state_rng :: StdGen
+    }
 
 data Args = Args {
       args_selectionString       :: String
@@ -80,7 +86,7 @@ data Config = Config {
     , conf_tempDir               :: FilePath
     } deriving (Show, Eq)
 
-data Label = Label RefKind Text
+data Label = MkLabel RefKind Text
 
 data RefKind = Definition
              | Theorem
@@ -88,4 +94,5 @@ data RefKind = Definition
              | Property
              | Example
              | Figure
+             | Note
     deriving (Show, Eq)

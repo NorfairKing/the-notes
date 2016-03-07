@@ -8,9 +8,7 @@ import           Sets.Algebra.Difference.Terms
 
 
 setDifference :: Note
-setDifference = note "difference" $ do
-    subsection "Set difference"
-
+setDifference = subsection "Difference" $ do
     differenceDefinition
     intersectionAndDifferenceDisjunct
     symmetricSetDifferencesDisjunct
@@ -99,12 +97,9 @@ symmetricDifferenceEquivalentDefinition = de $ do
               , "" & "" =§= a △ b
             ]
 
-symmetricDifferenceITOUnionAndIntersectionLabel :: Label
-symmetricDifferenceITOUnionAndIntersectionLabel = thmlab "sets-symmetric-difference-in-terms-of-union-and-intersection"
-
 symmetricDifferenceITOUnionAndIntersection :: Note
 symmetricDifferenceITOUnionAndIntersection = thm $ do
-    lab symmetricDifferenceITOUnionAndIntersectionLabel
+    lab symmetricDifferenceInTermsOfUnionAndIntersectionTheoremLabel
     setsDec
     let (a, b, x, y) = ("A", "B", "x", "y")
     ma $ a △ b =§= (pars $ a ∪ b) \\ (pars $ a ∩ b)
@@ -121,12 +116,9 @@ symmetricDifferenceITOUnionAndIntersection = thm $ do
             , "" & "" =§= a △ b
           ]
 
-intersectionOverDifferenceLabel :: Label
-intersectionOverDifferenceLabel = thmlab "intersection-over-difference"
-
 intersectionOverDifference :: Note
 intersectionOverDifference = thm $ do
-    lab intersectionOverDifferenceLabel
+    lab intersectionOverDifferenceTheoremLabel
     setssDec
     let (a, b, c, x, y) = ("A", "B", "C", "x", "y")
     ma $ a ∩ (pars $ b \\ c) =§= (pars $ a ∩ b) \\ c

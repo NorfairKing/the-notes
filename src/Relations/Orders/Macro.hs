@@ -60,26 +60,45 @@ bot = comm0 "bot"
 
 -- * Bounds
 
--- | Least upper bound
+-- ** Least upper bound
+
+supsign :: Note
+supsign = comm0 "sqcup"
+
 (⊔) :: Note -> Note -> Note
-(⊔) = binop $ comm0 "sqcup"
-
-inf :: Note -> Note
-inf = fn "Inf"
-
-infcomp :: Note -> Note -> Note
-infcomp = comp $ commS "bigsqcap"
-
-
--- | Greatest lower bound
-(⊓) :: Note -> Note -> Note
-(⊓) = binop $ comm0 "sqcap"
+(⊔) = binop supsign
 
 sup :: Note -> Note
 sup = fn "Sup"
 
+bigsupsign :: Note
+bigsupsign = commS "bigsqcup"
+
 supcomp :: Note -> Note -> Note
-supcomp = comp $ commS "bigsqcup"
+supcomp = comp bigsupsign
+
+supof :: Note -> Note
+supof = (supsign <>)
+
+-- ** Greatest lower bound
+
+infsign :: Note
+infsign = comm0 "sqcap"
+
+(⊓) :: Note -> Note -> Note
+(⊓) = binop infsign
+
+inf :: Note -> Note
+inf = fn "Inf"
+
+biginfsign :: Note
+biginfsign = commS "bigsqcap"
+
+infcomp :: Note -> Note -> Note
+infcomp = comp biginfsign
+
+infof :: Note -> Note
+infof = (infsign <>)
 
 -- * Lattices
 

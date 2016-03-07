@@ -9,7 +9,7 @@ import           Logic.AbstractLogic.Macro
 
 -- | The 'next' temporal logic operator
 next :: Note -> Note
-next = mappend $ comm0 "textbigcircle"
+next = mappend $ comm0 "bigcirc"
 
 -- | The 'until' temporal logic operator
 until :: Note -> Note -> Note

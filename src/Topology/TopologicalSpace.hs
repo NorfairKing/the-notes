@@ -2,13 +2,14 @@ module Topology.TopologicalSpace where
 
 import           Notes
 
-import           Sets.Algebra.Intersection (distributionLaw2Label,
-                                            intersectionAssociativityLabel)
+import           Sets.Algebra.Intersection.Terms
+import           Sets.Basics.Terms
+
+import           Topology.TopologicalSpace.Terms
 
 
-topologicalSpace :: Note
-topologicalSpace = note "topological-spaces" $ do
-    section "Topological Space"
+topologicalSpaceS :: Note
+topologicalSpaceS = section "Topological Space" $ do
     topologyDefinition
     topologicalSpaceDefinition
     closedSetDefinition
@@ -19,13 +20,10 @@ topologicalSpace = note "topological-spaces" $ do
     comparableDefinition
     finerCoarserDefinition
 
-topology :: Note
-topology = ix "topology"
-
 topologyDefinition :: Note
 topologyDefinition = de $ do
-    s ["Let ", m topset, " be a set"]
-    s ["A ", term "topology", " ", m toptop, " on ", m topset, " is a collection of subsets of ", m topset, "with the following properties"]
+    s ["Let ", m topset, " be a ", set]
+    s ["A ",  topology', " ", m toptop, " on ", m topset, " is a collection of ", subsets, " of ", m topset, "with the following properties"]
     enumerate $ do
         item $ m $ emptyset ∈ toptop
         item $ m $ topset ∈ toptop
@@ -42,8 +40,8 @@ topologyDefinition = de $ do
 topologicalSpaceDefinition :: Note
 topologicalSpaceDefinition = do
     de $ do
-        s ["Let ", m topset, " be a set and ", m toptop, " a topology on ", m topset]
-        s [m topsp, " is called a ", term "topological space"]
+        s ["Let ", m topset, " be a ", set, and, m toptop, " a ", topology, on, m topset]
+        s [m topsp, " is called a ", topologicalSpace]
     nte $ do
         s ["In a sence, the sets in ", m toptop, " describe very abstractly which sets in ", m topset, " are ", quoted "close", " to eachother without describing ", emph "how", " close they are"]
 
@@ -97,14 +95,14 @@ inducedTopology = do
           s ["Let ", m "A", " be a subset of ", m ty]
           s ["Per construction, this means that there exists a subset ", m "B", " as follows "]
           ma $ setuncmp ("a" ∈ "A") "a" =: setuncmp ("b" ∈ "B") ("a" ∩ y)
-          s ["Because of the distributivity of the union,", ref distributionLaw2Label, " this is equal to the following set"]
+          s ["Because of the distributivity of the union,", ref distributionLaw2TheoremLabel, " this is equal to the following set"]
           ma $ (pars $ setuncmp ("b" ∈ "B") "a") ∩ y
           s ["Per construction of ", m ty, " this means that ", m (setuncmp ("a" ∈ "A") "a"), " is in ", m ty]
         item $ do
           s ["Let ", m "B", " be a finite subset of ", m ty]
           s ["Per construction, this means that there exists a subset ", m "B", " as follows "]
           ma $ setincmp ("a" ∈ "A") "a" =: setincmp ("a" ∈ "A") ("a" ∩ y)
-          s ["Because of the associativity of the intersection,", ref intersectionAssociativityLabel, " this is equal to the following set"]
+          s ["Because of the associativity of the intersection,", ref intersectionAssociativityPropertyLabel, " this is equal to the following set"]
           ma $ (pars $ setincmp ("a" ∈ "A") "a") ∩ y
           s ["Per construction of ", m ty, " this means that ", m (setincmp ("a" ∈ "A") "a"), " is in ", m ty]
   where

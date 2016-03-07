@@ -10,46 +10,47 @@ import           Sets.Basics.Macro
 import           Sets.Basics.Terms
 
 setBasics :: Note
-setBasics = note "basics" $ do
-    section "Set Basics"
-    setsS
-    subsetsS
+setBasics = section "Set Basics" $ do
+    setsSS
+    subsetsSS
     universalSet
     emptySet
-    singleton
-    predicates
+    singletonDefinition
+    predicateSS
 
-setsS :: Note
-setsS = do
+setsSS :: Note
+setsSS = do
     setDefinition
     setElementNotation
-    setComprehensionDefinition
     setEqualityDefinition
     setEqTransitivity
 
-subsetsS :: Note
-subsetsS = do
+subsetsSS :: Note
+subsetsSS = subsection "Subsets" $ do
     subsetDefinition
     subsetAntiSymmetry
     subsetTransitivity
     strictSubsetDefinition
 
 universalSet :: Note
-universalSet = do
+universalSet = subsection "The universal set" $ do
     universalSetDefinition
     universalSetSupsetOfAllSets
 
 emptySet :: Note
-emptySet = do
+emptySet = subsection "The empty set" $ do
     emptySetDefinition
     emptySetSubsetOfAllSets
 
-predicates :: Note
-predicates = do
+predicateSS :: Note
+predicateSS = subsection "Predicates" $ do
     predicateDefinition
+    setComprehensionDefinition
 
-singleton :: Note
-singleton = de $ s ["A ", ix "set", " with exactly one element is called a ", term "singleton"]
+singletonDefinition :: Note
+singletonDefinition = do
+    lab singletonDefinitionLabel
+    de $ s ["A ", set, " with exactly one ", element, " is called a ", singleton']
 
 setDefinition :: Note
 setDefinition = de $ do
@@ -60,16 +61,8 @@ setDefinition = de $ do
 
 setElementNotation :: Note
 setElementNotation = de $ do
-    s ["The fact that a ", ix "set", " ", m "A", " contains a certain ", ix "element", " ", m "a", " is denoted as ", m $ "a" ∈ "A"]
+    s ["The fact that a ", set, " ", m "A", " contains a certain ", element, " ", m "a", " is denoted as ", m $ "a" ∈ "A"]
 
-setComprehensionDefinition :: Note
-setComprehensionDefinition = de $ do
-    s ["A formal description of a ", ix "set", " using a ", ix "predicate", " ", m "p", " is written as follows"]
-    ma $ setcmpr "x" $ app "p" "x"
-    s ["This is the ", ix "set", " of all objects that have the ", ix "property", " ", m "P"]
-
-setEqualityDefinitionLabel :: Label
-setEqualityDefinitionLabel = delab "sets-equality"
 
 setEqualityDefinition :: Note
 setEqualityDefinition = de $ do
@@ -194,25 +187,22 @@ subsetTransitivity = thm $ do
 
 strictSubsetDefinition :: Note
 strictSubsetDefinition = de $ do
-    s ["A ", ix "set", " is a ", term "strict subset", " of another ", ix "set", " if and only if ", m "A", " is a ", ix "subset", " of ", m "B", " and not equal to ", m "B"]
+    s ["A ", set, " is a ", term "strict subset", " of another ", set, " if and only if ", m "A", " is a ", ix "subset", " of ", m "B", " and not equal to ", m "B"]
     ma $ ("A" `subsetneq` "B") === (("A" ⊆ "B") ∧ ("A" `setneq` "B"))
 
 
 universalSetDefinition :: Note
 universalSetDefinition = do
     de $ do
-        s ["The ", term "universal set", " is the ", ix "set", " of all objects"]
+        s ["The ", term "universal set", " is the ", set, " of all objects"]
         ma $ setuniv === setcmpr "x" "true"
     nte $ do
-        s ["Note that this is well defined as this ", ix "set", " would have to include itself.", " We will ignore this for now as the ", ix "universal set ", " is usually restricted to a domain that will be clear from the context"]
-
-universalSetSupsetOfAllSetsLabel :: Label
-universalSetSupsetOfAllSetsLabel = thmlab "sets-every-set-is-a-subset-of-the-universe"
+        s ["Note that this is not well defined as this ", set, " would have to include itself.", " We will ignore this for now as the ", ix "universal set ", " is usually restricted to a domain that will be clear from the context"]
 
 universalSetSupsetOfAllSets :: Note
 universalSetSupsetOfAllSets = thm $ do
-    lab universalSetSupsetOfAllSetsLabel
-    s ["Every set ", m "A", " is a ", ix "subset", " of the ", ix "universal set", " ", m "setuniv"]
+    lab everySetIsASubsetOfTheUniverseTheoremLabel
+    s ["Every set ", m "A", " is a ", ix "subset", " of the ", ix "universal set", " ", m setuniv]
     ma $ fa "A" $ "A" ⊆ setuniv
 
     proof $ do
@@ -223,7 +213,7 @@ universalSetSupsetOfAllSets = thm $ do
 
 emptySetDefinition :: Note
 emptySetDefinition = de $ do
-    s ["The ", term "empty set", " ", m emptyset, " is the ", ix "set", " that contains no elements"]
+    s ["The ", term "empty set", " ", m emptyset, " is the ", set, " that contains no elements"]
     ma $ emptyset === setcmpr "x" "false"
 
 emptySetSubsetOfAllSets :: Note
@@ -247,3 +237,10 @@ predicateDefinition = de $ do
     p = "P"
     a = "a"
     aa = "A"
+
+setComprehensionDefinition :: Note
+setComprehensionDefinition = de $ do
+    s ["A formal description of a ", set, " using a ", predicate, " ", m "p", " is written as follows"]
+    ma $ setcmpr ("x" ∈ "A") $ app "p" "x"
+    s ["This is the ", set, " of all objects in ", m "A", " that satisfy the ", predicate, " ", m "P"]
+

@@ -2,15 +2,15 @@ module Sets.Algebra.Intersection where
 
 import           Notes
 
-import           Functions.BinaryOperation       (associative_)
+import           Functions.BinaryOperation.Terms
 import           Logic.PropositionalLogic.Macro
+
 import           Sets.Algebra.Union.Terms
 
 import           Sets.Algebra.Intersection.Terms
 
 setIntersection :: Note
-setIntersection = note "intersection" $ do
-    subsection "Set intersection"
+setIntersection = subsection "Intersection" $ do
     intersectionDefinition
     intersectionAssociative
     intersectionCommutative
@@ -36,12 +36,9 @@ intersectionDefinition = de $ do
     s [the, intersection', " ", m (a ∪ b), " of two sets ", m a, " and ", m b, " is the set of all elements of both ", m a, " and ", m b]
     ma $ a ∪ b =§= setcmpr x ((x ∈ a) ∧ (x ∈ b))
 
-intersectionAssociativityLabel :: Label
-intersectionAssociativityLabel = Label Property "intersection-associative"
-
 intersectionAssociative :: Note
 intersectionAssociative = prop $ do
-    lab intersectionAssociativityLabel
+    lab intersectionAssociativityPropertyLabel
     s ["The set ", intersection, " is ", associative_]
     ma $ a ∩ (pars $ b ∩ c) =§= (pars $ a ∩ b) ∩ c
 
@@ -181,12 +178,9 @@ distributionLaws = do
     distributionLaw1
     distributionLaw2
 
-distributionLaw1Label :: Label
-distributionLaw1Label = Label Theorem "dristribution-law-1"
-
 distributionLaw1 :: Note
 distributionLaw1 = thm $ do
-    lab distributionLaw1Label
+    lab distributionLaw1TheoremLabel
     s ["The set ", intersection, is, distributive, " with respect to the set ", union]
     ma $ a ∩ (pars $ b ∪ c) =§= (pars $ a ∪ b) ∩ (pars $ a ∪ c)
 
@@ -203,12 +197,9 @@ distributionLaw1 = thm $ do
               , "" & "" =§= (pars $ a ∪ b) ∩ (pars $ a ∪ c)
             ]
 
-distributionLaw2Label :: Label
-distributionLaw2Label = Label Theorem "dristribution-law-2"
-
 distributionLaw2 :: Note
 distributionLaw2 = thm $ do
-    lab distributionLaw2Label
+    lab distributionLaw2TheoremLabel
     s ["The set ", union, is, distributive, " with respect to the set ", intersection]
     ma $ a ∪ (pars $ b ∩ c) =§= (pars $ a ∩ b) ∪ (pars $ a ∩ c)
 

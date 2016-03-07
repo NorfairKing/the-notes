@@ -4,9 +4,11 @@ module Titlepage (myTitlePage) where
 import           Control.Monad        (forM_)
 import           Control.Monad.Reader (asks)
 
-import           Prelude              (return)
+import           Prelude              (return, (++))
 
 import qualified Data.Text            as T
+
+import           Development.GitRev
 
 import           Notes
 
@@ -56,7 +58,7 @@ myTitlePage = do
                     lnbk
                     "Compiled" & commS "today"
                     lnbk
-                    "Commit" & raw (T.pack $(commitHash))
+                    "Commit" & raw (T.pack $(gitHash))
                     lnbk
                 comm1 "vspace" $ raw "0.5\\textheight"
 

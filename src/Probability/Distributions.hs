@@ -2,27 +2,30 @@ module Probability.Distributions where
 
 import           Notes
 
+import           LinearAlgebra.VectorSpaces.Terms
 import           Logic.FirstOrderLogic.Macro
+
 import           Probability.Intro.Macro
 import           Probability.Intro.Terms
 import           Probability.ProbabilityMeasure.Macro
+import           Probability.ProbabilityMeasure.Terms
 import           Probability.RandomVariable.Macro
 import           Probability.RandomVariable.Terms
+import           Probability.SigmaAlgebra.Macro
+import           Probability.SigmaAlgebra.Terms
 
 import           Probability.Distributions.Macro
 import           Probability.Distributions.Terms
 
 distributions :: Note
-distributions = note "important-distributions" $ do
-    section "Important distributions"
+distributions = section "Important distributions" $ do
+    discreteDistributionSS
+    continuousDistributionSS
 
-    discreteDistributions
-    continuousDistributions
-
-discreteDistributions :: Note
-discreteDistributions = do
-    subsection "Discrete distributions"
+discreteDistributionSS :: Note
+discreteDistributionSS = subsection "Discrete distributions" $ do
     discreteUniform
+    empiricalDistributionDefinition
     bernoulli
     binomial
 
@@ -36,6 +39,17 @@ discreteUniform = de $ do
     p = subsc "p"
     n = "n"
     i = "i"
+
+empiricalDistributionDefinition :: Note
+empiricalDistributionDefinition = de $ do
+    let x = "X"
+    s ["Let ", m x, "be a", vector, "of values"]
+    s [m x, "viewed as the", universe, "of a", measurableSpace, m $ mspace x $ powset x, "induces a", probabilityMeasure, m prm_, "as follows"]
+    let a = "a"
+        b = "b"
+    ma $ prob a =: (1 /: setsize x) * setsize (setcmpr (b ∈ x) (a =: b))
+    s ["This is called the", empiricalDistribution', "defined by the vector", m x]
+
 
 bernoulli :: Note
 bernoulli = de $ do
@@ -67,14 +81,13 @@ binomial = de $ do
     n = "n"
     p = "p"
 
-continuousDistributions :: Note
-continuousDistributions = do
-    subsection "Continuous distributions"
+continuousDistributionSS :: Note
+continuousDistributionSS = subsection "Continuous distributions" $ do
     gaussianDistributionDefinition
 
 gaussianDistributionDefinition :: Note
 gaussianDistributionDefinition = de $ do
-    s ["A ", gaussianDistribution', or, normalDistribution', " with parameters ", m mean_, " and ", m variance_, " is given by the following ", probabilityDensity]
+    s ["A ", gaussianDistribution', or, normalDistribution', " with parameters ", m mn_, " and ", m var_, " is given by the following ", probabilityDensity]
     ma $ do
         let x = "x"
-        prds x =: exp (- ((pars $ x - mean_) ^ 2) /: (2 * variance_ ^ 2)) /: (variance_ * sqrt (2 * pi))
+        prds x =: exp (- ((pars $ x - mn_) ^ 2) /: (2 * var_)) /: (sd_ * sqrt (2 * pi))

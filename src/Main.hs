@@ -9,6 +9,7 @@ import           System.Directory     (setCurrentDirectory)
 import           System.Exit          (ExitCode (..), die)
 import           System.Process       (CreateProcess (..),
                                        readCreateProcessWithExitCode, shell)
+import           System.Random        (mkStdGen)
 import           Utils
 
 import           Notes
@@ -21,9 +22,12 @@ import           Parser
 import           Titlepage
 
 import           Computability.Main
+import           Cryptography.Main
 import           DataMining.Main
 import           Fields.Main
 import           Functions.Main
+import           Geometry.Main
+import           GraphTheory.Main
 import           Groups.Main
 import           LinearAlgebra.Main
 import           Logic.Main
@@ -32,6 +36,7 @@ import           Probability.Main
 import           Relations.Main
 import           Rings.Main
 import           Sets.Main
+import           Statistics.Main
 import           Topology.Main
 
 
@@ -56,12 +61,14 @@ main = do
 
 
             -- This is where the magic happens
-            (eet, _) <- runNote entireDocument cf pconf startState
+            (eet, _) <- buildNote entireDocument cf pconf startState
 
             case eet of
                 Left err -> if conf_ignoreReferenceErrors cf
-                            then P.print err
-                            else error $ show err
+                            then printErrors err
+                            else do
+                                printErrors err
+                                error "Pdf not built."
                 Right () -> return ()
 
             (ec, out, err) <- liftIO $ readCreateProcessWithExitCode
@@ -77,6 +84,9 @@ main = do
                 ExitSuccess -> return ()
 
             return ()
+
+printErrors :: [ΛError] -> IO ()
+printErrors = putStr . unlines . map show
 
 latexMkJob :: Config -> CreateProcess
 latexMkJob cf = shell $ "latexmk " ++ unwords latexMkArgs
@@ -101,7 +111,7 @@ latexMkJob cf = shell $ "latexmk " ++ unwords latexMkArgs
 
 
 startState :: State
-startState = State
+startState = State { state_rng = mkStdGen 42 }
 
 entireDocument :: Note
 entireDocument = do
@@ -113,10 +123,13 @@ entireDocument = do
 
     document $ do
         myTitlePage
-        tableofcontents
-        newpage
+
+        -- Ensure that pdf numbers coincide with the page numbers in the document
+        comm2 "addtocounter" "page" "1"
+
         renderConfig
         license
+        tableofcontents
         allNotes
 
         bibfn <- asks conf_bibFileName
@@ -134,12 +147,16 @@ allNotes = do
     sets
     relations
     functions
+    graphTheory
     groups
     rings
     fields
     linearAlgebra
+    geometry
     topology
     computability
     probability
+    statisticsC
+    cryptography
     machineLearning
     dataMining

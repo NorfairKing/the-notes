@@ -3,17 +3,16 @@ module Sets.Main where
 import           Notes
 
 import           Sets.Algebra.Main
-import           Sets.Basics            (setBasics)
+import           Sets.Basics
 import           Sets.CarthesianProduct
 import           Sets.Partition
-import           Sets.PointedSets       (pointedSets)
+import           Sets.PointedSets
 import           Sets.Powerset
 
 sets :: Note
-sets = note "sets" $ do
-     chapter "Sets"
+sets = chapter "Sets" $ do
      setBasics
-     partitions
+     partitionS
      algebra
      powersetS
      carthesianProducts

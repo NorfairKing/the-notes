@@ -4,30 +4,19 @@ import           Notes
 
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
-import           Relations.Basics               (relation_)
-import           Relations.Domain               (domain_, image_)
+import           Relations.Basics.Terms         hiding (total')
+import           Relations.Domain.Terms
 import           Sets.Basics.Terms
 
-
 import           Functions.Application.Macro
-import           Functions.Basics.Macro
+import           Functions.Application.Terms
+import           Functions.Jections.Terms
 
-makeDefs [
-      "function"
-    , "partial function"
-    , "corange"
-    , "codomain"
-    , "total"
-    , "surjective"
-    , "binary function"
-    , "ternary function"
-    , "member-wise application"
-    ]
+import           Functions.Basics.Macro
+import           Functions.Basics.Terms
 
 basics :: Note
-basics = note "basics" $ do
-    section "Basics"
-
+basics = section "Basics" $ do
     partialFunctionDefinition
     totalFunctionDefinition
     surjectiveDefinition
@@ -43,7 +32,6 @@ partialFunctionDefinition = de $ do
     lab functionDefinitionLabel
     lab partialFunctionDefinitionLabel
     s ["A ", partialFunction', or, function', " ", m fun_, " is a triple ", m t , " where ", m dom_, and, img_, " are sets and ", m fun_, " is a single-valued binary ", relation_, " between ", m dom_, and, m img_]
-    s ["Each of the sets ", m dom_, and, img_, " have an equivalence relation defined on them, both written as ", m (eqsign)]
     ma $ fa (cs [x, y 1, y 2]) $ (pars $ tuple x (y 1) ∈ fun_ ∧ tuple x (y 2) ∈ fun_) ⇒ (y 1 =: y 2)
     s ["The triple ", m t, " is often written as ", m $ fun fun_ dom_ img_]
     s [m dom_, " is called the ", corange', ", ", m img_, " is called the ", codomain']

@@ -13,9 +13,7 @@ import           Computability.RegularExpressions.Terms
 
 
 regularExpressions :: Note
-regularExpressions = note "regular-expressions" $ do
-    section "Regular Expressions"
-
+regularExpressions = section "Regular Expressions" $ do
     regularExpressionDefinition
     regularExpressionsOverAlphabet
     languageOfRegularExpression

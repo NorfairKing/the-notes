@@ -2,20 +2,19 @@ module Relations.Main (relations) where
 
 import           Notes
 
-import           Relations.Basics      (basicDefinitions)
-import           Relations.Domain      (domainAndImage)
-import           Relations.Equivalence (equivalenceRelations)
-import           Relations.Orders      (orders)
-import           Relations.Preorders   (preorders)
+import           Relations.Basics
+import           Relations.Domain
+import           Relations.Equivalence
+import           Relations.Orders
+import           Relations.Preorders
 
 
 relations :: Note
-relations = note "relations" $ do
-    chapter "Relations"
+relations = chapter "Relations" $ do
     basicDefinitions
     domainAndImage
     preorders
-    equivalenceRelations
+    equivalenceRelationS
     orders
 
 

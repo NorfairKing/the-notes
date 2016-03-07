@@ -64,6 +64,13 @@ laadd = bm "+"
 (<+>) :: Note -> Note -> Note
 (<+>) = binop laadd
 
+-- Linear Algebra Vector Space Substraction
+lasub :: Note
+lasub = bm "-"
+
+(<->) :: Note -> Note -> Note
+(<->) = binop lasub
+
 -- Linear Algebra Vector Space Scalar Multiplication
 lamul :: Note
 lamul = bm $ comm0 "cdot"
@@ -100,6 +107,15 @@ lain v w = autoBrackets langle rangle $ cs [v, w]
 realVectorInproduct :: Note
 realVectorInproduct = lainprod
 
+-- | Dotproduct
+(/.\) :: Note -> Note -> Note
+(/.\) = binop $ negsp <> comm0 "cdot" <> negsp
+  where negsp = commS "kern" <> raw "-2px"
+
+-- | Addition of euclidean vectors
+(/+\) :: Note -> Note -> Note
+(/+\) = (<+>)
+
 
 -- Linear Algebra Inner Product Space
 laips :: Note
@@ -116,3 +132,10 @@ laips_ = quintuple
 euclideanInnerProductSpace :: Note -> Note
 euclideanInnerProductSpace p = laips_ reals (reals ^: p) realVecAddition realVecScalarMultiplication lainprod
 
+
+-- Identity matrix
+id :: Note -> Note
+id n = mathbb "I" !: n
+
+id_ :: Note
+id_ = mathbb "I"
