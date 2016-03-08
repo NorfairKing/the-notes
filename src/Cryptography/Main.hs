@@ -1,7 +1,7 @@
 {-# LANGUAGE QuasiQuotes #-}
 module Cryptography.Main where
 
-import           Notes                                hiding (inverse)
+import           Notes                                hiding (cyclic, inverse)
 
 import           Codec.Picture.Png                    (decodePng, writePng)
 import           Codec.Picture.Types                  (DynamicImage (..),
@@ -696,13 +696,21 @@ diffieHellmanProtocolDefinition = de $ do
 
 discreteLogarithmProblemDefinition :: Note
 discreteLogarithmProblemDefinition = de $ do
+    lab discreteLogarithmDefinitionLabel
+    lab dLDefinitionLabel
     let aa = "A"
         a = "a"
         g = "g"
     s [the, discreteLogarithm', "(" <> dL' <> ")", "problem", "for a", cyclic_, group, m $ grp_ =: grp (genby g) grpop_, "is the problem of computing, for a given", group, element, m $ aa ∈ grps_, "the exponent", m $ a ∈ ord grp_, " such that", m $ aa =: g ^ a, "holds"]
 
 computationalDHProblemDefinition :: Note
-computationalDHProblemDefinition = de $ mempty
+computationalDHProblemDefinition = de $ do
+    lab computationalDiffieHellmanDefinitionLabel
+    lab cDHDefinitionLabel
+    let a = "a"
+        b = "b"
+        g = "g"
+    s [the, computationalDiffieHellman, "(" <> cDH' <> ")", "problem for a given", cyclic, group, m $ grp_ =: grp (genby g) grpop_, "is the problem of computing, for given group elements", m $ g ^ a, and, m $ g ^ b, "the group element", m $ g ^ (a * b)]
 
 decisionalDHProblemDefinition :: Note
 decisionalDHProblemDefinition = de $ mempty

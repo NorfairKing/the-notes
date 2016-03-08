@@ -71,6 +71,9 @@ makeDefs [
 
     , "discrete logarithm"
     , "DL"
+
+    , "computational Diffie-Hellman"
+    , "CDH"
     ]
 
 
