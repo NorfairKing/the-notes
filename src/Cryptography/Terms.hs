@@ -74,6 +74,10 @@ makeDefs [
 
     , "computational Diffie-Hellman"
     , "CDH"
+
+    , "Diffie-Hellman triple"
+    , "decisional Diffie-Hellman"
+    , "DDH"
     ]
 
 

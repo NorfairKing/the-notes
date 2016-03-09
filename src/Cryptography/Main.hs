@@ -85,6 +85,7 @@ cryptography = chapter "Cryptography" $ do
     section "Computational Problems" $ do
         discreteLogarithmProblemDefinition
         computationalDHProblemDefinition
+        diffieHellmanTripleDefinition
         decisionalDHProblemDefinition
 
 
@@ -712,5 +713,22 @@ computationalDHProblemDefinition = de $ do
         g = "g"
     s [the, computationalDiffieHellman, "(" <> cDH' <> ")", "problem for a given", cyclic, group, m $ grp_ =: grp (genby g) grpop_, "is the problem of computing, for given group elements", m $ g ^ a, and, m $ g ^ b, "the group element", m $ g ^ (a * b)]
 
+diffieHellmanTripleDefinition :: Note
+diffieHellmanTripleDefinition = de $ do
+    lab diffieHellmanTripleDefinitionLabel
+    let a = "a"
+        b = "b"
+        c = "c"
+        g = "g"
+    s ["A", diffieHellmanTriple, "in a given", cyclic, group, m $ grp_ =: grp (genby g) grpop_, "is a triple of the form", m $ triple (g ^ a) (g ^ b) (g ^ (a * b)), "where", m a <> ",", m b, and, m c, "are hole numbers"]
+
+
 decisionalDHProblemDefinition :: Note
-decisionalDHProblemDefinition = de $ mempty
+decisionalDHProblemDefinition = de $ do
+    lab computationalDiffieHellmanDefinitionLabel
+    lab cDHDefinitionLabel
+    let a = "a"
+        b = "b"
+        c = "c"
+        g = "g"
+    s [the, decisionalDiffieHellman', "(" <> dDH' <> ")", "problem for a given", cyclic, group, m $ grp_ =: grp (genby g) grpop_, "is the problem of determining whether, for given group elements", (m $ g ^ a) <> ",", m $ g ^ b, and, m $ g ^ c, "whether they are chosen randomly and independently from", m grps_, "or form a", diffieHellmanTriple]
