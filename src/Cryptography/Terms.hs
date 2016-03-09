@@ -12,6 +12,7 @@ makeDefs [
 
     , "message space"
     , "message"
+    , "plaintext"
     , "ciphertext space"
     , "ciphertext"
     , "key space"
@@ -78,6 +79,14 @@ makeDefs [
     , "Diffie-Hellman triple"
     , "decisional Diffie-Hellman"
     , "DDH"
+
+    , "public-key encryption scheme"
+    , "PKE"
+    , "key generator"
+    , "key pair"
+    , "public key"
+    , "secret key"
+    , "private key"
     ]
 
 

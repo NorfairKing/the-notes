@@ -88,6 +88,9 @@ cryptography = chapter "Cryptography" $ do
         diffieHellmanTripleDefinition
         decisionalDHProblemDefinition
 
+    section "Public key encryption" $ do
+        publicKeyEncryptionSchemeDefinition
+
 
 cryptographicSchemeDefinition :: Note
 cryptographicSchemeDefinition = de $ do
@@ -164,7 +167,7 @@ oneTimePadExample = ex $ do
 
     keyBS <- getKeyFor mesgBS
 
-    s ["Encrypting the message", quoted $ raw $ T.pack mesg, "(encoded with ASCII) with following the", oneTimePad, cipher, "with a random key, results in the following situation"]
+    s ["Encrypting the", message, quoted $ raw $ T.pack mesg, "(encoded with ASCII) with following the", oneTimePad, cipher, "with a random key, results in the following situation"]
 
     let encryption = otpEncrypt keyBS mesgBS
     let showNice = text . raw . T.pack
@@ -231,12 +234,12 @@ indcpaDefinition = de $ do
         let mi = "m" !: i
             r = "r"
             ri = r !: i
-        item $ s ["The adversary can choose up to", m t, "messages", m mi, "and receive their encryptions", m $ enc mi k ri, "for fresh and independent randomness values", m $ ri ∈ rsp_]
+        item $ s ["The adversary can choose up to", m t, messages, m mi, "and receive their encryptions", m $ enc mi k ri, "for fresh and independent randomness values", m $ ri ∈ rsp_]
         let m0 = "m" !: 0
             m1 = "m" !: 1
-        item $ s ["The adversary chooses two messages", m m0, and, m m1, "of the same length"]
+        item $ s ["The adversary chooses two", messages, m m0, and, m m1, "of the same length"]
         item $ s ["The challenger chooses a uniformly random bit", m b <> ", computes the encryption of ", m $ c =: enc mb k r, "for a fresh and independent randomness value", m $ r ∈ rsp_, "and returns it to the adversary"]
-        item $ s ["The adversary can again choose up to", m t, "messages as in step 2, but the total number is limited by", m t]
+        item $ s ["The adversary can again choose up to", m t, messages, "as in step 2, but the total number is limited by", m t]
         item $ s ["The adversary issues his guess", m b', "for", m b]
     s [the, advantage', "of the adversary in this game is defined as", m $ 2 * prob (b' =: b) - 1 /: 2]
 
@@ -267,7 +270,7 @@ indccaDefinition = de $ do
         item $ s ["The adversary can choose up to", m t, messages, m mi, or, ciphertexts, m ci, "and receive their encryptions", m $ enc mi k ri, "for fresh and independent randomness values", m $ ri ∈ rsp_, or, ciphertexts, "(in the case of", messages <> ") or receive their decryptions", m $ dec ci k, "(in the case of", ciphertexts <> ")"]
         let m0 = "m" !: 0
             m1 = "m" !: 1
-        item $ s ["The adversary chooses two messages", m m0, and, m m1, "of the same length"]
+        item $ s ["The adversary chooses two", messages, m m0, and, m m1, "of the same length"]
         item $ s ["The challenger chooses a uniformly random bit", m b <> ", computes the encryption of ", m $ c =: enc mb k r, "for a fresh and independent randomness value", m $ r ∈ rsp_, "and returns it to the adversary"]
         item $ s ["The adversary can again choose up to", m t, messages, or, ciphertexts, "as in step 2, but the total number is limited by", m t]
         item $ s ["The adversary issues his guess", m b', "for", m b]
@@ -732,3 +735,37 @@ decisionalDHProblemDefinition = de $ do
         c = "c"
         g = "g"
     s [the, decisionalDiffieHellman', "(" <> dDH' <> ")", "problem for a given", cyclic, group, m $ grp_ =: grp (genby g) grpop_, "is the problem of determining whether, for given group elements", (m $ g ^ a) <> ",", m $ g ^ b, and, m $ g ^ c, "whether they are chosen randomly and independently from", m grps_, "or form a", diffieHellmanTriple]
+
+
+publicKeyEncryptionSchemeDefinition :: Note
+publicKeyEncryptionSchemeDefinition = de $ do
+    lab publicKeyEncryptionSchemeDefinitionLabel
+    lab keyGeneratorDefinitionLabel
+    s ["A", publicKeyEncryptionScheme', "(" <> pKE' <> ")", "consists of three functions"]
+    itemize $ do
+        item $ do
+            s ["A", keyGenerator', function]
+            s ["This is a probabillistic", function, "that generates a", keyPair' <> ",", "a", publicKey', anda, secretKey', "(" <> privateKey' <> ")"]
+        item $ do
+            s ["An", encryptionFunction']
+            s ["This is a probabillistic", function, "that takes as inputs a", publicKey, anda, plaintext, "and computes the", ciphertext]
+        item $ do
+            s ["A", decryptionFunction']
+            s ["This is a deterministic", function, "that takes as inputs a", secretKey, anda, ciphertext, "and computes the", plaintext]
+
+    s ["... such that for every encryption/decryption", keyPair, "the decryption transformation is the inverse of the encryption transformation"]
+
+    todo "formalize"
+
+
+
+
+
+
+
+
+
+
+
+
+
