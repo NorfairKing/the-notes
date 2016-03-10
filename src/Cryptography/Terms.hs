@@ -87,6 +87,9 @@ makeDefs [
     , "public key"
     , "secret key"
     , "private key"
-    ]
+    , "ElGamal"
 
+    , "trapdoor one-way permutation"
+    , "TWOP"
+    ]
 

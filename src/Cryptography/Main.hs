@@ -90,7 +90,14 @@ cryptography = chapter "Cryptography" $ do
 
     section "Public key encryption" $ do
         publicKeyEncryptionSchemeDefinition
+        iNDCCASecureDefinitionPKEDefinition
+        pKEINDCCASecureDefinition
+        diffieHellmanPKEDefinition
+        elGamalSchemeDefinition
+        elGamalSchemeCPAButNotCCPASecure
 
+    section "Trapdoor one-way permutations" $ do
+        trapdoorOneWayPermutationDefinition
 
 cryptographicSchemeDefinition :: Note
 cryptographicSchemeDefinition = de $ do
@@ -663,7 +670,7 @@ messageAuthenticationCodeSecurityDefinition = de $ do
             s [the, adversary, "chooses a", message, m m', "and a", mAC <> "-value", m z]
             s ["He wins the game if", m $ z =: f m' k, and, m m', "was not asked as a query in step 2"]
 
-    s ["A", mAC, function, "is called", cMASecure', "if no feasible", adversary, "wins this game with a non negligible", probability]
+    s ["A", mAC, function, "is called", cMASecure', "if no feasible", adversary, "wins this game with a non-negligible", probability]
 
 diffieHellmanProtocolDefinition :: Note
 diffieHellmanProtocolDefinition = de $ do
@@ -758,14 +765,78 @@ publicKeyEncryptionSchemeDefinition = de $ do
     todo "formalize"
 
 
+iNDCCASecureDefinitionPKEDefinition :: Note
+iNDCCASecureDefinitionPKEDefinition = de $ do
+    lab iNDCCADefinitionLabel
+    lab indistinguishabilityChosenCiphertextAttackDefinitionLabel
+    let t = "t"
+    s ["A", m t <> "-message", indistinguishabilityChosenPlaintextAttack', "(" <> iNDCCA' <> ")", "game", "for a", publicKeyEncryptionScheme, "between a", challenger, "and an", adversary, "goes as follows"]
+    let b = "b"
+        b' = "b'"
+    enumerate $ do
+        item $ s [the, challenger, "chooses a", secretKey, publicKey, "pair using the", keyGenerator, function, "and sends the", publicKey, "to the adversary"]
+        item $ s [the, adversary, "can choose", ciphertexts, "and receive their decryptions under the", secretKey]
+        let m0 = "m" !: 0
+            m1 = "m" !: 1
+            mb = "m" !: b
+        item $ s [the, adversary, "chooses two messages", m m0, and, m m1, "of the same length"]
+        let b = "b"
+        item $ s [the, challenger, "chooses a uniformly random bit", m b <> ", computes the encryption of", m mb <> ", and returns it to the", adversary]
+        item $ s [the, adversary, "can again choose", ciphertexts, "and receive their decryptions as in step 2, but the encryption of", m mb, "is excluded"]
+        item $ s [the, adversary, "guesses", m b, "by issuing a guess", m b']
+    s [the, advantage', "of the", adversary, "in this game is defined as", m $ 2 * prob (b' =: b) - 1 /: 2]
+    todo "formalize"
+
+pKEINDCCASecureDefinition :: Note
+pKEINDCCASecureDefinition = de $ do
+    s ["A", publicKeyEncryptionScheme, "is called", iNDCCASecure, "if no feasible", adversary, "has a negligible", advantage]
 
 
+diffieHellmanPKEDefinition :: Note
+diffieHellmanPKEDefinition = de $ do
+    s [the, diffieHellman, protocol, "can be used as a", publicKeyEncryptionScheme]
+    let g = "g"
+        q = "q"
+    s ["Let", m $ grp_ =: grp (genby g) grpop_, "be a", cyclic, group, "with a known order", m q, and, "let", m $ tuple enc_ dec_, "be a given secure", symmetricCryptosystem]
+    s ["The following is then a", publicKeyEncryptionScheme]
+    let zq = integers !: q
+    itemize $ do
+        let b = "B"
+            x = "x"
+            xb = x !: b
+            mesg = "m"
+        item $ do
+            s ["A", keyGenerator, function]
+            newline
+            s ["Choose", m xb, "uniformly at random from", m zq]
+            s [the, secretKey, "is", m xb, "and the", publicKey, "is", m $ g ^ xb]
+        item $ do
+            let r = "r"
+            s ["An", encryptionFunction]
+            newline
+            s ["Choose", m x, "at random from", m zq]
+            s [the, ciphertext, "for a", message, m mesg, "is the pair", m $ tuple (g ^ x) (enc mesg (g ^ (xb ^ x)) r), "where", m r, "is a uniformly random value from the", randomnessSpace, "of", m enc_]
+        item $ do
+            s ["A", decryptionFunction]
+            newline
+            todo "Left as exercise?"
+    s ["Note that we implicitly use the fact every cyclic group of finite order", m q, "is isomorphic to", m zq]
+    refneeded "prove this in the group chapter"
 
 
+elGamalSchemeDefinition :: Note
+elGamalSchemeDefinition = de $ do
+    lab elGamalDefinitionLabel
+    s ["A", publicKeyEncryptionScheme, "based on the", diffieHellman, protocol, "where the", symmetricCryptosystem, "is", the, oneTimePad, "is called the", elGamal', publicKeyEncryptionScheme]
 
 
+elGamalSchemeCPAButNotCCPASecure :: Note
+elGamalSchemeCPAButNotCCPASecure = thm $ do
+    s [the, elGamal, publicKeyEncryptionScheme, "is", iNDCPASecure, "but not", iNDCCASecure]
 
 
-
+trapdoorOneWayPermutationDefinition :: Note
+trapdoorOneWayPermutationDefinition = de $ do
+    lab trapdoorOneWayPermutationDefinitionLabel
 
 

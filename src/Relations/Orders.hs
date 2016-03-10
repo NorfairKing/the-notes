@@ -136,14 +136,13 @@ partialOrderExamples = do
         s [m r, "is a", partialOrder]
 
     ex $ do
-        s ["The set of natural numbers", m naturals, "equipped with the", relation, quoted "divides", ref dividesIsRelationExampleLabel, "is a", partialOrder, "on this set"]
-        let n = 32 :: P.Int
+        let n = 16 :: P.Int
+        s ["The set of natural numbers", m naturals, "up to", m (raw $ T.pack $ show n) <> ", equipped with the", relation, quoted "divides", ref dividesIsRelationExampleLabel, "is a", partialOrder, "on this set"]
         let tshow = T.pack . show
-        hasseFig 10 $ hasseDiagram (P.map tshow [1..n])
-                    $ [(tshow a, tshow b) | a <- [1..n], b <- [a..n], b `P.mod` a == 0]
-        s ["Of course this figure can only be shown partially"]
-        s ["Here it is show for the natural numbers up to", m $ raw $ tshow n]
-
+        hasseFig 10 $ hasseDiagram (P.map tshow [0 .. n])
+                    $ [(tshow a, tshow b) | a <- [1 .. n], b <- [a .. n], b `P.mod` a == 0]
+                    P.++ [(tshow a, tshow 0) | a <- [1 .. n]]
+        s ["Notice that", m 0, "is actually the", greatestElement, "according to this order"]
 
 powsetPosetPreorder :: Note
 powsetPosetPreorder = do
