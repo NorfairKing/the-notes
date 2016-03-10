@@ -91,5 +91,7 @@ makeDefs [
 
     , "trapdoor one-way permutation"
     , "TWOP"
+    , "trapdoor generator"
+    , "trapdoor"
     ]
 

@@ -29,12 +29,14 @@ import           Functions.Basics.Macro
 import           Functions.Basics.Terms
 import           Functions.Inverse.Macro
 import           Functions.Inverse.Terms
+import           Functions.Jections.Terms
 import           Groups.Macro
 import           Groups.Terms
 import           Logic.FirstOrderLogic.Macro
 import           Probability.Independence.Terms
 import           Probability.ProbabilityMeasure.Macro
 import           Probability.ProbabilityMeasure.Terms
+import           Relations.Orders.Macro
 import           Sets.Basics.Terms
 
 import           Cryptography.Macro
@@ -98,6 +100,7 @@ cryptography = chapter "Cryptography" $ do
 
     section "Trapdoor one-way permutations" $ do
         trapdoorOneWayPermutationDefinition
+        tWOPInversionGame
 
 cryptographicSchemeDefinition :: Note
 cryptographicSchemeDefinition = de $ do
@@ -838,5 +841,36 @@ elGamalSchemeCPAButNotCCPASecure = thm $ do
 trapdoorOneWayPermutationDefinition :: Note
 trapdoorOneWayPermutationDefinition = de $ do
     lab trapdoorOneWayPermutationDefinitionLabel
+    lab tWOPDefinitionLabel
+    lab trapdoorGeneratorDefinitionLabel
+    lab trapdoorDefinitionLabel
+    let x = mathcal "X"
+        y = mathcal "Y"
+    s ["A", trapdoorOneWayPermutation', "(" <> tWOP <> ")", "is and efficient probabillistic algorithm, the", trapdoorGenerator', "which generates descriptions of two algorithms and two", sets, m x, and, m y]
+    let f_ = "F"
+        d_ = "D"
+        g_ = "g"
+        g = fn g_
+    itemize $ do
+        item $ do
+            s ["An algorithm", m f_, "computing an", injective, function, m $ fun "f" x y]
+            s ["Typically,", m f_, "is described by a short parameter called the", publicKey, "which also defines", m x, and,m y]
+        item $ do
+            s ["An algorithm", m d_, "computing the", inverseFunction, m g_, "of", m f_]
+            ma $ fun g_ y (x ∪ bot) <> text " such that " <> (fa ("x" ∈ x) (g (fn "f" "x") =: "x"))
+            s ["If", m "y", "is not in the range of", m f_, "then", m $ g "y", "will be", m bot]
+            s ["Typically,", m d_, "is described by a short parameter called the", trapdoor']
 
 
+tWOPInversionGame :: Note
+tWOPInversionGame = de $ do
+    s [the, tWOP, "inversion game between an", adversary, anda, challenger, "is defined as follows"]
+    let x = mathcal "X"
+        y = mathcal "Y"
+        f = "F"
+        d = "D"
+    itemize $ do
+        item $ do
+            s [the, challenger, "uses the", trapdoorGenerator, "to generate", m $ quadruple f d x y, "and sends the", publicKey, "(" <> m (triple x y f) <> ")", "together with", m $ fn f "x", "for a uniformly random", m $ "x" ∈ x, "to the", adversary]
+        item $ do
+            s [the, adversary, "wins the game if she outputs", m "x"]
