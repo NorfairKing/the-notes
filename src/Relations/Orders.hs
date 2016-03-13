@@ -144,6 +144,44 @@ partialOrderExamples = do
                     P.++ [(tshow a, tshow 0) | a <- [1 .. n]]
         s ["Notice that", m 0, "is actually the", greatestElement, "according to this order"]
 
+    ex $ do
+        s ["Consider the set", m $ setofs [true, false]]
+        let a = "a"
+            b = "b"
+        s [the, relation, "of all tuples", m $ tuple a b, "for", m $ a ⇒ b, "is a partial order"]
+
+        proof $ do
+            s ["We prove that", m $ "" ⇒ "", "is", reflexive <> ",", transitive, and, antisymmetric]
+            itemize $ do
+                item $ do
+                    s [m $ "" ⇒ "", "is", reflexive]
+                    newline
+                    s ["Indeed, for an arbitrary", m a <> ", ", m $ a ⇒ a, "holds by the law of excluded middle"]
+                item $ do
+                    s [m $ "" ⇒ "", "is", transitive]
+                    newline
+                    let a = "a"
+                        b = "b"
+                        c = "c"
+                    s ["Let", m a <> ",", m b, and, m c, "be propositional truth values such that", m $ a ⇒ b, and, m $ b ⇒ c, "hold"]
+                    s ["Either all three", m a <> ",", m b, and, m c, "are all three", true, "or", m c, "is", false]
+                    s ["In both cases, ", m $ a ⇒ c, "holds"]
+                item $ do
+                    s [m $ "" ⇒ "", "is", antisymmetric]
+                    newline
+                    s ["Indeed, the full relation is", m $ setofs [tuple true true, tuple false true, tuple false false]]
+                    s ["It is clearly", antisymmetric]
+
+        let f = "false"
+            t = "true"
+        hasseFig 2 $ hasseDiagram
+            [ f, t]
+            [ (f, f)
+            , (f, t)
+            , (t, t)
+            ]
+        s ["Note that this statement still holds in propositional logic if we take", m $ "" ⇔ "", "as the", equivalenceRelation, "instead of", m $ "" =: ""]
+
 powsetPosetPreorder :: Note
 powsetPosetPreorder = do
     thm $ do
