@@ -14,6 +14,7 @@ makeDefs
     , "inverse"
     , "cyclic"
     , "generator"
+    , "order"
     ]
 
 
@@ -21,4 +22,5 @@ makeThms
     [ "subgroup same identity"
     , "generated set is group"
     , "trivial subgroups"
+    , "element order divides group order"
     ]

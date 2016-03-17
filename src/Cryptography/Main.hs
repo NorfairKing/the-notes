@@ -101,6 +101,8 @@ cryptography = chapter "Cryptography" $ do
     section "Trapdoor one-way permutations" $ do
         trapdoorOneWayPermutationDefinition
         tWOPInversionGame
+        ethRootComputation
+        rSATWOPDefinition
 
 cryptographicSchemeDefinition :: Note
 cryptographicSchemeDefinition = de $ do
@@ -715,7 +717,7 @@ discreteLogarithmProblemDefinition = de $ do
     let aa = "A"
         a = "a"
         g = "g"
-    s [the, discreteLogarithm', "(" <> dL' <> ")", "problem", "for a", cyclic_, group, m $ grp_ =: grp (genby g) grpop_, "is the problem of computing, for a given", group, element, m $ aa ∈ grps_, "the exponent", m $ a ∈ ord grp_, " such that", m $ aa =: g ^ a, "holds"]
+    s [the, discreteLogarithm', "(" <> dL' <> ")", "problem", "for a", cyclic_, group, m $ grp_ =: grp (genby g) grpop_, "is the problem of computing, for a given", group, element, m $ aa ∈ grps_, "the exponent", m $ integer a, " such that", m $ aa =: g ^ a, "holds"]
 
 computationalDHProblemDefinition :: Note
 computationalDHProblemDefinition = de $ do
@@ -800,7 +802,7 @@ diffieHellmanPKEDefinition = de $ do
     s [the, diffieHellman, protocol, "can be used as a", publicKeyEncryptionScheme]
     let g = "g"
         q = "q"
-    s ["Let", m $ grp_ =: grp (genby g) grpop_, "be a", cyclic, group, "with a known order", m q, and, "let", m $ tuple enc_ dec_, "be a given secure", symmetricCryptosystem]
+    s ["Let", m $ grp_ =: grp (genby g) grpop_, "be a", cyclic, group, "with a known", order, m q, and, "let", m $ tuple enc_ dec_, "be a given secure", symmetricCryptosystem]
     s ["The following is then a", publicKeyEncryptionScheme]
     let zq = integers !: q
     itemize $ do
@@ -823,7 +825,7 @@ diffieHellmanPKEDefinition = de $ do
             s ["A", decryptionFunction]
             newline
             todo "Left as exercise?"
-    s ["Note that we implicitly use the fact every cyclic group of finite order", m q, "is isomorphic to", m zq]
+    s ["Note that we implicitly use the fact every cyclic group of", finite, order, m q, "is isomorphic to", m zq]
     refneeded "prove this in the group chapter"
 
 
@@ -874,3 +876,52 @@ tWOPInversionGame = de $ do
             s [the, challenger, "uses the", trapdoorGenerator, "to generate", m $ quadruple f d x y, "and sends the", publicKey, "(" <> m (triple x y f) <> ")", "together with", m $ fn f "x", "for a uniformly random", m $ "x" ∈ x, "to the", adversary]
         item $ do
             s [the, adversary, "wins the game if she outputs", m "x"]
+
+
+ethRootComputation :: Note
+ethRootComputation = do
+    thm $ do
+        let gid_ = "1"
+        s ["Let", m grp_, "be some", finite, group, "with neutral element", m gid_]
+        let e = "e"
+            d = "d"
+            gs = setsize grps_
+        s ["Let", m $ integer e, "be given exponent", relativelyPrime_, "to", m gs]
+        let x = "x"
+            y = "y"
+        s [the, m e <> "-th root of an", element, m $ y ∈ grps_, "namely", m $ x ∈ grps_, "satisfying", m (x ^ e =: y) <> ", can be computed according to", m $ x =: y ^ d, "where", m $ d =: ginvm (intmgrp gs) e, "is the multiplicative inverse of", m e, "modulo", m gs]
+        proof $ do
+            let k = "k"
+            s ["Define", m $ k =: ((e * d - 1) /: gs), "and observe the following"]
+            ma $
+                (pars $ x ^ e) ^ d
+                =: x ^ (e * d)
+                =: x ^ (k * gs + 1)
+                =: (pars (x ^ gs)) ^ k ** x
+                =: x
+            s ["Here we used the fact that", m $ x ^ gs, "equals", m gid_, "because the", order, "of", m x, "divides", m gs, ref elementOrderDividesGroupOrderTheoremLabel]
+    nte $ do
+        s ["No general algorithm is known for computing", m "e" <> "-th roots in a", group, "without knowing its", order]
+
+rSATWOPDefinition :: Note
+rSATWOPDefinition = de $ do
+    s [the, rSA', trapdoorOneWayPermutation, "is defined as follows"]
+    let p = "p"
+        q = "q"
+        n = "n"
+        e = "e"
+        d = "d"
+    s [the, trapdoorGenerator, "chooses two", primes, m p, and, m q, "computes", m $ n =: p * q, "and chooses", m e, "such that", m e, "is", relativelyPrime_, "to", m $ etot n]
+    s [the, publicKey, "is the pair", m $ tuple n e]
+    s ["It then computes", m $ d =: e ^ (-1) `mod` etot n]
+    s [the, trapdoor, "is", m d]
+    let z = int0mod n
+        x = mathcal "X"
+        y = mathcal "Y"
+    s ["It outputs", m $ x =: y =: z, "as the relevant", sets]
+    let f = "f"
+        g = "g"
+        x = "x"
+    s [m f, "is defined as", m $ func f z z x (x ^ e), and, m g, "is defined as", m $ func g z z x (x ^ d)]
+
+    todo "prove that this is in fact secure"

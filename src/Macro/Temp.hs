@@ -111,3 +111,11 @@ acyclic = ix "acyclic"
 -- Groups
 cyclic :: Note
 cyclic = ix "cyclic"
+
+-- * Number theory
+
+relativelyPrime_ :: Note
+relativelyPrime_ = ix "relatively prime"
+
+primes :: Note
+primes = ix "primes"

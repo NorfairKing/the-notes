@@ -4,6 +4,7 @@ import           Types
 
 import           Macro.Math
 import           Macro.MetaMacro
+import           Macro.Numbers.Macro
 import           Macro.Tuple
 
 -- * Magma
@@ -109,6 +110,19 @@ gid_ = mid_
 -- | Inverse element in a group
 ginv :: Note -> Note
 ginv = (^ "-1")
+
+-- | Inverse element in a given group
+ginvm :: Note -> Note -> Note
+ginvm g n = "" !: g <> n ^ "-1"
+
+
+-- | Additive group of integers modulo n
+intagrp :: Note -> Note
+intagrp n = grp (intmod n) $ "" + ""
+
+-- | Multiplicative group of integers modulo n
+intmgrp :: Note -> Note
+intmgrp n = grp (int0mod n) cdot_
 
 -- * Generated set
 

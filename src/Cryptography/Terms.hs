@@ -93,5 +93,7 @@ makeDefs [
     , "TWOP"
     , "trapdoor generator"
     , "trapdoor"
+
+    , "RSA"
     ]
 
