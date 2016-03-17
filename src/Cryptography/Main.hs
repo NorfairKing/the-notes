@@ -103,6 +103,18 @@ cryptography = chapter "Cryptography" $ do
         tWOPInversionGame
         ethRootComputation
         rSATWOPDefinition
+        tWOPAsPKE
+
+    section "Digital signatures" $ do
+        digitalSignatureDefinition
+        signatureForgeryGameDefinition
+        digitalSignatureSecurity
+
+    section "Hash functions" $ do
+        hashFunctionDefinition
+        collisionFindingGameDefinition
+        collisionResistantDefinition
+
 
 cryptographicSchemeDefinition :: Note
 cryptographicSchemeDefinition = de $ do
@@ -925,3 +937,72 @@ rSATWOPDefinition = de $ do
     s [m f, "is defined as", m $ func f z z x (x ^ e), and, m g, "is defined as", m $ func g z z x (x ^ d)]
 
     todo "prove that this is in fact secure"
+
+
+tWOPAsPKE :: Note
+tWOPAsPKE = de $ do
+    s ["Given a", trapdoorOneWayPermutation <> ", we can construct a", publicKeyEncryptionScheme, "as follows"]
+    s ["Let the domain of the", trapdoorOneWayPermutation, "be the", messageSpace]
+    let f_ = "F"
+        d_ = "D"
+    s ["Let encryption be the application of the", trapdoorOneWayPermutation <> ", where the", publicKey, "is the description of the algorithm", m f_, "and the", secretKey, "the description of the algorithm", m d_]
+
+
+digitalSignatureDefinition :: Note
+digitalSignatureDefinition = de $ do
+    lab digitalSignatureSchemeDefinitionLabel
+    lab dSSDefinitionLabel
+    lab signingKeyDefinitionLabel
+    lab signatureVerificationKeyDefinitionLabel
+    lab signingAlgorithmDefinitionLabel
+    lab signatureDefinitionLabel
+    lab signatureVerificationAlgorithmDefinitionLabel
+    s ["A", digitalSignatureScheme', "consists of three algorithms as follows"]
+    itemize $ do
+        item $ s ["A probabillistic", keyGenerator', "algorithm which generates a", keyPair <> ", consisting of a", signingKey', "(" <> secretKey <> ")", "and a", signatureVerificationKey', "(" <> publicKey <> ")"]
+        item $ s ["A probabillistic", signingAlgorithm', "that takes as inputs a", signingKey, anda, message, "and computes the", signature', "for the", message]
+        item $ s ["A deterministic", signatureVerificationAlgorithm', "that takes as inputs a", signatureVerificationKey <> ", a", message, anda, signature, "and outputs a bit that can be interpreted as", dquoted "accept", or, dquoted "reject"]
+    s ["For every", keyPair <> ", the", signatureVerificationAlgorithm, "must accept the signature computed by the", signingAlgorithm]
+
+signatureForgeryGameDefinition :: Note
+signatureForgeryGameDefinition = de $ do
+    lab signatureForgeryGameDefinitionLabel
+    s [the, signatureForgeryGame', "between an", adversary, anda, challenger, "is played as follows"]
+    enumerate $ do
+        item $ s [the, challenger, "uses the", keyGenerator, "to generate a", keyPair, "and sends the", signatureVerificationKey, "to the", adversary]
+        item $ s [the, adversary, "can ask arbitrary", messages, "to be signed by the", challenger]
+        item $ s [the, adversary, "chooses a", message, anda, signature, "and wins the game if the", signature, "is a valid", signature, "for the", message, "and the", message, "was not queried yet"]
+
+digitalSignatureSecurity :: Note
+digitalSignatureSecurity = de $ do
+    s ["A", digitalSignatureScheme, "is said to be", dquoted "secure against existential forgery under a chosen-message attack", "if no feasible", adversary, "can win the", signatureForgeryGame, "with a non-negligible", probability]
+
+
+hashFunctionDefinition :: Note
+hashFunctionDefinition = de $ do
+    lab hashFunctionDefinitionLabel
+    let d = "D"
+        r = "R"
+    s ["A", hashFunction', "is a", function, m $ fun hshf_ d r, "where", m $ setsize d, "is (much) larger than", m $ setsize r]
+    s ["Elements of", m d, "are called", hashes']
+    let k = "k"
+    s ["Typically", m $ d =: bitss "*", and, m $ r =: bitss k, "for some suitable", m $ natural k]
+
+collisionFindingGameDefinition :: Note
+collisionFindingGameDefinition = de $ do
+    lab collisionFindingGameDefinitionLabel
+    s ["Let", m hshf_, "be a", hashFunction]
+    s [the, collisionFindingGame', "between an", adversary, anda, challenger, "is played as follows"]
+    enumerate $ do
+        let x = "x"
+            x' = "x'"
+        item $ s [the, adversary, "can obtain the", hash, m $ hsh x, "for any argument", m x, "of their choice"]
+        item $ s [the, adversary, "outputs a pair of", messages, m $ tuple x x', "and wins the game if they are different but their", hashes, "are the same"]
+
+collisionResistantDefinition :: Note
+collisionResistantDefinition = de $ do
+    lab collisionResistantDefinitionLabel
+    let c = "c"
+        cc = "C"
+        hc = hshf_ !: c
+    s ["A parametrized family", m $ setcmpr hc (c ∈ cc), "of", hashFunctions, "is called", collisionResistant, "if no feasible", adversary, "can win the", collisionFindingGame, "with a non-negligible", probability, "for a", hashFunction, m hc, "(known to the", adversary <> ") chosen uniformly at random from the family of", hashFunction]

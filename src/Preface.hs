@@ -9,7 +9,7 @@ myPreface = do
     s ["There are many like it but these ones are mine"]
     newline
 
-    s ["If you find any errors in these notes, the author kindly requests you to report them"]
+    s ["If you find any errors in these notes, I kindly requests you to report them"]
     newline
 
     s ["If there is any part of the defined notation that you do not like, you can request a copy with a modified notation"]
