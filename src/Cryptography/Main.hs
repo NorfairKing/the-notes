@@ -41,6 +41,7 @@ import           Sets.Basics.Terms
 
 import           Cryptography.Macro
 import           Cryptography.OTP.Impl
+import           Cryptography.SystemAlgebra
 import           Cryptography.Terms
 
 cryptography :: Note
@@ -115,6 +116,7 @@ cryptography = chapter "Cryptography" $ do
         collisionFindingGameDefinition
         collisionResistantDefinition
 
+    systemAlgebraS
 
 cryptographicSchemeDefinition :: Note
 cryptographicSchemeDefinition = de $ do
