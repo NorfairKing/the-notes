@@ -8,6 +8,7 @@ makeDefs
     , "system"
     , "label"
     , "interface label set"
+    , "interface"
     , "system merging operation"
     , "interface connection operation"
     ]

@@ -2,6 +2,7 @@ module Cryptography.SystemAlgebra.Macro where
 
 import           Types
 
+import           Macro.Arrows
 import           Macro.Math
 import           Macro.MetaMacro
 
@@ -42,3 +43,18 @@ ico s i1 i2 = s ^ (i1 <> "-" <> i2)
 -- | System with empty interface label set
 emptysys :: Note
 emptysys = comm0 "blacksquare"
+
+-- | Merging interfaces
+mio :: Note -- ^ System
+    -> Note -- ^ Interface set
+    -> Note -- ^ Resulting interface
+    -> Note
+mio s l j = s ^ (l <> rightarrow <> j)
+
+
+-- | Merging interfaces inverse operation
+mioi :: Note -- ^ System
+     -> Note -- ^ Interface set
+     -> Note -- ^ Resulting interface
+     -> Note
+mioi s j l = s ^ (sqbrac $ j <> rightarrow <> l)
