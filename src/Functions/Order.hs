@@ -88,6 +88,8 @@ approximationS = subsection "Approximations" $ do
     approximationExamples
     monotoneEquivalences
     approximationExists
+    mostPreciseApproximationDefinition
+    leastFixedPointApproximationTheorem
 
 
 monotonicDefinition :: Note
@@ -668,6 +670,8 @@ galoisConnectionExistenceGamma = thm $ do
 
 approximationDefinition :: Note
 approximationDefinition = de $ do
+    lab approximatesDefinitionLabel
+    lab approximationDefinitionLabel
     let a = alpha
         g = gamma
         x = "X"
@@ -689,7 +693,8 @@ approximationDefinition = de $ do
 approximationExamples :: Note
 approximationExamples = do
     ex $ do
-        s ["In the following diagram, the blue arrow in the", set, m "A", approximates, "the blue arrow in the", set, m "B"]
+        s ["In the following diagram, the function represented by the blue arrows in the", set, m "A", approximates, "the blue arrow in the", set, m "B"]
+        s ["The green arrows represent", m alpha]
         let c1 = "blue"
             c2 = "darkgreen"
             (x, fx) = ("x", "f(x)")
@@ -704,7 +709,7 @@ approximationExamples = do
             [(c1, funf), (c1, fung), (c2, funa)]
 
 monotoneEquivalences :: Note
-monotoneEquivalences = do
+monotoneEquivalences = thm $ do
     let a = alpha
         g = gamma
         x = "X"
@@ -744,13 +749,85 @@ approximationExists = thm $ do
         ry = partord_ !: y
     s ["Let", m $ fun a x y, and, m $ fun g y x, "form a", galoisConnection]
     ma $ gcon a g (lat x rx) (lat y ry)
-    let f = "f"
-    s ["Let", m $ fun f x x, "be a", monotone, function]
+    let f_ = "f"
+        f = fn f_
+    s ["Let", m $ fun f_ x x, "be a", monotone, function]
+    s ["There always exists an", approximation, "of", m f_]
 
     proof $ do
         s ["Because", m x, "is a", completeLattice, "it must contain its", supremum]
-        let h = "h"
+        let h_ = "h"
+            h = fn h_
             y_ = "y"
-        s [the, function, m $ func h y y y_ (supof x), "therefore", approximates, m f]
+        s [the, function, m $ func h_ y y y_ (supof x), "therefore", approximates, m f_]
+        let p = "p"
+            q = "q"
+        let ao = fn a
+            (<<) = inposet ry
+        s ["Indeed, let", m p, and, m q, "be arbitrary", elements, "of", m x, and, m y, "respectively such that", m $ ao p << y]
+        s [m $ h y, "is", m $ supof x, "by definition, so ", m $ ao (f x) << h y, "holds by construction"]
+        s [m h_, "is called the", leastPreciseApproximation', "of", m f_]
+
+mostPreciseApproximationDefinition :: Note
+mostPreciseApproximationDefinition = de $ do
+    lab mostPreciseApproximationDefinitionLabel
+    let a = alpha
+        g = gamma
+        x = "X"
+        rx = partord_ !: x
+        y = "Y"
+        ry = partord_ !: y
+    s ["Let", m $ fun a x y, and, m $ fun g y x, "form a", galoisConnection]
+    ma $ gcon a g (lat x rx) (lat y ry)
+    let f_ = "f"
+        f = fn f_
+    s ["Let", m $ fun f_ x x, "be a", monotone, function]
+    let h_ = "h"
+        h = fn h_
+        z = "z"
+    s [m $ func h_ y y z $ h z =: fn a (f (fn g z)), "is called the", mostPreciseApproximation', "of", m f_]
+
+
+leastFixedPointApproximationTheorem :: Note
+leastFixedPointApproximationTheorem = thm $ do
+    term "Least fixed point approximation"
+    newline
+    let a = alpha
+        g = gamma
+        x = "X"
+        rx = partord_ !: x
+        y = "Y"
+        ry = partord_ !: y
+    s ["Let", m $ fun a x y, and, m $ fun g y x, "form a", galoisConnection]
+    ma $ gcon a g (lat x rx) (lat y ry)
+    let f_ = "F"
+        f = fn f_
+        f'_ = "F" <> comm0 "sharp"
+        f' = fn f'_
+    s ["Let", m $ fun f_ x x, and, m $ fun f'_ y y, "be", monotone, functions, "such that", m f'_, approximates, m f_]
+    let ao = fn a
+        (<<) = inposet ry
+    ma $ ao (f x) << f' y
+
+    s ["The following then holds about the", leastFixedPoints, "of", m f_, and, m f'_]
+    ma $ ao (lfp f_) << lfp f'_
+
+    toprove
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
