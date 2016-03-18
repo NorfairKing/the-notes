@@ -85,11 +85,13 @@ galoisConnectionS = subsection "Galois connections" $ do
 approximationS :: Note
 approximationS = subsection "Approximations" $ do
     approximationDefinition
+    approximationEquivalentDefinition
     approximationExamples
     monotoneEquivalences
     approximationExists
     mostPreciseApproximationDefinition
     leastFixedPointApproximationTheorem
+    leastFixedPointApproximationTheoremWithoutGalois
 
 
 monotonicDefinition :: Note
@@ -690,6 +692,31 @@ approximationDefinition = de $ do
     ma $ fa (x_ ∈ x) $ fa (y_ ∈ y) $ inposet ry (fn a x_) y_ ⇒ inposet ry (fn a (fn f x_)) (fn h y_)
 
 
+approximationEquivalentDefinition :: Note
+approximationEquivalentDefinition = thm $ do
+    s ["An", approximation, "of a", function, "can equivalently be defined as follows"]
+    newline
+
+    let g = gamma
+        x = "X"
+        rx = partord_ !: x
+        y = "Y"
+        ry = partord_ !: y
+    s ["Let", m $ fun g y x, "be a monotone", function, "on the posets", m $ relposet x rx, and, m $ relposet y ry]
+    let f_ = "F"
+        f = fn f_
+        f'_ = "F" <> comm0 "sharp"
+        f' = fn f'_
+    s ["Let", m $ fun f_ x x, and, m $ fun f'_ y y, "be", monotone, functions]
+    s ["We say that", m f'_, approximates, m f_, "if the following holds"]
+    let go = fn g
+        (<<) = inposet rx
+        z = "z"
+    ma $ fa (z ∈ y) $ f (go z) << go (f' z)
+
+    toprove_ "prove that these definitions are in fact equivalent"
+
+
 approximationExamples :: Note
 approximationExamples = do
     ex $ do
@@ -811,6 +838,32 @@ leastFixedPointApproximationTheorem = thm $ do
 
     s ["The following then holds about the", leastFixedPoints, "of", m f_, and, m f'_]
     ma $ ao (lfp f_) << lfp f'_
+
+    toprove
+
+
+leastFixedPointApproximationTheoremWithoutGalois :: Note
+leastFixedPointApproximationTheoremWithoutGalois = thm $ do
+    term "Least fixed point approximation without a Galois connection"
+    newline
+    let g = gamma
+        x = "X"
+        rx = partord_ !: x
+        y = "Y"
+        ry = partord_ !: y
+    s ["Let", m $ fun g y x, "be a monotone", function, "on the posets", m $ relposet x rx, and, m $ relposet y ry]
+    let f_ = "F"
+        f = fn f_
+        f'_ = "F" <> comm0 "sharp"
+        f' = fn f'_
+    s ["Let", m $ fun f_ x x, and, m $ fun f'_ y y, "be", monotone, functions, "such that", m f'_, approximates, m f_]
+    let go = fn g
+        (<<) = inposet rx
+        z = "z"
+    ma $ fa (z ∈ y) $ f (go z) << go (f' z)
+
+    s ["The following then holds about the", leastFixedPoints, "of", m f_, and, m f'_]
+    ma $ lfp f_ << go (lfp (f'_))
 
     toprove
 
