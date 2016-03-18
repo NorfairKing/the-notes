@@ -370,9 +370,9 @@ kleenesFixedPointTheorem = do
 latticesOverFunctions :: Note
 latticesOverFunctions = thm $ do
     lab latticesOverFunctionsTheoremLabel
-    s ["Let ", m lat_, " be a ", lattice, and, m y, " a set"]
-    s [m $ lat (funt x y) partord_, " is a ", lattice, " where ", m partord_, " is defined as follows"]
-    ma $ f ⊆: g ⇔ fa (a ∈ dom f) (f -: a ⊆: g -: a)
+    s ["Let ", m $ lat y partord_, " be a ", lattice, and, m x, " a set"]
+    s [m $ lat (funt x y) po, " is a ", lattice, " where ", m po, " is defined as follows"]
+    ma $ f << g ⇔ fa (a ∈ dom f) (f -: a ⊆: g -: a)
     s ["This also implies the following"]
     ma $ (pars $ f ⊔ g) -: a =: (f -: a ⊔  g -: a)
     ma $ (pars $ f ⊓ g) -: a =: (f -: a ⊓  g -: a)
@@ -384,6 +384,8 @@ latticesOverFunctions = thm $ do
     a = "a"
     x = latset_
     y = "Y"
+    po = partord_ !: (x <> rightarrow <> y)
+    (<<) = inposet po
 
 
 completelyMeetPreservingDefinition :: Note
