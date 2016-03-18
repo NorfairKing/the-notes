@@ -34,6 +34,7 @@ import           LinearAlgebra.Main
 import           Logic.Main
 import           MachineLearning.Main
 import           Probability.Main
+import           ProgramAnalysis.Main
 import           Relations.Main
 import           Rings.Main
 import           Sets.Main
@@ -159,6 +160,7 @@ allNotes = do
     computability
     probability
     statisticsC
+    programAnalysisC
     cryptography
     machineLearning
     dataMining
