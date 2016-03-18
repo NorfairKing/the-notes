@@ -78,6 +78,8 @@ cryptography = chapter "Cryptography" $ do
             cBCDefinition
             counterDefinition
 
+        deterministicCryptoSystemInsecure
+
     section "Message Authentication Codes" $ do
         messageAuthenticationCodeDefinition
         messageAuthenticationCodeSecurityDefinition
@@ -659,6 +661,17 @@ counterDefinition = de $ do
     s ["Note that", m $ inv f_, "is not needed for decryption"]
 
     tikzFig "CTR mode" ["scale=1.5"] $ raw $ [litFile|src/Cryptography/CTRTikZ.tex|]
+
+
+deterministicCryptoSystemInsecure :: Note
+deterministicCryptoSystemInsecure = thm $ do
+    s ["No", cipher, "could ever be", iNDCPASecure, "as is"]
+
+    proof $ do
+        s ["Let", m $ tuple enc_ dec_, "be a", cipher]
+        s [the, attacker, "chooses two arbitrary", messages, "and submits them to receive two", ciphertexts]
+        s [the, attacker, "then submits those same", messages, "as part of the challenge"]
+        s [the, attacker, "then only needs to compare the", ciphertext, "he got to the", ciphertexts, "he got earlier to win the game with", advantage, m 1]
 
 
 
