@@ -34,6 +34,9 @@ makeDefs [
     , "IND-CPA"
     , "IND-CPA secure"
 
+    , "non-adaptive IND-CPA"
+    , "non-adaptively IND-CPA secure"
+
     , "indistinguishability chosen ciphertext attack"
     , "IND-CCA"
     , "IND-CCA secure"

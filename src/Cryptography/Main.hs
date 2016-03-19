@@ -32,6 +32,7 @@ import           Functions.Inverse.Terms
 import           Functions.Jections.Terms
 import           Groups.Macro
 import           Groups.Terms
+import           LinearAlgebra.VectorSpaces.Terms
 import           Logic.FirstOrderLogic.Macro
 import           Probability.Independence.Terms
 import           Probability.ProbabilityMeasure.Macro
@@ -61,6 +62,10 @@ cryptography = chapter "Cryptography" $ do
         subsection "IND-CPA" $ do
             indcpaDefinition
             indcpaSecurityDefinition
+            nonAdaptiveINDCPAGame
+            nonAdaptiveINDCPASecurity
+            nonAdaptiveINDCPAStrictlyWeaker
+            deterministicCryptoSystemInsecure
 
         subsection "IND-CCA" $ do
             indccaDefinition
@@ -78,7 +83,8 @@ cryptography = chapter "Cryptography" $ do
             cBCDefinition
             counterDefinition
 
-        deterministicCryptoSystemInsecure
+            xorBlockCipher
+
 
     section "Message Authentication Codes" $ do
         messageAuthenticationCodeDefinition
@@ -277,6 +283,35 @@ indcpaSecurityDefinition = de $ do
     lab iNDCPASecureDefinitionLabel
     let t = "t"
     s ["A", symmetricCryptosystem, "is called", iNDCPASecure', "if no feasible", adversary, "has a non-negligible", advantage, "in a", m t <> "-message", indistinguishabilityChosenPlaintextAttack, "game", "where", m t, "is only bounded by the adversary's running time"]
+
+nonAdaptiveINDCPAGame :: Note
+nonAdaptiveINDCPAGame = de $ do
+    lab nonAdaptiveINDCPADefinitionLabel
+    let mp = tuple ("m" !: 1) ("m" !: 2)
+    s ["A", nonAdaptiveINDCPA', "game between a", challenger, and, adversary, "is played as follows for a fixed message pair", m mp]
+    let b = "b"
+    let b' = "b'"
+    enumerate $ do
+        let k = "k"
+        item $ s [the, challenger, "chooses a", secretKey, m k, "uniformly at random"]
+        let c = "c"
+            r = "r"
+        item $ s [the, challenger, "chooses a uniformly random bit", m b <> ", computes the encryption", m $ c =: enc ("m" !: b) k r, "for a fresh and", independent, "randomness value", m $ r ∈ rsp_, "and sends", m c, "to the", adversary]
+        item $ s [the, adversary, "can choose messages and receive their encryptions"]
+        item $ s [the, adversary, "guesses", m b, "by issuing a guess", m b']
+    s [the, advantage, "of the adversary in this game is defined as", m $ 2 * prob (b' =: b) - 1 /: 2]
+
+nonAdaptiveINDCPASecurity :: Note
+nonAdaptiveINDCPASecurity = de $ do
+    lab nonAdaptivelyINDCPASecureDefinitionLabel
+    s ["A", symmetricCryptosystem, "is called", nonAdaptivelyINDCPASecure', "if for every fixed pair of messages of the same length, no feasible adversary has a non-negligible", advantage, "in the", nonAdaptiveINDCPA, "game"]
+
+nonAdaptiveINDCPAStrictlyWeaker :: Note
+nonAdaptiveINDCPAStrictlyWeaker = thm $ do
+    s [nonAdaptiveINDCPA, "security is strictly weaker than regular", iNDCPA, "security"]
+    s ["That is, every", iNDCPASecure, symmetricCryptosystem, "is also", nonAdaptivelyINDCPASecure, "and if there exists a", nonAdaptivelyINDCPASecure, symmetricCryptosystem, "then there is one such system that is not", iNDCPASecure]
+
+    toprove
 
 indccaDefinition :: Note
 indccaDefinition = de $ do
@@ -596,7 +631,7 @@ cBCDefinition = de $ do
             c1 = c !: 1
             cl = c !: l
         item $ do
-            "Encryption:"
+            "Encryption: "
             let iv = "IV"
             s ["First a so-called", initialisationVector', m c0, "(also written as", m iv <> ")", "is chosen uniformly at random"]
             ma $ enc mesg k_ c0
@@ -673,6 +708,59 @@ deterministicCryptoSystemInsecure = thm $ do
         s [the, attacker, "chooses two arbitrary", messages, "and submits them to receive two", ciphertexts]
         s [the, attacker, "then submits those same", messages, "as part of the challenge"]
         s [the, attacker, "then only needs to compare the", ciphertext, "he got to the", ciphertexts, "he got earlier to win the game with", advantage, m 1]
+
+
+xorBlockCipher :: Note
+xorBlockCipher = do
+    thm $ do
+        let f_ = "F"
+            n = "n"
+            k = "k"
+        s ["Let", m $ fun2 f_ (bitss n) (bitss k) (bitss n), "be a", blockCipher]
+        s ["If we know that", m f_, "can be implemented with only XOR gates and we have an encryption oracle, we can decrypt any", message]
+
+        proof $ do
+            let mesg = "m"
+                c = "c"
+                k = "k"
+            s ["Let", m mesg, "be an arbitrary", message, "and let", m c, "be its encryption with a", secretKey, m k]
+            s ["Because every XOR gate corresponds to summing to bits, every bit of", m c, "can be seen as a linear combination of the", message, "bits, the", key, "bits and a constant"]
+            let i = "i"
+                ci = c !: i
+                q = "q"
+                qi = q !: i
+                j = "j"
+                kj = k !: j
+                mj = mesg !: j
+                aij = "a" !: (i <> j)
+                bij = "b" !: (i <> j)
+            ma $ ci =: sumcmpr (j =: 1) n (aij * mj) + sumcmpr (j =: 1) k (bij * kj) + qi
+            s ["In matrix notation this looks as follows"]
+            let a = "A"
+                b = "B"
+            ma $ c =: a * mesg + b * k + q
+            s ["Here", m a, "is an", m $ n × n, matrix <> ",", m b, "is an", m $ n × k, matrix, and, m q, "is a", vector, "of length", m n]
+            newline
+
+            let u = "u"
+            s ["When we ask for the encryption of the zero message, we get", m $ u =: b * k + q]
+            s ["Now we only need to find", m a]
+            let mi = mesg !: i
+                gi = "g" !: i
+            s ["We ask for the encryptions", m gi, "of the", messages, m mi, "that are all zero except in place", m i, "to find the collumns of", m a]
+            ma $ gi - u =: (pars $ a * mi + b * k + q) - u =: a * mi
+            s [m $ a * mi, "is precicely the", m i <> "-th column of", m a]
+            s ["We now know", m a, "and", m $ b * k + q]
+            s ["Because", m f_, "is a", permutation, "for every", m k <> ",", m f_, "must be", invertible]
+            s ["We can therefore solve the linear system", m $ a * mesg =: c - u, "to find", m mesg, "from", m c]
+
+    thm $ do
+        let f_ = "F"
+            n = "n"
+            k = "k"
+        s ["Let", m $ fun2 f_ (bitss n) (bitss k) (bitss n), "be a", blockCipher]
+        s ["If we know that", m f_, "is operated in", cipherBlockChaining, "mode, can be implemented with only XOR gates and we have an encryption oracle, we can decrypt any", message]
+        toprove
 
 
 

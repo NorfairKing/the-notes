@@ -108,6 +108,9 @@ directed = ix "directed"
 acyclic :: Note
 acyclic = ix "acyclic"
 
+permutation :: Note
+permutation = ix "permutation"
+
 -- Groups
 cyclic :: Note
 cyclic = ix "cyclic"
