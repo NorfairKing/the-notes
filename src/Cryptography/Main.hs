@@ -86,6 +86,7 @@ cryptography = chapter "Cryptography" $ do
 
     section "Key agreement" $ do
         diffieHellmanProtocolDefinition
+        diffieHellmanManInTheMiddleAttack
 
     section "Computational Problems" $ do
         discreteLogarithmProblemDefinition
@@ -736,6 +737,13 @@ diffieHellmanProtocolDefinition = de $ do
 
     todo "generalisation to arbitrary cyclic groups"
 
+
+diffieHellmanManInTheMiddleAttack :: Note
+diffieHellmanManInTheMiddleAttack = nte $ do
+    s ["If the insecure channel used in the", diffieHellman, protocol, "is not authenticated, this protocol can be attacked trivially"]
+
+    s ["If an", attacker, "can intercept and replace", messages, "they can set themselves up as an intermediate node and read/change any message that passes them"]
+    s ["They do this by intercepting both halfkeys and sending back their own", halfkey, "to both to complete the", protocol]
 
 discreteLogarithmProblemDefinition :: Note
 discreteLogarithmProblemDefinition = de $ do
