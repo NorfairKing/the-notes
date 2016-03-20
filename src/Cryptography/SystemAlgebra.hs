@@ -19,8 +19,12 @@ systemAlgebraS = section "System Algebra" $ do
     systemAlgebraExamples
     mergingInterfaces
     mergingInterfacesExamples
+    twoSystemCompositionDefinition
+    compositionOfTwoSystemsIsATwoSystem
+    twoSystemCompositionAssociative
     parallelCompositionDefinition
     parallelCompositionExamples
+    parallelCompositionOfTwoSystemsIsTwoSystem
 
 
 abstractSystemAlgebraDefinition :: Note
@@ -64,7 +68,7 @@ abstractSystemAlgebraDefinition = de $ do
     ma $ fa (cs [a, b] ∈ syss_) $ fa (cs [l1, l2] ∈ labs_) $ ico a l1 l2 `sm` b =: ico (pars $ a `sm` b) l1 l2
 
     let l = "L"
-    s ["A system", m a, "with", m $ la a =: l, "is called an", m l <> "-" <> system']
+    s ["A system", m a, "with", m $ la a =: l, "is called an", m l <> "-" <> system', "or also a", m (setsize l) <> "-" <> system', "if the names of the labels aren't considered"]
 
 
 abstractSystemAlgebraDefinitionNote :: Note
@@ -95,7 +99,6 @@ systemAlgebraExamples = do
             s2 = Connected a b s1
         systemsFig 3 [s1, s2] $ s ["The connection of the interfaces", m "a", and, m "b", "in the abstract", system, m "S"]
 
-
     ex $ do
         s ["Electronic components that can be connected to an electronic circuit forms a", systemAlgebra <> ", where the", systemMergingOperation, "means to place components on a board together and the", interfaceConnectionOperation, "means to place a wire between the interfaces"]
 
@@ -124,6 +127,32 @@ mergingInterfacesExamples = do
         systemsFig 5 [sys, MergeLabels [a, b, c] l sys] $ do
             s ["The system on the right represents the merger of the interfaces", m "a" <> ", " <> m "b", and, m "c", "into", m "l", "from the system on the left"]
 
+twoSystemCompositionDefinition :: Note
+twoSystemCompositionDefinition = de $ do
+    let s1 = "S" !: 1
+        s2 = "S" !: 2
+        l = "l"
+        l1 = l !: 1
+        l2 = l !: 2
+    s [the, "(serial)", composition', "of two", m 2 <> "-" <> systems, "(with disjoint", interfaceLabelSets <> ")", "on two", labels, m l1, and, m l2, "where", m l1, "is in the", interfaceLabelSet, "of", m s1, and, m l2, "is in the", interfaceLabelSet, "of", m s2, "is defined as the merger of", m s1, and, m s2, "followed by the connection of", m l1, and, m l2, "in the result"]
+
+compositionOfTwoSystemsIsATwoSystem :: Note
+compositionOfTwoSystemsIsATwoSystem = do
+    thm $ do
+        s [the, composition, "of two", m 2 <> "-" <> systems, "is again a", m 2 <> "-" <> system]
+        noproof
+    ex $ do
+        let (a, b, c, d) = ("a", "b", "c", "d")
+        let s1 = System "A" [a, b]
+            s2 = System "B" [c, d]
+            sys = Connected b c $ Merge s1 s2
+        systemFig 3 sys $ s ["The composition of two", m 2 <> "-" <> systems]
+
+twoSystemCompositionAssociative :: Note
+twoSystemCompositionAssociative = thm $ do
+    s [the, composition, "of", m 2 <> "-" <> systems, "is", associative]
+    toprove
+
 parallelCompositionDefinition :: Note
 parallelCompositionDefinition = de $ do
     lab parallelCompositionDefinitionLabel
@@ -141,14 +170,26 @@ parallelCompositionDefinition = de $ do
 
 parallelCompositionExamples :: Note
 parallelCompositionExamples = do
-    let (a, b) = ("a", "b")
     ex $ do
-        let s1 = System "A" [a, b]
-            s2 = System "B" [a, b]
+        let (a, b, c) = ("a", "b", "c")
+        let s1 = System "A" [a, b, c]
+            s2 = System "B" [a, b, c]
             sys = ParComp [s1, s2]
         systemFig 5 sys $ s ["The parallel composition of two abstract", systems]
 
 
+parallelCompositionOfTwoSystemsIsTwoSystem :: Note
+parallelCompositionOfTwoSystemsIsTwoSystem = do
+    thm $ do
+        s [the, parallelComposition, "of", m 2 <> "-" <> systems, "is a", m 2 <> "-" <> system]
+        noproof
+    ex $ do
+        let (a, b) = ("a", "b")
+        let s1 = System "A" [a, b]
+            s2 = System "B" [a, b]
+            s3 = System "C" [a, b]
+            sys = ParComp [s1, s2, s3]
+        systemFig 6 sys $ s ["The parallel composition of three 2-", systems]
 
 
 

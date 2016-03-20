@@ -12,5 +12,6 @@ makeDefs
     , "system merging operation"
     , "interface connection operation"
     , "interface merging"
+    , "composition"
     , "parallel composition"
     ]
