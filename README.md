@@ -24,11 +24,12 @@ You may need to `ignore-reference-errors`.
 ## Contribution
 Contributions to these notes are very welcome in the form of pull requests or patches via email.
 
-`IMPORTANT`, before contributing, please install the `bin/pre_commit_test.sh` hook into `.git/hooks/pre-commit`. You can do this by running `spark deploy hooks.sus` or by manually copying the file.
+`IMPORTANT`, before contributing, please install the `bin/pre_commit_test.sh` hook into `.git/hooks/pre-commit`. You can do this by running `spark deploy hooks.sus` or by manually copying the files.
 
 ### Dependencies
 To make contributions, you will need:
 
+- `stack`
 - `ghc`
 - `cabal`
 - `haddock`
