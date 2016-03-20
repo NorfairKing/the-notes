@@ -2,11 +2,14 @@ module Cryptography.SystemAlgebra where
 
 import           Notes
 
+import           Cryptography.Macro
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
 import           Functions.Basics.Terms
 import           Functions.BinaryOperation.Terms
 import           Logic.FirstOrderLogic.Macro
+import           Probability.RandomVariable.Terms
+import           Relations.Domain.Terms
 import           Sets.Basics.Terms
 
 import           Cryptography.SystemAlgebra.Graph
@@ -42,6 +45,11 @@ systemAlgebraS = section "System Algebra" $ do
     subsection "Discrete Single-Interface Systems" $ do
         subsubsection "(X,Y)-Systems" $ do
             xySystemsDefinition
+            ySourceDefinition
+            beaconDefinition
+            bitStringBeaconDefinition
+            uniformBitstringBeaconDefinition
+            uniformRandomFunctionSystem
 
 
 abstractSystemAlgebraDefinition :: Note
@@ -259,6 +267,45 @@ xySystemsDefinition = de $ do
         f_ i = f !: i
         x_ i = "x" !: i
         y_ i = "y" !: i
-    s ["A", system, "that computes a", function, m $ fun f x y, "for every new input, i.e.,", m $ y_ i =: fn (f_ i) (x_ i) <> ",is called an", xyS x y]
+    s ["A", system, "that computes a", function, m $ fun f x y, "for every new input, i.e.,", m $ y_ i =: fn (f_ i) (x_ i) <> ",is called an", m (tuple x y) <> "-" <> system']
     let r = "R"
     s ["More precicely, an", xyS x y, m r, "is a", nS 1, "that takes inputs from a", countable, set, m x, "and (probabillistically) generates an output from a", countable, set, m y, "that possibly depends on an internal state of the", system]
+
+    todo "define it more formaly with state space and transitions etc"
+
+
+ySourceDefinition :: Note
+ySourceDefinition = de $ do
+    lab sourceDefinitionLabel
+    let y = mathcal "Y"
+    s ["An", m y <> "-" <> source', system, "is a", nS 1, "that only takes trigger inputs (with a unary alphabet) and (probabillistically) produces, for each trigger input, an output in", m y, "based on previous output"]
+
+
+beaconDefinition :: Note
+beaconDefinition = de $ do
+    lab beaconDefinitionLabel
+    s ["A memoryless", source <> ", outputting independent uniform", randomVariables, "is called a", beacon']
+
+
+bitStringBeaconDefinition :: Note
+bitStringBeaconDefinition = de $ do
+    let n = "n"
+    s ["A", beacon, "with domain", m $ bitss n, "is denoted as", m $ bitsbea n]
+
+uniformBitstringBeaconDefinition :: Note
+uniformBitstringBeaconDefinition = de $ do
+    let n = "n"
+    s ["A", beacon, "with domain", m $ bitss n, "that outputs a uniform random", m n <> "-bit string", "is denoted as", m $ ubitsbea n]
+
+uniformRandomFunctionSystem :: Note
+uniformRandomFunctionSystem = de $ do
+    lab uniformRandomFunctionDefinitionLabel
+    lab uRFDefinitionLabel
+    let x = mathcal "X"
+        y = mathcal "Y"
+    s ["A", uniformRandomFunction', "(" <> uRF' <> ")", "from some", domain, m x, "to some", finite, range, m y, "is a memoryless", nS 1, "which, for every new input, replies with a uniformly random value, but replies consistently if a previously given input is repeated"]
+    let m_ = "m"
+        n_ = "n"
+    s ["Typically we consider", m $ x =: bitss m_, and, m $ y =: bitss n_, "and denote such a", uRF, "as", m $ urf m_ n_]
+
+

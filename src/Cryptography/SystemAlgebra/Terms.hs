@@ -18,6 +18,10 @@ makeDefs
     , "resource"
     , "converter system"
     , "converter"
+    , "source"
+    , "beacon"
+    , "uniform random function"
+    , "URF"
     ]
 
 nS :: Note -> Note
@@ -28,3 +32,6 @@ nSs n = m n <> "-" <> systems
 
 xyS :: Note -> Note -> Note
 xyS x y = m (tuple x y) <> "-" <> system
+
+yS :: Note -> Note
+yS y = m y <> "-" <> source

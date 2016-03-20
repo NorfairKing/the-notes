@@ -5,6 +5,7 @@ import           Types
 import           Macro.Arrows
 import           Macro.Math
 import           Macro.MetaMacro
+import           Macro.Text
 
 import           Functions.Application.Macro
 
@@ -72,3 +73,16 @@ conv_ :: Note -- ^ Converter
       -> Note -- ^ Resource
       -> Note
 conv_ = (<>)
+
+
+-- | Bitstring beacon
+bitsbea :: Note -> Note
+bitsbea n = textbf "B" !: n
+
+-- | Uniform bitstring beacon
+ubitsbea :: Note -> Note
+ubitsbea n = textbf "U" !: n
+
+-- | Uniform random function
+urf :: Note -> Note -> Note
+urf m n = textbf "R" !: cs [m, n]

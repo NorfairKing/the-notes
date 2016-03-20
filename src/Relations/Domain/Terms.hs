@@ -5,4 +5,5 @@ import           Notes
 makeDefs [
       "domain"
     , "image"
+    , "range"
     ]

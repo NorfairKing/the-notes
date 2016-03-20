@@ -35,7 +35,8 @@ domainDefinition = de $ do
 imageDefinition :: Note
 imageDefinition = de $ do
     lab imageDefinitionLabel
-    s [the, image', or, term "range", " of a binary relation ", m rel_, " between sets ", m a, and, m b, " is the following subset of ", m b]
+    lab rangeDefinitionLabel
+    s [the, image', or, range', " of a binary relation ", m rel_, " between sets ", m a, and, m b, " is the following subset of ", m b]
     ma $ setcmpr y (te x $ tuple x y ∈ rel_)
   where
     a = "A"
