@@ -14,4 +14,8 @@ makeDefs
     , "interface merging"
     , "composition"
     , "parallel composition"
+    , "resource system"
+    , "resource"
+    , "converter system"
+    , "converter"
     ]

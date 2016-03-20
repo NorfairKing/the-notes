@@ -83,6 +83,8 @@ renderSystem sys@(ParComp syss) = cluster_ (name sys) $ do
 allSame :: (Eq a) => [a] -> Bool
 allSame xs = all (== head xs) (tail xs)
 
+compose :: Text -> Text -> System -> System -> System
+compose l1 l2 s1 s2 = Connected l1 l2 $ Merge s1 s2
 
 instance Graph System SystemGenConfig where
     defaultGenConfig = SystemGenConfig

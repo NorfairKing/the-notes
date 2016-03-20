@@ -17,14 +17,25 @@ systemAlgebraS = section "System Algebra" $ do
     abstractSystemAlgebraDefinition
     abstractSystemAlgebraDefinitionNote
     systemAlgebraExamples
-    mergingInterfaces
-    mergingInterfacesExamples
-    twoSystemCompositionDefinition
-    compositionOfTwoSystemsIsATwoSystem
-    twoSystemCompositionAssociative
-    parallelCompositionDefinition
-    parallelCompositionExamples
-    parallelCompositionOfTwoSystemsIsTwoSystem
+
+    subsection "Merging interfaces" $ do
+        mergingInterfaces
+        mergingInterfacesExamples
+
+    subsection "2-systems" $ do
+        twoSystemCompositionDefinition
+        compositionOfTwoSystemsIsATwoSystem
+        twoSystemCompositionAssociative
+
+    subsection "Parallel composition" $ do
+        parallelCompositionDefinition
+        parallelCompositionExamples
+        parallelCompositionOfTwoSystemsIsTwoSystem
+
+    subsection "Resources and converters" $ do
+        resourceDefinition
+        converterDefinition
+        converterExamples
 
 
 abstractSystemAlgebraDefinition :: Note
@@ -145,7 +156,7 @@ compositionOfTwoSystemsIsATwoSystem = do
         let (a, b, c, d) = ("a", "b", "c", "d")
         let s1 = System "A" [a, b]
             s2 = System "B" [c, d]
-            sys = Connected b c $ Merge s1 s2
+            sys = compose b c s1 s2
         systemFig 3 sys $ s ["The composition of two", m 2 <> "-" <> systems]
 
 twoSystemCompositionAssociative :: Note
@@ -193,6 +204,36 @@ parallelCompositionOfTwoSystemsIsTwoSystem = do
 
 
 
+resourceDefinition :: Note
+resourceDefinition = de $ do
+    lab resourceSystemDefinitionLabel
+    lab resourceDefinitionLabel
+    let i = mathcal "I"
+    s ["An", m i <> "-" <> resourceSystem', "or simply", m i <> "-" <> resource, "is a", system, "with", interfaceLabelSet, m i]
 
+converterDefinition :: Note
+converterDefinition = de $ do
+    lab converterSystemDefinitionLabel
+    lab converterDefinitionLabel
+    s ["A", converterSystem', "or simply", converter', "is a", system, "with two", interfaces <> ", an inside and an outside interface"]
+    let a = alpha
+        r = "R"
+        i = mathcal "I"
+    s [the, "inside", interface, "of a", converterSystem, m a, "can be connected to an", interface, "of an", m i <> "-" <> resourceSystem, m r <> ", resulting in a new", resourceSystem, "of the same type as", m r, "where the outside interface of", m a, "serves as the new interface of the combined system"]
+    s ["If", m r, "is a", m 1 <> "-" <> system, "then the resulting", m 1 <> "-" <> system, "is denoted as", m $ conv_ a r]
+    let i_ = "i"
+    s ["Otherwise, if", m a, "is connected to interface", m $ i_ ∈ i, "of", m r, "the resulting", system, "is denoted as", m $ conv a i_ r]
 
+converterExamples :: Note
+converterExamples = do
+    ex $ do
+        let (a, b, c, d, e) = ("a", "b", "c", "in", "out")
+        let r = System "R" [a, b, c]
+            co = System "c" [d, e]
+            sys = compose c d r co
+        systemFig 6 sys $ s ["The conversion of a", resourceSystem, m "R", "with a converter", m "c"]
 
+conversionOrderDoesNotMatter :: Note
+conversionOrderDoesNotMatter = thm $ do
+    s ["When two", converters, "are connected to distinct", interfaces, "of a", resource, "their order of conversion does not matter"]
+    noproof

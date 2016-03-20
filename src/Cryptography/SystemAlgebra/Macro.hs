@@ -58,3 +58,17 @@ mioi :: Note -- ^ System
      -> Note -- ^ Resulting interface
      -> Note
 mioi s j l = s ^ (sqbrac $ j <> rightarrow <> l)
+
+
+-- | Convert resource with converter
+conv :: Note -- ^ Converter
+     -> Note -- ^ Converted interface
+     -> Note -- ^ Resource
+     -> Note
+conv a i s = a ^ i <> s
+
+-- | Convert 1-resource with converter
+conv_ :: Note -- ^ Converter
+      -> Note -- ^ Resource
+      -> Note
+conv_ = (<>)
