@@ -19,3 +19,12 @@ makeDefs
     , "converter system"
     , "converter"
     ]
+
+nS :: Note -> Note
+nS n = m n <> "-" <> system
+
+nSs :: Note -> Note
+nSs n = m n <> "-" <> systems
+
+xyS :: Note -> Note -> Note
+xyS x y = m (tuple x y) <> "-" <> system

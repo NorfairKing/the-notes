@@ -111,6 +111,9 @@ acyclic = ix "acyclic"
 permutation :: Note
 permutation = ix "permutation"
 
+countable :: Note
+countable = ix "countable"
+
 -- Groups
 cyclic :: Note
 cyclic = ix "cyclic"

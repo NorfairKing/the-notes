@@ -2,6 +2,7 @@ module Cryptography.SystemAlgebra where
 
 import           Notes
 
+import           Functions.Application.Macro
 import           Functions.Basics.Macro
 import           Functions.Basics.Terms
 import           Functions.BinaryOperation.Terms
@@ -14,28 +15,33 @@ import           Cryptography.SystemAlgebra.Terms
 
 systemAlgebraS :: Note
 systemAlgebraS = section "System Algebra" $ do
-    abstractSystemAlgebraDefinition
-    abstractSystemAlgebraDefinitionNote
-    systemAlgebraExamples
+    subsection "Abstract systems" $ do
+        abstractSystemAlgebraDefinition
+        abstractSystemAlgebraDefinitionNote
+        systemAlgebraExamples
 
-    subsection "Merging interfaces" $ do
-        mergingInterfaces
-        mergingInterfacesExamples
+        subsubsection "Merging interfaces" $ do
+            mergingInterfaces
+            mergingInterfacesExamples
 
-    subsection "2-systems" $ do
-        twoSystemCompositionDefinition
-        compositionOfTwoSystemsIsATwoSystem
-        twoSystemCompositionAssociative
+        subsubsection "2-systems" $ do
+            twoSystemCompositionDefinition
+            compositionOfTwoSystemsIsATwoSystem
+            twoSystemCompositionAssociative
 
-    subsection "Parallel composition" $ do
-        parallelCompositionDefinition
-        parallelCompositionExamples
-        parallelCompositionOfTwoSystemsIsTwoSystem
+        subsubsection "Parallel composition" $ do
+            parallelCompositionDefinition
+            parallelCompositionExamples
+            parallelCompositionOfTwoSystemsIsTwoSystem
 
-    subsection "Resources and converters" $ do
-        resourceDefinition
-        converterDefinition
-        converterExamples
+        subsubsection "Resources and converters" $ do
+            resourceDefinition
+            converterDefinition
+            converterExamples
+
+    subsection "Discrete Single-Interface Systems" $ do
+        subsubsection "(X,Y)-Systems" $ do
+            xySystemsDefinition
 
 
 abstractSystemAlgebraDefinition :: Note
@@ -236,4 +242,23 @@ converterExamples = do
 conversionOrderDoesNotMatter :: Note
 conversionOrderDoesNotMatter = thm $ do
     s ["When two", converters, "are connected to distinct", interfaces, "of a", resource, "their order of conversion does not matter"]
+    let a = alpha
+        i = "i"
+        b = beta
+        j = "j"
+        r = "R"
+    ma $ conv a i (conv b j r) =: conv b j (conv a i r)
     noproof
+
+xySystemsDefinition :: Note
+xySystemsDefinition = de $ do
+    let f = "f"
+        x = mathcal "X"
+        y = mathcal "Y"
+        i = "i"
+        f_ i = f !: i
+        x_ i = "x" !: i
+        y_ i = "y" !: i
+    s ["A", system, "that computes a", function, m $ fun f x y, "for every new input, i.e.,", m $ y_ i =: fn (f_ i) (x_ i) <> ",is called an", xyS x y]
+    let r = "R"
+    s ["More precicely, an", xyS x y, m r, "is a", nS 1, "that takes inputs from a", countable, set, m x, "and (probabillistically) generates an output from a", countable, set, m y, "that possibly depends on an internal state of the", system]
