@@ -8,6 +8,7 @@ import           Functions.BinaryOperation.Terms
 import           Logic.FirstOrderLogic.Macro
 import           Sets.Basics.Terms
 
+import           Cryptography.SystemAlgebra.Graph
 import           Cryptography.SystemAlgebra.Macro
 import           Cryptography.SystemAlgebra.Terms
 
@@ -17,6 +18,10 @@ systemAlgebraS = section "System Algebra" $ do
     abstractSystemAlgebraDefinitionNote
     systemAlgebraExamples
     mergingInterfaces
+    mergingInterfacesExamples
+    parallelCompositionDefinition
+    parallelCompositionExamples
+
 
 abstractSystemAlgebraDefinition :: Note
 abstractSystemAlgebraDefinition = de $ do
@@ -75,6 +80,22 @@ abstractSystemAlgebraDefinitionNote = nte $ do
 
 systemAlgebraExamples :: Note
 systemAlgebraExamples = do
+    let (a, b, c, d) = ("a", "b", "c", "d")
+    ex $ do
+        let sys = System "S" [a, b]
+        systemFig 3 sys $ s ["An abstract", system, m "S", "with two interfaces:", m "a", and, m "b"]
+    ex $ do
+        let s1 = System "A" [a, b]
+            s2 = System "B" [c, d]
+            sys = Merge s1 s2
+        systemFig 5 sys $ s ["The merger of two abstract", systems]
+
+    ex $ do
+        let s1 = System "S" [a, b, c]
+            s2 = Connected a b s1
+        systemsFig 3 [s1, s2] $ s ["The connection of the interfaces", m "a", and, m "b", "in the abstract", system, m "S"]
+
+
     ex $ do
         s ["Electronic components that can be connected to an electronic circuit forms a", systemAlgebra <> ", where the", systemMergingOperation, "means to place components on a board together and the", interfaceConnectionOperation, "means to place a wire between the interfaces"]
 
@@ -82,7 +103,8 @@ systemAlgebraExamples = do
 
 mergingInterfaces :: Note
 mergingInterfaces = de $ do
-    s ["Given a", systemAlgebra, "we define a composite operation called", dquoted "interface merging", "as follows"]
+    lab interfaceMergingDefinitionLabel
+    s ["Given a", systemAlgebra, "we define a composite operation called", interfaceMerging', "as follows"]
     let a = "A"
         l = "L"
         j = "j"
@@ -94,9 +116,37 @@ mergingInterfaces = de $ do
         item $ m $ fa (a ∈ syss_) $ fa (l ⊆ la a) $ fa (j ∈ labs_ \\ la a) $ la (mioi a j l) =: (pars $ la a \\ setof j) ∪ l
         item $ m $ mioi (pars $ mio a l j) j l =: a
 
+mergingInterfacesExamples :: Note
+mergingInterfacesExamples = do
+    ex $ do
+        let (a, b, c, d, e, l) = ("a", "b", "c", "d", "e", "l")
+        let sys = System "A" [a, b, c, d, e]
+        systemsFig 5 [sys, MergeLabels [a, b, c] l sys] $ do
+            s ["The system on the right represents the merger of the interfaces", m "a" <> ", " <> m "b", and, m "c", "into", m "l", "from the system on the left"]
+
+parallelCompositionDefinition :: Note
+parallelCompositionDefinition = de $ do
+    lab parallelCompositionDefinitionLabel
+    let s_ = "s"
+        s1 = s_ !: 1
+        s2 = s_ !: 2
+        k = "k"
+        sk = s_ !: k
+        sl = list s1 s2 sk
+    s ["Let", m sl, "be", systems, "in a", systemAlgebra, "with the same", interfaceLabelSet]
+    let sn = sqbrac sl
+    s ["Let", m sn, "be the", system <> ", obtained by relabeling the", interfaces, "of the", systems, m sl, "to be disjoint, then merging the", systems, "and then merging all parralel", interfaces, "into one interface with the same name"]
+    s [m sn, "is called the", parallelComposition', "of", m sl]
 
 
-
+parallelCompositionExamples :: Note
+parallelCompositionExamples = do
+    let (a, b) = ("a", "b")
+    ex $ do
+        let s1 = System "A" [a, b]
+            s2 = System "B" [a, b]
+            sys = ParComp [s1, s2]
+        systemFig 5 sys $ s ["The parallel composition of two abstract", systems]
 
 
 
