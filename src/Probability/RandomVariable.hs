@@ -26,6 +26,7 @@ randomVariableS = section "Random Variables" $ do
     introS
     distributionFunctionSS
     quantileFunctionSS
+    copiesOfRandomVariablesSS
     typesOfRandomVariables
     momentsOfRandomVariables
 
@@ -99,9 +100,13 @@ distributionFunctionSS = subsection "Cumulative distribution function" $ do
 
 cumulativeDistributionFunctionDefinition :: Note
 cumulativeDistributionFunctionDefinition = de $ do
+    lab cumulativeDistributionFunctionDefinitionLabel
+    lab cDFDefinitionLabel
+    lab distributionFunctionDefinitionLabel
+    lab probabilityDistributionDefinitionLabel
     psDec
     s ["Let ", m rvfunc_, " be a ", randomVariable]
-    s ["The ", cumulativeDistributionFunction', " (", term "CDF", ") or ", distributionFunction', " as follows"]
+    s ["The ", cumulativeDistributionFunction', " (", cDF', "), ", distributionFunction', or, probabilityDistribution," as follows"]
     ma $ func df_ reals reals a $ prd (ocint minfty a) =: prob (setcmpr o (vrv o)) =: prob (rv_ <= a)
     s ["Sometimes the term ", distribution', " is also used as-is"]
   where
@@ -172,6 +177,47 @@ quartileDefinition = de $ do
 medianDefinition :: Note
 medianDefinition = de $ do
     s ["The second ", quartile, " is called the ", median]
+
+copiesOfRandomVariablesSS :: Note
+copiesOfRandomVariablesSS = subsection "Copies of random variables" $ do
+    independentCopyDefinition
+    cloneDefinition
+    copyVsCloneExample
+
+independentCopyDefinition :: Note
+independentCopyDefinition = de $ do
+    lab independentCopyDefinitionLabel
+    let x = "X"
+    s ["Let", m x, "be a", randomVariable]
+    let q = "q"
+    s ["We denote by", m $ icop x q, the, randomVariable, "consisting of", m q, independentCopies', "of", m x]
+    let x1 = x !: 1
+        x2 = x !: 2
+        xq = x !: q
+    ma $ icop x q =: tuplelist x1 x2 xq
+    s ["More precicely,", m $ list x1 x2 xq, "are", independent, "and have the same", probabilityDistribution, "as", m x]
+
+
+cloneDefinition :: Note
+cloneDefinition = de $ do
+    lab cloneDefinitionLabel
+    let x = "X"
+    s ["Let", m x, "be a", randomVariable]
+    let q = "q"
+    s ["We denote by", m $ clon x q, the, randomVariable, "consisting of", m q, clones', "of", m x]
+    let x1 = x !: 1
+        x2 = x !: 2
+        xq = x !: q
+    ma $ clon x q =: tuplelist x1 x2 xq
+    s ["More precicely,", m $ list x1 x2 xq, "are identical"]
+
+
+copyVsCloneExample :: Note
+copyVsCloneExample = ex $ do
+    let x = "X"
+    s ["Let", m x, "be a binary", randomVariable, "with a uniform", distribution]
+    let q = "q"
+    s [m $ icop x q, "is the", randomVariable, "with uniform", distribution, "over", m $ setofs [0, 1] ^ q, "and", m $ clon x q, "is the", randomVariable, "which takes on the two values", m $ tuplelist 0 0 0, and, m $ tuplelist 1 1 1, "with", probability, m $ 1 /: 2]
 
 
 typesOfRandomVariables :: Note
