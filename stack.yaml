@@ -11,6 +11,7 @@ extra-deps:
 - QuickCheck-2.8.1
 - StateVar-1.1.0.2
 - ansi-wl-pprint-0.6.7.3
+- ansi-terminal-0.6.2.3
 - async-2.0.2
 - base-orphans-0.4.5
 - base16-bytestring-0.1.1.6
