@@ -39,6 +39,7 @@ executable the-notes
                         , JuicyPixels           >= 3.2       && < 3.3
                         , file-embed            >= 0.0.9     && < 0.1
                         , safe                  >= 0.3       && < 0.4
+                        , time                  >= 1.5       && < 1.6
   ghc-options:        -Wall
                       -fwarn-unused-imports
                       -fwarn-incomplete-patterns

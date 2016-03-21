@@ -15,6 +15,7 @@ import           Utils
 import           Notes
 
 import           Config
+import           Dependencies
 import           Header
 import           License
 import           Packages
@@ -44,6 +45,9 @@ import           Topology.Main
 
 main :: IO ()
 main = do
+    printHeader
+    outputSystemInfo
+    checkDependencies
     mc <- getConfig
     case mc of
         Nothing -> error "Couldn't parse arguments."
@@ -62,6 +66,7 @@ main = do
             setCurrentDirectory dir
 
 
+            printGenerationHeader
             -- This is where the magic happens
             (eet, _) <- buildNote entireDocument cf pconf startState
 
@@ -73,6 +78,8 @@ main = do
                                 error "Pdf not built."
                 Right () -> return ()
 
+            putStrLn ""
+            printCompilationHeader
             (ec, out, err) <- liftIO $ readCreateProcessWithExitCode
                                         (latexMkJob cf)
                                         ""
@@ -86,6 +93,24 @@ main = do
                 ExitSuccess -> return ()
 
             return ()
+
+printHeader :: IO ()
+printHeader = do
+    putStrLn "---------------- [ The Notes ] ---------------- "
+    putStrLn "  by Tom Sydney Kerckhove                       "
+    putStrLn "     syd.kerckhove@gmail.com                    "
+    putStrLn "                                                "
+    putStrLn "  at https://github.com/NorfairKing/the-notes   "
+    putStrLn "     http://cs-syd.eu                           "
+    putStrLn "                                                "
+
+printGenerationHeader :: IO ()
+printGenerationHeader = do
+    putStrLn "------------ [ Generation ] ------------ "
+
+printCompilationHeader :: IO ()
+printCompilationHeader = do
+    putStrLn "------------ [ Compilation ] ----------- "
 
 printErrors :: [ΛError] -> IO ()
 printErrors = putStr . unlines . map show
