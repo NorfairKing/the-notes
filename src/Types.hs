@@ -71,6 +71,7 @@ data Args = Args {
     , args_bibFileName           :: String
     , args_pdfFileName           :: String
     , args_tempDir               :: FilePath
+    , args_outDir                :: FilePath
     } deriving (Show, Eq)
 
 data Config = Config {
@@ -84,6 +85,7 @@ data Config = Config {
     , conf_bibFileName           :: FilePath
     , conf_pdfFileName           :: FilePath
     , conf_tempDir               :: FilePath
+    , conf_outDir                :: FilePath
     } deriving (Show, Eq)
 
 data Label = MkLabel RefKind Text

@@ -1,4 +1,3 @@
-{-# LANGUAGE QuasiQuotes #-}
 module Titlepage (myTitlePage) where
 
 import           Control.Monad        (forM_)
@@ -7,8 +6,6 @@ import           Control.Monad.Reader (asks)
 import           Prelude              (return, (++))
 
 import qualified Data.Text            as T
-
-import           Development.GitRev
 
 import           Notes
 
@@ -57,8 +54,6 @@ myTitlePage = do
                     "Started" & "September 28, 2015"
                     lnbk
                     "Compiled" & commS "today"
-                    lnbk
-                    "Commit" & raw (T.pack $(gitHash))
                     lnbk
                 comm1 "vspace" $ raw "0.5\\textheight"
 
