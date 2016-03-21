@@ -139,3 +139,10 @@ id n = mathbb "I" !: n
 
 id_ :: Note
 id_ = mathbb "I"
+
+
+-- | Times, in the context of matrix dimensions
+--
+-- > C-k *X
+(×) :: Note -> Note -> Note
+(×) = binop $ comm0 "times"

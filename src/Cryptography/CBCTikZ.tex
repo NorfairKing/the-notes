@@ -1,0 +1,43 @@
+%%% Commom TiKZ Library
+\usetikzlibrary{positioning}
+  
+\begin{scope}[xshift=8cm]
+  \node[thick] (x3) at (0,0) {$\bigoplus$};
+  \draw[->] (0,1) node[above] {$m_{l}$} -- (x3);
+  \draw (-0.5,-2) rectangle node{$F(\cdot, k)$} ++(1,1);
+  \draw[->] (x3) -- ++(0,-1);
+  \draw[->] (0,-2) -- ++(0,-1) node[below] {$c_{l}$};
+\end{scope}
+
+\begin{scope}[xshift=6cm]
+  \node at (0,-1.5) {$\cdots\cdots$};
+  \draw[<-] (x3) -- ++(-1,0) node[left] {$c_{l-1}$};
+\end{scope}
+
+\begin{scope}[xshift=4cm]
+  \node[thick] (x2) at (0,0) {$\bigoplus$};
+  \draw[->] (0,1) node[above] {$m_{3}$} -- (x2);
+  \draw (-0.5,-2) rectangle node{$F(\cdot, k)$} ++(1,1);
+  \draw[->] (x2) -- ++(0,-1);
+  \draw[->] (0,-2) -- ++(0,-1) node[below] {$c_{3}$};
+\end{scope}
+
+\begin{scope}[xshift=2cm]
+  \node[thick] (x1) at (0,0) {$\bigoplus$};
+  \draw[->] (0,1) node[above] {$m_{2}$} -- (x1);
+  \draw (-0.5,-2) rectangle node{$F(\cdot, k)$} ++(1,1);
+  \draw[->] (x1) -- ++(0,-1);
+  \draw[->] (0,-2) -- ++(0,-1) node[below] {$c_{2}$};
+  \draw[->] (0,-2.5) -- ++(1,0) -- ++(0,+2.5) -- (x2);
+\end{scope}
+
+\begin{scope}
+  \node[thick] (x0) at (0,0) {$\bigoplus$};
+  \draw[->] (0,1) node[above] {$m_{1}$} -- (x0);
+  \draw (-0.5,-2) rectangle node{$F(\cdot, k)$} ++(1,1);
+  \draw[->] (x0) -- ++(0,-1);
+  \draw[->] (0,-2) -- ++(0,-1) node[below] {$c_{1}$};
+  \draw[->] (0,-2.5) -- ++(1,0) -- ++(0,+2.5) -- (x1);
+  \draw[<-] (x0) -- ++(-1,0) node[left] {$IV$};
+\end{scope}
+

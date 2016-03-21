@@ -9,7 +9,7 @@ import           Macro.Sets.Macro
 
 -- * Concatenation of messages
 (++) :: Note -> Note -> Note
-(++) = binop "|"
+(++) = binop $ commS " " <> "|" <> commS " "
 
 -- conccmp :: Note -> Note -> Note
 -- conccmp =
@@ -83,4 +83,14 @@ bitss n = bits ^: n
 -- | Tag space
 tsp_ :: Note
 tsp_ = mathcal "T"
+
+-- * Hash function
+
+-- | Concrete hash function
+hshf_ :: Note
+hshf_ = "h"
+
+-- | Concrete hash function application
+hsh :: Note -> Note
+hsh = fn hshf_
 

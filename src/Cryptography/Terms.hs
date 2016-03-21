@@ -12,6 +12,7 @@ makeDefs [
 
     , "message space"
     , "message"
+    , "plaintext"
     , "ciphertext space"
     , "ciphertext"
     , "key space"
@@ -33,6 +34,9 @@ makeDefs [
     , "IND-CPA"
     , "IND-CPA secure"
 
+    , "non-adaptive IND-CPA"
+    , "non-adaptively IND-CPA secure"
+
     , "indistinguishability chosen ciphertext attack"
     , "IND-CCA"
     , "IND-CCA secure"
@@ -47,8 +51,16 @@ makeDefs [
 
     , "block cipher"
     , "block length"
+
     , "electronic codebook"
     , "ECB"
+
+    , "cipher block chaining"
+    , "initialisation vector"
+    , "CBC"
+
+    , "counter"
+    , "CTR"
 
     , "message authentication code"
     , "MAC"
@@ -63,6 +75,45 @@ makeDefs [
 
     , "discrete logarithm"
     , "DL"
-    ]
 
+    , "computational Diffie-Hellman"
+    , "CDH"
+
+    , "Diffie-Hellman triple"
+    , "decisional Diffie-Hellman"
+    , "DDH"
+
+    , "public-key encryption scheme"
+    , "PKE"
+    , "key generator"
+    , "key pair"
+    , "public key"
+    , "secret key"
+    , "private key"
+    , "ElGamal"
+
+    , "trapdoor one-way permutation"
+    , "TWOP"
+    , "trapdoor generator"
+    , "trapdoor"
+
+    , "RSA"
+
+    , "digital signature scheme"
+    , "DSS"
+    , "signing key"
+    , "signature verification key"
+    , "signature"
+    , "signing algorithm"
+    , "signature verification algorithm"
+    , "signature forgery game"
+
+    , "full domain hash"
+    , "FDH"
+
+    , "hash function"
+    , "hash"
+    , "collision-finding game"
+    , "collision resistant"
+    ]
 

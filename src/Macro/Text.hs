@@ -32,6 +32,12 @@ cs = commaSeparated
 and :: Note
 and = "and"
 
+anda :: Note
+anda = "and a"
+
+andan :: Note
+andan = "and an"
+
 or :: Note
 or = "or"
 

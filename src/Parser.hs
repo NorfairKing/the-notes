@@ -14,12 +14,16 @@ config :: Args -> IO (Maybe Config)
 config args = do
     let ss = constructSelection $ args_selectionString args
 
+    cur <- getCurrentDirectory
+    let resolve fp
+          = if isAbsolute fp
+            then return fp
+            else return $ cur </> fp
+
     let tda = args_tempDir args
-    tempdir <- if isAbsolute tda
-                then return tda
-                else do
-                    dir <- getCurrentDirectory
-                    return $ dir </> tda
+    tempDir <- resolve tda
+    let oda = args_outDir args
+    outDir <- resolve oda
 
 
     return $ Just $ Config {
@@ -32,7 +36,8 @@ config args = do
         , conf_texFileName              = args_texFileName args
         , conf_bibFileName              = args_bibFileName args
         , conf_pdfFileName              = args_pdfFileName args
-        , conf_tempDir                  = tempdir
+        , conf_tempDir                  = tempDir
+        , conf_outDir                   = outDir
         }
   where st = args_subtitle args
 
@@ -89,7 +94,13 @@ argParser = Args
             <> help "The name of the output .pdf file to generate")
     <*> strOption
         (long "tmp-dir"
-            <> short 'd'
-            <> value "out"
+            <> short 't'
+            <> value "tmp"
             <> metavar "DIR"
             <> help "The working directory for note generating")
+    <*> strOption
+        (long "out-dir"
+            <> short 'o'
+            <> value "out"
+            <> metavar "DIR"
+            <> help "The output directory for notes")

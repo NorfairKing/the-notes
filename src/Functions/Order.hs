@@ -85,9 +85,13 @@ galoisConnectionS = subsection "Galois connections" $ do
 approximationS :: Note
 approximationS = subsection "Approximations" $ do
     approximationDefinition
+    approximationEquivalentDefinition
     approximationExamples
     monotoneEquivalences
     approximationExists
+    mostPreciseApproximationDefinition
+    leastFixedPointApproximationTheorem
+    leastFixedPointApproximationTheoremWithoutGalois
 
 
 monotonicDefinition :: Note
@@ -366,9 +370,9 @@ kleenesFixedPointTheorem = do
 latticesOverFunctions :: Note
 latticesOverFunctions = thm $ do
     lab latticesOverFunctionsTheoremLabel
-    s ["Let ", m lat_, " be a ", lattice, and, m y, " a set"]
-    s [m $ lat (funt x y) partord_, " is a ", lattice, " where ", m partord_, " is defined as follows"]
-    ma $ f ⊆: g ⇔ fa (a ∈ dom f) (f -: a ⊆: g -: a)
+    s ["Let ", m $ lat y partord_, " be a ", lattice, and, m x, " a set"]
+    s [m $ lat (funt x y) po, " is a ", lattice, " where ", m po, " is defined as follows"]
+    ma $ f << g ⇔ fa (a ∈ dom f) (f -: a ⊆: g -: a)
     s ["This also implies the following"]
     ma $ (pars $ f ⊔ g) -: a =: (f -: a ⊔  g -: a)
     ma $ (pars $ f ⊓ g) -: a =: (f -: a ⊓  g -: a)
@@ -380,6 +384,8 @@ latticesOverFunctions = thm $ do
     a = "a"
     x = latset_
     y = "Y"
+    po = partord_ !: (x <> rightarrow <> y)
+    (<<) = inposet po
 
 
 completelyMeetPreservingDefinition :: Note
@@ -668,6 +674,8 @@ galoisConnectionExistenceGamma = thm $ do
 
 approximationDefinition :: Note
 approximationDefinition = de $ do
+    lab approximatesDefinitionLabel
+    lab approximationDefinitionLabel
     let a = alpha
         g = gamma
         x = "X"
@@ -686,10 +694,36 @@ approximationDefinition = de $ do
     ma $ fa (x_ ∈ x) $ fa (y_ ∈ y) $ inposet ry (fn a x_) y_ ⇒ inposet ry (fn a (fn f x_)) (fn h y_)
 
 
+approximationEquivalentDefinition :: Note
+approximationEquivalentDefinition = thm $ do
+    s ["An", approximation, "of a", function, "can equivalently be defined as follows"]
+    newline
+
+    let g = gamma
+        x = "X"
+        rx = partord_ !: x
+        y = "Y"
+        ry = partord_ !: y
+    s ["Let", m $ fun g y x, "be a monotone", function, "on the posets", m $ relposet x rx, and, m $ relposet y ry]
+    let f_ = "F"
+        f = fn f_
+        f'_ = "F" <> comm0 "sharp"
+        f' = fn f'_
+    s ["Let", m $ fun f_ x x, and, m $ fun f'_ y y, "be", monotone, functions]
+    s ["We say that", m f'_, approximates, m f_, "if the following holds"]
+    let go = fn g
+        (<<) = inposet rx
+        z = "z"
+    ma $ fa (z ∈ y) $ f (go z) << go (f' z)
+
+    toprove_ "prove that these definitions are in fact equivalent"
+
+
 approximationExamples :: Note
 approximationExamples = do
     ex $ do
-        s ["In the following diagram, the blue arrow in the", set, m "A", approximates, "the blue arrow in the", set, m "B"]
+        s ["In the following diagram, the function represented by the blue arrows in the", set, m "A", approximates, "the blue arrow in the", set, m "B"]
+        s ["The green arrows represent", m alpha]
         let c1 = "blue"
             c2 = "darkgreen"
             (x, fx) = ("x", "f(x)")
@@ -704,7 +738,7 @@ approximationExamples = do
             [(c1, funf), (c1, fung), (c2, funa)]
 
 monotoneEquivalences :: Note
-monotoneEquivalences = do
+monotoneEquivalences = thm $ do
     let a = alpha
         g = gamma
         x = "X"
@@ -744,13 +778,111 @@ approximationExists = thm $ do
         ry = partord_ !: y
     s ["Let", m $ fun a x y, and, m $ fun g y x, "form a", galoisConnection]
     ma $ gcon a g (lat x rx) (lat y ry)
-    let f = "f"
-    s ["Let", m $ fun f x x, "be a", monotone, function]
+    let f_ = "f"
+        f = fn f_
+    s ["Let", m $ fun f_ x x, "be a", monotone, function]
+    s ["There always exists an", approximation, "of", m f_]
 
     proof $ do
         s ["Because", m x, "is a", completeLattice, "it must contain its", supremum]
-        let h = "h"
+        let h_ = "h"
+            h = fn h_
             y_ = "y"
-        s [the, function, m $ func h y y y_ (supof x), "therefore", approximates, m f]
+        s [the, function, m $ func h_ y y y_ (supof x), "therefore", approximates, m f_]
+        let p = "p"
+            q = "q"
+        let ao = fn a
+            (<<) = inposet ry
+        s ["Indeed, let", m p, and, m q, "be arbitrary", elements, "of", m x, and, m y, "respectively such that", m $ ao p << y]
+        s [m $ h y, "is", m $ supof x, "by definition, so ", m $ ao (f x) << h y, "holds by construction"]
+        s [m h_, "is called the", leastPreciseApproximation', "of", m f_]
+
+mostPreciseApproximationDefinition :: Note
+mostPreciseApproximationDefinition = de $ do
+    lab mostPreciseApproximationDefinitionLabel
+    let a = alpha
+        g = gamma
+        x = "X"
+        rx = partord_ !: x
+        y = "Y"
+        ry = partord_ !: y
+    s ["Let", m $ fun a x y, and, m $ fun g y x, "form a", galoisConnection]
+    ma $ gcon a g (lat x rx) (lat y ry)
+    let f_ = "f"
+        f = fn f_
+    s ["Let", m $ fun f_ x x, "be a", monotone, function]
+    let h_ = "h"
+        h = fn h_
+        z = "z"
+    s [m $ func h_ y y z $ h z =: fn a (f (fn g z)), "is called the", mostPreciseApproximation', "of", m f_]
+
+
+leastFixedPointApproximationTheorem :: Note
+leastFixedPointApproximationTheorem = thm $ do
+    term "Least fixed point approximation"
+    newline
+    let a = alpha
+        g = gamma
+        x = "X"
+        rx = partord_ !: x
+        y = "Y"
+        ry = partord_ !: y
+    s ["Let", m $ fun a x y, and, m $ fun g y x, "form a", galoisConnection]
+    ma $ gcon a g (lat x rx) (lat y ry)
+    let f_ = "F"
+        f = fn f_
+        f'_ = "F" <> comm0 "sharp"
+        f' = fn f'_
+    s ["Let", m $ fun f_ x x, and, m $ fun f'_ y y, "be", monotone, functions, "such that", m f'_, approximates, m f_]
+    let ao = fn a
+        (<<) = inposet ry
+    ma $ ao (f x) << f' y
+
+    s ["The following then holds about the", leastFixedPoints, "of", m f_, and, m f'_]
+    ma $ ao (lfp f_) << lfp f'_
+
+    toprove
+
+
+leastFixedPointApproximationTheoremWithoutGalois :: Note
+leastFixedPointApproximationTheoremWithoutGalois = thm $ do
+    term "Least fixed point approximation without a Galois connection"
+    newline
+    let g = gamma
+        x = "X"
+        rx = partord_ !: x
+        y = "Y"
+        ry = partord_ !: y
+    s ["Let", m $ fun g y x, "be a monotone", function, "on the posets", m $ relposet x rx, and, m $ relposet y ry]
+    let f_ = "F"
+        f = fn f_
+        f'_ = "F" <> comm0 "sharp"
+        f' = fn f'_
+    s ["Let", m $ fun f_ x x, and, m $ fun f'_ y y, "be", monotone, functions, "such that", m f'_, approximates, m f_]
+    let go = fn g
+        (<<) = inposet rx
+        z = "z"
+    ma $ fa (z ∈ y) $ f (go z) << go (f' z)
+
+    s ["The following then holds about the", leastFixedPoints, "of", m f_, and, m f'_]
+    ma $ lfp f_ << go (lfp (f'_))
+
+    toprove
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

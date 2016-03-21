@@ -108,6 +108,20 @@ directed = ix "directed"
 acyclic :: Note
 acyclic = ix "acyclic"
 
+permutation :: Note
+permutation = ix "permutation"
+
+countable :: Note
+countable = ix "countable"
+
 -- Groups
 cyclic :: Note
 cyclic = ix "cyclic"
+
+-- * Number theory
+
+relativelyPrime_ :: Note
+relativelyPrime_ = ix "relatively prime"
+
+primes :: Note
+primes = ix "primes"

@@ -26,6 +26,9 @@ makeDefs [
     , "Galois insertion"
 
     , "approximates"
+    , "approximation"
+    , "least precise approximation"
+    , "most precise approximation"
     ]
 
 makeThms [

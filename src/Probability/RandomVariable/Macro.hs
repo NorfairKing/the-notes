@@ -139,3 +139,18 @@ cprobss :: [Note] -> [Note] -> Note
 cprobss [] [] = error "Can't have conditional probability of no variables"
 cprobss n [] = probs n
 cprobss vs cvs = cprob (cs vs) (cs cvs)
+
+
+-- * Copies
+
+-- | Independent copy
+icop :: Note -- Random variable
+     -> Note -- Power
+     -> Note
+icop = (^:)
+
+-- | Clone
+clon :: Note -- Random variable
+     -> Note -- Power
+     -> Note
+clon x q = x ^: (sqbrac q)

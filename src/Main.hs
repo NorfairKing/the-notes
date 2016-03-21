@@ -5,7 +5,7 @@ import           Prelude              as P
 import qualified Data.Text            as T
 
 import           Control.Monad.Reader (asks)
-import           System.Directory     (setCurrentDirectory)
+import           System.Directory     (copyFile, withCurrentDirectory)
 import           System.Exit          (ExitCode (..), die)
 import           System.Process       (CreateProcess (..),
                                        readCreateProcessWithExitCode, shell)
@@ -15,10 +15,12 @@ import           Utils
 import           Notes
 
 import           Config
+import           Dependencies
 import           Header
 import           License
 import           Packages
 import           Parser
+import           Preface
 import           Titlepage
 
 import           Computability.Main
@@ -33,6 +35,7 @@ import           LinearAlgebra.Main
 import           Logic.Main
 import           MachineLearning.Main
 import           Probability.Main
+import           ProgramAnalysis.Main
 import           Relations.Main
 import           Rings.Main
 import           Sets.Main
@@ -42,6 +45,9 @@ import           Topology.Main
 
 main :: IO ()
 main = do
+    printHeader
+    outputSystemInfo
+    checkDependencies
     mc <- getConfig
     case mc of
         Nothing -> error "Couldn't parse arguments."
@@ -55,35 +61,59 @@ main = do
                 , projectBibFileName = conf_bibFileName cf
                 }
 
-            let dir = conf_tempDir cf
-            makeDir dir
-            setCurrentDirectory dir
+            let tmpdir = conf_tempDir cf
+                outdir = conf_outDir cf
+            makeDir tmpdir
+            makeDir outdir
+            withCurrentDirectory tmpdir $ do
+                printGenerationHeader
+                -- This is where the magic happens
+                (eet, _) <- buildNote entireDocument cf pconf startState
 
+                case eet of
+                    Left err -> if conf_ignoreReferenceErrors cf
+                                then printErrors err
+                                else do
+                                    printErrors err
+                                    error "Pdf not built."
+                    Right () -> return ()
 
-            -- This is where the magic happens
-            (eet, _) <- buildNote entireDocument cf pconf startState
-
-            case eet of
-                Left err -> if conf_ignoreReferenceErrors cf
-                            then printErrors err
-                            else do
-                                printErrors err
-                                error "Pdf not built."
-                Right () -> return ()
-
-            (ec, out, err) <- liftIO $ readCreateProcessWithExitCode
-                                        (latexMkJob cf)
-                                        ""
-            let outputAnyway = do
-                  putStrLn out
-                  putStrLn err
-            case ec of
-                ExitFailure _ -> do
-                    outputAnyway
-                    die "Compilation failed"
-                ExitSuccess -> return ()
+                putStrLn ""
+                printCompilationHeader
+                (ec, out, err) <- liftIO $ readCreateProcessWithExitCode
+                                            (latexMkJob cf)
+                                            ""
+                let outputAnyway = do
+                      putStrLn out
+                      putStrLn err
+                case ec of
+                    ExitFailure _ -> do
+                        outputAnyway
+                        die "Compilation failed"
+                    ExitSuccess -> do
+                        -- Copy output file from temp dir to output dir
+                        let file = conf_pdfFileName cf ++ ".pdf"
+                        copyFile file (outdir ++ "/" ++ file)
 
             return ()
+
+printHeader :: IO ()
+printHeader = do
+    putStrLn "---------------- [ The Notes ] ---------------- "
+    putStrLn "  by Tom Sydney Kerckhove                       "
+    putStrLn "     syd.kerckhove@gmail.com                    "
+    putStrLn "                                                "
+    putStrLn "  at https://github.com/NorfairKing/the-notes   "
+    putStrLn "     http://cs-syd.eu                           "
+    putStrLn "                                                "
+
+printGenerationHeader :: IO ()
+printGenerationHeader = do
+    putStrLn "------------ [ Generation ] ------------ "
+
+printCompilationHeader :: IO ()
+printCompilationHeader = do
+    putStrLn "------------ [ Compilation ] ----------- "
 
 printErrors :: [ΛError] -> IO ()
 printErrors = putStr . unlines . map show
@@ -110,6 +140,8 @@ latexMkJob cf = shell $ "latexmk " ++ unwords latexMkArgs
     pdfLatexArgs = ["-shell-escape", "-halt-on-error", "-enable-write18"]
 
 
+
+
 startState :: State
 startState = State { state_rng = mkStdGen 42 }
 
@@ -123,6 +155,7 @@ entireDocument = do
 
     document $ do
         myTitlePage
+        myPreface
 
         -- Ensure that pdf numbers coincide with the page numbers in the document
         comm2 "addtocounter" "page" "1"
@@ -157,6 +190,7 @@ allNotes = do
     computability
     probability
     statisticsC
+    programAnalysisC
     cryptography
     machineLearning
     dataMining
