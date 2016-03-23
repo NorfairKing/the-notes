@@ -41,7 +41,7 @@ equivalenceClass = ix "equivalence class"
 equivalenceClassDefinition :: Note
 equivalenceClassDefinition = de $ do
     s ["Let ", m eqrel_, " be an ", equivalenceRelation, " on a set ", m xx, " and let ", m x, " be an element of ", m xx]
-    s ["The ", term "equivalence class", " ", m (eqcl_ x), " of ", m x, " in ", m eqrel_, " is the set of all elements that are equivalent to ", m x]
+    s ["The ", defineTerm "equivalence class", " ", m (eqcl_ x), " of ", m x, " in ", m eqrel_, " is the set of all elements that are equivalent to ", m x]
 
     ma $ eqcl_ x === setcmpr (y ∈ xx) (x .~ y)
   where
@@ -52,7 +52,7 @@ equivalenceClassDefinition = de $ do
 quotientSetDefinition :: Note
 quotientSetDefinition = de $ do
     s ["Let ", m eqrel_, " be an ", equivalenceRelation, " on a set ", m xx]
-    s ["The ", term "quotient set", " ", m (eqrel_ `eqcls` xx),  " of ", m xx, " with respect to ", m eqrel_, " is the set of all equivalennce classes of ", m xx, " in ", m eqrel_]
+    s ["The ", defineTerm "quotient set", " ", m (eqrel_ `eqcls` xx),  " of ", m xx, " with respect to ", m eqrel_, " is the set of all equivalennce classes of ", m xx, " in ", m eqrel_]
 
     ma $ (xx ./~ eqrel_) === setcmpr (eqcl_ x) (x ∈ xx)
   where

@@ -336,7 +336,7 @@ lassoRegressionP = paragraph "LASSO Regression" $ do
 generalRidgeRegressionP :: Note
 generalRidgeRegressionP = paragraph "Generalized Ridge Regression" $ do
     let q = "q"
-    s ["Ridge regression can be generalized to have a shrinkage term parametrized by", m q]
+    s ["Ridge regression can be generalized to have a shrinkage defineTerm parametrized by", m q]
     de $ do
         s ["The generalized", ridgeCost, "is a", costFunction, "with", parameter, m q]
         let b = beta

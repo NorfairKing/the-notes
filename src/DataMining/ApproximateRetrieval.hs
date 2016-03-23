@@ -71,7 +71,7 @@ localitySensitiveHashing = subsubsection "Locality Sensitive Hashing" $ do
     newline
 
     s ["If this problem was about exact duplicates then people would scream ", dquoted "Use hashfunctions!", " because it is such a great solution"]
-    s ["Locality sensitive hashing builds on that sentiment but uses so-called ", term "locality sensitive hashfunction", "s instead of regular hash functions"]
+    s ["Locality sensitive hashing builds on that sentiment but uses so-called ", defineTerm "locality sensitive hashfunction", "s instead of regular hash functions"]
     s ["The idea is that similar items should hash to similar values"]
     footnote $ s $ ["That's exactly the opposite of what you would want in cryptographic hash functions"]
 

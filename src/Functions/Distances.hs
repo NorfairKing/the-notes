@@ -34,9 +34,9 @@ distanceDefinition = de $ do
         item $ m $ fa rxy $ dxy =: 0
         item $ m $ fa rxy $ dxy =: dyx
         item $ do
-          s ["The ", term "triangle inequality"]
+          s ["The ", defineTerm "triangle inequality"]
           ma $ fa (cs [x, y, z] ∈ reals) $ (d `fn` xy + d `fn` yz) <= (d `fn` xz)
-    s ["A distance function is also called a ", term "pseudometric"]
+    s ["A distance function is also called a ", defineTerm "pseudometric"]
   where
     x = "x"
     y = "y"
@@ -55,7 +55,7 @@ distanceDefinition = de $ do
 distanceExamples :: Note
 distanceExamples = do
     ex $ do
-        s [the, term "cosine distance"]
+        s [the, defineTerm "cosine distance"]
         s ["Let ", m q, " be a natural numbers"]
         ma $ func2 cd rq rq realsp v w $ arccos_ $ (trans v * w) /: (n2 v * n2 w)
 

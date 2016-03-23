@@ -238,7 +238,7 @@ lossFunctionExamples = do
         s [the, quadraticLoss', function]
         ma $ func2 lf_ reals reals realsp x y $ (pars $ (y - x)) ^: 2
     ex $ do
-        s [the, term "0-1 loss", function, "is", m 1, "whenever the arguments differ and", m 0, " otherwise"]
+        s [the, defineTerm "0-1 loss", function, "is", m 1, "whenever the arguments differ and", m 0, " otherwise"]
         ma $ func2 lf_ mmos_ mmos_ (ccint 0 1 ⊆ realsp) x y $ mathbb "I" !: (x ≠ y)
     ex $ do
         s [the, exponentialLoss', function, "with parameter", m beta]

@@ -46,7 +46,7 @@ makeDef concept = do
                 (
                   NormalB $
                     AppE
-                      (VarE $ mkName "term")
+                      (VarE $ mkName "defineTerm")
                       conceptLit
                 )
                 []
@@ -153,7 +153,7 @@ makeDef concept = do
                   NormalB $
                       AppE
                         (AppE
-                          (VarE $ mkName "term_")
+                          (VarE $ mkName "defineTerm_")
                           pluralConceptLit)
                         conceptLit
                 )

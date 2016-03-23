@@ -221,7 +221,7 @@ partialOrdersFromPreorders = thm $ do
 posetDefinition :: Note
 posetDefinition = de $ do
     lab posetDefinitionLabel
-    s ["A ", term "partially ordered set", or, poset', " is a tuple ", m relposet_, " of a set and a partial order on that set"]
+    s ["A ", defineTerm "partially ordered set", or, poset', " is a tuple ", m relposet_, " of a set and a partial order on that set"]
 
 
 crossPosetLift :: Note

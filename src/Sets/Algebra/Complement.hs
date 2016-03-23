@@ -27,7 +27,7 @@ complementDefinition = de $ do
     s [the, complement', " of a ", set, " ", m a, " relative to a set ", m b, " is the set of all elements of ", m b, " that are not in ", m a]
     ma $ setrelc b a === b \\ a
 
-    s ["When ", m b, " is clear from the context (i.e. there is a universe in play), we just speak about the ", term "complement"]
+    s ["When ", m b, " is clear from the context (i.e. there is a universe in play), we just speak about the ", defineTerm "complement"]
     ma $ setc a === setrelc setuniv a
 
 
@@ -55,7 +55,7 @@ doubleComplement = thm $ do
 complementaryLawUnion :: Note
 complementaryLawUnion = thm $ do
     lab unionComplementaryLawTheoremLabel
-    s [the, term "complementary law", " for the set ", union]
+    s [the, defineTerm "complementary law", " for the set ", union]
     let (a, b, x, y) = ("A", "B", "x", "y")
     s ["Let ", m a, and, m b, " be sets"]
     ma $ a ∪ setc a =§= setuniv
@@ -75,7 +75,7 @@ complementaryLawUnion = thm $ do
 
 complementaryLawIntersection :: Note
 complementaryLawIntersection = thm $ do
-    s [the, term "complementary law", " for the set ", intersection]
+    s [the, defineTerm "complementary law", " for the set ", intersection]
     let (a, b, x, y) = ("A", "B", "x", "y")
     s ["Let ", m a, and, m b, " be sets"]
     ma $ a ∩ setc a =§= emptyset
@@ -96,7 +96,7 @@ complementaryLawIntersection = thm $ do
 firstLawOfDeMorgan :: Note
 firstLawOfDeMorgan = thm $ do
     lab firstLawOfDeMorganTheoremLabel
-    s [the, term "first law of De Morgan"]
+    s [the, defineTerm "first law of De Morgan"]
 
     let (a, b, x, y) = ("A", "B", "x", "y")
     ma $ setc (pars $ a ∪ b) =§= setc a ∩ setc b
@@ -117,7 +117,7 @@ firstLawOfDeMorgan = thm $ do
 secondLawOfDeMorgan :: Note
 secondLawOfDeMorgan = thm $ do
     lab secondLawOfDeMorganTheoremLabel
-    s [the, term "second law of De Morgan"]
+    s [the, defineTerm "second law of De Morgan"]
 
     let (a, b, x, y) = ("A", "B", "x", "y")
     ma $ setc (pars $ a ∩ b) =§= setc a ∪ setc b

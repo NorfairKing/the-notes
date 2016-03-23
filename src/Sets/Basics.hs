@@ -67,12 +67,12 @@ setElementNotation = de $ do
 setEqualityDefinition :: Note
 setEqualityDefinition = de $ do
     lab setEqualityDefinitionLabel
-    s ["Two ", sets, " ", m "A", " and ", m "B", " are ", term "equal", " if and only if they contain the same elements"]
+    s ["Two ", sets, " ", m "A", " and ", m "B", " are ", defineTerm "equal", " if and only if they contain the same elements"]
     ma $ ("A" =§= "B") === (fa "x" $ ("x" ∈ "A") ∧ ("x" ∈ "B"))
 
 setEqTransitivity :: Note
 setEqTransitivity = thm $ do
-    s ["The ", term "transitivity", " of ", quoted $ m seteqsign]
+    s ["The ", defineTerm "transitivity", " of ", quoted $ m seteqsign]
     newline
 
     s ["Let ", m "A", ", ", m "B", and , m "C", " be ", sets]
@@ -126,7 +126,7 @@ subsetDefinition = de $ do
 
 subsetAntiSymmetry :: Note
 subsetAntiSymmetry = thm $ do
-    s ["The ", term "anti-symmetry", " of ", quoted $ m subseteqsign, ": ", newline, " Let ", m "A", " and ", m "B", " be ", sets]
+    s ["The ", defineTerm "anti-symmetry", " of ", quoted $ m subseteqsign, ": ", newline, " Let ", m "A", " and ", m "B", " be ", sets]
 
     ma $ (pars $ "A" ⊆ "B" ∧ "B" ⊆ "A") ⇔ "A" =§= "B"
 
@@ -160,7 +160,7 @@ subsetAntiSymmetry = thm $ do
 
 subsetTransitivity :: Note
 subsetTransitivity = thm $ do
-    s ["The ", term "transitivity", " of ", quoted $ m subseteqsign, ": Let ", m "A", ", ", m "B", " and ", m "C", " be ", sets]
+    s ["The ", defineTerm "transitivity", " of ", quoted $ m subseteqsign, ": Let ", m "A", ", ", m "B", " and ", m "C", " be ", sets]
     ma $ do
         ("A" ⊆ "B") ∧ ("B" ⊆ "C") ⇒ ("A" ⊆ "C")
 
@@ -187,14 +187,14 @@ subsetTransitivity = thm $ do
 
 strictSubsetDefinition :: Note
 strictSubsetDefinition = de $ do
-    s ["A ", set, " is a ", term "strict subset", " of another ", set, " if and only if ", m "A", " is a ", ix "subset", " of ", m "B", " and not equal to ", m "B"]
+    s ["A ", set, " is a ", defineTerm "strict subset", " of another ", set, " if and only if ", m "A", " is a ", ix "subset", " of ", m "B", " and not equal to ", m "B"]
     ma $ ("A" `subsetneq` "B") === (("A" ⊆ "B") ∧ ("A" `setneq` "B"))
 
 
 universalSetDefinition :: Note
 universalSetDefinition = do
     de $ do
-        s ["The ", term "universal set", " is the ", set, " of all objects"]
+        s ["The ", defineTerm "universal set", " is the ", set, " of all objects"]
         ma $ setuniv === setcmpr "x" "true"
     nte $ do
         s ["Note that this is not well defined as this ", set, " would have to include itself.", " We will ignore this for now as the ", ix "universal set ", " is usually restricted to a domain that will be clear from the context"]
@@ -213,7 +213,7 @@ universalSetSupsetOfAllSets = thm $ do
 
 emptySetDefinition :: Note
 emptySetDefinition = de $ do
-    s ["The ", term "empty set", " ", m emptyset, " is the ", set, " that contains no elements"]
+    s ["The ", defineTerm "empty set", " ", m emptyset, " is the ", set, " that contains no elements"]
     ma $ emptyset === setcmpr "x" "false"
 
 emptySetSubsetOfAllSets :: Note

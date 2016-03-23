@@ -42,7 +42,7 @@ firstOrderLogicDefinition = de $ do
 
 termDefinition :: Note
 termDefinition = do
-    de $ s ["A ", term "term", " in first order logic is either a constant symbol, a variable or a ", m "k", "-ary function symbol applied to terms"]
+    de $ s ["A ", defineTerm "defineTerm", " in first order logic is either a constant symbol, a variable or a ", m "k", "-ary function symbol applied to terms"]
 
     ex $ s [cs $ P.map (dquoted . m) [1, 2, 3, x, f x], " are terms in first order logic"]
   where
@@ -228,7 +228,7 @@ propositionalisationSS :: Note
 propositionalisationSS = subsubsection "propositionalisation" $ do
     de $ do
         s [propositionalisation', " is an ", inference, " in first order logic"]
-        s ["It consists of replacing all quantified variables with so called ", groundingVariable', "s using each possible term"]
+        s ["It consists of replacing all quantified variables with so called ", groundingVariable', "s using each possible defineTerm"]
         s ["This turns the problem into a propositional logic problem and it can then be solved as discussed before"]
     s ["The problem with proportionalisation is that the solver may need to create a lot of unnecessary symbols"]
     s ["Even worse, the amount of created symbols could be infinite"]

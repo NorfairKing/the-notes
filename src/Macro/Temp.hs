@@ -114,6 +114,9 @@ permutation = ix "permutation"
 countable :: Note
 countable = ix "countable"
 
+smallest :: Note
+smallest = ix "smallest"
+
 -- Groups
 cyclic :: Note
 cyclic = ix "cyclic"

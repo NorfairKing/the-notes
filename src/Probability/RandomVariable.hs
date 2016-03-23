@@ -108,7 +108,7 @@ cumulativeDistributionFunctionDefinition = de $ do
     s ["Let ", m rvfunc_, " be a ", randomVariable]
     s ["The ", cumulativeDistributionFunction', " (", cDF', "), ", distributionFunction', or, probabilityDistribution," as follows"]
     ma $ func df_ reals reals a $ prd (ocint minfty a) =: prob (setcmpr o (vrv o)) =: prob (rv_ <= a)
-    s ["Sometimes the term ", distribution', " is also used as-is"]
+    s ["Sometimes the defineTerm ", distribution', " is also used as-is"]
   where
     a = "a"
     o = omega

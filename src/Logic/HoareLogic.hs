@@ -266,7 +266,7 @@ modifiesDefinition = de $ do
 ruleOfConstancy :: Note
 ruleOfConstancy = do
     de $ do
-        s [the, term "rule of constancy", " is an ", inference, " in Hoare Logic"]
+        s [the, defineTerm "rule of constancy", " is an ", inference, " in Hoare Logic"]
         s ["Let ", m r, " be an assertion"]
         ma $ linf [htrip p a q, (freevars r) ∩ (mods a) =§= emptyset] (htrip (p ∧ r) a (q ∧ r))
         s ["This is known as ", dquoted (s ["Whatever ", m a, " doesn't modify, stays the same"])]
@@ -290,7 +290,7 @@ ruleOfConstancy = do
 conditionalRule :: Note
 conditionalRule = do
     de $ do
-        s [the, term "conditional rule", " is an ", inference, " in Hoare Logic"]
+        s [the, defineTerm "conditional rule", " is an ", inference, " in Hoare Logic"]
         ma $ linf [htrip (p ∧ c) a q, htrip (p ∧ not c) b q] $ htrip p (ifThenElse c a b) q
 
     ex $ ma $ e
@@ -309,7 +309,7 @@ loopRuleDefinition = do
         lab loopRuleDefinitionLabel
         s [the, loopRule', " is an ", inference, " in Hoare Logic"]
         ma $ linf [htrip p a i, htrip (i ∧ not c) b i] $ htrip p (fromUntilLoop a c b) (i ∧ c)
-        s ["The first triple is called the ", term "initiation", and, " the second is called the ", term "consecution", or, term "inductiveness"]
+        s ["The first triple is called the ", defineTerm "initiation", and, " the second is called the ", defineTerm "consecution", or, defineTerm "inductiveness"]
         s ["This rule is also sometimes written as follows"]
         raw "\n"
         prooftree $

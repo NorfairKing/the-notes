@@ -326,7 +326,7 @@ fixedPointRegionIsIntersectionOfAscAndDesc = thm $ do
 
 tarskiFixedPointTheorem :: Note
 tarskiFixedPointTheorem = thm $ do
-    term "Tarksi's fixed point theorem"
+    defineTerm "Tarksi's fixed point theorem"
     newline
     s ["Let", m lat_, "be a", completeLattice_, "and let", m $ fun f x x, "be a", monotone, function]
     s [the, fixedPointRegion, m $ fix f, "of", m f, "is a", completeLattice]
@@ -353,7 +353,7 @@ kleeneChainDefinition = de $ do
 kleenesFixedPointTheorem :: Note
 kleenesFixedPointTheorem = do
     thm $ do
-        term "Kleene's fixed point theorem"
+        defineTerm "Kleene's fixed point theorem"
         newline
         s ["Let ", m lat_, " be a ", completeLattice_, and, m $ fun f x x, " a ", scottContinuous, " function"]
         ma $ lfp f =: sup (kleeneCh bot)
@@ -819,7 +819,7 @@ mostPreciseApproximationDefinition = de $ do
 
 leastFixedPointApproximationTheorem :: Note
 leastFixedPointApproximationTheorem = thm $ do
-    term "Least fixed point approximation"
+    defineTerm "Least fixed point approximation"
     newline
     let a = alpha
         g = gamma
@@ -846,7 +846,7 @@ leastFixedPointApproximationTheorem = thm $ do
 
 leastFixedPointApproximationTheoremWithoutGalois :: Note
 leastFixedPointApproximationTheoremWithoutGalois = thm $ do
-    term "Least fixed point approximation without a Galois connection"
+    defineTerm "Least fixed point approximation without a Galois connection"
     newline
     let g = gamma
         x = "X"

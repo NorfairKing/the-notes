@@ -28,7 +28,7 @@ regularExpressions = section "Regular Expressions" $ do
 
 regularExpressionDefinition :: Note
 regularExpressionDefinition = de $ do
-    s ["A ", regularExpression', " (", term "RE", ") over an ", alphabet, " ", m alph_, " is inductively defined as an expression of the following form"]
+    s ["A ", regularExpression', " (", defineTerm "RE", ") over an ", alphabet, " ", m alph_, " is inductively defined as an expression of the following form"]
     itemize $ do
         item $ m rees
         item $ m ree
