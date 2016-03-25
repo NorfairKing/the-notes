@@ -136,7 +136,7 @@ cryptographicProtocolDefinition :: Note
 cryptographicProtocolDefinition = de $ do
     lab cryptographicProtocolDefinitionLabel
     lab protocolDefinitionLabel
-    s ["A", cryptographicProtocol', "for a given", set, "of parties consists of, for each party, a precicely specified behavior in the interaction with the other parties"]
+    s ["A", cryptographicProtocol', "for a given", set, "of", parties', "(" <> agents' <> ")", "consists of, for each", party <> ", a precicely specified behavior in the interaction with the other parties"]
 
 symmetricCryptosystemDefinition :: Note
 symmetricCryptosystemDefinition = do

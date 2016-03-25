@@ -7,6 +7,8 @@ makeDefs [
     , "cryptosystem"
     , "cryptographic protocol"
     , "protocol"
+    , "party"
+    , "agent"
 
     , "symmetric cryptosystem"
 

@@ -2,9 +2,14 @@ module FormalMethods.Main where
 
 import           Notes                       hiding (constant, cyclic, inverse)
 
+import           Cryptography.Terms          hiding (signature, signature',
+                                              signatureDefinitionLabel)
 import           Functions.Application.Macro
+import           Functions.Basics.Macro
 import           Functions.Basics.Terms
 import           Logic.FirstOrderLogic.Macro
+import           Relations.Equivalence.Macro
+import           Relations.Equivalence.Terms
 import           Sets.Basics.Terms
 
 import           FormalMethods.Macro
@@ -22,12 +27,31 @@ formalMethods = chapter "Formal Methods" $ do
     orientedEquationDefinition
     equationalDerivationDefinition
     peanoEquationalDerivationsExample
+    cryptographicMessagesTermAlgebra
+    freeTermAlgebraDefinition
+    semanticEqualityDefinition
+    quotientTermAlgebraDefinition
+    substitutionDefinition
+    substitutionExamples
+    compositionSubstitution
+    positionDefinition
+    subtermExamples
+    matchesDefinition
+    matchesExamples
+    subtermReplacement
+    subtermReplacementExamples
+    applicationDefinition
+    applicationExamples
+    unifiableDefinition
+    unifiableExamples
+    mostGeneralUnifier
+
 
 signatureDefinition :: Note
 signatureDefinition = de $ do
     lab signatureDefinitionLabel
     lab arityDefinitionLabel
-    s ["A", signature', m sig_, "is a", set, "of", function, "symbols, each with an", arity']
+    s ["A", signature', m sig_, "is a", set, "of so-called", function, "symbols, each with an", arity']
 
 constantDefinition :: Note
 constantDefinition = de $ do
@@ -83,11 +107,13 @@ equationalTheoryDefinition = de $ do
 
 orientedEquationDefinition :: Note
 orientedEquationDefinition = de $ do
+    lab ruleDefinitionLabel
     let t = "t"
         t' = "t'"
     s ["An", equation, m $ t =: t', "can be oriented"]
-    s ["If it is oriented left, it is written as", m $ t <> leftarrow <> t']
-    s ["If it is oriented right, it is written as", m $ t <> rightarrow <> t']
+    s ["If it is oriented left, it is written as", m $ rr t t']
+    s ["If it is oriented right, it is written as", m $ lr t t']
+    s ["An oriented", equation, "is called a", rule']
 
 equationalDerivationDefinition :: Note
 equationalDerivationDefinition = de $ do
@@ -107,4 +133,215 @@ peanoEquationalDerivationsExample = ex $ do
     s ["Using", m $ res eqs_, "on", m $ succ (succ 0) + succ 0, "yields the following", equationalDerivation]
     ma $ succ (succ 0) + succ 0 =: succ (succ (succ 0) + 0) =: succ (succ (succ 0))
 
+
+cryptographicMessagesTermAlgebra :: Note
+cryptographicMessagesTermAlgebra = de $ do
+    s [the, termAlgebra, "of", "cryptographic messages", "is defined as follows"]
+    s ["Let the following be a", signature]
+    ma $ sig_ =: ags_ ∪ frsh_ ∪ fncs_ ∪ setofs [pair cdot_ cdot_, pk cdot_, aenc cdot_ cdot_, senc cdot_ cdot_]
+    itemize $ do
+        item $ s [m vars_ <> ":", the, set, "of", variables]
+        item $ s [m ags_  <> ":", the, set, "of", agents]
+        item $ s [m fncs_ <> ":", the, set, "of", functions]
+        let t = "t"
+            t1 = t !: 1
+            t2 = t !: 2
+        item $ s [m $ pair t1 t2 <> ":", "pairing"]
+        item $ s [m $ pk t <> ":", publicKey]
+        item $ s [m $ aenc t1 t2 <> ":", "asymmetric encryption"]
+        item $ s [m $ senc t1 t2 <> ":", "symmetric encryption"]
+    s ["In this", termAlgebra, "every term is called a", message]
+
+
+freeTermAlgebraDefinition :: Note
+freeTermAlgebraDefinition = de $ do
+    s [the, freeTermAlgebra', "over a given", termAlgebra, m ta_, "is the", termAlgebra, "in which every", term, "is interpreted as its syntactic representation"]
+    s ["We define the", freeEquationalTheory', "over it with", equations, "as follows"]
+    let t = "t"
+        t1 = t !: 1
+        t2 = t !: 2
+    ma $ t1 =: t2 <> text " if and only if " <> t1 =!= t2
+
+semanticEqualityDefinition :: Note
+semanticEqualityDefinition = nte $ do
+    let t = "t"
+    s ["A", set, "of", equations, m eqs_, "induces a congruence relation", m eqr_, "on", terms, "and thus the equivalence class", m $ eqcl eqr_ t, "of a", term, m t, "modulo", m eqs_]
+    s ["This congruence relation is called", defineTerm "semantic equality"]
+
+quotientTermAlgebraDefinition :: Note
+quotientTermAlgebraDefinition = de $ do
+    s ["Let", m sig_, "be a", signature <> ", ", m vars_, asetof, variables, and, m eqs_, asetof, equations]
+    s [the, quotientTermAlgebra', m $ eqr_ `eqcls` ta sig_ vars_, "interprets each", term, "by its own", equivalenceClass]
+
+substitutionDefinition :: Note
+substitutionDefinition = de $ do
+    lab substitutionDefinitionLabel
+    s ["Let", m sig_, "be a", signature, and, m vars_, asetof, variables]
+    let sub = fn subs_
+        x = "x"
+    s ["A", substitution', m subs_, "is a", function, m $ fun subs_ vars_ ta_, "where", m $ sub x, "is different from", m x, "for finitely many", m $ x ∈ vars_]
+
+    s ["We write substitutions in postfix notation and homomorphically extend them to a mapping", m $ fun subs_ ta_ ta_, "on", terms, "as follows"]
+    let t = "t"
+        t1 = t !: 1
+        t2 = t !: 2
+        n = "n"
+        tn = t !: n
+        f = "f"
+    ma $ sb subs_ (fn f $ list t1 t2 tn) =: fn f (list (sb_ t1) (sb_ t2) (sb_ tn))
+
+substitutionExamples :: Note
+substitutionExamples = do
+    ex $ do
+        let x = "X"
+            mesg = "M"
+            k = "K"
+        s ["Given a", substitution, m $ subs_ =: setof (x <> mapsto <> senc mesg k), "and the term", m $ pair x k, "we can apply the", substitution, "to get the following", term]
+        ma $ sb_ (pair x k) =: pair (senc mesg k) k
+
+compositionSubstitution :: Note
+compositionSubstitution = thm $ do
+    s ["The composition of", substitutions, "is again a", substitution]
+    toprove
+
+positionDefinition :: Note
+positionDefinition = de $ do
+    lab positionDefinitionLabel
+    lab subtermDefinitionLabel
+    s ["A", position', "is a list of natural numbers"]
+    let t = "t"
+        p = pos_
+    s ["Given a position", m p <> ",", the, subterm, m $ t |. p, "of a", term, m t, "at", position, m p, "is defined as follows"]
+    let t = "t"
+        t1 = t !: 1
+        t2 = t !: 2
+        i = "i"
+        ti = t !: i
+        n = "n"
+        tn = t !: n
+    itemize $ do
+        item $ m $ t |. nil === t
+        item $ do
+            let f = "f"
+            s ["Let", m t, "be a", term, "of the form", m $ t =: fn f (list t1 t2 tn), "for", m $ f ∈ sig_, and, m $ 1 <= i <= n]
+            let q = "q"
+            ma $ t |. (cns i q) === ti |. q
+
+
+subtermExamples :: Note
+subtermExamples = ex $ do
+    let t = "t"
+        mesg = "M"
+        k = "K"
+    s ["For the", term, m $ t =: sdec_ (senc_ mesg k) k, "there are five subterms"]
+
+    itemize $ do
+        item $ m $ t |. nil =: t
+        item $ m $ t |. sing 1 =: senc_ mesg k
+        item $ m $ t |. listofs [1, 1] =: mesg
+        item $ m $ t |. listofs [1, 2] =: k
+        item $ m $ t |. sing 2 =: k
+
+matchesDefinition :: Note
+matchesDefinition = de $ do
+    lab matchesDefinitionLabel
+    lab matchingSubstitutionDefinitionLabel
+    let t = "t"
+        l = "l"
+    s ["A", term, m t, matches', "another", term, m l, "if there is a", subterm, "of", m $ t |. pos_, "such that there is a", substitution, m subs_, "so that", m $ t |. pos_ =: sb_ l]
+    s ["We call this", substitution, "the", matchingSubstitution']
+
+matchesExamples :: Note
+matchesExamples = do
+    ex $ do
+        let t = "t"
+            mesg = "M"
+            k = "K"
+        s ["Let", m $ t =: sdec_ (senc_ mesg k) k, "be a", term]
+        itemize $ do
+            item $ s [m $ senc_ mesg k, matches, m t, "at", position, m $ sing 1, "with the identity", matchingSubstitution]
+            let x = "X"
+            item $ s [m x, matches, m t, "at", position, m $ sing 1, "with", m $ funcomp [(x, senc_ mesg k)], "as", matchingSubstitution]
+            item $ s [m x, matches, m t, "at", position, m nil, "with", m $ funcomp [(x, t)], "as", matchingSubstitution]
+            item $ s [m $ sdec_ x k, matches, m t, "at", position, m nil, "with", m $ funcomp [(x, senc_ mesg k)], "as", matchingSubstitution]
+            item $ s [m $ sdec_ (senc_ mesg x) x, matches, m t, "at", position, m nil, "with", m $ funcomp [(x, k)], "as", matchingSubstitution]
+            let y = "Y"
+            item $ s [m $ pair x y, "does not match", m t, "anywhere"]
+
+
+subtermReplacement :: Note
+subtermReplacement = de $ do
+    let t = "t"
+        r = "r"
+        p = pos_
+    s ["Let", m t, "be a", term, and, m p, "a", position, "with", matchingSubstitution, m subs_]
+    s ["Let", m r, "be another", term]
+    s ["We denote", m t, "with the subterm at", position, m p, "replaced by", m r, "as", m $ trepl t r p]
+
+subtermReplacementExamples :: Note
+subtermReplacementExamples = do
+    ex $ do
+        let t = "t"
+            mesg = "M"
+            k = "K"
+            r = "r"
+            x = "X"
+            y = "Y"
+        s ["Let", m $ t =: sdec_ (senc_ mesg k) k, and, m $ r =: pair x y, "be", terms]
+        itemize $ do
+            item $ m $ trepl t r (sing 1) =: sdec_ (pair x y) k
+            item $ m $ trepl t y (listofs [1, 2]) =: sdec_ (senc_ mesg y) k
+            item $ m $ trepl t r nil =: r
+
+applicationDefinition :: Note
+applicationDefinition = de $ do
+    lab applicableDefinitionLabel
+    lab applicationDefinitionLabel
+    let l = "l"
+        t = "t"
+        r = "r"
+        p = pos_
+    s ["A", rule, m $ rr l r, "is", applicable', "on a", term, m t, "when", m t, "matches", m l]
+    s [the, "result of applying such a", rule, "is the", term, m $ trepl t (sb_ r) p, "where", m subs_, "is the", matchingSubstitution]
+
+applicationExamples :: Note
+applicationExamples = do
+    ex $ do
+        let t = "t"
+            mesg = "M"
+            k = "K"
+        s ["Let", m $ t =: sdec_ (senc_ mesg k) k, "be a", term]
+        let x = "X"
+        s [m x, matches, m t, "at", position, m $ sing 1, "with", m $ funcomp [(x, senc_ mesg k)], "as", matchingSubstitution]
+        let y = "Y"
+            z = "Z"
+        s ["Let", m $ rr x $ pair y z, "be a", rule]
+        s ["This", rule, "is", applicable, "to", m t, "because", m x, "matches", m t]
+        s ["The result of the application is", m $ sdec_ (pair y z) k]
+    ex $ do
+        let t = "t"
+            a = "A"
+            b = "B"
+        s ["Let", m $ t =: pair a b, "be a", term]
+        let x = "X"
+        s [m $ pair x b, matches, m t, "at", position, m nil, "with", matchingSubstitution, m $ funcomp [(x, a)]]
+        s [the, rule, m $ rr (pair x b) (pair b x), "is", applicable, "to", m t, "and the result is", m $ pair b x]
+
+unifiableDefinition :: Note
+unifiableDefinition = de $ do
+    lab unifiableDefinitionLabel
+    lab unifierDefinitionLabel
+    let t = "t"
+        t1 = t !: 1
+        t2 = t !: 2
+    s ["We say that an", equation, m $ t1 =?= t2, "is", unifiable, "in an", equationalTheory, m et_, "for", m $ cs [t1, t2] ∈ ta_, "if there is a", substitution, m subs_, "such that", m $ sb_ t1 `eq_` sb_ t2, "holds"]
+    s ["We then call", m subs_, "a", unifier]
+
+unifiableExamples :: Note
+unifiableExamples = do
+    exneeded
+
+mostGeneralUnifier :: Note
+mostGeneralUnifier = de $ do
+    s [the, defineTerm "most general unifier", "TODO"]
 

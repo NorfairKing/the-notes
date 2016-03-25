@@ -12,3 +12,7 @@ makeDefs [
 
 makeThm "Every set is a subset of the universe"
 makeDe "Set equality"
+
+
+asetof :: Note
+asetof = "a " <> set <> " of"

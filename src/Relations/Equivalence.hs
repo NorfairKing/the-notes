@@ -14,15 +14,15 @@ import           Relations.Equivalence.Terms
 equivalenceRelationS :: Note
 equivalenceRelationS = section "Equivalence Relations" $ do
     equivalenceRelationDefinition
-    equivalenceClasses
+    equivalenceClassesSS
 
 equivalenceRelationDefinition :: Note
 equivalenceRelationDefinition = de $ do
     lab equivalenceRelationDefinitionLabel
     s ["A ", symmetric_, " ", preorder, " is called an ", equivalenceRelation']
 
-equivalenceClasses :: Note
-equivalenceClasses = subsection "Equivalence Classes" $ do
+equivalenceClassesSS :: Note
+equivalenceClassesSS = subsection "Equivalence Classes" $ do
     equivalenceClassDefinition
 
     totheorem "The equivalence class of an element contains that element"
@@ -35,13 +35,10 @@ equivalenceClasses = subsection "Equivalence Classes" $ do
     totheorem "A partition induces an equivalence relation"
 
 
-equivalenceClass :: Note
-equivalenceClass = ix "equivalence class"
-
 equivalenceClassDefinition :: Note
 equivalenceClassDefinition = de $ do
     s ["Let ", m eqrel_, " be an ", equivalenceRelation, " on a set ", m xx, " and let ", m x, " be an element of ", m xx]
-    s ["The ", defineTerm "equivalence class", " ", m (eqcl_ x), " of ", m x, " in ", m eqrel_, " is the set of all elements that are equivalent to ", m x]
+    s ["The ", equivalenceClass', " ", m (eqcl_ x), " of ", m x, " in ", m eqrel_, " is the set of all elements that are equivalent to ", m x]
 
     ma $ eqcl_ x === setcmpr (y ∈ xx) (x .~ y)
   where
@@ -51,8 +48,9 @@ equivalenceClassDefinition = de $ do
 
 quotientSetDefinition :: Note
 quotientSetDefinition = de $ do
+    lab quotientSetDefinitionLabel
     s ["Let ", m eqrel_, " be an ", equivalenceRelation, " on a set ", m xx]
-    s ["The ", defineTerm "quotient set", " ", m (eqrel_ `eqcls` xx),  " of ", m xx, " with respect to ", m eqrel_, " is the set of all equivalennce classes of ", m xx, " in ", m eqrel_]
+    s ["The ", quotientSet', " ", m (eqrel_ `eqcls` xx),  " of ", m xx, " with respect to ", m eqrel_, " is the set of all equivalennce classes of ", m xx, " in ", m eqrel_]
 
     ma $ (xx ./~ eqrel_) === setcmpr (eqcl_ x) (x ∈ xx)
   where
