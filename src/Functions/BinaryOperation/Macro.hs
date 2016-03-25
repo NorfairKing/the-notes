@@ -38,3 +38,6 @@ binopapp_ = binop binop_
 (★) :: Note -> Note -> Note
 (★) = binopapp_
 
+-- | Binary Identity
+bid_ :: Note
+bid_ = "i"

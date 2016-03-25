@@ -6,8 +6,6 @@ makeDefs
     [ "magma"
     , "semigroup"
     , "monoid"
-    , "identity"
-    , "neutral element"
     , "group"
     , "subgroup"
     , "trivial subgroup"
@@ -19,7 +17,9 @@ makeDefs
 
 
 makeThms
-    [ "subgroup same identity"
+    [ "inverse unique"
+    , "inverse of applied operation"
+    , "subgroup same identity"
     , "generated set is group"
     , "trivial subgroups"
     , "element order divides group order"

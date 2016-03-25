@@ -25,4 +25,3 @@ fa n m = forallSign <> n <> ":" <> commS " " <> m
 
 fas :: [Note] -> Note -> Note
 fas ns = fa $ cs ns
-
