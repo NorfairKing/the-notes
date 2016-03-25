@@ -32,6 +32,7 @@ makeDefs
     , "termination"
     , "terminating"
     , "confluence"
+    , "confluent"
     ]
 
 eequalityStep :: Note -> Note

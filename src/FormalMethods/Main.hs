@@ -8,6 +8,7 @@ import           Cryptography.Terms             hiding (signature, signature',
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
 import           Functions.Basics.Terms
+import           Functions.Inverse.Macro
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
 import           Relations.Equivalence.Macro
@@ -21,15 +22,16 @@ formalMethods :: Note
 formalMethods = chapter "Formal Methods" $ do
     signatureDefinition
     constantDefinition
+    signatureArityNote
     peanoExampleSig
     termAlgebraDefinition
     peanoExampleAlgebra
     equationDefinition
+    peanoEquationsExample
     equationalTheoryDefinition
     orientedEquationDefinition
-    equationalDerivationDefinition
-    peanoEquationalDerivationsExample
     cryptographicMessagesTermAlgebra
+    cryptographicMessagesEquations
     freeTermAlgebraDefinition
     semanticEqualityDefinition
     quotientTermAlgebraDefinition
@@ -50,6 +52,7 @@ formalMethods = chapter "Formal Methods" $ do
     equalityStepDefinition
     equalityRelationDefinition
     equalityProofDefinition
+    equalityProofExamples
     infiniteComputationsDefinition
     terminatingDefinition
     terminatingExamples
@@ -68,6 +71,9 @@ constantDefinition :: Note
 constantDefinition = de $ do
     lab constantDefinitionLabel
     s ["A", constant', "is an element of a", signature, "with arity", m 0]
+
+signatureArityNote :: Note
+signatureArityNote = nte $ s ["For a", function, "symbol with arity", m 2, "the infix notation is sometimes used"]
 
 peanoExampleSig :: Note
 peanoExampleSig = ex $ do
@@ -111,6 +117,17 @@ equationDefinition = de $ do
         t' = "t'"
     s ["An", equation', "is a pair of", m terms', m (tuple t t') <> ", written", m $ t =: t']
 
+peanoEquationsExample :: Note
+peanoEquationsExample = ex $ do
+    s [the, equations, m eqs_, "defining the Peano natural numbers are the following"]
+    let succ = fn "succ"
+    itemize $ do
+        let x = "X"
+        item $ m $ x + 0 =: x
+        let y = "Y"
+        item $ m $ x + succ y =: succ (x + y)
+
+
 equationalTheoryDefinition :: Note
 equationalTheoryDefinition = de $ do
     s ["Let", m sig_, "be a", signature, "and", m eqs_, "a set of", equations']
@@ -132,19 +149,6 @@ equationalDerivationDefinition = de $ do
     s ["Let", m et_, "be an", equationalTheory]
     s ["An", equationalDerivation', "in", m et_, "is a list of", terms, "such that every pair of two successive", terms, "is an", equation, "in", m eqs_]
 
-peanoEquationalDerivationsExample :: Note
-peanoEquationalDerivationsExample = ex $ do
-    s [the, equations, m eqs_, "defining the Peano natural numbers are the following"]
-    let succ = fn "succ"
-    itemize $ do
-        let x = "X"
-        item $ m $ x + 0 =: x
-        let y = "Y"
-        item $ m $ x + succ y =: succ (x + y)
-    s ["Using", m $ res eqs_, "on", m $ succ (succ 0) + succ 0, "yields the following", equationalDerivation]
-    ma $ succ (succ 0) + succ 0 =: succ (succ (succ 0) + 0) =: succ (succ (succ 0))
-
-
 cryptographicMessagesTermAlgebra :: Note
 cryptographicMessagesTermAlgebra = de $ do
     s [the, termAlgebra, "of", "cryptographic messages", "is defined as follows"]
@@ -163,6 +167,19 @@ cryptographicMessagesTermAlgebra = de $ do
         item $ s [m $ senc t1 t2 <> ":", "symmetric encryption"]
     s ["In this", termAlgebra, "every term is called a", message]
 
+cryptographicMessagesEquations :: Note
+cryptographicMessagesEquations = de $ do
+    s [the, equationalTheory, "of", "cryptographic messages", "contains the following", equations]
+    itemize $ do
+        let mesg = "M"
+            k = "K"
+        item $ m $ aenc (aenc mesg k) (inv k) =: mesg
+        item $ m $ inv (inv k) =: k
+        item $ m $ senc (senc mesg k) k =: mesg
+        let x = "X"
+            y = "Y"
+            b = "B"
+        item $ m $ exp_ (exp_ b x) y =: exp_ (exp_ b y) x
 
 freeTermAlgebraDefinition :: Note
 freeTermAlgebraDefinition = de $ do
@@ -382,6 +399,19 @@ equalityProofDefinition = de $ do
         tn = t !: n
     s ["A list of", equalitySteps, m $ t0 <--> t1 <--> dotsc <--> tn <> ", witnessing", m n <> "-" <> equalityStep, "equality of", m t0, and, m tn, "is called an", equalityProof']
 
+equalityProofExamples :: Note
+equalityProofExamples = do
+    ex $ do
+        s ["Let", m eqs_, "consist of the following equations"]
+        let succ = fn "succ"
+        itemize $ do
+            let x = "X"
+            item $ m $ x + 0 =: x
+            let y = "Y"
+            item $ m $ x + succ y =: succ (x + y)
+        s ["Using", m $ res eqs_, "on", m $ succ (succ 0) + succ 0, "yields the following", equalityProof]
+        ma $ succ (succ 0) + succ 0 =: succ (succ (succ 0) + 0) =: succ (succ (succ 0))
+
 infiniteComputationsDefinition :: Note
 infiniteComputationsDefinition = de $ do
     lab infiniteComputationsDefinitionLabel
@@ -398,7 +428,10 @@ terminatingDefinition = de $ do
 
 terminatingExamples :: Note
 terminatingExamples = do
-    exneeded
+    let a = "a"
+        b = "b"
+    ex $ s ["For", m $ eqs_ =: setof (a =: b) <> ",", m $ res eqs_, "is", terminating]
+    ex $ s ["For", m $ eqs_ =: setofs [a =: b, b =: a] <> ",", m $ res eqs_, "is not", terminating]
 
 reachingNotation :: Note
 reachingNotation = de $ do
@@ -416,6 +449,7 @@ reachingNotation = de $ do
 confluenceDefinition :: Note
 confluenceDefinition = de $ do
     lab confluenceDefinitionLabel
+    lab confluentDefinitionLabel
     s ["An", equationalTheory, m et_, "is said to have the property of", confluence', "if the following holds"]
     let t = ("t" !:)
         t1 = t 1
@@ -426,6 +460,10 @@ confluenceDefinition = de $ do
 
 confluenceExamples :: Note
 confluenceExamples = do
-    exneeded
+    let a = "a"
+        b = "b"
+        c = "c"
+    ex $ s ["For", m $ eqs_ =: setofs [a =: b, a =: c] <> ",", m $ res eqs_, "is not", confluent]
+    ex $ s ["For", m $ eqs_ =: setofs [a =: b, a =: c, b =: c] <> ",", m $ res eqs_, "is", confluent]
 
 

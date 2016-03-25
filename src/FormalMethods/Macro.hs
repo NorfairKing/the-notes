@@ -99,6 +99,10 @@ senc_ = fn2 "senc"
 sdec_ :: Note -> Note -> Note
 sdec_ = fn2 "sdec"
 
+-- | Exponentiation
+exp_ :: Note -> Note -> Note
+exp_ = fn2 "exp"
+
 -- | Syntactic equality
 synteq :: Note -> Note -> Note
 synteq = binop $ "=" !: "syntactic"
