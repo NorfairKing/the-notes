@@ -1,13 +1,15 @@
 module FormalMethods.Main where
 
-import           Notes                       hiding (constant, cyclic, inverse)
+import           Notes                          hiding (constant, cyclic,
+                                                 inverse)
 
-import           Cryptography.Terms          hiding (signature, signature',
-                                              signatureDefinitionLabel)
+import           Cryptography.Terms             hiding (signature, signature',
+                                                 signatureDefinitionLabel)
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
 import           Functions.Basics.Terms
 import           Logic.FirstOrderLogic.Macro
+import           Logic.PropositionalLogic.Macro
 import           Relations.Equivalence.Macro
 import           Relations.Equivalence.Terms
 import           Sets.Basics.Terms
@@ -45,6 +47,15 @@ formalMethods = chapter "Formal Methods" $ do
     unifiableDefinition
     unifiableExamples
     mostGeneralUnifier
+    equalityStepDefinition
+    equalityRelationDefinition
+    equalityProofDefinition
+    infiniteComputationsDefinition
+    terminatingDefinition
+    terminatingExamples
+    reachingNotation
+    confluenceDefinition
+    confluenceExamples
 
 
 signatureDefinition :: Note
@@ -344,4 +355,77 @@ unifiableExamples = do
 mostGeneralUnifier :: Note
 mostGeneralUnifier = de $ do
     s [the, defineTerm "most general unifier", "TODO"]
+
+equalityStepDefinition :: Note
+equalityStepDefinition = de $ do
+    lab equalityStepDefinitionLabel
+    let u = "u"
+        v = "v"
+    s ["Let", m et_, "be an", equationalTheory, "and let", m u, and, m v, "be", terms, "in", m ta_]
+    s ["If either", m $ rr u v, or, m $ lr u v, "is in", m eqs_, "then", m $ u <--> v, "is said to be an", m eqs_ <> "-" <> equalityStep']
+
+equalityRelationDefinition :: Note
+equalityRelationDefinition = de $ do
+    lab equalityRelationDefinitionLabel
+    s ["Let", m et_, "be an", equationalTheory]
+    s [the, "transitive-reflexive closure", "of", m $ "" <--> "", "is the", m eqs_ <> "-" <> equalityRelation', m eqr_]
+    todo "define transitive reflexive closure, or just closures in general"
+
+equalityProofDefinition :: Note
+equalityProofDefinition = de $ do
+    lab equalityProofDefinitionLabel
+    s ["Let", m et_, "be an", equationalTheory]
+    let t = "t"
+        t0 = t !: 0
+        t1 = t !: 1
+        n = "n"
+        tn = t !: n
+    s ["A list of", equalitySteps, m $ t0 <--> t1 <--> dotsc <--> tn <> ", witnessing", m n <> "-" <> equalityStep, "equality of", m t0, and, m tn, "is called an", equalityProof']
+
+infiniteComputationsDefinition :: Note
+infiniteComputationsDefinition = de $ do
+    lab infiniteComputationsDefinitionLabel
+    let a_ = "a"
+        a = fn a_
+    s ["An", equationalTheory, m et_, "is said to have", infiniteComputations', "if there is a", function, m $ fun a_ naturals ta_, "as follows"]
+    let n = "n"
+    ma $ a 0 `rr` a 1 `rr` a 2 `rr` dotsb `rr` a n `rr` a (n + 1) `rr` dotsb
+
+terminatingDefinition :: Note
+terminatingDefinition = de $ do
+    lab terminatingDefinitionLabel
+    s ["An", equationalTheory, m et_, "is said to be", terminating', "when it does not have", infiniteComputations]
+
+terminatingExamples :: Note
+terminatingExamples = do
+    exneeded
+
+reachingNotation :: Note
+reachingNotation = de $ do
+    let u = "u"
+        v = "v"
+    s ["Let", m et_, "be an", equationalTheory, and, m u, and, m v, terms, "in", m ta_]
+    s ["We define the following abbreviation"]
+    let t = ("t" !:)
+        t1 = t 1
+        t2 = t 2
+        n = "n"
+        tn = t n
+    ma $ u ->* v === te (list t1 t2 tn) (u `rr` t1 `rr` t2 `rr` dotsb `rr` tn `rr` v)
+
+confluenceDefinition :: Note
+confluenceDefinition = de $ do
+    lab confluenceDefinitionLabel
+    s ["An", equationalTheory, m et_, "is said to have the property of", confluence', "if the following holds"]
+    let t = ("t" !:)
+        t1 = t 1
+        t2 = t 2
+        t3 = t 3
+        t4 = t 4
+    ma $ fa (cs [t1, t2, t3] ∈ ta_) $ (pars $ t1 ->* t2 ∧ t1 ->* t3) ⇒ (pars $ te (t4 ∈ ta_) $ t2 ->* t4 ∧ t3 ->* t4)
+
+confluenceExamples :: Note
+confluenceExamples = do
+    exneeded
+
 

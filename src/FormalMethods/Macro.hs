@@ -168,3 +168,22 @@ qeq = binop $ comm2 "overset" "?" "="
 -- TODO move this to the math macros?
 (=?=) :: Note -> Note -> Note
 (=?=) = qeq
+
+
+-- | Equality step
+-- mnemonic: EQuality in Both directions
+eqb :: Note -> Note -> Note -> Note
+eqb e = binop $ leftrightarrow !: e
+
+-- | Equality step with concrete equation set
+eqb_ :: Note -> Note -> Note
+eqb_ = eqb eqs_
+
+-- | Infix version of the above
+(<-->) :: Note -> Note -> Note
+(<-->) = eqb_
+
+-- | A chain of -> between two terms
+(->*) :: Note -> Note -> Note
+(->*) = binop $ rightarrow ^: "*"
+

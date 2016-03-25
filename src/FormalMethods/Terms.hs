@@ -25,4 +25,17 @@ makeDefs
     , "application"
     , "unifiable"
     , "unifier"
+    , "equality step"
+    , "equality relation"
+    , "equality proof"
+    , "infinite computations"
+    , "termination"
+    , "terminating"
+    , "confluence"
     ]
+
+eequalityStep :: Note -> Note
+eequalityStep e = m e <> "-" <> equalityStep
+
+eequalityRelation :: Note -> Note
+eequalityRelation e = m e <> "-" <> equalityRelation
