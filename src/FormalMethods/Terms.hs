@@ -25,6 +25,7 @@ makeDefs
     , "application"
     , "unifiable"
     , "unifier"
+    , "unify"
     , "equality step"
     , "equality relation"
     , "equality proof"

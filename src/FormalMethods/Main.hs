@@ -359,6 +359,7 @@ unifiableDefinition :: Note
 unifiableDefinition = de $ do
     lab unifiableDefinitionLabel
     lab unifierDefinitionLabel
+    lab unifyDefinitionLabel
     let t = "t"
         t1 = t !: 1
         t2 = t !: 2
@@ -367,7 +368,24 @@ unifiableDefinition = de $ do
 
 unifiableExamples :: Note
 unifiableExamples = do
-    exneeded
+    let f_ = "f"
+        f = fn2 f_
+        h_ = "h"
+        h = fn h_
+        a = "a"
+        b = "b"
+        x = "X"
+        y = "Y"
+        z = "Z"
+        ta_ = ta (setofs [f_, h_, a, b]) (setofs [x, y, z])
+    ex $ do
+        s ["In the", freeEquationalTheory, "over", m ta_, "the following statements are true"]
+        itemize $ do
+            item $ s [m $ f x y =?= f (h a) x, "is", unifiable, "by the", substitution, m $ funcomp [(x, h a), (y, x)]]
+            item $ s [m $ f x y =?= f (h x) x, "is not", unifiable, "because", m x, and, m $ h x, "can never", unify]
+            item $ s [m $ f x b =?= f (h y) z, "is", unifiable, "by the", substitution, m $ funcomp [(x, h y), (z, b)]]
+            item $ s [m $ f x x =?= f (h y) y, "is not", unifiable]
+
 
 mostGeneralUnifier :: Note
 mostGeneralUnifier = de $ do
