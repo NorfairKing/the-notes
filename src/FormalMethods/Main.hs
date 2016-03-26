@@ -286,6 +286,7 @@ matchesExamples = do
             mesg = "M"
             k = "K"
         s ["Let", m $ t =: sdec_ (senc_ mesg k) k, "be a", term]
+        todo "define the term algebra explicitly"
         itemize $ do
             item $ s [m $ senc_ mesg k, matches, m t, "at", position, m $ sing 1, "with the identity", matchingSubstitution]
             let x = "X"
@@ -295,6 +296,23 @@ matchesExamples = do
             item $ s [m $ sdec_ (senc_ mesg x) x, matches, m t, "at", position, m nil, "with", m $ funcomp [(x, k)], "as", matchingSubstitution]
             let y = "Y"
             item $ s [m $ pair x y, "does not match", m t, "anywhere"]
+    ex $ do
+        let f_ = "f"
+            f = fn2 f_
+            h_ = "h"
+            h = fn h_
+            a = "a"
+            b = "b"
+            x = "X"
+            y = "Y"
+            z = "Z"
+            ta_ = ta (setofs [f_, h_, a, b]) (setofs [x, y, z])
+        s ["Consider the", termAlgebra, m ta_]
+        itemize $ do
+            item $ s [m $ f (h a) x, "matches", m $ f x y, "with", matchingSubstitution, m $ funcomp [(x, h a), (y, x)], "at", position, m nil]
+            item $ s [m $ f (h x) x, "matches", m $ f x y, "with", matchingSubstitution, m $ funcomp [(x, h x), (y, x)], "at", position, m nil]
+            item $ s [m $ f (h y) z, "does not match", m $ f x b, "anywhere"]
+            item $ s [m $ f (h y) y, "does not match", m $ f x x, "anywhere"]
 
 
 subtermReplacement :: Note
@@ -385,7 +403,13 @@ unifiableExamples = do
             item $ s [m $ f x y =?= f (h x) x, "is not", unifiable, "because", m x, and, m $ h x, "can never", unify]
             item $ s [m $ f x b =?= f (h y) z, "is", unifiable, "by the", substitution, m $ funcomp [(x, h y), (z, b)]]
             item $ s [m $ f x x =?= f (h y) y, "is not", unifiable]
-
+    ex $ do
+        s ["In the", freeEquationalTheory, "over the", quotientTermAlgebra, "of", m ta_, "modulo", m $ setofs [f a b =: f b a], "the following statements are true"]
+        itemize $ do
+            item $ s [m $ f x y =?= f (h a) x, "is", unifiable, "by an even more general", substitution, m $ funcomp [(y, h(a))]]
+            item $ s [m $ f x y =?= f (h x) x, "is", unifiable, "by the", substitution, m $ funcomp [(y, h x)], "where there was no", unifier, "before"]
+            item $ s [m $ f x b =?= f (h y) z, "is", unifiable, "by the", substitution, m $ funcomp [(x, h y), (z, b)], "just as before"]
+            item $ s [m $ f x x =?= f (h y) y, "is not", unifiable]
 
 mostGeneralUnifier :: Note
 mostGeneralUnifier = de $ do
