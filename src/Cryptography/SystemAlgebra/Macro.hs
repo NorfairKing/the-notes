@@ -86,3 +86,25 @@ ubitsbea n = textbf "U" !: n
 -- | Uniform random function
 urf :: Note -> Note -> Note
 urf m n = textbf "R" !: cs [m, n]
+
+
+-- | Synchronous composition
+syncomp :: Note -> Note -> Note
+syncomp = binop "|"
+
+-- | Asynchronous composition
+asyncomp :: Note -> Note -> Note
+asyncomp a b = sqbrac $ cs [a, b]
+
+
+
+
+
+
+
+
+
+
+
+
+

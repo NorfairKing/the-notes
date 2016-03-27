@@ -6,6 +6,7 @@ import           Cryptography.Macro
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
 import           Functions.Basics.Terms
+import           Functions.BinaryOperation.Macro
 import           Functions.BinaryOperation.Terms
 import           Logic.FirstOrderLogic.Macro
 import           Probability.RandomVariable.Terms
@@ -50,6 +51,9 @@ systemAlgebraS = section "System Algebra" $ do
             bitStringBeaconDefinition
             uniformBitstringBeaconDefinition
             uniformRandomFunctionSystem
+            xyOperationSystemDefinition
+            synchronousParallelCompositionDefinition
+            asynchronousParallelCompositionDefinition
 
 
 abstractSystemAlgebraDefinition :: Note
@@ -267,7 +271,7 @@ xySystemsDefinition = de $ do
         f_ i = f !: i
         x_ i = "x" !: i
         y_ i = "y" !: i
-    s ["A", system, "that computes a", function, m $ fun f x y, "for every new input, i.e.,", m $ y_ i =: fn (f_ i) (x_ i) <> ",is called an", m (tuple x y) <> "-" <> system']
+    s ["A", system, "that computes a", function, m $ fun f x y, "for every new input, i.e.,", m (y_ i =: fn (f_ i) (x_ i)) <> ",is called an", m (tuple x y) <> "-" <> system']
     let r = "R"
     s ["More precicely, an", xyS x y, m r, "is a", nS 1, "that takes inputs from a", countable, set, m x, "and (probabillistically) generates an output from a", countable, set, m y, "that possibly depends on an internal state of the", system]
 
@@ -307,5 +311,88 @@ uniformRandomFunctionSystem = de $ do
     let m_ = "m"
         n_ = "n"
     s ["Typically we consider", m $ x =: bitss m_, and, m $ y =: bitss n_, "and denote such a", uRF, "as", m $ urf m_ n_]
+
+
+xyOperationSystemDefinition :: Note
+xyOperationSystemDefinition = de $ do
+    let x = mathcal "X"
+        y = mathcal "Y"
+        a = "a"
+        b = "b"
+    s ["Consider two", xySs x y, m a, and, m b]
+    s ["For a", binaryOperation, m binop_, "on", m y <> ", the", system, m $ a ★ b, "is the", xyS x y, "where the input is given to both", m a, and, m b, "and their outputs are combined using", m binop_, "as follows"]
+    let f n = fn $ "f" .^: n .!: "i"
+    let e = "x"
+        x1 = e !: 1
+        x2 = e !: 2
+        i = "i"
+        xi = e !: i
+        lx = list x1 x2 xi
+    ma $ f (a ★ b) lx =: f a lx ★ f b lx
+    todo "what is this f doing here? is it a model of how the output can depend on the state? make that explicit!"
+
+synchronousParallelCompositionDefinition :: Note
+synchronousParallelCompositionDefinition = de $ do
+    lab synchronousParallelCompositionDefinitionLabel
+    let u = mathcal "U"
+        v = mathcal "V"
+        x = mathcal "X"
+        y = mathcal "Y"
+        a = "a"
+        b = "b"
+    s ["For an", xyS u v, m a, andan, xyS x y, m b <> ", the", synchronousParallelComposition, m $ syncomp a b, "is the", xyS (u ⨯ x) (v ⨯ y), "which takes pairs of inputs and returns the corresponding pairs of outputs as follows"]
+    let f n = fn $ "f" .^: n .!: "i"
+    let e = "x"
+        x1 = e !: 1
+        x2 = e !: 2
+        i = "i"
+        xi = e !: i
+        d = "y"
+        y1 = d !: 1
+        y2 = d !: 2
+        yi = d !: i
+        lx = list x1 x2 xi
+        ly = list y1 y2 yi
+        lt = list (tuple x1 y1) (tuple x2 y2) (tuple xi yi)
+    ma $ f (syncomp a b) lt =: f a lx ★ f b ly
+
+asynchronousParallelCompositionDefinition :: Note
+asynchronousParallelCompositionDefinition = de $ do
+    lab asynchronousParallelCompositionDefinitionLabel
+    let u = mathcal "U"
+        v = mathcal "V"
+        x = mathcal "X"
+        y = mathcal "Y"
+        a = "a"
+        b = "b"
+        uc = setcmpr (tuple 0 "u") ("u" ∈ u)
+        xc = setcmpr (tuple 1 "x") ("x" ∈ x)
+        vc = setcmpr (tuple 0 "v") ("v" ∈ v)
+        yc = setcmpr (tuple 1 "y") ("y" ∈ y)
+    s ["For an", xyS u v, m a, andan, xyS x y, m b <> ", the", synchronousParallelComposition, m $ asyncomp a b, "is the", ma (tuple (uc ∪ xc) (vc ∪ yc)) <> "-" <> system, "where each subsystem can be queried independently as follows"]
+    let f n = fn $ "f" .^: n .!: "i"
+    let e = "x"
+        x1 = e !: 1
+        x2 = e !: 2
+        i = "i"
+        xi = e !: i
+        d = "y"
+        y1 = d !: 1
+        y2 = d !: 2
+        yi = d !: i
+        lx = list x1 x2 xi
+        ly = list y1 y2 yi
+        l0 = tuple 0 $ pars lx
+        l1 = tuple 1 $ pars ly
+    ma $ centeredBelowEachOther
+        [ f (asyncomp a b) l0 =: f a lx
+        , f (asyncomp a b) l1 =: f b ly
+        ]
+
+
+
+
+
+
 
 

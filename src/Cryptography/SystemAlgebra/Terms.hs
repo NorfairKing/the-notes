@@ -22,6 +22,8 @@ makeDefs
     , "beacon"
     , "uniform random function"
     , "URF"
+    , "synchronous parallel composition"
+    , "asynchronous parallel composition"
     ]
 
 nS :: Note -> Note
@@ -31,7 +33,10 @@ nSs :: Note -> Note
 nSs n = m n <> "-" <> systems
 
 xyS :: Note -> Note -> Note
-xyS x y = m (tuple x y) <> "-" <> system
+xyS x y = nS $ tuple x y
+
+xySs :: Note -> Note -> Note
+xySs x y = nSs $ tuple x y
 
 yS :: Note -> Note
 yS y = m y <> "-" <> source
