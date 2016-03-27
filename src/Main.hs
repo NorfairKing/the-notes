@@ -15,6 +15,7 @@ import           Utils
 import           Notes
 
 import           Config
+import           Contributors
 import           Dependencies
 import           Header
 import           License
@@ -163,6 +164,8 @@ entireDocument = do
 
         renderConfig
         license
+        renderContributors
+
         tableofcontents
         allNotes
 
