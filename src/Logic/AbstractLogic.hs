@@ -45,8 +45,8 @@ theoryDefinition = do
         lab sentenceDefinitionLabel
 
         s ["A ", theory', or, logic',  " is a mathematical framework for proving properties about a certain object domain"]
-        s ["Those properties are called ", theorem, "s"]
-        s ["A ", theory, " consists of a ", grammar', ", a set of ", axiom', "s", and , semantics', " for formulae"]
+        s ["Those properties are called ", theorems']
+        s ["A ", theory, " consists of a ", grammar', ", a set of ", axioms', and , semantics', " for formulae"]
         enumerate $ do
             item $ do
                 s ["A ", grammar', " defines well-formed formulae"]
