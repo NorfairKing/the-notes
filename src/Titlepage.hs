@@ -1,13 +1,13 @@
 module Titlepage (myTitlePage) where
 
-import           Control.Monad        (forM_)
-import           Control.Monad.Reader (asks)
+import           Notes
 
+import           Data.List            (intercalate)
 import           Prelude              (return, (++))
 
+import           Control.Monad        (forM_)
+import           Control.Monad.Reader (asks)
 import qualified Data.Text            as T
-
-import           Notes
 
 titlepageE :: Note -> Note
 titlepageE = liftL $ TeXEnv "titlepage" []
@@ -39,7 +39,7 @@ myTitlePage = do
                     Nothing -> return ()
                     Just st -> do
                       raw "[1.0\\baselineskip]"
-                      huge2 $ textbf $ raw $ T.pack $ st
+                      huge2 $ textbf $ raw $ T.pack $ intercalate "\\\\" $ words st
                       lnbk
                       raw "\n"
 
@@ -49,7 +49,7 @@ myTitlePage = do
                 lnbk
                 raw "\n"
                 raw "[4.0\\baselineskip]"
-                comm1 "vspace" $ raw "0.7\\textheight"
+                comm1 "vspace" $ raw "0.6\\textheight"
 
 
 
