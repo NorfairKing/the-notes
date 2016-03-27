@@ -49,13 +49,7 @@ myTitlePage = do
                 lnbk
                 raw "\n"
                 raw "[4.0\\baselineskip]"
-
-                large $ tabular Nothing [LeftColumn, LeftColumn] $ do
-                    "Started" & "September 28, 2015"
-                    lnbk
-                    "Compiled" & commS "today"
-                    lnbk
-                comm1 "vspace" $ raw "0.5\\textheight"
+                comm1 "vspace" $ raw "0.7\\textheight"
 
 
 

@@ -83,8 +83,9 @@ renderConfig = do
 
     packageDep ["yyyymmdd","hhmmss"] "datetime"
     s [comm0 "LaTeX", "compiled on", comm0 "today", " at ", comm0 "currenttime"]
+    newline
 
-
+    s ["The", quoted "the-notes", "project was started on", "September 28, 2015"]
 
 
 breakUp :: String -> String
