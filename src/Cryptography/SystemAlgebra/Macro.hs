@@ -96,10 +96,9 @@ syncomp = binop "|"
 asyncomp :: Note -> Note -> Note
 asyncomp a b = sqbrac $ cs [a, b]
 
-
-
-
-
+-- | Transcript of system and environment
+transcr :: Note -> Note -> Note
+transcr = fn2 "tr"
 
 
 

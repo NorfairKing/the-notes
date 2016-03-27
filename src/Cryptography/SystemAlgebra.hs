@@ -54,6 +54,12 @@ systemAlgebraS = section "System Algebra" $ do
             xyOperationSystemDefinition
             synchronousParallelCompositionDefinition
             asynchronousParallelCompositionDefinition
+        subsubsection "Environments" $ do
+            environmentDefinition
+            transcriptDefinition
+        subsubsection "Probabillistic systems" $ do
+            probabillisticSystemDefinition
+            probabillisticEnvironmentDefinition
 
 
 abstractSystemAlgebraDefinition :: Note
@@ -273,7 +279,7 @@ xySystemsDefinition = de $ do
         y_ i = "y" !: i
     s ["A", system, "that computes a", function, m $ fun f x y, "for every new input, i.e.,", m (y_ i =: fn (f_ i) (x_ i)) <> ",is called an", m (tuple x y) <> "-" <> system']
     let r = "R"
-    s ["More precicely, an", xyS x y, m r, "is a", nS 1, "that takes inputs from a", countable, set, m x, "and (probabillistically) generates an output from a", countable, set, m y, "that possibly depends on an internal state of the", system]
+    s ["More precicely, an", xyS x y, m r, "is a", nS 1, "that takes inputs from a", countable, set, m x, "and generates an output from a", countable, set, m y, "that possibly depends on an internal state of the", system]
 
     todo "define it more formaly with state space and transitions etc"
 
@@ -388,6 +394,66 @@ asynchronousParallelCompositionDefinition = de $ do
         [ f (asyncomp a b) l0 =: f a lx
         , f (asyncomp a b) l1 =: f b ly
         ]
+
+environmentDefinition :: Note
+environmentDefinition = de $ do
+    lab deterministicEnvironmentDefinitionLabel
+    lab environmentDefinitionLabel
+    let x = mathcal "X"
+        y = mathcal "Y"
+        g = "g"
+        i = "i"
+    s ["A", deterministicEnvironment, "for an", xyS x y, "(" <> "a " <> yxDE y x <> ")", "is a", constant, m $ g !: 0, "together with a", sequence, "of", functions, m $ sequ g i, "where", m $ fun g (y ^ (i - 1)) x]
+
+transcriptDefinition :: Note
+transcriptDefinition = de $ do
+    lab transcriptDefinitionLabel
+    let x = mathcal "X"
+        y = mathcal "Y"
+        i = "i"
+        g = "g"
+        a = "a"
+        e = "e"
+    s ["If an", xyS x y, m a, "is connected to a", yxDE y x, m e, "then an alternating", sequence, "of", elements, "in", m x, and, m y, "is generated as follows"]
+    let x_ = ("x" !:)
+        y_ = ("y" !:)
+        g_ n = fn $ "g" .^: e .!: n
+        f_ n = fn $ "f" .^: a .!: n
+    ma $ leftBelowEachOther
+        [ x_ 1 =: g !: 0
+        , y_ 1 =: f_ 1 (cs [x_ 1])
+        , x_ 2 =: g_ 1 (cs [y_ 1])
+        , y_ 2 =: f_ 2 (cs [x_ 1, x_ 2])
+        , x_ 3 =: g_ 2 (cs [y_ 1, y_ 2])
+        , y_ 3 =: f_ 3 (cs [x_ 1, x_ 2, x_ 3])
+        , x_ i =: g_ i (cs [y_ 1, y_ 2, dotsc, y_ (i - 1)])
+        , y_ i =: f_ i (cs [x_ 1, x_ 2, dotsc, x_ i])
+        ]
+    s ["This alternating", sequence, "is called a", transcript', "and is denoted by", m $ transcr a e]
+
+probabillisticSystemDefinition :: Note
+probabillisticSystemDefinition = de $ do
+    lab probabillisticSystemDefinitionLabel
+    let x = mathcal "X"
+        y = mathcal "Y"
+    s ["A", probabillisticSystem', "(an " <> xyPS x y <> ")", "is a", randomVariable, "over the", set, "of", xyDSs x y]
+
+probabillisticEnvironmentDefinition :: Note
+probabillisticEnvironmentDefinition = de $ do
+    lab probabillisticEnvironmentDefinitionLabel
+    let x = mathcal "X"
+        y = mathcal "Y"
+    s ["A", probabillisticEnvironment', "(an " <> yxPE x y <> ")", "is a", randomVariable, "over the", set, "of", yxDEs x y]
+
+
+
+
+
+
+
+
+
+
 
 
 
