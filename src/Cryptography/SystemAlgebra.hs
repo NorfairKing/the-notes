@@ -60,6 +60,7 @@ systemAlgebraS = section "System Algebra" $ do
         subsubsection "Probabillistic systems" $ do
             probabillisticSystemDefinition
             probabillisticEnvironmentDefinition
+            probabillisticTranscriptDefinition
 
 
 abstractSystemAlgebraDefinition :: Note
@@ -444,6 +445,16 @@ probabillisticEnvironmentDefinition = de $ do
     let x = mathcal "X"
         y = mathcal "Y"
     s ["A", probabillisticEnvironment', "(an " <> yxPE x y <> ")", "is a", randomVariable, "over the", set, "of", yxDEs x y]
+
+probabillisticTranscriptDefinition :: Note
+probabillisticTranscriptDefinition = de $ do
+    lab probabillisticEnvironmentDefinitionLabel
+    let x = mathcal "X"
+        y = mathcal "Y"
+        a = "A"
+        e = "E"
+    s ["Let", m a, "be an", xyPS x y, and, m e, "a", yxPE x y]
+    s [the, probabillisticTranscript, m $ transcr a e, "of", m a, and, m e, "is the", sequence, "of", randomVariables, "as defined for the deterministic case in definition", rawRef transcriptDefinitionLabel]
 
 
 
