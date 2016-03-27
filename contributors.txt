@@ -1,3 +1,3 @@
-[ ("Andrei Barsan", ["data-mining.large-scale-learning"]),
-("Nick Van den Broeck", ["logic.abstract_logic"])
+[ ("Andrei Barsan", ["data-mining.large-scale-learning"])
+, ("Nick Van den Broeck", ["logic.abstract-logic"])
 ]
