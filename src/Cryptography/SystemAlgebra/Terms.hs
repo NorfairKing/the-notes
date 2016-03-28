@@ -21,8 +21,6 @@ makeDefs
     , "converter"
     , "source"
     , "beacon"
-    , "uniform random function"
-    , "URF"
     , "synchronous parallel composition"
     , "asynchronous parallel composition"
     , "deterministic environment"
@@ -32,6 +30,13 @@ makeDefs
     , "probabillistic environment"
     , "probabillistic transcript"
     , "behaviour"
+    , "random function"
+    , "random permutation"
+    , "uniform random function"
+    , "URF"
+    , "uniform random permutation"
+    , "URP"
+    , "cumulative description"
     ]
 
 -- | N-system
@@ -80,3 +85,7 @@ xyPS x y = m (tuple x y) <> "-" <> probabillisticSystem
 
 xyPSs :: Note -> Note -> Note
 xyPSs x y = m (tuple x y) <> "-" <> probabillisticSystems
+
+-- | Y-beacon
+yB :: Note -> Note
+yB y = m y <> "-" <> beacon

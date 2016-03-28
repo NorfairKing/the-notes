@@ -104,8 +104,3 @@ transcr = fn2 "tr"
 bhv :: Note -> Note
 bhv = fn "b"
 
-
-
-
-
-

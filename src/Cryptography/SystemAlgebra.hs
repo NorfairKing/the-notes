@@ -11,6 +11,7 @@ import           Functions.BinaryOperation.Terms
 import           Logic.FirstOrderLogic.Macro
 import           Probability.ConditionalProbability.Macro
 import           Probability.ConditionalProbability.Terms
+import           Probability.Independence.Terms
 import           Probability.ProbabilityMeasure.Macro
 import           Probability.RandomVariable.Terms
 import           Relations.Domain.Terms
@@ -66,6 +67,12 @@ systemAlgebraS = section "System Algebra" $ do
             probabillisticTranscriptDefinition
         subsubsection "Behaviours" $ do
             behaviourDefinition
+            equivalentProbabillisticSystems
+            behaviourOfEnvironmentDefinition
+            probabillisticBeaconDefinition
+            randomFunctionDefinition
+            cumulativeDescriptionDefinition
+            transcriptDistributionDefinition
 
 
 abstractSystemAlgebraDefinition :: Note
@@ -507,6 +514,125 @@ behaviourDefinition = de $ do
     s ["Note that we use", m $ "x" ^ i, "as an abbreviaton for", m $ cs [x_ 1, x_ 2, dotsc, x_ i] <> ",", m $ "y" ^ i, "for", m $ cs [y_ 1, y_ 2, dotsc, y_ i] ,"as well as", m $ x ^ i, "for", m $ cs [x !: 1, x !: 2, dotsc, x !: i]]
 
 
+
+equivalentProbabillisticSystems :: Note
+equivalentProbabillisticSystems = de $ do
+    let x = mathcal "X"
+        y = mathcal "Y"
+    s ["Two", xyPSs x y, "are", defineTerm "equivalent", "if they have the same behaviour"]
+
+
+
+behaviourOfEnvironmentDefinition :: Note
+behaviourOfEnvironmentDefinition = de $ do
+    let xx = mathcal "X"
+        yy = mathcal "Y"
+        x = "X"
+        y = "Y"
+        e = "E"
+        i = "i"
+        p = "p" .^: e
+        pi = p .!: (x !: i <> mid <> y ^ (i - 1) <> ", " <> x ^ (i - 1))
+    s [the, behaviour', m $ bhv x, "of a", yxPE yy xx, m e, "is the", sequence, "of", conditionalProbability, distributions, m $ sequ pi i, "as follows"]
+    todo "Define fully"
+
+probabillisticBeaconDefinition :: Note
+probabillisticBeaconDefinition = de $ do
+    let xx = mathcal "X"
+        yy = mathcal "Y"
+        xs = "X"
+        ys = "Y"
+        x = "x"
+        y = "y"
+        i = "i"
+        p = "p"
+        b = "B"
+    s ["A", yB yy, "is a", system, m b, "with arbitrary input alphabet", m xx <> ",", "wich outputs a new", independent, "and uniformly distributed (over", m yy <> ") output", m $ ys !: i, "for every new input", m $ xs !: i]
+    ma $ fn3 (p .^: b .!: (ys !: i <> mid <> cs [xs ^: i, ys ^: (i - 1)])) (y !: i) (x ^: i) (y ^: (i - 1)) =: (1 /: setsize yy)
+
+
+randomFunctionDefinition :: Note
+randomFunctionDefinition = de $ do
+    s ["A", randomFunction', "for a finite input alphabet, is a", system, "which corresponds to a function table chosen according to some distribution"]
+    s ["A", uniformRandomFunction', "is denoted as", uRF']
+    s ["A", randomPermutation', "is a", system, "which corresponds to a function table chosen according to some distribution from the", set, "of", permutations]
+    s ["A", uniformRandomPermutation', "is denoted as", uRP']
+    todo "make this rigorous"
+
+    todo "what's the problem with an infinite alphabet? p 62"
+    todo "replace the previous definition"
+    exneeded
+
+
+cumulativeDescriptionDefinition :: Note
+cumulativeDescriptionDefinition = de $ do
+    lab cumulativeDescriptionDefinitionLabel
+    let xx = mathcal "X"
+        yy = mathcal "Y"
+        xs = "X"
+        ys = "Y"
+        x = "x"
+        y = "y"
+        i = "i"
+        a = "S"
+        p = "p" .^: a
+        cd_ i = p .!: ((ys ^ i) <> mid <> (xs ^ i))
+        cd i = fn2 (cd_ i) (y ^ i) (x ^ i)
+        od_ i = p .!: ((ys !: i) <> mid <> cs [xs ^: i, ys ^: (i - 1)])
+        od i = fn3 (od_ i)
+                   (y !: i)
+                   (x ^: i)
+                   (y ^: (i - 1))
+    s ["An", xyPS xx yy, m a, "can be analyzed for a fixed list of inputs", m $ list (x !: 1) (x !: 2) (x !: i)]
+    s [the, "list", m $ list (ys !: 1) (ys !: 2) (ys !: i), "is then a", randomVariable, "in itself and", m a, "defines its", conditionalProbability, distribution, m $ cd i]
+    let j = "j"
+    ma $ cd i
+      =: prodcmpr (j =: 1) i (od j)
+    s ["This", conditionalProbability, distribution, m $ cd_ i, "satisfies a consistency condition which captures that", m $ ys !: j, "will never depend on", m $ ys !: i, "for any", m i, "greater than", m j]
+    s ["The original distributions", m $ od_ i, "can be computed from the distributions", m $ cd_ i, "according to the following equation"]
+    ma $ od i =: ((cd i) /: (cd (i - 1)))
+    toprove
+    s ["Hence the", behaviour, "can be equivalently be defined as the", sequence, m $ sequ (cd_ i) i, "of", conditionalProbability, distributions]
+    s [m $ cd_ i, "is called the", cumulativeDescription', "of", m a]
+
+
+transcriptDistributionDefinition :: Note
+transcriptDistributionDefinition = de $ do
+    let xx = mathcal "X"
+        yy = mathcal "Y"
+        xs = "X"
+        ys = "Y"
+        x = "x"
+        y = "y"
+        i = "i"
+        a = "A"
+        e = "E"
+    s ["As noted earlier, an", xyPS xx yy, m a, anda, yxPE yy xx, m e, "together define a random experiment where", m a, and, m e , "are independent, in which the transcript", m $ cs [xs !: 1, ys !: 1, xs !: 2, ys !: 3, dotsc, xs !: i, ys !: i, dotsc], "is defined"]
+    let k = "k"
+        seg k = xs ^ k <> ys ^ k
+    s ["We denote the", randomVariable, "corresponding to the initial segment of the", transcript, "(up to the", m k <> "-th step) by", m $ seg k]
+    s ["Its", probabilityDistribution, "can then be described in terms of the", behaviour, "of", m a, and, m e, "as follows"]
+    let pr_ = pr $ seg k
+        pr = ("Pr" .^: (a <> e) .!:)
+        p = "p"
+        pe_ = p .^: e
+        pe = pe_ .!: (xs ^: i <> mid <> cs [xs ^: (i - 1), ys ^: (i - 1)])
+        pec = pe_ .!: (xs ^: i <> mid <> ys ^: (i - 1))
+        pa_ = p .^: a
+        pa = pa_ .!: (ys ^: i <> mid <> cs [xs ^: i, ys ^: (i - 1)])
+        pac = pa_ .!: (ys ^: i <> mid <> xs ^: (i - 1))
+    aligneqs
+        (fn2 pr_ (x ^ k) (y ^ k))
+        [ prodcmpr (i =: 1) k $ fn3 pe (x !: i) (x ^: (i - 1)) (y ^ (i - 1))
+                         `cdot` fn3 pa (y !: i) (x ^: i      ) (y ^ (i - 1))
+        ,      fn2 pec (x ^: i) (y ^: (i - 1))
+        `cdot` fn2 pac (y ^: i) (x ^: i)
+        ]
+    s ["Note that", m pr_, "only depends on the", behaviours, "of", m a, and, m e]
+    s ["In such a random experiment, the", conditionalProbability, distribution, "of", m $ ys !: i, "given", m $ list (xs !: 1) (xs !: 2) (xs !: i), and, m $ list (ys !: 1) (ys !: 2) (ys !: i), "is equal to", m pa]
+    ma $ pr (ys ^: i <> mid <> cs [xs ^: i, ys ^: (i - 1)]) =: pa
+    s ["However, the analogous statement about the cumulative description does not hold for a general", environment]
+    ma $ pr (ys ^: i <> mid <> xs ^: i) `neq` (pa_ .!: (ys ^: i <> mid <> xs ^: i))
 
 
 
