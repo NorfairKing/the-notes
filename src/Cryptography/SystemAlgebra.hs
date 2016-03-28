@@ -9,6 +9,9 @@ import           Functions.Basics.Terms
 import           Functions.BinaryOperation.Macro
 import           Functions.BinaryOperation.Terms
 import           Logic.FirstOrderLogic.Macro
+import           Probability.ConditionalProbability.Macro
+import           Probability.ConditionalProbability.Terms
+import           Probability.ProbabilityMeasure.Macro
 import           Probability.RandomVariable.Terms
 import           Relations.Domain.Terms
 import           Sets.Basics.Terms
@@ -61,6 +64,8 @@ systemAlgebraS = section "System Algebra" $ do
             probabillisticSystemDefinition
             probabillisticEnvironmentDefinition
             probabillisticTranscriptDefinition
+        subsubsection "Behaviours" $ do
+            behaviourDefinition
 
 
 abstractSystemAlgebraDefinition :: Note
@@ -454,11 +459,52 @@ probabillisticTranscriptDefinition = de $ do
         a = "A"
         e = "E"
     s ["Let", m a, "be an", xyPS x y, and, m e, "a", yxPE x y]
-    s [the, probabillisticTranscript, m $ transcr a e, "of", m a, and, m e, "is the", sequence, "of", randomVariables, "as defined for the deterministic case in definition", rawRef transcriptDefinitionLabel]
+    s [the, probabillisticTranscript, m $ transcr a e, "of", m a, and, m e, "is the", sequence, "of", randomVariables, "as defined for the deterministic case in", rawRef transcriptDefinitionLabel]
 
 
-
-
+behaviourDefinition :: Note
+behaviourDefinition = de $ do
+    lab behaviourDefinitionLabel
+    let xx = mathcal "X"
+        yy = mathcal "Y"
+        x = "X"
+        y = "Y"
+        a = "S"
+        i = "i"
+        p = "p" .^: a
+        pi = p .!: (y !: i <> mid <> x ^ i <> ", " <> y ^ (i - 1))
+        (.|.) a b = a <> mid <> b
+    s [the, behaviour', m $ bhv x, "of a", xyPS xx yy, m a, "is the", sequence, "of", conditionalProbability, distributions, m $ sequ pi i, "as follows"]
+    let x_ i = "x" !: i
+        y_ i = "y" !: i
+        f i n = fn ("f" .^: a .!: i) (cs n)
+    ma $ belowEachOther [LeftColumn, LeftColumn]
+        [ fn2 (p .!: ((y !: 1) .|. (x !: 1)))
+              (y_ 1)
+              (x_ 1)
+          & "" =: prob (f 1 [x_ 1] =: y_ 1)
+        , fn3 (p .!: ((y !: 2) .|. cs [tuple (x !: 1) (x !: 2), y !: 1]))
+              (y_ 2)
+              (tuple (x_ 1) (x_ 2))
+              (y_ 1)
+          & "" =: cprob (f 2 [x_ 1, x_ 2] =: y_ 2)
+                  (f 1 [x_ 1] =: y_ 1)
+        , fn3 (p .!: ((y !: 3) .|. cs [triple (x !: 1) (x !: 2) (x !: 3), tuple (y !: 1) (y !: 2)]))
+              (y_ 3)
+              (triple (x_ 1) (x_ 2) (x_ 3))
+              (tuple (y_ 1) (y_ 2))
+          & "" =: cprob (f 3 [x_ 1, x_ 2, x_ 3] =: y_ 3)
+                  (cs [f 1 [x_ 1] =: y_ 1, f 2 [x_ 1, x_ 2] =: y_ 2])
+        , "" & vdots
+        , fn3 (p .!: ((y !: i) .|. cs [x ^: i, y ^: i - 1]))
+              (y_ i)
+              ("x" ^ i)
+              ("y" ^ (i - 1))
+          & "" =: cprob (f i ["x" ^ i] =: y_ i)
+                  (cs [f 1 [x_ 1] =: y_ 1, f 2 [x_ 1, x_ 2] =: y_ 2, dotsc, f (i - 1) ["x" ^: (i - 1)] =: y_ (i - 1)   ])
+        , "" & vdots
+        ]
+    s ["Note that we use", m $ "x" ^ i, "as an abbreviaton for", m $ cs [x_ 1, x_ 2, dotsc, x_ i] <> ",", m $ "y" ^ i, "for", m $ cs [y_ 1, y_ 2, dotsc, y_ i] ,"as well as", m $ x ^ i, "for", m $ cs [x !: 1, x !: 2, dotsc, x !: i]]
 
 
 

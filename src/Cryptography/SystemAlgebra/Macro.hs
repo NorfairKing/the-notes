@@ -100,7 +100,9 @@ asyncomp a b = sqbrac $ cs [a, b]
 transcr :: Note -> Note -> Note
 transcr = fn2 "tr"
 
-
+-- | Behaviour of a probabillistic X,Y-system
+bhv :: Note -> Note
+bhv = fn "b"
 
 
 

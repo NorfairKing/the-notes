@@ -31,6 +31,7 @@ makeDefs
     , "probabillistic system"
     , "probabillistic environment"
     , "probabillistic transcript"
+    , "behaviour"
     ]
 
 -- | N-system
