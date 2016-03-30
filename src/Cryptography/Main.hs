@@ -1,28 +1,31 @@
 {-# LANGUAGE QuasiQuotes #-}
 module Cryptography.Main where
 
-import           Notes                                hiding (cyclic, inverse)
+import           Notes                                    hiding (cyclic,
+                                                           inverse)
 
-import           Codec.Picture.Png                    (decodePng, writePng)
-import           Codec.Picture.Types                  (DynamicImage (..),
-                                                       Image (..), Pixel (..),
-                                                       PixelRGB8 (..),
-                                                       PixelRGBA8 (..),
-                                                       generateFoldImage,
-                                                       pixelMap, pixelMapXY)
-import           Control.Monad                        (replicateM, unless)
-import qualified Data.Bits                            as B (Bits (..))
-import qualified Data.ByteString                      as SB
-import qualified Data.ByteString.Char8                as SB8
-import           Data.FileEmbed                       (embedFile)
-import qualified Data.Text                            as T
-import           System.Directory                     (doesFileExist)
+import           Codec.Picture.Png                        (decodePng, writePng)
+import           Codec.Picture.Types                      (DynamicImage (..),
+                                                           Image (..),
+                                                           Pixel (..),
+                                                           PixelRGB8 (..),
+                                                           PixelRGBA8 (..),
+                                                           generateFoldImage,
+                                                           pixelMap, pixelMapXY)
+import           Control.Monad                            (replicateM, unless)
+import qualified Data.Bits                                as B (Bits (..))
+import qualified Data.ByteString                          as SB
+import qualified Data.ByteString.Char8                    as SB8
+import           Data.FileEmbed                           (embedFile)
+import qualified Data.Text                                as T
+import           System.Directory                         (doesFileExist)
 import           Utils
 
-import           Prelude                              (Bool (..), Either (..),
-                                                       Int, error, mapM, snd,
-                                                       (<$>))
-import qualified Prelude                              as P (and)
+import           Prelude                                  (Bool (..),
+                                                           Either (..), Int,
+                                                           error, mapM, snd,
+                                                           (<$>))
+import qualified Prelude                                  as P (and)
 
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
@@ -34,9 +37,11 @@ import           Groups.Macro
 import           Groups.Terms
 import           LinearAlgebra.VectorSpaces.Terms
 import           Logic.FirstOrderLogic.Macro
+import           Probability.ConditionalProbability.Macro
 import           Probability.Independence.Terms
 import           Probability.ProbabilityMeasure.Macro
 import           Probability.ProbabilityMeasure.Terms
+import           Probability.RandomVariable.Terms
 import           Relations.Orders.Macro
 import           Sets.Basics.Terms
 
@@ -54,14 +59,18 @@ cryptography = chapter "Cryptography" $ do
         deterministicCryptoSystem
         cipherDefinition
 
-        oneTimePadDefinition
-        oneTimePadExample
-        oneTimePadSecure
+        subsection "One Time Pad" $ do
+            oneTimePadDefinition
+            oneTimePadExample
+            oneTimePadSecure
+
+        keyStreamGeneratorDefinition
         additiveStreamCipherDefinition
 
         subsection "IND-CPA" $ do
             indcpaDefinition
             indcpaSecurityDefinition
+            advantageNote
             nonAdaptiveINDCPAGame
             nonAdaptiveINDCPASecurity
             nonAdaptiveINDCPAStrictlyWeaker
@@ -156,17 +165,18 @@ symmetricCryptosystemDefinition = do
         let k = "k"
             m = "m"
             r = "r"
+        s [the, defineTerm "correctness condition", "states that the following must hold"]
         ma $ fa (k ∈ ksp_)
            $ fa (m ∈ msp_)
            $ fa (r ∈ rsp_)
            $ dec (enc m k r) k =: m
     nte $ do
         s ["Practicality dictates that", m enc_, and, m dec_, "must be efficiently computable"]
-        s ["This is called the practicality condition"]
+        s ["This is called the", defineTerm "practicality condition"]
 
 deterministicCryptoSystem :: Note
 deterministicCryptoSystem = de $ do
-    s ["A", deterministic', cryptosystem, "is a system in which the", randomnessSpace, "is entirely ignored"]
+    s ["A", deterministic', cryptosystem, "is a system in which the", randomnessSpace, "is entirely ignored (or is the empty set, for example)"]
     s ["We then model the", encryptionFunction, "as taking only two arguments and leave out the", randomnessSpace]
 
 cipherDefinition :: Note
@@ -179,7 +189,8 @@ oneTimePadDefinition = de $ do
     lab oneTimePadDefinitionLabel
     lab manyTimePadDefinitionLabel
 
-    s [the, oneTimePad', "is a", cipher, "with the following", encryptionFunction, and, decryptionFunction]
+    let n = "n"
+    s [the, oneTimePad', "of some size", m n, "is a", cipher, "with", messageSpace, m (bitss n) <> ",", keySpace, m $ bitss n, and, "the following", encryptionFunction, and, decryptionFunction]
     let mesg = "m"
         k = "k"
     ma $ enc' mesg k =: mesg ⊕ k
@@ -220,14 +231,37 @@ oneTimePadExample = ex $ do
 
 
 oneTimePadSecure :: Note
-oneTimePadSecure = do
-    prop $ do
-        let n = "n"
-        s [the, oneTimePad <> "'s", ciphertexts, "are", independent, "of their", messages, "for a given message length", m n]
-        toprove_ "page 17 of crypto"
-    nte $ do
-        let t = "t"
-        s ["Note that we cannot say that the", oneTimePad, "is", iNDCPASecure, "nor", iNDCCASecure, "for any", m $ t >= 1, "because the", oneTimePad, "can, by definition, only be used once for the same key"]
+oneTimePadSecure = prop $ do
+    let n = "n"
+    s [the, oneTimePad <> "'s", ciphertexts, "are", independent, "of their", messages, "for a given message length", m n]
+    proof $ do
+        let m_ = "M"
+            k_ = "K"
+            c_ = "C"
+            n = "n"
+        s ["Let", m m_ <> ",", m k_, and, m c_, "denote", m n <> "-bit", randomVariables, "corresponding to the", plaintext <> ",", key, and, ciphertext, "respectively"]
+        let mesg = "m"
+            k = "k"
+            c = "c"
+        s ["Because the", key, m k_, "is uniformly distributed, so is the", ciphertext, "for every choice", m $ m_ =: mesg, "of the", message]
+        ma $ prob (k_ =: k) =: 2 ^ (- n)
+        ma $ fa (mesg ∈ m_) $ prob (c_ =: enc' mesg k)
+
+        why
+
+        s ["In other words, the following holds"]
+        ma $ cprob (c_ =: c) (m_ =: mesg) =: 2 ^ (- n)
+        ma $ prob (c_ =: c) =: 2 ^ (- n)
+
+        why
+
+        s ["Now we see that for any uniformly generated", key, "the", plaintext, message, "and the", ciphertext, "are", independent]
+        ma $ prob (cs [c_ =: c, m_ =: mesg]) =: cprob (c_ =: c) (m_ =: mesg) * prob (m_ =: mesg) =: prob (c_ =: c) * prob (m_ =: mesg)
+
+
+keyStreamGeneratorDefinition :: Note
+keyStreamGeneratorDefinition = do
+    todo "Define a keystream generator"
 
 
 
@@ -276,7 +310,11 @@ indcpaDefinition = de $ do
         item $ s ["The challenger chooses a uniformly random bit", m b <> ", computes the encryption of ", m $ c =: enc mb k r, "for a fresh and independent randomness value", m $ r ∈ rsp_, "and returns it to the adversary"]
         item $ s ["The adversary can again choose up to", m t, messages, "as in step 2, but the total number is limited by", m t]
         item $ s ["The adversary issues his guess", m b', "for", m b]
-    s [the, advantage', "of the adversary in this game is defined as", m $ 2 * prob (b' =: b) - 1 /: 2]
+    s [the, advantage', "of the adversary in this game is defined as", m $ abs $ 2 * prob (b' =: b) - 1 /: 2]
+
+advantageNote :: Note
+advantageNote = nte $ do
+    s ["Note that this definition of the", advantage, "captures the idea that a non-zero advantage means that the", adversary, "is better than random"]
 
 indcpaSecurityDefinition :: Note
 indcpaSecurityDefinition = de $ do
@@ -287,7 +325,7 @@ indcpaSecurityDefinition = de $ do
 nonAdaptiveINDCPAGame :: Note
 nonAdaptiveINDCPAGame = de $ do
     lab nonAdaptiveINDCPADefinitionLabel
-    let mp = tuple ("m" !: 1) ("m" !: 2)
+    let mp = tuple ("m" !: 0) ("m" !: 1)
     s ["A", nonAdaptiveINDCPA', "game between a", challenger, and, adversary, "is played as follows for a fixed message pair", m mp]
     let b = "b"
     let b' = "b'"
@@ -355,6 +393,7 @@ sendCashImageBS = $(embedFile "src/Cryptography/sendcash.png")
 manyTimePadInsecure :: Note
 manyTimePadInsecure = do
     thm $ do
+        lab manyTimePadInsecureTheoremLabel
         s ["Re-using the key for a", oneTimePad <> ", thus yielding a so-called", manyTimePad, "is not", iNDCPASecure]
 
         proof $ do
@@ -374,6 +413,11 @@ manyTimePadInsecure = do
                     s [the, attacker, "checks whether this equals", m m1]
                     s ["If so, he outputs the bit", m 0, ", otherwise he will output the bit", m 1]
                     s ["This way the", attacker, "wins the game every time"]
+
+    nte $ do
+        let t = "t"
+        s ["Note that we cannot say that the", oneTimePad, "is", iNDCPASecure, "nor", iNDCCASecure, "for any", m $ t >= 1, "because the", oneTimePad, "can, by definition, only be used once for the same key"]
+
 
     ex $ do
         -- We will asume everything stays fine

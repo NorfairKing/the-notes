@@ -119,3 +119,6 @@ makeDefs [
     , "collision resistant"
     ]
 
+makeThms
+    [ "many time pad insecure"
+    ]
