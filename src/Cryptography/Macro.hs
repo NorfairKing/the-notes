@@ -47,19 +47,6 @@ ksp_ = mathcal "K"
 rsp_ :: Note
 rsp_ = mathcal "R"
 
--- * Xor
-xor :: Note -> Note -> Note
-xor = binop xor_
-
-(⊕) :: Note -> Note -> Note
-(⊕) = xor
-
-xor_ :: Note
-xor_ = comm0 "oplus"
-
-xorBig_ :: Note
-xorBig_ = comm0 "bigoplus"
-
 -- * Pseudorandom generator
 
 gen_ :: Note

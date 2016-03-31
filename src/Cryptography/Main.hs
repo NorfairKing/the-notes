@@ -18,6 +18,7 @@ import           Groups.Macro
 import           Groups.Terms
 import           LinearAlgebra.VectorSpaces.Terms
 import           Logic.FirstOrderLogic.Macro
+import           Logic.PropositionalLogic.Macro
 import           Probability.ConditionalProbability.Macro
 import           Probability.Independence.Terms
 import           Probability.ProbabilityMeasure.Macro
@@ -59,6 +60,7 @@ cryptography = chapter "Cryptography" $ do
         subsection "One Time Pad" $ do
             oneTimePadDefinition
             oneTimePadExample
+            xorUniform
             oneTimePadSecure
 
         manyTimePadInsecure
@@ -212,6 +214,34 @@ oneTimePadExample = ex $ do
         , "ciphertext"  & showNice (binBS' encryption)
         ]
 
+xorUniform :: Note
+xorUniform = thm $ do
+    lab xorUniformTheoremLabel
+    s ["Let", m grp_, "be a", finite, group]
+    let x = "X"
+        y = "Y"
+    s ["Let", m x, and, m y, "be two", independent, randomVariables, "over", m grps_]
+    s ["If", m x, "is uniformly distributed, then", m $ x ** y, "is uniformly distributed"]
+
+    proof $ do
+        let g = "g"
+        s ["Let", m g, "be an arbitrary", element, "of", m grps_]
+
+        let i = "i"
+            h=  "h"
+        aligneqs (prob $ x ** y =: g)
+            [ sumcmp (i ∈ g) $ prob $ x =: i ∧ x ** y =: g
+            , sumcmp (i ∈ g) $ prob $ x =: i ∧ y =: ginv i ** g
+            , sumcmp (i ∈ g) $ prob (x =: i) * prob (y =: ginv i ** g)
+            , (1 /: setsize grps_) * sumcmp (i ∈ g) (prob $ y =: ginv i ** g)
+            , (1 /: setsize grps_) * sumcmp (h ∈ g) (prob $ y =: h)
+            , 1 /: setsize grps_
+            ]
+
+        s ["In the third step we used that", m x, and, m y, "are", independent, "and in the fifth step we substited", m h, "for", m $ ginv i ** g]
+        why_ "Can we make this substitution?"
+        s ["This means that", m $ x ** y, "is uniformly distributed"]
+
 
 oneTimePadSecure :: Note
 oneTimePadSecure = prop $ do
@@ -226,17 +256,14 @@ oneTimePadSecure = prop $ do
         let mesg = "m"
             k = "k"
             c = "c"
-        s ["Because the", key, m k_, "is uniformly distributed, so is the", ciphertext, "for every choice", m $ m_ =: mesg, "of the", message]
+        s ["Because the", key, m k_, "is uniformly distributed, so is the", ciphertext, "for every choice", m $ m_ =: mesg, "of the", message, ref xorUniformTheoremLabel]
+
         ma $ prob (k_ =: k) =: 2 ^ (- n)
         ma $ fa (mesg ∈ m_) $ prob (c_ =: enc' mesg k)
-
-        why
 
         s ["In other words, the following holds"]
         ma $ cprob (c_ =: c) (m_ =: mesg) =: 2 ^ (- n)
         ma $ prob (c_ =: c) =: 2 ^ (- n)
-
-        why
 
         s ["Now we see that for any uniformly generated", key, "the", plaintext, message, "and the", ciphertext, "are", independent]
         ma $ prob (cs [c_ =: c, m_ =: mesg]) =: cprob (c_ =: c) (m_ =: mesg) * prob (m_ =: mesg) =: prob (c_ =: c) * prob (m_ =: mesg)

@@ -121,4 +121,5 @@ makeDefs [
 
 makeThms
     [ "many time pad insecure"
+    , "xor uniform"
     ]
