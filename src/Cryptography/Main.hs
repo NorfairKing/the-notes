@@ -11,20 +11,21 @@ import           Codec.Picture.Types                      (DynamicImage (..),
                                                            PixelRGB8 (..),
                                                            PixelRGBA8 (..),
                                                            generateFoldImage,
-                                                           pixelMap, pixelMapXY)
+                                                           pixelMapXY)
 import           Control.Monad                            (replicateM, unless)
 import qualified Data.Bits                                as B (Bits (..))
 import qualified Data.ByteString                          as SB
 import qualified Data.ByteString.Char8                    as SB8
 import           Data.FileEmbed                           (embedFile)
+import           Data.List                                (cycle)
 import qualified Data.Text                                as T
 import           System.Directory                         (doesFileExist)
 import           Utils
 
 import           Prelude                                  (Bool (..),
                                                            Either (..), Int,
-                                                           error, mapM, snd,
-                                                           (<$>))
+                                                           error, mapM, return,
+                                                           snd, (<$>))
 import qualified Prelude                                  as P (and)
 
 import           Functions.Application.Macro
@@ -357,7 +358,6 @@ indccaDefinition = de $ do
     lab indistinguishabilityChosenCiphertextAttackDefinitionLabel
     let t = "t"
         k = "k"
-        i = "i"
     let b = "b"
         mb = "m" !: b
         c = "c"
@@ -365,6 +365,7 @@ indccaDefinition = de $ do
     s ["A", m t <> "-message", indistinguishabilityChosenPlaintextAttack', "game", "(" <> iNDCCA' <> ")", "between a", challenger, "and an", adversary, "goes as follows"]
     enumerate $ do
         item $ s ["The challenger chooses a secret key", m k, "uniformly at random"]
+        let i = "i"
         let mi = "m" !: i
             ci = "c" !: i
             r = "r"
@@ -446,18 +447,19 @@ manyTimePadInsecure = do
             height = (imageHeight smileyImg)
 
         -- The total number of random bypes required.
-        -- One less would not work.
-        let pixels = 3 * width * height
+        -- One less would not work. One more wouldn't either.
+        let pixels =  width * height
 
         -- Generate that amount of bytes
-        keyBS <- replicateM pixels random :: Note' [Word8]
+        keyBS <- replicateM pixels random :: Note' [Bool]
 
         -- Now generate an image with this data.
         let keyImage :: Image PixelRGB8
             keyImage = snd $ generateFoldImage fun keyBS width height
               where
-                fun :: [Word8] -> Int -> Int -> ([Word8], PixelRGB8)
-                fun (r:g:b:rest) _ _ = (rest, PixelRGB8 r g b)
+                fun :: [Bool] -> Int -> Int -> ([Bool], PixelRGB8)
+                fun (True:rest)  _ _ = (rest, PixelRGB8 0xff 0xff 0xff)
+                fun (False:rest) _ _ = (rest, PixelRGB8 0x00 0x00 0x00)
                 fun _ _ _ = error "incorrect number of random bytes supplied"
 
         -- Encrypt both of our images with the key image
@@ -607,23 +609,32 @@ eCBInsecure = do
         -- Get the tux image
         let (ImageRGBA8 tuxImg) = fromRight $ decodePng tuxImageBS
 
-        -- Generate 4 random bytes to build a single pixel key
-        r <- random
-        g <- random
-        b <- random
-        a <- random
-        let pixelKey = PixelRGBA8 r g b a
+        -- The length of the block cipher to use
+        let keylen = 5
 
-        -- Now generate an image by xor-ing every pixel with this single pixel
+        -- Make a tiny list of pixels
+        pixelKey <- replicateM keylen $ do
+            -- Generate 4 random bytes to build a single pixel
+            r <- random
+            g <- random
+            b <- random
+            a <- random
+            return $ PixelRGBA8 r g b a
+
+
+        let xorPixel :: PixelRGBA8 -> PixelRGBA8 -> PixelRGBA8
+            xorPixel (PixelRGBA8 r1 g1 b1 a1) (PixelRGBA8 r2 g2 b2 a2)
+                = (PixelRGBA8 (r1 `B.xor` r2) (g1 `B.xor` g2) (b1 `B.xor` b2) (a1 `B.xor` a2))
+
+        let width = (imageWidth tuxImg)
+            height = (imageHeight tuxImg)
+
         let cipherImage :: Image PixelRGBA8
-            cipherImage = pixelMap fun tuxImg
+            cipherImage = snd $ generateFoldImage fun (cycle pixelKey) width height
               where
-                fun :: PixelRGBA8 -> PixelRGBA8
-                fun p = p `xorPixel` pixelKey
-
-                xorPixel :: PixelRGBA8 -> PixelRGBA8 -> PixelRGBA8
-                xorPixel (PixelRGBA8 r1 g1 b1 a1) (PixelRGBA8 r2 g2 b2 a2)
-                    = (PixelRGBA8 (r1 `B.xor` r2) (g1 `B.xor` g2) (b1 `B.xor` b2) (a1 `B.xor` a2))
+                fun :: [PixelRGBA8] -> Int -> Int -> ([PixelRGBA8], PixelRGBA8)
+                fun (p:ps) x y = (ps, (pixelAt tuxImg x y) `xorPixel` p)
+                fun _ _ _ = error "Something went wrong while generating a weird penguin."
 
         let tuxFP = "tux.png"
             encTuxFP = "tux_enc.png"
@@ -646,7 +657,7 @@ eCBInsecure = do
         hereFigure $ do
             include encTuxFP
             caption $ s ["The encryption with a", blockCipher, "in", eCB, "mode"]
-        s ["In this case we used a", blockCipher, "with", blockLength, "one pixel"]
+        s ["In this case we used a", blockCipher, "with a", blockLength, "of", m $ raw $ T.pack $ show keylen, "pixels"]
         s ["As the", encryptionFunction, "we used the XOR with a randomly chosen", key]
   where
     include = includegraphics
