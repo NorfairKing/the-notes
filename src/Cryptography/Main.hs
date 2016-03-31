@@ -4,29 +4,9 @@ module Cryptography.Main where
 import           Notes                                    hiding (cyclic,
                                                            inverse)
 
-import           Codec.Picture.Png                        (decodePng, writePng)
-import           Codec.Picture.Types                      (DynamicImage (..),
-                                                           Image (..),
-                                                           Pixel (..),
-                                                           PixelRGB8 (..),
-                                                           PixelRGBA8 (..),
-                                                           generateFoldImage,
-                                                           pixelMapXY)
-import           Control.Monad                            (replicateM, unless)
-import qualified Data.Bits                                as B (Bits (..))
 import qualified Data.ByteString                          as SB
 import qualified Data.ByteString.Char8                    as SB8
-import           Data.FileEmbed                           (embedFile)
-import           Data.List                                (cycle)
 import qualified Data.Text                                as T
-import           System.Directory                         (doesFileExist)
-import           Utils
-
-import           Prelude                                  (Bool (..),
-                                                           Either (..), Int,
-                                                           error, mapM, return,
-                                                           snd, (<$>))
-import qualified Prelude                                  as P (and)
 
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
@@ -46,7 +26,9 @@ import           Probability.RandomVariable.Terms
 import           Relations.Orders.Macro
 import           Sets.Basics.Terms
 
+import           Cryptography.BlockCipherECBAttack
 import           Cryptography.Macro
+import           Cryptography.ManyTimePadAttack
 import           Cryptography.OTP.Impl
 import           Cryptography.SystemAlgebra
 import           Cryptography.Terms
@@ -60,13 +42,6 @@ cryptography = chapter "Cryptography" $ do
         deterministicCryptoSystem
         cipherDefinition
 
-        subsection "One Time Pad" $ do
-            oneTimePadDefinition
-            oneTimePadExample
-            oneTimePadSecure
-
-        keyStreamGeneratorDefinition
-        additiveStreamCipherDefinition
 
         subsection "IND-CPA" $ do
             indcpaDefinition
@@ -81,7 +56,14 @@ cryptography = chapter "Cryptography" $ do
             indccaDefinition
             indccaSecurityDefinition
 
+        subsection "One Time Pad" $ do
+            oneTimePadDefinition
+            oneTimePadExample
+            oneTimePadSecure
+
         manyTimePadInsecure
+        keyStreamGeneratorDefinition
+        additiveStreamCipherDefinition
 
         subsection "pseudorandomness" $ do
             pseudoRandomGeneratorDefinition
@@ -385,12 +367,6 @@ indccaSecurityDefinition = de $ do
     let t = "t"
     s ["A", symmetricCryptosystem, "is called", iNDCCASecure', "if no feasible", adversary, "has a non-negligible", advantage, "in a", m t <> "-message", indistinguishabilityChosenCiphertextAttack, "game", "where", m t, "is only bounded by the adversary's running time"]
 
-smileyImageBS :: SB.ByteString
-smileyImageBS = $(embedFile "src/Cryptography/smiley.png")
-
-sendCashImageBS :: SB.ByteString
-sendCashImageBS = $(embedFile "src/Cryptography/sendcash.png")
-
 manyTimePadInsecure :: Note
 manyTimePadInsecure = do
     thm $ do
@@ -419,114 +395,8 @@ manyTimePadInsecure = do
         let t = "t"
         s ["Note that we cannot say that the", oneTimePad, "is", iNDCPASecure, "nor", iNDCCASecure, "for any", m $ t >= 1, "because the", oneTimePad, "can, by definition, only be used once for the same key"]
 
+    manyTimePadAttack
 
-    ex $ do
-        -- We will asume everything stays fine
-        let fromRight (Right a) = a
-            fromRight _ = error "there was an error decoding the images"
-
-        -- Get the smiley image
-        let (ImageRGB8 smileyImg) = fromRight $ decodePng smileyImageBS
-
-        -- Get the sendCash image
-        let (ImageRGB8 sendCashImg) = fromRight $ decodePng sendCashImageBS
-
-        -- This is how you XOR images
-        let xorImages :: Image PixelRGB8 -> Image PixelRGB8 -> Image PixelRGB8
-            xorImages i1 i2 = pixelMapXY fun i1
-              where
-                fun :: Int -> Int -> PixelRGB8 -> PixelRGB8
-                fun x y p = p `xorPixel` pixelAt i2 x y
-
-                xorPixel :: PixelRGB8 -> PixelRGB8 -> PixelRGB8
-                xorPixel (PixelRGB8 r1 g1 b1) (PixelRGB8 r2 g2 b2)
-                    = (PixelRGB8 (r1 `B.xor` r2) (g1 `B.xor` g2) (b1 `B.xor` b2))
-
-        -- Width and height of our six images, they must all be the same.
-        let width = (imageWidth smileyImg)
-            height = (imageHeight smileyImg)
-
-        -- The total number of random bypes required.
-        -- One less would not work. One more wouldn't either.
-        let pixels =  width * height
-
-        -- Generate that amount of bytes
-        keyBS <- replicateM pixels random :: Note' [Bool]
-
-        -- Now generate an image with this data.
-        let keyImage :: Image PixelRGB8
-            keyImage = snd $ generateFoldImage fun keyBS width height
-              where
-                fun :: [Bool] -> Int -> Int -> ([Bool], PixelRGB8)
-                fun (True:rest)  _ _ = (rest, PixelRGB8 0xff 0xff 0xff)
-                fun (False:rest) _ _ = (rest, PixelRGB8 0x00 0x00 0x00)
-                fun _ _ _ = error "incorrect number of random bytes supplied"
-
-        -- Encrypt both of our images with the key image
-        let encSmiley = xorImages keyImage smileyImg
-        let encSendCash = xorImages keyImage sendCashImg
-
-        -- Xor the encrypted messages for dramatic effect
-        let encXORImg = xorImages smileyImg sendCashImg
-
-        let keyFP = "key.png"
-            smileyFP = "smiley.png"
-            sendCashFP = "sendcash.png"
-            encSmileyFP = "smiley_enc.png"
-            encSendCashFP = "sendCash_enc.png"
-            encXORFP = "xor_enc.png"
-            allFiles =
-                [ keyFP
-                , smileyFP
-                , sendCashFP
-                , encSmileyFP
-                , encSendCashFP
-                , encXORFP
-                ]
-
-        doneAlready <- liftIO $ P.and <$> mapM doesFileExist allFiles
-        unless doneAlready $ do
-            registerAction smileyFP $ writePng smileyFP smileyImg
-            registerAction sendCashFP $ writePng sendCashFP sendCashImg
-            registerAction keyFP $ writePng keyFP keyImage
-            registerAction encSmileyFP $ writePng encSmileyFP encSmiley
-            registerAction encSmileyFP $ writePng encSendCashFP encSendCash
-            registerAction encXORFP $ writePng encXORFP encXORImg
-
-        -- Show it all to our reader
-        s ["The following is an application of the above theorem to a concrete situation with images"]
-        s ["Suppose we have messages in the form of images as follows"]
-        hereFigure $ do
-            include smileyFP
-            hspace $ Cm 1
-            include sendCashFP
-            caption "Two messages in the form of images"
-
-        s ["We decide to use the", oneTimePad, "so we generate a random", key]
-        hereFigure $ do
-            include keyFP
-            caption "The key"
-
-        s ["We forget about the requirement that the", oneTimePad, "can only be used once and use the key for both of our messages, thus making it a", manyTimePad]
-        s ["The resulting encryptions look inconspicuous"]
-        hereFigure $ do
-            include encSmileyFP
-            hspace $ Cm 1
-            include encSendCashFP
-            caption "The encrypted messages"
-
-        s ["When we XOR the encryptions, however, the result is far from unintelligible"]
-        hereFigure $ do
-            include encXORFP
-            caption "The XOR of the two encrypted messages"
-        s ["You can clearly see that this image is the XOR of the two original messages"]
-        s ["This is entirely insecure"]
-  where
-    include = includegraphics
-                [ KeepAspectRatio True
-                , IGHeight (Cm 3.0)
-                , IGWidth (CustomMeasure $ "0.5" <> textwidth)
-                ]
 
 pseudoRandomGeneratorDefinition :: Note
 pseudoRandomGeneratorDefinition = de $ do
@@ -573,9 +443,6 @@ eCBDefinition = de $ do
     tikzFig "ECB mode" [] $ raw $ [litFile|src/Cryptography/ECBTikZ.tex|]
 
 
-tuxImageBS :: SB.ByteString
-tuxImageBS = $(embedFile "src/Cryptography/tux.png")
-
 eCBInsecure :: Note
 eCBInsecure = do
     thm $ do
@@ -599,73 +466,7 @@ eCBInsecure = do
                 item $ s [the, attacker, "then submits", m m0, and, m m1, "and receives a", ciphertext, m c, "from the", challenger]
                 item $ s [the, attacker, "outputs the bit", m 0, "if the blocks of", m c, "are equal", and, m 1, "otherwise"]
 
-
-    ex $ do
-
-        -- We will asume everything stays fine
-        let fromRight (Right a) = a
-            fromRight _ = error "there was an error decoding the images"
-
-        -- Get the tux image
-        let (ImageRGBA8 tuxImg) = fromRight $ decodePng tuxImageBS
-
-        -- The length of the block cipher to use
-        let keylen = 5
-
-        -- Make a tiny list of pixels
-        pixelKey <- replicateM keylen $ do
-            -- Generate 4 random bytes to build a single pixel
-            r <- random
-            g <- random
-            b <- random
-            a <- random
-            return $ PixelRGBA8 r g b a
-
-
-        let xorPixel :: PixelRGBA8 -> PixelRGBA8 -> PixelRGBA8
-            xorPixel (PixelRGBA8 r1 g1 b1 a1) (PixelRGBA8 r2 g2 b2 a2)
-                = (PixelRGBA8 (r1 `B.xor` r2) (g1 `B.xor` g2) (b1 `B.xor` b2) (a1 `B.xor` a2))
-
-        let width = (imageWidth tuxImg)
-            height = (imageHeight tuxImg)
-
-        let cipherImage :: Image PixelRGBA8
-            cipherImage = snd $ generateFoldImage fun (cycle pixelKey) width height
-              where
-                fun :: [PixelRGBA8] -> Int -> Int -> ([PixelRGBA8], PixelRGBA8)
-                fun (p:ps) x y = (ps, (pixelAt tuxImg x y) `xorPixel` p)
-                fun _ _ _ = error "Something went wrong while generating a weird penguin."
-
-        let tuxFP = "tux.png"
-            encTuxFP = "tux_enc.png"
-            allFiles =
-                [ tuxFP
-                , encTuxFP
-                ]
-
-        doneAlready <- liftIO $ P.and <$> mapM doesFileExist allFiles
-        unless doneAlready $ do
-            registerAction tuxFP $ writePng tuxFP tuxImg
-            registerAction encTuxFP $ writePng encTuxFP cipherImage
-
-        s ["The following is an application of the above theorem to a concrete situation with an image"]
-        s ["Suppose we have an image as a message"]
-        hereFigure $ do
-            include tuxFP
-            caption "An image as a message"
-        s ["If we use a", blockCipher, "in", electronicCodebook, "mode", "the result of the encryption will still resemble the message"]
-        hereFigure $ do
-            include encTuxFP
-            caption $ s ["The encryption with a", blockCipher, "in", eCB, "mode"]
-        s ["In this case we used a", blockCipher, "with a", blockLength, "of", m $ raw $ T.pack $ show keylen, "pixels"]
-        s ["As the", encryptionFunction, "we used the XOR with a randomly chosen", key]
-  where
-    include = includegraphics
-                [ KeepAspectRatio True
-                , IGHeight (Cm 3.0)
-                , IGWidth (CustomMeasure $ "0.5" <> textwidth)
-                ]
-
+    blockCipherECBAttack
 
 cBCDefinition :: Note
 cBCDefinition = de $ do

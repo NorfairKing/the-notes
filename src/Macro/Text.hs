@@ -3,7 +3,7 @@ module Macro.Text where
 import           Types
 
 import           Data.List (intersperse)
-import           Prelude   (sequence_)
+import           Prelude   (error, length, otherwise, sequence_, (<))
 
 -- Shorter than sequence_
 -- To model a sentence.
@@ -28,6 +28,18 @@ commaSeparated = separated ", "
 
 cs :: [Note] -> Note
 cs = commaSeparated
+
+commaSeparatedAnd :: [Note] -> Note
+commaSeparatedAnd ns
+    | length ns < 2 = commaSeparated ns
+    | otherwise = go ns
+  where
+    go [] = error "impossible as per three lines above"
+    go [n] = and <> " " <> n
+    go (n:ns) = n <> ", " <> go ns
+
+csa :: [Note] -> Note
+csa = commaSeparatedAnd
 
 and :: Note
 and = "and"
