@@ -85,6 +85,9 @@ cryptography = chapter "Cryptography" $ do
     section "Message Authentication Codes" $ do
         messageAuthenticationCodeDefinition
         messageAuthenticationCodeSecurityDefinition
+        encryptThenMacInsecureForSameKey
+        unforgableMayLeakPlain
+        todo "define the confidentiality property for MAC's"
 
     section "Key agreement" $ do
         diffieHellmanProtocolDefinition
@@ -122,6 +125,8 @@ cryptography = chapter "Cryptography" $ do
         collisionResistantDefinition
 
     systemAlgebraS
+
+    cryptoRefs
 
 cryptographicSchemeDefinition :: Note
 cryptographicSchemeDefinition = de $ do
@@ -850,6 +855,30 @@ messageAuthenticationCodeSecurityDefinition = de $ do
 
     s ["A", mAC, function, "is called", cMASecure', "if no feasible", adversary, "wins this game with a non-negligible", probability]
 
+encryptThenMacInsecureForSameKey :: Note
+encryptThenMacInsecureForSameKey = thm $ do
+    s ["Let", m mfn_, "be a", mAC, "that is", cMASecure]
+    let mesg = "m"
+        k = "k"
+    s ["If a single", message, m mesg, "is encrypted with the", oneTimePad, "and the result is tagged by this", mAC, "with the same", key, m k, "the resulting scheme, called", encryptThenMAC', "with the same key, the result is no longer", cMASecure, "if an", adversary, "has an encryption oracle"]
+    todo "define encrypt then MAC separately"
+
+    proof $ do
+        s ["The following", adversary, "can win the", mACForgery, "game with", probability, m 1]
+        itemize $ do
+            let c = "c"
+            item $ s [the, adversary, "chooses a random", message, m mesg, "and receives its encryption", m c, "from the encryption oracle"]
+            item $ s [the, adversary, "wins the", mACForgery, "game by submitting", m $ mfn c k]
+
+
+unforgableMayLeakPlain :: Note
+unforgableMayLeakPlain = thm $ do
+    s ["There exists a", mAC, "that is", cMASecure, "but will leak the entire", plaintext]
+    todo "define encrypt and MAC separately"
+    proof $ do
+        s ["Let", m mfn_, "be a", mAC, "that is", cMASecure]
+        s [the, mAC, m $ mfn_ <> "'", "that appends the", plaintext, "to the tag of", m mfn_, "is still", cMASecure, "but leaks the", plaintext]
+
 diffieHellmanProtocolDefinition :: Note
 diffieHellmanProtocolDefinition = de $ do
     lab diffieHellmanDefinitionLabel
@@ -1174,3 +1203,12 @@ collisionResistantDefinition = de $ do
         cc = "C"
         hc = hshf_ !: c
     s ["A parametrized family", m $ setcmpr hc (c ∈ cc), "of", hashFunctions, "is called", collisionResistant, "if no feasible", adversary, "can win the", collisionFindingGame, "with a non-negligible", probability, "for a", hashFunction, m hc, "(known to the", adversary <> ") chosen uniformly at random from the family of", hashFunction]
+
+
+cryptoRefs :: Note
+cryptoRefs = do
+    nocite $ Reference "book" "cryptography-foundations" $
+        [ ("author", "Ueli Maurer")
+        , ("title", "Cryptography Foundations")
+        , ("year", "2016")
+        ]

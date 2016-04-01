@@ -71,6 +71,14 @@ bitss n = bits ^: n
 tsp_ :: Note
 tsp_ = mathcal "T"
 
+-- | Concrete MAC function
+mfn_ :: Note
+mfn_ = "f"
+
+-- | Computation of tag of message and key
+mfn :: Note -> Note -> Note
+mfn = fn2 mfn_
+
 -- * Hash function
 
 -- | Concrete hash function
