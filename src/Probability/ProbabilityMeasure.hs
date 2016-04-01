@@ -26,6 +26,7 @@ probabilityMeasureS = section "Probability Measures" $ do
     probabilitySpaceProbabilityOfComplement
     probabilityPartitionByIntersection
     probabilityOfUnion
+    unionBoundTheorem
     probabilityOfDifference
     probabilitySubsetImpliesSmaller
     probabilityAtMostOne
@@ -168,6 +169,19 @@ probabilityOfUnion = prop $ do
   where
     a = "A"
     b = "B"
+
+unionBoundTheorem :: Note
+unionBoundTheorem = thm $ do
+    lab unionBoundTheoremLabel
+    psDec
+    let a_ = "A"
+        i = "i"
+        a n = a_ !: n
+    s ["Let", m $ cs [a 1, a 2, dotsc, a i, dotsc], "be a", countable, "set of events in", m sa_]
+    ma $ prob (setuncmp i (a i)) <= sumcmp i (prob $ a i)
+
+    toprove
+
 
 probabilityOfDifference :: Note
 probabilityOfDifference = prop $ do

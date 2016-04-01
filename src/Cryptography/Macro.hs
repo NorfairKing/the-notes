@@ -81,3 +81,6 @@ hshf_ = "h"
 hsh :: Note -> Note
 hsh = fn hshf_
 
+-- | Length of a bitstring
+len :: Note -> Note
+len = autoBrackets "|" "|"

@@ -48,6 +48,7 @@ cryptography = chapter "Cryptography" $ do
             indcpaDefinition
             indcpaSecurityDefinition
             advantageNote
+            securityDefinitionNote
             nonAdaptiveINDCPAGame
             nonAdaptiveINDCPASecurity
             nonAdaptiveINDCPAStrictlyWeaker
@@ -326,6 +327,56 @@ advantageNote :: Note
 advantageNote = nte $ do
     s ["Note that this definition of the", advantage, "captures the idea that a non-zero advantage means that the", adversary, "is better than random"]
 
+securityDefinitionNote :: Note
+securityDefinitionNote = nte $ do
+    s ["We could have defined security by saying that an", adversary, "should not be able to guess a single bit of information about the", plaintext, "from the", ciphertext <> ", but that definition has some problems"]
+    s ["As an example, here we describe a", symmetricCryptosystem, "that fullfils this definition, but where the XOR of all", message, "bits is trivially computable"]
+    s ["As such this scheme is not", iNDCPASecure]
+    s ["Let the", keySpace, and, messageSpace, "both be", m $ bitss 2, "and let the", ciphertextSpace, "be", m $ bitss 3]
+    let mesg = "m"
+        m1 = mesg !: 1
+        m2 = mesg !: 2
+        k = "k"
+        k1 = k !: 1
+        k2 = k !: 2
+    s [the, encryptionFunction, "encrypts a", message, m $ mesg =: tuple m1 m2 ∈ bitss 2, "using a", key, m $ k =: tuple k1 k2 ∈ bitss 2, "as follows"]
+    ma $ enc' mesg k =: triple (m1 `xor` k1) (m2 `xor` k2) (m1 `xor` m2) ∈ bitss 3
+    s [the, adversary, "can simply read off the XOR of the", message, "as the last bit of the", ciphertext]
+    s ["Observe that this doesn't contradict the fact that any", ciphertext, "is still statistically", independent, "from its", plaintext, message]
+    proof $ do
+        let c = "c"
+            c_ = "C"
+            k_ = "K"
+            m_ = "M"
+            m1_ = m_ !: 1
+            m2_ = m_ !: 2
+        s ["We will prove that", m c_, "is statistically", independent, "from", m m1_, "under the assumption that", m m_, and, m k_, "are", independent, "and uniformly distributed", randomVariables, "over", m $ bitss 2]
+        s ["This will imply that", m c_, "is statistically", independent, "from", m m2_, "as well and as such from", m m_]
+        aligneqs (cprob (c_ =: c) (m1_ =: m1))
+            [ sumcmp (cs [m2 ∈ bits, k ∈ bitss 2]) $ cprob (c_ =: c ∧ m2_ =: m2 ∧ k_ =: k) (m1_ =: m1)
+            , sumcmp (cs [m2 ∈ bits, k ∈ bitss 2]) $ cprob (m2_ =: m2) (m1_ =: m1)
+                                                   * cprob (k_ =: k) (m_ =: tuple m1 m2)
+                                                   * cprob (c_ =: c) (m_ =: tuple m1 m2 ∧ k_ =: k)
+            , sumcmp (cs [m2 ∈ bits, k ∈ bitss 2]) $ prob (m2_ =: m2)
+                                                   * prob (k_ =: k)
+                                                   * cprob (c_ =: c) (m_ =: tuple m1 m2 ∧ k_ =: k)
+            , (2 ^ (-3)) * sumcmp (cs [m2, k]) (cprob (c_ =: c) (m_ =: tuple m1 m2 ∧ k_ =: k))
+            , (2 ^ (-3))
+            ]
+        why_ "does the second step hold?"
+        s ["In step four, we use that", keys, "are assumed to be distributed uniformly"]
+        s ["We also used that, because", m m_, "is assumed to be distributed uniformly,", m m2_, "is", independent, "from", m m1_]
+        s ["In the last step we used that, because", m c_, "is completely determined given", m m_, and, m k]
+        why_ "shouldn't all the terms in that sum evaluate to 1?"
+        s ["The above shows that", m c_, "is uniformly distributed given", m $ m1_ =: m1]
+        s ["It now follows that", m c_, and, m m1_, "are statistically", independent]
+        aligneqs (prob $ c_ =: c)
+            [ sumcmp (m1 ∈ bits) (prob (m1_ =: m1) * cprob (c_ =: c) (m1_ =: m1))
+            , (2 ^ (-3)) * sumcmp (m1 ∈ bits) (prob $ m1_ =: m1) =: 2 ^ (-3)
+            ]
+        s ["Consequently.."]
+        ma $ prob (m1_ =: m1 ∧ c_ =: c) =: prob (m1_ =: m1) * cprob (c_ =: c) (m1_ =: m1) =: prob (m1_ =: m1) * prob (c_ =: c)
+
 indcpaSecurityDefinition :: Note
 indcpaSecurityDefinition = de $ do
     lab iNDCPASecureDefinitionLabel
@@ -357,9 +408,82 @@ nonAdaptiveINDCPASecurity = de $ do
 nonAdaptiveINDCPAStrictlyWeaker :: Note
 nonAdaptiveINDCPAStrictlyWeaker = thm $ do
     s [nonAdaptiveINDCPA, "security is strictly weaker than regular", iNDCPA, "security"]
-    s ["That is, every", iNDCPASecure, symmetricCryptosystem, "is also", nonAdaptivelyINDCPASecure, "and if there exists a", nonAdaptivelyINDCPASecure, symmetricCryptosystem, "then there is one such system that is not", iNDCPASecure]
 
-    toprove
+    proof $ do
+        s ["Every", iNDCPASecure, symmetricCryptosystem, "is also", nonAdaptivelyINDCPASecure, "and if there exists a", nonAdaptivelyINDCPASecure, symmetricCryptosystem, "then there is one such system that is not", iNDCPASecure]
+        let m0 = "m" !: 0
+            m1 = "m" !: 1
+        enumerate $ do
+            item $ do
+                let a = "A"
+                    a' = a <> "'"
+                let e = epsilon
+                s ["First we prove that if there exists an", adversary, "with non-negligible", advantage, m e, "in winning the", nonAdaptiveINDCPA, "game for a fixed", message, "pair", m $ tuple m0 m1, "of the same length, then there exists an", adversary, m a', "that wins the", nonAdaptiveINDCPA, "game with advantage", m e]
+                s ["Indeed, the new", adversary, m a', "simply skips steps 2 of the", iNDCPA, "game and submits the fixed", message, "pair", m $ tuple m0 m1, "in step 3"]
+                s ["Then", m a', "does exactly what", m a, "does so they have the same", advantage]
+            item $ do
+                s ["Next we show that there exists a", nonAdaptivelyINDCPASecure, symmetricCryptosystem, "that is not", iNDCPASecure]
+                s ["Let", m $ tuple enc_ dec_, "denote the assumed", nonAdaptivelyINDCPASecure, symmetricCryptosystem, "with", messageSpace, m msp_ <> ",", ciphertextSpace, m csp_ <> ",", keySpace, m ksp_, and, randomnessSpace, m rsp_]
+
+                let e_ = "e'"
+                    d_ = "d'"
+                    e = fn3 e_
+                    d = fn2 d_
+                s ["We define the follwing", symmetricCryptosystem, m $ tuple e_ d_, "with", keySpace, m $ ksp_ ^ 2, and, ciphertextSpace, m $ csp_ ⨯ ksp_ ⨯ bits, "as follows"]
+
+                let r = "r"
+                    k = "k"
+                    k1 = k !: 1
+                    k2 = k !: 2
+                    mesg = "m"
+                ma $ e mesg (tuple k1 k2) r =: cases ( do
+                        triple (enc mesg k1 r) k2 1 <> text " if " <> mesg =: k2
+                        lnbk
+                        triple (enc mesg k1 r) k2 0 <> text " if " <> mesg `neq` k2
+                    )
+                let b = "b"
+                    c = "c"
+                    x = "x"
+                ma $ d (triple c k b) (tuple k1 k2) =: dec c k1
+
+                s ["First we prove that this is in fact a valid", symmetricCryptosystem]
+                s ["Let", m $ tuple k1 k2 ∈ ksp_ ^ 2, "be an arbitrary", key <> ",", m $ mesg ∈ msp_, "an arbitrary", message, and, m $ r ∈ rsp_, "an arbitrary randomness value"]
+                aligneqs (d (e mesg (tuple k1 k2) r) (tuple k1 k2))
+                    [ d (triple (enc mesg k1 r) k2 x) (tuple k1 k2)
+                    , dec (enc mesg k1 r) k1
+                    , mesg
+                    ]
+                s ["In the above,", m x, "is a bit"]
+
+                s ["We now show that this scheme is", nonAdaptivelyINDCPASecure]
+                s ["Let", m $ tuple m0 m1, "be an arbitrary fixed", message, "pair"]
+                s ["Let", m $ tuple k1 k2, "be a", key, "chosen independently of the", message, "pair and uniformly at random"]
+                s ["Observe firstly that the", probability, "that", m k2, "matches either of the", messages, "is negligible for large", keySpaces, m ksp_, ref unionBoundTheoremLabel]
+                ma   $ prob (m0 =: k2 ∨ m1 =: k2)
+                    <= prob (m0 =: k2) + prob (m1 =: k2)
+                    =: (2 /: setsize ksp_)
+                let cb = c !: b
+                    cb' = cb <> "'"
+                    mb = mesg !: b
+                s ["If", m m0, and, m m1, "are both different from", m k2, "the challenger outputs", m $ cb' =: triple (enc mb k1 r) k2 0, "and since that", m k2, "is", independent, "of", m b <> ",", m k1, and, m r <> ",", "this does not reveal any more information about", m b, "than", m $ cb =: enc mb k r]
+                s ["Since no", adversary, "can guess", m b, "from", m cb, "with non-negligible", advantage <> ", the scheme", m $ tuple e_ d_, "is", nonAdaptivelyINDCPASecure]
+
+                s ["However, the following", adversary, "wins the regular", iNDCPA, "game for this scheme with", advantage, "tending to", m 1, "for large", keySpaces]
+                itemize $ do
+                    item $ s [the, adversary, "queries the encryption for some", message, m mesg, "and obtains the responce", m $ c =: (triple (enc mesg k1 r) k2 x) ∈ (csp_ ⨯ ksp_ ⨯ bits)]
+                    let m' = mesg <> "'"
+                        xb = "x" !: b
+                    item $ s [the, adversary, "issues the challenge", m $ tuple k2 m', "for some arbitrary", m $ m' `neq` k2, "and", m $ len m' =: len k2, "and obtains", m $ cb' =: triple cb k2 xb, "from the", challenger]
+                    item $ s [the, adversary, "outputs", m 0, "if", m $ xb =: 1, and, m 1, "otherwise"]
+                s ["The inherent difference between", nonAdaptiveINDCPASecurity, and, iNDCPA, "security is that the", adversary, "can aqcuire information before the challenge is submitted and can use that information in the challenge"]
+
+
+
+
+
+
+
+
 
 indccaDefinition :: Note
 indccaDefinition = de $ do
@@ -591,6 +715,7 @@ deterministicCryptoSystemInsecure = thm $ do
         s [the, attacker, "chooses two arbitrary", messages, "and submits them to receive two", ciphertexts]
         s [the, attacker, "then submits those same", messages, "as part of the challenge"]
         s [the, attacker, "then only needs to compare the", ciphertext, "he got to the", ciphertexts, "he got earlier to win the game with", advantage, m 1]
+        s ["Note that this only works because a", cipher, "is defined to be deterministic"]
 
 
 xorBlockCipher :: Note

@@ -11,9 +11,13 @@ makeDefs [
     , "discrete probability measure"
     ]
 
-makeThm "Probability measure finite additivity"
-makeProps [
-      "Probability partition by intersection"
+makeThms
+    [ "Probability measure finite additivity"
+    , "Union bound"
+    ]
+
+makeProps
+    [ "Probability partition by intersection"
     , "Probability of union"
     , "Probability of difference"
     , "Probability subset implies smaller probability"

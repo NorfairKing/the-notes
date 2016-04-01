@@ -482,7 +482,7 @@ correlationDefinition = de $ do
 independenceOfRandomVariables :: Note
 independenceOfRandomVariables = de $ do
     s ["Let ", m x, and, m y, " be random variables in ", m prbsp]
-    s [m x, and, m y, " are called ", independent', " if and only if every two events ", m (x <= a), and, m (y <= b), " are ", independent_, " events"]
+    s [m x, and, m y, " are called (statistically)", independent', " if and only if every two events ", m (x <= a), and, m (y <= b), " are ", independent_, " events"]
   where
     a = "a"
     b = "b"
