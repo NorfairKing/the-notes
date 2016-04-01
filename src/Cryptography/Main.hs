@@ -75,10 +75,11 @@ cryptography = chapter "Cryptography" $ do
             blockCipherDefinition
             eCBDefinition
             eCBInsecure
+            xorBlockCipherECB
             cBCDefinition
+            xorBlockCipherCBC
             counterDefinition
 
-            xorBlockCipher
 
 
     section "Message Authentication Codes" $ do
@@ -683,7 +684,7 @@ counterDefinition = de $ do
             r = "r"
             bs = autoAngleBrackets
         item $ do
-            "Encryption:"
+            "Encryption: "
             let iv = "IV"
             s ["First an", initialisationVector, m $ r ∈ bitss (n / 2), "(also written as", m iv <> ")", "is chosen uniformly at random"]
             ma $ enc mesg k_ r
@@ -718,57 +719,105 @@ deterministicCryptoSystemInsecure = thm $ do
         s ["Note that this only works because a", cipher, "is defined to be deterministic"]
 
 
-xorBlockCipher :: Note
-xorBlockCipher = do
-    thm $ do
-        let f_ = "F"
-            n = "n"
+xorBlockCipherECB :: Note
+xorBlockCipherECB = thm $ do
+    lab xorECBInsecureTheoremLabel
+    let f_ = "F"
+        n = "n"
+        k = "k"
+    s ["Let", m $ fun2 f_ (bitss n) (bitss k) (bitss n), "be a", blockCipher]
+    s ["If we know that", m f_, "can be implemented with only XOR gates and we have an encryption oracle, we can decrypt any", message]
+
+    proof $ do
+        let mesg = "m"
+            c = "c"
             k = "k"
-        s ["Let", m $ fun2 f_ (bitss n) (bitss k) (bitss n), "be a", blockCipher]
-        s ["If we know that", m f_, "can be implemented with only XOR gates and we have an encryption oracle, we can decrypt any", message]
+        s ["Let", m mesg, "be an arbitrary", message, "and let", m c, "be its encryption with a", secretKey, m k]
+        s ["Because every XOR gate corresponds to summing to bits, every bit of", m c, "can be seen as a linear combination of the", message, "bits, the", key, "bits and a constant"]
+        let i = "i"
+            ci = c !: i
+            q = "q"
+            qi = q !: i
+            j = "j"
+            kj = k !: j
+            mj = mesg !: j
+            aij = "a" !: (i <> j)
+            bij = "b" !: (i <> j)
+        ma $ ci =: sumcmpr (j =: 1) n (aij * mj) + sumcmpr (j =: 1) k (bij * kj) + qi
+        s ["In matrix notation this looks as follows"]
+        let a = "A"
+            b = "B"
+        ma $ c =: a * mesg + b * k + q
+        s ["Here", m a, "is an", m $ n × n, matrix <> ",", m b, "is an", m $ n × k, matrix, and, m q, "is a", vector, "of length", m n]
+        newline
 
-        proof $ do
-            let mesg = "m"
-                c = "c"
-                k = "k"
-            s ["Let", m mesg, "be an arbitrary", message, "and let", m c, "be its encryption with a", secretKey, m k]
-            s ["Because every XOR gate corresponds to summing to bits, every bit of", m c, "can be seen as a linear combination of the", message, "bits, the", key, "bits and a constant"]
-            let i = "i"
-                ci = c !: i
-                q = "q"
-                qi = q !: i
-                j = "j"
-                kj = k !: j
-                mj = mesg !: j
-                aij = "a" !: (i <> j)
-                bij = "b" !: (i <> j)
-            ma $ ci =: sumcmpr (j =: 1) n (aij * mj) + sumcmpr (j =: 1) k (bij * kj) + qi
-            s ["In matrix notation this looks as follows"]
-            let a = "A"
-                b = "B"
-            ma $ c =: a * mesg + b * k + q
-            s ["Here", m a, "is an", m $ n × n, matrix <> ",", m b, "is an", m $ n × k, matrix, and, m q, "is a", vector, "of length", m n]
-            newline
+        let u = "u"
+        s ["When we ask for the encryption of the zero message, we get", m $ u =: b * k + q]
+        s ["Now we only need to find", m a]
+        let mi = mesg !: i
+            gi = "g" !: i
+        s ["We ask for the encryptions", m gi, "of the", messages, m mi, "that are all zero except in place", m i, "to find the collumns of", m a]
+        ma $ gi - u =: (pars $ a * mi + b * k + q) - u =: a * mi
+        s [m $ a * mi, "is precicely the", m i <> "-th column of", m a]
+        s ["We now know", m a, "and", m $ b * k + q]
+        s ["Because", m f_, "is a", permutation, "for every", m k <> ",", m f_, "must be", invertible]
+        s ["We can therefore solve the linear system", m $ a * mesg =: c - u, "to find", m mesg, "from", m c]
 
-            let u = "u"
-            s ["When we ask for the encryption of the zero message, we get", m $ u =: b * k + q]
-            s ["Now we only need to find", m a]
-            let mi = mesg !: i
-                gi = "g" !: i
-            s ["We ask for the encryptions", m gi, "of the", messages, m mi, "that are all zero except in place", m i, "to find the collumns of", m a]
-            ma $ gi - u =: (pars $ a * mi + b * k + q) - u =: a * mi
-            s [m $ a * mi, "is precicely the", m i <> "-th column of", m a]
-            s ["We now know", m a, "and", m $ b * k + q]
-            s ["Because", m f_, "is a", permutation, "for every", m k <> ",", m f_, "must be", invertible]
-            s ["We can therefore solve the linear system", m $ a * mesg =: c - u, "to find", m mesg, "from", m c]
+xorBlockCipherCBC :: Note
+xorBlockCipherCBC = thm $ do
+    let f_ = "F"
+        n = "n"
+        k = "k"
+    s ["Let", m $ fun2 f_ (bitss n) (bitss k) (bitss n), "be a", blockCipher]
+    s ["If we know that", m f_, "is operated in", cipherBlockChaining, "mode, can be implemented with only XOR gates and we have an encryption oracle, we can decrypt any", message]
 
-    thm $ do
-        let f_ = "F"
-            n = "n"
-            k = "k"
-        s ["Let", m $ fun2 f_ (bitss n) (bitss k) (bitss n), "be a", blockCipher]
-        s ["If we know that", m f_, "is operated in", cipherBlockChaining, "mode, can be implemented with only XOR gates and we have an encryption oracle, we can decrypt any", message]
-        toprove
+    proof $ do
+        let f = fn2 f_
+            mesg = "m"
+            l = "l"
+            m1 = mesg !: 1
+            m2 = mesg !: 2
+            ml = mesg !: l
+        let u = "u"
+            v = "v"
+            v0 = v !: 0
+            v1 = v !: 1
+        s ["Invoking an encryption oracle on a single-block", message, m $ u ∈ bitss n, "yields a 2-block", ciphertext, m $ tuple v0 v1 ∈ bitss (2 * n), "where the first block is uniformly random"]
+        why_ "is the first block uniformly random? That's not a requirement of the definition of a block cipher, let's just say the first block is useless"
+        s ["The second block is given by", m $ f (u `xor` v0) k]
+        let a = "A"
+            b = "B"
+        s ["As discussed earlier", ref xorECBInsecureTheoremLabel <> ",", m f_, "can be characterized by the following equation where", m a, "is an", m $ n × n, matrix, and, m b, "is an", m $ n × k, matrix]
+        let c = "c"
+            q = "q"
+        ma $ c =: a * mesg + b * k + q
+        let u' = u <> "'"
+            v' = v <> "'"
+            v0' = v0 <> "'"
+            v1' = v1 <> "'"
+        s ["We encrypt two random vectors", m u, and, m u', "to receive two", ciphertexts, m $ v =: tuple v0 v1, and, m $ v' =: tuple v0' v1', "as follows"]
+        let w = "w"
+        ma $ v1 - v1' =: (a * (pars $ u + v0) + b * k + q) - (a * (pars $ u' + v0') + b * k + q) =: a * ((pars $ u + v0) - (pars $ u' + v0')) =: a * w
+        let i = "i"
+            t = "t"
+            t1 = t !: 1
+            t2 = t !: 2
+            ti = t !: i
+            gi = "g" !: i
+        s ["Now, we know that", m w, "is uniformly distributed", ref xorUniformTheoremLabel, "so by encrypting enough random", messages, "we can obtain the vectors", m $ gi =: a * ti, "for some", basis, m $ list t1 t2 ti, "of", m $ bitss n]
+        let gg = "G"
+            tt = "T"
+        ma $ gg =: a * tt ⇔ a
+         =: gg * matinv tt
+        s ["Let", m $ list m1 m2 ml, "be an", m l <> "-block", message]
+        s ["Now that we have the", matrix, m a <> ",", "we can compute the", m i <> "-th block", m i, "of the original message", m mesg, "as follows, where", m $ v1 =: a * (pars $ u + v0) + b * k + q, "is one of the earlier encrypted single block", messages]
+        let c_ = (c !:)
+            mi = mesg !: i
+        aligneqs (matinv a * (pars $ c_ i - v1) - (c_ (i - 1) - u - v0))
+            [ matinv a * (pars $ a * (pars $ mi - c_ (i - 1)) + b * k  + q - pars (a * (pars $ u + v0) + b * k + q)) - (pars $ c_ (i - 1) - u - v0)
+            , mi + c_ (i - 1) - u - v0 - (c_ (i - 1) - u - v0)
+            , mi
+            ]
 
 
 

@@ -22,6 +22,9 @@ derivative = ix "derivative"
 homogenous :: Note
 homogenous = ix "homogenous"
 
+basis :: Note
+basis = ix "basis"
+
 matrix :: Note
 matrix = ix "matrix"
 
