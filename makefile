@@ -7,6 +7,9 @@ all: bin
 build: $(SOURCES)
 	stack build --jobs=8
 
+
+SPSPDB=$(shell stack path --snapshot-pkg-db)
+SPLPDB=$(shell stack path --local-pkg-db)
 pedantic:
 	stack clean
 	stack build \
@@ -15,7 +18,6 @@ pedantic:
 		--jobs=8 \
 		--ghc-options="\
 				-fforce-recomp \
-				-O0 \
 				-Wall \
 				-Werror \
 				-fwarn-unused-imports \
@@ -23,9 +25,6 @@ pedantic:
 				-fwarn-unused-do-bind \
 				-fno-warn-name-shadowing \
 				-fno-warn-orphans"
-
-SPSPDB=$(shell stack path --snapshot-pkg-db)
-SPLPDB=$(shell stack path --local-pkg-db)
 doc: $(SOURCES)
 	cabal configure --package-db=clear --package-db=global --package-db=$(SPSPDB) --package-db=$(SPLPDB)
 	cabal haddock --executables --haddock-options="--no-warnings --no-print-missing-docs"
