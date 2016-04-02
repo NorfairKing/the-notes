@@ -20,8 +20,8 @@ mACS = section "Message Authentication Codes" $ do
     messageAuthenticationCodeSecurityDefinition
 
     subsection "Approaches to Authenticated Encryption" $ do
-        encryptThenMACDefinition
         encryptAndMACDefinition
+        encryptThenMACDefinition
         mACThenEncryptDefinition
 
     encryptThenMacInsecureForSameKey
@@ -78,6 +78,14 @@ encryptThenMACDefinition = do
 encryptAndMACDefinition :: Note
 encryptAndMACDefinition = de $ do
     lab encryptAndMACDefinitionLabel
+    s [the, encryptThenMAC', "(" <> etM' <> ")", "approach uses a", symmetricCryptosystem, m scs_, "with", messageSpace, m msp_ <> ",", keySpace, m ksp_, and, ciphertextSpace, m csp_, anda, mAC, m mfn_, "with", messageSpace, m msp_, and, keySpace, m ksp_, "as follows"]
+    let mesg = "m"
+        tag = "t"
+        ciph = "c"
+    s ["First the", plaintext, m mesg, "is encrypted to", m ciph]
+    s ["A", mAC, m tag, "is produced based on the original", plaintext]
+    s [the, message, "is then the tuple", m $ tuple mesg tag]
+    tikzFig "Encrypt then MAC" [] $ raw $ [litFile|src/Cryptography/MACs/encryptAndMACTikZ.tex|]
 
 mACThenEncryptDefinition :: Note
 mACThenEncryptDefinition = de $ do
