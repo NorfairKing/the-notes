@@ -1,16 +1,17 @@
 module Cryptography.MACs where
 
-import           Notes                                hiding (cyclic, inverse)
+import           Notes                                    hiding (cyclic,
+                                                           inverse)
 
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
 import           Functions.Basics.Terms
 import           Probability.ProbabilityMeasure.Terms
 
-import           Cryptography.Macro
 import           Cryptography.MACs.Macro
 import           Cryptography.MACs.Terms
-import           Cryptography.Terms
+import           Cryptography.SymmetricCryptography.Macro
+import           Cryptography.SymmetricCryptography.Terms
 
 mACS :: Note
 mACS = section "Message Authentication Codes" $ do

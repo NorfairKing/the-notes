@@ -1,24 +1,30 @@
 module Cryptography.ManyTimePadAttack where
 
 
-import           Notes               hiding (cyclic, inverse)
+import           Notes                                    hiding (cyclic,
+                                                           inverse)
 
-import           Codec.Picture.Png   (decodePng, writePng)
-import           Codec.Picture.Types (DynamicImage (..), Image (..), Pixel (..),
-                                      PixelRGB8 (..), generateFoldImage,
-                                      pixelMapXY)
-import           Control.Monad       (replicateM, unless)
-import qualified Data.Bits           as B (Bits (..))
-import qualified Data.ByteString     as SB
-import           Data.FileEmbed      (embedFile)
-import           System.Directory    (doesFileExist)
+import           Codec.Picture.Png                        (decodePng, writePng)
+import           Codec.Picture.Types                      (DynamicImage (..),
+                                                           Image (..),
+                                                           Pixel (..),
+                                                           PixelRGB8 (..),
+                                                           generateFoldImage,
+                                                           pixelMapXY)
+import           Control.Monad                            (replicateM, unless)
+import qualified Data.Bits                                as B (Bits (..))
+import qualified Data.ByteString                          as SB
+import           Data.FileEmbed                           (embedFile)
+import           System.Directory                         (doesFileExist)
 import           Utils
 
-import           Prelude             (Bool (..), Either (..), Int, error, mapM,
-                                      snd, (<$>))
-import qualified Prelude             as P (and)
+import           Prelude                                  (Bool (..),
+                                                           Either (..), Int,
+                                                           error, mapM, snd,
+                                                           (<$>))
+import qualified Prelude                                  as P (and)
 
-import           Cryptography.Terms
+import           Cryptography.SymmetricCryptography.Terms
 
 
 manyTimePadAttack :: Note

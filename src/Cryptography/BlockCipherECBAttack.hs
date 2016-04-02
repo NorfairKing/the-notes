@@ -1,24 +1,32 @@
 module Cryptography.BlockCipherECBAttack where
 
-import           Notes               hiding (cyclic, inverse)
+import           Notes                                    hiding (cyclic,
+                                                           inverse)
 
-import           Codec.Picture.Png   (decodePng, writePng)
-import           Codec.Picture.Types (DynamicImage (..), Image (..), Pixel (..),
-                                      PixelRGBA8 (..), generateFoldImage)
-import           Control.Monad       (forM, forM_, replicateM, unless)
-import qualified Data.Bits           as B (Bits (..))
-import qualified Data.ByteString     as SB
-import           Data.FileEmbed      (embedFile)
-import           Data.List           (cycle)
-import qualified Data.Text           as T
-import           System.Directory    (doesFileExist)
+import           Codec.Picture.Png                        (decodePng, writePng)
+import           Codec.Picture.Types                      (DynamicImage (..),
+                                                           Image (..),
+                                                           Pixel (..),
+                                                           PixelRGBA8 (..),
+                                                           generateFoldImage)
+import           Control.Monad                            (forM, forM_,
+                                                           replicateM, unless)
+import qualified Data.Bits                                as B (Bits (..))
+import qualified Data.ByteString                          as SB
+import           Data.FileEmbed                           (embedFile)
+import           Data.List                                (cycle)
+import qualified Data.Text                                as T
+import           System.Directory                         (doesFileExist)
 import           Utils
 
-import           Prelude             (Bool (..), Either (..), Int, error, map,
-                                      mapM, return, snd, zip, (++), (<$>))
-import qualified Prelude             as P (and)
+import           Prelude                                  (Bool (..),
+                                                           Either (..), Int,
+                                                           error, map, mapM,
+                                                           return, snd, zip,
+                                                           (++), (<$>))
+import qualified Prelude                                  as P (and)
 
-import           Cryptography.Terms
+import           Cryptography.SymmetricCryptography.Terms
 
 
 blockCipherECBAttack :: Note

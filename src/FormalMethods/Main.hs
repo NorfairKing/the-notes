@@ -1,10 +1,13 @@
 module FormalMethods.Main where
 
-import           Notes                          hiding (constant, cyclic,
-                                                 inverse)
+import           Notes                                    hiding (constant,
+                                                           cyclic, inverse)
 
-import           Cryptography.Terms             hiding (signature, signature',
-                                                 signatureDefinitionLabel)
+import           Cryptography.SymmetricCryptography.Terms
+import           Cryptography.Terms                       hiding (signature,
+                                                           signature',
+                                                           signatureDefinitionLabel,
+                                                           signature_)
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
 import           Functions.Basics.Terms

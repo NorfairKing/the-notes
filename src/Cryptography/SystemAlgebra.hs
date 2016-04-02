@@ -2,7 +2,6 @@ module Cryptography.SystemAlgebra where
 
 import           Notes
 
-import           Cryptography.Macro
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
 import           Functions.Basics.Terms
@@ -16,6 +15,8 @@ import           Probability.ProbabilityMeasure.Macro
 import           Probability.RandomVariable.Terms
 import           Relations.Domain.Terms
 import           Sets.Basics.Terms
+
+import           Cryptography.SymmetricCryptography.Macro
 
 import           Cryptography.SystemAlgebra.Graph
 import           Cryptography.SystemAlgebra.Macro
