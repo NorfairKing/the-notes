@@ -60,36 +60,43 @@ messageAuthenticationCodeSecurityDefinition = de $ do
     s ["A", mAC, function, "is called", cMASecure', "if no feasible", adversary, "wins this game with a non-negligible", probability]
 
 encryptThenMACDefinition :: Note
-encryptThenMACDefinition = do
+encryptThenMACDefinition = de $ do
+    lab encryptThenMACDefinitionLabel
+    s [the, encryptThenMAC', "(" <> etM' <> ")", "approach uses a", symmetricCryptosystem, m scs_, "with", messageSpace, m msp_ <> ",", keySpace, m ksp_, and, ciphertextSpace, m csp_, anda, mAC, m mfn_, "with", messageSpace, m csp_, and, keySpace, m ksp_, "as follows"]
+    let mesg = "m"
+        tag = "t"
+        ciph = "c"
+    s ["First the", plaintext, m mesg, "is encrypted to", m ciph <> ", then a", mAC, m tag, "is produced based on the resulting", ciphertext]
+    s [the, "result is the tuple", m $ tuple ciph tag]
+    tikzFig "Encrypt then MAC" [] $ raw $ [litFile|src/Cryptography/MACs/encryptThenMACTikZ.tex|]
+
+
+encryptAndMACDefinition :: Note
+encryptAndMACDefinition = do
     de $ do
-        lab encryptThenMACDefinitionLabel
-        s [the, encryptThenMAC', "(" <> etM' <> ")", "approach uses a", symmetricCryptosystem, m scs_, "with", messageSpace, m msp_ <> ",", keySpace, m ksp_, and, ciphertextSpace, m csp_, anda, mAC, m mfn_, "with", messageSpace, m csp_, and, keySpace, m ksp_, "as follows"]
+        lab encryptAndMACDefinitionLabel
+        s [the, encryptAndMAC', "(" <> eaM' <> ")", "approach uses a", symmetricCryptosystem, m scs_, "with", messageSpace, m msp_ <> ",", keySpace, m ksp_, and, ciphertextSpace, m csp_, anda, mAC, m mfn_, "with", messageSpace, m msp_, and, keySpace, m ksp_, "as follows"]
         let mesg = "m"
             tag = "t"
             ciph = "c"
-        s ["First the", plaintext, m mesg, "is encrypted to", m ciph <> ", then a", mAC, m tag, "is produced based on the resulting", ciphertext]
-        s [the, message, "is then the tuple", m $ tuple ciph tag]
-        tikzFig "Encrypt then MAC" [] $ raw $ [litFile|src/Cryptography/MACs/encryptThenMACTikZ.tex|]
+        s ["First the", plaintext, m mesg, "is encrypted to", m ciph]
+        s ["A", mAC, m tag, "is produced based on the original", plaintext]
+        s [the, "result is the tuple", m $ tuple mesg tag]
+        tikzFig "Encrypt then MAC" [] $ raw $ [litFile|src/Cryptography/MACs/encryptAndMACTikZ.tex|]
     nte $ do
         s ["Note that this approach could equivalently be defined with two different", keySpaces]
         s ["The equivalence is then in modeling both of them as part of a tuple and having the", symmetricCryptosystem, and, mAC, "each use its own part of a tuple"]
 
-
-encryptAndMACDefinition :: Note
-encryptAndMACDefinition = de $ do
-    lab encryptAndMACDefinitionLabel
-    s [the, encryptThenMAC', "(" <> etM' <> ")", "approach uses a", symmetricCryptosystem, m scs_, "with", messageSpace, m msp_ <> ",", keySpace, m ksp_, and, ciphertextSpace, m csp_, anda, mAC, m mfn_, "with", messageSpace, m msp_, and, keySpace, m ksp_, "as follows"]
-    let mesg = "m"
-        tag = "t"
-        ciph = "c"
-    s ["First the", plaintext, m mesg, "is encrypted to", m ciph]
-    s ["A", mAC, m tag, "is produced based on the original", plaintext]
-    s [the, message, "is then the tuple", m $ tuple mesg tag]
-    tikzFig "Encrypt then MAC" [] $ raw $ [litFile|src/Cryptography/MACs/encryptAndMACTikZ.tex|]
-
 mACThenEncryptDefinition :: Note
 mACThenEncryptDefinition = de $ do
     lab mACThenEncryptDefinitionLabel
+    s [the, mACThenEncrypt', "(" <> mtE' <> ")", "approach uses a", mAC, m mfn_, with, messageSpace, m msp_ <> ",", keySpace, m ksp_, and, tagSpace, m tsp_, anda, symmetricCryptosystem, m scs_, with, messageSpace, m (msp_ ⨯ tsp_) <> ",", keySpace, m ksp_, and, ciphertextSpace, m csp_, "as follows"]
+    let mesg = "m"
+        tag = "t"
+        ciph = "c"
+    s ["First the", plaintext, m mesg, "is tagged with the", mAC, m tag, ", then the tuple", m $ tuple mesg tag, "is encrypted to", m ciph]
+    s [the, "result is", m ciph]
+    tikzFig "Encrypt then MAC" [] $ raw $ [litFile|src/Cryptography/MACs/mACThenEncryptTikZ.tex|]
 
 
 encryptThenMacInsecureForSameKey :: Note

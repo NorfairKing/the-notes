@@ -11,7 +11,7 @@ makeDefs
     , "EtM"
 
     , "Encrypt-and-MAC"
-    , "EnM"
+    , "EaM"
 
     , "MAC-then-Encrypt"
     , "MtE"
