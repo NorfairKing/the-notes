@@ -29,6 +29,9 @@ import           Sets.Basics.Terms
 
 import           Cryptography.BlockCipherECBAttack
 import           Cryptography.Macro
+import           Cryptography.MACs
+import           Cryptography.MACs.Macro
+import           Cryptography.MACs.Terms
 import           Cryptography.ManyTimePadAttack
 import           Cryptography.OTP.Impl
 import           Cryptography.SystemAlgebra
@@ -81,13 +84,7 @@ cryptography = chapter "Cryptography" $ do
             counterDefinition
 
 
-
-    section "Message Authentication Codes" $ do
-        messageAuthenticationCodeDefinition
-        messageAuthenticationCodeSecurityDefinition
-        encryptThenMacInsecureForSameKey
-        unforgableMayLeakPlain
-        todo "define the confidentiality property for MAC's"
+    mACS
 
     section "Key agreement" $ do
         diffieHellmanProtocolDefinition

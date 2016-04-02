@@ -65,20 +65,6 @@ bits = setofs [0, 1]
 bitss :: Note -> Note
 bitss n = bits ^: n
 
--- * MAC
-
--- | Tag space
-tsp_ :: Note
-tsp_ = mathcal "T"
-
--- | Concrete MAC function
-mfn_ :: Note
-mfn_ = "f"
-
--- | Computation of tag of message and key
-mfn :: Note -> Note -> Note
-mfn = fn2 mfn_
-
 -- * Hash function
 
 -- | Concrete hash function

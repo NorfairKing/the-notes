@@ -64,14 +64,6 @@ makeDefs [
     , "counter"
     , "CTR"
 
-    , "message authentication code"
-    , "MAC"
-    , "tag space"
-    , "Encrypt-then-MAC"
-
-    , "MAC-forgery"
-    , "CMA secure"
-
     , "Diffie-Hellman"
     , "DH"
     , "halfkey"
