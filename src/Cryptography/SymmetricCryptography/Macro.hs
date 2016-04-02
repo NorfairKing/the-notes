@@ -3,6 +3,7 @@ module Cryptography.SymmetricCryptography.Macro where
 import           Types
 
 import           Macro.MetaMacro
+import           Macro.Tuple
 
 import           Functions.Application.Macro
 import           Macro.Sets.Macro
@@ -30,6 +31,14 @@ dec_ = "d"
 
 dec :: Note -> Note -> Note
 dec = fn2 dec_
+
+-- | Symmetric cryptosystem
+scs :: Note -> Note -> Note
+scs = tuple
+
+-- | Concrete Symmetric cryptosystem
+scs_ :: Note
+scs_ = scs enc_ dec_
 
 -- | Message space
 msp_ :: Note

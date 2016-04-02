@@ -1,3 +1,4 @@
+{-# LANGUAGE QuasiQuotes #-}
 module Cryptography.MACs where
 
 import           Notes                                    hiding (cyclic,
@@ -17,9 +18,17 @@ mACS :: Note
 mACS = section "Message Authentication Codes" $ do
     messageAuthenticationCodeDefinition
     messageAuthenticationCodeSecurityDefinition
+
+    subsection "Approaches to Authenticated Encryption" $ do
+        encryptThenMACDefinition
+        encryptAndMACDefinition
+        mACThenEncryptDefinition
+
     encryptThenMacInsecureForSameKey
     unforgableMayLeakPlain
     todo "define the confidentiality property for MAC's"
+
+
 
 messageAuthenticationCodeDefinition :: Note
 messageAuthenticationCodeDefinition = de $ do
@@ -49,6 +58,31 @@ messageAuthenticationCodeSecurityDefinition = de $ do
             s ["He wins the game if", m $ z =: f m' k, and, m m', "was not asked as a query in step 2"]
 
     s ["A", mAC, function, "is called", cMASecure', "if no feasible", adversary, "wins this game with a non-negligible", probability]
+
+encryptThenMACDefinition :: Note
+encryptThenMACDefinition = do
+    de $ do
+        lab encryptThenMACDefinitionLabel
+        s [the, encryptThenMAC', "(" <> etM' <> ")", "approach uses a", symmetricCryptosystem, m scs_, "with", messageSpace, m msp_ <> ",", keySpace, m ksp_, and, ciphertextSpace, m csp_, anda, mAC, m mfn_, "with", messageSpace, m csp_, and, keySpace, m ksp_, "as follows"]
+        let mesg = "m"
+            tag = "t"
+            ciph = "c"
+        s ["First the", plaintext, m mesg, "is encrypted to", m ciph <> ", then a", mAC, m tag, "is produced based on the resulting", ciphertext]
+        s [the, message, "is then the tuple", m $ tuple ciph tag]
+        tikzFig "Encrypt then MAC" [] $ raw $ [litFile|src/Cryptography/MACs/encryptThenMACTikZ.tex|]
+    nte $ do
+        s ["Note that this approach could equivalently be defined with two different", keySpaces]
+        s ["The equivalence is then in modeling both of them as part of a tuple and having the", symmetricCryptosystem, and, mAC, "each use its own part of a tuple"]
+
+
+encryptAndMACDefinition :: Note
+encryptAndMACDefinition = de $ do
+    lab encryptAndMACDefinitionLabel
+
+mACThenEncryptDefinition :: Note
+mACThenEncryptDefinition = de $ do
+    lab mACThenEncryptDefinitionLabel
+
 
 encryptThenMacInsecureForSameKey :: Note
 encryptThenMacInsecureForSameKey = thm $ do
