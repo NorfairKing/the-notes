@@ -2,6 +2,8 @@ source bin/lib.sh
 
 count_todos () {
   MAX_TODOS="100"
+  TMP_FILE="/tmp/out.txt"
+  rm -f "${TMP_FILE}"
 
   TODO_KEYWORDS=(
     "TODO"
@@ -19,23 +21,26 @@ count_todos () {
   do
     keywordtext="$(printf "%-10s" "${todo}:")"
     print_colored_text BLUE "${keywordtext}"
-    num="$(grep --color=auto --word-regexp "${todo}" --recursive --exclude 'Todo.hs' src | wc -l)"
+
+    local cmd="grep --color=auto --word-regexp "${todo}" --recursive --exclude Todo.hs src"
+    ${cmd} >> "${TMP_FILE}"
+    num="$($cmd | wc -l)"
     text="$(printf "%5d" "${num}")"
 
     if [ "${num}" == "0" ] ; then
-      print_colored_text GREEN "${text}"
+      print_colored_text GREEN "${text}\n"
     elif [ ${num} -le $((MAX_TODOS / 2)) ] ; then
-      print_colored_text YELLOW "${text}"
+      print_colored_text YELLOW "${text}\n"
     else
-      print_colored_text RED "${text} WARNING"
+      print_colored_text RED "${text} WARNING\n"
     fi
-    printf "\n"
 
     total="$((${total} + ${num}))"
   done
 
   echo
 
+  cat "${TMP_FILE}" | sort
   print_colored_text BLUE "$(printf "%-10s" "total:")"
   text="$(printf "%5d" "${total}")"
   if [ "$total" == "0" ] ; then
