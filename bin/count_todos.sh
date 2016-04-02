@@ -40,7 +40,6 @@ count_todos () {
 
   echo
 
-  cat "${TMP_FILE}" | sort
   print_colored_text BLUE "$(printf "%-10s" "total:")"
   text="$(printf "%5d" "${total}")"
   if [ "$total" == "0" ] ; then
@@ -48,6 +47,7 @@ count_todos () {
   elif [ ${total} -le ${MAX_TODOS} ] ; then
     print_colored_text YELLOW "${text}\n"
   else                           
+    cat "${TMP_FILE}" | sort
     print_colored_text RED "${text}\n"
     
     echo "I cannot let you go through with this. Fix some todo's first!"
@@ -55,4 +55,6 @@ count_todos () {
   fi  
 }
 
-check "Counting todo's" count_todos
+printf "Check: Making sure there aren't too many todo's left in the code\n"
+count_todos
+print_colored_text GREEN "Success\n"
