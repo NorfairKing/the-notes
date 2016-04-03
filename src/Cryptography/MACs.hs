@@ -101,11 +101,10 @@ mACThenEncryptDefinition = de $ do
 
 encryptThenMacInsecureForSameKey :: Note
 encryptThenMacInsecureForSameKey = thm $ do
-    s ["Let", m mfn_, "be a", mAC, "that is", cMASecure]
+    s ["Let", m mfn_, "be a", mAC, "that is", cMASecure, "and let it be used in the", encryptThenMAC, "approach with the", oneTimePad]
     let mesg = "m"
         k = "k"
-    s ["If a single", message, m mesg, "is encrypted with the", oneTimePad, "and the result is tagged by this", mAC, "with the same", key, m k, "the resulting scheme, called", encryptThenMAC', "with the same key, the result is no longer", cMASecure, "if an", adversary, "has an encryption oracle"]
-    todo "define encrypt then MAC separately"
+    s ["If a single", message, m mesg, "is encrypted and tagged with the same", key, m k, "the resulting scheme is no longer", cMASecure, "if an", adversary, "has an encryption oracle"]
 
     proof $ do
         s ["The following", adversary, "can win the", mACForgery, "game with", probability, m 1]
@@ -117,8 +116,31 @@ encryptThenMacInsecureForSameKey = thm $ do
 
 unforgableMayLeakPlain :: Note
 unforgableMayLeakPlain = thm $ do
-    s ["There exists a", mAC, "that is", cMASecure, "but will leak the entire", plaintext]
-    todo "define encrypt and MAC separately"
+    s ["For any ", cMASecure, mAC, ", there exists a", mAC, "that is", cMASecure, "but, when used with any", symmetricCryptosystem, "in an", encryptAndMAC, "fashion, results in an", iNDCPA, "insecure", symmetricCryptosystem]
+
     proof $ do
-        s ["Let", m mfn_, "be a", mAC, "that is", cMASecure]
-        s [the, mAC, m $ mfn_ <> "'", "that appends the", plaintext, "to the tag of", m mfn_, "is still", cMASecure, "but leaks the", plaintext]
+        let f_ = mfn_
+            f = fn2 f_
+        s ["Let", m f_, "be a", mAC, "that is", cMASecure]
+        let f'_ = mfn_ <> "'"
+        s ["Define the", mAC, m f'_, "as follows"]
+        let f'  = fn2 f'_
+            mesg = "m"
+            k = "k"
+        ma $ f' mesg k =: f mesg k ++ mesg
+        s ["In other words,", m f'_, "appends the", plaintext, "to the tag of", m f_]
+        s [m f'_, "is still", cMASecure, "because if there was a way to forge a tag for", m f'_, "that tag could be reduced in length to obtain a forged tag for", m f_]
+        newline
+
+        s ["When", m f'_, "is used in conjunction with any", symmetricCryptosystem, m scs_, "the result of the", encryptAndMAC, "scheme will contain the entire", plaintext, "and can therefore never be", iNDCPASecure]
+
+
+
+
+
+
+
+
+
+
+
