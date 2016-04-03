@@ -4,7 +4,7 @@ import           Notes
 
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
-import           Relations.Basics.Terms         hiding (total')
+import           Relations.Basics.Terms         hiding (total, total')
 import           Relations.Domain.Terms
 import           Sets.Basics.Terms
 
@@ -23,6 +23,7 @@ basics = section "Basics" $ do
     ternaryFunctionDefinition
 
     predicateEquivalentDefinition
+    unitFunctionDefinition
 
 
 partialFunctionDefinition :: Note
@@ -69,3 +70,24 @@ predicateEquivalentDefinition = thm $ do
     s ["A", predicate_, m p_, "on a", set, m a, "can equivalently be defined as a", function, m $ fun p_ a (setofs [false, true]), "that deides whether the", predicate, "holds for an", element]
 
     toprove
+
+
+unitFunctionDefinition :: Note
+unitFunctionDefinition = do
+    de $ do
+        lab unitFunctionDefinitionLabel
+        let a = "A"
+            e = comm0 "bullet"
+        s ["For a given", domain, m a, "the", unitFunction', "is the", total, function, "that maps every", element, "of", m a, "to a", quoted "dummy", element, m e]
+        let x = "x"
+        ma $ unitf a =: setcmpr (tuple x e) (x ∈ a)
+    nte $ do
+        s ["This dummy", element, "just signifies that all information is lost in this", unitFunction]
+
+
+
+
+
+
+
+

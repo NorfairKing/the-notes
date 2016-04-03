@@ -2,13 +2,13 @@ module Cryptography.SystemAlgebra.Macro where
 
 import           Types
 
+import qualified Data.Text                   as T
+import           Prelude                     (Int, id)
+
 import           Macro.Arrows
 import           Macro.Math
 import           Macro.MetaMacro
 import           Macro.Text
-
-import qualified Data.Text                   as T
-import           Prelude                     (Int)
 
 import           Functions.Application.Macro
 
@@ -117,6 +117,9 @@ bullet = comm0 "bullet"
 negSpace :: Int -> Note
 negSpace n = commS "kern" <> raw ("-" <> T.pack (show n) <> "px")
 
+comC :: Note
+comC = longrightarrow
+
 autC :: Note
 autC = bullet <> negSpace 4 <> longrightarrow
 
@@ -128,3 +131,25 @@ secuC = bullet <> negSpace 4 <> longrightarrow <> negSpace 6 <> bullet
 
 keyC :: Note
 keyC = bullet <> negSpace 5 <> raw "=\\joinrel=\\joinrel=" <> negSpace 6 <> bullet
+
+hkeyC :: Note
+hkeyC = raw "=\\joinrel=\\joinrel=" <> negSpace 6 <> bullet
+
+
+-- | Encryption transformer
+encT :: Note -- ^ Encryption function
+     -> Note
+encT = id
+
+-- | Encryption transformer for @enc_@
+encT_ :: Note
+encT_ = encT "enc"
+
+-- | Decryption transformer
+decT :: Note -- ^ Decryption function
+     -> Note
+decT = id
+
+-- | Decryption transformer for @dec_@
+decT_ :: Note
+decT_ = decT "dec"

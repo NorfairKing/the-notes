@@ -1,0 +1,102 @@
+\tikzstyle{block}=[rectangle, fill=white, draw=black, minimum height=1em, minimum width=2em, text opacity=1]
+\tikzstyle{fun}=[circle, draw=black, fill=white]
+\tikzstyle{bg}=[fill=gray, fill opacity = 0.1]
+
+% Secure channel on the right
+\begin{scope}[xshift=8cm, yshift=0.5cm]
+  \node (title) at (2, 0.5) {$Secure$};
+  \draw[bg] (0, -2) rectangle (4, 1);
+
+  \node[block] (a) at (0, 0) {$A$};
+  \node[block] (b) at (4, 0) {$B$};
+  \coordinate (i) at (2, 0) {};
+  \node[block] (e) at (2, -2) {$E$};
+  \node[fun] (f) at (2, -1) {$|\cdot|$};
+
+  \draw (a) -- (i);
+  \draw[arrows={-latex}] (i) -- (b);
+  \draw (i) -- (f);
+  \draw[arrows={-latex}] (f) -- (e);
+\end{scope}
+
+% Simulator below it.
+\begin{scope}[xshift=8cm, yshift=-2.5cm]
+  \node (title) at (1.5, 0.5) {$Sim$};
+  \draw[bg] (1, -1) rectangle (3, 1);
+
+  \node[block] (t) at (2, 1) {$E$};
+  \node[fun] (d) at (2, 0) {$\$$};
+  \node[block] (b) at (2, -1) {$E$};
+
+  \draw[arrows={-latex}] (t) -- (d);
+  \draw[arrows={-latex}] (d) -- (b);
+\end{scope}
+
+% Key channel
+\begin{scope}
+  \node (title) at (1, 1) {$Key$};
+  \draw[bg] (0, -1) rectangle (4, 1.5);
+
+  \node[block] (a) at (0, 0) {$A$};
+  \node[block] (b) at (4, 0) {$B$};
+  \coordinate (i) at (2, 0) {};
+  \node[block] (e) at (2, -1) {$E$};
+  \node[block] (k) at (2, 1) {$\$$};
+
+  \draw[arrows={-latex}] (k) -- (i);
+  \draw[arrows={latex-}] (a) -- (i);
+  \draw[arrows={-latex}] (i) -- (b);
+  \draw[arrows={-|}] (i) -- (e);
+\end{scope}
+
+% Authenticated channel below it
+\begin{scope}[yshift=-2.5cm]
+  \node (title) at (2, 0.5) {$Authenticated$};
+  \draw[bg] (0, -1) rectangle (4, 1);
+
+  \node[block] (a) at (0, 0) {$A$};
+  \node[block] (b) at (4, 0) {$B$};
+  \coordinate (i) at (2, 0) {};
+  \node[block] (e) at (2, -1) {$E$};
+
+  \draw (a) -- (i);
+  \draw[arrows={-latex}] (i) -- (b);
+  \draw[arrows={-latex}] (i) -- (e);
+\end{scope}
+
+% Encryption transformer to the left
+\begin{scope}[yshift=-2cm]
+  \node (title) at (-1.5, 2.5) {$Enc$};
+  \draw[bg] (-2, -1.5) rectangle (0, 3.5);
+
+  \node[block] (ak) at (0, 2) {$A$};
+  \node[block] (ac) at (0, -0.5) {$A$};
+  \node[fun] (ai) at (-1, 2) {$g$};
+  \node[fun] (enc) at (-1, -0.5) {$enc$};
+  \node[block] (an) at (-2, -0.5) {$A$};
+
+  \draw[arrows={-latex}] (ak) -- (ai);
+  \draw (ai) -- (enc);
+  \draw[arrows={-latex}] (ai) -- (enc);
+  \draw[arrows={-latex}] (enc) -- (ac);
+  \draw[arrows={-latex}] (an) -- (enc);
+\end{scope}
+
+% Decryption transformer to the right
+\begin{scope}[xshift=6cm, yshift=-2cm]
+  \draw[bg] (-2, -1.5) rectangle (0, 3.5);
+  \node (title) at (-0.5, 2.5) {$Dec$};
+
+  \node[block] (bk) at (-2, 2) {$B$};
+  \node[block] (bd) at (0, -0.5) {$B$};
+  \node[fun] (bi) at (-1, 2) {$g$};
+  \node[fun] (dec) at (-1, -0.5) {$dec$};
+  \node[block] (bn) at (-2, -0.5) {$B$};
+
+  \draw[arrows={-latex}] (bk) -- (bi);
+  \draw (bi) -- (dec);
+  \draw[arrows={-latex}] (bi) -- (dec);
+  \draw[arrows={-latex}] (dec) -- (bd);
+  \draw[arrows={-latex}] (bn) -- (dec);
+\end{scope}
+

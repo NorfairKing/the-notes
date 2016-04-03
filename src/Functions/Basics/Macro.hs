@@ -4,6 +4,7 @@ import qualified Prelude                     as P (map)
 import           Types
 
 import           Macro.Arrows
+import           Macro.MetaMacro
 import           Macro.Sets.Macro
 import           Macro.Tuple
 
@@ -100,6 +101,14 @@ img_ = "B"
 -- | Image of a function
 img :: Note -> Note
 img = R.img
+
+-- | The unit function for a given domain
+unitf :: Note -> Note
+unitf = (unitf_ !:)
+
+-- | A general unit function
+unitf_ :: Note
+unitf_ = mathcal "U"
 
 
 -- * Misc functions

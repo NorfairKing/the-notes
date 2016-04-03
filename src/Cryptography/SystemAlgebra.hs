@@ -9,16 +9,18 @@ import           Functions.Basics.Terms
 import           Functions.BinaryOperation.Macro
 import           Functions.BinaryOperation.Terms
 import           Logic.FirstOrderLogic.Macro
+import           Logic.PropositionalLogic.Macro
 import           Probability.ConditionalProbability.Macro
 import           Probability.ConditionalProbability.Terms
 import           Probability.Independence.Terms
 import           Probability.ProbabilityMeasure.Macro
+import           Probability.ProbabilityMeasure.Terms
 import           Probability.RandomVariable.Terms
 import           Relations.Domain.Terms
 import           Sets.Basics.Terms
 
 import           Cryptography.SymmetricCryptography.Macro
-import           Cryptography.SymmetricCryptography.Terms
+import           Cryptography.SymmetricCryptography.Terms hiding (advantage')
 
 import           Cryptography.SystemAlgebra.Graph
 import           Cryptography.SystemAlgebra.Macro
@@ -83,6 +85,9 @@ systemAlgebraS = section "System Algebra" $ do
         secretChannelDefinition
         secureChannelDefinition
         keyChannelDefinition
+        distinguisherDefinition
+        symmetricCryptoSystemsTransformer
+        secureFromAuthenticated
 
 
 abstractSystemAlgebraDefinition :: Note
@@ -653,7 +658,7 @@ channelDefinition = do
     de $ do
         lab channelDefinitionLabel
         lab communicationChannelDefinitionLabel
-        s ["A", communicationChannel', or, channel', "is a", nS 3, "with", interfaces, "labeled", csa [m a, m b, m e]]
+        s ["A", communicationChannel', or, channel', m comC, "is a", nS 3, "with", interfaces, "labeled", csa [m a, m b, m e]]
         tikzFig "Communication channel model" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/channelTikZ.tex|]
         let sys = System "Channel" ["A", "B", "E"]
         systemFig 4 sys $ s ["A", communicationChannel, "from the", systemAlgebra, "point of view"]
@@ -678,14 +683,22 @@ secretChannelDefinition = de $ do
     let a = "A"
         b = "B"
         e = "E"
-    s ["A", secretChannel', m secrC, "is a", communicationChannel, "where", m e, "cannot read", messages, "going from", m a, to, m b]
+        f = "f"
+    s ["A", secretChannel', m secrC, "is a", communicationChannel, "where", m e, "cannot read", messages, "going from", m a, to, m b, "but will get a", function, m f, "of any transmitted", message]
     tikzFig "Secret Communication Channel" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/secrChannelTikZ.tex|]
+    s ["Ideally", m f, "is of course the", unitFunction, m unitf_]
+    s ["in that case the", secretChannel, "looks as follows"]
+    tikzFig "Secret Communication Channel with unit function leak" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/unitSecrChannelTikZ.tex|]
 
 secureChannelDefinition :: Note
 secureChannelDefinition = de $ do
     lab secureChannelDefinitionLabel
-    s ["A", secureChannel', m secuC, "provides both secrecy and authentication"]
-    tikzFig "Key Channel" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/secuChannelTikZ.tex|]
+    let f = "f"
+    s ["A", secureChannel', m secuC, "provides both secrecy and authentication but leaks a", function, m f, "of the transmitted", message]
+    tikzFig "Secure Channel" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/secuChannelTikZ.tex|]
+    s ["Ideally", m f, "is of course the", unitFunction, m unitf_]
+    s ["in that case the", secureChannel, "looks as follows"]
+    tikzFig "Secure Channel" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/unitSecuChannelTikZ.tex|]
 
 keyChannelDefinition :: Note
 keyChannelDefinition = de $ do
@@ -695,4 +708,56 @@ keyChannelDefinition = de $ do
         e = "E"
     s ["A", keyChannel', m keyC, "is a", communicationChannel, "that can generate", keys, "from some", keySpace, "and share them with", m a, and, m b, "but where", m e, "cannot read or modify those", keys]
     tikzFig "Key Channel" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/keyChannelTikZ.tex|]
+    s ["The symbol", m hkeyC, "for parties", m a, and, m b, "denotes that", m a, "knows that at most", m b, "knows the", key, "but", m b, "does not necessarily know who else holds the", key]
+
+distinguisherDefinition :: Note
+distinguisherDefinition = de $ do
+    let p = "P"
+        q = "Q"
+    s ["Let", m p, and, m q, "be two", systems]
+    s ["A", distinguisher', "is an algorithm that can access a", system, "(one of those two)", "and outputs a bit"]
+    s [the, distinguisher <> "'s", advantage', "is defined as the", probability, "that the", distinguisher, "outputs a bit that correctly indicates which of the two", systems, "it has been accessing"]
+
+symmetricCryptoSystemsTransformer :: Note
+symmetricCryptoSystemsTransformer = de $ do
+    let a = "A"
+        b = "B"
+    s ["Let", m keyC, "be a", keyChannel, and, m comC, "a", communicationChannel]
+    s ["Let", m scs_, "be a", symmetricCryptosystem]
+    s ["We define two transformers", m $ encT_ ^: a, and, m $ decT_ ^: b, "that are each", nSs 3, "to encrypt or decrypt, respectively, any passing message with the", key]
+    tikzFig "Encryption Transformer" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/encTransformerTikZ.tex|]
+    tikzFig "Decryption Transformer" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/decTransformerTikZ.tex|]
+
+secureFromAuthenticated :: Note
+secureFromAuthenticated = ex $ do
+    s ["Let", m autC, "be a single-use", authenticatedChannel, and, "let", m secuC, "be a", secureChannel, "without deletion that leaks the length"]
+    let mesg = "m"
+        a = "A"
+        b = "B"
+        e = "E"
+    s ["More specifically, on an input", message, m $ mesg ∈ bitss "*", "at", interface, m a <> ",", m autC, "outputs", m mesg, "at", interfaces, m e, and, m b <> ",", and, m secuC, "outputs the length", m $ len mesg, "at", interface, m e]
+    let k = "k"
+    s ["Further, let", m keyC, "be a shared secret", keyChannel, "that initially outputs a uniformly random", key, m $ k ∈ bitss kappa, "at", interfaces, m a, and, m b, "(and nothing at", interface, m e <> ")"]
+
+    itemize $ do
+        item $ do
+            let g_ = "g"
+                g = fn g_
+                n = "n"
+            s ["Let", m $ fun g_ (bitss kappa) (bitss n), "be a", pseudoRandomGenerator]
+            let c = "c"
+                x = "x"
+            s ["Let", texttt "enc", "be the converter that, on input", m $ mesg ∈ msp_, "at its outside interface, computes", m $ x =: g k, "and outputs", m $ c =: mesg `xor` x, "to the receiver"]
+            s ["Let", texttt "dec", "be the converter that, on input", m $ c ∈ csp_, "at its outside interface, computes", m $ x =: g k, "and outputs", m $ c `xor` x, "to the receiver"]
+
+            tikzFig "The situation" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/secureFromAuthenticatedTikZ.tex|]
+
+            s ["We define a simulator", m sigma, "as the", system, "that, on input", m $ len mesg, "at its inside", interface <> ", generates a", ciphertext, m $ c ∈ bitss (len mesg), "uniformly at random and outputs its at its outside", interface]
+            newline
+            let d = "D"
+                rr = "R"
+                ss = "S"
+            s ["Now any", distinguisher, m d, "that can distinguish", m $ rr =: conv encT_ "A" (conv decT_ "B" (listofs [keyC, autC])), "from", m $ ss =: conv sigma "E" (listof secuC), "with advantage", m alpha, "can be used to distinguish", m $ g ("U" !: kappa), from, m ("U" !: n)]
+            toprove
+
 
