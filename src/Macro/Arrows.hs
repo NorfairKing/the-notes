@@ -20,3 +20,8 @@ rightarrow = comm0 "rightarrow"
 rightArrow :: Note
 rightArrow = comm0 "Rightarrow"
 
+longleftarrow :: Note
+longleftarrow = comm0 "longleftarrow"
+
+longrightarrow :: Note
+longrightarrow = comm0 "longrightarrow"

@@ -57,4 +57,9 @@ count_todos () {
 
 printf "Check: Making sure there aren't too many todo's left in the code\n"
 count_todos
-print_colored_text GREEN "Success\n"
+if [[ "$?" == "0" ]]
+then
+  print_colored_text GREEN "Success\n"
+else
+  exit -1
+fi

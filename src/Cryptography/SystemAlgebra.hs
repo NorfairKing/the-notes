@@ -1,3 +1,4 @@
+{-# LANGUAGE QuasiQuotes #-}
 module Cryptography.SystemAlgebra where
 
 import           Notes
@@ -17,6 +18,7 @@ import           Relations.Domain.Terms
 import           Sets.Basics.Terms
 
 import           Cryptography.SymmetricCryptography.Macro
+import           Cryptography.SymmetricCryptography.Terms
 
 import           Cryptography.SystemAlgebra.Graph
 import           Cryptography.SystemAlgebra.Macro
@@ -74,6 +76,13 @@ systemAlgebraS = section "System Algebra" $ do
             randomFunctionDefinition
             cumulativeDescriptionDefinition
             transcriptDistributionDefinition
+
+    subsection "Secure Channels" $ do
+        channelDefinition
+        authenticatedChannelDefinition
+        secretChannelDefinition
+        secureChannelDefinition
+        keyChannelDefinition
 
 
 abstractSystemAlgebraDefinition :: Note
@@ -636,13 +645,54 @@ transcriptDistributionDefinition = de $ do
     ma $ pr (ys ^: i <> mid <> xs ^: i) `neq` (pa_ .!: (ys ^: i <> mid <> xs ^: i))
 
 
+channelDefinition :: Note
+channelDefinition = do
+    let a = "A"
+        b = "B"
+        e = "E"
+    de $ do
+        lab channelDefinitionLabel
+        lab communicationChannelDefinitionLabel
+        s ["A", communicationChannel', or, channel', "is a", nS 3, "with", interfaces, "labeled", csa [m a, m b, m e]]
+        tikzFig "Communication channel model" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/channelTikZ.tex|]
+        let sys = System "Channel" ["A", "B", "E"]
+        systemFig 4 sys $ s ["A", communicationChannel, "from the", systemAlgebra, "point of view"]
 
+    nte $ do
+        s ["A", communicationChannel, "models the situation in which two", parties, "interact via", messages, "on the", interfaces, csa [m a, m b], "with the possible interference via", m e]
+        s ["On an insecure", communicationChannel <> ",", m e, "can read and modify any", message, "going from", m a, to, m b]
+        s ["We model the interaction to be one-way and model two-way communication using two channels"]
 
+authenticatedChannelDefinition :: Note
+authenticatedChannelDefinition = de $ do
+    lab authenticatedChannelDefinitionLabel
+    let a = "A"
+        b = "B"
+        e = "E"
+    s ["An", authenticatedChannel', m autC, "is a", communicationChannel, "where", m e, "cannot modify", messages, "going from", m a, to, m b]
+    tikzFig "Authenticated Communication Channel" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/autChannelTikZ.tex|]
 
+secretChannelDefinition :: Note
+secretChannelDefinition = de $ do
+    lab secretChannelDefinitionLabel
+    let a = "A"
+        b = "B"
+        e = "E"
+    s ["A", secretChannel', m secrC, "is a", communicationChannel, "where", m e, "cannot read", messages, "going from", m a, to, m b]
+    tikzFig "Secret Communication Channel" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/secrChannelTikZ.tex|]
 
+secureChannelDefinition :: Note
+secureChannelDefinition = de $ do
+    lab secureChannelDefinitionLabel
+    s ["A", secureChannel', m secuC, "provides both secrecy and authentication"]
+    tikzFig "Key Channel" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/secuChannelTikZ.tex|]
 
-
-
-
-
+keyChannelDefinition :: Note
+keyChannelDefinition = de $ do
+    lab keyChannelDefinitionLabel
+    let a = "A"
+        b = "B"
+        e = "E"
+    s ["A", keyChannel', m keyC, "is a", communicationChannel, "that can generate", keys, "from some", keySpace, "and share them with", m a, and, m b, "but where", m e, "cannot read or modify those", keys]
+    tikzFig "Key Channel" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/keyChannelTikZ.tex|]
 

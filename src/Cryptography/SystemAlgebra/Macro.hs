@@ -7,6 +7,9 @@ import           Macro.Math
 import           Macro.MetaMacro
 import           Macro.Text
 
+import qualified Data.Text                   as T
+import           Prelude                     (Int)
+
 import           Functions.Application.Macro
 
 -- | Concrete set of systems
@@ -104,3 +107,24 @@ transcr = fn2 "tr"
 bhv :: Note -> Note
 bhv = fn "b"
 
+
+
+-- * Channels
+
+bullet :: Note
+bullet = comm0 "bullet"
+
+negSpace :: Int -> Note
+negSpace n = commS "kern" <> raw ("-" <> T.pack (show n) <> "px")
+
+autC :: Note
+autC = bullet <> negSpace 4 <> longrightarrow
+
+secrC :: Note
+secrC = longrightarrow <> negSpace 6 <> bullet
+
+secuC :: Note
+secuC = bullet <> negSpace 4 <> longrightarrow <> negSpace 6 <> bullet
+
+keyC :: Note
+keyC = bullet <> negSpace 5 <> raw "=\\joinrel=\\joinrel=" <> negSpace 6 <> bullet

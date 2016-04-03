@@ -37,6 +37,12 @@ makeDefs
     , "uniform random permutation"
     , "URP"
     , "cumulative description"
+    , "communication channel"
+    , "channel"
+    , "authenticated channel"
+    , "secret channel"
+    , "key channel"
+    , "secure channel"
     ]
 
 -- | N-system

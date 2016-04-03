@@ -16,6 +16,7 @@ data System
     = System Text [Label]
     | Connected Text Text System
     | Merge System System
+    | Merges [System]
     | MergeLabels [Text] Text System
     | ParComp [System]
 
@@ -23,13 +24,15 @@ data System
 λ (System _ ls) = ls
 λ (Connected l1 l2 s) = filter (/= l1) . filter (/= l2) $ λ s
 λ (Merge s1 s2) = λ s1 ++ λ s2
+λ (Merges ss) = concatMap λ ss
 λ (MergeLabels ls l s) = l : (filter (`notElem` ls) $ λ s)
 λ (ParComp ss) = nub $ concatMap λ ss
 
 name :: System -> Text
 name (System n _) = n
 name (Connected _ _ s) = name s
-name (Merge s1 s2) = name s1 <> " V " <> name s2
+name (Merge _ _) = ""
+name (Merges _) = ""
 name (MergeLabels _ _ s) = name s
 name (ParComp ss) = mconcat $ map name ss
 
@@ -53,13 +56,19 @@ renderSystem (MergeLabels ls l s) = do
     return $ lnis : filter (\(li, _) -> li `notElem` ls) ns
 
 renderSystem s@(Merge s1 s2) = cluster_ (T.filter (/= ' ') $ name s) $ do
-    graphDec ["label" =: name s]
     nis1 <- renderSystem s1
     nis2 <- renderSystem s2
     let ns = nis1 ++ nis2
         ls = map fst ns
     if ((length $ nub ls) == (length ls))
     then return ns
+    else error "Label sets of systems must be disjunct"
+
+renderSystem s@(Merges ss) = cluster_ (T.filter (/= ' ') $ name s) $ do
+    nis <- concat <$> mapM renderSystem ss
+    let ls = map fst nis
+    if ((length $ nub ls) == (length ls))
+    then return nis
     else error "Label sets of systems must be disjunct"
 
 renderSystem (Connected l1 l2 sys) = do
