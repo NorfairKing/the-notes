@@ -6,6 +6,10 @@ makeDefs
     [ "message authentication code"
     , "MAC"
     , "tag space"
+    , "tag"
+
+    , "MAC-forgery"
+    , "CMA secure"
 
     , "Encrypt-then-MAC"
     , "EtM"
@@ -16,6 +20,14 @@ makeDefs
     , "MAC-then-Encrypt"
     , "MtE"
 
-    , "MAC-forgery"
-    , "CMA secure"
+    , "impersonation attack"
+    , "substitution attack"
+
+    , "uniform tags"
+    , "independent tags"
+    ]
+
+makeThms
+    [ "uniform tags impersonation probability bounded"
+    , "independent tags substitution probability bounded"
     ]

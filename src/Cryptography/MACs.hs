@@ -7,7 +7,10 @@ import           Notes                                    hiding (cyclic,
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
 import           Functions.Basics.Terms
+import           Logic.PropositionalLogic.Macro
+import           Probability.Independence.Terms
 import           Probability.ProbabilityMeasure.Terms
+import           Probability.RandomVariable.Terms
 
 import           Cryptography.MACs.Macro
 import           Cryptography.MACs.Terms
@@ -24,10 +27,21 @@ mACS = section "Message Authentication Codes" $ do
         encryptThenMACDefinition
         mACThenEncryptDefinition
 
-    encryptThenMacInsecureForSameKey
-    unforgableMayLeakPlain
+        encryptThenMacInsecureForSameKey
+        unforgableMayLeakPlain
     todo "define the confidentiality property for MAC's"
 
+    todo "define the CBC MAC"
+
+    subsection "MAC forgery attacks" $ do
+        impersonationAttackDefinition
+        substitutionAttackDefinition
+        tagVariableDefinition
+        uniformTagsDefinition
+        uniformTagsImpersonationProbabilityBounded
+        independentTagsDefinition
+        independentTagsSubstitutionProbabilityBounded
+        boundedAttackSuccessExamples
 
 
 messageAuthenticationCodeDefinition :: Note
@@ -35,8 +49,9 @@ messageAuthenticationCodeDefinition = de $ do
     lab messageAuthenticationCodeDefinitionLabel
     lab mACDefinitionLabel
     lab tagSpaceDefinitionLabel
+    lab tagDefinitionLabel
     let f = "f"
-    s ["A", messageAuthenticationCode', "(" <> mAC' <> ")", "for a message space", m msp_, ", " <> keySpace, m ksp_, and, tagSpace', m tsp_, "is a", function, m $ fun2 f msp_ ksp_ tsp_]
+    s ["A", messageAuthenticationCode', "(" <> mAC' <> ")", "for a", messageSpace, m msp_, ", " <> keySpace, m ksp_, and, tagSpace', m tsp_, "is a", function, m $ fun2 f msp_ ksp_ tsp_]
 
 messageAuthenticationCodeSecurityDefinition :: Note
 messageAuthenticationCodeSecurityDefinition = de $ do
@@ -134,7 +149,105 @@ unforgableMayLeakPlain = thm $ do
 
         s ["When", m f'_, "is used in conjunction with any", symmetricCryptosystem, m scs_, "the result of the", encryptAndMAC, "scheme will contain the entire", plaintext, "and can therefore never be", iNDCPASecure]
 
+impersonationAttackDefinition :: Note
+impersonationAttackDefinition = de $ do
+    lab impersonationAttackDefinitionLabel
+    s ["In a", m 0 <> "-" <> message, mACForgery, "game for a", mAC, m mfn_ <> ",", "if an", adversary, "directly submits a", message, "with a valid", tag <> ", this is called an", impersonationAttack']
 
+substitutionAttackDefinition :: Note
+substitutionAttackDefinition = de $ do
+    lab substitutionAttackDefinitionLabel
+    let mesg = "m"
+        t = "t"
+    s ["In a", m 1 <> "-" <> message, mACForgery, "game for a", mAC, m mfn_ <> ",", "if an", adversary, "obtains a", tag, m t, "for a", message, m mesg, "and submits a differentt", message, "with a valid", tag <> ", this is called an", substitutionAttack']
+
+tagVariableDefinition :: Note
+tagVariableDefinition = de $ do
+    let f_ = mfn_
+        f = fn2 f_
+    s ["Let", m f_, "be a", mAC, with, keySpace, m ksp_, "and let the", key, "be uniformly distributed over", m ksp_]
+    let mesg = "m"
+        kk = "K"
+    s ["For a given", message, m mesg <> ",", "we define", m $ f mesg kk, "as the", randomVariable, "for the", tag, "of", m mesg]
+
+uniformTagsDefinition :: Note
+uniformTagsDefinition = de $ do
+    lab uniformTagsDefinitionLabel
+    let f_ = mfn_
+        f = fn2 f_
+    let mesg = "m"
+        kk = "K"
+    s ["A", m mAC, m f_, "is said to have", uniformTags', "if, for any", message, m mesg <> ", the", tag, m $ f mesg kk, "is uniformly distributed if the", key, m kk, "is uniformly distributed"]
+
+uniformTagsImpersonationProbabilityBounded :: Note
+uniformTagsImpersonationProbabilityBounded = thm $ do
+    lab uniformTagsImpersonationProbabilityBoundedTheoremLabel
+    let f_ = mfn_
+    s ["If a", mAC, m f_, with, tagSpace, m tsp_, "has", uniformTags <> ", then the success", probability, "of an", impersonationAttack, "is bounded by", m $ 1 /: setsize tsp_]
+    toprove
+
+independentTagsDefinition :: Note
+independentTagsDefinition = de $ do
+    lab independentTagsDefinitionLabel
+    let f_ = mfn_
+        f = fn2 f_
+    let mesg = "m"
+        m1 = mesg !: 1
+        m2 = mesg !: 2
+        kk = "K"
+    s ["A", mAC, m f_, "is said to have", uniformTags', "if, for any two different", message, m m1, and, m m2 <> ", the", tags, m $ f m1 kk, and, m $ f m2 kk, "are", statisticallyIndependent, "if the", key, m kk, "is uniformly distributed"]
+
+independentTagsSubstitutionProbabilityBounded :: Note
+independentTagsSubstitutionProbabilityBounded = thm $ do
+    lab independentTagsSubstitutionProbabilityBoundedTheoremLabel
+    let f_ = mfn_
+    s ["If a", mAC, m f_, with, tagSpace, m tsp_, "has", uniformTags, and, independentTags <> ", then the success", probability, "of a", substitutionAttack, "is bounded by", m $ 1 /: setsize tsp_]
+
+boundedAttackSuccessExamples :: Note
+boundedAttackSuccessExamples = do
+    ex $ do
+        let n = "n"
+        s ["Consider the following", mAC, with, messageSpace, m bits <> ",", keySpace, m $ bitss n, and, tagSpace, m $ bitss (n /: 2), "for an even", m n]
+        let k = "k"
+            k1 = k !: 1
+            k2 = k !: 2
+            kn = k !: n
+            kn2 = k !: (n /: 2)
+            kn2p = k !: ((n /: 2) + 1)
+            kn2pp = k !: ((n /: 2) + 2)
+
+        ma $ cases $ do
+            mfn 0 (tuplelist k1 k2 kn) =: (tuplelist k1 k2 kn2)
+            lnbk
+            mfn 1 (tuplelist k1 k2 kn) =: (tuplelist kn2p kn2pp kn)
+
+        s ["This", mAC, "has", uniformTags, "and furthermore", independentTags, "because the", tags, "for the", messages, m 0, and, m 1, "are", statisticallyIndependent, "since the bits in the", key, "are", independent]
+        s ["Therefore, the probability of any", adversary, "of winning a", m 1 <> "-" <> message, mACForgery, "game is bounded by", m $ 1 /: setsize tsp_ =: 2 ^ (- n /: 2)]
+
+    ex $ do
+        let n = "n"
+        s ["Consider the following", mAC, with, messageSpace, m terns <> ",", keySpace, m $ bitss n, and, tagSpace, m $ bitss (n /: 2), "for an even", m n]
+        let k = "k"
+            kk = "K"
+            k1 = k !: 1
+            k2 = k !: 2
+            kn = k !: n
+            kn2 = k !: (n /: 2)
+            kn2p = k !: ((n /: 2) + 1)
+            kn2pp = k !: ((n /: 2) + 2)
+        ma $ cases $ do
+            mfn 0 (tuplelist k1 k2 kn) =: tuplelist k1 k2 kn2
+            lnbk
+            mfn 1 (tuplelist k1 k2 kn) =: tuplelist kn2p kn2pp kn
+            lnbk
+            mfn 2 (tuplelist k1 k2 kn) =: tuplelist (k1 `xor` kn2p) (k2 `xor` kn2pp) (kn2 `xor` kn)
+        s [m $ mfn 1 kk, and, m $ mfn 2 kk, "are clearly uniformly distributed (see above)"]
+        s ["Because the XOR operation is uniform", ref xorUniformTheoremLabel <> ",", m $ mfn 2 kk, "is also uniformly distributed"]
+        s ["This means that this", mAC, "has", uniformTags]
+        s ["In the previous example, we already showed that", m $ mfn 0 kk, and, m $ mfn 1 kk, "are", statisticallyIndependent]
+        s ["Because", m $ mfn 2 kk, "can be viewed as the", oneTimePad <> "-encryption of", m $ mfn 0 kk, "with", m $ tuplelist kn2p kn2pp kn, "and the", oneTimePad, "produces", statisticallyIndependent, ciphertexts, ref oneTimePadSecurePropertyLabel <> ", and an analogous argument holds for", m (mfn 1 kk) <> ", this", mAC, "also has", independentTags]
+
+    todo "Similarly secure MAC over GF(2 ^ n/2)"
 
 
 

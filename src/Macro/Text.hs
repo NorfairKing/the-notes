@@ -80,8 +80,12 @@ with = "with"
 be :: Note
 be = "be"
 
+from :: Note
+from = "from"
+
 kul :: Note
 kul = "KU Leuven"
 
 eth :: Note
 eth = "ETH"
+

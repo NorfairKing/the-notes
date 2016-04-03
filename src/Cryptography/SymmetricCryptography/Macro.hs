@@ -74,6 +74,13 @@ bits = setofs [0, 1]
 bitss :: Note -> Note
 bitss n = bits ^: n
 
+-- * Ternary field
+terns :: Note
+terns = setofs [0, 1, 2]
+
+ternss :: Note -> Note
+ternss n = terns ^: n
+
 -- | Length of a bitstring
 len :: Note -> Note
 len = autoBrackets "|" "|"

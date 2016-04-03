@@ -201,6 +201,7 @@ xorUniform = thm $ do
 
 oneTimePadSecure :: Note
 oneTimePadSecure = prop $ do
+    lab oneTimePadSecurePropertyLabel
     let n = "n"
     s [the, oneTimePad <> "'s", ciphertexts, "are", independent, "of their", messages, "for a given message length", m n]
     proof $ do
@@ -297,7 +298,7 @@ securityDefinitionNote = nte $ do
     s [the, encryptionFunction, "encrypts a", message, m $ mesg =: tuple m1 m2 ∈ bitss 2, "using a", key, m $ k =: tuple k1 k2 ∈ bitss 2, "as follows"]
     ma $ enc' mesg k =: triple (m1 `xor` k1) (m2 `xor` k2) (m1 `xor` m2) ∈ bitss 3
     s [the, adversary, "can simply read off the XOR of the", message, "as the last bit of the", ciphertext]
-    s ["Observe that this doesn't contradict the fact that any", ciphertext, "is still statistically", independent, "from its", plaintext, message]
+    s ["Observe that this doesn't contradict the fact that any", ciphertext, "is still", statisticallyIndependent, "from its", plaintext, message]
     proof $ do
         let c = "c"
             c_ = "C"
@@ -305,8 +306,8 @@ securityDefinitionNote = nte $ do
             m_ = "M"
             m1_ = m_ !: 1
             m2_ = m_ !: 2
-        s ["We will prove that", m c_, "is statistically", independent, "from", m m1_, "under the assumption that", m m_, and, m k_, "are", independent, "and uniformly distributed", randomVariables, "over", m $ bitss 2]
-        s ["This will imply that", m c_, "is statistically", independent, "from", m m2_, "as well and as such from", m m_]
+        s ["We will prove that", m c_, is, statisticallyIndependent, from, m m1_, "under the assumption that", m m_, and, m k_, "are", independent, "and uniformly distributed", randomVariables, "over", m $ bitss 2]
+        s ["This will imply that", m c_, is, statisticallyIndependent, from, m m2_, "as well and as such from", m m_]
         aligneqs (cprob (c_ =: c) (m1_ =: m1))
             [ sumcmp (cs [m2 ∈ bits, k ∈ bitss 2]) $ cprob (c_ =: c ∧ m2_ =: m2 ∧ k_ =: k) (m1_ =: m1)
             , sumcmp (cs [m2 ∈ bits, k ∈ bitss 2]) $ cprob (m2_ =: m2) (m1_ =: m1)

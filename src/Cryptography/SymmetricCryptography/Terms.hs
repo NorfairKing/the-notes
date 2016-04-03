@@ -65,6 +65,8 @@ makeDefs [
     , "CTR"
     ]
 
+makeProp "One Time Pad secure"
+
 makeThms
     [ "many time pad insecure"
     , "xor uniform"
