@@ -11,6 +11,7 @@ import           Functions.Jections.Terms
 import           Groups.Macro
 import           Groups.Terms
 import           Logic.FirstOrderLogic.Macro
+import           Probability.Independence.Terms
 import           Probability.ProbabilityMeasure.Macro
 import           Probability.ProbabilityMeasure.Terms
 import           Relations.Orders.Macro
@@ -270,40 +271,63 @@ diffieHellmanPKEDefinition = de $ do
         q = "q"
     s ["Let", m $ grp_ =: grp (genby g) grpop_, "be a", cyclic, group, "with a known", order, m q, and, "let", m $ tuple enc_ dec_, "be a given secure", symmetricCryptosystem]
     s ["The following is then a", publicKeyEncryptionScheme]
-    let zq = integers !: q
+    let zq = intmod q
     itemize $ do
-        let b = "B"
+        let a = "A"
+            b = "B"
             x = "x"
+            y = "y"
+            xa = x !: a
             xb = x !: b
+            ya = y !: a
+            yb = y !: b
             mesg = "m"
         item $ do
             s ["A", keyGenerator, function]
             newline
             s ["Choose", m xb, "uniformly at random from", m zq]
-            s [the, secretKey, "is", m xb, "and the", publicKey, "is", m $ g ^ xb]
+            s [the, secretKey, "is", m xb, "and the", publicKey, "is", m $ yb =: g ^ xb]
         item $ do
             let r = "r"
             s ["An", encryptionFunction]
             newline
-            s ["Choose", m x, "at random from", m zq]
-            s [the, ciphertext, "for a", message, m mesg, "is the pair", m $ tuple (g ^ x) (enc mesg (g ^ (xb ^ x)) r), "where", m r, "is a uniformly random value from the", randomnessSpace, "of", m enc_]
+            s ["Choose", m xa, "at random from", m zq]
+            s [the, ciphertext, "for a", message, m mesg, "is the pair", m $ tuple (g ^ xa) (enc mesg (pars (g ^ xb) ^ xa) r), "where", m r, "is a uniformly random value from the", randomnessSpace, "of", m enc_]
+        let c = "c"
         item $ do
             s ["A", decryptionFunction]
             newline
-            todo "Left as exercise?"
-    s ["Note that we implicitly use the fact every cyclic group of", finite, order, m q, "is isomorphic to", m zq]
-    refneeded "prove this in the group chapter"
+            s ["Given a", ciphertext, "pair", m $ tuple ya c, "the", decryptionFunction, "computes", m $ pars $ ya ^ xb, "to use as the key to decrypt", m $ mesg =: dec c (ya ^ xb)]
+    todo "prove that this is in fact a valid PKE"
 
 
 elGamalSchemeDefinition :: Note
-elGamalSchemeDefinition = de $ do
-    lab elGamalDefinitionLabel
-    s ["A", publicKeyEncryptionScheme, "based on the", diffieHellman, protocol, "where the", symmetricCryptosystem, "is", the, oneTimePad, "is called the", elGamal', publicKeyEncryptionScheme]
-
+elGamalSchemeDefinition = do
+    de $ do
+        lab elGamalDefinitionLabel
+        s ["A", publicKeyEncryptionScheme, "based on the", diffieHellman, protocol, "where the", symmetricCryptosystem, "is", the, oneTimePad, "is called the", elGamal', publicKeyEncryptionScheme]
+    nte $ do
+        let q = "q"
+        s ["Note that we implicitly use the fact every cyclic group of", finite, order, m q, "is isomorphic to", m $ intmod q]
+        refneeded "prove this in the group chapter"
 
 elGamalSchemeCPAButNotCCPASecure :: Note
 elGamalSchemeCPAButNotCCPASecure = thm $ do
-    s [the, elGamal, publicKeyEncryptionScheme, "is", iNDCPASecure, "but not", iNDCCASecure]
+    s [the, elGamal, publicKeyEncryptionScheme, "is", iNDCPASecure, "under the", decisionalDiffieHellman, "assumption", "but not", iNDCCASecure]
+
+    proof $ do
+        let a = mathcal "A"
+        s ["Let", m a, "be an efficient", adversary, "that has", advantage, m alpha, "in the", iNDCPA, "game for public key encryption"]
+        let p = "P"
+            q = "Q"
+            r = "R"
+            g = "g"
+            tr = triple p q r
+            x = "X"
+            y = "Y"
+        s ["We show that this implies that there is an efficient distinguisher that, given", m (tr ∈ grps_) <> ", has", advantage, m $ alpha /: 2, "in distinguishing the case where", csa [m p, m q, m r], "are", independent, "and uniformly distributed over", m grps_, "from the case where", csa [m $ p =: g ^ x, m $ q =: g ^ y, m $ r =: g ^ (x * y)], "holds for", independent, m $ cs [x, y] ∈ intmod "q"]
+
+        todo "finish this proof"
 
 
 trapdoorOneWayPermutationDefinition :: Note
