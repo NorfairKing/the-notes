@@ -7,10 +7,9 @@
 \node[block] (b) at (4, 0) {$B$};
 \coordinate (i) at (2, 0) {};
 \node[block] (e) at (2, -1) {$E$};
-\node[rectangle, draw=black, minimum height=1em, minimum width=1em] (k) at (2, 1) {$\$$};
+\node[block] (k) at (2, 1) {$\$$};
 
 \draw[arrows={-latex}] (k) -- (i);
 \draw[arrows={latex-}] (a) -- (i);
 \draw[arrows={-latex}] (i) -- (b);
-\draw[arrows={-|}] (i) -- (e);
 

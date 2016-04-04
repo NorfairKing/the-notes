@@ -92,6 +92,9 @@ from = "from"
 to :: Note
 to = "to"
 
+at :: Note
+at = "at"
+
 kul :: Note
 kul = "KU Leuven"
 
