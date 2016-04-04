@@ -1,7 +1,7 @@
 source bin/lib.sh
 
 count_todos () {
-  MAX_TODOS="100"
+  MAX_TODOS="200"
   TMP_FILE="/tmp/out.txt"
   rm -f "${TMP_FILE}"
 
@@ -12,6 +12,7 @@ count_todos () {
     "todo_"
     "why"
     "why_"
+    "toprove"
     )
 
 

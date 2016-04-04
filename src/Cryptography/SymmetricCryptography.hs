@@ -277,7 +277,7 @@ indcpaDefinition = de $ do
         item $ s ["The challenger chooses a uniformly random bit", m b <> ", computes the encryption of ", m $ c =: enc mb k r, "for a fresh and independent randomness value", m $ r ∈ rsp_, "and returns it to the adversary"]
         item $ s ["The adversary can again choose up to", m t, messages, "as in step 2, but the total number is limited by", m t]
         item $ s ["The adversary issues his guess", m b', "for", m b]
-    s [the, advantage', "of the adversary in this game is defined as", m $ abs $ 2 * prob (b' =: b) - 1 /: 2]
+    s [the, advantage', "of the adversary in this game is defined as", m $ abs $ 2 * (pars $ prob (b' =: b) - 1 /: 2)]
 
 advantageNote :: Note
 advantageNote = nte $ do
@@ -354,7 +354,7 @@ nonAdaptiveINDCPAGame = de $ do
         item $ s [the, challenger, "chooses a uniformly random bit", m b <> ", computes the encryption", m $ c =: enc ("m" !: b) k r, "for a fresh and", independent, "randomness value", m $ r ∈ rsp_, "and sends", m c, "to the", adversary]
         item $ s [the, adversary, "can choose messages and receive their encryptions"]
         item $ s [the, adversary, "guesses", m b, "by issuing a guess", m b']
-    s [the, advantage, "of the adversary in this game is defined as", m $ 2 * prob (b' =: b) - 1 /: 2]
+    s [the, advantage, "of the adversary in this game is defined as", m $ 2 * (pars $ prob (b' =: b) - 1 /: 2)]
 
 nonAdaptiveINDCPASecurity :: Note
 nonAdaptiveINDCPASecurity = de $ do
@@ -466,7 +466,7 @@ indccaDefinition = de $ do
         item $ s ["The challenger chooses a uniformly random bit", m b <> ", computes the encryption of ", m $ c =: enc mb k r, "for a fresh and independent randomness value", m $ r ∈ rsp_, "and returns it to the adversary"]
         item $ s ["The adversary can again choose up to", m t, messages, or, ciphertexts, "as in step 2, but the total number is limited by", m t]
         item $ s ["The adversary issues his guess", m b', "for", m b]
-    s [the, advantage', "of the adversary in this game is defined as", m $ 2 * prob (b' =: b) - 1 /: 2]
+    s [the, advantage', "of the adversary in this game is defined as", m $ 2 * (pars $ prob (b' =: b) - 1 /: 2)]
 
 indccaSecurityDefinition :: Note
 indccaSecurityDefinition = de $ do

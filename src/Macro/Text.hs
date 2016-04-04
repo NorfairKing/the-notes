@@ -95,6 +95,9 @@ to = "to"
 at :: Note
 at = "at"
 
+because :: Note
+because = "because"
+
 kul :: Note
 kul = "KU Leuven"
 
