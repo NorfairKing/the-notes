@@ -306,11 +306,17 @@ xySystemsDefinition = de $ do
         f_ i = f !: i
         x_ i = "x" !: i
         y_ i = "y" !: i
-    s ["A", system, "that computes a", function, m $ fun f x y, "for every new input, i.e.,", m (y_ i =: fn (f_ i) (x_ i)) <> ",is called an", m (tuple x y) <> "-" <> system']
+    s ["A", system, "that computes a", function, m $ fun (f_ i) (x ^ i) y, "for every new input, i.e.,", m (y_ i =: fn (f_ i) (x_ i)) <> ", is called an", m (tuple x y) <> "-" <> system']
     let r = "R"
     s ["More precicely, an", xyS x y, m r, "is a", nS 1, "that takes inputs from a", countable, set, m x, "and generates an output from a", countable, set, m y, "that possibly depends on an internal state of the", system]
-
-    todo "define it more formaly with state space and transitions etc"
+    s ["Formally, this is described as a", sequence, m $ sequ (f_ i) i, "of", functions, "as follows"]
+    ma $ leftBelowEachOther $
+        [ func (f_ 1) (x ^ 1) y (x_ 1) ((y_ 1) =: fn (f_ 1) (x_ 1))
+        , func (f_ 2) (x ^ 2) y (tuple (x_ 1) (x_ 2)) ((y_ 2) =: fn (f_ 2) (tuple (x_ 1) (x_ 2)))
+        , func (f_ 3) (x ^ 3) y (triple (x_ 1) (x_ 2) (x_ 3)) ((y_ 3) =: fn (f_ 3) (triple (x_ 1) (x_ 2) (x_ 3)))
+        , vdots
+        , func (f_ i) (x ^ i) y (tuplelist (x_ 1) (x_ 2) (x_ i)) ((y_ i) =: fn (f_ i) (tuplelist (x_ 1) (x_ 2) (x_ i)))
+        ]
 
 
 ySourceDefinition :: Note
@@ -364,7 +370,6 @@ xyOperationSystemDefinition = de $ do
         xi = e !: i
         lx = list x1 x2 xi
     ma $ f (a ★ b) lx =: f a lx ★ f b lx
-    todo "what is this f doing here? is it a model of how the output can depend on the state? make that explicit!"
 
 synchronousParallelCompositionDefinition :: Note
 synchronousParallelCompositionDefinition = de $ do
