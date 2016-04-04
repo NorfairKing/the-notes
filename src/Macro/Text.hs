@@ -80,6 +80,12 @@ with = "with"
 be :: Note
 be = "be"
 
+beA :: Note
+beA = "be a"
+
+beAn :: Note
+beAn = "be an"
+
 from :: Note
 from = "from"
 

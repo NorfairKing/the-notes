@@ -7,6 +7,7 @@ makeDefs
     , "semigroup"
     , "monoid"
     , "group"
+    , "neutral element"
     , "subgroup"
     , "trivial subgroup"
     , "inverse"

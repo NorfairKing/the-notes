@@ -6,7 +6,6 @@ makeDefs [
       "binary operation"
     , "associative"
     , "identity"
-    , "neutral element"
     ]
 
 makeThm "identity unique"

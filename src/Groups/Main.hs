@@ -54,10 +54,12 @@ groupDefinition :: Note
 groupDefinition = de $ do
     lab groupDefinitionLabel
     lab inverseDefinitionLabel
+    lab neutralElementDefinitionLabel
     s ["A", monoid, m grp_, "is called a", group', "if every", element, "has an", inverse', "with respect to the", identity, m gid_]
     let a = "a"
         ai = ginv a
     ma $ fa (a ∈ grps_) $ te (ai ∈ grps_) $ a ** ai =: gid_ =: ai ** a
+    s ["In a", group, "the", identity, "is sometimes called the", neutralElement']
 
 inverseUniqueTheorem :: Note
 inverseUniqueTheorem = thm $ do

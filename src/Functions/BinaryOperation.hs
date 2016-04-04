@@ -46,7 +46,7 @@ identityDefinition :: Note
 identityDefinition = de $ do
     let x = "X"
     s ["Let", m x, "be a", set, and, m binop_, "a", binaryOperation, "on", m x]
-    s ["If", m x, "contains an", element, m bid_, "with the following property, that element is called an", identity', or, neutralElement']
+    s ["If", m x, "contains an", element, m bid_, "with the following property, that element is called an", identity']
     let a = "a"
     ma $ fa (a ∈ x) $ a ★ bid_ =: bid_ =: bid_ ★ a
 

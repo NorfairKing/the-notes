@@ -39,6 +39,7 @@ cryptography = chapter "Cryptography" $ do
         discreteLogarithmProblemDefinition
         additiveDLEasy
         dlReducable
+        dlModTwoInEvenOrderGroup
         computationalDHProblemDefinition
         diffieHellmanTripleDefinition
         decisionalDHProblemDefinition
@@ -163,6 +164,25 @@ dlReducable = thm $ do
         s ["The algorithm now uses", m a, "to find", m c, from, m z, and, m d, from, m h]
         s ["It then computes the multiplicative inverse of", m d, "in", m $ intring $ ord grps_, "with the extended Euclidean algorithm and finally computes", m b, "by evaluating", m $ rinv d * c =: rinv d * d * b =: b]
 
+dlModTwoInEvenOrderGroup :: Note
+dlModTwoInEvenOrderGroup = thm $ do
+    let n = "n"
+    s ["Let", m grp_, beA, group, with, "an even", order, m $ ord grp_ =: 2 * n]
+    s ["There exists an efficient algorithm to compute whether the", discreteLogarithm, "of an", element, "is even or not"]
+
+    proof $ do
+        let x = "x"
+        s ["Let", m x, beAn, element, "of", m grps_]
+        let g = "g"
+            a = "a"
+        s ["For a given base", m g, "the task is to compute", m $ a `mod` 2, "such that", m $ x =: g ^ a, "holds"]
+        let q = "q"
+            r = "r"
+        s ["Define", m q, and, m r, "as the quotient and rest after division by", m 2, "of", m a]
+        s ["Observe first the following"]
+        ma $ x ^ n =: g ^ (a * n) =: g ^ ((pars $ 2 * q + r) * n) =: g ^ (2 * n * q) ** (g ^ (r * n) =: g ^ (r * n))
+        s ["This means that", m $ x ^ n, "will be equal to the", neutralElement, "if", m a, "is even and", m $ g ^ n, "(which cannot be the", neutralElement <> ") if", m a, "is odd"]
+        s ["We only have to compare", m $ x ^ n, "to the", neutralElement, "to determine", m $ a `mod` 2]
 
 
 computationalDHProblemDefinition :: Note
