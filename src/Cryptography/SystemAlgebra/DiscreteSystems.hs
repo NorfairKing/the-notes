@@ -8,10 +8,14 @@ import           Functions.Basics.Macro
 import           Functions.Basics.Terms
 import           Functions.BinaryOperation.Macro
 import           Functions.BinaryOperation.Terms
+import           LinearAlgebra.VectorSpaces.Terms
+import           Logic.FirstOrderLogic.Macro
 import           Probability.ConditionalProbability.Macro
 import           Probability.ConditionalProbability.Terms
+import           Probability.Distributions.Terms
 import           Probability.Independence.Terms
 import           Probability.ProbabilityMeasure.Macro
+import           Probability.ProbabilityMeasure.Terms
 import           Probability.RandomVariable.Terms
 import           Relations.Domain.Terms
 import           Sets.Basics.Terms
@@ -34,8 +38,10 @@ discreteSystemsSS = subsection "Discrete Single-Interface Systems" $ do
         xyOperationSystemDefinition
         synchronousParallelCompositionDefinition
         asynchronousParallelCompositionDefinition
+        restrictedSystemDefinition
     subsubsection "Environments" $ do
         environmentDefinition
+        restrictedEnvironmentDefinition
         transcriptDefinition
     subsubsection "Probabillistic systems" $ do
         probabillisticSystemDefinition
@@ -44,7 +50,9 @@ discreteSystemsSS = subsection "Discrete Single-Interface Systems" $ do
     subsubsection "Behaviours" $ do
         behaviourDefinition
         equivalentProbabillisticSystems
+        behaviourExamples
         behaviourOfEnvironmentDefinition
+        equivalentProbabillisticEnvironments
         probabillisticBeaconDefinition
         randomFunctionDefinition
         cumulativeDescriptionDefinition
@@ -183,6 +191,15 @@ asynchronousParallelCompositionDefinition = de $ do
         , f (asyncomp a b) l1 =: f b ly
         ]
 
+restrictedSystemDefinition :: Note
+restrictedSystemDefinition = de $ do
+    let n = "n"
+        sys = "S"
+        x = mathcal "X"
+        y = mathcal "Y"
+    s ["Let", m sys, "be an", xyS x y]
+    s [m $ firstOf n sys, "is the", xyS x (y ∪ setof emptyset), "that behaves like", m sys <> ", restricted to the first", m n, "inputs (and outputs)"]
+
 environmentDefinition :: Note
 environmentDefinition = de $ do
     lab deterministicEnvironmentDefinitionLabel
@@ -203,6 +220,15 @@ environmentDefinition = de $ do
         , vdots
         , func (g_ i) (y ^ (i - 1)) x (tuplelist (y_ 1) (y_ 2) (y_ (i - 1))) ((x_ i) =: fn (g_ i) (tuplelist (y_ 1) (y_ 2) (y_ (i - 1))))
         ]
+
+restrictedEnvironmentDefinition :: Note
+restrictedEnvironmentDefinition = de $ do
+    let n = "n"
+        sys = "S"
+        x = mathcal "X"
+        y = mathcal "Y"
+    s ["Let", m sys, "be an", yxE y x]
+    s [m $ firstOf n sys, "is the", yxE y (x ∪ setof emptyset), "that behaves like", m sys <> ", restricted to the first", m n, "outputs"]
 
 transcriptDefinition :: Note
 transcriptDefinition = de $ do
@@ -236,6 +262,8 @@ probabillisticSystemDefinition = de $ do
     let x = mathcal "X"
         y = mathcal "Y"
     s ["A", probabillisticSystem', "(an " <> xyPS x y <> ")", "is a", randomVariable, "over the", set, "of", xyDSs x y]
+
+
 
 probabillisticEnvironmentDefinition :: Note
 probabillisticEnvironmentDefinition = de $ do
@@ -300,13 +328,88 @@ behaviourDefinition = de $ do
     s ["Note that we use", m $ "x" ^ i, "as an abbreviaton for", m $ cs [x_ 1, x_ 2, dotsc, x_ i] <> ",", m $ "y" ^ i, "for", m $ cs [y_ 1, y_ 2, dotsc, y_ i] ,"as well as", m $ x ^ i, "for", m $ cs [x !: 1, x !: 2, dotsc, x !: i]]
 
 
-
 equivalentProbabillisticSystems :: Note
 equivalentProbabillisticSystems = de $ do
     let x = mathcal "X"
         y = mathcal "Y"
     s ["Two", xyPSs x y, "are", defineTerm "equivalent", "if they have the same behaviour"]
 
+
+behaviourExamples :: Note
+behaviourExamples = do
+    let xx = mathcal "X"
+        yy = mathcal "Y"
+    ex $ do
+        let p = "p"
+        s ["Let", m $ xx =: setof 0, and, m $ yy =: setofs [0, 1], be, sets, "and let", m $ p ∈ ccint 0 1]
+        let sp = "S" !: p
+        s ["Consider the", xyS xx yy, m sp, "that, on each input, outputs a bit that is", m 1, with, probability, m p]
+        s ["That is to say, ", m sp, "has the following", behaviour]
+        let i = "i"
+            y = "y"
+        ma $ bhvsi_ sp i =: cases (do
+              p       & (y !: i) =: 1
+              lnbk
+              (1 - p) & (y !: i) =: 0
+            )
+        let n = "n"
+            bot = setof emptyset
+            yy' = yy ∪ bot
+        s ["We will now describe a", randomVariable, "over the", set, "of", xyDSs xx yy', "(a", xyPS xx yy <> ")", "that has the", behaviour, "of", m $ firstOf n sp]
+
+        s ["First we have to describe the", set, "to build this", randomVariable, "over"]
+        let v = "v"
+            v1 = v !: 1
+            v2 = v !: 2
+            vi = v !: i
+            vn = v !: n
+        s ["Let", m $ v =: veclist v1 v2 vn ∈ bitss n, "be a random", vector, "of bits"]
+        let t = "t"
+            tv = t !: v
+            tvi = tv !: i
+        s ["Now consider the", xyDS xx yy', m tv, "defined as the", sequence, "of", functions, m $ sequ tvi i, "as follows"]
+        ma $ fn tvi (tuplelist v1 v2 vi) =: cases (do
+            vi & i <= n
+            lnbk
+            bot & i > n
+            )
+
+        let z = "Z"
+            z1 = z !: 1
+            z2 = z !: 2
+            zi = z !: i
+            zim = z !: (i - 1)
+            zn = z !: n
+        s ["Let", m $ list z1 z2 zn, be, independent, and, identicallyDistributed, randomVariables, over, m bits, "such that", m $ fa (i ∈ setlist 1 2 n) (prob (zi =: 1) =: p), and, m $ fa (i ∈ setlist 1 2 n) (prob (zi =: 0) =: 1 - p), "hold"]
+        let tt = "T"
+        s ["We now define the", randomVariable, m tt, over, m $ setcmpr tv (v ∈ bitss n), "as follows"]
+        ma $ tt =: t !: tuplelist z1 z2 zn
+
+
+        s [m tt, "is now a", xyPS xx yy']
+        let x = "x"
+            x1 = x !: 1
+            x2 = x !: 2
+            xi = x !: i
+            tt_ = fn tt
+        s ["Note that", m $ tt_ (tuplelist x1 x2 xi) =: zi, "holds for", m $ i <= n, and, m $ tt_ (tuplelist x1 x2 xi) =: bot, "otherwise"]
+
+        s ["Now we can prove that", m tt, "does in fact have the correct", behaviour, "as follows"]
+        let y1 = y !: 1
+            y2 = y !: 2
+            yi = y !: i
+            yim = y !: (i - 1)
+        aligneqs (bhvsi_ tt i)
+            [ cprob (tt_ (x ^ i) =: yi) (list (tt_ x1 =: y1) (tt_ (tuple x1 x2) =: y2) (tt_ (x ^ (i - 1)) =: yim))
+            , cprob (zi =: yi) (list (z1 =: y1) (y2 =: y2) (zim =: yim))
+            , prob (zi =: yi)
+            , cases $ do
+                  p       & (y !: i) =: 1
+                  lnbk
+                  (1 - p) & (y !: i) =: 0
+            ]
+        s ["Clearly, ", m $ bhvs tt i bot (x ^ i) (y ^ (i - 1)), " is zero for", m $ i <= n, "and one otherwise"]
+        s ["We can therefore conclude that", m tt, "has the", behaviour, "of", m $ firstOf n sp]
 
 
 behaviourOfEnvironmentDefinition :: Note
@@ -350,6 +453,13 @@ behaviourOfEnvironmentDefinition = de $ do
         , "" & vdots
         ]
     s ["Note that we use", m $ "x" ^ i, "as an abbreviaton for", m $ cs [x_ 1, x_ 2, dotsc, x_ i] <> ",", m $ "y" ^ i, "for", m $ cs [y_ 1, y_ 2, dotsc, y_ i] ,"as well as", m $ x ^ i, "for", m $ cs [x !: 1, x !: 2, dotsc, x !: i]]
+
+equivalentProbabillisticEnvironments :: Note
+equivalentProbabillisticEnvironments = de $ do
+    let x = mathcal "X"
+        y = mathcal "Y"
+    s ["Two", yxPEs y x, "are", defineTerm "equivalent", "if they have the same", behaviour]
+
 
 probabillisticBeaconDefinition :: Note
 probabillisticBeaconDefinition = de $ do

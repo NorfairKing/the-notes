@@ -45,6 +45,9 @@ xySs x y = nSs $ tuple x y
 yS :: Note -> Note
 yS y = m y <> "-" <> source
 
+-- | Y,X-environment
+yxE :: Note -> Note -> Note
+yxE y x = m (tuple y x) <> "-" <> environment
 
 -- | Deterministic environment for X,Y-system
 yxDE :: Note -> Note -> Note

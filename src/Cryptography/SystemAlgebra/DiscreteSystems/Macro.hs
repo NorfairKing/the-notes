@@ -37,4 +37,29 @@ transcr = fn2 "tr"
 bhv :: Note -> Note
 bhv = fn "b"
 
+-- | System that only considers the first n steps of a system
+firstOf :: Note -> Note -> Note
+firstOf n sys = sqbrac n <> sys
 
+-- | Behaviour of given in step i probabillistic X,Y-system
+bhvs_ :: Note -- ^ The system
+     -> Note -- ^ The step i
+     -> Note
+bhvs_ sys i = "p" .^: sys .!: (yy !: i <> mid <> xx ^ i <> yy ^ (i - 1))
+  where
+    xx = "X"
+    yy = "Y"
+
+bhvs :: Note -- ^ The system
+     -> Note -- ^ The step i
+     -> Note -- ^ y_i
+     -> Note -- ^ x^i
+     -> Note -- ^ y^{i-1}
+     -> Note
+bhvs sys i = fn3 (bhvs_ sys i)
+
+bhvsi_ :: Note -> Note -> Note
+bhvsi_ sys i = bhvs sys i (y !: i) (x ^ i) (y ^ (i - 1))
+  where
+    x = "x"
+    y = "y"

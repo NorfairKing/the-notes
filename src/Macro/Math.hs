@@ -336,3 +336,7 @@ cdot_ = comm0 "cdot"
 (^) :: Note -> Note -> Note
 (^) = (^:)
 
+
+-- | Underscore (as in, ignoring this argument)
+unmatched :: Note
+unmatched = comm1 "text" "_"
