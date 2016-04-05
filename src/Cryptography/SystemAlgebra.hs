@@ -327,7 +327,7 @@ ySourceDefinition :: Note
 ySourceDefinition = de $ do
     lab sourceDefinitionLabel
     let y = mathcal "Y"
-    s ["An", m y <> "-" <> source', system, "is a", nS 1, "that only takes trigger inputs (with a unary alphabet) and (probabillistically) produces, for each trigger input, an output in", m y, "based on previous output"]
+    s ["An", m y <> "-" <> source', system, "is a", nS 1, "that only takes trigger inputs (with a unary alphabet) and produces, for each trigger input, an output in", m y, "based on previous output"]
 
 
 beaconDefinition :: Note
@@ -440,8 +440,19 @@ environmentDefinition = de $ do
     let x = mathcal "X"
         y = mathcal "Y"
         g = "g"
+        g_ = (g !:)
+        x_ = ("x" !:)
+        y_ = ("y" !:)
         i = "i"
-    s ["A", deterministicEnvironment, "for an", xyS x y, "(" <> "a " <> yxDE y x <> ")", "is a", constant, m $ g !: 0, "together with a", sequence, "of", functions, m $ sequ g i, "where", m $ fun g (y ^ (i - 1)) x]
+    s ["A", deterministicEnvironment, "for an", xyS x y, "(" <> "a " <> yxDE y x <> ")", "is a", constant, m $ g_ 1, "together with a", sequence, "of", functions, m $ sequ (g_ i) i, "where", m $ fun (g_ i) (y ^ (i - 1)) x]
+    ma $ leftBelowEachOther $
+        [ g_ 1 ∈ y
+        , func (g_ 2) y x (y_ 1) ((x_ 2) =: fn (g_ 2) (y_ 1))
+        , func (g_ 3) (y ^ 2) x (tuple (y_ 1) (y_ 2)) ((x_ 3) =: fn (g_ 3) (tuple (y_ 1) (y_ 2)))
+        , func (g_ 4) (y ^ 3) x (triple (y_ 1) (y_ 2) (y_ 3)) ((x_ 4) =: fn (g_ 4) (triple (y_ 1) (y_ 2) (y_ 3)))
+        , vdots
+        , func (g_ i) (y ^ (i - 1)) x (tuplelist (y_ 1) (y_ 2) (y_ (i - 1))) ((x_ i) =: fn (g_ i) (tuplelist (y_ 1) (y_ 2) (y_ (i - 1))))
+        ]
 
 transcriptDefinition :: Note
 transcriptDefinition = de $ do
@@ -458,14 +469,14 @@ transcriptDefinition = de $ do
         g_ n = fn $ "g" .^: e .!: n
         f_ n = fn $ "f" .^: a .!: n
     ma $ leftBelowEachOther
-        [ x_ 1 =: g !: 0
-        , y_ 1 =: f_ 1 (cs [x_ 1])
-        , x_ 2 =: g_ 1 (cs [y_ 1])
-        , y_ 2 =: f_ 2 (cs [x_ 1, x_ 2])
-        , x_ 3 =: g_ 2 (cs [y_ 1, y_ 2])
-        , y_ 3 =: f_ 3 (cs [x_ 1, x_ 2, x_ 3])
-        , x_ i =: g_ i (cs [y_ 1, y_ 2, dotsc, y_ (i - 1)])
-        , y_ i =: f_ i (cs [x_ 1, x_ 2, dotsc, x_ i])
+        [ x_ 1 =: g !: 1
+        , y_ 1 =: f_ 1 (x_ 1)
+        , x_ 2 =: g_ 2 (y_ 1)
+        , y_ 2 =: f_ 2 (tuple (x_ 1) (x_ 2))
+        , x_ 3 =: g_ 3 (tuple (y_ 1) (y_ 2))
+        , y_ 3 =: f_ 3 (triple (x_ 1) (x_ 2) (x_ 3))
+        , x_ i =: g_ i (tuplelist (y_ 1) (y_ 2) (y_ (i - 1)))
+        , y_ i =: f_ i (tuplelist (x_ 1) (x_ 2) (x_ i))
         ]
     s ["This alternating", sequence, "is called a", transcript', "and is denoted by", m $ transcr a e]
 
@@ -506,7 +517,7 @@ behaviourDefinition = de $ do
         p = "p" .^: a
         pi = p .!: (y !: i <> mid <> x ^ i <> ", " <> y ^ (i - 1))
         (.|.) a b = a <> mid <> b
-    s [the, behaviour', m $ bhv x, "of a", xyPS xx yy, m a, "is the", sequence, "of", conditionalProbability, distributions, m $ sequ pi i, "as follows"]
+    s [the, behaviour', m $ bhv a, "of a", xyPS xx yy, m a, "is the", sequence, "of", conditionalProbability, distributions, m $ sequ pi i, "as follows"]
     let x_ i = "x" !: i
         y_ i = "y" !: i
         f i n = fn ("f" .^: a .!: i) (cs n)
@@ -528,7 +539,7 @@ behaviourDefinition = de $ do
           & "" =: cprob (f 3 [x_ 1, x_ 2, x_ 3] =: y_ 3)
                   (cs [f 1 [x_ 1] =: y_ 1, f 2 [x_ 1, x_ 2] =: y_ 2])
         , "" & vdots
-        , fn3 (p .!: ((y !: i) .|. cs [x ^: i, y ^: i - 1]))
+        , fn3 (p .!: ((y !: i) .|. cs [x ^: i, y ^: (i - 1)]))
               (y_ i)
               ("x" ^ i)
               ("y" ^ (i - 1))
@@ -558,8 +569,37 @@ behaviourOfEnvironmentDefinition = de $ do
         i = "i"
         p = "p" .^: e
         pi = p .!: (x !: i <> mid <> y ^ (i - 1) <> ", " <> x ^ (i - 1))
-    s [the, behaviour', m $ bhv x, "of a", yxPE yy xx, m e, "is the", sequence, "of", conditionalProbability, distributions, m $ sequ pi i, "as follows"]
-    todo "Define fully"
+        (.|.) a b = a <> mid <> b
+    s [the, behaviour', m $ bhv e, "of a", yxPE yy xx, m e, "is the", sequence, "of", conditionalProbability, distributions, m $ sequ pi i, "as follows"]
+    let x_ i = "x" !: i
+        y_ i = "y" !: i
+        g i n = fn ("g" .^: e .!: i) (cs n)
+    ma $ belowEachOther [LeftColumn, LeftColumn]
+        [ fn (p .!: ((x !: 1)))
+                (x_ 1)
+             & "" =: prob (("g" .^: e .!: 1) =: x_ 1)
+        , fn3 (p .!: ((x !: 2) .|. cs [x !: 1, y !: 1]))
+                (x_ 2)
+                (x_ 1)
+                (y_ 1)
+             & "" =: cprob (g 2 [y_ 1] =: x_ 2)
+                           (("g" .^: e .!: 1) =: x_ 1)
+        , fn3 (p .!: ((x !: 3) .|. cs [tuple (x !: 1) (x !: 2), tuple (y !: 1) (y !: 2)]))
+                (x_ 3)
+                (tuple (x_ 1) (x_ 2))
+                (tuple (y_ 1) (y_ 2))
+             & "" =: cprob (g 3 [y_ 1, y_ 2] =: x_ 3)
+                           (cs [("g" .^: e .!: 1) =: x_ 1, g 2 [y_ 1] =: x_ 2])
+        , "" & vdots
+        , fn3 (p .!: ((x !: i) .|. cs [x ^ (i - 1), y ^ (i - 1)]))
+              (x_ i)
+              ("y" ^ (i - 1))
+              ("x" ^ (i - 1))
+             & "" =: cprob (g i ["y" ^ (i - 1)] =: x_ i)
+                           (cs [("g" .^: e .!: 1) =: x_ 1, g 2 [y_ 1] =: x_ 2, g 3 [y_ 1, y_ 2] =: x_ 3, g (i - 1) ["y" ^ (i - 2)] =: "x" !: (i - 1)])
+        , "" & vdots
+        ]
+    s ["Note that we use", m $ "x" ^ i, "as an abbreviaton for", m $ cs [x_ 1, x_ 2, dotsc, x_ i] <> ",", m $ "y" ^ i, "for", m $ cs [y_ 1, y_ 2, dotsc, y_ i] ,"as well as", m $ x ^ i, "for", m $ cs [x !: 1, x !: 2, dotsc, x !: i]]
 
 probabillisticBeaconDefinition :: Note
 probabillisticBeaconDefinition = de $ do
