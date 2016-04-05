@@ -22,6 +22,7 @@ import           Sets.Basics.Terms
 
 import           Cryptography.SymmetricCryptography.Macro
 
+import           Cryptography.SystemAlgebra.AbstractSystems.Macro
 import           Cryptography.SystemAlgebra.AbstractSystems.Terms
 import           Cryptography.SystemAlgebra.DiscreteSystems.Macro
 import           Cryptography.SystemAlgebra.DiscreteSystems.Terms
@@ -339,77 +340,149 @@ behaviourExamples :: Note
 behaviourExamples = do
     let xx = mathcal "X"
         yy = mathcal "Y"
+        q = "Query"
+    let p = "p"
+    let s_ = ("S" !:)
+        sp = s_ p
+    let i = "i"
+    let n = "n"
+        bot = "E"
+        yy' = yy ∪ setof bot
+    let v = "v"
+        v1 = v !: 1
+        v2 = v !: 2
+        vi = v !: i
+        vn = v !: n
+    let x = "x"
+        x1 = x !: 1
+        x2 = x !: 2
+        xi = x !: i
+        xim = x !: (i - 1)
+    let y = "y"
+        y1 = y !: 1
+        y2 = y !: 2
+        yi = y !: i
+        yim = y !: (i - 1)
+    let z = "Z"
+        z1 = z !: 1
+        z2 = z !: 2
+        zi = z !: i
+        zim = z !: (i - 1)
+        zn = z !: n
+    let t = "t"
+        tv = t !: v
+        tvi = tv !: i
+    let tt = "T"
+        tt_ = fn tt
     ex $ do
-        let p = "p"
-        s ["Let", m $ xx =: setof 0, and, m $ yy =: setofs [0, 1], be, sets, "and let", m $ p ∈ ccint 0 1]
-        let sp = "S" !: p
+        s ["Let", m $ xx =: setof q, and, m $ yy =: setofs [0, 1], be, sets, "and let", m $ p ∈ ccint 0 1]
         s ["Consider the", xyS xx yy, m sp, "that, on each input, outputs a bit that is", m 1, with, probability, m p]
         s ["That is to say, ", m sp, "has the following", behaviour]
-        let i = "i"
-            y = "y"
         ma $ bhvsi_ sp i =: cases (do
               p       & (y !: i) =: 1
               lnbk
               (1 - p) & (y !: i) =: 0
             )
-        let n = "n"
-            bot = setof emptyset
-            yy' = yy ∪ bot
         s ["We will now describe a", randomVariable, "over the", set, "of", xyDSs xx yy', "(a", xyPS xx yy <> ")", "that has the", behaviour, "of", m $ firstOf n sp]
 
         s ["First we have to describe the", set, "to build this", randomVariable, "over"]
-        let v = "v"
-            v1 = v !: 1
-            v2 = v !: 2
-            vi = v !: i
-            vn = v !: n
         s ["Let", m $ v =: veclist v1 v2 vn ∈ bitss n, "be a random", vector, "of bits"]
-        let t = "t"
-            tv = t !: v
-            tvi = tv !: i
         s ["Now consider the", xyDS xx yy', m tv, "defined as the", sequence, "of", functions, m $ sequ tvi i, "as follows"]
-        ma $ fn tvi (tuplelist v1 v2 vi) =: cases (do
+        ma $ fn tvi (tuplelist x1 x2 xi) =: cases (do
             vi & i <= n
             lnbk
             bot & i > n
             )
-
-        let z = "Z"
-            z1 = z !: 1
-            z2 = z !: 2
-            zi = z !: i
-            zim = z !: (i - 1)
-            zn = z !: n
         s ["Let", m $ list z1 z2 zn, be, independent, and, identicallyDistributed, randomVariables, over, m bits, "such that", m $ fa (i ∈ setlist 1 2 n) (prob (zi =: 1) =: p), and, m $ fa (i ∈ setlist 1 2 n) (prob (zi =: 0) =: 1 - p), "hold"]
-        let tt = "T"
         s ["We now define the", randomVariable, m tt, over, m $ setcmpr tv (v ∈ bitss n), "as follows"]
         ma $ tt =: t !: tuplelist z1 z2 zn
 
 
         s [m tt, "is now a", xyPS xx yy']
-        let x = "x"
-            x1 = x !: 1
-            x2 = x !: 2
-            xi = x !: i
-            tt_ = fn tt
         s ["Note that", m $ tt_ (tuplelist x1 x2 xi) =: zi, "holds for", m $ i <= n, and, m $ tt_ (tuplelist x1 x2 xi) =: bot, "otherwise"]
 
         s ["Now we can prove that", m tt, "does in fact have the correct", behaviour, "as follows"]
-        let y1 = y !: 1
-            y2 = y !: 2
-            yi = y !: i
-            yim = y !: (i - 1)
-        aligneqs (bhvsi_ tt i)
-            [ cprob (tt_ (x ^ i) =: yi) (list (tt_ x1 =: y1) (tt_ (tuple x1 x2) =: y2) (tt_ (x ^ (i - 1)) =: yim))
-            , cprob (zi =: yi) (list (z1 =: y1) (y2 =: y2) (zim =: yim))
-            , prob (zi =: yi)
-            , cases $ do
-                  p       & (y !: i) =: 1
-                  lnbk
-                  (1 - p) & (y !: i) =: 0
-            ]
-        s ["Clearly, ", m $ bhvs tt i bot (x ^ i) (y ^ (i - 1)), " is zero for", m $ i <= n, "and one otherwise"]
-        s ["We can therefore conclude that", m tt, "has the", behaviour, "of", m $ firstOf n sp]
+        proof $ do
+            aligneqs (bhvsi_ tt i)
+                [ cprob (tt_ (x ^ i) =: yi) (list (tt_ x1 =: y1) (tt_ (tuple x1 x2) =: y2) (tt_ (x ^ (i - 1)) =: yim))
+                , cprob (zi =: yi) (list (z1 =: y1) (y2 =: y2) (zim =: yim))
+                , prob (zi =: yi)
+                , cases $ do
+                      p       & (y !: i) =: 1
+                      lnbk
+                      (1 - p) & (y !: i) =: 0
+                ]
+            s ["Clearly, ", m $ bhvs tt i bot (x ^ i) (y ^ (i - 1)), " is zero for", m $ i <= n, "and one otherwise"]
+            s ["We can therefore conclude that", m tt, "has the", behaviour, "of", m $ firstOf n sp]
+
+        let a = alpha
+        s ["Next, we describe a deterministic", converter, m a, "such that the following holds"]
+        let ssq = s_ $ 1 /: sqrt 2
+            ssh = s_ $ 1 /: 2
+        ma $ conv_ a (firstOf n ssq) =: firstOf (n /: 2) ssh
+        s ["Observe that the", probability, "that two consequtive bits output by", m ssq, "are both equal to", m 1, "is", m $ (1 /: sqrt 2) * (1 /: sqrt 2) =: (1 /: 2)]
+        s ["The idea is to define the", converter, m a, "such that for every query at its outside", interface <> ", it fetches two bits at the inside", interface, "and outputs", m 1, "at the outside", interface, "if the two bits are both equal to", m 1, and, m 0, "in the other three cases"]
+
+        let o_ = text "out"
+            i_ = text "in"
+            oq = tuple o_ q
+            iq = tuple i_ q
+            o0 = tuple o_ 0
+            o1 = tuple o_ 1
+            i0 = tuple i_ 0
+            i1 = tuple i_ 1
+            ob = tuple o_ bot
+            ib = tuple i_ bot
+            wsi = setofs [oq, i0, i1, ib] -- Weird set in
+            wso = setofs [o0, o1, ob, iq] -- Weird set out
+        s ["We model the", converter, "as a", xyDS wsi wso, "that takes tuples where the first element specifies whether the second element arrived at the inside or the outside", interface, "and produces tuples where the first element specifies whether the second element is output at the inside or the outside", interface]
+        let ai = a !: i
+        s ["Concretely we have to define the", sequence, "of", functions, m $ sequ ai i, "that defines the workings of", m a, "as follows"]
+        ma $ fun ai (wsi ^ i) wso
+        itemize $ do
+            item $ do
+                s ["The first output is specified as follows"]
+                let a1 = fn (a !: 1)
+                ma $ leftBelowEachOther
+                    [ a1 oq =: iq
+                    , a1 unmatched =: ob
+                    ]
+                s ["That is, when queried (which we conveniently model as", m oq <> ")", "it will query at the inside", interface, "(which we model as", m iq <> ")"]
+                s ["If anything other than a query comes in, we output an error", "(" <> m ob <> ")"]
+            item $ do
+                s ["For", m $ i >= 2, "we set", m $ fn ai (tuplelist x1 x2 xim), "to", m ob, "if any of the", m xi, "are", m ob]
+                s ["This models the fact that once the", system, "errors, it will error every time it's called subsequently"]
+            item $ do
+                s ["On the other hand, if none of", m $ list x1 x2 xim, "are", m ob <> ", we distinguish three cases based on", m $ i `mod` 3]
+                itemize $ do
+                    item $ do
+                        s ["For", m $ i `mod` 3 =: 1, "we just have", m a, "query the inside", interface, "and error otherwise"]
+                        ma $ leftBelowEachOther
+                            [ fn ai (list unmatched unmatched oq) =: iq
+                            , fn ai (list unmatched unmatched unmatched) =: ob
+                            ]
+                    item $ do
+                        s ["For", m $ i `mod` 3 =: 2, "we just have", m a, "query the inside", interface, "again and error if anything happens other than an the receival of an answer at the inside", interface]
+                        ma $ leftBelowEachOther
+                            [ fn ai (list unmatched unmatched i0) =: iq
+                            , fn ai (list unmatched unmatched i1) =: iq
+                            , fn ai (list unmatched unmatched unmatched) =: ob
+                            ]
+                    item $ do
+                        s ["For", m $ i `mod` 3 =: 0, "let", m a, "finally use the previously gotten bits"]
+                        ma $ leftBelowEachOther
+                            [ fn ai (listofs [unmatched, unmatched, dotsc, i1, i1]) =: o1
+                            , fn ai (listofs [unmatched, unmatched, dotsc, i0, i1]) =: o0
+                            , fn ai (listofs [unmatched, unmatched, dotsc, i1, i0]) =: o0
+                            , fn ai (listofs [unmatched, unmatched, dotsc, i0, i0]) =: o0
+                            , fn ai (list unmatched unmatched unmatched) =: ob
+                            ]
+                        s ["We have", m a, "output", m 1, "if the previous two input bits were", m 1, and, m 0, "otherwise"]
+            s ["Now,", m $ firstOf n ssq, "will output", m bot, "after", m n, "queries"]
+            s ["As per the construction,", m a, "will query", m $ firstOf n ssq, m 2, "times for every query it gets, and will therefore output", m bot, "after", m $ n /: 2, "queries"]
+            s ["This means that the construction of", m $ firstOf (n /: 2) ssh, from, m $ firstOf n ssq, "with the", converter, m a]
+
+
 
 
 behaviourOfEnvironmentDefinition :: Note

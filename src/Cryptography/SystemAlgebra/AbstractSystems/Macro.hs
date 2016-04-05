@@ -71,4 +71,4 @@ conv a i s = a ^ i <> s
 conv_ :: Note -- ^ Converter
       -> Note -- ^ Resource
       -> Note
-conv_ = (<>)
+conv_ a s = a <> s
