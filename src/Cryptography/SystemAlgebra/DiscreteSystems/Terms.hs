@@ -1,25 +1,11 @@
-module Cryptography.SystemAlgebra.Terms where
+module Cryptography.SystemAlgebra.DiscreteSystems.Terms where
 
 import           Notes
 
+import           Cryptography.SystemAlgebra.AbstractSystems.Terms
+
 makeDefs
-    [ "abstract system algebra"
-    , "system algebra"
-    , "system"
-    , "label"
-    , "interface label set"
-    , "interface"
-    , "system merging operation"
-    , "interface connection operation"
-    , "interface merging"
-    , "composition"
-    , "parallel composition"
-    , "deterministic system"
-    , "resource system"
-    , "resource"
-    , "converter system"
-    , "converter"
-    , "source"
+    [ "source"
     , "beacon"
     , "synchronous parallel composition"
     , "asynchronous parallel composition"
@@ -37,14 +23,6 @@ makeDefs
     , "uniform random permutation"
     , "URP"
     , "cumulative description"
-    , "communication channel"
-    , "channel"
-    , "authenticated channel"
-    , "secret channel"
-    , "key channel"
-    , "secure channel"
-    , "distinguisher"
-    , "advantage"
     ]
 
 -- | N-system

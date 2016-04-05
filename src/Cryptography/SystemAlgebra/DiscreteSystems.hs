@@ -1,6 +1,7 @@
 module Cryptography.SystemAlgebra.DiscreteSystems where
 
-import           Notes                                    hiding (cyclic)
+import           Notes                                            hiding
+                                                                   (cyclic)
 
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
@@ -17,8 +18,9 @@ import           Sets.Basics.Terms
 
 import           Cryptography.SymmetricCryptography.Macro
 
-import           Cryptography.SystemAlgebra.Macro
-import           Cryptography.SystemAlgebra.Terms
+import           Cryptography.SystemAlgebra.AbstractSystems.Terms
+import           Cryptography.SystemAlgebra.DiscreteSystems.Macro
+import           Cryptography.SystemAlgebra.DiscreteSystems.Terms
 
 discreteSystemsSS :: Note
 discreteSystemsSS = subsection "Discrete Single-Interface Systems" $ do

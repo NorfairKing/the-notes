@@ -83,8 +83,6 @@ executable the-notes
       Cryptography.SymmetricCryptography.Terms
       Cryptography.SystemAlgebra
       Cryptography.SystemAlgebra.Graph
-      Cryptography.SystemAlgebra.Macro
-      Cryptography.SystemAlgebra.Terms
       Cryptography.Terms
       DataMining.ApproximateRetrieval
       DataMining.ExamQuestions

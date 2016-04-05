@@ -1,6 +1,7 @@
 module Cryptography.SystemAlgebra.AbstractSystems where
 
-import           Notes                            hiding (cyclic)
+import           Notes                                            hiding
+                                                                   (cyclic)
 
 import           Functions.Basics.Macro
 import           Functions.Basics.Terms
@@ -8,9 +9,9 @@ import           Functions.BinaryOperation.Terms
 import           Logic.FirstOrderLogic.Macro
 import           Sets.Basics.Terms
 
+import           Cryptography.SystemAlgebra.AbstractSystems.Macro
+import           Cryptography.SystemAlgebra.AbstractSystems.Terms
 import           Cryptography.SystemAlgebra.Graph
-import           Cryptography.SystemAlgebra.Macro
-import           Cryptography.SystemAlgebra.Terms
 
 abstractSystemsSS :: Note
 abstractSystemsSS = section "System Algebra" $ do
