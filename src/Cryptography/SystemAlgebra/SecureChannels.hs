@@ -13,18 +13,18 @@ import           Logic.PropositionalLogic.Macro
 import           Probability.ProbabilityMeasure.Terms
 import           Sets.Basics.Terms
 
+import           Cryptography.ComputationalProblems.Terms
 import           Cryptography.SymmetricCryptography.Macro
 import           Cryptography.SymmetricCryptography.Terms         hiding
                                                                    (advantage,
                                                                    advantage')
-
 import           Cryptography.SystemAlgebra.AbstractSystems.Macro
 import           Cryptography.SystemAlgebra.AbstractSystems.Terms
 import           Cryptography.SystemAlgebra.DiscreteSystems.Terms
 import           Cryptography.SystemAlgebra.Graph
+
 import           Cryptography.SystemAlgebra.SecureChannels.Macro
 import           Cryptography.SystemAlgebra.SecureChannels.Terms
-import           Cryptography.Terms
 
 secureChannelsSS :: Note
 secureChannelsSS = subsection "Secure Channels" $ do

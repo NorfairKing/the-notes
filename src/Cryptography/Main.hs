@@ -21,6 +21,8 @@ import           Rings.Macro
 import           Rings.Terms
 import           Sets.Basics.Terms
 
+import           Cryptography.ComputationalProblems
+import           Cryptography.ComputationalProblems.Terms
 import           Cryptography.Macro
 import           Cryptography.MACs
 import           Cryptography.SymmetricCryptography
@@ -38,14 +40,7 @@ cryptography = chapter "Cryptography" $ do
         diffieHellmanProtocolDefinition
         diffieHellmanManInTheMiddleAttack
 
-    section "Computational Problems" $ do
-        discreteLogarithmProblemDefinition
-        additiveDLEasy
-        dlReducable
-        dlModTwoInEvenOrderGroup
-        computationalDHProblemDefinition
-        diffieHellmanTripleDefinition
-        decisionalDHProblemDefinition
+    computationalProblemsS
 
     section "Public key encryption" $ do
         publicKeyEncryptionSchemeDefinition
@@ -217,6 +212,7 @@ decisionalDHProblemDefinition = de $ do
         c = "c"
         g = "g"
     s [the, decisionalDiffieHellman', "(" <> dDH' <> ")", "problem for a given", cyclic, group, m $ grp_ =: grp (genby g) grpop_, "is the problem of determining whether, for given group elements", (m $ g ^ a) <> ",", m $ g ^ b, and, m $ g ^ c, "whether they are chosen randomly and independently from", m grps_, "or form a", diffieHellmanTriple]
+
 
 
 publicKeyEncryptionSchemeDefinition :: Note

@@ -71,6 +71,9 @@ executable the-notes
       Config
       Contributors
       Cryptography.BlockCipherECBAttack
+      Cryptography.ComputationalProblems
+      Cryptography.ComputationalProblems.Macro
+      Cryptography.ComputationalProblems.Terms
       Cryptography.MACs
       Cryptography.MACs.Macro
       Cryptography.MACs.Terms
@@ -82,7 +85,16 @@ executable the-notes
       Cryptography.SymmetricCryptography.Macro
       Cryptography.SymmetricCryptography.Terms
       Cryptography.SystemAlgebra
+      Cryptography.SystemAlgebra.AbstractSystems
+      Cryptography.SystemAlgebra.AbstractSystems.Macro
+      Cryptography.SystemAlgebra.AbstractSystems.Terms
+      Cryptography.SystemAlgebra.DiscreteSystems
+      Cryptography.SystemAlgebra.DiscreteSystems.Macro
+      Cryptography.SystemAlgebra.DiscreteSystems.Terms
       Cryptography.SystemAlgebra.Graph
+      Cryptography.SystemAlgebra.SecureChannels
+      Cryptography.SystemAlgebra.SecureChannels.Macro
+      Cryptography.SystemAlgebra.SecureChannels.Terms
       Cryptography.Terms
       DataMining.ApproximateRetrieval
       DataMining.ExamQuestions
