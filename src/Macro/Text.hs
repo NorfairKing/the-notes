@@ -56,6 +56,9 @@ or = "or"
 is :: Note
 is = "is"
 
+are :: Note
+are = "are"
+
 the :: Note
 the = "The"
 

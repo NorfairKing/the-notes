@@ -57,6 +57,10 @@ cryptography = chapter "Cryptography" $ do
         ethRootComputation
         rSATWOPDefinition
         tWOPAsPKE
+        rsaPKEExample
+        rsaSmallEInsecure
+        rsaSmallEInsecure2
+        totientToFactorisation
 
     section "Digital signatures" $ do
         digitalSignatureDefinition
@@ -220,20 +224,24 @@ publicKeyEncryptionSchemeDefinition = de $ do
     lab publicKeyEncryptionSchemeDefinitionLabel
     lab keyGeneratorDefinitionLabel
     s ["A", publicKeyEncryptionScheme', "(" <> pKE' <> ")", "consists of three functions"]
+    let pk = "pk"
+        sk = "sk"
+        mesg = "m"
+        c = "c"
+        r = "r"
     itemize $ do
         item $ do
             s ["A", keyGenerator', function]
-            s ["This is a probabillistic", function, "that generates a", keyPair' <> ",", "a", publicKey', anda, secretKey', "(" <> privateKey' <> ")"]
+            s ["This is a probabillistic", function, "that generates a", keyPair', m (tuple pk sk) <> ",", "of a", publicKey', m $ pk ∈ pksp_, anda, secretKey', "(" <> privateKey' <> ")", m $ sk ∈ sksp_]
         item $ do
-            s ["An", encryptionFunction']
-            s ["This is a probabillistic", function, "that takes as inputs a", publicKey, anda, plaintext, "and computes the", ciphertext]
+            s ["An", encryptionFunction', m aenc_]
+            s ["This is a probabillistic", function, "that takes as inputs a", publicKey, m (pk ∈ pksp_) <> ",", plaintext, m $ sk ∈ sksp_, anda, "fresh randomness value", m $ r ∈ rsp_, "and computes the", ciphertext, m $ c =: aenc mesg pk r ∈ csp_]
         item $ do
-            s ["A", decryptionFunction']
-            s ["This is a deterministic", function, "that takes as inputs a", secretKey, anda, ciphertext, "and computes the", plaintext]
+            s ["A", decryptionFunction', m adec_]
+            s ["This is a deterministic", function, "that takes as inputs a", secretKey, m (sk ∈ sksp_), anda, ciphertext, m $ c ∈ csp_, "and computes the", plaintext, m $ mesg =: adec c sk ∈ msp_]
 
     s ["... such that for every encryption/decryption", keyPair, "the decryption transformation is the inverse of the encryption transformation"]
-
-    todo "formalize"
+    ma $ fa (cs [pk ∈ pksp_, sk ∈ sksp_, mesg ∈ msp_, r ∈ rsp_]) $ adec (aenc mesg pk r) sk =: mesg
 
 
 iNDCCASecureDefinitionPKEDefinition :: Note
@@ -502,6 +510,94 @@ tWOPAsPKE = de $ do
         d_ = "D"
     s ["Let encryption be the application of the", trapdoorOneWayPermutation <> ", where the", publicKey, "is the description of the algorithm", m f_, "and the", secretKey, "the description of the algorithm", m d_]
 
+rsaPKEExample :: Note
+rsaPKEExample = ex $ do
+    s ["In this example we will show how we can use the", rSA, trapdoorOneWayPermutation, "to build a", publicKeyEncryptionScheme]
+    let n = "n"
+    let p = "p"
+        q = "q"
+        e = "e"
+        d = "d"
+    let mesg = "m"
+        c = "c"
+    itemize $ do
+        item $ do
+            s [the, keyGenerator, function, "generates two primes", m p, and, m q, "and computes", m $ n =: p * q, "as well as", m $ etot n =: (p - 1) * (q - 1), "and selects an", m $ e ∈ integers, "that is relatively prime to", m $ etot n, "to compute", m $ d =: ginv e `mod` etot n]
+            itemize $ do
+                item $ s [the, publicKey, "is then", m $ tuple n e]
+                item $ s [the, privateKey, "is", m d]
+        item $ do
+            s [the, encryptionFunction, "computes the", ciphertext, m $ c =: mesg ^ e `mod` n, "for a given", message, m mesg]
+        item $ do
+            s [the, decryptionFunction, "computes the original", message, m $ mesg =: c ^ d `mod` n, "for a given", ciphertext, m c]
+    s ["This is in fact a valid", publicKeyEncryptionScheme]
+    proof $ do
+        s ["Let", m $ cs [p, q] ∈ integers, "be arbitrary and let", m $ mesg ∈ intmod n, "be an arbitrary", message]
+        ma $ (pars $ mesg ^ d `mod` n) ^ e `mod` n
+          =: (pars $ mesg ^ (ginv e `mod` etot n) `mod` n) ^ e `mod` n
+          =: mesg ^ ((pars $ ginv e `mod` etot n) * e) `mod` n
+          =: mesg
+    why_ "Don't these 'mod n' things pose a problem"
+    s ["Note that the", messageSpace, m $ intmod n, "is only decided uppon during the key generation phase"]
+
+rsaSmallEInsecure :: Note
+rsaSmallEInsecure = thm $ do
+    let e = "e"
+        n = "n"
+        mesg = "m"
+        c = "c"
+    s ["When a small", m e, "is selected in the", rSA, publicKeyEncryptionScheme <> ", any", message, "from a considerable subspace of the", messageSpace, "can be efficiently recovered"]
+    proof $ do
+        let m0 = msp_ !: 0
+        s ["For a small", m $ e ∈ intmod n, ", the subspace", m $ m0 =: setcmpr (mesg ∈ naturals) (mesg ^ e < n), "is considerably large (or at least non-negligible and increasing in size for increasing", m n <> ")"]
+        s ["For any", message, m (mesg ∈ m0) <> ",", "the corresponding ciphertext equals", m $ c =: mesg ^ e `mod` n =: mesg ^ e]
+        s ["In other words, ", m $ mesg ^ e, "is not reduced modulo", m n]
+        s ["This means that an", adversary, "can efficiently compute", m $ c ^ (1 /: e), "over the integers and recover", m mesg, "entirely"]
+
+rsaSmallEInsecure2 :: Note
+rsaSmallEInsecure2 = thm $ do
+    let e = "e"
+        n = "n"
+        mesg = "m"
+        c = "c"
+        i = "i"
+    s ["When a small", m e, "is selected in the", rSA, publicKeyEncryptionScheme <> ", any", message, "can be efficiently recovered as long as it is send to at least", m e, "different", parties, "who all use the same", m e]
+    proof $ do
+        let n1 = n !: 1
+            n2 = n !: 2
+            ni = n !: i
+            ne = n !: e
+        s ["In this scenario the", m e, parties, "have different moduli", m $ list n1 n2 ne]
+        let c1 = c !: 1
+            c2 = c !: 2
+            ce = c !: e
+        s ["Let", m $ list c1 c2 ce, "be the", ciphertexts, "that are sent to these", parties]
+        ma $ centeredBelowEachOther
+            [ c1 =: mesg ^ e `mod` n1
+            , c2 =: mesg ^ e `mod` n2
+            , vdots
+            , ce =: mesg ^ e `mod` ne
+            ]
+        s ["Using the", chineseRemainderTheorem_, "we can efficiently compute", m c, "as follows"]
+        ma $ c =: mesg ^ e `mod` (prodcmpr (i =: 1) e ni)
+        s ["Because", m mesg, "is smaller than every", m ni <> ", it follows that", m $ mesg ^ e < (prodcmpr (i =: 1) e ni), "holds"]
+        s ["In other words, ", m c, "is not reduced modulo", m (prodcmpr (i =: 1) e ni)]
+        s ["This means that an adversary can recover", m mesg, "entirely by computing the", m e <> "-th root of", m c, "in", m integers]
+
+totientToFactorisation :: Note
+totientToFactorisation = thm $ do
+    let n = "n"
+        p = "p"
+        q = "q"
+    s ["Let", m n, "be a product of two", primes, m p, and, m q]
+    s ["Given", m n, and, m $ etot n, "we can efficiently compute", m p, and, m q]
+    proof $ do
+        s ["Because", m p, and, m q, are, primes <> ",", m $ etot n =: (pars $ p - 1) * (pars $ q - 1), "must hold"]
+        why
+        s ["Now observe the following"]
+        ma $ p =: n - q + 1 - etot n
+        ma $ n =: n * q - q ^ 2 + q - etot n * q
+        s ["Since", m n, and, m $ etot n, "are known, we can solve this quadratic system efficiently"]
 
 digitalSignatureDefinition :: Note
 digitalSignatureDefinition = de $ do
