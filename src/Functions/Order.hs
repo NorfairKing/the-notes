@@ -33,11 +33,14 @@ order = section "Functions and orders" $ do
     subsection "Monotonic functions" $ do
         monotonicDefinition
         monotonicFunctionsClosedUnderComposition
+        scottContinuousDefinition
 
-    scottContinuousDefinition
-    fixedPointDefinition
-    leastFixedPointDefinition
-    greatestFixedPointDefinition
+    subsection "Fixed points" $ do
+        fixedPointDefinition
+        leastFixedPointDefinition
+        greatestFixedPointDefinition
+        fixedPointExamples
+
     regions
 
     tarskiFixedPointTheorem
@@ -193,6 +196,66 @@ greatestFixedPointDefinition = de $ do
   where
     f = fun_
     x = posetset_
+
+
+
+fixedPointExamples :: Note
+fixedPointExamples = do
+    ex $ do
+        s ["The following", function, is, monotone, "but has no", fixedPoints]
+        mempty
+        let c1 = "blue"
+        let (a, b, c) = ("a", "b", "c")
+            hd1 = hasseDiagram [a, b, c] [(a, b), (a, c)]
+            fun1 = [(a, b), (b, c), (c, b)]
+        orderFunctionFig 3 normalConfig $ OrderFunctionFig
+            [("A", hd1)]
+            [(c1, fun1)]
+
+    ex $ do
+        s ["The following", function, is, "not", monotone, "has two", fixedPoints, "but no", leastFixedPoint]
+        mempty
+        let c1 = "blue"
+        let (a, b, c, d) = ("a", "b", "c", "d")
+            hd1 = hasseDiagram [a, b, c, d] [(a, b), (a, c), (b, d), (c, d)]
+            fun1 = [(a, c), (b, b), (c, c), (d, b)]
+        orderFunctionFig 3 normalConfig $ OrderFunctionFig
+            [("A", hd1)]
+            [(c1, fun1)]
+
+    ex $ do
+        s ["The following", function, is, monotone, "has one", fixedPoint, "which is subsequently the", leastFixedPoint]
+        mempty
+        let c1 = "blue"
+        let (a, b, c, d) = ("a", "b", "c", "d")
+            hd1 = hasseDiagram [a, b, c, d] [(a, b), (a, c), (b, d), (c, d)]
+            fun1 = [(a, c), (b, c), (c, c), (d, c)]
+        orderFunctionFig 3 normalConfig $ OrderFunctionFig
+            [("A", hd1)]
+            [(c1, fun1)]
+
+    ex $ do
+        s ["The following", function, is, monotone, "has two", fixedPoints, "but no", leastFixedPoint]
+        mempty
+        let c1 = "blue"
+        let (a, b) = ("a", "b")
+            hd1 = hasseDiagram [a, b] [(a, a), (b, b)]
+            fun1 = [(a, a), (b, b)]
+        orderFunctionFig 3 normalConfig $ OrderFunctionFig
+            [("A", hd1)]
+            [(c1, fun1)]
+
+    ex $ do
+        s ["The following", function, is, monotone, "has four", fixedPoints, "but no", leastFixedPoint]
+        mempty
+        let c1 = "blue"
+        let (a, b, c, d) = ("a", "b", "c", "d")
+            hd1 = hasseDiagram [a, b, c, d] [(a, b), (a, c), (b, d), (c, d)]
+            fun1 = [(a, a), (b, b), (c, c), (d, d)]
+        orderFunctionFig 3 normalConfig $ OrderFunctionFig
+            [("A", hd1)]
+            [(c1, fun1)]
+
 
 fixedPointRegionDefinition :: Note
 fixedPointRegionDefinition = de $ do
