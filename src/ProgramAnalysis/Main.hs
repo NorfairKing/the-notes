@@ -172,4 +172,5 @@ abstractDomainForIntervalAbstraction = do
         s ["The purpose of abstract interpretation is to approximate this", function]
 
 
+    subsection "Carthesian abstraction" $ mempty
 

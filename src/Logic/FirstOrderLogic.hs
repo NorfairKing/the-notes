@@ -72,13 +72,12 @@ quantifiers = subsection "Quantifiers" $ do
 
     propertiesOfQuantifiers
 
-x, y, p :: Note
+x, y :: Note
 x = "x"
 y = "y"
-p = "P"
 
 pp :: Note -> Note
-pp = fn p
+pp = fn "P"
 
 ppp :: Note -> Note -> Note
 ppp x y = fn p $ cs [x, y]

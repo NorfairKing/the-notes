@@ -49,12 +49,11 @@ hoareLogicS = section "Hoare Logic" $ do
 
     note "exam-question-2014" examQuestion2014
 
-a, b, c, i, p, q, r, e, x, y, z :: Note
+a, b, c, i, q, r, e, x, y, z :: Note
 a = "A"
 b = "B"
 c = "c"
 i = "I"
-p = "P"
 q = "Q"
 r = "R"
 e = "e"
@@ -363,6 +362,7 @@ loopTermination = de $ do
             ma $ fa v0 ((v <> "<" <> v0) ⇒ (htrip ((v =: v0) ∧ not c) b (v <> "<" <> v0)))
 
   where
+    p = "P"
     ss = "S"
     v = "v"
     v0 = "v'"

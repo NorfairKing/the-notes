@@ -656,8 +656,7 @@ collisionResistantDefinition = de $ do
     let c = "c"
         cc = "C"
         hc = hshf_ !: c
-    s ["A parametrized family", m $ setcmpr hc (c ∈ cc), "of", hashFunctions, "is called", collisionResistant, "if no feasible", adversary, "can win the", collisionFindingGame, "with a non-negligible", probability, "for a", hashFunction, m hc, "(known to the", adversary <> ") chosen uniformly at random from the family of", hashFunction]
-
+    s ["A parametrized family", m $ setcmpr hc (c ∈ cc), "of", hashFunctions, "is called", collisionResistant', "if no feasible", adversary, "can win the", collisionFindingGame, "with a non-negligible", probability, "for a", hashFunction, m hc, "(known to the", adversary <> ") chosen uniformly at random from the family of", hashFunction]
 
 cryptoRefs :: Note
 cryptoRefs = do
