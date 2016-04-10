@@ -11,7 +11,9 @@ makeDefs [
     , "fixed point"
     , "fixed point region"
     , "ascending region"
+    , "pre-fixedpoint"
     , "descending region"
+    , "post-fixedpoint"
     , "least fixed point"
     , "greatest fixed point"
     , "Kleene chain"
@@ -33,6 +35,7 @@ makeDefs [
 
 makeThms [
       "Monotonic functions closed under composition"
+    , "Scott continuous implies monotonic"
     , "Descending region is closed under application"
     , "Ascending region is closed under application"
     , "Top element is in descending region"

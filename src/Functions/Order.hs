@@ -34,6 +34,7 @@ order = section "Functions and orders" $ do
         monotonicDefinition
         monotonicFunctionsClosedUnderComposition
         scottContinuousDefinition
+        scottContinuousImpliesMonotonicTheorem
 
     subsection "Fixed points" $ do
         fixedPointDefinition
@@ -77,13 +78,14 @@ galoisConnectionS = subsection "Galois connections" $ do
     galoisConnectionDefinition
     galoisConnectionEquivalentDefinition
     galoisConnectionExamples
-    galoisInsertionDefinition
-    galoisInsertionOtherJections
     galoisConnectionsCompose
     galoisConnectionsPreserves
     preservesNoGaloisConnection
+    galoisConnectionDetermination
     galoisConnectionExistenceAlpha
     galoisConnectionExistenceGamma
+    galoisInsertionDefinition
+    galoisInsertionOtherJections
 
 approximationS :: Note
 approximationS = subsection "Approximations" $ do
@@ -162,6 +164,32 @@ scottContinuousDefinition = de $ do
     y = "Y"
     ry = partord_ !: y
 
+scottContinuousImpliesMonotonicTheorem :: Note
+scottContinuousImpliesMonotonicTheorem = thm $ do
+    let f = fun_
+        f_ = fn f
+        x = "X"
+        rx = partord_ !: x
+        y = "Y"
+        ry = partord_ !: y
+    s ["Let ", m $ lat x rx, and, m $ lat y ry, " each be a ", lattice_, and, m $ fun f x y, "a", function]
+    s ["If", m f, "is", scottContinuous <> ",", "then", m f, "is", monotonic]
+
+    proof $ do
+        s ["Let", m f, "be a", scottContinuous, function]
+        let a = "a"
+            b = "b"
+        let (<<) = inposet rx
+            (<.) = inposet ry
+        s ["Let", m a, and, m b, "be elements of", m x, "such that", m $ a << b, "holds"]
+        s ["According to the definition of a", scottContinuous, function, "we observe the following"]
+        ma $ f_ (sup $ setofs [a, b]) =: sup (setofs [f_ a, f_ b])
+        s [the, supremum, "of", m $ setofs [a, b], "is", m b]
+        ma $ f_ b =: sup (setofs [f_ a, f_ b])
+        s ["By the definition of a", supremum <> ", this means that", m $ f_ a <. f_ b, "must hold"]
+
+
+
 fixedPointDefinition :: Note
 fixedPointDefinition = de $ do
     lab fixedPointDefinitionLabel
@@ -208,7 +236,7 @@ fixedPointExamples = do
         let (a, b, c) = ("a", "b", "c")
             hd1 = hasseDiagram [a, b, c] [(a, b), (a, c)]
             fun1 = [(a, b), (b, c), (c, b)]
-        orderFunctionFig 3 normalConfig $ OrderFunctionFig
+        orderFunctionFig 4 normalConfig $ OrderFunctionFig
             [("A", hd1)]
             [(c1, fun1)]
 
@@ -219,7 +247,7 @@ fixedPointExamples = do
         let (a, b, c, d) = ("a", "b", "c", "d")
             hd1 = hasseDiagram [a, b, c, d] [(a, b), (a, c), (b, d), (c, d)]
             fun1 = [(a, c), (b, b), (c, c), (d, b)]
-        orderFunctionFig 3 normalConfig $ OrderFunctionFig
+        orderFunctionFig 4 normalConfig $ OrderFunctionFig
             [("A", hd1)]
             [(c1, fun1)]
 
@@ -230,7 +258,7 @@ fixedPointExamples = do
         let (a, b, c, d) = ("a", "b", "c", "d")
             hd1 = hasseDiagram [a, b, c, d] [(a, b), (a, c), (b, d), (c, d)]
             fun1 = [(a, c), (b, c), (c, c), (d, c)]
-        orderFunctionFig 3 normalConfig $ OrderFunctionFig
+        orderFunctionFig 4 normalConfig $ OrderFunctionFig
             [("A", hd1)]
             [(c1, fun1)]
 
@@ -241,7 +269,7 @@ fixedPointExamples = do
         let (a, b) = ("a", "b")
             hd1 = hasseDiagram [a, b] [(a, a), (b, b)]
             fun1 = [(a, a), (b, b)]
-        orderFunctionFig 3 normalConfig $ OrderFunctionFig
+        orderFunctionFig 2 normalConfig $ OrderFunctionFig
             [("A", hd1)]
             [(c1, fun1)]
 
@@ -252,7 +280,7 @@ fixedPointExamples = do
         let (a, b, c, d) = ("a", "b", "c", "d")
             hd1 = hasseDiagram [a, b, c, d] [(a, b), (a, c), (b, d), (c, d)]
             fun1 = [(a, a), (b, b), (c, c), (d, d)]
-        orderFunctionFig 3 normalConfig $ OrderFunctionFig
+        orderFunctionFig 4 normalConfig $ OrderFunctionFig
             [("A", hd1)]
             [(c1, fun1)]
 
@@ -261,7 +289,7 @@ fixedPointRegionDefinition :: Note
 fixedPointRegionDefinition = de $ do
     lab fixedPointRegionDefinitionLabel
     s ["Let ", m relposet_, " be a ", poset_, and, m $ fun f x x, " a ", function]
-    s ["The ", fixedPointRegion', " ", m $ fix f, " is the ", set, " of ", fixedPoint, "s of ", m latset_]
+    s ["The ", fixedPointRegion', " ", m $ fix f, " is the ", set, " of ", fixedPoints, " of ", m latset_]
     ma $ fix f === setcmpr (a ∈ latset_) (a =: f_ a)
   where
     f = fun_
@@ -272,9 +300,11 @@ fixedPointRegionDefinition = de $ do
 ascendingRegionDefinition :: Note
 ascendingRegionDefinition = de $ do
     lab ascendingRegionDefinitionLabel
+    lab preFixedpointDefinitionLabel
     s ["Let ", m relposet_, " be a ", poset_, and, m $ fun f x x, " a ", function]
-    s ["The ", ascendingRegion', " ", m $ asc f, " is the following ", set]
+    s [the , ascendingRegion', " ", m $ asc f, " is the following ", set]
     ma $ asc f === setcmpr (a ∈ latset_) (a ⊆: f_ a)
+    s [elements, "of the", ascendingRegion, "are sometimes called", preFixedpoints']
   where
     f = fun_
     f_ = fn f
@@ -284,9 +314,11 @@ ascendingRegionDefinition = de $ do
 descendingRegionDefinition :: Note
 descendingRegionDefinition = de $ do
     lab descendingRegionDefinitionLabel
+    lab postFixedpointDefinitionLabel
     s ["Let ", m relposet_, " be a ", poset_, and, m $ fun f x x, " a ", function]
-    s ["The ", descendingRegion', " ", m $ desc f, " is the following ", set]
+    s [the, descendingRegion', " ", m $ desc f, " is the following ", set]
     ma $ desc f === setcmpr (a ∈ latset_) (f_ a ⊆: a)
+    s [elements, "of the", descendingRegion, "are sometimes called", postFixedpoints']
   where
     f = fun_
     f_ = fn f
@@ -389,7 +421,7 @@ fixedPointRegionIsIntersectionOfAscAndDesc = thm $ do
 
 tarskiFixedPointTheorem :: Note
 tarskiFixedPointTheorem = thm $ do
-    defineTerm "Tarksi's fixed point theorem"
+    defineTerm "Tarski's fixed point theorem"
     newline
     s ["Let", m lat_, "be a", completeLattice_, "and let", m $ fun f x x, "be a", monotone, function]
     s [the, fixedPointRegion, m $ fix f, "of", m f, "is a", completeLattice]
@@ -548,7 +580,7 @@ galoisConnectionDefinition = de $ do
 
 galoisConnectionEquivalentDefinition :: Note
 galoisConnectionEquivalentDefinition = thm $ do
-    s ["The following is an equilavent definition of a", galoisConnection]
+    s ["The following is an equivalent definition of a", galoisConnection]
     newline
 
     s ["Let", m $ lat x rx, and, m $ lat y ry, "be", completeLattices]
@@ -573,7 +605,7 @@ galoisConnectionExamples = do
         c2 = "blue"
     s ["In the following examples, the", raw c1, "arrows correspond to", m alpha, "and the", raw c2, "arrows correspond to", m gamma]
     ex $ do
-        s ["The following diagrams shows a simple non-trivial", galoisConnection]
+        s ["The following diagram shows a simple non-trivial", galoisConnection]
         let (a, b, c) = ("a", "b", "c")
             hd1 = hasseDiagram [a, c] [(a, c)]
             hd2 = hasseDiagram [b] []
@@ -583,7 +615,7 @@ galoisConnectionExamples = do
             [("A", hd1), ("B", hd2)]
             [(c1, fun1), (c2, fun2)]
     ex $ do
-        s ["The following diagrams shows another simple non-trivial", galoisConnection]
+        s ["The following diagram shows another simple non-trivial", galoisConnection]
         let (a, b, c, d) = ("a", "b", "c", "d")
             hd1 = hasseDiagram [a, c] [(a, c)]
             hd2 = hasseDiagram [b, d] [(b, d)]
@@ -706,7 +738,33 @@ preservesNoGaloisConnection = cex $ do
             [("A", hd1), ("B", hd2)]
             [(c1, fun1), (c2, fun2)]
         s ["In this situation", m alpha, "is", completelyJoinPreserving, and, m gamma, "is", completelyMeetPreserving, "but they don't form a", galoisConnection]
+        let ct = raw c
+            bt = raw b
+        s ["Take for example the", element, m ct]
+        s [m $ fn gamma $ fn alpha ct, "is", m bt, "but", m $ inposet (partord_ !: "A") ct bt, "does not hold"]
 
+galoisConnectionDetermination :: Note
+galoisConnectionDetermination = thm $ do
+    let a = alpha
+        g = gamma
+        x = "X"
+        rx = partord_ !: x
+        y = "Y"
+        ry = partord_ !: y
+    s ["Let", m a, and, m g, "form a", galoisConnection]
+
+    ma $ gcon a g (lat x rx) (lat y ry)
+
+    let (<<) = inposet rx
+
+    let p = "p"
+        q = "q"
+    s [m a, "completely determines", m g, "as follows"]
+    ma $ fn a p =: infofm y (setcmpr (q ∈ y) (p << fn g q))
+    s [m g, "completely determines", m a, "as follows"]
+    ma $ fn a p =: supofm x (setcmpr (p ∈ x) (fn a p << q))
+
+    toprove
 
 galoisConnectionExistenceAlpha :: Note
 galoisConnectionExistenceAlpha = thm $ do
@@ -734,6 +792,7 @@ galoisConnectionExistenceGamma = thm $ do
     ma $ gcon a g (lat x rx) (lat y ry)
 
     toprove
+
 
 approximationDefinition :: Note
 approximationDefinition = de $ do

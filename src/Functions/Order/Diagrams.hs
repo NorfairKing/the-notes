@@ -25,7 +25,7 @@ normalConfig :: OrderFunctionFigRenderConfig
 normalConfig = OrderFunctionFigRenderConfig (return ()) (return ())
 
 dotsConfig :: OrderFunctionFigRenderConfig
-dotsConfig = OrderFunctionFigRenderConfig (nodeDec [shape =: "point"]) (return ())
+dotsConfig = OrderFunctionFigRenderConfig (nodeDec ["shape" =: "point"]) (return ())
 
 instance Graph OrderFunctionFig OrderFunctionFigRenderConfig where
     defaultGenConfig = normalConfig
@@ -33,6 +33,7 @@ instance Graph OrderFunctionFig OrderFunctionFigRenderConfig where
         offrcNodeConfig c
         offrcEdgeConfig c
         graphDec ["nodesep" =: "0.5"]
+        nodeDec ["width" =: "0.05", "height" =: "0.05"]
         rankdir bottomTop
         edgeDec [arrowhead =: none]
         nis <- fmap concat $ forM (offHasseDiagrams funFig) $ \(n, h) -> cluster_ n $ do

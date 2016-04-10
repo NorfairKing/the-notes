@@ -80,6 +80,10 @@ supcomp = comp bigsupsign
 supof :: Note -> Note
 supof = (supsign <>)
 
+-- | Supremum, modified
+supofm :: Note -> Note -> Note
+supofm n = (supsign !: n <>)
+
 -- ** Greatest lower bound
 
 infsign :: Note
@@ -99,6 +103,10 @@ infcomp = comp biginfsign
 
 infof :: Note -> Note
 infof = (infsign <>)
+
+-- | Infimum, modified
+infofm :: Note -> Note -> Note
+infofm n = (infsign !: n <>)
 
 -- * Lattices
 
