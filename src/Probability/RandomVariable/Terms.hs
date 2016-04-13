@@ -25,6 +25,7 @@ makeDefs [
     , "probability density function"
     , "probability density"
     , "density"
+    , "statistically independent"
     , "expected value"
     , "mean"
     , "covariance"

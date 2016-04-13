@@ -45,9 +45,17 @@ lor = between lorsign
 --orcom = comp lorsign
 
 -- Logical Xor
-xor :: Note -> Note -> Note
-xor = between $ comm0 "oplus"
+xor_ :: Note
+xor_ = comm0 "oplus"
 
+xor :: Note -> Note -> Note
+xor = binop xor_
+
+(⊕) :: Note -> Note -> Note
+(⊕) = xor
+
+xorBig_ :: Note
+xorBig_ = comm0 "bigoplus"
 
 -- If and only if
 iffsign :: Note

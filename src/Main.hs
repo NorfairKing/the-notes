@@ -15,6 +15,7 @@ import           Utils
 import           Notes
 
 import           Config
+import           Contributors
 import           Dependencies
 import           Header
 import           License
@@ -27,6 +28,7 @@ import           Computability.Main
 import           Cryptography.Main
 import           DataMining.Main
 import           Fields.Main
+import           FormalMethods.Main
 import           Functions.Main
 import           Geometry.Main
 import           GraphTheory.Main
@@ -162,6 +164,8 @@ entireDocument = do
 
         renderConfig
         license
+        renderContributors
+
         tableofcontents
         allNotes
 
@@ -192,5 +196,6 @@ allNotes = do
     statisticsC
     programAnalysisC
     cryptography
+    formalMethods
     machineLearning
     dataMining

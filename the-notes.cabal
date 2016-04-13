@@ -69,17 +69,46 @@ executable the-notes
       Computability.Symbols.Macro
       Computability.Symbols.Terms
       Config
+      Contributors
+      Cryptography.BlockCipherECBAttack
+      Cryptography.ComputationalProblems
+      Cryptography.ComputationalProblems.Macro
+      Cryptography.ComputationalProblems.Terms
+      Cryptography.MACs
+      Cryptography.MACs.Macro
+      Cryptography.MACs.Terms
       Cryptography.Macro
       Cryptography.Main
+      Cryptography.ManyTimePadAttack
+      Cryptography.OTP.Impl
+      Cryptography.SymmetricCryptography
+      Cryptography.SymmetricCryptography.Macro
+      Cryptography.SymmetricCryptography.Terms
+      Cryptography.SystemAlgebra
+      Cryptography.SystemAlgebra.AbstractSystems
+      Cryptography.SystemAlgebra.AbstractSystems.Macro
+      Cryptography.SystemAlgebra.AbstractSystems.Terms
+      Cryptography.SystemAlgebra.DiscreteSystems
+      Cryptography.SystemAlgebra.DiscreteSystems.Macro
+      Cryptography.SystemAlgebra.DiscreteSystems.Terms
+      Cryptography.SystemAlgebra.Graph
+      Cryptography.SystemAlgebra.SecureChannels
+      Cryptography.SystemAlgebra.SecureChannels.Macro
+      Cryptography.SystemAlgebra.SecureChannels.Terms
       Cryptography.Terms
       DataMining.ApproximateRetrieval
+      DataMining.ExamQuestions
       DataMining.LargeScaleLearning
       DataMining.LargeScaleLearning.Macro
       DataMining.LargeScaleLearning.Terms
       DataMining.Main
       DataMining.MapReduce
       DataMining.MapReduce.Terms
+      Dependencies
       Fields.Main
+      FormalMethods.Macro
+      FormalMethods.Main
+      FormalMethods.Terms
       Functions.Application
       Functions.Application.Macro
       Functions.Application.Terms
@@ -101,6 +130,7 @@ executable the-notes
       Functions.Jections.Terms
       Functions.Main
       Functions.Order
+      Functions.Order.Diagrams
       Functions.Order.Macro
       Functions.Order.Terms
       Functions.SetFunctions
@@ -169,6 +199,7 @@ executable the-notes
       Macro.Graphviz
       Macro.Index
       Macro.LinearAlgebra.Macro
+      Macro.Lists
       Macro.MachineLearning.Macro
       Macro.Math
       Macro.MetaMacro
@@ -188,6 +219,7 @@ executable the-notes
       Notes
       Packages
       Parser
+      Preface
       Probability.BayesianNetwork
       Probability.BayesianNetwork.Graph
       Probability.BayesianNetwork.Terms
@@ -221,6 +253,7 @@ executable the-notes
       Probability.SigmaAlgebra
       Probability.SigmaAlgebra.Macro
       Probability.SigmaAlgebra.Terms
+      ProgramAnalysis.Main
       Relations.Basics
       Relations.Basics.Macro
       Relations.Basics.Terms
@@ -233,12 +266,15 @@ executable the-notes
       Relations.Equivalence.Terms
       Relations.Main
       Relations.Orders
+      Relations.Orders.Hasse
       Relations.Orders.Macro
       Relations.Orders.Terms
       Relations.Preorders
       Relations.Preorders.Macro
       Relations.Preorders.Terms
+      Rings.Macro
       Rings.Main
+      Rings.Terms
       Sets.Algebra.Complement
       Sets.Algebra.Complement.Terms
       Sets.Algebra.Difference
@@ -254,6 +290,9 @@ executable the-notes
       Sets.CarthesianProduct
       Sets.CarthesianProduct.Terms
       Sets.Main
+      Sets.Multiset
+      Sets.Multiset.Macro
+      Sets.Multiset.Terms
       Sets.Partition
       Sets.Partition.Terms
       Sets.PointedSets
@@ -265,6 +304,7 @@ executable the-notes
       Statistics.Main
       Statistics.Terms
       TH
+      TH.Command
       TH.Definition
       TH.Label
       TH.LitFile

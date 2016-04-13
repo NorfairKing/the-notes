@@ -2,7 +2,6 @@
 
 The code is not always consistent with these conventions but any additions should be.
 
-
 ## Modules
 
 `Macro.Chapter.Macro` is deprecated.
@@ -25,10 +24,14 @@ Modules should be imported in this order:
 
 ## Terms
 
+Term functions are generated with template haskell with `makeDefs`.
+
 - `term` is the indexed version
 - `term'` indexed and bold
 - `termDefinitionLabel` label for the definition of the term
 - `term_` indexed term with reference with a reference to the definition
+
+Plural forms are also generated: `terms` and `terms'`.
 
 ## Top level function
 
@@ -38,7 +41,8 @@ Use the suffix
 - SSS for subsubsections
 
 ## Variables
-Make local variables if necessary
+
+Make local variables if necessary.
 
 - Use `x` for "x" and `xx` for "X" if both are required.
 

@@ -45,8 +45,8 @@ theoryDefinition = do
         lab sentenceDefinitionLabel
 
         s ["A ", theory', or, logic',  " is a mathematical framework for proving properties about a certain object domain"]
-        s ["Those properties are called ", theorem, "s"]
-        s ["A ", theory, " consists of a ", grammar', ", a set of ", axiom', "s", and , semantics', " for formulae"]
+        s ["Those properties are called ", theorems']
+        s ["A ", theory, " consists of a ", grammar', ", a set of ", axioms', and , semantics', " for formulae"]
         enumerate $ do
             item $ do
                 s ["A ", grammar', " defines well-formed formulae"]
@@ -91,7 +91,7 @@ inferenceNotation = de $ do
     s ["An inference rule is written as follows"]
     s ["It means that if theorems ", m (commaSeparated fs), " can be asserted, we may assert ", m (f 0), " as a theorem"]
     ma $ linf fs (f 0)
-    s ["The sentences above the line are called the ", term "hypotheses", or, "antecedents", and, "the sentence below the line is called the ", term "conclusion"]
+    s ["The sentences above the line are called the ", defineTerm "hypotheses", or, "antecedents", and, "the sentence below the line is called the ", defineTerm "conclusion"]
   where
     fs = [f 1, f 2, dotsc, f "n"]
     f n = logicf !: n
@@ -149,7 +149,7 @@ exampleTheoryIntegers = ex $ do
     "In this example theory, the following could be a sound, but not complete, inference rule:"
     ma $ linf [su 0, fa "f" (p "f" ⇒ p (su "f"))] (fa "f" $ p "f")
     "This rule is called "
-    term "induction"
+    defineTerm "induction"
     "."
 
   where

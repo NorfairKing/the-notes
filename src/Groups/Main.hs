@@ -17,6 +17,9 @@ groups = chapter "Groups" $ do
     monoidDefinition
     groupDefinition
 
+    inverseUniqueTheorem
+    inverseOfAppliedOperationTheorem
+
     subgroupDefinition
     subgroupSameIdentity
     trivialSubgroupsDT
@@ -45,18 +48,60 @@ monoidDefinition = de $ do
     lab monoidDefinitionLabel
     lab identityDefinitionLabel
     lab neutralElementDefinitionLabel
-    s ["A", semigroup, m mnd_, "is called a", monoid', "if it has an", identity', "(or", neutralElement' <> ")", m mid_ <> ":"]
-    let a = "a"
-    ma $ fa (a ∈ mnds_) $ a ˚ mid_ =: a =: mid_ ˚ a
+    s ["A", semigroup, m mnd_, "is called a", monoid', "if it has an", identity_, m mid_]
 
 groupDefinition :: Note
 groupDefinition = de $ do
     lab groupDefinitionLabel
     lab inverseDefinitionLabel
+    lab neutralElementDefinitionLabel
     s ["A", monoid, m grp_, "is called a", group', "if every", element, "has an", inverse', "with respect to the", identity, m gid_]
     let a = "a"
         ai = ginv a
     ma $ fa (a ∈ grps_) $ te (ai ∈ grps_) $ a ** ai =: gid_ =: ai ** a
+    s ["In a", group, "the", identity, "is sometimes called the", neutralElement']
+
+inverseUniqueTheorem :: Note
+inverseUniqueTheorem = thm $ do
+    lab inverseUniqueTheoremLabel
+    s ["Let", m grp_, "be a", group]
+    s ["For every", element, "of", m grps_, "there exists exactly one", inverse, element]
+
+    proof $ do
+        let x = "x"
+            y = "y"
+            z = "z"
+        s ["Suppose that an", element, m x, "has two", inverses, m y, and, m z, "in a", group, m grp_, "with", identity, m gid_]
+        aligneqs y
+            [ y ** gid_
+            , y ** pars (x ** z)
+            , pars (y ** x) ** z
+            , gid_ ** z
+            , z
+            ]
+
+inverseOfAppliedOperationTheorem :: Note
+inverseOfAppliedOperationTheorem = thm $ do
+    lab inverseOfAppliedOperationTheoremLabel
+    s ["Let", m grp_, "be a", group]
+    let x = "x"
+        y = "y"
+    ma $ fa (cs [x, y] ∈ grps_) $ ginv (pars $ x ** y) =: ginv y ** ginv x
+
+    proof $ do
+        s ["Let", m x, and, m y, "be", elements, "of", m grps_, and, "let", m gid_, "be the", identity, "of the", group, m gid_]
+        aligneqs (ginv $ pars $ x ** y)
+            [ (ginv $ pars $ x ** y) ** gid_
+            , (ginv $ pars $ x ** y) ** (pars $ x ** ginv x)
+            , (ginv $ pars $ x ** y) ** (pars $ (pars $ x ** gid_) ** ginv x)
+            , (ginv $ pars $ x ** y) ** (pars $ (pars $ x ** (pars $ y ** ginv y)) ** ginv x)
+            , (ginv $ pars $ x ** y) ** (pars $ (pars $ pars (x ** y) ** ginv y) ** ginv x)
+            , pars ((ginv $ pars $ x ** y) ** (pars $ pars (x ** y) ** ginv y)) ** ginv x
+            , pars (pars ((ginv $ pars $ x ** y) ** (pars (x ** y))) ** ginv y) ** ginv x
+            , pars (gid_ ** ginv y) ** ginv x
+            , ginv y ** ginv x
+            ]
+
 
 subgroupDefinition :: Note
 subgroupDefinition = de $ do

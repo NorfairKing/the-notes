@@ -95,7 +95,7 @@ unionSubsetDefinition = thm $ do
 
 unionIdentityLaw :: Note
 unionIdentityLaw = thm $ do
-    s [the, term "identity law", " for the ", set, " ", union]
+    s [the, defineTerm "identity law", " for the ", set, " ", union]
     let (a, x) = ("A", "x")
     ma $ a ∪ emptyset =§= a
 
@@ -108,7 +108,7 @@ unionIdentityLaw = thm $ do
 
 unionDominationLaw :: Note
 unionDominationLaw = thm $ do
-    s [the, term "domination law", " for the ", set, " ", union]
+    s [the, defineTerm "domination law", " for the ", set, " ", union]
     let (a, x) = ("A", "x")
     ma $ a ∪ setuniv =§= setuniv
 

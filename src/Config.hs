@@ -4,7 +4,6 @@ import           Language.Haskell.TH  (runIO, stringE)
 import           Prelude
 
 import           Control.Monad.Reader (ask)
-import           Data.List            (intercalate)
 import qualified Data.Text            as T
 import           Data.Time            (getZonedTime)
 
@@ -13,6 +12,7 @@ import           Development.GitRev   (gitBranch, gitCommitCount, gitCommitDate,
                                        gitDirty, gitHash)
 import           Network.HostName     (getHostName)
 import           System.Info
+import           Utils
 
 import           Notes
 
@@ -83,15 +83,8 @@ renderConfig = do
 
     packageDep ["yyyymmdd","hhmmss"] "datetime"
     s [comm0 "LaTeX", "compiled on", comm0 "today", " at ", comm0 "currenttime"]
+    newline
 
+    s ["The", quoted "the-notes", "project was started on", "September 28, 2015"]
 
-
-
-breakUp :: String -> String
-breakUp = intercalate "\n" . chunk 80
-
-chunk :: Int -> [a] -> [[a]]
-chunk _ [] = []
-chunk n xs = y1 : chunk n y2
-  where (y1, y2) = splitAt n xs
 

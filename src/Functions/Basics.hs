@@ -4,12 +4,10 @@ import           Notes
 
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
-import           Relations.Basics.Terms         hiding (total')
+import           Relations.Basics.Terms         hiding (total, total')
 import           Relations.Domain.Terms
 import           Sets.Basics.Terms
 
-import           Functions.Application.Macro
-import           Functions.Application.Terms
 import           Functions.Jections.Terms
 
 import           Functions.Basics.Macro
@@ -24,7 +22,8 @@ basics = section "Basics" $ do
     binaryFunctionDefinition
     ternaryFunctionDefinition
 
-    memberwiseApplication
+    predicateEquivalentDefinition
+    unitFunctionDefinition
 
 
 partialFunctionDefinition :: Note
@@ -64,11 +63,31 @@ ternaryFunctionDefinition = de $ do
     lab ternaryFunctionDefinitionLabel
     s ["A ", ternaryFunction', " is a function ", m (fun fun_ dom_ img_), " where ", m dom_, " is a set of triples"]
 
-memberwiseApplication :: Note
-memberwiseApplication = de $ do
-    s ["Let ", m funfunc_, " be a ", function]
-    s [the, memberWiseApplication', " of ", m funfunc_, " to a ", subset, " ", m ss, " of ", m dom_, " is the set of all applications of ", m fun_, " to members of ", m ss, " and is denoted as ", m (fun_ `mwfn` ss)]
-    ma $ fun_ `mwfn` ss === setcmpr (fun_ `fn` e) (e ∈ ss)
-  where
-    ss = "S"
-    e = "s"
+predicateEquivalentDefinition :: Note
+predicateEquivalentDefinition = thm $ do
+    let p_ = "P"
+        a = "A"
+    s ["A", predicate_, m p_, "on a", set, m a, "can equivalently be defined as a", function, m $ fun p_ a (setofs [false, true]), "that deides whether the", predicate, "holds for an", element]
+
+    toprove
+
+
+unitFunctionDefinition :: Note
+unitFunctionDefinition = do
+    de $ do
+        lab unitFunctionDefinitionLabel
+        let a = "A"
+            e = comm0 "bullet"
+        s ["For a given", domain, m a, "the", unitFunction', "is the", total, function, "that maps every", element, "of", m a, "to a", quoted "dummy", element, m e]
+        let x = "x"
+        ma $ unitf a =: setcmpr (tuple x e) (x ∈ a)
+    nte $ do
+        s ["This dummy", element, "just signifies that all information is lost in this", unitFunction]
+
+
+
+
+
+
+
+

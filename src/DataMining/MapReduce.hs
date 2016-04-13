@@ -38,11 +38,11 @@ mapReduceConcept = subsection "The Concept" $ do
           item $ s ["Infrequent updates of those data"]
           item $ s ["Frequent reads of and appends to those data"]
 
-        de $ s ["A ", term "map", " is a function ", m $ fun "Map" ((pars $ k ⨯ v) ^: p) ((pars $ k' ⨯ v') ^: q)]
+        de $ s ["A ", defineTerm "map", " is a function ", m $ fun "Map" ((pars $ k ⨯ v) ^: p) ((pars $ k' ⨯ v') ^: q)]
 
-        de $ s ["A ", term "reduce", " is a function ", m $ fun "Reduce" (k' ⨯ (v' ^: r)) ((pars $ k'' ⨯ v'') ^: ss)]
+        de $ s ["A ", defineTerm "reduce", " is a function ", m $ fun "Reduce" (k' ⨯ (v' ^: r)) ((pars $ k'' ⨯ v'') ^: ss)]
 
-        nte $ s [m k, and, m k', " are sets of so-called ", term "key", "s", and, m v, and, m v', " are sets of so-called ", term "value", "s"]
+        nte $ s [m k, and, m k', " are sets of so-called ", defineTerm "key", "s", and, m v, and, m v', " are sets of so-called ", defineTerm "value", "s"]
         nte $ s ["In reality these functions will be implemented by a computation and can, in theory, have side-effects but for the sake of clarity and efficiency it is best to try to avoid such a situation"]
 
         s ["The programmer supplies both a map and a reduce function"]

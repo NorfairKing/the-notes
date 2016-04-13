@@ -39,7 +39,7 @@ vectorSpaceDefinition = de $ do
         item $ do
             s ["Let ", m (pars lamul), "be a", binaryOperation]
             ma $ fun (pars lamul) (lafield ⨯ laset) laset
-    s [m lavs, " is a ", term "vector space", over, m lafield, " if the following properties hold"]
+    s [m lavs, " is a ", defineTerm "vector space", over, m lafield, " if the following properties hold"]
     enumerate $ do
         item $ do
             s [m (grp laset laadd), " is a commutative group"]

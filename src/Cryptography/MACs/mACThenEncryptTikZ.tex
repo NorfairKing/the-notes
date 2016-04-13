@@ -1,0 +1,20 @@
+\tikzstyle{block}=[rectangle, draw=black, minimum height=2em, minimum width=3em]
+\tikzstyle{a}=[arrows={-latex}]
+
+\begin{scope}
+  \node (m) at (-1.5, 1.5) {$m$};
+  \node (k) at (1.5, 1.5) {$k$};
+  \node (mt) at (0, 0) {$(m, t)$};
+  \node[block] (enc) at (1.5, 0) {$enc$};
+  \node[block] (f) at (0, 1.5) {$f$};
+  \node (c) at (1.5, -1.5) {$enc((m, f(m, k)), k, r)$};
+  \draw[a] (m) -- (f);
+  \draw[a] (k) -- (f);
+  \draw[a] (m) -- (mt);
+  \draw[a] (f) -- (mt);
+  \draw[a] (k) -- (enc);
+  \draw[a] (mt) -- (enc);
+  \draw[a] (enc) -- (c);
+
+  \draw (-0.5,-2) rectangle (3.5,-1);
+\end{scope}

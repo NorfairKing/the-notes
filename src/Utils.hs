@@ -129,3 +129,13 @@ random = do
     let (a, rng') = R.random rng
     modify $ \s -> s { state_rng = rng' }
     return a
+
+
+breakUp :: String -> String
+breakUp = intercalate "\n" . chunk 80
+
+chunk :: Int -> [a] -> [[a]]
+chunk _ [] = []
+chunk n xs = y1 : chunk n y2
+  where (y1, y2) = splitAt n xs
+

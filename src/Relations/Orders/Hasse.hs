@@ -5,13 +5,12 @@ import           Control.Monad  (forM, forM_, void)
 import           Data.List      (nub)
 import           Notes          hiding (directed, not, (=:))
 import           Prelude
-import           Safe           (headMay)
 import           Text.Dot
 import           Text.Dot.Class
 
 hasseDiagram :: [Text] -> [(Text, Text)] -> HasseDiagram
 hasseDiagram nodes edges = HasseDiagram
-    { hasseNodes = nodes
+    { hasseNodes = nub nodes
     , hasseEdges = nub $ edges ++ map (\n -> (n, n)) nodes
     }
 
@@ -39,7 +38,7 @@ drawHasseNodes hd = go $ hasseEdges hd
             return $ botNodes ++ rest
          where
            notBottoms = filter (\(from, _) -> notElem from bottoms) edges
-           bottoms = nub [ from | (from, _) <- edges, headMay (edgesTo from) == Just (from, from)]
+           bottoms = nub [ from | (from, _) <- edges, let e = edgesTo from in length e == 1 && (from, from) == head e]
            edgesTo node = filter (\(_, to) -> to == node) edges
 
 drawHasseEdges :: [(Text, NodeId)] -> HasseDiagram -> DotGen ()

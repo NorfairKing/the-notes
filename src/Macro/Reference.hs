@@ -28,14 +28,19 @@ labelOf (MkLabel _ n) = n
 labelFor :: Label -> Text
 labelFor l = wordFor l <> ":" <> labelOf l
 
+rawRef :: Label -> Note
+rawRef l = do
+    let ll = labelFor l
+    fromLaTeX $ TeXRaw $ wordFor l
+    " "
+    T.ref ll
+
 ref :: Label -> Note
 ref l = footnote $ do
     debug <- asks conf_visualDebug
     let ll = labelFor l
     "See "
-    fromLaTeX $ TeXRaw $ wordFor l
-    " "
-    T.ref ll
+    rawRef l
     " on page "
     T.pageref ll
     "."

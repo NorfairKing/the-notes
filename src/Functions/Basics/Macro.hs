@@ -1,13 +1,15 @@
 module Functions.Basics.Macro where
 
+import qualified Prelude                     as P (map)
 import           Types
 
 import           Macro.Arrows
+import           Macro.MetaMacro
+import           Macro.Sets.Macro
 import           Macro.Tuple
 
 import           Functions.Application.Macro
-import           Macro.Sets.CarthesianProduct
-import qualified Relations.Domain.Macro       as R (dom, img)
+import qualified Relations.Domain.Macro      as R (dom, img)
 
 -- * Functions
 -- | Standard symbol for the underlying relation of a function
@@ -76,6 +78,10 @@ func2 :: Note -- ^ Name
       -> Note
 func2 m n1 n2 o p1 p2 = func m (n1 ⨯ n2) o (tuple p1 p2)
 
+-- * Function comprehension
+funcomp :: [(Note, Note)] -> Note
+funcomp tups = setofs $ P.map (\(a,b) -> a <> mapsto <> b) tups
+
 -- * Domain
 
 -- | Standard domain (or corange) symbol
@@ -95,6 +101,14 @@ img_ = "B"
 -- | Image of a function
 img :: Note -> Note
 img = R.img
+
+-- | The unit function for a given domain
+unitf :: Note -> Note
+unitf = (unitf_ !:)
+
+-- | A general unit function
+unitf_ :: Note
+unitf_ = mathcal "U"
 
 
 -- * Misc functions

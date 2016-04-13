@@ -28,11 +28,11 @@ ix_ text ind = do
 emphTerm :: Note -> Note
 emphTerm = textbf
 
-term :: Note -> Note
-term text = term_ text text
+defineTerm :: Note -> Note
+defineTerm text = defineTerm_ text text
 
-term_ :: Note -> Note -> Note
-term_ text ind = do
+defineTerm_ :: Note -> Note -> Note
+defineTerm_ text ind = do
     index ind
     emphTerm text
 

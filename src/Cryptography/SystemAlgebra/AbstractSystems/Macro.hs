@@ -1,11 +1,10 @@
-module Cryptography.SystemAlgebra.Macro where
+module Cryptography.SystemAlgebra.AbstractSystems.Macro where
 
 import           Types
 
 import           Macro.Arrows
 import           Macro.Math
 import           Macro.MetaMacro
-import           Macro.Text
 
 import           Functions.Application.Macro
 
@@ -72,17 +71,4 @@ conv a i s = a ^ i <> s
 conv_ :: Note -- ^ Converter
       -> Note -- ^ Resource
       -> Note
-conv_ = (<>)
-
-
--- | Bitstring beacon
-bitsbea :: Note -> Note
-bitsbea n = textbf "B" !: n
-
--- | Uniform bitstring beacon
-ubitsbea :: Note -> Note
-ubitsbea n = textbf "U" !: n
-
--- | Uniform random function
-urf :: Note -> Note -> Note
-urf m n = textbf "R" !: cs [m, n]
+conv_ a s = a <> s

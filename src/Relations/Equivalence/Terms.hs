@@ -4,4 +4,6 @@ import           Notes
 
 makeDefs [
       "equivalence relation"
+    , "equivalence class"
+    , "quotient set"
     ]

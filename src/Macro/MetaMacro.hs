@@ -2,8 +2,8 @@ module Macro.MetaMacro where
 
 import           Types
 
-environment :: String -> Note -> Note
-environment name = liftL $ TeXEnv name []
+defineEnvironment :: String -> Note -> Note
+defineEnvironment name = liftL $ TeXEnv name []
 
 comm2 :: LaTeXC l => String -> l -> l -> l
 comm2 name = liftL2 $ \l1 l2 -> TeXComm name [FixArg l1, FixArg l2]

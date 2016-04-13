@@ -101,7 +101,8 @@ antisymmetricDefinition = de $ do
 partialOrderDefinition :: Note
 partialOrderDefinition = de $ do
     lab partialOrderDefinitionLabel
-    s ["A ", partialOrder', " is an ", antisymmetric, " ", preorder_]
+    lab orderDefinitionLabel
+    s ["A ", partialOrder', "(or", order' <> ")", "is an", antisymmetric, preorder_]
 
 partialOrderExamples :: Note
 partialOrderExamples = do
@@ -137,18 +138,18 @@ partialOrderExamples = do
 
     ex $ do
         let n = 16 :: P.Int
-        s ["The set of natural numbers", m naturals, "up to", m (raw $ T.pack $ show n) <> ", equipped with the", relation, quoted "divides", ref dividesIsRelationExampleLabel, "is a", partialOrder, "on this set"]
+        s ["In the", set, "of natural numbers", m naturals, "up to", m (raw $ T.pack $ show n) <> ", the", relation, quoted "divides", ref dividesIsRelationExampleLabel, "is a", partialOrder, "on this", set]
         let tshow = T.pack . show
         hasseFig 10 $ hasseDiagram (P.map tshow [0 .. n])
                     $ [(tshow a, tshow b) | a <- [1 .. n], b <- [a .. n], b `P.mod` a == 0]
                     P.++ [(tshow a, tshow 0) | a <- [1 .. n]]
-        s ["Notice that", m 0, "is actually the", greatestElement, "according to this order"]
+        s ["Notice that", m 0, "is actually the", greatestElement, "according to this", order]
 
     ex $ do
-        s ["Consider the set", m $ setofs [true, false]]
+        s ["Consider the", set, m $ setofs [true, false]]
         let a = "a"
             b = "b"
-        s [the, relation, "of all tuples", m $ tuple a b, "for", m $ a ⇒ b, "is a partial order"]
+        s [the, relation, "of all tuples", m $ tuple a b, "for", m $ a ⇒ b, "is a", partialOrder]
 
         proof $ do
             s ["We prove that", m $ "" ⇒ "", "is", reflexive <> ",", transitive, and, antisymmetric]
@@ -181,6 +182,11 @@ partialOrderExamples = do
             , (t, t)
             ]
         s ["Note that this statement still holds in propositional logic if we take", m $ "" ⇔ "", "as the", equivalenceRelation, "instead of", m $ "" =: ""]
+
+    ex $ do
+        let a = "A"
+        s ["For any", set, m a <> ", ", m subseteq_, "is a", partialOrder, on, m $ powset a]
+        toprove
 
 powsetPosetPreorder :: Note
 powsetPosetPreorder = do
@@ -221,7 +227,7 @@ partialOrdersFromPreorders = thm $ do
 posetDefinition :: Note
 posetDefinition = de $ do
     lab posetDefinitionLabel
-    s ["A ", term "partially ordered set", or, poset', " is a tuple ", m relposet_, " of a set and a partial order on that set"]
+    s ["A ", defineTerm "partially ordered set", or, poset', " is a tuple ", m relposet_, " of a set and a partial order on that set"]
 
 
 crossPosetLift :: Note
@@ -291,7 +297,7 @@ chainDefinition = de $ do
     s ["A", subset, m y, "of", m posetset_, "is called a", chain', "if every two elements in", m y, "are", comparable]
     let a = "a"
         b = "b"
-    ma $ fa (a ∈ posetset_) $ fa (b ∈ posetset_) $ (a ⊆: b) ∨ (a ⊆: b)
+    ma $ fa (a ∈ posetset_) $ fa (b ∈ posetset_) $ (a ⊆: b) ∨ (b ⊆: a)
 
 heightDefinition :: Note
 heightDefinition = de $ do
@@ -341,7 +347,7 @@ smallestElementDefinition :: Note
 smallestElementDefinition = de $ do
     lab smallestElementDefinitionLabel
     psDec
-    s ["A ", smallestElement', " ", m (bot ∈ posetset_), " is an element such that all other elements are greater"]
+    s ["A ", smallestElement', or, leastElement', m (bot ∈ posetset_), "is an", element, "such that all other elements are greater"]
     ma $ fa (x ∈ posetset_) (bot ⊆: x)
   where
     x = "x"
@@ -397,8 +403,9 @@ supremumDefinition :: Note
 supremumDefinition = de $ do
     lab supremumDefinitionLabel
     lab joinDefinitionLabel
+    lab leastUpperBoundDefinitionLabel
     psDec
-    s ["A ", supremum', or, join', " of (but not necessarily in)", m posetset_, " is a smallest ", upperBound, " of ", m posetset_]
+    s ["A ", supremum', or, join', or, leastUpperBound', " of (but not necessarily in)", m posetset_, " is a smallest ", upperBound, " of ", m posetset_]
     s ["That is to say, all other upper bounds of ", m posetset_, " are larger"]
     ma $ sup posetset_ =: supcomp "" posetset_
     s [m $ a ⊔ b, "is the notation for the", supremum, "of two element"]
@@ -410,8 +417,9 @@ infimumDefinition :: Note
 infimumDefinition = de $ do
     lab infimumDefinitionLabel
     lab meetDefinitionLabel
+    lab greatestLowerBoundDefinitionLabel
     psDec
-    s ["A ", infimum', or, meet', " of (but not necessarily in) ", m posetset_, " is a greatest ", lowerBound, " of ", m posetset_]
+    s ["A ", infimum', or, meet', or, greatestLowerBound', " of (but not necessarily in) ", m posetset_, " is a greatest ", lowerBound, " of ", m posetset_]
     s ["That is to say, all other lower bounds of ", m posetset_, " are smaller"]
     ma $ inf posetset_ =: infcomp "" posetset_
     s [m $ a ⊓ b, "is the notation for the", infimum, "of two element"]

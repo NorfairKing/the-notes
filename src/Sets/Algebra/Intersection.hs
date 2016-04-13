@@ -104,7 +104,7 @@ intersectionSubsetDefinition = thm $ do
 
 intersectionIdentityLaw :: Note
 intersectionIdentityLaw = thm $ do
-    s [the, term "identity law", " for the set ", intersection]
+    s [the, defineTerm "identity law", " for the set ", intersection]
     ma $ a ∩ setuniv =§= a
 
     proof $ do
@@ -116,7 +116,7 @@ intersectionIdentityLaw = thm $ do
 
 intersectionDominationLaw :: Note
 intersectionDominationLaw = thm $ do
-    s [the, term "domination law", " for the set ", intersection]
+    s [the, defineTerm "domination law", " for the set ", intersection]
     ma $ a ∩ setuniv =§= a
 
     proof $ do
@@ -129,7 +129,7 @@ intersectionDominationLaw = thm $ do
 
 disjunctDefinition :: Note
 disjunctDefinition = de $ do
-    s ["Two sets ", m a, and, m b, " are ", term "disjunct", " if they have no elements in common"]
+    s ["Two sets ", m a, and, m b, " are ", defineTerm "disjunct", " if they have no elements in common"]
     ma $ a ∩ b =§= emptyset
 
 
@@ -140,7 +140,7 @@ absorptionLaws = do
 
 absorptionLaw1 :: Note
 absorptionLaw1 = thm $ do
-    s ["The first ", term "absorption law"]
+    s ["The first ", defineTerm "absorption law"]
     ma $ a ∪ (pars $ a ∩ b) =§= a
 
     proof $ do
@@ -158,7 +158,7 @@ absorptionLaw1 = thm $ do
 
 absorptionLaw2 :: Note
 absorptionLaw2 = thm $ do
-    s ["The second ", term "absorption law"]
+    s ["The second ", defineTerm "absorption law"]
     ma $ a ∩ (pars $ a ∪ b) =§= a
 
     proof $ do

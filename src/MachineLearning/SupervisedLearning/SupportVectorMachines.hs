@@ -47,7 +47,7 @@ regularGradientDescentSS = do
         let grf = fn $ grad ff
         s ["This means that, for ", m gamma, " small enough, ", m $ f a >= f b, " holds where ", m $ b =: a - gamma * grf a]
         s ["Repeating this step gets us a sequence of points with a decreasing value under ", m ff]
-        s [m gamma, " is called the ", term "step size", " and it can change every step"]
+        s [m gamma, " is called the ", defineTerm "step size", " and it can change every step"]
         s ["If ", m gamma, " is small enough in each step, this means that the sequence of poince will converge to a local minimum"]
         newline
         s ["This process is called ", gradientDescent']
@@ -63,7 +63,7 @@ stochasticGradientDescentSS = subsubsection "Stochastic gradient descent" $ do
     let ff = "F"
     de $ do
         s ["When the ", function, " to minimize can be written as the sum of ", differentiable, functions, ", the process of ", gradientDescent, " can be sped up by adding an element of randomness"]
-        s ["Instead of taking the gradient of the entire ", function, m ff, ", we instead take the gradient of just one term of the sum that comprises ", m ff, " and take a step in the opposite direction"]
+        s ["Instead of taking the gradient of the entire ", function, m ff, ", we instead take the gradient of just one defineTerm of the sum that comprises ", m ff, " and take a step in the opposite direction"]
         s ["This process is called ", stochasticGradientDescent']
     todo "This is also a first draft, the real deal is much more complicated"
 
@@ -120,7 +120,7 @@ hardConstraintsSVM = subsubsection "SVM with hard constraints" $ do
     newline
 
     s ["An important insight is that the maximum-margin hyperplane is entirely defined by a few closest points (one more than the dimension of the vector, if there are no degeneracies)"]
-    s ["These points are called ", term "support vector", "s and they satisfy the following equation"]
+    s ["These points are called ", defineTerm "support vector", "s and they satisfy the following equation"]
     ma $ w /.\ x + b =: pm 1
 
     s ["As it turns out, these support vectors allow us to rewrite the problem of maximizing the margin"]
@@ -152,7 +152,7 @@ hardConstraintsSVM = subsubsection "SVM with hard constraints" $ do
           "" & (min w $ w /.\ w)
         , text "such that " & (fa i $ y !: i * (pars $ w /.\ x !: i + b) >= 1)
         ]
-    s ["This problem is called ", term "SVM with hard constraints"]
+    s ["This problem is called ", defineTerm "SVM with hard constraints"]
 
     nte $ do
         s ["Without loss of generality, we can assume that the desired ", hyperplane, " goes through the ", origin, " given that we use the ", ix "homogenous representation", " of vectors"]
@@ -182,7 +182,7 @@ softConstraintsSVM = subsubsection "SVM with soft constraints" $ do
     let i = "i"
         n = "n"
         xii = N.xi !: i
-    s ["The margin can be used to penalize mistakes via the use of so-called ", term "slack variables", " ", m xii]
+    s ["The margin can be used to penalize mistakes via the use of so-called ", defineTerm "slack variables", " ", m xii]
     align_ $
         let i = "i" in
         [
@@ -203,7 +203,7 @@ softConstraintsSVM = subsubsection "SVM with soft constraints" $ do
         s ["When we set ", m c, " to ", m pinfty, " the result will be a hyperplane that separates the hyperplane"]
         s ["When we set ", m c, " to ", m 0, " then the result will ignore the data"]
 
-    s ["This problem is called ", term "SVM with soft constraints"]
+    s ["This problem is called ", defineTerm "SVM with soft constraints"]
 
 
 naturalForm :: Note
@@ -214,7 +214,7 @@ naturalForm = subsubsection "SVM in natural form" $ do
         n = "n"
     s ["The problem can be rewritten one last time"]
     ma $ argmin (w <> ", " <> b) $ w /.\ w + c * sumcmpr (i =: 1) n (maxof (setofs [0, 1 - (pars $ (y !: i) * (pars $ w /.\ x !: i + b) )]))
-    s ["This formulation is called ", term "SVM in its natural form"]
+    s ["This formulation is called ", defineTerm "SVM in its natural form"]
 
 computingMargin :: Note
 computingMargin = subsubsection "Computing the margin" $ do
@@ -286,7 +286,7 @@ preferentialChoiceExample = ex $ do
     ma $ f' x =: w' /.\ x
     s ["This", function, "ranks objects", textbf "uniquely", ", that is, for any pair of obects", m $ tuple xi xj, "it satisfies", m $ f' xi > f' xj, "if the rank of", m xi, "is higher than the rank of", m xj]
     ma $ xi <* xj === f' xi > f' xj
-    s [m w', "is called the", term "optimal preference vector"]
+    s [m w', "is called the", defineTerm "optimal preference vector"]
 
     newline
 

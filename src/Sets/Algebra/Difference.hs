@@ -78,7 +78,7 @@ symmetricSetDifferencesDisjunct = thm $ do
 symmetricDifferenceDefinition :: Note
 symmetricDifferenceDefinition = de $ do
     let (a, b, x) = ("A", "B", "x")
-    s [the, term "symmetric difference", " of two sets ", m a, and, m b, " is the set of all element that are in either ", m a, or, m b, " but not both"]
+    s [the, defineTerm "symmetric difference", " of two sets ", m a, and, m b, " is the set of all element that are in either ", m a, or, m b, " but not both"]
     ma $ a △ b === setcmpr x ((pars $ (x ∈ a) ∧ (x `nin` b)) ∨ (pars $ (x `nin` a) ∧ (x ∈ b)))
 
 symmetricDifferenceEquivalentDefinition :: Note

@@ -265,19 +265,19 @@ doubleNegationElimination = thm $ do
 
 contraposition :: Note
 contraposition = thm $ do
-    s [term "Contraposition"]
+    s [defineTerm "Contraposition"]
     let (a, b) = ("A", "B")
     equivalenceProof (Implies a b) (Implies (Not b) (Not a))
 
 deMorgan1 :: Note
 deMorgan1 = thm $ do
-    s ["First law of ", term "De Morgan"]
+    s ["First law of ", defineTerm "De Morgan"]
     let (a, b) = ("A", "B")
     equivalenceProof (Not $ Or a b) (And (Not a) (Not b))
 
 deMorgan2 :: Note
 deMorgan2 = thm $ do
-    s ["Second law of ", term "De Morgan"]
+    s ["Second law of ", defineTerm "De Morgan"]
     let (a, b) = ("A", "B")
     equivalenceProof (Not $ And a b) (Or (Not a) (Not b))
 
@@ -301,10 +301,10 @@ conjunctiveNormalFormS :: Note
 conjunctiveNormalFormS = subsubsection "Conjunctive Normal Form" $ do
     de $ do
         lab conjunctiveNormalFormDefinitionLabel
-        s ["A sentence in propositional logic is said to be in ", conjunctiveNormalForm', or, term "clausal normal form", " (", term "CNF", ") if it is a conjunction of clauses where a clause is a disjunction of literals"]
+        s ["A sentence in propositional logic is said to be in ", conjunctiveNormalForm', or, defineTerm "clausal normal form", " (", defineTerm "CNF", ") if it is a conjunction of clauses where a clause is a disjunction of literals"]
     thm $ do
         s ["Every sentence propositional logic can be converted into an equivalent formula that is in CNF"]
-        s ["There is a famous transformation called the ", term "Tseitin transformation", cite tseitinTransformation, " that does exactly this"]
+        s ["There is a famous transformation called the ", defineTerm "Tseitin transformation", cite tseitinTransformation, " that does exactly this"]
 
         s ["The Tseitin transformation works by applying the following steps"]
         enumerate $ do
@@ -393,7 +393,7 @@ resolution = note "resolution" $ do
 
 resolutionDefinition :: Note
 resolutionDefinition = de $ do
-    s ["The ", inference, " ", term "rule of resolution", " is an ", inference, " in proposition logic"]
+    s ["The ", inference, " ", defineTerm "rule of resolution", " is an ", inference, " in proposition logic"]
     s ["It assumes that sentences are in ", conjunctiveNormalForm]
     s ["Let ", m a, and, m b, " be propositional formulae in CNF."]
     ma $ do

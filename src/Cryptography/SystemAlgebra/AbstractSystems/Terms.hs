@@ -1,4 +1,4 @@
-module Cryptography.SystemAlgebra.Terms where
+module Cryptography.SystemAlgebra.AbstractSystems.Terms where
 
 import           Notes
 
@@ -14,24 +14,10 @@ makeDefs
     , "interface merging"
     , "composition"
     , "parallel composition"
+    , "deterministic system"
     , "resource system"
     , "resource"
     , "converter system"
     , "converter"
-    , "source"
-    , "beacon"
-    , "uniform random function"
-    , "URF"
     ]
 
-nS :: Note -> Note
-nS n = m n <> "-" <> system
-
-nSs :: Note -> Note
-nSs n = m n <> "-" <> systems
-
-xyS :: Note -> Note -> Note
-xyS x y = m (tuple x y) <> "-" <> system
-
-yS :: Note -> Note
-yS y = m y <> "-" <> source

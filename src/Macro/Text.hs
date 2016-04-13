@@ -1,9 +1,32 @@
+{-# LANGUAGE FlexibleInstances    #-}
+{-# LANGUAGE TypeFamilies         #-}
+{-# LANGUAGE TypeSynonymInstances #-}
 module Macro.Text where
 
 import           Types
 
 import           Data.List (intersperse)
-import           Prelude   (sequence_)
+import           Prelude   (error, length, otherwise, sequence_, (++), (<))
+
+-- Polyvariadic version of 's'.
+p :: NoteArgs args => args
+p = noteArgs []
+
+class NoteArgs t where
+    noteArgs :: [Note] -> t
+
+instance NoteArgs Note where
+    -- noteArgs :: [Note] -> Note
+    noteArgs = s
+
+-- The equality constraint Note ~ note is what makes it all work.
+-- Otherwise the type checker wouldn't have been able to figure out that
+-- String literals should be interpreted as Note's.
+instance (Note ~ note, NoteArgs r) => NoteArgs (note -> r) where
+    -- noteArgs :: [Note] -> ([Note] -> r)
+    noteArgs ns n = noteArgs $ ns ++ [n]
+
+-- FIXME find a way to add an instance for NoteArgs ([note] -> r), then the old 's' will work.
 
 -- Shorter than sequence_
 -- To model a sentence.
@@ -29,6 +52,18 @@ commaSeparated = separated ", "
 cs :: [Note] -> Note
 cs = commaSeparated
 
+commaSeparatedAnd :: [Note] -> Note
+commaSeparatedAnd ns
+    | length ns < 2 = commaSeparated ns
+    | otherwise = go ns
+  where
+    go [] = error "impossible as per three lines above"
+    go [n] = and <> " " <> n
+    go (n:ns) = n <> ", " <> go ns
+
+csa :: [Note] -> Note
+csa = commaSeparatedAnd
+
 and :: Note
 and = "and"
 
@@ -43,6 +78,9 @@ or = "or"
 
 is :: Note
 is = "is"
+
+are :: Note
+are = "are"
 
 the :: Note
 the = "The"
@@ -68,8 +106,27 @@ with = "with"
 be :: Note
 be = "be"
 
+beA :: Note
+beA = "be a"
+
+beAn :: Note
+beAn = "be an"
+
+from :: Note
+from = "from"
+
+to :: Note
+to = "to"
+
+at :: Note
+at = "at"
+
+because :: Note
+because = "because"
+
 kul :: Note
 kul = "KU Leuven"
 
 eth :: Note
 eth = "ETH"
+

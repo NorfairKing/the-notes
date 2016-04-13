@@ -6,7 +6,7 @@ myPreface :: Note
 myPreface = do
     comm1 "section*" "Preface"
     s ["These are my notes"]
-    s ["There are many like it but these ones are mine"]
+    s ["There are many like them but these ones are mine"]
     newline
 
     s ["If you find any errors in these notes, I kindly requests you to report them"]

@@ -7,7 +7,7 @@ makeDefs [
     ]
 
 
-
+makeEx "powsetSubsetPreorder"
 
 
 

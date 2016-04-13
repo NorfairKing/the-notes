@@ -1,0 +1,14 @@
+\tikzstyle{block}=[rectangle, fill=white, draw=black, minimum height=1em, minimum width=2em, fill opacity=1, text opacity=1]
+
+\node (title) at (2, 0.5) {$Secret$};
+\draw (0, -1) rectangle (4, 1);
+
+\node[block] (a) at (0, 0) {$A$};
+\node[block] (b) at (4, 0) {$B$};
+\coordinate (i) at (2, 0) {};
+\node[block] (e) at (2, -1) {$E$};
+
+\draw (a) -- (i);
+\draw[arrows={-latex}] (i) -- (b);
+\draw[arrows={latex-|}] (i) -- (e);
+

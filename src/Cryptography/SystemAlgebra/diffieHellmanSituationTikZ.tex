@@ -1,0 +1,53 @@
+\tikzstyle{block}=[rectangle, fill=white, draw=black, minimum height=1em, minimum width=2em, fill opacity=1, text opacity=1]
+\tikzstyle{bg}=[fill=gray, fill opacity = 0.1]
+
+\begin{scope}
+\node (title) at (2, 0.5) {$Authenticated$};
+\draw[bg] (0, -1) rectangle (4, 1);
+
+\node[block] (a) at (0, 0) {$B$};
+\node[block] (b) at (4, 0) {$A$};
+\coordinate (i) at (2, 0) {};
+\node[block] (e) at (2, -1) {$E$};
+
+\draw[arrows={latex-}] (b) -- (i);
+\draw[arrows={-latex}] (i) -- (a);
+\draw[arrows={-latex}] (i) -- (e);
+\end{scope}
+
+\begin{scope}
+  \node (title) at (-1, 0) {$DH$};
+  \draw[bg] (-2, -0.5) rectangle (0, 0.5);
+  \node[block] (ac) at (0 , 0) {$A$};
+  \node[block] (an) at (-2, 0) {$A$};
+\end{scope}
+
+\begin{scope}[xshift=6cm]
+  \node (title) at (-1, 0) {$DH$};
+  \draw[bg] (-2, -0.5) rectangle (0, 0.5);
+  \node[block] (ac) at (0 , 0) {$B$};
+  \node[block] (an) at (-2, 0) {$B$};
+\end{scope}
+
+\begin{scope}[xshift=8cm, yshift=0.5cm]
+  \node (title) at (1, 1) {$Key$};
+  \draw[bg] (0, -1) rectangle (4, 1.5);
+
+  \node[block] (a) at (0, 0) {$A$};
+  \node[block] (b) at (4, 0) {$B$};
+  \coordinate (i) at (2, 0) {};
+  \node[block] (e) at (2, -1) {$E$};
+  \node[block] (k) at (2, 1) {$\$$};
+
+  \draw[arrows={-latex}] (k) -- (i);
+  \draw[arrows={latex-}] (a) -- (i);
+  \draw[arrows={-latex}] (i) -- (b);
+\end{scope}
+
+\begin{scope}[xshift=10cm, yshift=-1.25cm]
+  \node (title) at (0, 0) {$\sigma$};
+  \draw[bg] (-0.5, -0.75) rectangle (0.5, 0.75);
+  \node[block] (ac) at (0,  0.75) {$E$};
+  \node[block] (an) at (0, -0.75) {$E$};
+\end{scope}
+

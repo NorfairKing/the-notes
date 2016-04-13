@@ -10,4 +10,5 @@ makeDefs [
     , "total"
     , "binary function"
     , "ternary function"
+    , "unit function"
     ]

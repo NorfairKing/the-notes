@@ -35,7 +35,7 @@ topologyDefinition = de $ do
             s ["Let ", m "B", " be a finite subset of ", m toptop]
             ma $ setincmp ("b" ∈ "B") "b" ∈ toptop
             s ["The intersection of any finite collection of open sets in an open set"]
-    s ["These sets are called the ", term "open", " sets of ", m topset]
+    s ["These sets are called the ", defineTerm "open", " sets of ", m topset]
 
 topologicalSpaceDefinition :: Note
 topologicalSpaceDefinition = do
@@ -48,16 +48,16 @@ topologicalSpaceDefinition = do
 closedSetDefinition :: Note
 closedSetDefinition = de $ do
     topspDec
-    s ["A subset ", m "x", " of ", m topset, " is called ", term "closed", " if ", m (topset \\ "x"), " is open"]
+    s ["A subset ", m "x", " of ", m topset, " is called ", defineTerm "closed", " if ", m (topset \\ "x"), " is open"]
 
 trivialTopologyDefinition :: Note
 trivialTopologyDefinition = de $ do
-    s ["The ", term "trivial topology", " on a set ", m topset, " is the set ", m (setofs [emptyset, topset])]
-    s ["This topology is also called the ", term "indiscrete topology"]
+    s ["The ", defineTerm "trivial topology", " on a set ", m topset, " is the set ", m (setofs [emptyset, topset])]
+    s ["This topology is also called the ", defineTerm "indiscrete topology"]
 
 discreteTopologyDefinition :: Note
 discreteTopologyDefinition = de $ do
-    s ["The ", term "discrete topology", " on a set ", m topset, " is the powerset ", m (powset topset), " of ", m topset]
+    s ["The ", defineTerm "discrete topology", " on a set ", m topset, " is the powerset ", m (powset topset), " of ", m topset]
 
 topologyExamples :: Note
 topologyExamples = do
@@ -84,7 +84,7 @@ inducedTopology = do
       s ["Let ", m y, " be a subset of ", m topset]
       s ["The set ", m ty, " is a topology on ", m y]
       ma $ ty =: setcmpr ("O" ∩ y) ("O" ∈ toptop)
-      s [m ty, " is called the ", term "induced topology", on, m y, by, m toptop]
+      s [m ty, " is called the ", defineTerm "induced topology", on, m y, by, m toptop]
 
     proof $ do
       noindent
@@ -112,11 +112,11 @@ inducedTopology = do
 
 comparableDefinition :: Note
 comparableDefinition = de $ do
-    s ["Two topologies ", m (toptop !: 1), and, m (toptop !: 2), " on a set ", m topset, " are called ", term "comparable", " if either is a subset of the other"]
+    s ["Two topologies ", m (toptop !: 1), and, m (toptop !: 2), " on a set ", m topset, " are called ", defineTerm "comparable", " if either is a subset of the other"]
 
 finerCoarserDefinition :: Note
 finerCoarserDefinition = de $ do
     s ["Let ", m (toptop !: 1), and, m (toptop !: 2), " be two comparable topologies on a set ", m topset, " where ", m (toptop !: 1 ⊆ toptop !: 2), " holds"]
-    s [m (toptop !: 1), " is called ", term "finer", " than ", m (toptop !: 2), and, m (toptop !: 2), " is called ", term "coarser", " than ", m (toptop !: 1)]
-    s ["If ", m (toptop !: 1), " is a proper subset of ", m (toptop !: 2), " then we would call them ", term "strictly finer", and, term "strictly coarser", " respectively"]
+    s [m (toptop !: 1), " is called ", defineTerm "finer", " than ", m (toptop !: 2), and, m (toptop !: 2), " is called ", defineTerm "coarser", " than ", m (toptop !: 1)]
+    s ["If ", m (toptop !: 1), " is a proper subset of ", m (toptop !: 2), " then we would call them ", defineTerm "strictly finer", and, defineTerm "strictly coarser", " respectively"]
 

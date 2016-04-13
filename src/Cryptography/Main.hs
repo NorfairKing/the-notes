@@ -1,104 +1,46 @@
-{-# LANGUAGE QuasiQuotes #-}
 module Cryptography.Main where
 
-import           Notes                                hiding (cyclic, inverse)
-
-import           Codec.Picture.Png                    (decodePng, writePng)
-import           Codec.Picture.Types                  (DynamicImage (..),
-                                                       Image (..), Pixel (..),
-                                                       PixelRGB8 (..),
-                                                       PixelRGBA8 (..),
-                                                       generateFoldImage,
-                                                       pixelMap, pixelMapXY)
-import           Control.Monad                        (replicateM, unless)
-import qualified Data.Bits                            as B (Bits (..))
-import qualified Data.ByteString                      as SB
-import qualified Data.ByteString.Char8                as SB8
-import           Data.FileEmbed                       (embedFile)
-import qualified Data.Text                            as T
-import           System.Directory                     (doesFileExist)
-import           Utils
-
-import           Prelude                              (Bool (..), Either (..),
-                                                       Int, error, mapM, snd,
-                                                       (<$>))
-import qualified Prelude                              as P (and)
+import           Notes                                    hiding (cyclic,
+                                                           inverse)
 
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
 import           Functions.Basics.Terms
-import           Functions.Inverse.Macro
 import           Functions.Inverse.Terms
 import           Functions.Jections.Terms
 import           Groups.Macro
 import           Groups.Terms
-import           LinearAlgebra.VectorSpaces.Terms
 import           Logic.FirstOrderLogic.Macro
+import           Logic.PropositionalLogic.Macro
+import           Probability.ConditionalProbability.Macro
 import           Probability.Independence.Terms
 import           Probability.ProbabilityMeasure.Macro
 import           Probability.ProbabilityMeasure.Terms
 import           Relations.Orders.Macro
+import           Rings.Macro
+import           Rings.Terms
 import           Sets.Basics.Terms
 
+import           Cryptography.ComputationalProblems
+import           Cryptography.ComputationalProblems.Terms
 import           Cryptography.Macro
-import           Cryptography.OTP.Impl
+import           Cryptography.MACs
+import           Cryptography.SymmetricCryptography
+import           Cryptography.SymmetricCryptography.Macro
+import           Cryptography.SymmetricCryptography.Terms
 import           Cryptography.SystemAlgebra
 import           Cryptography.Terms
 
 cryptography :: Note
 cryptography = chapter "Cryptography" $ do
-    section "Symmetric cryptosystems" $ do
-        cryptographicSchemeDefinition
-        cryptographicProtocolDefinition
-        symmetricCryptosystemDefinition
-        deterministicCryptoSystem
-        cipherDefinition
-
-        oneTimePadDefinition
-        oneTimePadExample
-        oneTimePadSecure
-        additiveStreamCipherDefinition
-
-        subsection "IND-CPA" $ do
-            indcpaDefinition
-            indcpaSecurityDefinition
-            nonAdaptiveINDCPAGame
-            nonAdaptiveINDCPASecurity
-            nonAdaptiveINDCPAStrictlyWeaker
-            deterministicCryptoSystemInsecure
-
-        subsection "IND-CCA" $ do
-            indccaDefinition
-            indccaSecurityDefinition
-
-        manyTimePadInsecure
-
-        subsection "pseudorandomness" $ do
-            pseudoRandomGeneratorDefinition
-
-        subsection "block ciphers" $ do
-            blockCipherDefinition
-            eCBDefinition
-            eCBInsecure
-            cBCDefinition
-            counterDefinition
-
-            xorBlockCipher
-
-
-    section "Message Authentication Codes" $ do
-        messageAuthenticationCodeDefinition
-        messageAuthenticationCodeSecurityDefinition
+    symmetricCryptographyS
+    mACS
 
     section "Key agreement" $ do
         diffieHellmanProtocolDefinition
         diffieHellmanManInTheMiddleAttack
 
-    section "Computational Problems" $ do
-        discreteLogarithmProblemDefinition
-        computationalDHProblemDefinition
-        diffieHellmanTripleDefinition
-        decisionalDHProblemDefinition
+    computationalProblemsS
 
     section "Public key encryption" $ do
         publicKeyEncryptionSchemeDefinition
@@ -106,7 +48,8 @@ cryptography = chapter "Cryptography" $ do
         pKEINDCCASecureDefinition
         diffieHellmanPKEDefinition
         elGamalSchemeDefinition
-        elGamalSchemeCPAButNotCCPASecure
+        elGamalSchemeCPASecure
+        elGamalSchemeNotCCASecure
 
     section "Trapdoor one-way permutations" $ do
         trapdoorOneWayPermutationDefinition
@@ -114,6 +57,10 @@ cryptography = chapter "Cryptography" $ do
         ethRootComputation
         rSATWOPDefinition
         tWOPAsPKE
+        rsaPKEExample
+        rsaSmallEInsecure
+        rsaSmallEInsecure2
+        totientToFactorisation
 
     section "Digital signatures" $ do
         digitalSignatureDefinition
@@ -127,671 +74,8 @@ cryptography = chapter "Cryptography" $ do
 
     systemAlgebraS
 
-cryptographicSchemeDefinition :: Note
-cryptographicSchemeDefinition = de $ do
-    lab cryptographicSchemeDefinitionLabel
-    s ["A", cryptographicScheme', or, cryptosystem', "consists of several", functions]
+    cryptoRefs
 
-cryptographicProtocolDefinition :: Note
-cryptographicProtocolDefinition = de $ do
-    lab cryptographicProtocolDefinitionLabel
-    lab protocolDefinitionLabel
-    s ["A", cryptographicProtocol', "for a given", set, "of parties consists of, for each party, a precicely specified behavior in the interaction with the other parties"]
-
-symmetricCryptosystemDefinition :: Note
-symmetricCryptosystemDefinition = do
-    de $ do
-        lab symmetricCryptosystemDefinitionLabel
-        lab messageSpaceDefinitionLabel
-        lab ciphertextSpaceDefinitionLabel
-        lab keySpaceDefinitionLabel
-        s ["A", symmetricCryptosystem', "for a", messageSpace', m msp_, ", ", ciphertextSpace', m csp_, ", ", keySpace', m ksp_, and, randomnessSpace, m rsp_, "is a pair of", functions, m $ tuple enc_ dec_, "as follows"]
-        itemize $ do
-            item $ do
-                s [m enc_, "is called an", encryptionFunction', "and must be a", total, function]
-                ma $ fun3 enc_ msp_ ksp_ rsp_ csp_
-            item $ do
-                s [m dec_, "is called a", decryptionFunction', "and it is usually strictly a", partialFunction]
-                ma $ fun2 dec_ csp_ ksp_ msp_
-        let k = "k"
-            m = "m"
-            r = "r"
-        ma $ fa (k ∈ ksp_)
-           $ fa (m ∈ msp_)
-           $ fa (r ∈ rsp_)
-           $ dec (enc m k r) k =: m
-    nte $ do
-        s ["Practicality dictates that", m enc_, and, m dec_, "must be efficiently computable"]
-        s ["This is called the practicality condition"]
-
-deterministicCryptoSystem :: Note
-deterministicCryptoSystem = de $ do
-    s ["A", deterministic', cryptosystem, "is a system in which the", randomnessSpace, "is entirely ignored"]
-    s ["We then model the", encryptionFunction, "as taking only two arguments and leave out the", randomnessSpace]
-
-cipherDefinition :: Note
-cipherDefinition = de $ do
-    lab cipherDefinitionLabel
-    s ["A", cipher', "is a", deterministic, symmetricCryptosystem]
-
-oneTimePadDefinition :: Note
-oneTimePadDefinition = de $ do
-    lab oneTimePadDefinitionLabel
-    lab manyTimePadDefinitionLabel
-
-    s [the, oneTimePad', "is a", cipher, "with the following", encryptionFunction, and, decryptionFunction]
-    let mesg = "m"
-        k = "k"
-    ma $ enc' mesg k =: mesg ⊕ k
-    let c = "c"
-    ma $ dec c k =: c ⊕ k
-
-    tikzFig "One-Time Pad" [] $ raw $ [litFile|src/Cryptography/OTPTikZ.tex|]
-
-    s [the, oneTimePad, "must only be used at most once for every key, otherwise it is called a", manyTimePad']
-
-    toprove_ "prove that this is in fact a cipher, that the functions invert each other."
-
-oneTimePadExample :: Note
-oneTimePadExample = ex $ do
-    let mesg :: String
-        mesg = "Hello!"
-
-        mesgBS :: SB.ByteString
-        mesgBS = SB8.pack mesg
-
-    keyBS <- getKeyFor mesgBS
-
-    s ["Encrypting the", message, quoted $ raw $ T.pack mesg, "(encoded with ASCII) with following the", oneTimePad, cipher, "with a random key, results in the following situation"]
-
-    let encryption = otpEncrypt keyBS mesgBS
-    let showNice = text . raw . T.pack
-    ma $ belowEachOther [RightColumn, LeftColumn]
-        [ "message"     & showNice (hexBS' mesgBS)
-        , "key"         & showNice (hexBS' keyBS)
-        , "ciphertext"  & showNice (hexBS' encryption)
-        ]
-
-    ma $ belowEachOther [RightColumn, LeftColumn]
-        [ "message"     & showNice (binBS' mesgBS)
-        , "key"         & showNice (binBS' keyBS)
-        , "ciphertext"  & showNice (binBS' encryption)
-        ]
-
-
-oneTimePadSecure :: Note
-oneTimePadSecure = do
-    prop $ do
-        let n = "n"
-        s [the, oneTimePad <> "'s", ciphertexts, "are", independent, "of their", messages, "for a given message length", m n]
-        toprove_ "page 17 of crypto"
-    nte $ do
-        let t = "t"
-        s ["Note that we cannot say that the", oneTimePad, "is", iNDCPASecure, "nor", iNDCCASecure, "for any", m $ t >= 1, "because the", oneTimePad, "can, by definition, only be used once for the same key"]
-
-
-
-additiveStreamCipherDefinition :: Note
-additiveStreamCipherDefinition = de $ do
-    let f_ = "f"
-        f = fn f_
-    s ["Let ", m f_, "be a", keyStreamGenerator]
-    todo "define keystreamgenerator"
-    s [the, additiveStreamCipher, "is a", cipher, "with the following", encryptionFunction, and, decryptionFunction]
-
-    let mesg = "m"
-        k = "k"
-    ma $ enc' mesg k =: mesg ⊕ (f k)
-    let c = "c"
-    ma $ dec c k =: c ⊕ (f k)
-
-    tikzFig "Additive Key-Stream Generator" [] $ raw $ [litFile|src/Cryptography/AKSGTikZ.tex|]
-
-    toprove_ "prove that this is in fact a cipher, that the functions invert each other."
-
-indcpaDefinition :: Note
-indcpaDefinition = de $ do
-    lab iNDCPADefinitionLabel
-    lab indistinguishabilityChosenPlaintextAttackDefinitionLabel
-    lab adversaryDefinitionLabel
-    lab challengerDefinitionLabel
-    lab attackerDefinitionLabel
-    let t = "t"
-        k = "k"
-        i = "i"
-    let b = "b"
-        mb = "m" !: b
-        c = "c"
-    let b' = b <> "'"
-    s ["A", m t <> "-message", indistinguishabilityChosenPlaintextAttack', "game", "(" <> iNDCPA' <> ")", "between a", challenger', "and an", adversary', "(" <> attacker' <> ")", "goes as follows"]
-    enumerate $ do
-        item $ s ["The challenger chooses a secret key", m k, "uniformly at random"]
-        let mi = "m" !: i
-            r = "r"
-            ri = r !: i
-        item $ s ["The adversary can choose up to", m t, messages, m mi, "and receive their encryptions", m $ enc mi k ri, "for fresh and independent randomness values", m $ ri ∈ rsp_]
-        let m0 = "m" !: 0
-            m1 = "m" !: 1
-        item $ s ["The adversary chooses two", messages, m m0, and, m m1, "of the same length"]
-        item $ s ["The challenger chooses a uniformly random bit", m b <> ", computes the encryption of ", m $ c =: enc mb k r, "for a fresh and independent randomness value", m $ r ∈ rsp_, "and returns it to the adversary"]
-        item $ s ["The adversary can again choose up to", m t, messages, "as in step 2, but the total number is limited by", m t]
-        item $ s ["The adversary issues his guess", m b', "for", m b]
-    s [the, advantage', "of the adversary in this game is defined as", m $ 2 * prob (b' =: b) - 1 /: 2]
-
-indcpaSecurityDefinition :: Note
-indcpaSecurityDefinition = de $ do
-    lab iNDCPASecureDefinitionLabel
-    let t = "t"
-    s ["A", symmetricCryptosystem, "is called", iNDCPASecure', "if no feasible", adversary, "has a non-negligible", advantage, "in a", m t <> "-message", indistinguishabilityChosenPlaintextAttack, "game", "where", m t, "is only bounded by the adversary's running time"]
-
-nonAdaptiveINDCPAGame :: Note
-nonAdaptiveINDCPAGame = de $ do
-    lab nonAdaptiveINDCPADefinitionLabel
-    let mp = tuple ("m" !: 1) ("m" !: 2)
-    s ["A", nonAdaptiveINDCPA', "game between a", challenger, and, adversary, "is played as follows for a fixed message pair", m mp]
-    let b = "b"
-    let b' = "b'"
-    enumerate $ do
-        let k = "k"
-        item $ s [the, challenger, "chooses a", secretKey, m k, "uniformly at random"]
-        let c = "c"
-            r = "r"
-        item $ s [the, challenger, "chooses a uniformly random bit", m b <> ", computes the encryption", m $ c =: enc ("m" !: b) k r, "for a fresh and", independent, "randomness value", m $ r ∈ rsp_, "and sends", m c, "to the", adversary]
-        item $ s [the, adversary, "can choose messages and receive their encryptions"]
-        item $ s [the, adversary, "guesses", m b, "by issuing a guess", m b']
-    s [the, advantage, "of the adversary in this game is defined as", m $ 2 * prob (b' =: b) - 1 /: 2]
-
-nonAdaptiveINDCPASecurity :: Note
-nonAdaptiveINDCPASecurity = de $ do
-    lab nonAdaptivelyINDCPASecureDefinitionLabel
-    s ["A", symmetricCryptosystem, "is called", nonAdaptivelyINDCPASecure', "if for every fixed pair of messages of the same length, no feasible adversary has a non-negligible", advantage, "in the", nonAdaptiveINDCPA, "game"]
-
-nonAdaptiveINDCPAStrictlyWeaker :: Note
-nonAdaptiveINDCPAStrictlyWeaker = thm $ do
-    s [nonAdaptiveINDCPA, "security is strictly weaker than regular", iNDCPA, "security"]
-    s ["That is, every", iNDCPASecure, symmetricCryptosystem, "is also", nonAdaptivelyINDCPASecure, "and if there exists a", nonAdaptivelyINDCPASecure, symmetricCryptosystem, "then there is one such system that is not", iNDCPASecure]
-
-    toprove
-
-indccaDefinition :: Note
-indccaDefinition = de $ do
-    lab iNDCCADefinitionLabel
-    lab indistinguishabilityChosenCiphertextAttackDefinitionLabel
-    let t = "t"
-        k = "k"
-        i = "i"
-    let b = "b"
-        mb = "m" !: b
-        c = "c"
-    let b' = b <> "'"
-    s ["A", m t <> "-message", indistinguishabilityChosenPlaintextAttack', "game", "(" <> iNDCCA' <> ")", "between a", challenger, "and an", adversary, "goes as follows"]
-    enumerate $ do
-        item $ s ["The challenger chooses a secret key", m k, "uniformly at random"]
-        let mi = "m" !: i
-            ci = "c" !: i
-            r = "r"
-            ri = r !: i
-        item $ s ["The adversary can choose up to", m t, messages, m mi, or, ciphertexts, m ci, "and receive their encryptions", m $ enc mi k ri, "for fresh and independent randomness values", m $ ri ∈ rsp_, or, ciphertexts, "(in the case of", messages <> ") or receive their decryptions", m $ dec ci k, "(in the case of", ciphertexts <> ")"]
-        let m0 = "m" !: 0
-            m1 = "m" !: 1
-        item $ s ["The adversary chooses two", messages, m m0, and, m m1, "of the same length"]
-        item $ s ["The challenger chooses a uniformly random bit", m b <> ", computes the encryption of ", m $ c =: enc mb k r, "for a fresh and independent randomness value", m $ r ∈ rsp_, "and returns it to the adversary"]
-        item $ s ["The adversary can again choose up to", m t, messages, or, ciphertexts, "as in step 2, but the total number is limited by", m t]
-        item $ s ["The adversary issues his guess", m b', "for", m b]
-    s [the, advantage', "of the adversary in this game is defined as", m $ 2 * prob (b' =: b) - 1 /: 2]
-
-indccaSecurityDefinition :: Note
-indccaSecurityDefinition = de $ do
-    lab iNDCCASecureDefinitionLabel
-    let t = "t"
-    s ["A", symmetricCryptosystem, "is called", iNDCCASecure', "if no feasible", adversary, "has a non-negligible", advantage, "in a", m t <> "-message", indistinguishabilityChosenCiphertextAttack, "game", "where", m t, "is only bounded by the adversary's running time"]
-
-smileyImageBS :: SB.ByteString
-smileyImageBS = $(embedFile "src/Cryptography/smiley.png")
-
-sendCashImageBS :: SB.ByteString
-sendCashImageBS = $(embedFile "src/Cryptography/sendcash.png")
-
-manyTimePadInsecure :: Note
-manyTimePadInsecure = do
-    thm $ do
-        s ["Re-using the key for a", oneTimePad <> ", thus yielding a so-called", manyTimePad, "is not", iNDCPASecure]
-
-        proof $ do
-            s ["We will prove an even stronger statement, namely that the", manyTimePad, "is not even secure in a", iNDCPA, "game where the initial messages cannot be used during the challenge"]
-            enumerate $ do
-                item $ s ["An", attacker, "can gain an", advantage, "of", m 1, "by playing a", m 2 <> "-message", iNDCPA, "-game as follows"]
-                let m0 = "m" !: 0
-                    m1 = "m" !: 1
-                    m2 = "m" !: 2
-                    c = "c"
-                    c0 = c !: 0
-                    c1 = c !: 1
-                item $ s [the, attacker, "chooses two distinct", messages, m m0, and, m m1, "of the same length at random and asks for their encryptions", m c0, and, m c1]
-                item $ s [the, attacker, "then submits", m $ (c0 `xor` c1) =: (m0 `xor` m1), "as well as another random", message, m m2, "and receives a", ciphertext, m c, "from the", challenger]
-                item $ do
-                    s [the, attacker, "computes", m $ c `xor` c0]
-                    s [the, attacker, "checks whether this equals", m m1]
-                    s ["If so, he outputs the bit", m 0, ", otherwise he will output the bit", m 1]
-                    s ["This way the", attacker, "wins the game every time"]
-
-    ex $ do
-        -- We will asume everything stays fine
-        let fromRight (Right a) = a
-            fromRight _ = error "there was an error decoding the images"
-
-        -- Get the smiley image
-        let (ImageRGB8 smileyImg) = fromRight $ decodePng smileyImageBS
-
-        -- Get the sendCash image
-        let (ImageRGB8 sendCashImg) = fromRight $ decodePng sendCashImageBS
-
-        -- This is how you XOR images
-        let xorImages :: Image PixelRGB8 -> Image PixelRGB8 -> Image PixelRGB8
-            xorImages i1 i2 = pixelMapXY fun i1
-              where
-                fun :: Int -> Int -> PixelRGB8 -> PixelRGB8
-                fun x y p = p `xorPixel` pixelAt i2 x y
-
-                xorPixel :: PixelRGB8 -> PixelRGB8 -> PixelRGB8
-                xorPixel (PixelRGB8 r1 g1 b1) (PixelRGB8 r2 g2 b2)
-                    = (PixelRGB8 (r1 `B.xor` r2) (g1 `B.xor` g2) (b1 `B.xor` b2))
-
-        -- Width and height of our six images, they must all be the same.
-        let width = (imageWidth smileyImg)
-            height = (imageHeight smileyImg)
-
-        -- The total number of random bypes required.
-        -- One less would not work.
-        let pixels = 3 * width * height
-
-        -- Generate that amount of bytes
-        keyBS <- replicateM pixels random :: Note' [Word8]
-
-        -- Now generate an image with this data.
-        let keyImage :: Image PixelRGB8
-            keyImage = snd $ generateFoldImage fun keyBS width height
-              where
-                fun :: [Word8] -> Int -> Int -> ([Word8], PixelRGB8)
-                fun (r:g:b:rest) _ _ = (rest, PixelRGB8 r g b)
-                fun _ _ _ = error "incorrect number of random bytes supplied"
-
-        -- Encrypt both of our images with the key image
-        let encSmiley = xorImages keyImage smileyImg
-        let encSendCash = xorImages keyImage sendCashImg
-
-        -- Xor the encrypted messages for dramatic effect
-        let encXORImg = xorImages smileyImg sendCashImg
-
-        let keyFP = "key.png"
-            smileyFP = "smiley.png"
-            sendCashFP = "sendcash.png"
-            encSmileyFP = "smiley_enc.png"
-            encSendCashFP = "sendCash_enc.png"
-            encXORFP = "xor_enc.png"
-            allFiles =
-                [ keyFP
-                , smileyFP
-                , sendCashFP
-                , encSmileyFP
-                , encSendCashFP
-                , encXORFP
-                ]
-
-        doneAlready <- liftIO $ P.and <$> mapM doesFileExist allFiles
-        unless doneAlready $ do
-            registerAction smileyFP $ writePng smileyFP smileyImg
-            registerAction sendCashFP $ writePng sendCashFP sendCashImg
-            registerAction keyFP $ writePng keyFP keyImage
-            registerAction encSmileyFP $ writePng encSmileyFP encSmiley
-            registerAction encSmileyFP $ writePng encSendCashFP encSendCash
-            registerAction encXORFP $ writePng encXORFP encXORImg
-
-        -- Show it all to our reader
-        s ["The following is an application of the above theorem to a concrete situation with images"]
-        s ["Suppose we have messages in the form of images as follows"]
-        hereFigure $ do
-            include smileyFP
-            hspace $ Cm 1
-            include sendCashFP
-            caption "Two messages in the form of images"
-
-        s ["We decide to use the", oneTimePad, "so we generate a random", key]
-        hereFigure $ do
-            include keyFP
-            caption "The key"
-
-        s ["We forget about the requirement that the", oneTimePad, "can only be used once and use the key for both of our messages, thus making it a", manyTimePad]
-        s ["The resulting encryptions look inconspicuous"]
-        hereFigure $ do
-            include encSmileyFP
-            hspace $ Cm 1
-            include encSendCashFP
-            caption "The encrypted messages"
-
-        s ["When we XOR the encryptions, however, the result is far from unintelligible"]
-        hereFigure $ do
-            include encXORFP
-            caption "The XOR of the two encrypted messages"
-        s ["You can clearly see that this image is the XOR of the two original messages"]
-        s ["This is entirely insecure"]
-  where
-    include = includegraphics
-                [ KeepAspectRatio True
-                , IGHeight (Cm 3.0)
-                , IGWidth (CustomMeasure $ "0.5" <> textwidth)
-                ]
-
-pseudoRandomGeneratorDefinition :: Note
-pseudoRandomGeneratorDefinition = de $ do
-    lab pseudoRandomGeneratorDefinitionLabel
-    lab pRGDefinitionLabel
-    let k = "k"
-        n = "n"
-    s ["A", pseudoRandomGenerator', "(" <> pRG' <> ")", "is a function", m $ fun gen_ (bitss k) (bitss n), "for", m $ n > k, "such that no feasible algorithm has a non-negligible advantage in distinguishing pseudo-randomly generated bits from actually random bits"]
-
-
-blockCipherDefinition :: Note
-blockCipherDefinition = do
-    let f_ = "F"
-    de $ do
-        lab blockCipherDefinitionLabel
-        lab blockLengthDefinitionLabel
-        let n_ = "n"
-            m_ = "m"
-            f  = fn2 f_
-            k_ = "k"
-        s ["A", blockCipher', "with", blockLength', m n_, "and key length", m m_, "is a", function, m $ fun2 f_ (bitss n_) (bitss m_) (bitss n_), "such that for every key", m k_ <> ", ", m $ f cdot_ k_, "is a bijection"]
-    nte $ do
-        s ["Practicality requires that one knows efficient algorithms for computing ", m f_, "and its", inverseFunction, "given the key"]
-
-eCBDefinition :: Note
-eCBDefinition = de $ do
-    lab electronicCodebookDefinitionLabel
-    lab eCBDefinitionLabel
-    let f_ = "F"
-        k_ = "k"
-        n = "n"
-    s ["Let", m f_, "be a", blockCipher, "with", blockLength, m n, "and let", m k_, "be a key sampled uniformly from the key space"]
-    s [the, electronicCodebook', "(" <> eCB' <> ")", "mode for a", blockCipher, "is a", cipher, "as follows"]
-    let mesg = "m"
-        f = fn2 f_
-        l = "l"
-    s ["Let", m mesg, "be a", message, "with a length that is a multiple of", m n <> ": ", m $ l * n]
-    itemize $ do
-        item $ s ["Encryption: ", m $ enc' mesg k_ =: f (mesg !: 1) k_ ++ f (mesg !: 2) k_ ++ dotsc ++ f (mesg !: l) k_]
-        let c = "c"
-            fm = fn2 $ inv f_
-        item $ s ["Decryption: ", m $ dec c k_ =: fm (c !: 1) k_ ++ fm (c !: 2) k_ ++ dotsc ++ fm (c !: l) k_]
-
-    tikzFig "ECB mode" [] $ raw $ [litFile|src/Cryptography/ECBTikZ.tex|]
-
-
-tuxImageBS :: SB.ByteString
-tuxImageBS = $(embedFile "src/Cryptography/tux.png")
-
-eCBInsecure :: Note
-eCBInsecure = do
-    thm $ do
-        let f_ = "F"
-            n = "n"
-        s ["Let", m f_, "be a", blockCipher, "with", blockLength, m n]
-        -- let k_ = "k"
-        s [the, electronicCodebook', "mode for a", blockCipher, "is not", iNDCCASecure, "on its own"]
-
-        proof $ do
-            s ["We will prove an even stronger statement, namely that the", electronicCodebook, "mode is not even secure in a", iNDCPA, "game where the initial messages cannot be used during the challenge"]
-            s ["An", attacker, "can gain an", advantage, "of", m 1, "by playing a", m 0 <> "-message", iNDCPA, "-game as follows"]
-            enumerate $ do
-                let m0 = "m" !: 0
-                    m1 = "m" !: 1
-                item $ s [the, attacker, "chooses two", messages, m m0, and, m m1, "of length", m $ 2 * n, "such that the following holds"]
-                itemize $ do
-                    item $ s ["In ", m m0, "both blocks are equal"]
-                    item $ s ["In ", m m1, "the blocks are distinct"]
-                let c = "c"
-                item $ s [the, attacker, "then submits", m m0, and, m m1, "and receives a", ciphertext, m c, "from the", challenger]
-                item $ s [the, attacker, "outputs the bit", m 0, "if the blocks of", m c, "are equal", and, m 1, "otherwise"]
-
-
-    ex $ do
-
-        -- We will asume everything stays fine
-        let fromRight (Right a) = a
-            fromRight _ = error "there was an error decoding the images"
-
-        -- Get the tux image
-        let (ImageRGBA8 tuxImg) = fromRight $ decodePng tuxImageBS
-
-        -- Generate 4 random bytes to build a single pixel key
-        r <- random
-        g <- random
-        b <- random
-        a <- random
-        let pixelKey = PixelRGBA8 r g b a
-
-        -- Now generate an image by xor-ing every pixel with this single pixel
-        let cipherImage :: Image PixelRGBA8
-            cipherImage = pixelMap fun tuxImg
-              where
-                fun :: PixelRGBA8 -> PixelRGBA8
-                fun p = p `xorPixel` pixelKey
-
-                xorPixel :: PixelRGBA8 -> PixelRGBA8 -> PixelRGBA8
-                xorPixel (PixelRGBA8 r1 g1 b1 a1) (PixelRGBA8 r2 g2 b2 a2)
-                    = (PixelRGBA8 (r1 `B.xor` r2) (g1 `B.xor` g2) (b1 `B.xor` b2) (a1 `B.xor` a2))
-
-        let tuxFP = "tux.png"
-            encTuxFP = "tux_enc.png"
-            allFiles =
-                [ tuxFP
-                , encTuxFP
-                ]
-
-        doneAlready <- liftIO $ P.and <$> mapM doesFileExist allFiles
-        unless doneAlready $ do
-            registerAction tuxFP $ writePng tuxFP tuxImg
-            registerAction encTuxFP $ writePng encTuxFP cipherImage
-
-        s ["The following is an application of the above theorem to a concrete situation with an image"]
-        s ["Suppose we have an image as a message"]
-        hereFigure $ do
-            include tuxFP
-            caption "An image as a message"
-        s ["If we use a", blockCipher, "in", electronicCodebook, "mode", "the result of the encryption will still resemble the message"]
-        hereFigure $ do
-            include encTuxFP
-            caption $ s ["The encryption with a", blockCipher, "in", eCB, "mode"]
-        s ["In this case we used a", blockCipher, "with", blockLength, "one pixel"]
-        s ["As the", encryptionFunction, "we used the XOR with a randomly chosen", key]
-  where
-    include = includegraphics
-                [ KeepAspectRatio True
-                , IGHeight (Cm 3.0)
-                , IGWidth (CustomMeasure $ "0.5" <> textwidth)
-                ]
-
-
-cBCDefinition :: Note
-cBCDefinition = de $ do
-    lab cipherBlockChainingDefinitionLabel
-    lab cBCDefinitionLabel
-    let f_ = "F"
-        k_ = "k"
-        n = "n"
-    s ["Let", m f_, "be a", blockCipher, "with", blockLength, m n, "and let", m k_, "be a key sampled uniformly from the key space"]
-    s [the, cipherBlockChaining', "(" <> cBC' <> ")", "mode for a", blockCipher, "is a", symmetricCryptosystem, "as follows"]
-    let mesg = "m"
-        f = fn2 f_
-        l = "l"
-    s ["Let", m mesg, "be a", message, "with a length that is a multiple of", m n <> ": ", m $ l * n]
-    itemize $ do
-        let c = "c"
-            c0 = c !: 0
-            c1 = c !: 1
-            cl = c !: l
-        item $ do
-            "Encryption: "
-            let iv = "IV"
-            s ["First a so-called", initialisationVector', m c0, "(also written as", m iv <> ")", "is chosen uniformly at random"]
-            ma $ enc mesg k_ c0
-                 =: c0
-                 ++ f (mesg !: 1 `xor` c0) k_
-                 ++ f (mesg !: 2 `xor` c1) k_
-                 ++ dotsc
-                 ++ f (mesg !: l `xor` cl) k_
-
-        let fm = fn2 $ inv f_
-        item $ do
-            s ["Decryption must be done sequentially"]
-            ma $ dec c k_
-                =: (fm (c !: 1) k_ `xor` c0)
-                ++ (fm (c !: 2) k_ `xor` c1)
-                ++ dotsc
-                ++ (fm (c !: l) k_ `xor` cl)
-
-
-    tikzFig "CBC mode" [] $ raw $ [litFile|src/Cryptography/CBCTikZ.tex|]
-
-
-counterDefinition :: Note
-counterDefinition = de $ do
-    lab counterDefinitionLabel
-    lab cTRDefinitionLabel
-    let f_ = "F"
-        k_ = "k"
-        n = "n"
-    s ["Let", m f_, "be a", blockCipher, "with", blockLength, m n, "and let", m k_, "be a key sampled uniformly from the key space"]
-    s [the, counter', "(" <> cTR' <> ")", "mode for a", blockCipher, "is a", symmetricCryptosystem, "as follows"]
-    let mesg = "m"
-        f = fn2 f_
-        l = "l"
-    s ["Let", m mesg, "be a", message, "with a length that is a multiple of", m n <> ": ", m $ l * n]
-    itemize $ do
-        let c = "c"
-            c1 = c !: 1
-            c2 = c !: 1
-            cl = c !: l
-            i = "i"
-            r = "r"
-            bs = autoAngleBrackets
-        item $ do
-            "Encryption:"
-            let iv = "IV"
-            s ["First an", initialisationVector, m $ r ∈ bitss (n / 2), "(also written as", m iv <> ")", "is chosen uniformly at random"]
-            ma $ enc mesg k_ r
-                 =: r
-                 ++ mesg !: 1 `xor` (f (r ++ bs 1) k_)
-                 ++ mesg !: 2 `xor` (f (r ++ bs 2) k_)
-                 ++ dotsc
-                 ++ mesg !: l `xor` (f (r ++ bs l) k_)
-            s ["Here", m $ bs i, "is the representation of", m i, "as an", m $ n / 2, "bit string"]
-
-        item $ do
-            "Decryption:"
-            ma $ dec c k_
-                =: c1 `xor` (f (r ++ bs 1) k_)
-                ++ c2 `xor` (f (r ++ bs 2) k_)
-                ++ dotsc
-                ++ cl `xor` (f (r ++ bs l) k_)
-    s ["Note that", m $ inv f_, "is not needed for decryption"]
-
-    tikzFig "CTR mode" ["scale=1.5"] $ raw $ [litFile|src/Cryptography/CTRTikZ.tex|]
-
-
-deterministicCryptoSystemInsecure :: Note
-deterministicCryptoSystemInsecure = thm $ do
-    s ["No", cipher, "could ever be", iNDCPASecure, "as is"]
-
-    proof $ do
-        s ["Let", m $ tuple enc_ dec_, "be a", cipher]
-        s [the, attacker, "chooses two arbitrary", messages, "and submits them to receive two", ciphertexts]
-        s [the, attacker, "then submits those same", messages, "as part of the challenge"]
-        s [the, attacker, "then only needs to compare the", ciphertext, "he got to the", ciphertexts, "he got earlier to win the game with", advantage, m 1]
-
-
-xorBlockCipher :: Note
-xorBlockCipher = do
-    thm $ do
-        let f_ = "F"
-            n = "n"
-            k = "k"
-        s ["Let", m $ fun2 f_ (bitss n) (bitss k) (bitss n), "be a", blockCipher]
-        s ["If we know that", m f_, "can be implemented with only XOR gates and we have an encryption oracle, we can decrypt any", message]
-
-        proof $ do
-            let mesg = "m"
-                c = "c"
-                k = "k"
-            s ["Let", m mesg, "be an arbitrary", message, "and let", m c, "be its encryption with a", secretKey, m k]
-            s ["Because every XOR gate corresponds to summing to bits, every bit of", m c, "can be seen as a linear combination of the", message, "bits, the", key, "bits and a constant"]
-            let i = "i"
-                ci = c !: i
-                q = "q"
-                qi = q !: i
-                j = "j"
-                kj = k !: j
-                mj = mesg !: j
-                aij = "a" !: (i <> j)
-                bij = "b" !: (i <> j)
-            ma $ ci =: sumcmpr (j =: 1) n (aij * mj) + sumcmpr (j =: 1) k (bij * kj) + qi
-            s ["In matrix notation this looks as follows"]
-            let a = "A"
-                b = "B"
-            ma $ c =: a * mesg + b * k + q
-            s ["Here", m a, "is an", m $ n × n, matrix <> ",", m b, "is an", m $ n × k, matrix, and, m q, "is a", vector, "of length", m n]
-            newline
-
-            let u = "u"
-            s ["When we ask for the encryption of the zero message, we get", m $ u =: b * k + q]
-            s ["Now we only need to find", m a]
-            let mi = mesg !: i
-                gi = "g" !: i
-            s ["We ask for the encryptions", m gi, "of the", messages, m mi, "that are all zero except in place", m i, "to find the collumns of", m a]
-            ma $ gi - u =: (pars $ a * mi + b * k + q) - u =: a * mi
-            s [m $ a * mi, "is precicely the", m i <> "-th column of", m a]
-            s ["We now know", m a, "and", m $ b * k + q]
-            s ["Because", m f_, "is a", permutation, "for every", m k <> ",", m f_, "must be", invertible]
-            s ["We can therefore solve the linear system", m $ a * mesg =: c - u, "to find", m mesg, "from", m c]
-
-    thm $ do
-        let f_ = "F"
-            n = "n"
-            k = "k"
-        s ["Let", m $ fun2 f_ (bitss n) (bitss k) (bitss n), "be a", blockCipher]
-        s ["If we know that", m f_, "is operated in", cipherBlockChaining, "mode, can be implemented with only XOR gates and we have an encryption oracle, we can decrypt any", message]
-        toprove
-
-
-
-messageAuthenticationCodeDefinition :: Note
-messageAuthenticationCodeDefinition = de $ do
-    lab messageAuthenticationCodeDefinitionLabel
-    lab mACDefinitionLabel
-    lab tagSpaceDefinitionLabel
-    let f = "f"
-    s ["A", messageAuthenticationCode', "(" <> mAC' <> ")", "for a message space", m msp_, ", " <> keySpace, m ksp_, and, tagSpace', m tsp_, "is a", function, m $ fun2 f msp_ ksp_ tsp_]
-
-messageAuthenticationCodeSecurityDefinition :: Note
-messageAuthenticationCodeSecurityDefinition = de $ do
-    lab cMASecureDefinitionLabel
-    let t = "t"
-        f_ = "f"
-        f = fn2 f_
-    s ["A", m t <> "-message", mACForgery', "game", "for a", mAC, m f_, "between an", adversary, "and a", challenger, "is played as follows"]
-    let k = "k"
-    enumerate $ do
-        item $ s [the, challenger, "chooses a secret key", m $ k ∈ ksp_, "uniformly at random"]
-        let i = "i"
-            mi = "m" !: i
-        item $ s [the, adversary, "can choose up to", m t, messages, m mi, "and receive their", mAC <> "-values", m $ f mi k]
-        let m' = "m'"
-            z = "z"
-        item $ do
-            s [the, adversary, "chooses a", message, m m', "and a", mAC <> "-value", m z]
-            s ["He wins the game if", m $ z =: f m' k, and, m m', "was not asked as a query in step 2"]
-
-    s ["A", mAC, function, "is called", cMASecure', "if no feasible", adversary, "wins this game with a non-negligible", probability]
 
 diffieHellmanProtocolDefinition :: Note
 diffieHellmanProtocolDefinition = de $ do
@@ -842,6 +126,68 @@ discreteLogarithmProblemDefinition = de $ do
         g = "g"
     s [the, discreteLogarithm', "(" <> dL' <> ")", "problem", "for a", cyclic_, group, m $ grp_ =: grp (genby g) grpop_, "is the problem of computing, for a given", group, element, m $ aa ∈ grps_, "the exponent", m $ integer a, " such that", m $ aa =: g ^ a, "holds"]
 
+additiveDLEasy :: Note
+additiveDLEasy = thm $ do
+    let n = "n"
+    s [the, discreteLogarithm, "problem is trivially solvable in the", group, m $ intagrp n]
+    proof $ do
+        let z = "z"
+            a = "a"
+            g = "g"
+        s ["Recall that, for any element", m (z ∈ intmod n) <> ", we are looking for the integer", m $ integer a, "such that", m $ z =: g * a, "where", m g, "is a", generator, "of", m $ intagrp n]
+        s ["Luckily, ", m $ intagrp n, "gives rise to a", ring, m $ intring n, "as well"]
+        s ["This allows us to find", m a, "by dividing", m z, by, m g]
+        s ["More precicely: because", m g, "is a", generator, "means that", m g, "must have a multiplicative inverse in", m $ intring n, "otherwise no multiple of", m g, "would be equal to", m 1]
+        s ["Now the only thing we need to do is go through the", elements, "of", m $ intmod n, "multiply each of them by", m g, "in", m $ intring n, "and check if the result equals", m 1, "to find the multiplicative inverse", m $ rinv g, "of", m g, "in", m $ intring n]
+        s ["We then compute", m a, "by evaluating", m $ rinv g * z =: rinv g * g * a =: a]
+        s ["We could also use the extended Euclidean algorithm to find", m $ rinv g, "even more efficiently"]
+        refneeded "Extended Euclidean algorithm"
+
+dlReducable :: Note
+dlReducable = thm $ do
+    let g = "g"
+        h = "h"
+    s [the, discreteLogarithm, "problem in a", group, m grp_, "for a", generator, m g, "is reducable to the", discreteLogarithm, "problem in that same", group, "but for a different", generator]
+
+    proof $ do
+        let a = "A"
+        s ["Let", m a, "be an algorithm that solves the", discreteLogarithm, "problem for a", generator, m g]
+        s ["We construct an algorithm that solves the", discreteLogarithm, "problem for another", generator, m h, "of", m grp_, "as follows"]
+        let z = "z"
+            b = "b"
+            c = "c"
+        s ["Let", m z, "be the", group, element, "that we want the", discreteLogarithm, m b, "base", m h, "in", m grp_, "of"]
+        s ["There then exists a", m $ integer c, "such that", m c, "is the", discreteLogarithm, "base", m g, "in", m grp_, "of", m z]
+        ma $ z =: h ^ b =: g ^ c
+        let d = "d"
+        s ["Because", m h, "is an", element, "of", m grps_ <> ",", "there exists a", m $ integer d, "such that", m $ h =: g ^ d, "holds"]
+        ma $ z =: (pars $ g ^ d) ^ b =: g ^ c
+        s ["This means that we have the following equation for", m c, "in", m $ intring $ ord grps_]
+        ma $ d * b =: c
+        s ["The algorithm now uses", m a, "to find", m c, from, m z, and, m d, from, m h]
+        s ["It then computes the multiplicative inverse of", m d, "in", m $ intring $ ord grps_, "with the extended Euclidean algorithm and finally computes", m b, "by evaluating", m $ rinv d * c =: rinv d * d * b =: b]
+
+dlModTwoInEvenOrderGroup :: Note
+dlModTwoInEvenOrderGroup = thm $ do
+    let n = "n"
+    s ["Let", m grp_, beA, group, with, "an even", order, m $ ord grp_ =: 2 * n]
+    s ["There exists an efficient algorithm to compute whether the", discreteLogarithm, "of an", element, "is even or not"]
+
+    proof $ do
+        let x = "x"
+        s ["Let", m x, beAn, element, "of", m grps_]
+        let g = "g"
+            a = "a"
+        s ["For a given base", m g, "the task is to compute", m $ a `mod` 2, "such that", m $ x =: g ^ a, "holds"]
+        let q = "q"
+            r = "r"
+        s ["Define", m q, and, m r, "as the quotient and rest after division by", m 2, "of", m a]
+        s ["Observe first the following"]
+        ma $ x ^ n =: g ^ (a * n) =: g ^ ((pars $ 2 * q + r) * n) =: g ^ (2 * n * q) ** (g ^ (r * n) =: g ^ (r * n))
+        s ["This means that", m $ x ^ n, "will be equal to the", neutralElement, "if", m a, "is even and", m $ g ^ n, "(which cannot be the", neutralElement <> ") if", m a, "is odd"]
+        s ["We only have to compare", m $ x ^ n, "to the", neutralElement, "to determine", m $ a `mod` 2]
+
+
 computationalDHProblemDefinition :: Note
 computationalDHProblemDefinition = de $ do
     lab computationalDiffieHellmanDefinitionLabel
@@ -872,25 +218,30 @@ decisionalDHProblemDefinition = de $ do
     s [the, decisionalDiffieHellman', "(" <> dDH' <> ")", "problem for a given", cyclic, group, m $ grp_ =: grp (genby g) grpop_, "is the problem of determining whether, for given group elements", (m $ g ^ a) <> ",", m $ g ^ b, and, m $ g ^ c, "whether they are chosen randomly and independently from", m grps_, "or form a", diffieHellmanTriple]
 
 
+
 publicKeyEncryptionSchemeDefinition :: Note
 publicKeyEncryptionSchemeDefinition = de $ do
     lab publicKeyEncryptionSchemeDefinitionLabel
     lab keyGeneratorDefinitionLabel
     s ["A", publicKeyEncryptionScheme', "(" <> pKE' <> ")", "consists of three functions"]
+    let pk = "pk"
+        sk = "sk"
+        mesg = "m"
+        c = "c"
+        r = "r"
     itemize $ do
         item $ do
             s ["A", keyGenerator', function]
-            s ["This is a probabillistic", function, "that generates a", keyPair' <> ",", "a", publicKey', anda, secretKey', "(" <> privateKey' <> ")"]
+            s ["This is a probabillistic", function, "that generates a", keyPair', m (tuple pk sk) <> ",", "of a", publicKey', m $ pk ∈ pksp_, anda, secretKey', "(" <> privateKey' <> ")", m $ sk ∈ sksp_]
         item $ do
-            s ["An", encryptionFunction']
-            s ["This is a probabillistic", function, "that takes as inputs a", publicKey, anda, plaintext, "and computes the", ciphertext]
+            s ["An", encryptionFunction', m aenc_]
+            s ["This is a probabillistic", function, "that takes as inputs a", publicKey, m (pk ∈ pksp_) <> ",", plaintext, m $ sk ∈ sksp_, anda, "fresh randomness value", m $ r ∈ rsp_, "and computes the", ciphertext, m $ c =: aenc mesg pk r ∈ csp_]
         item $ do
-            s ["A", decryptionFunction']
-            s ["This is a deterministic", function, "that takes as inputs a", secretKey, anda, ciphertext, "and computes the", plaintext]
+            s ["A", decryptionFunction', m adec_]
+            s ["This is a deterministic", function, "that takes as inputs a", secretKey, m (sk ∈ sksp_), anda, ciphertext, m $ c ∈ csp_, "and computes the", plaintext, m $ mesg =: adec c sk ∈ msp_]
 
     s ["... such that for every encryption/decryption", keyPair, "the decryption transformation is the inverse of the encryption transformation"]
-
-    todo "formalize"
+    ma $ fa (cs [pk ∈ pksp_, sk ∈ sksp_, mesg ∈ msp_, r ∈ rsp_]) $ adec (aenc mesg pk r) sk =: mesg
 
 
 iNDCCASecureDefinitionPKEDefinition :: Note
@@ -912,7 +263,7 @@ iNDCCASecureDefinitionPKEDefinition = de $ do
         item $ s [the, challenger, "chooses a uniformly random bit", m b <> ", computes the encryption of", m mb <> ", and returns it to the", adversary]
         item $ s [the, adversary, "can again choose", ciphertexts, "and receive their decryptions as in step 2, but the encryption of", m mb, "is excluded"]
         item $ s [the, adversary, "guesses", m b, "by issuing a guess", m b']
-    s [the, advantage', "of the", adversary, "in this game is defined as", m $ 2 * prob (b' =: b) - 1 /: 2]
+    s [the, advantage', "of the", adversary, "in this game is defined as", m $ 2 * (pars $ prob (b' =: b) - 1 /: 2)]
     todo "formalize"
 
 pKEINDCCASecureDefinition :: Note
@@ -927,40 +278,141 @@ diffieHellmanPKEDefinition = de $ do
         q = "q"
     s ["Let", m $ grp_ =: grp (genby g) grpop_, "be a", cyclic, group, "with a known", order, m q, and, "let", m $ tuple enc_ dec_, "be a given secure", symmetricCryptosystem]
     s ["The following is then a", publicKeyEncryptionScheme]
-    let zq = integers !: q
+    let zq = intmod q
     itemize $ do
-        let b = "B"
+        let a = "A"
+            b = "B"
             x = "x"
+            y = "y"
+            xa = x !: a
             xb = x !: b
+            ya = y !: a
+            yb = y !: b
             mesg = "m"
         item $ do
             s ["A", keyGenerator, function]
             newline
             s ["Choose", m xb, "uniformly at random from", m zq]
-            s [the, secretKey, "is", m xb, "and the", publicKey, "is", m $ g ^ xb]
+            s [the, secretKey, "is", m xb, "and the", publicKey, "is", m $ yb =: g ^ xb]
         item $ do
             let r = "r"
             s ["An", encryptionFunction]
             newline
-            s ["Choose", m x, "at random from", m zq]
-            s [the, ciphertext, "for a", message, m mesg, "is the pair", m $ tuple (g ^ x) (enc mesg (g ^ (xb ^ x)) r), "where", m r, "is a uniformly random value from the", randomnessSpace, "of", m enc_]
+            s ["Choose", m xa, "at random from", m zq]
+            s [the, ciphertext, "for a", message, m mesg, "is the pair", m $ tuple (g ^ xa) (enc mesg (pars (g ^ xb) ^ xa) r), "where", m r, "is a uniformly random value from the", randomnessSpace, "of", m enc_]
+        let c = "c"
         item $ do
             s ["A", decryptionFunction]
             newline
-            todo "Left as exercise?"
-    s ["Note that we implicitly use the fact every cyclic group of", finite, order, m q, "is isomorphic to", m zq]
-    refneeded "prove this in the group chapter"
+            s ["Given a", ciphertext, "pair", m $ tuple ya c, "the", decryptionFunction, "computes", m $ pars $ ya ^ xb, "to use as the key to decrypt", m $ mesg =: dec c (ya ^ xb)]
+    todo "prove that this is in fact a valid PKE"
 
 
 elGamalSchemeDefinition :: Note
-elGamalSchemeDefinition = de $ do
-    lab elGamalDefinitionLabel
-    s ["A", publicKeyEncryptionScheme, "based on the", diffieHellman, protocol, "where the", symmetricCryptosystem, "is", the, oneTimePad, "is called the", elGamal', publicKeyEncryptionScheme]
+elGamalSchemeDefinition = do
+    de $ do
+        lab elGamalDefinitionLabel
+        s ["A", publicKeyEncryptionScheme, "based on the", diffieHellman, protocol, "where the", symmetricCryptosystem, "is", the, oneTimePad, "is called the", elGamal', publicKeyEncryptionScheme]
+    nte $ do
+        let q = "q"
+        s ["Note that we implicitly use the fact every cyclic group of", finite, order, m q, "is isomorphic to", m $ intmod q]
+        refneeded "prove this in the group chapter"
+
+elGamalSchemeCPASecure :: Note
+elGamalSchemeCPASecure = thm $ do
+    s [the, elGamal, publicKeyEncryptionScheme, "is", iNDCPASecure, "under the", decisionalDiffieHellman, "assumption"]
+
+    proof $ do
+        let a = mathcal "A"
+        s ["Let", m a, "be an efficient", adversary, "that has", advantage, m alpha, "in the", iNDCPA, "game for public key encryption"]
+        let p = "p"
+            q = "q"
+            r = "r"
+            g = "g"
+            tr = triple p q r
+            x = "x"
+            y = "y"
+        let d = "D"
+        s ["We show that this implies that there is an efficient distinguisher that, given", m (tr ∈ grps_) <> ",", "has", advantage, m $ alpha /: 2, "in distinguishing the case where", csa [m p, m q, m r], "are", independent, "and uniformly distributed over", m grps_, "from the case where", csa [m $ p =: g ^ x, m $ q =: g ^ y, m $ r =: g ^ (x * y)], "holds for", independent, m $ cs [x, y] ∈ intmod "q"]
+        newline
+
+        s ["Let", m d, "be the following distinguisher that uses", m a]
+        s [m d, "will play the", iNDCPA, "game as the", challenger, "and use", m a, "as the", adversary]
+        s ["As the", publicKey <> ",", m d, "sends", m q, "to", m a]
+        let mesg = "m"
+            m0 = mesg !: 0
+            m1 = mesg !: 1
+            b = "b"
+            mb = mesg !: b
+        s ["Whenever", m a, "submits two", messages, m m0, and, m m1 <> ",", m d, "will choose a bit", m b, "uniformly at random and sends", m $ tuple p (mb ** r), to, m a]
+        let b' = b <> "'"
+        s ["When", m a, "outputs a bit", m b' <> ",", m d, "outputs the bit", m $ b `xor` b', "to distinguish a", diffieHellmanTriple, "from a uniformly random and independent triple"]
+        s ["A set bit", m 1, "would indicate the former while an unset bit", m 0, "would indicate the latter"]
+        newline
+        s ["Now we prove that this distinguisher", m d, "does in fact have", advantage, m $ alpha /: 2, "in solving the", decisionalDiffieHellman, "problem for", m tr]
+        itemize $ do
+            let ss = "I"
+            item $ do
+                s ["Denote the situation in which", m tr, "are uniform and", independent, "as", m ss]
+                s ["In this situation,",  m $ mb ** r , "is distributed uniformly", ref xorUniformTheoremLabel]
+                s ["Moreover, ", csa [m p, m q, m $ mb ** r], "are", independent]
+                let v = "v"
+                    v1 = v !: 1
+                    v2 = v !: 2
+                    v3 = v !: 3
+                aligneqs (prob $ p =: v1 ∧ q =: v2 ∧ mb ** r =: v3)
+                    [ prob $ p =: v1 ∧ q =: v2 ∧ r =: ginv mb ** v3
+                    , prob (p =: v1) * prob (q =: v2) * prob (r =: ginv mb ** v3)
+                    , prob (p =: v1) * prob (q =: v2) * prob (mb ** r =: v3)
+                    ]
+                s ["This means that the three values", csa [m p, m q, m $ mb ** r], "that", m a, "sees during the game are uniformly and independently distributed"]
+                s ["Since this is true for both possible values of", m b <> ", the ditribution of the output of", m a, "is identical in both cases"]
+                newline
+                s ["Now observe the following for", m $ ss =: tr, "with", csa [m p, m q, m r], "uniform", and, independent]
+                ma $ cprob (fn d tr =: 1 `xor` b) (b =: 0) =: cprob (fn d tr =: 1 `xor` b) (b =: 1)
+                s ["This imples the following about", m $ prob (fn d tr =: 1)]
+                aligneqs (cprob (fn d tr =: 1) ss)
+                    [ (1 /: 2) * cprob (fn d tr =: 1) (b =: 0)
+                    + (1 /: 2) * cprob (fn d tr =: 1) (b =: 1)
+                    , (1 /: 2) * cprob (fn d tr =: 1) (b =: 0)
+                    + (1 /: 2) * (pars $ 1 - cprob (fn d tr =: 0) (b =: 1))
+                    , (1 /: 2)
+                    ]
+                s ["In the third step we used that", m d, "will output", m 1 <> ", given", m tr, with, probability, m $ 1 /: 2, "because", m a, "will output a uniformly random bit given", m tr]
+                s ["In other words: if the triple", m tr, "is in fact uniform", and, independent <> ", then", m d, "will output a random and uniform bit"]
+            let rr = "J"
+            item $ do
+                s ["On the other hand, if the triple", m tr, "is a", diffieHellmanTriple, "for uniform", and, independent, m (cs [x, y] ∈ intmod "q") <> "(denote this situation as", m rr <> "), the values", csa [m p, m q, m $ mb ** r], "that", m a, "sees during the game exactly correspond to the values that", m a, "would see in the actual", iNDCPA, "game"]
+                aligneqs (cprob (fn d tr =: 0) rr)
+                    [ (1 /: 2) * cprob (b' =: 1) (b =: 1)
+                    + (1 /: 2) * cprob (b' =: 0) (b =: 0)
+                    , (1 /: 2) * cprob (b' =: b) (b =: 0)
+                    + (1 /: 2) * cprob (b' =: b) (b =: 1)
+                    , prob (b' =: b)
+                    ]
+                s ["In the second step we rewrite the expression to end up with an expression that will simplify to something involving", m $ prob $ b' =: b]
+            item $ do
+                s ["Now we can calculate the", advantage, "of", m d, "using the definition"]
+                aligneqs (alpha !: d)
+                    [ 2 * (abs $ prob (fn d tr =: 1 ∧ ss) + prob (fn d tr =: 0 ∧ rr) - (1 /: 2))
+                    , (2 * (abs $ cprob (fn d tr =: 1) ss * prob ss + cprob (fn d tr =: 0) rr * prob rr - (1 /: 2)))
+                    , (2 * (abs $ (1 /: 2) * cprob (fn d tr =: 1) ss + (1 /: 2) * cprob (fn d tr =: 0) rr - (1 /: 2)))
+                    , (abs $ cprob (fn d tr =: 1) ss + cprob (fn d tr =: 0) rr - 1)
+                    , (abs $ (1 /: 2) + prob (b' =: b) - 1)
+                    , (abs $ prob (b' =: b) - (1 /: 2))
+                    , (abs $ (1 /: 2) * 2 * (pars $ prob (b' =: b) - (1 /: 2)))
+                    , (abs $ (1 /: 2) * alpha)
+                    , (alpha /: 2)
+                    ]
+                s ["Overall we obtain that the", advantage, "of", m d, "is equal to", m $ alpha /: 2]
 
 
-elGamalSchemeCPAButNotCCPASecure :: Note
-elGamalSchemeCPAButNotCCPASecure = thm $ do
-    s [the, elGamal, publicKeyEncryptionScheme, "is", iNDCPASecure, "but not", iNDCCASecure]
+
+
+elGamalSchemeNotCCASecure :: Note
+elGamalSchemeNotCCASecure = thm $ do
+    s [the, elGamal, publicKeyEncryptionScheme, "is not", iNDCCASecure, "under the", decisionalDiffieHellman, "assumption"]
+    toprove
 
 
 trapdoorOneWayPermutationDefinition :: Note
@@ -1058,6 +510,94 @@ tWOPAsPKE = de $ do
         d_ = "D"
     s ["Let encryption be the application of the", trapdoorOneWayPermutation <> ", where the", publicKey, "is the description of the algorithm", m f_, "and the", secretKey, "the description of the algorithm", m d_]
 
+rsaPKEExample :: Note
+rsaPKEExample = ex $ do
+    s ["In this example we will show how we can use the", rSA, trapdoorOneWayPermutation, "to build a", publicKeyEncryptionScheme]
+    let n = "n"
+    let p = "p"
+        q = "q"
+        e = "e"
+        d = "d"
+    let mesg = "m"
+        c = "c"
+    itemize $ do
+        item $ do
+            s [the, keyGenerator, function, "generates two primes", m p, and, m q, "and computes", m $ n =: p * q, "as well as", m $ etot n =: (p - 1) * (q - 1), "and selects an", m $ e ∈ integers, "that is relatively prime to", m $ etot n, "to compute", m $ d =: ginv e `mod` etot n]
+            itemize $ do
+                item $ s [the, publicKey, "is then", m $ tuple n e]
+                item $ s [the, privateKey, "is", m d]
+        item $ do
+            s [the, encryptionFunction, "computes the", ciphertext, m $ c =: mesg ^ e `mod` n, "for a given", message, m mesg]
+        item $ do
+            s [the, decryptionFunction, "computes the original", message, m $ mesg =: c ^ d `mod` n, "for a given", ciphertext, m c]
+    s ["This is in fact a valid", publicKeyEncryptionScheme]
+    proof $ do
+        s ["Let", m $ cs [p, q] ∈ integers, "be arbitrary and let", m $ mesg ∈ intmod n, "be an arbitrary", message]
+        ma $ (pars $ mesg ^ d `mod` n) ^ e `mod` n
+          =: (pars $ mesg ^ (ginv e `mod` etot n) `mod` n) ^ e `mod` n
+          =: mesg ^ ((pars $ ginv e `mod` etot n) * e) `mod` n
+          =: mesg
+    why_ "Don't these 'mod n' things pose a problem"
+    s ["Note that the", messageSpace, m $ intmod n, "is only decided uppon during the key generation phase"]
+
+rsaSmallEInsecure :: Note
+rsaSmallEInsecure = thm $ do
+    let e = "e"
+        n = "n"
+        mesg = "m"
+        c = "c"
+    s ["When a small", m e, "is selected in the", rSA, publicKeyEncryptionScheme <> ", any", message, "from a considerable subspace of the", messageSpace, "can be efficiently recovered"]
+    proof $ do
+        let m0 = msp_ !: 0
+        s ["For a small", m $ e ∈ intmod n, ", the subspace", m $ m0 =: setcmpr (mesg ∈ naturals) (mesg ^ e < n), "is considerably large (or at least non-negligible and increasing in size for increasing", m n <> ")"]
+        s ["For any", message, m (mesg ∈ m0) <> ",", "the corresponding ciphertext equals", m $ c =: mesg ^ e `mod` n =: mesg ^ e]
+        s ["In other words, ", m $ mesg ^ e, "is not reduced modulo", m n]
+        s ["This means that an", adversary, "can efficiently compute", m $ c ^ (1 /: e), "over the integers and recover", m mesg, "entirely"]
+
+rsaSmallEInsecure2 :: Note
+rsaSmallEInsecure2 = thm $ do
+    let e = "e"
+        n = "n"
+        mesg = "m"
+        c = "c"
+        i = "i"
+    s ["When a small", m e, "is selected in the", rSA, publicKeyEncryptionScheme <> ", any", message, "can be efficiently recovered as long as it is send to at least", m e, "different", parties, "who all use the same", m e]
+    proof $ do
+        let n1 = n !: 1
+            n2 = n !: 2
+            ni = n !: i
+            ne = n !: e
+        s ["In this scenario the", m e, parties, "have different moduli", m $ list n1 n2 ne]
+        let c1 = c !: 1
+            c2 = c !: 2
+            ce = c !: e
+        s ["Let", m $ list c1 c2 ce, "be the", ciphertexts, "that are sent to these", parties]
+        ma $ centeredBelowEachOther
+            [ c1 =: mesg ^ e `mod` n1
+            , c2 =: mesg ^ e `mod` n2
+            , vdots
+            , ce =: mesg ^ e `mod` ne
+            ]
+        s ["Using the", chineseRemainderTheorem_, "we can efficiently compute", m c, "as follows"]
+        ma $ c =: mesg ^ e `mod` (prodcmpr (i =: 1) e ni)
+        s ["Because", m mesg, "is smaller than every", m ni <> ", it follows that", m $ mesg ^ e < (prodcmpr (i =: 1) e ni), "holds"]
+        s ["In other words, ", m c, "is not reduced modulo", m (prodcmpr (i =: 1) e ni)]
+        s ["This means that an adversary can recover", m mesg, "entirely by computing the", m e <> "-th root of", m c, "in", m integers]
+
+totientToFactorisation :: Note
+totientToFactorisation = thm $ do
+    let n = "n"
+        p = "p"
+        q = "q"
+    s ["Let", m n, "be a product of two", primes, m p, and, m q]
+    s ["Given", m n, and, m $ etot n, "we can efficiently compute", m p, and, m q]
+    proof $ do
+        s ["Because", m p, and, m q, are, primes <> ",", m $ etot n =: (pars $ p - 1) * (pars $ q - 1), "must hold"]
+        why
+        s ["Now observe the following"]
+        ma $ p =: n - q + 1 - etot n
+        ma $ n =: n * q - q ^ 2 + q - etot n * q
+        s ["Since", m n, and, m $ etot n, "are known, we can solve this quadratic system efficiently"]
 
 digitalSignatureDefinition :: Note
 digitalSignatureDefinition = de $ do
@@ -1116,4 +656,12 @@ collisionResistantDefinition = de $ do
     let c = "c"
         cc = "C"
         hc = hshf_ !: c
-    s ["A parametrized family", m $ setcmpr hc (c ∈ cc), "of", hashFunctions, "is called", collisionResistant, "if no feasible", adversary, "can win the", collisionFindingGame, "with a non-negligible", probability, "for a", hashFunction, m hc, "(known to the", adversary <> ") chosen uniformly at random from the family of", hashFunction]
+    s ["A parametrized family", m $ setcmpr hc (c ∈ cc), "of", hashFunctions, "is called", collisionResistant', "if no feasible", adversary, "can win the", collisionFindingGame, "with a non-negligible", probability, "for a", hashFunction, m hc, "(known to the", adversary <> ") chosen uniformly at random from the family of", hashFunction]
+
+cryptoRefs :: Note
+cryptoRefs = do
+    nocite $ Reference "book" "cryptography-foundations" $
+        [ ("author", "Ueli Maurer")
+        , ("title", "Cryptography Foundations")
+        , ("year", "2016")
+        ]

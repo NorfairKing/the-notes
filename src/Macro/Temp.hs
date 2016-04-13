@@ -22,6 +22,9 @@ derivative = ix "derivative"
 homogenous :: Note
 homogenous = ix "homogenous"
 
+basis :: Note
+basis = ix "basis"
+
 matrix :: Note
 matrix = ix "matrix"
 
@@ -111,8 +114,14 @@ acyclic = ix "acyclic"
 permutation :: Note
 permutation = ix "permutation"
 
+permutations :: Note
+permutations = ix "permutations"
+
 countable :: Note
 countable = ix "countable"
+
+smallest :: Note
+smallest = ix "smallest"
 
 -- Groups
 cyclic :: Note
@@ -125,3 +134,6 @@ relativelyPrime_ = ix "relatively prime"
 
 primes :: Note
 primes = ix "primes"
+
+chineseRemainderTheorem_ :: Note
+chineseRemainderTheorem_ = ix "Chinese remainder theorem"

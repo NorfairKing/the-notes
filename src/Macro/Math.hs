@@ -182,7 +182,7 @@ max sub body = commS "max" .!: sub <> body
 
 -- | Maximum of
 maxof :: Note -> Note
-maxof body = commS "max" <> body
+maxof body = comm0 "max" <> body
 
 -- | Minimum accross value
 min :: Note -> Note -> Note
@@ -190,7 +190,7 @@ min sub body = commS "min" .!: sub <> body
 
 -- | Minimum of
 minof :: Note -> Note
-minof body = commS "min" <> body
+minof body = comm0 "min" <> body
 
 -- | Arguments at minumum
 argmax :: Note -> Note -> Note
@@ -336,3 +336,7 @@ cdot_ = comm0 "cdot"
 (^) :: Note -> Note -> Note
 (^) = (^:)
 
+
+-- | Underscore (as in, ignoring this argument)
+unmatched :: Note
+unmatched = comm1 "text" "_"

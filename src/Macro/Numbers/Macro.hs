@@ -13,10 +13,10 @@ integer :: Note -> Note
 integer n = n ∈ integers
 
 intmod :: Note -> Note
-intmod n = integers !: ("mod " <> n)
+intmod n = integers !: n
 
 int0mod :: Note -> Note
-int0mod n = integers !: (0 <> " mod " <> n)
+int0mod n = integers !: (0 <> "," <> n)
 
 realsp :: Note
 realsp = reals ^: "+"

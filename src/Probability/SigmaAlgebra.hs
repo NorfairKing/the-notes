@@ -46,7 +46,7 @@ generatedSigmaAlgebra = subsection "Generating sigma algebra's" $ do
 sigmaAlgebraDefinition :: Note
 sigmaAlgebraDefinition = de $ do
     lab sigmaAlgebraDefinitionLabel
-    s ["A ", sigmaAlgebra', " or ", term salgebra, " ", m sa_, " is a ", set, " of subsets of the ", universe_, " of a ", stochasticExperiment, " with the following three properties"]
+    s ["A ", sigmaAlgebra', " or ", defineTerm salgebra, " ", m sa_, " is a ", set, " of subsets of the ", universe_, " of a ", stochasticExperiment, " with the following three properties"]
 
     enumerate $ do
         item $ m $ univ_ ∈ sa_

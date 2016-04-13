@@ -1,6 +1,9 @@
 # The Notes
 [![Build Status](https://travis-ci.org/NorfairKing/super-user-spark.svg?branch=master)](https://travis-ci.org/NorfairKing/super-user-spark)
 
+A published version of these latest generated pdf can be found at [cs-syd.eu](http://cs-syd.eu/projects/notes.html).
+
+
 ## Preselects
 
 This is a large collection of notes.
@@ -10,7 +13,7 @@ See the `preselect` directory.
 
 ## Raw Compilation
 
-Compiling the notes generator is as easy as running `cabal install`.
+Compiling the notes generator is as easy as running `stack install`.
 Generating the notes is done with `the-notes`.
 
 You can also generate subsets of the notes by adding selectors to the command.
@@ -23,20 +26,7 @@ You may need to `ignore-reference-errors`.
 
 ## Contribution
 Contributions to these notes are very welcome in the form of pull requests or patches via email.
-
-`IMPORTANT`, before contributing, please install the `bin/pre_commit_test.sh` hook into `.git/hooks/pre-commit`. You can do this by running `spark deploy hooks.sus` or by manually copying the files.
-
-### Dependencies
-To make contributions, you will need:
-
-- `stack`
-- `ghc`
-- `cabal`
-- `haddock`
-- `hlint`
-- `minted` (`pygmentize`)
-- `latexmk`
-- `dot`
+More info in [the contribution guide](/CONTRIBUTE.md).
 
 ## Licence
 "The Notes"
