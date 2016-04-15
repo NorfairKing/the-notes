@@ -3,24 +3,38 @@ module Cryptography.ComputationalProblems where
 import           Notes                                    hiding (cyclic,
                                                            inverse)
 
+import           Cryptography.SymmetricCryptography.Macro
+import           Functions.Basics.Macro
 import           Groups.Macro
 import           Groups.Terms
+import           Probability.RandomVariable.Terms
 import           Rings.Macro
 import           Rings.Terms
 import           Sets.Basics.Terms
 
--- import           Cryptography.ComputationalProblems.Macro
+import           Cryptography.ComputationalProblems.Macro
 import           Cryptography.ComputationalProblems.Terms
 
 computationalProblemsS :: Note
 computationalProblemsS = section "Computational Problems" $ do
-        discreteLogarithmProblemDefinition
-        additiveDLEasy
-        dlReducable
-        dlModTwoInEvenOrderGroup
-        computationalDHProblemDefinition
-        diffieHellmanTripleDefinition
-        decisionalDHProblemDefinition
+    searchProblemDefinition
+    discreteLogarithmProblemDefinition
+    additiveDLEasy
+    dlReducable
+    dlModTwoInEvenOrderGroup
+    computationalDHProblemDefinition
+    diffieHellmanTripleDefinition
+    decisionalDHProblemDefinition
+
+searchProblemDefinition :: Note
+searchProblemDefinition = do
+    de $ do
+        lab searchProblemDefinitionLabel
+        s ["A", searchProblem', "is a tuple", m sprob_, "consisting of an", instanceSpace', m isp_ <> ",", "a", witnessSpace', or, solutionSpace', m wsp_ <> ",", "a", predicate, m $ fun2 spred_ isp_ wsp_ bits , anda, probabilityDistribution, m sprob_, "over the", instanceSpace]
+    nte $ do
+        let x = "x"
+            w = "w"
+        s [the, searchProblem, m sprob_, "consists of finding, for a given instance", m (x ∈ isp_) <> ",", "drawn according to", m sprob_ <> ", a", witness, m (w ∈ wsp_), "such that", m $ sol x w =: 1]
 
 
 discreteLogarithmProblemDefinition :: Note

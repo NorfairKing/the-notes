@@ -3,7 +3,13 @@ module Cryptography.ComputationalProblems.Terms where
 import           Notes
 
 makeDefs
-    [ "discrete logarithm"
+    [ "search problem"
+    , "instance space"
+    , "witness space"
+    , "witness"
+    , "solution space"
+
+    , "discrete logarithm"
     , "DL"
 
     , "computational Diffie-Hellman"
