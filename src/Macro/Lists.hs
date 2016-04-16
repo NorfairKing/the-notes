@@ -2,6 +2,7 @@ module Macro.Lists where
 
 import           Types
 
+import           Macro.Math
 import           Macro.Text
 
 -- | List of arbitrary content
@@ -23,3 +24,9 @@ sing = listof
 -- | Building a list
 cns :: Note -> Note -> Note
 cns e es = e <> ":" <> es
+
+listlst :: Note -> Note -> Note
+listlst a z = listofs [a, dotsc, z]
+
+listlist :: Note -> Note -> Note -> Note
+listlist a b z = listofs [a, b, dotsc, z]
