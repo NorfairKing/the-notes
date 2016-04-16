@@ -176,26 +176,27 @@ entireDocument = do
     header
 
     document $ do
-        myTitlePage
-        myPreface
+        slow $ do
+            myTitlePage
+            myPreface
 
-        -- Ensure that pdf numbers coincide with the page numbers in the document
-        comm2 "addtocounter" "page" "1"
+            -- Ensure that pdf numbers coincide with the page numbers in the document
+            comm2 "addtocounter" "page" "1"
 
-        renderConfig
-        license
-        renderContributors
+            renderConfig
+            license
+            renderContributors
+            tableofcontents
 
-        tableofcontents
         allNotes
 
-        bibfn <- asks conf_bibFileName
-        comm1 "bibliographystyle" "plain"
-        comm1 "bibliography" $ raw $ T.pack bibfn
+        slow $ do
+            bibfn <- asks conf_bibFileName
+            comm1 "bibliographystyle" "plain"
+            comm1 "bibliography" $ raw $ T.pack bibfn
+            printindex
 
-        printindex
-
-        listoftodos
+            listoftodos
 
 
 allNotes :: Note

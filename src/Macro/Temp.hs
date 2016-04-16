@@ -4,6 +4,9 @@ import           Types
 
 import           Macro.Index
 
+base :: Note
+base = ix "base"
+
 infinite :: Note
 infinite = ix "infinite"
 

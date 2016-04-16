@@ -1,6 +1,7 @@
 module Macro.Index where
 
 import           Types
+import           Utils
 
 printindex :: Note
 printindex = do
@@ -22,7 +23,7 @@ ix text = ix_ text text
 
 ix_ :: Note -> Note -> Note
 ix_ text ind = do
-    index ind
+    slow $ index ind
     text
 
 emphTerm :: Note -> Note
@@ -33,6 +34,6 @@ defineTerm text = defineTerm_ text text
 
 defineTerm_ :: Note -> Note -> Note
 defineTerm_ text ind = do
-    index ind
+    slow $ index ind
     emphTerm text
 

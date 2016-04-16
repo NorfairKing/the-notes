@@ -9,8 +9,13 @@ makeDefs
     , "witness"
     , "solution space"
 
+    , "function inversion"
+    , "one-way function"
+
     , "discrete logarithm"
     , "DL"
+
+    , "distinction problem"
 
     , "computational Diffie-Hellman"
     , "CDH"
@@ -18,4 +23,7 @@ makeDefs
     , "Diffie-Hellman triple"
     , "decisional Diffie-Hellman"
     , "DDH"
+
+    , "game"
+    , "winning condition"
     ]
