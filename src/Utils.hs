@@ -13,6 +13,7 @@ import           Control.Monad.State    (gets, modify)
 import           System.Directory       (createDirectory, removeFile)
 import           System.IO.Error        (isAlreadyExistsError,
                                          isDoesNotExistError)
+import           System.Process         (readProcess)
 import qualified System.Random          as R (Random (..))
 
 import qualified Crypto.Hash.MD5        as MD5
@@ -20,6 +21,7 @@ import qualified Data.ByteString        as SB
 import qualified Data.ByteString.Base16 as B16
 import qualified Data.ByteString.Char8  as SB8
 import qualified Data.Text.Encoding     as T
+import qualified Data.Text.IO           as T
 
 
 
@@ -33,6 +35,12 @@ removeIfExists :: FilePath -> IO ()
 removeIfExists fileName = removeFile fileName `catch` handleExists
   where handleExists e
           | isDoesNotExistError e = return ()
+          | otherwise = throwIO e
+
+readFileSafely :: FilePath -> IO Text
+readFileSafely filename = T.readFile filename `catch` handleExists
+  where handleExists e
+          | isDoesNotExistError e = return ""
           | otherwise = throwIO e
 
 pairs :: [a] -> [(a,a)]
@@ -139,3 +147,20 @@ chunk _ [] = []
 chunk n xs = y1 : chunk n y2
   where (y1, y2) = splitAt n xs
 
+
+runCommand :: String -> IO String
+runCommand str = readProcess bin args ""
+  where (bin:args) = words str
+
+-- Because it's the only good way to do it, apparently.
+timeIO :: IO a -> IO (Double, a)
+timeIO action = do
+    start <- read <$> runCommand "date +%s%N"
+    result <- action
+    end <- read <$> runCommand "date +%s%N"
+    return ((end - start) / (10 ^ (9 :: Integer)), result)
+
+printTiming :: IO () -> IO ()
+printTiming func = do
+    (time, _) <- timeIO func
+    putStrLn $ unwords ["Total:", show time, "seconds"]

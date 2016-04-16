@@ -29,6 +29,7 @@ config args = do
     return $ Just $ Config {
           conf_selection                = ss
         , conf_visualDebug              = args_visualDebug args
+        , conf_fast                     = args_fast args
         , conf_verbose                  = args_verbose args
         , conf_ignoreReferenceErrors    = args_ignoreReferenceErrors args
         , conf_todos                    = args_todos args
@@ -62,6 +63,10 @@ argParser = Args
         (long "visual-debug"
             <> short 'd'
             <> help "Generate visual debug code")
+    <*> switch
+        (long "fast"
+            <> short 'f'
+            <> help "Compile slightly faster (with caching), only suitable for development")
     <*> switch
         (long "verbose"
             <> short 'v'

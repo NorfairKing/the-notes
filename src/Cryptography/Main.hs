@@ -134,7 +134,7 @@ additiveDLEasy = thm $ do
         let z = "z"
             a = "a"
             g = "g"
-        s ["Recall that, for any element", m (z ∈ intmod n) <> ", we are looking for the integer", m $ integer a, "such that", m $ z =: g * a, "where", m g, "is a", generator, "of", m $ intagrp n]
+        s ["Recall that, for any", element, m (z ∈ intmod n) <> ", we are looking for the integer", m $ integer a, "such that", m $ z =: g * a, "where", m g, "is a", generator, "of", m $ intagrp n]
         s ["Luckily, ", m $ intagrp n, "gives rise to a", ring, m $ intring n, "as well"]
         s ["This allows us to find", m a, "by dividing", m z, by, m g]
         s ["More precicely: because", m g, "is a", generator, "means that", m g, "must have a multiplicative inverse in", m $ intring n, "otherwise no multiple of", m g, "would be equal to", m 1]
@@ -195,7 +195,7 @@ computationalDHProblemDefinition = de $ do
     let a = "a"
         b = "b"
         g = "g"
-    s [the, computationalDiffieHellman, "(" <> cDH' <> ")", "problem for a given", cyclic, group, m $ grp_ =: grp (genby g) grpop_, "is the problem of computing, for given group elements", m $ g ^ a, and, m $ g ^ b, "the group element", m $ g ^ (a * b)]
+    s [the, computationalDiffieHellman, "(" <> cDH' <> ")", "problem for a given", cyclic, group, m $ grp_ =: grp (genby g) grpop_, "is the problem of computing, for given", group, elements, m $ g ^ a, and, m $ g ^ b, "the group element", m $ g ^ (a * b)]
 
 diffieHellmanTripleDefinition :: Note
 diffieHellmanTripleDefinition = de $ do
@@ -215,7 +215,7 @@ decisionalDHProblemDefinition = de $ do
         b = "b"
         c = "c"
         g = "g"
-    s [the, decisionalDiffieHellman', "(" <> dDH' <> ")", "problem for a given", cyclic, group, m $ grp_ =: grp (genby g) grpop_, "is the problem of determining whether, for given group elements", (m $ g ^ a) <> ",", m $ g ^ b, and, m $ g ^ c, "whether they are chosen randomly and independently from", m grps_, "or form a", diffieHellmanTriple]
+    s [the, decisionalDiffieHellman', "(" <> dDH' <> ")", "problem for a given", cyclic, group, m $ grp_ =: grp (genby g) grpop_, "is the problem of determining whether, for given", group, elements, (m $ g ^ a) <> ",", m $ g ^ b, and, m $ g ^ c, "whether they are chosen randomly and independently from", m grps_, "or form a", diffieHellmanTriple]
 
 
 
@@ -223,7 +223,7 @@ publicKeyEncryptionSchemeDefinition :: Note
 publicKeyEncryptionSchemeDefinition = de $ do
     lab publicKeyEncryptionSchemeDefinitionLabel
     lab keyGeneratorDefinitionLabel
-    s ["A", publicKeyEncryptionScheme', "(" <> pKE' <> ")", "consists of three functions"]
+    s ["A", publicKeyEncryptionScheme', "(" <> pKE' <> ")", "consists of three", functions]
     let pk = "pk"
         sk = "sk"
         mesg = "m"
@@ -249,7 +249,7 @@ iNDCCASecureDefinitionPKEDefinition = de $ do
     lab iNDCCADefinitionLabel
     lab indistinguishabilityChosenCiphertextAttackDefinitionLabel
     let t = "t"
-    s ["A", m t <> "-message", indistinguishabilityChosenPlaintextAttack', "(" <> iNDCCA' <> ")", "game", "for a", publicKeyEncryptionScheme, "between a", challenger, "and an", adversary, "goes as follows"]
+    s ["A", m t <> "-", message, indistinguishabilityChosenPlaintextAttack', "(" <> iNDCCA' <> ")", "game", "for a", publicKeyEncryptionScheme, "between a", challenger, "and an", adversary, "goes as follows"]
     let b = "b"
         b' = "b'"
     enumerate $ do
@@ -258,7 +258,7 @@ iNDCCASecureDefinitionPKEDefinition = de $ do
         let m0 = "m" !: 0
             m1 = "m" !: 1
             mb = "m" !: b
-        item $ s [the, adversary, "chooses two messages", m m0, and, m m1, "of the same length"]
+        item $ s [the, adversary, "chooses two", messages, m m0, and, m m1, "of the same length"]
         let b = "b"
         item $ s [the, challenger, "chooses a uniformly random bit", m b <> ", computes the encryption of", m mb <> ", and returns it to the", adversary]
         item $ s [the, adversary, "can again choose", ciphertexts, "and receive their decryptions as in step 2, but the encryption of", m mb, "is excluded"]

@@ -1,15 +1,18 @@
 module Main where
 
-import           Prelude              as P
+import           Prelude                as P
 
-import qualified Data.Text            as T
+import qualified Data.Text              as T
 
-import           Control.Monad.Reader (asks)
-import           System.Directory     (copyFile, withCurrentDirectory)
-import           System.Exit          (ExitCode (..), die)
-import           System.Process       (CreateProcess (..),
-                                       readCreateProcessWithExitCode, shell)
-import           System.Random        (mkStdGen)
+import           Control.DeepSeq        (force)
+import           Control.Exception.Base (evaluate)
+import           Control.Monad          (void)
+import           Control.Monad.Reader   (asks)
+import           System.Directory       (copyFile, withCurrentDirectory)
+import           System.Exit            (ExitCode (..), die)
+import           System.Process         (CreateProcess (..),
+                                         readCreateProcessWithExitCode, shell)
+import           System.Random          (mkStdGen)
 import           Utils
 
 import           Notes
@@ -46,7 +49,7 @@ import           Topology.Main
 
 
 main :: IO ()
-main = do
+main = printTiming $ do
     printHeader
     outputSystemInfo
     checkDependencies
@@ -69,6 +72,12 @@ main = do
             makeDir outdir
             withCurrentDirectory tmpdir $ do
                 printGenerationHeader
+
+                let mn = conf_texFileName cf ++ ".tex"
+
+                beforeHash <- hashContent <$> (liftIO $ readFileSafely mn)
+                void $ evaluate $ force beforeHash
+
                 -- This is where the magic happens
                 (eet, _) <- buildNote entireDocument cf pconf startState
 
@@ -81,10 +90,20 @@ main = do
                     Right () -> return ()
 
                 putStrLn ""
+
+                afterHash <- hashContent <$> (liftIO $ readFileSafely mn)
+                void $ evaluate $ force afterHash
+
                 printCompilationHeader
-                (ec, out, err) <- liftIO $ readCreateProcessWithExitCode
-                                            (latexMkJob cf)
-                                            ""
+                (dur, (ec, out, err)) <-
+                    liftIO $ timeIO $ do
+                        result <- readCreateProcessWithExitCode (latexMkJob cf) ""
+                        evaluate $ force result
+
+                if beforeHash == afterHash
+                then liftIO $ putStrLn $ "LaTeX compilation was done already."
+                else liftIO $ putStrLn $ unwords ["LaTeX compilation took", show dur, "seconds."]
+
                 let outputAnyway = do
                       putStrLn out
                       putStrLn err
@@ -96,6 +115,7 @@ main = do
                         -- Copy output file from temp dir to output dir
                         let file = conf_pdfFileName cf ++ ".pdf"
                         copyFile file (outdir ++ "/" ++ file)
+                        putStrLn "Compilation success.\n"
 
             return ()
 
@@ -199,3 +219,4 @@ allNotes = do
     formalMethods
     machineLearning
     dataMining
+
