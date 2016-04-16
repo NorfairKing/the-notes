@@ -2,8 +2,10 @@ module Preface where
 
 import           Notes
 
+import           Utils
+
 myPreface :: Note
-myPreface = do
+myPreface = slow $ do
     comm1 "section*" "Preface"
     s ["These are my notes"]
     s ["There are many like them but these ones are mine"]

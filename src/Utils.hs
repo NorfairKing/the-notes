@@ -9,6 +9,8 @@ import           Data.List              (intercalate, isSuffixOf)
 import           Data.Maybe             (fromJust)
 
 import           Control.Exception
+import           Control.Monad          (unless)
+import           Control.Monad.Reader   (asks)
 import           Control.Monad.State    (gets, modify)
 import           System.Directory       (createDirectory, removeFile)
 import           System.IO.Error        (isAlreadyExistsError,
@@ -164,3 +166,9 @@ printTiming :: IO () -> IO ()
 printTiming func = do
     (time, _) <- timeIO func
     putStrLn $ unwords ["Total:", show time, "seconds"]
+
+-- | Indicate that a part of the notes is skippable during fast compilation
+slow :: Note -> Note
+slow func = do
+    fast <- asks conf_fast
+    unless fast func
