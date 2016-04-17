@@ -3,11 +3,7 @@ module Cryptography.Terms where
 import           Notes
 
 makeDefs
-    [ "Diffie-Hellman"
-    , "DH"
-    , "halfkey"
-
-    , "public-key encryption scheme"
+    [ "public-key encryption scheme"
     , "PKE"
     , "key generator"
     , "key pair"
