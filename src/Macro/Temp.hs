@@ -4,6 +4,9 @@ import           Types
 
 import           Macro.Index
 
+leastSignificantBit :: Note
+leastSignificantBit = ix "least significant bit"
+
 base :: Note
 base = ix "base"
 
@@ -101,9 +104,6 @@ projection = ix "projection"
 
 closed :: Note
 closed = ix "closed"
-
-algorithm :: Note
-algorithm = ix "algorithm"
 
 transformation :: Note
 transformation = ix "transformation"

@@ -61,6 +61,7 @@ cryptography = chapter "Cryptography" $ do
         rsaSmallEInsecure
         rsaSmallEInsecure2
         totientToFactorisation
+        rsaAsHardAsLSB
 
     section "Digital signatures" $ do
         digitalSignatureDefinition
@@ -379,18 +380,21 @@ trapdoorOneWayPermutationDefinition = de $ do
     lab trapdoorOneWayPermutationDefinitionLabel
     lab tWOPDefinitionLabel
     lab trapdoorGeneratorDefinitionLabel
+    lab trapdoorFunctionDefinitionLabel
     lab trapdoorDefinitionLabel
     let x = mathcal "X"
         y = mathcal "Y"
-    s ["A", trapdoorOneWayPermutation', "(" <> tWOP <> ")", "is and efficient probabillistic algorithm, the", trapdoorGenerator', "which generates descriptions of two algorithms and two", sets, m x, and, m y]
     let f_ = "F"
         d_ = "D"
-        g_ = "g"
+    s ["A", trapdoorOneWayPermutation', "(" <> tWOP <> ")", "is and efficient probabillistic algorithm, the", trapdoorGenerator', "which generates descriptions of two", algorithms, m f_, and, m d_, "and two", sets, m x, and, m y]
+    let g_ = "g"
         g = fn g_
     itemize $ do
         item $ do
-            s ["An algorithm", m f_, "computing an", injective, function, m $ fun "f" x y]
+            let ff = "f"
+            s ["An algorithm", m f_, "computing an", injective, function, m $ fun ff x y]
             s ["Typically,", m f_, "is described by a short parameter called the", publicKey, "which also defines", m x, and,m y]
+            s [m ff, "is called the", trapdoorFunction']
         item $ do
             s ["An algorithm", m d_, "computing the", inverseFunction, m g_, "of", m f_]
             ma $ fun g_ y (x ∪ bot) <> text " such that " <> (fa ("x" ∈ x) (g (fn "f" "x") =: "x"))
@@ -445,19 +449,26 @@ rSATWOPDefinition = de $ do
         n = "n"
         e = "e"
         d = "d"
-    s [the, trapdoorGenerator, "chooses two", primes, m p, and, m q, "computes", m $ n =: p * q, "and chooses", m e, "such that", m e, "is", relativelyPrime_, "to", m $ etot n]
-    s [the, publicKey, "is the pair", m $ tuple n e]
-    s ["It then computes", m $ d =: e ^ (-1) `mod` etot n]
-    s [the, trapdoor, "is", m d]
-    let z = int0mod n
-        x = mathcal "X"
-        y = mathcal "Y"
-    s ["It outputs", m $ x =: y =: z, "as the relevant", sets]
-    let f = "f"
-        g = "g"
-        x = "x"
-    s [m f, "is defined as", m $ func f z z x (x ^ e), and, m g, "is defined as", m $ func g z z x (x ^ d)]
+    itemize $ do
+        let f = "f"
+            g = "g"
+            x = "x"
+        let z = int0mod n
+        item $ do
+            s [the, trapdoorGenerator, "chooses two", primes, m p, and, m q, "computes", m $ n =: p * q, "and chooses", m e, "such that", m e, "is", relativelyPrime_, "to", m $ etot n]
+            s [the, publicKey, "is the pair", m $ tuple n e]
+            s ["It then computes the", trapdoor, m $ d =: e ^ (-1) `mod` etot n]
+            let x = mathcal "X"
+                y = mathcal "Y"
+            s ["It outputs", m $ x =: y =: z, "as the relevant", sets]
+        item $ do
+            s [m f, "is defined as follows"]
+            ma $ func f z z x $ x ^ e
+        item $ do
+            s [m g, "is defined as follows"]
+            ma $ func g z z x $ x ^ d
 
+    todo "prove that the trapdoor allows for the inversion of the trapdoor function"
     todo "prove that this is in fact secure"
 
 
@@ -557,6 +568,65 @@ totientToFactorisation = thm $ do
         ma $ p =: n - q + 1 - etot n
         ma $ n =: n * q - q ^ 2 + q - etot n * q
         s ["Since", m n, and, m $ etot n, "are known, we can solve this quadratic system efficiently"]
+
+rsaAsHardAsLSB :: Note
+rsaAsHardAsLSB = do
+    thm $ do
+        let algo = "A"
+            a = fn algo
+            k = "k"
+            n = "n"
+            e = "e"
+            c = "c"
+            mesg = "m"
+        s ["In the", rSA, publicKeyEncryptionScheme, "any efficient algorithm", m algo, "which, for a given", csa [m k <> "-bit RSA-modulus" <> m n, "exponent " <> m e, ciphertext <> " " <> m c], "computes the", leastSignificantBit, "of the corresponding plaintext", m mesg <> ", can be used to build an efficient algorithm which, for a given", ciphertext, m c, "computes the entire corresponding", plaintext, m mesg, "by calling algorithm", m algo, m k, "times as a subroutine"]
+        footnote $ s ["By", dquoted leastSignificantBit, "we mean", m $ mesg `mod` 2]
+        todo "what does this mean in terms of reductions?"
+
+        proof $ do
+            s ["Let", m algo, "be an efficient algorithm which, for a given", csa [m k <> "-bit RSA-modulus" <> m n, "exponent " <> m e, ciphertext <> " " <> m (c =: mesg ^ e)], "computes the", leastSignificantBit, "of the corresponding plaintext", m mesg]
+            let algo' = "A'"
+            s ["This algorithm", m algo, "can be exploited as follows to build an algorithm", m algo', "that computes the entire corresponding", plaintext]
+
+            itemize $ do
+                let t = "t"
+                item $ do
+                    s ["Note first that one can easily compute", m $ (pars $ (2 ^ t) * mesg) ^ e `mod` n]
+                    aligneqs ((pars $ (2 ^ t) * mesg) ^ e `mod` n)
+                      [ (2 ^ (t * e) * mesg ^ e `mod` n)
+                      , (2 ^ (t * e) * c `mod` n)
+                      ]
+                    why
+                let u = "u"
+                item $ do
+                    s ["Let", m mesg, "be a", message, "such that", m $ mesg < (n / (2 ^ t)), "holds", "for any", m $ t ∈ naturals]
+                    s ["Note that this means that", m $ (2 ^ t) * mesg < n, "holds, which implies that", m $ (2 ^ t) * mesg, "is not reduced modulo", m n]
+                    s ["For that same", m mesg <> ",", m $ mesg + n / (2 ^ t), "is reduced exactly once modulo", m n, "(" <>(m $ n < (2 ^ t) * mesg + n < 2 * n) <> ")"]
+                    s ["Similarly,", m $ mesg + (u * n) / (2 ^ t), "is reduced exactly", m u, "times modulo", m n, "(" <>(m $ (u - 1) * n < (2 ^ t) * mesg + u * n < u * n) <> ")"]
+                item $ do
+                    s ["Because", m n, "is odd (it's the product of two large primes, yes, larger than", m 2 <> ")", "we can reason about the size of", m mesg, "as follows"]
+                    ma $ (a (2 ^ e * c) =: 0) ⇔ (mesg < (n / 2))
+                    ma $ (a (4 ^ e * c) =: 0) ⇔ cases (do
+                            (0 < mesg < (n / 4))
+                            lnbk
+                            text $ " " <> or
+                            lnbk
+                            ((n / 2) < mesg < (3 * n / 4))
+                        )
+                    ma $ (a (2 ^ (t * e) * c) =: 0) ⇔ ((u / (2 ^ t)) < mesg < ((u + 1) / (2 ^ t))) <> (text $ " with " <> m u <> " even")
+                    s ["Concretely, this means that we can find the", m t <> "-th", leastSignificantBit, "of", m mesg, "be querying", m algo, with, m $ 2 ^ (t * e) * c, "and looking at the output"]
+                    ma $ a (2 ^ (e * t) * c) =: lsb (roundd $ 2 ^ (e * t) * (mesg / n))
+                item $ do
+                    s ["Putting all of this information together, we can find", m mesg, "entirely by querying", m algo, m k, "times with input", m $ setcmpr (2 ^ (t * e)) (t ∈ setlist 1 2 t), "respectively"]
+    nte $ do
+        let k = "k"
+        s ["In fact, a stronger theorem can be proven: An algorithm which computes any binary function of the least", m $ log k, "bits of the", plaintext, "with probability non-negligibly greater than", m $ 1 / 2, "of being correct, can be used to compute the entire", plaintext]
+        refneeded "to the paper where this is proven"
+
+
+
+
+
 
 digitalSignatureDefinition :: Note
 digitalSignatureDefinition = de $ do

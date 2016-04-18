@@ -3,7 +3,8 @@ module Cryptography.Terms where
 import           Notes
 
 makeDefs
-    [ "public-key encryption scheme"
+    [ "algorithm"
+    , "public-key encryption scheme"
     , "PKE"
     , "key generator"
     , "key pair"
@@ -15,6 +16,7 @@ makeDefs
     , "trapdoor one-way permutation"
     , "TWOP"
     , "trapdoor generator"
+    , "trapdoor function"
     , "trapdoor"
 
     , "RSA"

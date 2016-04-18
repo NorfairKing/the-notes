@@ -24,7 +24,9 @@ adec_ = "adec"
 adec :: Note -> Note -> Note
 adec = fn2 adec_
 
-
+-- | Least significant bit
+lsb :: Note -> Note
+lsb = fn "LSB"
 
 -- * Hash function
 

@@ -310,10 +310,10 @@ mathfrak n = do
 -- * Logarithms
 
 log :: Note -> Note
-log n = commS "log" <> n
+log n = comm0 "log" <> n
 
 logn :: Note -> Note -> Note
-logn n m = commS "log" !: n <> m
+logn n m = comm0 "log" !: n <> m
 
 -- * Cdot
 
@@ -340,3 +340,12 @@ cdot_ = comm0 "cdot"
 -- | Underscore (as in, ignoring this argument)
 unmatched :: Note
 unmatched = comm1 "text" "_"
+
+-- * Rounding
+-- Round down
+roundd :: Note -> Note
+roundd = autoBrackets lfloor rfloor
+
+-- Round up
+roundu :: Note -> Note
+roundu = autoBrackets lceil rceil

@@ -2,6 +2,7 @@ module DataMining.LargeScaleLearning where
 
 import           Notes
 
+import           Cryptography.Terms
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
 import           Functions.Basics.Terms
