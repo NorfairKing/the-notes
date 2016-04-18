@@ -350,6 +350,7 @@ test-suite the-notes-test
                      , gitrev                >= 1.2       && < 1.3
                      , random                >= 1.1       && < 1.2
                      , hostname              >= 1.0       && < 1.1
+                     , deepseq               >= 1.4       && < 1.5
   default-extensions: OverloadedStrings
                       NoImplicitPrelude
                       TemplateHaskell
