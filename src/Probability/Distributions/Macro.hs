@@ -34,3 +34,7 @@ normalD :: Note -- Mean
         -> Note -- Variance
         -> Note
 normalD = fn2 $ mathcal "N"
+
+-- * Uniform
+uniformD_ :: Note
+uniformD_ = mathcal "U"

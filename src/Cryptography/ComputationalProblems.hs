@@ -35,11 +35,13 @@ computationalProblemsS = section "Computational Problems" $ do
             additiveDLEasy
             dlReducable
             dlModTwoInEvenOrderGroup
+            dlNotation
 
         subsubsection "Diffie Hellman" $ do
             computationalDHProblemDefinition
             diffieHellmanTripleDefinition
             decisionalDHProblemDefinition
+
 
         gameDefinition
         solverDefinition
@@ -138,6 +140,16 @@ distinctionProblemDefinition = de $ do
     let n = "n"
     s ["A", distinctionProblem', "is a", searchProblem, "where, for some", m (n ∈ naturals) <> ",", "the", instanceSpace, "is a", set, "of", m n <> "-tuples", "and the", witnessSpace, "is", m $ intmod n]
 
+dlNotation :: Note
+dlNotation = do
+    de $ do
+        s ["We use", m $ dlp dlgrp_, "to mean the", discreteLogarithm, searchProblem, "in the worst-case in the", group, m dlgrp_]
+    de $ do
+        let d = "D"
+        s ["We use", m $ dlpd dlgrp_ d, "to mean the", discreteLogarithm, searchProblem, "in the case of the distribution", m d, "in the group", m dlgrp_]
+    de $ do
+        s ["We use", m $ dlpa dlgrp_, "to mean the", discreteLogarithm, searchProblem, "in the average-case (uniform distribution) in the group", m dlgrp_]
+
 computationalDHProblemDefinition :: Note
 computationalDHProblemDefinition = de $ do
     lab computationalDiffieHellmanDefinitionLabel
@@ -166,7 +178,6 @@ decisionalDHProblemDefinition = de $ do
         c = "c"
         g = "g"
     s [the, decisionalDiffieHellman', "(" <> dDH' <> ")", "problem for a given", cyclic, group, m $ grp_ =: grp (genby g) grpop_, "is the problem of determining whether, for given group elements", (m $ g ^ a) <> ",", m $ g ^ b, and, m $ g ^ c, "whether they are chosen randomly and independently from", m grps_, "or form a", diffieHellmanTriple]
-
 
 functionInversionDefinition :: Note
 functionInversionDefinition = do
