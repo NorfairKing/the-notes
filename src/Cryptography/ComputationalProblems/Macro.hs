@@ -52,16 +52,33 @@ dlgrp_ = grp (genby "g") grpop_
 dlp :: Note -> Note
 dlp = ("DL" .!:)
 
+-- | Worst-case of a problem
+spwc :: Note -> Note
+spwc = (.^: "*")
+
+-- | Problem in case of the given distribution
+spdc :: Note -> Note -> Note
+spdc dis = (.^: dis)
+
+-- | Average-case of a problem"
+spac :: Note -> Note
+spac = spdc uniformD_
+
 -- | Discrete logarithm problem for given group in the worst-case.
 dlpw :: Note -> Note
-dlpw grp = dlp grp .^: "*"
+dlpw = spwc . dlp
 
 -- | Discrete logarithm problem for given group in the case of the given distribution
-dlpd :: Note -- ^ Group
-     -> Note -- ^ Distribution
+dlpd :: Note -- ^ Distribution
+     -> Note -- ^ Group
      -> Note
-dlpd grp dis = dlp grp .^: dis
+dlpd dis = spdc dis . dlp
 
 -- | Discrete logarithm problem for given group in the average-case.
 dlpa :: Note -> Note
-dlpa grp = dlpd grp uniformD_
+dlpa = spac . dlp
+
+
+-- | Least significant bit of the discrete logarithm in a given intmod group.
+lsbp :: Note -> Note
+lsbp n = ("LSB" !: n)

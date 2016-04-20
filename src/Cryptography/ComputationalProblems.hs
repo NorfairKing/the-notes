@@ -23,6 +23,7 @@ computationalProblemsS :: Note
 computationalProblemsS = section "Computational Problems" $ do
     subsection "Search problems" $ do
         searchProblemDefinition
+        probCaseNotation
 
         distinctionProblemDefinition
 
@@ -36,6 +37,8 @@ computationalProblemsS = section "Computational Problems" $ do
             dlReducable
             dlModTwoInEvenOrderGroup
             dlNotation
+            lsbProbNotation
+            dlLSBHardness
 
         subsubsection "Diffie Hellman" $ do
             computationalDHProblemDefinition
@@ -131,7 +134,7 @@ dlModTwoInEvenOrderGroup = thm $ do
         s ["Define", m q, and, m r, "as the quotient and rest after division by", m 2, "of", m a]
         s ["Observe first the following"]
         ma $ x ^ n =: g ^ (a * n) =: g ^ ((pars $ 2 * q + r) * n) =: g ^ (2 * n * q) ** (g ^ (r * n) =: g ^ (r * n))
-        s ["This means that", m $ x ^ n, "will be equal to the", neutralElement, "if", m a, "is even and", m $ g ^ n, "(which cannot be the", neutralElement <> ") if", m a, "is odd"]
+        s ["This means that", m $ x ^ n, "will be equal to the", neutralElement, "if", m a, "is even and", m $ g ^ n, "(which cannot be the", neutralElement, "because", m g, "is a", generator, and, m grp_, "has", order, m (2 * n) <> ") if", m a, "is odd"]
         s ["We only have to compare", m $ x ^ n, "to the", neutralElement, "to determine", m $ a `mod` 2]
 
 distinctionProblemDefinition :: Note
@@ -140,15 +143,56 @@ distinctionProblemDefinition = de $ do
     let n = "n"
     s ["A", distinctionProblem', "is a", searchProblem, "where, for some", m (n ∈ naturals) <> ",", "the", instanceSpace, "is a", set, "of", m n <> "-tuples", "and the", witnessSpace, "is", m $ intmod n]
 
+probCaseNotation :: Note
+probCaseNotation = de $ do
+    let p = "p"
+    s ["Usually a", searchProblem, m p, "is described with an implicit", probabilityDistribution]
+    s ["We then use the following notation"]
+    itemize $ do
+        item $ do
+            s ["We use", m $ spwc p, "to mean", m p, "in the worst-case"]
+        item $ do
+            let d = "D"
+            s ["We use", m $ spdc d p, "to mean", m p, "in the case of the distribution", m d]
+        item $ do
+            s ["We use", m $ spac p, "to mean", m p, "in the average-case"]
+
 dlNotation :: Note
-dlNotation = do
-    de $ do
-        s ["We use", m $ dlp dlgrp_, "to mean the", discreteLogarithm, searchProblem, "in the worst-case in the", group, m dlgrp_]
-    de $ do
-        let d = "D"
-        s ["We use", m $ dlpd dlgrp_ d, "to mean the", discreteLogarithm, searchProblem, "in the case of the distribution", m d, "in the group", m dlgrp_]
-    de $ do
-        s ["We use", m $ dlpa dlgrp_, "to mean the", discreteLogarithm, searchProblem, "in the average-case (uniform distribution) in the group", m dlgrp_]
+dlNotation = de $ do
+    s ["We use", m $ dlp dlgrp_, "to denote the", discreteLogarithm, searchProblem, "in the", group, m dlgrp_]
+
+lsbProbNotation :: Note
+lsbProbNotation = de $ do
+    let n = "n"
+    s ["We use", m $ lsbp n, "to denote the", searchProblem, "of finding the", leastSignificantBit, "of the", discreteLogarithm, "of a", group, element, "in the", group, m $ grp (intmod n) ("" `cdot` ""), "chosen uniformly at random"]
+
+dlLSBHardness :: Note
+dlLSBHardness = do
+    thm $ do
+        let d = delta
+            e = epsilon
+            sol = "S"
+            n = "n"
+            p = spac $ lsbp n
+            dp = dlpw $ grp (intmod n) $ "" `cdot` ""
+            q = "Q"
+        s ["For any", m $ cs [d, e] ∈ ccint 0 1, "and for any", solver, m sol, for, m p, with, performance, "greater than", m e <> ",", "there exists a solver", m q, "for", m dp, with, performance, "at least", m $ 1 - d, "which invokes", m sol, "a polynomial number of times (with respect to", csa [m $ log (1 / d), m $ 1 / e, m $ log n] <> ")", "and otherwise performs only a few simple operations"]
+
+        toprove_ "The proof for this will make use of other theorems that still need to be written up on"
+    nte $ s ["This theorem is usually worded via its contraposition"]
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 computationalDHProblemDefinition :: Note
 computationalDHProblemDefinition = de $ do
