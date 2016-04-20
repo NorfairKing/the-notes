@@ -26,4 +26,6 @@ makeDefs
 
     , "game"
     , "winning condition"
+    , "solver"
+    , "performance"
     ]

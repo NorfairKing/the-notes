@@ -10,6 +10,7 @@ import           Functions.Basics.Terms
 import           Groups.Macro
 import           Groups.Terms
 import           Logic.PropositionalLogic.Macro
+import           Probability.ProbabilityMeasure.Terms
 import           Probability.RandomVariable.Terms
 import           Rings.Macro
 import           Rings.Terms
@@ -23,7 +24,6 @@ computationalProblemsS = section "Computational Problems" $ do
     subsection "Search problems" $ do
         searchProblemDefinition
 
-        gameDefinition
         distinctionProblemDefinition
 
         subsubsection "Function inversion" $ do
@@ -41,6 +41,8 @@ computationalProblemsS = section "Computational Problems" $ do
             diffieHellmanTripleDefinition
             decisionalDHProblemDefinition
 
+        gameDefinition
+        solverDefinition
 
 searchProblemDefinition :: Note
 searchProblemDefinition = do
@@ -193,7 +195,12 @@ gameDefinition = de $ do
     s ["In thi sence, a", searchProblem, "is a non-interactive", game]
 
 
-
+solverDefinition :: Note
+solverDefinition = de $ do
+    lab solverDefinitionLabel
+    lab performanceDefinitionLabel
+    s ["A", solver', "is an algorithm that plays a", game]
+    s [the, performance', "of a", solver, "is the", probability, "that it wins the", game]
 
 
 
