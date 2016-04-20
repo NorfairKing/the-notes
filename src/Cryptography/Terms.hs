@@ -4,14 +4,6 @@ import           Notes
 
 makeDefs
     [ "algorithm"
-    , "public-key encryption scheme"
-    , "PKE"
-    , "key generator"
-    , "key pair"
-    , "public key"
-    , "secret key"
-    , "private key"
-    , "ElGamal"
 
     , "trapdoor one-way permutation"
     , "TWOP"
