@@ -349,3 +349,7 @@ roundd = autoBrackets lfloor rfloor
 -- Round up
 roundu :: Note -> Note
 roundu = autoBrackets lceil rceil
+
+-- * Bullet
+bullet :: Note
+bullet = comm0 "bullet"

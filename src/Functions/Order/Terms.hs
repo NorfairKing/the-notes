@@ -3,7 +3,8 @@ module Functions.Order.Terms where
 import           Notes
 
 makeDefs [
-      "monotonic"
+      "conjunctive order"
+    , "monotonic"
     , "monotone"
     , "isotone"
     , "order preserving"

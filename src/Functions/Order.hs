@@ -30,6 +30,7 @@ import           Functions.Order.Terms
 
 order :: Note
 order = section "Functions and orders" $ do
+    conjunctiveOrderDefinition
     subsection "Monotonic functions" $ do
         monotonicDefinition
         monotonicFunctionsClosedUnderComposition
@@ -98,6 +99,24 @@ approximationS = subsection "Approximations" $ do
     leastFixedPointApproximationTheorem
     leastFixedPointApproximationTheoremWithoutGalois
 
+
+conjunctiveOrderDefinition :: Note
+conjunctiveOrderDefinition = de $ do
+    lab conjunctiveOrderDefinitionLabel
+    let a = "A"
+        b = "B"
+        po = partord_
+    s ["Let", m po, "be a", partialOrder, "on a", set, m b, and, "let", m a, "be a", set, "as well"]
+    let f_ = "f"
+        f = fn f_
+        co = cordsign partord_
+    s [the, conjunctiveOrder', m co, "on the", set, "of", functions, m $ setcmpr f_ (fun f_ a b), "is defined as follows"]
+    let g_ = "g"
+        g = fn g_
+        (<.) = inposet po
+        (<<) = cord partord_
+        x = "x"
+    ma $ (f_ << g_) === (fa (x ∈ a) (f x <. g x))
 
 monotonicDefinition :: Note
 monotonicDefinition = de $ do

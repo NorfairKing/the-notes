@@ -3,15 +3,12 @@ module Cryptography.SystemAlgebra.SecureChannels.Macro where
 import           Types
 
 import qualified Data.Text    as T
+import           Macro.Math
 import           Prelude      (Int, id)
 
 import           Macro.Arrows
 
 -- * Channels
-
-bullet :: Note
-bullet = comm0 "bullet"
-
 negSpace :: Int -> Note
 negSpace n = commS "kern" <> raw ("-" <> T.pack (show n) <> "px")
 
