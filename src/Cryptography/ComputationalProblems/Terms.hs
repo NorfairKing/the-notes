@@ -31,6 +31,9 @@ makeDefs
     , "performance value"
     , "performance function"
     , "hard"
+    , "reduction"
+    , "reduction function"
+    , "performance translation function"
     ]
 
 nSolver :: Note -> Note
@@ -44,3 +47,9 @@ eHard e = m e <> "-" <> hard
 
 eHard' :: Note -> Note
 eHard' e = m e <> "-" <> hard'
+
+tReduction :: Note -> Note
+tReduction t = m t <> "-" <> reduction
+
+tReduction' :: Note -> Note
+tReduction' t = m t <> "-" <> reduction'

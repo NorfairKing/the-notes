@@ -7,6 +7,7 @@ import           Cryptography.SymmetricCryptography.Macro
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
 import           Functions.Basics.Terms
+import           Functions.Order.Terms
 import           Groups.Macro
 import           Groups.Terms
 import           Logic.FirstOrderLogic.Macro
@@ -54,6 +55,10 @@ computationalProblemsS = section "Computational Problems" $ do
         performanceFunctionDefinition
         aSolverDefinition
         informationTheoreticalHardness
+
+    section "Reductions" $ do
+        reductionDefinition
+
 
 searchProblemDefinition :: Note
 searchProblemDefinition = do
@@ -297,3 +302,44 @@ informationTheoreticalHardness = de $ do
         e = epsilon
     s ["If every", solver, m sl, "has a", performance, "smaller than some", m e <> ", we call", m probl_, "information-theoreticall", or, "unconditionally", eHard' e]
     ma $ fa (sl ∈ solvs_) (perf_ sl ⊆: e)
+
+
+
+reductionDefinition :: Note
+reductionDefinition = de $ do
+    lab reductionDefinitionLabel
+    lab reductionFunctionDefinitionLabel
+    lab performanceTranslationFunctionDefinitionLabel
+    let p = "p"
+        q = "q"
+    s ["Let", m p, and, m q, "be two", searchProblems <> "," , m $ solvs p, and, m $ solvs q, sets, "of", solvers]
+    let po = partord_
+    s ["Let", m $ perfs p, and, m $ perfs q, "be the", sets, "of", performanceValues, "associated with", m p, and, m q, "respectively"]
+    let pop = po !: p
+        poq = po !: q
+    s ["Let", m $ perfs p, and, m $ perfs q, "be equipped with the", partialOrders, m $ pop, and, m $ poq, "respectively"]
+    newline
+    let t_ = tau
+        t = fn t_
+        r_ = rho
+        r = fn r_
+        sl = "s"
+    s ["A", tReduction' t_, "of", m q, to, m p, "is a", function, m r_, "that maps a", solver, for, m p, "onto a", solver, for, m q, ".."]
+    ma $ func r_ (solvs p) (solvs q) sl (r sl)
+    s ["... such that", m t_, "is a", monotonic', function, "as follows"]
+    footnote $ s ["Monotonicity entails that a better", solver, "for", m p, "does not result in a worse", solver, "for", m q]
+    let a = "a"
+    ma $ func t_ (perfs p) (perfs q) a (t a)
+    s [m r_, "is called the", reductionFunction', and, m t_, "is called the", performanceTranslationFunction']
+    newline
+    s ["The following equation then characterizes this reduction"]
+    let (<<) = inposet poq
+    ma $ fa (sl ∈ solvs p) $ t (perf p sl) << perf q (r sl)
+
+
+
+
+
+
+
+

@@ -52,9 +52,13 @@ probl_ = "p"
 probs_ :: Note
 probs_ = comm0 "Theta"
 
+-- | Set of solvers for a problem
+solvs :: Note -> Note
+solvs = (comm0 "Sigma" !:)
+
 -- | Concrete set of solvers
 solvs_ :: Note
-solvs_ = comm0 "Sigma"
+solvs_ = solvs probl_
 
 -- | Performance set of a problem
 perfs :: Note -> Note
