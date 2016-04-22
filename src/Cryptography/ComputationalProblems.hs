@@ -9,9 +9,12 @@ import           Functions.Basics.Macro
 import           Functions.Basics.Terms
 import           Groups.Macro
 import           Groups.Terms
+import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
 import           Probability.ProbabilityMeasure.Terms
 import           Probability.RandomVariable.Terms
+import           Relations.Orders.Macro
+import           Relations.Orders.Terms                   hiding (order)
 import           Rings.Macro
 import           Rings.Terms
 import           Sets.Basics.Terms
@@ -48,6 +51,9 @@ computationalProblemsS = section "Computational Problems" $ do
 
         gameDefinition
         solverDefinition
+        performanceFunctionDefinition
+        aSolverDefinition
+        informationTheoreticalHardness
 
 searchProblemDefinition :: Note
 searchProblemDefinition = do
@@ -253,9 +259,41 @@ gameDefinition = de $ do
 solverDefinition :: Note
 solverDefinition = de $ do
     lab solverDefinitionLabel
-    lab performanceDefinitionLabel
     s ["A", solver', "is an algorithm that plays a", game]
     s [the, performance', "of a", solver, "is the", probability, "that it wins the", game]
+    todo "Is this the best definition of performance?"
 
+performanceFunctionDefinition :: Note
+performanceFunctionDefinition = nte $ do
+    de $ do
+        lab performanceDefinitionLabel
+        lab performanceValueDefinitionLabel
+        lab performanceFunctionDefinitionLabel
+        let sl = "s"
+        s ["Let", m probl_, "be a", searchProblem, and, m solvs_, "a", set, "of", solvers, for, m probl_]
+        s ["Let", m perfs_, "be a", set, "of so-called", performanceValues, "associated with", m probl_]
+        s ["A", performanceFunction, "is a", function, "as follows"]
+        ma $ func perff_ solvs_ perfs_ sl (perf_ sl)
+    nte $ do
+        s ["Performance values are often real numbers, for example a success probability or a distinguishing advantage"]
+        s ["In the simplest case, performance values are binary"]
 
+aSolverDefinition :: Note
+aSolverDefinition = de $ do
+    s ["Let", m probl_, "be a", searchProblem, and, m solvs_, "a", set, "of", solvers, for, m probl_]
+    let po = partord_
+    s ["Let", m perfs_, "be the", set, performanceValues, "associated with", m probl_, "such that", m perfs_, "is equipped with a", partialOrder, m po]
+    let a = "a"
+    s ["A", solver, "for which the following holds is called an", nSolver' a, "for", m p]
+    let sl = "s"
+    ma $ fa (sl ∈ solvs_) (perf_ sl ⊇: a)
 
+informationTheoreticalHardness :: Note
+informationTheoreticalHardness = de $ do
+    s ["Let", m probl_, "be a", searchProblem, and, m solvs_, "a", set, "of", solvers, for, m probl_]
+    let po = partord_
+    s ["Let", m perfs_, "be the", set, performanceValues, "associated with", m probl_, "such that", m perfs_, "is equipped with a", partialOrder, m po]
+    let sl = "s"
+        e = epsilon
+    s ["If every", solver, m sl, "has a", performance, "smaller than some", m e <> ", we call", m probl_, "information-theoreticall", or, "unconditionally", eHard' e]
+    ma $ fa (sl ∈ solvs_) (perf_ sl ⊆: e)

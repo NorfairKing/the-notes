@@ -28,4 +28,19 @@ makeDefs
     , "winning condition"
     , "solver"
     , "performance"
+    , "performance value"
+    , "performance function"
+    , "hard"
     ]
+
+nSolver :: Note -> Note
+nSolver n = m n <> "-" <> solver
+
+nSolver' :: Note -> Note
+nSolver' n = m n <> "-" <> solver'
+
+eHard :: Note -> Note
+eHard e = m e <> "-" <> hard
+
+eHard' :: Note -> Note
+eHard' e = m e <> "-" <> hard'

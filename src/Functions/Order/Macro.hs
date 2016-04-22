@@ -20,6 +20,7 @@ cord o = binop $ cordsign o
 (<=-) = cord $ comm0 "leqslant"
 
 
+
 -- * Regions
 
 -- | Fixed point region
