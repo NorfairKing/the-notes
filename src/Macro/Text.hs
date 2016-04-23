@@ -124,6 +124,9 @@ at = "at"
 because :: Note
 because = "because"
 
+respectively :: Note
+respectively = "respectively"
+
 kul :: Note
 kul = "KU Leuven"
 

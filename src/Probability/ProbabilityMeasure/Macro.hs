@@ -36,7 +36,7 @@ prbsp = prsp reals boreals prm_
 
 -- | Concrete probability measure
 prm_ :: Note
-prm_ = "P"
+prm_ = "Pr"
 
 -- | Probability with given probability measure
 prm :: Note -> Note -> Note

@@ -16,6 +16,7 @@ import           Probability.ProbabilityMeasure.Terms
 import           Probability.SigmaAlgebra.Macro
 import           Probability.SigmaAlgebra.Terms
 import           Relations.Domain.Terms
+import           Sets.Basics.Terms
 
 import           Probability.RandomVariable.Macro
 import           Probability.RandomVariable.Terms
@@ -231,6 +232,7 @@ discreteRandomVariables = subsubsection "Discrete random variables" $ do
     discreteDistributionDefinition
     discreteCumulativeDistribution
     discreteRandomVariableExamples
+    statisticalDistanceDefinition
 
 discreteRandomVariableDefinition :: Note
 discreteRandomVariableDefinition = de $ do
@@ -290,6 +292,15 @@ discreteRandomVariableExamples = do
             fn x h =: 50
             lnbk
             fn x t =: 0
+
+statisticalDistanceDefinition :: Note
+statisticalDistanceDefinition = de $ do
+    let x = "X"
+        y = "Y"
+        zz = mathcal "Z"
+        z = "z"
+    s [the, statisticalDistance', m "between two", randomVariables, m x, and, m y, "over a", finite, set, m zz, "is defined as follows"]
+    ma $ statd x y =: (1 / 2) * sumcmp (z ∈ zz) (abs $ prob (x =: z) - prob (y =: z))
 
 continuousRandomVariables :: Note
 continuousRandomVariables = subsubsection "Continuous random variables" $ do

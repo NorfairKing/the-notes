@@ -102,6 +102,7 @@ data RefKind = Definition
              | Example
              | Figure
              | Note
+             | Lemma
     deriving (Show, Eq)
 
 

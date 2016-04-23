@@ -13,7 +13,9 @@ import           Groups.Macro
 import           Groups.Terms
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
-import           Probability.ProbabilityMeasure.Terms
+import           Probability.Distributions.Macro
+import           Probability.ProbabilityMeasure.Macro
+import           Probability.RandomVariable.Macro
 import           Probability.RandomVariable.Terms
 import           Relations.Orders.Macro
 import           Relations.Orders.Terms                   hiding (order)
@@ -24,11 +26,12 @@ import           Sets.Basics.Terms
 import           Cryptography.ComputationalProblems.Macro
 import           Cryptography.ComputationalProblems.Terms
 
+
 computationalProblemsS :: Note
 computationalProblemsS = section "Computational Problems" $ do
+    todo "Restructure this entire section, first abstract problems and performances, then search, etc"
     subsection "Search problems" $ do
         searchProblemDefinition
-        probCaseNotation
 
         distinctionProblemDefinition
 
@@ -56,10 +59,16 @@ computationalProblemsS = section "Computational Problems" $ do
         performanceFunctionDefinition
         aSolverDefinition
         informationTheoreticalHardness
+        worstCaseDefinition
+        distributionCaseDefinition
+        averageCaseDefinition
+        averageCasePerformanceDifference
+        probCaseNotation
 
     section "Reductions" $ do
         reductionDefinition
         compositionOfReductions
+        todo "generalised reductions for lists of problems"
 
 
 searchProblemDefinition :: Note
@@ -156,20 +165,6 @@ distinctionProblemDefinition = de $ do
     let n = "n"
     s ["A", distinctionProblem', "is a", searchProblem, "where, for some", m (n ∈ naturals) <> ",", "the", instanceSpace, "is a", set, "of", m n <> "-tuples", "and the", witnessSpace, "is", m $ intmod n]
 
-probCaseNotation :: Note
-probCaseNotation = de $ do
-    let p = "p"
-    s ["Usually a", searchProblem, m p, "is described with an implicit", probabilityDistribution]
-    s ["We then use the following notation"]
-    itemize $ do
-        item $ do
-            s ["We use", m $ spwc p, "to mean", m p, "in the worst-case"]
-        item $ do
-            let d = "D"
-            s ["We use", m $ spdc d p, "to mean", m p, "in the case of the distribution", m d]
-        item $ do
-            s ["We use", m $ spac p, "to mean", m p, "in the average-case"]
-
 dlNotation :: Note
 dlNotation = de $ do
     s ["We use", m $ dlp dlgrp_, "to denote the", discreteLogarithm, searchProblem, "in the", group, m dlgrp_]
@@ -261,14 +256,13 @@ gameDefinition = de $ do
     s ["A", game', "is a", searchProblem, "where every instance is an interactive proces with which a", witness, "(algorithm) can interact in several steps"]
     s [the, game, "is characterized by a special winning condition that the algorithm should provoke to win the game"]
     s ["In thi sence, a", searchProblem, "is a non-interactive", game]
+    todo "redefine in terms of system algebra"
 
 
 solverDefinition :: Note
 solverDefinition = de $ do
     lab solverDefinitionLabel
     s ["A", solver', "is an algorithm that plays a", game]
-    s [the, performance', "of a", solver, "is the", probability, "that it wins the", game]
-    todo "Is this the best definition of performance?"
 
 performanceFunctionDefinition :: Note
 performanceFunctionDefinition = nte $ do
@@ -315,7 +309,7 @@ reductionDefinition = do
         lab reductionDefinitionLabel
         lab reductionFunctionDefinitionLabel
         lab performanceTranslationFunctionDefinitionLabel
-        s ["Let", m p, and, m q, "be two", searchProblems, and , m $ solvs p, and, m $ solvs q, sets, "of", solvers]
+        s ["Let", m p, and, m q, "be two", problems, and , m $ solvs p, and, m $ solvs q, sets, "of", solvers]
         let po = partord_
         s ["Let", m $ perfs p, and, m $ perfs q, "be the", sets, "of", performanceValues, "associated with", m p, and, m q, "respectively"]
         let pop = po !: p
@@ -349,7 +343,7 @@ compositionOfReductions = thm $ do
     let p = "p"
         q = "q"
         r = "r"
-    s ["Let", csa [m p, m q, m r], "be three", searchProblems, and, csa [m $ solvs p, m $ solvs q, m $ solvs r], sets, "of", solvers]
+    s ["Let", csa [m p, m q, m r], "be three", problems, and, csa [m $ solvs p, m $ solvs q, m $ solvs r], sets, "of", solvers]
     let po = partord_
     s ["Let", csa [m $ perfs p, m $ perfs q, m $ perfs r], "be the", sets, "of", performanceValues, "associated with", csa [m p, m q, m r], "respectively"]
     let pop = po !: p
@@ -385,6 +379,76 @@ compositionOfReductions = thm $ do
 
         s ["Combining these two inequalities yields the theorem"]
         ma $ fa (sl ∈ solvs p) $ t2 (t1 (perf p sl)) <. t2 (perf q (r1 sl)) <. perf r (r2 (r1 sl))
+
+
+worstCaseDefinition :: Note
+worstCaseDefinition = de $ do
+    lab worstCaseProblemDefinitionLabel
+    let p = mathcal "P"
+    s ["Let", m p, "be a", set, "of", problems, and, m $ solvs p, "a", set, "of solvers for all of those", problems]
+    s ["We define the", worstCaseProblem', m $ spwc p, "as the abstract", problem, "for which any", solver <> "'s", performance, "is defined as the", infimum, "over all the", performances, "of the", solver, "for the", problems, "in", m p]
+    let pp = "p"
+        sl = "s"
+    ma $ perf (spwc p) sl =: infcomp (pp ∈ p) (perf pp sl)
+
+distributionCaseDefinition :: Note
+distributionCaseDefinition = de $ do
+    let p = mathcal "P"
+    s ["Let", m p, "be a", set, "of", problems, and, m $ solvs p, "a", set, "of solvers for all of those", problems]
+    let d = "D"
+        ppp = "P"
+    s ["Let", m d, "be a", probabilityDistribution, "on a", m p <> "-" <> randomVariable, m ppp]
+    s ["We define the", weightedAverageCaseProblem', "over", m d, or, dProblem' d, m $ spdc d p, "as the abstract", problem, "for which any", solver <> "'s", performance, "is defined as the weighted average over all the", performances, "of the", solver, "for the", problems, "in", m p]
+    let pp = "p"
+        sl = "s"
+    ma $ perf (spdc d p) sl =: sumcmp (pp ∈ p) (prdsm d pp * perf pp sl)
+    s ["In terms of the random variable, that looks as follows"]
+    ma $ perf (spdc d p) sl =: sumcmp (pp ∈ p) (prob (ppp =: pp) * perf pp sl)
+
+
+averageCaseDefinition :: Note
+averageCaseDefinition = de $ do
+    let p = mathcal "P"
+    s ["Let", m p, "be a", set, "of", problems, and, m $ solvs p, "a", set, "of solvers for all of those", problems]
+    s ["We define the", averageCaseProblem, "as the", dProblem uniformD_, for, m p]
+
+
+probCaseNotation :: Note
+probCaseNotation = de $ do
+    let p = "p"
+    s ["Usually a", searchProblem, m p, "is described with an implicit", instanceSpace]
+    s ["We then use the following notation"]
+    itemize $ do
+        item $ do
+            s ["We use", m $ spwc p, "to mean", m p, "in the worst-case"]
+        item $ do
+            let d = "D"
+            s ["We use", m $ spdc d p, "to mean", m p, "in the case of the distribution", m d]
+        item $ do
+            s ["We use", m $ spac p, "to mean", m p, "in the average-case"]
+
+
+averageCasePerformanceDifference :: Note
+averageCasePerformanceDifference = lem $ do
+    let p = mathcal "P"
+        q = mathcal "Q"
+        d = ("D" !:)
+        dp = d p
+        dq = d q
+        oo = perfs ""
+    s ["Let", m p, and, m q, "be two", weightedAverageCaseProblems, with, probabilityDistributions, m dp, and, m dq, respectively, "with the same", set, "of", performances, m $ oo ⊆ reals]
+    let o = "o"
+        o1 = o !: 1
+        o2 = o !: 2
+        sl = "s"
+    ma $ fa sl $ perf p sl <= perf q sl + (pars $ max (cs [o1, o2] ∈ oo) (abs $ o1 - o2)) * statd p q
+
+    toprove
+
+
+
+
+
 
 
 

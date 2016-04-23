@@ -20,6 +20,7 @@ makeDefs [
     , "clone"
     , "discrete"
     , "discrete distribution"
+    , "statistical distance"
     , "continuous"
     , "continuous distribution"
     , "probability density function"

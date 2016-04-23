@@ -4,6 +4,7 @@ import           Notes
 
 makeDefs
     [ "search problem"
+    , "problem"
     , "instance space"
     , "witness space"
     , "witness"
@@ -34,6 +35,10 @@ makeDefs
     , "reduction"
     , "reduction function"
     , "performance translation function"
+
+    , "worst-case problem"
+    , "weighted average-case problem"
+    , "average-case problem"
     ]
 
 nSolver :: Note -> Note
@@ -53,3 +58,9 @@ tReduction t = m t <> "-" <> reduction
 
 tReduction' :: Note -> Note
 tReduction' t = m t <> "-" <> reduction'
+
+dProblem :: Note -> Note
+dProblem d = m d <> "-" <> problem
+
+dProblem' :: Note -> Note
+dProblem' d = m d <> "-" <> problem'
