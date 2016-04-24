@@ -28,6 +28,7 @@ import           Cryptography.SystemAlgebra.SecureChannels.Terms
 
 secureChannelsSS :: Note
 secureChannelsSS = subsection "Secure Channels" $ do
+    todo "move this whole section to after computational problems"
     channelDefinition
     authenticatedChannelDefinition
     secretChannelDefinition

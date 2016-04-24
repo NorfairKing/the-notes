@@ -34,10 +34,14 @@ makeDefs
     , "function inversion"
     , "one-way function"
 
+    , "distinction problem"
+    , "distinguisher"
+    , "advantage"
+    , "deterministic distinction game"
+    , "distinction game"
+
     , "discrete logarithm"
     , "DL"
-
-    , "distinction problem"
 
     , "computational Diffie-Hellman"
     , "CDH"

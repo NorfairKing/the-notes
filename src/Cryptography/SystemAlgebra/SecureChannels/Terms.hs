@@ -9,7 +9,5 @@ makeDefs
     , "secret channel"
     , "key channel"
     , "secure channel"
-    , "distinguisher"
-    , "advantage"
     ]
 

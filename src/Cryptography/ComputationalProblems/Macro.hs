@@ -99,6 +99,18 @@ sol = fn2 spred_
 probl_ :: Note
 probl_ = "p"
 
+
+-- * Distinction problems
+
+dprob :: Note -> Note -> Note
+dprob s1 s2 = autoBrackets langle rangle $ s1 <> comm0 "mid" <> s2
+
+dadv :: Note -> Note -> Note -> Note
+dadv d = fn2 $ comm0 "Delta" ^: d
+
+dadvs :: Note -> Note -> Note
+dadvs = fn2 $ comm0 "Delta"
+
 -- * Discrete logarithms
 
 -- | Example group for use with the discrete logarithm problem notation

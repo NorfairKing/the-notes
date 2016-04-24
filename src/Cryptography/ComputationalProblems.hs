@@ -66,6 +66,9 @@ computationalProblemsS = section "Computational Problems" $ do
 
         subsubsection "Distinction problems" $ do
             distinctionProblemDefinition
+            distinguisherDefinition
+            distinguisherAdvantageDefinition
+            distinctionGameDefinition
 
         subsubsection "Bit guessing problems" $ do
             mempty
@@ -312,8 +315,61 @@ dlModTwoInEvenOrderGroup = thm $ do
 distinctionProblemDefinition :: Note
 distinctionProblemDefinition = de $ do
     lab distinctionProblemDefinitionLabel
-    let n = "n"
-    s ["A", distinctionProblem', "is a", searchProblem, "where, for some", m (n ∈ naturals) <> ",", "the", instanceSpace, "is a", set, "of", m n <> "-tuples", "and the", witnessSpace, "is", m $ intmod n]
+    lab distinguisherDefinitionLabel
+    let ss = "S"
+        s0 = ss !: 0
+        s1 = ss !: 1
+        p = dprob s0 s1
+    s ["An abstract", distinctionProblem', "is a pair of", nSs 1, m $ tuple s0 s1, "and is denoted as", m p]
+
+distinguisherDefinition :: Note
+distinguisherDefinition = do
+    de $ do
+        lab distinguisherDefinitionLabel
+        let ss = "S"
+            s0 = ss !: 0
+            s1 = ss !: 1
+            p = dprob s0 s1
+        s ["A", distinguisher', "for a", distinctionProblem, m p, "is a", nS 2, "which at one", interface, "connects to a", system, m ss, "(either", m s0, or, m s1 <> ")", "and at the other", interface, "outputs a bit"]
+    nte $ do
+        s ["A", distinguisher, "can be both deterministic or probabillistic and is therefore usually assumed to be probabillistic"]
+
+distinguisherAdvantageDefinition :: Note
+distinguisherAdvantageDefinition = do
+    let ss = "S"
+        s0 = ss !: 0
+        s1 = ss !: 1
+        d = "D"
+    de $ do
+        let p = dprob s0 s1
+            ad = dadv d s0 s1
+        s [the, advantage', m ad, "of a", distinguisher, m d, "for a", distinctionProblem, m p, "in distinguishing", m s0, and, m s1, "is defined as follows"]
+        ma $ ad =: prob (conv_ s1 d =: 1) - prob (conv_ s0 d =: 1)
+    nte $ do
+        s ["Note that", m $ prob (conv_ s1 d =: 1), and, m $ prob (conv_ s0 d =: 1), "are probabilities in different random experiments"]
+        s ["In one experiment the", distinguisher, "is guessing the identity of", m s0, and, "in the other it's guessing the identity of", m s1]
+    de $ do
+        let dd = mathcal "D"
+        s ["We define the", advantage, "of a", set, m dd, "of", distinguishers, "as the", supremum, "of all the individual", distinguishers]
+        ma $ dadv dd s0 s1 =: supcomp (d ∈ dd) (dadv d s0 s1)
+        s ["Moreover, we denote the", advantage, "of the", set, "of all possible", distinguishers, "as", m $ dadvs s0 s1]
+
+distinctionGameDefinition :: Note
+distinctionGameDefinition = de $ do
+    lab distinctionGameDefinitionLabel
+    let ss = "S"
+        s0 = ss !: 0
+        s1 = ss !: 1
+        p = dprob s0 s1
+    s ["A", deterministicDistinctionGame', "for a", distinctionProblem, m p, "(deterministically) outputs either", m s0, or, m s1, "at one", interface, "and receives a bit at that same", interface]
+    s ["It then outputs a set bit if the bit that it receives matches the index of the", system, "it outputted before"]
+    newline
+    s ["A (probabillistic)", distinctionGame', "for a", distinctionProblem, m p, "is a", randomVariable, "over the", deterministicDistinctionGames, "for", m p]
+
+    s ["A", solver, "for a", distinctionGame, "for a", distinctionProblem, m p, "is a", distinguisher, "for", m p]
+    s [the, performanceValues, "of such a", solver, "lie in the interval", m $ ccint (-1) 1]
+    newline
+    s [the, performanceFunction, "is then defined as mapping a", distinguisher, "to its", advantage]
 
 dlNotation :: Note
 dlNotation = de $ do
@@ -382,7 +438,7 @@ decisionalDHProblemDefinition = de $ do
     s [the, decisionalDiffieHellman', "(" <> dDH' <> ")", "problem for a given", cyclic, group, m $ grp_ =: grp (genby g) grpop_, "is the problem of determining whether, for given group elements", (m $ g ^ a) <> ",", m $ g ^ b, and, m $ g ^ c, "whether they are chosen randomly and independently from", m grps_, "or form a", diffieHellmanTriple]
 
 functionInversionDefinition :: Note
-functionInversionDefinition = do
+functionInversionDefinition = de $ do
     lab functionInversionDefinitionLabel
     let a = "A"
         b = "B"
