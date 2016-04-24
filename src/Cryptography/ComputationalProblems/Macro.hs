@@ -8,6 +8,59 @@ import           Macro.MetaMacro
 import           Macro.Tuple
 import           Probability.Distributions.Macro
 
+-- * Problems
+
+-- | Concrete set of problems
+probs_ :: Note
+probs_ = comm0 "Theta"
+
+-- | Set of solvers for a problem
+solvs :: Note -> Note
+solvs = (comm0 "Sigma" !:)
+
+-- | Concrete set of solvers
+solvs_ :: Note
+solvs_ = solvs probl_
+
+-- | Performance set of a problem
+perfs :: Note -> Note
+perfs = (comm0 "Omega" !:)
+
+perfs_ :: Note
+perfs_ = perfs probl_
+
+-- | Performance function
+perffsign :: Note
+perffsign = "Perf"
+
+perff :: Note -> Note
+perff = (perffsign !:)
+
+perff_ :: Note
+perff_ = perff probl_
+
+perf :: Note -> Note -> Note
+perf p = fn $ perff p
+
+perf_ :: Note -> Note
+perf_ = perf probl_
+
+-- * Games
+
+-- ** Deterministic games
+gme_ :: Note
+gme_ = "g"
+
+plr_ :: Note
+plr_ = "w"
+
+-- ** Probabillistic games
+gmev_ :: Note
+gmev_ = "G"
+
+plrv_ :: Note
+plrv_ = "W"
+
 -- * Search problems
 
 -- | Search problem
@@ -45,43 +98,6 @@ sol = fn2 spred_
 -- | Search problem
 probl_ :: Note
 probl_ = "p"
-
--- * Problems
-
--- | Concrete set of problems
-probs_ :: Note
-probs_ = comm0 "Theta"
-
--- | Set of solvers for a problem
-solvs :: Note -> Note
-solvs = (comm0 "Sigma" !:)
-
--- | Concrete set of solvers
-solvs_ :: Note
-solvs_ = solvs probl_
-
--- | Performance set of a problem
-perfs :: Note -> Note
-perfs = (comm0 "Omega" !:)
-
-perfs_ :: Note
-perfs_ = perfs probl_
-
--- | Performance function
-perffsign :: Note
-perffsign = "Perf"
-
-perff :: Note -> Note
-perff = (perffsign !:)
-
-perff_ :: Note
-perff_ = perff probl_
-
-perf :: Note -> Note -> Note
-perf p = fn $ perff p
-
-perf_ :: Note -> Note
-perf_ = perf probl_
 
 -- * Discrete logarithms
 

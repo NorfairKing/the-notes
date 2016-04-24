@@ -1,13 +1,15 @@
+{-# LANGUAGE QuasiQuotes #-}
 module Cryptography.ComputationalProblems where
 
-import           Notes                                    hiding (cyclic,
-                                                           inverse)
+import           Notes                                            hiding
+                                                                   (cyclic,
+                                                                   inverse)
 
-import           Cryptography.SymmetricCryptography.Macro
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
 import           Functions.Basics.Terms
 import           Functions.Composition.Macro
+import           Functions.Jections.Terms
 import           Functions.Order.Terms
 import           Groups.Macro
 import           Groups.Terms
@@ -18,10 +20,15 @@ import           Probability.ProbabilityMeasure.Macro
 import           Probability.RandomVariable.Macro
 import           Probability.RandomVariable.Terms
 import           Relations.Orders.Macro
-import           Relations.Orders.Terms                   hiding (order)
+import           Relations.Orders.Terms                           hiding (order)
 import           Rings.Macro
 import           Rings.Terms
 import           Sets.Basics.Terms
+
+import           Cryptography.SymmetricCryptography.Macro
+import           Cryptography.SystemAlgebra.AbstractSystems.Macro
+import           Cryptography.SystemAlgebra.AbstractSystems.Terms
+import           Cryptography.SystemAlgebra.DiscreteSystems.Terms
 
 import           Cryptography.ComputationalProblems.Macro
 import           Cryptography.ComputationalProblems.Terms
@@ -30,46 +37,189 @@ import           Cryptography.ComputationalProblems.Terms
 computationalProblemsS :: Note
 computationalProblemsS = section "Computational Problems" $ do
     todo "Restructure this entire section, first abstract problems and performances, then search, etc"
-    subsection "Search problems" $ do
-        searchProblemDefinition
-
-        distinctionProblemDefinition
-
-        subsubsection "Function inversion" $ do
-            functionInversionDefinition
-            oneWayFunctionDefinition
-
-        subsubsection "Discrete Logarithms" $ do
-            discreteLogarithmProblemDefinition
-            additiveDLEasy
-            dlReducable
-            dlModTwoInEvenOrderGroup
-            dlNotation
-            lsbProbNotation
-            dlLSBHardness
-
-        subsubsection "Diffie Hellman" $ do
-            computationalDHProblemDefinition
-            diffieHellmanTripleDefinition
-            decisionalDHProblemDefinition
-
-
-        gameDefinition
-        solverDefinition
+    subsection "Abstract computational problems" $ do
         performanceFunctionDefinition
-        aSolverDefinition
-        informationTheoreticalHardness
-        worstCaseDefinition
-        distributionCaseDefinition
-        averageCaseDefinition
-        averageCasePerformanceDifference
-        probCaseNotation
+        subsubsection "Hardness" $ do
+            aSolverDefinition
+            informationTheoreticalHardness
+        subsubsection "Cases" $ do
+            worstCaseDefinition
+            distributionCaseDefinition
+            averageCaseDefinition
+            averageCasePerformanceDifference
+            probCaseNotation
 
-    section "Reductions" $ do
+    subsection "Reductions" $ do
         reductionDefinition
         compositionOfReductions
         todo "generalised reductions for lists of problems"
 
+    subsection "Games" $ do
+        deterministicGameDefinition
+        probabillisticGameDefinition
+        performanceOfAGame
+
+        subsubsection "Search problems" $ do
+            searchProblemDefinition
+            functionInversionDefinition
+            oneWayFunctionDefinition
+
+        subsubsection "Distinction problems" $ do
+            distinctionProblemDefinition
+
+        subsubsection "Bit guessing problems" $ do
+            mempty
+
+
+    subsection "Discrete Logarithms" $ do
+        discreteLogarithmProblemDefinition
+        additiveDLEasy
+        dlReducable
+        dlModTwoInEvenOrderGroup
+        dlNotation
+        lsbProbNotation
+        dlLSBHardness
+
+    subsection "Diffie Hellman" $ do
+        computationalDHProblemDefinition
+        diffieHellmanTripleDefinition
+        decisionalDHProblemDefinition
+
+performanceFunctionDefinition :: Note
+performanceFunctionDefinition = nte $ do
+    de $ do
+        lab problemDefinitionLabel
+        lab solverDefinitionLabel
+        lab performanceDefinitionLabel
+        lab performanceValueDefinitionLabel
+        lab performanceFunctionDefinitionLabel
+        let sl = "s"
+        s ["Let", m probl_, "be an abstract", problem', and, m solvs_, "a", set, "of abstract", solvers', for, m probl_]
+        s ["Let", m perfs_, "be a", set, "of so-called", performanceValues', "associated with", m probl_]
+        s ["A", performanceFunction', "is a", function, "as follows"]
+        ma $ func perff_ solvs_ perfs_ sl (perf_ sl)
+    nte $ do
+        s ["Performance values are often real numbers, for example a success probability or a distinguishing advantage"]
+        s ["In the simplest case, performance values are binary"]
+
+aSolverDefinition :: Note
+aSolverDefinition = de $ do
+    s ["Let", m probl_, "be a", searchProblem, and, m solvs_, "a", set, "of", solvers, for, m probl_]
+    let po = partord_
+    s ["Let", m perfs_, "be the", set, performanceValues, "associated with", m probl_, "such that", m perfs_, "is equipped with a", partialOrder, m po]
+    let a = "a"
+    s ["A", solver, "for which the following holds is called an", nSolver' a, "for", m probl_, "if the following holds"]
+    let sl = "s"
+    ma $ fa (sl ∈ solvs_) (perf_ sl ⊇: a)
+
+informationTheoreticalHardness :: Note
+informationTheoreticalHardness = de $ do
+    s ["Let", m probl_, "be a", searchProblem, and, m solvs_, "a", set, "of", solvers, for, m probl_]
+    let po = partord_
+    s ["Let", m perfs_, "be the", set, performanceValues, "associated with", m probl_, "such that", m perfs_, "is equipped with a", partialOrder, m po]
+    let sl = "s"
+        e = epsilon
+    s ["If every", solver, m sl, "has a", performance, "smaller than some", m e <> ", we call", m probl_, "information-theoreticall", or, "unconditionally", eHard' e]
+    ma $ fa (sl ∈ solvs_) (perf_ sl ⊆: e)
+
+worstCaseDefinition :: Note
+worstCaseDefinition = de $ do
+    lab worstCaseProblemDefinitionLabel
+    let p = mathcal "P"
+    s ["Let", m p, "be a", set, "of", problems, and, m $ solvs p, "a", set, "of solvers for all of those", problems]
+    s ["We define the", worstCaseProblem', m $ spwc p, "as the abstract", problem, "for which any", solver <> "'s", performance, "is defined as the", infimum, "over all the", performances, "of the", solver, "for the", problems, "in", m p]
+    let pp = "p"
+        sl = "s"
+    ma $ perf (spwc p) sl =: infcomp (pp ∈ p) (perf pp sl)
+
+distributionCaseDefinition :: Note
+distributionCaseDefinition = de $ do
+    let p = mathcal "P"
+    s ["Let", m p, "be a", set, "of", problems, and, m $ solvs p, "a", set, "of solvers for all of those", problems]
+    let d = "D"
+        ppp = "P"
+    s ["Let", m d, "be a", probabilityDistribution, "on a", m p <> "-" <> randomVariable, m ppp]
+    s ["We define the", weightedAverageCaseProblem', "over", m d, or, dProblem' d, m $ spdc d p, "as the abstract", problem, "for which any", solver <> "'s", performance, "is defined as the weighted average over all the", performances, "of the", solver, "for the", problems, "in", m p, "according to the", distribution, m d]
+    let pp = "p"
+        sl = "s"
+    ma $ perf (spdc d p) sl =: sumcmp (pp ∈ p) (prdsm d pp * perf pp sl)
+    s ["In terms of the random variable, that looks as follows"]
+    ma $ perf (spdc d p) sl =: sumcmp (pp ∈ p) (prob (ppp =: pp) * perf pp sl)
+
+
+averageCaseDefinition :: Note
+averageCaseDefinition = de $ do
+    let p = mathcal "P"
+    s ["Let", m p, "be a", set, "of", problems, and, m $ solvs p, "a", set, "of solvers for all of those", problems]
+    s ["We define the", averageCaseProblem, "as the", dProblem uniformD_, for, m p]
+
+
+probCaseNotation :: Note
+probCaseNotation = de $ do
+    let p = "p"
+    s ["Usually many problem can be described as being a specific instance with respect to some key information in what's called an", instanceSpace]
+    s ["We then use the following notation"]
+    itemize $ do
+        item $ do
+            s ["We use", m $ spwc p, "to mean", m p, "in the worst-case"]
+        item $ do
+            let d = "D"
+            s ["We use", m $ spdc d p, "to mean", m p, "in the case of the distribution", m d]
+        item $ do
+            s ["We use", m $ spac p, "to mean", m p, "in the average-case"]
+
+
+averageCasePerformanceDifference :: Note
+averageCasePerformanceDifference = lem $ do
+    let p = mathcal "P"
+        q = mathcal "Q"
+        d = ("D" !:)
+        dp = d p
+        dq = d q
+        oo = perfs ""
+    s ["Let", m p, and, m q, "be two", weightedAverageCaseProblems, with, probabilityDistributions, m dp, and, m dq, respectively, "with the same", set, "of", performances, m $ oo ⊆ reals]
+    let o = "o"
+        o1 = o !: 1
+        o2 = o !: 2
+        sl = "s"
+    ma $ fa sl $ perf p sl <= perf q sl + (pars $ max (cs [o1, o2] ∈ oo) (abs $ o1 - o2)) * statd p q
+
+    toprove
+
+deterministicGameDefinition :: Note
+deterministicGameDefinition = do
+    de $ do
+        lab deterministicGameDefinitionLabel
+        lab gameDefinitionLabel
+        lab playerDefinitionLabel
+        let g = gme_
+            w = plr_
+        s ["A", deterministicGame', m g, "is a", nS 2, "which can at one", interface, "be connected to a", nS 1, m w, "called a", player, or, winner, "and at the other", interface, "outputs a bit (indicating whether or not the game is won)"]
+        tikzFig "Deterministic Game System" [] $ raw $ [litFile|src/Cryptography/ComputationalProblems/GameTikZ.tex|]
+    nte $ do
+        s ["Because a combined", deterministicGame, "-", player, system, "is entirely deterministic, we sometimes view these combined systems under the", injection, "that maps them to the output bit"]
+
+probabillisticGameDefinition :: Note
+probabillisticGameDefinition = do
+    de $ do
+        lab probabillisticGameDefinitionLabel
+        let g = gmev_
+            w = plrv_
+        s ["A", probabillisticGame', m g, "is a", nPS 2, "which can at one", interface, "be connected to a", nPS 1, m w, "called a", player, or, winner, "and at the other", interface, "outputs a bit (indicating whether or not the game is won)"]
+    nte $ do
+        s ["Because the combination of a", probabillisticGame, anda, player, "can be thought of as a", randomVariable, "in itself, we often view the output bit as a", randomVariable, "as well"]
+
+performanceOfAGame :: Note
+performanceOfAGame = de $ do
+    s [the, performanceFunction, "of a", deterministicGame, "is defined by viewing its", players, "as solvers"]
+    s [the, set, "of", performanceValues, "is", m bits, "and the", performanceFunction, "is defined by whether a", player, "wins the", deterministicGame]
+    let g = gme_
+        w = plr_
+    ma $ func (perff g) (solvs g) bits w $ conv_ g w
+    s [the, performanceFunction, "of a", probabillisticGame, "is defined with", m $ ccint 0 1, "as the set of", performanceValues, "as the", performanceFunction, "of the", weightedAverageCaseProblem]
+    let gg = gmev_
+        ww = plrv_
+    ma $ func (perff gg) (solvs ww) bits ww $ (ev $ conv_ gg ww) =: prob (conv_ gg ww =: 1)
 
 searchProblemDefinition :: Note
 searchProblemDefinition = do
@@ -249,57 +399,6 @@ oneWayFunctionDefinition :: Note
 oneWayFunctionDefinition = de $ do
     s ["A", oneWayFunction', "is a", function, "such that its", functionInversion, searchProblem, "is computationally hard"]
 
-gameDefinition :: Note
-gameDefinition = de $ do
-    lab gameDefinitionLabel
-    lab winningConditionDefinitionLabel
-    s ["A", game', "is a", searchProblem, "where every instance is an interactive proces with which a", witness, "(algorithm) can interact in several steps"]
-    s [the, game, "is characterized by a special winning condition that the algorithm should provoke to win the game"]
-    s ["In thi sence, a", searchProblem, "is a non-interactive", game]
-    todo "redefine in terms of system algebra"
-
-
-solverDefinition :: Note
-solverDefinition = de $ do
-    lab solverDefinitionLabel
-    s ["A", solver', "is an algorithm that plays a", game]
-
-performanceFunctionDefinition :: Note
-performanceFunctionDefinition = nte $ do
-    de $ do
-        lab performanceDefinitionLabel
-        lab performanceValueDefinitionLabel
-        lab performanceFunctionDefinitionLabel
-        let sl = "s"
-        s ["Let", m probl_, "be a", searchProblem, and, m solvs_, "a", set, "of", solvers, for, m probl_]
-        s ["Let", m perfs_, "be a", set, "of so-called", performanceValues, "associated with", m probl_]
-        s ["A", performanceFunction, "is a", function, "as follows"]
-        ma $ func perff_ solvs_ perfs_ sl (perf_ sl)
-    nte $ do
-        s ["Performance values are often real numbers, for example a success probability or a distinguishing advantage"]
-        s ["In the simplest case, performance values are binary"]
-
-aSolverDefinition :: Note
-aSolverDefinition = de $ do
-    s ["Let", m probl_, "be a", searchProblem, and, m solvs_, "a", set, "of", solvers, for, m probl_]
-    let po = partord_
-    s ["Let", m perfs_, "be the", set, performanceValues, "associated with", m probl_, "such that", m perfs_, "is equipped with a", partialOrder, m po]
-    let a = "a"
-    s ["A", solver, "for which the following holds is called an", nSolver' a, "for", m p]
-    let sl = "s"
-    ma $ fa (sl ∈ solvs_) (perf_ sl ⊇: a)
-
-informationTheoreticalHardness :: Note
-informationTheoreticalHardness = de $ do
-    s ["Let", m probl_, "be a", searchProblem, and, m solvs_, "a", set, "of", solvers, for, m probl_]
-    let po = partord_
-    s ["Let", m perfs_, "be the", set, performanceValues, "associated with", m probl_, "such that", m perfs_, "is equipped with a", partialOrder, m po]
-    let sl = "s"
-        e = epsilon
-    s ["If every", solver, m sl, "has a", performance, "smaller than some", m e <> ", we call", m probl_, "information-theoreticall", or, "unconditionally", eHard' e]
-    ma $ fa (sl ∈ solvs_) (perf_ sl ⊆: e)
-
-
 
 reductionDefinition :: Note
 reductionDefinition = do
@@ -381,69 +480,6 @@ compositionOfReductions = thm $ do
         ma $ fa (sl ∈ solvs p) $ t2 (t1 (perf p sl)) <. t2 (perf q (r1 sl)) <. perf r (r2 (r1 sl))
 
 
-worstCaseDefinition :: Note
-worstCaseDefinition = de $ do
-    lab worstCaseProblemDefinitionLabel
-    let p = mathcal "P"
-    s ["Let", m p, "be a", set, "of", problems, and, m $ solvs p, "a", set, "of solvers for all of those", problems]
-    s ["We define the", worstCaseProblem', m $ spwc p, "as the abstract", problem, "for which any", solver <> "'s", performance, "is defined as the", infimum, "over all the", performances, "of the", solver, "for the", problems, "in", m p]
-    let pp = "p"
-        sl = "s"
-    ma $ perf (spwc p) sl =: infcomp (pp ∈ p) (perf pp sl)
-
-distributionCaseDefinition :: Note
-distributionCaseDefinition = de $ do
-    let p = mathcal "P"
-    s ["Let", m p, "be a", set, "of", problems, and, m $ solvs p, "a", set, "of solvers for all of those", problems]
-    let d = "D"
-        ppp = "P"
-    s ["Let", m d, "be a", probabilityDistribution, "on a", m p <> "-" <> randomVariable, m ppp]
-    s ["We define the", weightedAverageCaseProblem', "over", m d, or, dProblem' d, m $ spdc d p, "as the abstract", problem, "for which any", solver <> "'s", performance, "is defined as the weighted average over all the", performances, "of the", solver, "for the", problems, "in", m p]
-    let pp = "p"
-        sl = "s"
-    ma $ perf (spdc d p) sl =: sumcmp (pp ∈ p) (prdsm d pp * perf pp sl)
-    s ["In terms of the random variable, that looks as follows"]
-    ma $ perf (spdc d p) sl =: sumcmp (pp ∈ p) (prob (ppp =: pp) * perf pp sl)
-
-
-averageCaseDefinition :: Note
-averageCaseDefinition = de $ do
-    let p = mathcal "P"
-    s ["Let", m p, "be a", set, "of", problems, and, m $ solvs p, "a", set, "of solvers for all of those", problems]
-    s ["We define the", averageCaseProblem, "as the", dProblem uniformD_, for, m p]
-
-
-probCaseNotation :: Note
-probCaseNotation = de $ do
-    let p = "p"
-    s ["Usually a", searchProblem, m p, "is described with an implicit", instanceSpace]
-    s ["We then use the following notation"]
-    itemize $ do
-        item $ do
-            s ["We use", m $ spwc p, "to mean", m p, "in the worst-case"]
-        item $ do
-            let d = "D"
-            s ["We use", m $ spdc d p, "to mean", m p, "in the case of the distribution", m d]
-        item $ do
-            s ["We use", m $ spac p, "to mean", m p, "in the average-case"]
-
-
-averageCasePerformanceDifference :: Note
-averageCasePerformanceDifference = lem $ do
-    let p = mathcal "P"
-        q = mathcal "Q"
-        d = ("D" !:)
-        dp = d p
-        dq = d q
-        oo = perfs ""
-    s ["Let", m p, and, m q, "be two", weightedAverageCaseProblems, with, probabilityDistributions, m dp, and, m dq, respectively, "with the same", set, "of", performances, m $ oo ⊆ reals]
-    let o = "o"
-        o1 = o !: 1
-        o2 = o !: 2
-        sl = "s"
-    ma $ fa sl $ perf p sl <= perf q sl + (pars $ max (cs [o1, o2] ∈ oo) (abs $ o1 - o2)) * statd p q
-
-    toprove
 
 
 

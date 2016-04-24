@@ -3,8 +3,29 @@ module Cryptography.ComputationalProblems.Terms where
 import           Notes
 
 makeDefs
-    [ "search problem"
-    , "problem"
+    [ "problem"
+    , "performance"
+    , "performance value"
+    , "performance function"
+    , "solver"
+    , "hard"
+
+    , "worst-case problem"
+    , "weighted average-case problem"
+    , "average-case problem"
+
+    , "reduction"
+    , "reduction function"
+    , "performance translation function"
+
+    , "deterministic game"
+    , "probabillistic game"
+    , "game"
+    , "player"
+    , "winner"
+    , "winning condition"
+
+    , "search problem"
     , "instance space"
     , "witness space"
     , "witness"
@@ -24,21 +45,6 @@ makeDefs
     , "Diffie-Hellman triple"
     , "decisional Diffie-Hellman"
     , "DDH"
-
-    , "game"
-    , "winning condition"
-    , "solver"
-    , "performance"
-    , "performance value"
-    , "performance function"
-    , "hard"
-    , "reduction"
-    , "reduction function"
-    , "performance translation function"
-
-    , "worst-case problem"
-    , "weighted average-case problem"
-    , "average-case problem"
     ]
 
 nSolver :: Note -> Note

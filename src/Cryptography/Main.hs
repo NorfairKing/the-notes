@@ -33,8 +33,6 @@ cryptography = chapter "Cryptography" $ do
     symmetricCryptographyS
     mACS
 
-    computationalProblemsS
-
     keyAgreementS
     publicKeyEncryptionS
 
@@ -61,6 +59,7 @@ cryptography = chapter "Cryptography" $ do
         collisionResistantDefinition
 
     systemAlgebraS
+    computationalProblemsS
 
     cryptoRefs
 
