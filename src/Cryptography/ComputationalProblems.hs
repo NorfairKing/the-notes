@@ -9,6 +9,7 @@ import           Functions.Application.Macro
 import           Functions.Basics.Macro
 import           Functions.Basics.Terms
 import           Functions.Composition.Macro
+import           Functions.Distances.Terms
 import           Functions.Jections.Terms
 import           Functions.Order.Terms
 import           Groups.Macro
@@ -69,6 +70,8 @@ computationalProblemsS = section "Computational Problems" $ do
             distinguisherDefinition
             distinguisherAdvantageDefinition
             distinctionGameDefinition
+            distinctionAdvantagePseudoMetric
+            distinctionAdvantageRandomVariables
 
         subsubsection "Bit guessing problems" $ do
             mempty
@@ -84,8 +87,8 @@ computationalProblemsS = section "Computational Problems" $ do
         dlLSBHardness
 
     subsection "Diffie Hellman" $ do
-        computationalDHProblemDefinition
         diffieHellmanTripleDefinition
+        computationalDHProblemDefinition
         decisionalDHProblemDefinition
 
 performanceFunctionDefinition :: Note
@@ -371,6 +374,27 @@ distinctionGameDefinition = de $ do
     newline
     s [the, performanceFunction, "is then defined as mapping a", distinguisher, "to its", advantage]
 
+distinctionAdvantagePseudoMetric :: Note
+distinctionAdvantagePseudoMetric = lem $ do
+    let ss = "S"
+        s0 = ss !: 0
+        s1 = ss !: 1
+        p = dprob s0 s1
+        d = mathcal "D"
+    s ["If a", set, m d, "of", distinguishers, "for a", distinctionProblem, m p, "is closed under complementing the output bit, then", m $ dadv d cdot_ cdot_, "is a", pseudometric_]
+
+    toprove
+
+distinctionAdvantageRandomVariables :: Note
+distinctionAdvantageRandomVariables = lem $ do
+    let x = "X"
+        y = "Y"
+        dom = "A"
+    s ["Let", m x, and, m y, "be two", nPSs 1, "that each output only a single value in some", set, m dom, "(and can therefore be thought of as", randomVariables <> ")"]
+    s ["The best", distinguisher, "for the", distinctionProblem, m $ dprob x y, "has", advantage, m $ statd x y]
+    todo "Does there really exist such a distinguisher or it just an upper bound?"
+
+
 dlNotation :: Note
 dlNotation = de $ do
     s ["We use", m $ dlp dlgrp_, "to denote the", discreteLogarithm, searchProblem, "in the", group, m dlgrp_]
@@ -408,6 +432,15 @@ dlLSBHardness = do
 
 
 
+
+diffieHellmanTripleDefinition :: Note
+diffieHellmanTripleDefinition = de $ do
+    lab diffieHellmanTripleDefinitionLabel
+    let a = "a"
+        b = "b"
+        g = "g"
+    s ["A", diffieHellmanTriple', "in a given", cyclic, group, m $ grp_ =: grp (genby g) grpop_, "is a triple of the form", m $ triple (g ^ a) (g ^ b) (g ^ (a * b)), "where", m a, and, m b, "are whole numbers"]
+
 computationalDHProblemDefinition :: Note
 computationalDHProblemDefinition = de $ do
     lab computationalDiffieHellmanDefinitionLabel
@@ -415,17 +448,13 @@ computationalDHProblemDefinition = de $ do
     let a = "a"
         b = "b"
         g = "g"
-    s [the, computationalDiffieHellman, "(" <> cDH' <> ")", "problem for a given", cyclic, group, m $ grp_ =: grp (genby g) grpop_, "is the problem of computing, for given group elements", m $ g ^ a, and, m $ g ^ b, "the group element", m $ g ^ (a * b)]
-
-diffieHellmanTripleDefinition :: Note
-diffieHellmanTripleDefinition = de $ do
-    lab diffieHellmanTripleDefinitionLabel
-    let a = "a"
-        b = "b"
-        c = "c"
-        g = "g"
-    s ["A", diffieHellmanTriple, "in a given", cyclic, group, m $ grp_ =: grp (genby g) grpop_, "is a triple of the form", m $ triple (g ^ a) (g ^ b) (g ^ (a * b)), "where", m a <> ",", m b, and, m c, "are hole numbers"]
-
+        grp_ = grp (genby g) grpop_
+        ga = g ^ a
+        gb = g ^ b
+        gab = g ^ (a * b)
+    s [the, computationalDiffieHellman, "(" <> cDH' <> ")", "problem for a given", cyclic, group, m grp_, "is the problem of computing, for given group elements", m ga, and, m gb, "the group element", m gab]
+    newline
+    s ["More formally,", m $ cdhp grp_, "is the", nS 2, "that outputs", m $ triple g ga gb, "at its inside", interface, "and outputs", m 1, "at its outside", interface, "if it subsequently receives", m gab, "at that", interface]
 
 decisionalDHProblemDefinition :: Note
 decisionalDHProblemDefinition = de $ do
@@ -435,7 +464,27 @@ decisionalDHProblemDefinition = de $ do
         b = "b"
         c = "c"
         g = "g"
-    s [the, decisionalDiffieHellman', "(" <> dDH' <> ")", "problem for a given", cyclic, group, m $ grp_ =: grp (genby g) grpop_, "is the problem of determining whether, for given group elements", (m $ g ^ a) <> ",", m $ g ^ b, and, m $ g ^ c, "whether they are chosen randomly and independently from", m grps_, "or form a", diffieHellmanTriple]
+        grp_ = grp (genby g) grpop_
+        ga = g ^ a
+        gb = g ^ b
+        gc = g ^ c
+        gab = g ^ (a * b)
+    s [the, decisionalDiffieHellman', "(" <> dDH' <> ")", "problem for a given", cyclic, group, m grp_, "is the problem of determining whether, for given group elements", (m ga) <> ",", m gb, and, m gc, "whether they are chosen randomly and independently from", m grps_, "or form a", diffieHellmanTriple]
+    newline
+    let t = "T" !: grp_
+        r = "R" !: grp_
+    s ["More formally,", m $ ddhp grp_, "is the", distinctionProblem, m $ dprob t r, "between two", nPSs 1, m t, and, m r]
+    itemize $ do
+        item $ do
+            let tab = t !: cs [a, b]
+            s [m t, "is the", nPS 1, "that is the", randomVariable, "with uniform distribution over the", nDSs 1, m tab, "that output", m $ triple ga gb gab, "and at their", interface, "and do nothing else"]
+            s ["Here", m a, and, m b, "are", elements, "of", m $ intmod $ setsize grps_]
+        item $ do
+            let rabc = r !: cs [a, b, c]
+            s [m r, "is the", nPS 1, "that is the", randomVariable, "with uniform distribution over the", nDSs 1, m rabc, "that output", m $ triple a b c, "at their", interface, "and do nothing else"]
+            s ["Here", csa [m a, m b, m c], "are", elements, "of", m grps_]
+
+
 
 functionInversionDefinition :: Note
 functionInversionDefinition = de $ do

@@ -111,6 +111,16 @@ dadv d = fn2 $ comm0 "Delta" ^: d
 dadvs :: Note -> Note -> Note
 dadvs = fn2 $ comm0 "Delta"
 
+-- * Diffie-Hellman
+
+-- | Computational Diffie-Hellman problem for a given group. (Use this with the <generator>, operation notation of groups).
+cdhp :: Note -> Note
+cdhp = ("CDH" .!:)
+
+-- | Decisional Diffie-Hellman problem for a given group.
+ddhp :: Note -> Note
+ddhp = ("DDH" .!:)
+
 -- * Discrete logarithms
 
 -- | Example group for use with the discrete logarithm problem notation

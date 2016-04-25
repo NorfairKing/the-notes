@@ -299,8 +299,10 @@ statisticalDistanceDefinition = de $ do
         y = "Y"
         zz = mathcal "Z"
         z = "z"
-    s [the, statisticalDistance', m "between two", randomVariables, m x, and, m y, "over a", finite, set, m zz, "is defined as follows"]
+    s [the, statisticalDistance', "between two", randomVariables, m x, and, m y, "over a", finite, set, m zz, "is defined as follows"]
     ma $ statd x y =: (1 / 2) * sumcmp (z ∈ zz) (abs $ prob (x =: z) - prob (y =: z))
+    todo "Does Z need to be finite?"
+
 
 continuousRandomVariables :: Note
 continuousRandomVariables = subsubsection "Continuous random variables" $ do
