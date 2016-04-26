@@ -74,7 +74,11 @@ computationalProblemsS = section "Computational Problems" $ do
             distinctionAdvantageRandomVariables
 
         subsubsection "Bit guessing problems" $ do
-            mempty
+            bitGuessingProblemDefinition
+            bitGuesserDefinition
+            bitGuesserAdvantageDefinition
+            bitGuessingGameDefinition
+            distinctionBitGuessingEquivalenceLemma
 
 
     subsection "Discrete Logarithms" $ do
@@ -393,6 +397,46 @@ distinctionAdvantageRandomVariables = lem $ do
     s ["Let", m x, and, m y, "be two", nPSs 1, "that each output only a single value in some", set, m dom, "(and can therefore be thought of as", randomVariables <> ")"]
     s ["The best", distinguisher, "for the", distinctionProblem, m $ dprob x y, "has", advantage, m $ statd x y]
     todo "Does there really exist such a distinguisher or it just an upper bound?"
+
+
+bitGuessingProblemDefinition :: Note
+bitGuessingProblemDefinition = de $ do
+    lab bitGuessingProblemDefinitionLabel
+    s ["A", bitGuessingProblem', "is a", nS 1, "that outputs a single bit"]
+
+bitGuesserDefinition :: Note
+bitGuesserDefinition = de $ do
+    lab bitGuesserDefinitionLabel
+    s ["A", bitGuesser', "is a", nS 1, "that outputs a single bit at its", interface]
+
+bitGuesserAdvantageDefinition :: Note
+bitGuesserAdvantageDefinition = de $ do
+    let g = "G"
+        b = "B"
+    s [the, advantage, "of a", bitGuesser, m g, advantage', "in a", bitGuessingProblem, m b, "is defined as follows"]
+    let z = "z"
+        zg = z !: g
+        zb = z !: b
+    s ["Let", m zg, "be the bit output by", m g, and, m zb, "the bit output by", m b]
+    ma $ gadv g =: 2 * (pars $ prob (zg =: zb) - (1 / 2))
+    s ["The value of the", advantage, "lies in the interval", m $ ccint (-1) 1]
+
+bitGuessingGameDefinition :: Note
+bitGuessingGameDefinition = de $ do
+    let b = "B"
+    s ["A", deterministicBitGuessingGame', "for a", bitGuessingGame, m b, "(deterministically) has", m b, "output its bit and receives a bit at its inside interface from a", player]
+    s ["It then outputs a set bit (win) if the two bits equal"]
+    newline
+    s ["A (probabillistic)", bitGuessingGame', "for a", bitGuessingProblem, m b, "is", game, "is a", randomVariable, "over the deterministic", bitGuessingGames, for, m b]
+    s ["A", solver, "for a", bitGuessingGame, "for a", bitGuessingProblem, m b, "is a", bitGuesser, for, m b]
+    s [the, performanceValues, "of such a", solver, "lie in the interval", m $ ccint (-1) 1]
+    s [the, performanceFunction, "is then defined as mapping a", bitGuesser, "to its", advantage]
+
+distinctionBitGuessingEquivalenceLemma :: Note
+distinctionBitGuessingEquivalenceLemma = lem $ do
+    s [distinctionProblems, "can be regarded as a special case of", bitGuessingProblems, "where the bit is uniform"]
+    todo "DEFINITELY PROVE THIS"
+    toprove
 
 
 dlNotation :: Note

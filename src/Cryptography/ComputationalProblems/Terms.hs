@@ -34,11 +34,17 @@ makeDefs
     , "function inversion"
     , "one-way function"
 
+    , "advantage"
+
     , "distinction problem"
     , "distinguisher"
-    , "advantage"
     , "deterministic distinction game"
     , "distinction game"
+
+    , "bit-guessing problem"
+    , "bit guesser"
+    , "deterministic bit-guessing game"
+    , "bit-guessing game"
 
     , "discrete logarithm"
     , "DL"

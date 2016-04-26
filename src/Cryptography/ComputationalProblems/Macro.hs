@@ -105,11 +105,19 @@ probl_ = "p"
 dprob :: Note -> Note -> Note
 dprob s1 s2 = autoBrackets langle rangle $ s1 <> comm0 "mid" <> s2
 
+-- | A given Distinguisher's advantage
 dadv :: Note -> Note -> Note -> Note
 dadv d = fn2 $ comm0 "Delta" ^: d
 
+-- | Distinguishers' advantage
 dadvs :: Note -> Note -> Note
 dadvs = fn2 $ comm0 "Delta"
+
+-- * Bit guessing problems
+
+-- Guesser's advantage
+gadv :: Note -> Note
+gadv = fn "A"
 
 -- * Diffie-Hellman
 
