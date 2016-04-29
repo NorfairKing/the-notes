@@ -83,7 +83,7 @@ encryptThenMACDefinition = de $ do
         ciph = "c"
     s ["First the", plaintext, m mesg, "is encrypted to", m ciph <> ", then a", mAC, m tag, "is produced based on the resulting", ciphertext]
     s [the, "result is the tuple", m $ tuple ciph tag]
-    tikzFig "Encrypt then MAC" [] $ raw $ [litFile|src/Cryptography/MACs/encryptThenMACTikZ.tex|]
+    tikzFig encryptThenMAC [] $ raw $ [litFile|src/Cryptography/MACs/encryptThenMACTikZ.tex|]
 
 
 encryptAndMACDefinition :: Note
@@ -97,7 +97,7 @@ encryptAndMACDefinition = do
         s ["First the", plaintext, m mesg, "is encrypted to", m ciph]
         s ["A", mAC, m tag, "is produced based on the original", plaintext]
         s [the, "result is the tuple", m $ tuple mesg tag]
-        tikzFig "Encrypt then MAC" [] $ raw $ [litFile|src/Cryptography/MACs/encryptAndMACTikZ.tex|]
+        tikzFig encryptAndMAC [] $ raw $ [litFile|src/Cryptography/MACs/encryptAndMACTikZ.tex|]
     nte $ do
         s ["Note that this approach could equivalently be defined with two different", keySpaces]
         s ["The equivalence is then in modeling both of them as part of a tuple and having the", symmetricCryptosystem, and, mAC, "each use its own part of a tuple"]
@@ -111,7 +111,7 @@ mACThenEncryptDefinition = de $ do
         ciph = "c"
     s ["First the", plaintext, m mesg, "is tagged with the", mAC, m tag, ", then the tuple", m $ tuple mesg tag, "is encrypted to", m ciph]
     s [the, "result is", m ciph]
-    tikzFig "Encrypt then MAC" [] $ raw $ [litFile|src/Cryptography/MACs/mACThenEncryptTikZ.tex|]
+    tikzFig mACThenEncrypt [] $ raw $ [litFile|src/Cryptography/MACs/mACThenEncryptTikZ.tex|]
 
 
 encryptThenMacInsecureForSameKey :: Note

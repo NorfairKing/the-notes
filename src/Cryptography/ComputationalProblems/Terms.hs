@@ -25,12 +25,6 @@ makeDefs
     , "winner"
     , "winning condition"
 
-    , "search problem"
-    , "instance space"
-    , "witness space"
-    , "witness"
-    , "solution space"
-
     , "function inversion"
     , "one-way function"
 
@@ -45,6 +39,18 @@ makeDefs
     , "bit guesser"
     , "deterministic bit-guessing game"
     , "bit-guessing game"
+
+    , "search problem"
+    , "instance space"
+    , "witness space"
+    , "witness"
+    , "solution space"
+    , "deterministic search problem solver"
+    , "probabillistic search problem solver"
+    , "search problem solver"
+    , "deterministic search problem game"
+    , "probabillistic search problem game"
+    , "search problem game"
 
     , "discrete logarithm"
     , "DL"

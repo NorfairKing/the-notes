@@ -18,6 +18,7 @@ import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
 import           Probability.Distributions.Macro
 import           Probability.ProbabilityMeasure.Macro
+import           Probability.ProbabilityMeasure.Terms
 import           Probability.RandomVariable.Macro
 import           Probability.RandomVariable.Terms
 import           Relations.Orders.Macro
@@ -60,11 +61,6 @@ computationalProblemsS = section "Computational Problems" $ do
         probabillisticGameDefinition
         performanceOfAGame
 
-        subsubsection "Search problems" $ do
-            searchProblemDefinition
-            functionInversionDefinition
-            oneWayFunctionDefinition
-
         subsubsection "Distinction problems" $ do
             distinctionProblemDefinition
             distinguisherDefinition
@@ -79,6 +75,13 @@ computationalProblemsS = section "Computational Problems" $ do
             bitGuesserAdvantageDefinition
             bitGuessingGameDefinition
             distinctionBitGuessingEquivalenceLemma
+
+        subsubsection "Search problems" $ do
+            searchProblemDefinition
+            searchProblemSolverDefinition
+            searchProblemGameDefinition
+            functionInversionDefinition
+            oneWayFunctionDefinition
 
 
     subsection "Discrete Logarithms" $ do
@@ -109,8 +112,8 @@ performanceFunctionDefinition = nte $ do
         s ["A", performanceFunction', "is a", function, "as follows"]
         ma $ func perff_ solvs_ perfs_ sl (perf_ sl)
     nte $ do
-        s ["Performance values are often real numbers, for example a success probability or a distinguishing advantage"]
-        s ["In the simplest case, performance values are binary"]
+        s ["Performance values are often real numbers, for example a success", probability, "or a distinguishing", advantage]
+        s ["In the simplest case,", performanceValues, "are binary"]
 
 aSolverDefinition :: Note
 aSolverDefinition = de $ do
@@ -240,6 +243,38 @@ searchProblemDefinition = do
         let x = "x"
             w = "w"
         s [the, searchProblem, m sprob_, "consists of finding, for a given instance", m (x ∈ isp_) <> ",", "drawn according to", m sprob_ <> ", a", witness, m (w ∈ wsp_), "such that", m $ sol x w, "holds"]
+
+searchProblemSolverDefinition :: Note
+searchProblemSolverDefinition = do
+    de $ do
+        lab searchProblemSolverDefinitionLabel
+        s ["Let", m $ probl_ =: sprob_, "be a", searchProblem]
+        s ["A", deterministicSearchProblemSolver', "is a", function, m $ funt isp_ wsp_]
+        s ["A", probabillisticSearchProblemSolver', "is a", randomVariable, "over all the", deterministicSearchProblemSolvers, "for the same", searchProblem]
+    nte $ do
+        s ["The output of a", probabillisticSearchProblemSolver, "for a given instance is a", randomVariable, "over the", witnessSpace, m wsp_]
+
+searchProblemGameDefinition :: Note
+searchProblemGameDefinition = de $ do
+    lab searchProblemGameDefinitionLabel
+    s ["Let", m $ probl_ =: sprob_, "be a", searchProblem]
+    let x = "x"
+        w = "w"
+    s ["A", deterministicSearchProblemGame, for, m probl_, anda, "given instance", m x, "(deterministically) outputs", m x, "at its inside", interface, "and receives a", witness, m w, "at that same", interface]
+    s ["It then outputs a set bit (win) if", m $ sol x w, "holds"]
+    s ["For a", deterministicSearchProblemGame, "the", performanceValues, "are", m bits]
+    newline
+    let g = "G"
+    s ["A", probabillisticSearchProblemGame, m g, for, m probl_, "is a", randomVariable, "over the", deterministicSearchProblemGames, for, m probl_]
+    let sl = "S"
+    s ["A solver is then a", probabillisticSearchProblemSolver, m sl]
+    s [the, performanceValues, "lie in the interval", m $ ccint 0 1, "and the", performanceFunction, "is defined as follows"]
+    let xx = "X"
+    ma $ perf g sl =: prob (sol xx (fn sl xx))
+    s ["Here", m xx, "is the", randomVariable, "corresponding to the input to the", searchProblemSolver]
+    s ["In other words, the", performance, "of a", searchProblemSolver, "is the", probability, "that it finds a valid", witness]
+
+    todo "define advantage independently of game, just for a solver?"
 
 
 discreteLogarithmProblemDefinition :: Note
@@ -435,8 +470,11 @@ bitGuessingGameDefinition = de $ do
 distinctionBitGuessingEquivalenceLemma :: Note
 distinctionBitGuessingEquivalenceLemma = lem $ do
     s [distinctionProblems, "can be regarded as a special case of", bitGuessingProblems, "where the bit is uniform"]
-    todo "DEFINITELY PROVE THIS"
-    toprove
+    proof $ do
+        let d = "D"
+            b = "B"
+        s ["We prove this by showing that for any", distinctionProblem, m d, "there exists a", bitGuessingProblem, m b, "such that every", distinguisher, "for", m d, "can be used to construct a", bitGuesser, for, m b, "with the same (or better)", advantage]
+        toprove
 
 
 dlNotation :: Note
