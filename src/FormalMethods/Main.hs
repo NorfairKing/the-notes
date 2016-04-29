@@ -158,6 +158,7 @@ cryptographicMessagesTermAlgebra = de $ do
     itemize $ do
         item $ s [m vars_ <> ":", the, set, "of", variables]
         item $ s [m ags_  <> ":", the, set, "of", agents]
+        item $ s [m frsh_ <> ";", the, set, "of", "fresh values"]
         item $ s [m fncs_ <> ":", the, set, "of", functions]
         let t = "t"
             t1 = t !: 1
@@ -331,10 +332,10 @@ subtermReplacementExamples = do
         let t = "t"
             mesg = "M"
             k = "K"
-            r = "r"
             x = "X"
             y = "Y"
-        s ["Let", m $ t =: sdec_ (senc_ mesg k) k, and, m $ r =: pair x y, "be", terms]
+            r = pair x y
+        s ["Let", m $ t =: sdec_ (senc_ mesg k) k, "be a", term]
         itemize $ do
             item $ m $ trepl t r (sing 1) =: sdec_ (pair x y) k
             item $ m $ trepl t y (listofs [1, 2]) =: sdec_ (senc_ mesg y) k
@@ -382,7 +383,7 @@ unifiableDefinition = de $ do
     let t = "t"
         t1 = t !: 1
         t2 = t !: 2
-    s ["We say that an", equation, m $ t1 =?= t2, "is", unifiable, "in an", equationalTheory, m et_, "for", m $ cs [t1, t2] ∈ ta_, "if there is a", substitution, m subs_, "such that", m $ sb_ t1 `eq_` sb_ t2, "holds"]
+    s ["We say that an", equation, m $ t1 =?= t2, "is", unifiable', "in an", equationalTheory, m et_, "for", m $ cs [t1, t2] ∈ ta_, "if there is a", substitution, m subs_, "such that", m $ sb_ t1 `eq_` sb_ t2, "holds"]
     s ["We then call", m subs_, "a", unifier]
 
 unifiableExamples :: Note
