@@ -80,6 +80,7 @@ computationalProblemsS = section "Computational Problems" $ do
             searchProblemDefinition
             searchProblemSolverDefinition
             searchProblemGameDefinition
+            searchProblemSolverRepetition
             functionInversionDefinition
             oneWayFunctionDefinition
 
@@ -275,6 +276,33 @@ searchProblemGameDefinition = de $ do
     s ["In other words, the", performance, "of a", searchProblemSolver, "is the", probability, "that it finds a valid", witness]
 
     todo "define advantage independently of game, just for a solver?"
+
+searchProblemSolverRepetition :: Note
+searchProblemSolverRepetition = thm $ do
+    s ["Simply repeatedly applying the same", probabillisticSearchProblemSolver, "to a given instance of a", searchProblem, "does not necessarily boost the success", probability]
+    newline
+    let sl = "S"
+        sl' = "S'"
+        a = alpha
+    s ["More formally, let", m sl, "be a", probabillisticSearchProblemSolver, "for a", searchProblem, m sprob_, with, successProbability, m $ a ∈ ocint 0 1, "such that", m spred_, "can be efficiently computed"]
+    s ["Let", m sl', "be a", probabillisticSearchProblemSolver, "defined as follows"]
+    let x = "x"
+        w = "w"
+    s ["Given an instance", m $ x ∈ isp_, "it first invokes", m sl, "on input", m x, "to obtain", m w]
+    s ["If", m $ sol x w, "holds then", m sl', "returns", m w]
+    let w' = "w'"
+    s ["Otherwise it invokes", m sl, "again on input", m x, "to obtain", m w', "and returns", m w']
+    s ["The best lower bound on the", successProbability, "is", m a]
+
+    proof $ do
+        s ["It is easy to see that", m sl', "has", successProbability, "at least", m a]
+        s ["Now it suffices to show that there exists a", searchProblem, m sprob_, anda, probabillisticSearchProblemSolver, m sl, "such that", m sl', "has", successProbability, m a, for]
+        let x0 = x !: 0
+            x1 = x !: 1
+        s ["Consider a", searchProblem, "with only two possible instances", m $ wsp_ =: setofs [x0, x1]]
+        s ["Let", m sl, "be a", solver, "that finds a valid", witness, "given", m x0, "with probability", m a, "but never finds a valid", witness, "given", m x1]
+        s [the, successProbability, "of", m sl, is, m a <> ",but the", successProbability, "of", m sl', "is also", m a]
+
 
 
 discreteLogarithmProblemDefinition :: Note

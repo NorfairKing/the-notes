@@ -51,6 +51,7 @@ makeDefs
     , "deterministic search problem game"
     , "probabillistic search problem game"
     , "search problem game"
+    , "success probability"
 
     , "discrete logarithm"
     , "DL"
