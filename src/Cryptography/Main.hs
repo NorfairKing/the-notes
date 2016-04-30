@@ -18,6 +18,7 @@ import           Sets.Basics.Terms
 
 import           Cryptography.ComputationalProblems
 import           Cryptography.KeyAgreement
+import           Cryptography.KeyEncapsulation
 import           Cryptography.Macro
 import           Cryptography.MACs
 import           Cryptography.PublicKeyEncryption
@@ -32,7 +33,6 @@ cryptography :: Note
 cryptography = chapter "Cryptography" $ do
     symmetricCryptographyS
     mACS
-
     keyAgreementS
     publicKeyEncryptionS
 
@@ -52,6 +52,8 @@ cryptography = chapter "Cryptography" $ do
         digitalSignatureDefinition
         signatureForgeryGameDefinition
         digitalSignatureSecurity
+
+    keyEncapsulationS
 
     section "Hash functions" $ do
         hashFunctionDefinition

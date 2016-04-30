@@ -37,6 +37,7 @@ publicKeyEncryptionSchemeDefinition :: Note
 publicKeyEncryptionSchemeDefinition = de $ do
     lab publicKeyEncryptionSchemeDefinitionLabel
     lab keyGeneratorDefinitionLabel
+    s ["Let", m pksp_, "be a so-called", publicKeySpace', and, m sksp_, "a so-called", secretKeySpace']
     s ["A", publicKeyEncryptionScheme', "(" <> pKE' <> ")", "consists of three", functions]
     let pk = "pk"
         sk = "sk"
