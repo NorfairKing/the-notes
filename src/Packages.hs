@@ -49,7 +49,6 @@ packages = do
     packageDep ["hidelinks"] "hyperref"
 
     packageDep_ "listings"
-    packageDep_ "minted"
 
     -- For a nicer code font
     packageDep_ "courier"

@@ -34,6 +34,7 @@ secureChannelsSS = subsection "Secure Channels" $ do
     secretChannelDefinition
     secureChannelDefinition
     keyChannelDefinition
+    unilateralKeyChannelDefinition
     distinguisherDefinition
     symmetricCryptoSystemsTransformer
     secureFromAuthenticated
@@ -97,7 +98,23 @@ keyChannelDefinition = de $ do
         e = "E"
     s ["A", keyChannel', m keyC, "is a", communicationChannel, "that can generate", keys, "from some", keySpace, "and share them with", m a, and, m b, "but where", m e, "cannot read or modify those", keys]
     tikzFig "Key Channel" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/keyChannelTikZ.tex|]
-    s ["The symbol", m hkeyC, "for parties", m a, and, m b, "denotes that", m a, "knows that at most", m b, "knows the", key, "but", m b, "does not necessarily know who else holds the", key]
+
+unilateralKeyChannelDefinition :: Note
+unilateralKeyChannelDefinition = de $ do
+    s ["Let", m ksp_, "be a", keySpace]
+    s ["A", unilateralKeyChannel', m ukeyC, "is a", communicationChannel, "with the following properties"]
+    tikzFig "Key Channel" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/ukeyChannelTikZ.tex|]
+    s ["A", unilateralKeyChannel, "functions as follows"]
+    let a = "A"
+        b = "B"
+        e = "E"
+    itemize $ do
+        let k = "k"
+        item $ s ["First it chooses", m $ k ∈ ksp_, "uniformly at random"]
+        item $ s ["It outputs", m k, at, interface, m a]
+        item $ s ["On input", m deliverM, at, interface, m e, "it outputs", m k, at, interface, m b]
+        let k' = k <> "'"
+        item $ s ["On input", m $ k' ∈ ksp_, at, interface, m e, "it outputs", m k', at, interface, m b]
 
 distinguisherDefinition :: Note
 distinguisherDefinition = de $ do

@@ -8,6 +8,7 @@ makeDefs
     , "authenticated channel"
     , "secret channel"
     , "key channel"
+    , "unilateral key channel"
     , "secure channel"
     ]
 

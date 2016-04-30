@@ -36,9 +36,9 @@ secuC = bullet <> negSpace 4 <> longrightarrow <> negSpace 6 <> bullet
 keyC :: Note
 keyC = bullet <> negSpace 7 <> raw "=\\joinrel=\\joinrel=" <> negSpace 6 <> bullet
 
--- | Half key channel
-hkeyC :: Note
-hkeyC = raw "=\\joinrel=\\joinrel=" <> negSpace 6 <> bullet
+-- | Unilateral key channel
+ukeyC :: Note
+ukeyC = raw "=\\joinrel=\\joinrel=" <> negSpace 6 <> bullet
 
 
 -- | Encryption transformer
@@ -58,3 +58,7 @@ decT = id
 -- | Decryption transformer for @dec_@
 decT_ :: Note
 decT_ = decT "dec"
+
+-- | 'deliver' message
+deliverM :: Note
+deliverM = "deliver"
