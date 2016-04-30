@@ -93,11 +93,15 @@ computationalProblemsS = section "Computational Problems" $ do
         dlNotation
         lsbProbNotation
         dlLSBHardness
+        dlRepetitionBoosting
 
     subsection "Diffie Hellman" $ do
         diffieHellmanTripleDefinition
         computationalDHProblemDefinition
         decisionalDHProblemDefinition
+
+        reductionDlToCDH
+
 
 performanceFunctionDefinition :: Note
 performanceFunctionDefinition = nte $ do
@@ -199,6 +203,89 @@ averageCasePerformanceDifference = lem $ do
     ma $ fa sl $ perf p sl <= perf q sl + (pars $ max (cs [o1, o2] ∈ oo) (abs $ o1 - o2)) * statd p q
 
     toprove
+
+reductionDefinition :: Note
+reductionDefinition = do
+    let p = "p"
+        q = "q"
+    de $ do
+        lab reductionDefinitionLabel
+        lab reductionFunctionDefinitionLabel
+        lab performanceTranslationFunctionDefinitionLabel
+        s ["Let", m p, and, m q, "be two", problems, and , m $ solvs p, and, m $ solvs q, sets, "of", solvers]
+        let po = partord_
+        s ["Let", m $ perfs p, and, m $ perfs q, "be the", sets, "of", performanceValues, "associated with", m p, and, m q, "respectively"]
+        let pop = po !: p
+            poq = po !: q
+        s ["Let", m $ perfs p, and, m $ perfs q, "be equipped with the", partialOrders, m pop, and, m poq, "respectively"]
+        newline
+        let t_ = tau
+            t = fn t_
+            r_ = rho
+            r = fn r_
+            sl = "s"
+        s ["A", tReduction' t_, "of", m q, to, m p, "is a", function, m r_, "that maps a", solver, for, m p, "onto a", solver, for, m q, ".."]
+        ma $ func r_ (solvs p) (solvs q) sl (r sl)
+        s ["... such that", m t_, "is a", monotonic', function, "as follows"]
+        footnote $ s ["Monotonicity entails that a better", solver, "for", m p, "does not result in a worse", solver, "for", m q]
+        let a = "a"
+        ma $ func t_ (perfs p) (perfs q) a (t a)
+        s [m r_, "is called the", reductionFunction', and, m t_, "is called the", performanceTranslationFunction']
+        newline
+        s ["The following equation then characterizes this", reduction]
+        let (<<) = inposet poq
+        ma $ fa (sl ∈ solvs p) $ t (perf p sl) << perf q (r sl)
+    nte $ do
+        s ["We use a", reduction, "of", m q, to, m p, "to build a", solver, for, m q, "when we have a", solver, for, m p]
+    nte $ do
+        s ["The characteristic inequality of a reduction of", m q, to, m p, "can be interpreted as implying a lower bound on the performance of any solver for", m q, "in terms of", m p, "or as implying an upper bound on the performance for any solver for", m p, "in terms of", m q]
+    de $ do
+        lab reducibleDefinitionLabel
+        s ["A", problem, m p, "is said to be", reducible, "to another", problem, m q, "if there exists a", reduction, "of", m p, to, m q]
+
+
+compositionOfReductions :: Note
+compositionOfReductions = thm $ do
+    let p = "p"
+        q = "q"
+        r = "r"
+    s ["Let", csa [m p, m q, m r], "be three", problems, and, csa [m $ solvs p, m $ solvs q, m $ solvs r], sets, "of", solvers]
+    let po = partord_
+    s ["Let", csa [m $ perfs p, m $ perfs q, m $ perfs r], "be the", sets, "of", performanceValues, "associated with", csa [m p, m q, m r], "respectively"]
+    let pop = po !: p
+        poq = po !: q
+        por = po !: r
+    s ["Let", csa [m $ perfs p, m $ perfs q, m $ perfs r], "be equipped with the", partialOrders, csa [m pop, m poq, m por], "respectively"]
+    newline
+    let t1_ = tau !: 1
+        t1 = fn t1_
+        t2_ = tau !: 2
+        t2 = fn t2_
+        r1_ = rho !: 1
+        r1 = fn r1_
+        r2_ = rho !: 2
+        r2 = fn r2_
+        sl = "s"
+    s ["Let", m r1_, "be a", tReduction t1_, "of", m q, to, m p, "and let", m r2_, "be a", tReduction t2_, "of", m r, to, m q]
+    s ["Then", m $ r2_ ● r1_, "is a", tReduction $ pars $ t2_ ● t1_, "of", m r, to, m p]
+
+    proof $ do
+        s ["That", m r1_, "is a", tReduction t1_, "of", m q, to, m p, "means the following"]
+        let (<<) = inposet poq
+        ma $ fa (sl ∈ solvs p) $ t1 (perf p sl) << perf q (r1 sl)
+        let (<.) = inposet por
+        s ["Composing both sides with the", monotonic, function, m t2_, "gives us the following"]
+        ma $ fa (sl ∈ solvs p) $ t2 (t1 (perf p sl)) <. t2 (perf q (r1 sl))
+
+        s ["That", m r2_, "is a", tReduction t2_, "of", m r, to, m q, "means the following"]
+        ma $ fa (sl ∈ solvs q) $ t2 (perf q sl) <. perf r (r2 sl)
+
+        s ["Precomposing both sides with ", m r1_, "gives us the following"]
+        ma $ fa (sl ∈ solvs p) $ t2 (perf q (r1 sl)) <. perf r (r2 (r1 sl))
+
+        s ["Combining these two inequalities yields the theorem"]
+        ma $ fa (sl ∈ solvs p) $ t2 (t1 (perf p sl)) <. t2 (perf q (r1 sl)) <. perf r (r2 (r1 sl))
+
 
 deterministicGameDefinition :: Note
 deterministicGameDefinition = do
@@ -302,85 +389,6 @@ searchProblemSolverRepetition = thm $ do
         s ["Consider a", searchProblem, "with only two possible instances", m $ wsp_ =: setofs [x0, x1]]
         s ["Let", m sl, "be a", solver, "that finds a valid", witness, "given", m x0, "with probability", m a, "but never finds a valid", witness, "given", m x1]
         s [the, successProbability, "of", m sl, is, m a <> ",but the", successProbability, "of", m sl', "is also", m a]
-
-
-
-discreteLogarithmProblemDefinition :: Note
-discreteLogarithmProblemDefinition = do
-    de $ do
-        lab discreteLogarithmDefinitionLabel
-        lab dLDefinitionLabel
-        let aa = "A"
-            a = "a"
-            g = "g"
-        s [the, discreteLogarithm', "(" <> dL' <> ")", searchProblem, "for a", cyclic_, group, m $ grp_ =: grp (genby g) grpop_, "is the problem of computing, for a given", group, element, m $ aa ∈ grps_, "the exponent", m $ integer a, " such that", m $ aa =: g ^ a, "holds"]
-        s ["Formally: let", m grps_, "be the", instanceSpace, "of a", searchProblem, "with", witnessSpace, m $ setsize grps_ <> ",", "the following", predicate, m spred_, "and the uniform instance distribution of", group, elements]
-        let x = "x"
-            w = "w"
-        ma $ (sol x w) ⇔ (g ^ w =: x)
-    nte $ do
-        s ["Note that the", discreteLogarithm, "for a given", group, and, base, "is also a", functionInversion, searchProblem]
-
-additiveDLEasy :: Note
-additiveDLEasy = thm $ do
-    let n = "n"
-    s [the, discreteLogarithm, "problem is trivially solvable in the", group, m $ intagrp n]
-    proof $ do
-        let z = "z"
-            a = "a"
-            g = "g"
-        s ["Recall that, for any element", m (z ∈ intmod n) <> ", we are looking for the integer", m $ integer a, "such that", m $ z =: g * a, "where", m g, "is a", generator, "of", m $ intagrp n]
-        s ["Luckily, ", m $ intagrp n, "gives rise to a", ring, m $ intring n, "as well"]
-        s ["This allows us to find", m a, "by dividing", m z, by, m g]
-        s ["More precicely: because", m g, "is a", generator, "means that", m g, "must have a multiplicative inverse in", m $ intring n, "otherwise no multiple of", m g, "would be equal to", m 1]
-        s ["Now the only thing we need to do is go through the", elements, "of", m $ intmod n, "multiply each of them by", m g, "in", m $ intring n, "and check if the result equals", m 1, "to find the multiplicative inverse", m $ rinv g, "of", m g, "in", m $ intring n]
-        s ["We then compute", m a, "by evaluating", m $ rinv g * z =: rinv g * g * a =: a]
-        s ["We could also use the extended Euclidean algorithm to find", m $ rinv g, "even more efficiently"]
-        refneeded "Extended Euclidean algorithm"
-
-dlReducable :: Note
-dlReducable = thm $ do
-    let g = "g"
-        h = "h"
-    s [the, discreteLogarithm, "problem in a", group, m grp_, "for a", generator, m g, "is reducable to the", discreteLogarithm, "problem in that same", group, "but for a different", generator]
-
-    proof $ do
-        let a = "A"
-        s ["Let", m a, "be an algorithm that solves the", discreteLogarithm, "problem for a", generator, m g]
-        s ["We construct an algorithm that solves the", discreteLogarithm, "problem for another", generator, m h, "of", m grp_, "as follows"]
-        let z = "z"
-            b = "b"
-            c = "c"
-        s ["Let", m z, "be the", group, element, "that we want the", discreteLogarithm, m b, "base", m h, "in", m grp_, "of"]
-        s ["There then exists a", m $ integer c, "such that", m c, "is the", discreteLogarithm, "base", m g, "in", m grp_, "of", m z]
-        ma $ z =: h ^ b =: g ^ c
-        let d = "d"
-        s ["Because", m h, "is an", element, "of", m grps_ <> ",", "there exists a", m $ integer d, "such that", m $ h =: g ^ d, "holds"]
-        ma $ z =: (pars $ g ^ d) ^ b =: g ^ c
-        s ["This means that we have the following equation for", m c, "in", m $ intring $ ord grps_]
-        ma $ d * b =: c
-        s ["The algorithm now uses", m a, "to find", m c, from, m z, and, m d, from, m h]
-        s ["It then computes the multiplicative inverse of", m d, "in", m $ intring $ ord grps_, "with the extended Euclidean algorithm and finally computes", m b, "by evaluating", m $ rinv d * c =: rinv d * d * b =: b]
-
-dlModTwoInEvenOrderGroup :: Note
-dlModTwoInEvenOrderGroup = thm $ do
-    let n = "n"
-    s ["Let", m grp_, beA, group, with, "an even", order, m $ ord grp_ =: 2 * n]
-    s ["There exists an efficient algorithm to compute whether the", discreteLogarithm, "of an", element, "is even or not"]
-
-    proof $ do
-        let x = "x"
-        s ["Let", m x, beAn, element, "of", m grps_]
-        let g = "g"
-            a = "a"
-        s ["For a given base", m g, "the task is to compute", m $ a `mod` 2, "such that", m $ x =: g ^ a, "holds"]
-        let q = "q"
-            r = "r"
-        s ["Define", m q, and, m r, "as the quotient and rest after division by", m 2, "of", m a]
-        s ["Observe first the following"]
-        ma $ x ^ n =: g ^ (a * n) =: g ^ ((pars $ 2 * q + r) * n) =: g ^ (2 * n * q) ** (g ^ (r * n) =: g ^ (r * n))
-        s ["This means that", m $ x ^ n, "will be equal to the", neutralElement, "if", m a, "is even and", m $ g ^ n, "(which cannot be the", neutralElement, "because", m g, "is a", generator, and, m grp_, "has", order, m (2 * n) <> ") if", m a, "is odd"]
-        s ["We only have to compare", m $ x ^ n, "to the", neutralElement, "to determine", m $ a `mod` 2]
 
 distinctionProblemDefinition :: Note
 distinctionProblemDefinition = de $ do
@@ -532,14 +540,95 @@ dlLSBHardness = do
 
 
 
+discreteLogarithmProblemDefinition :: Note
+discreteLogarithmProblemDefinition = do
+    de $ do
+        lab discreteLogarithmDefinitionLabel
+        lab dLDefinitionLabel
+        let aa = "A"
+            a = "a"
+            g = "g"
+        s [the, discreteLogarithm', "(" <> dL' <> ")", searchProblem, "for a", cyclic_, group, m $ grp_ =: grp (genby g) grpop_, "is the problem of computing, for a given", group, element, m $ aa ∈ grps_, "the exponent", m $ integer a, " such that", m $ aa =: g ^ a, "holds"]
+        s ["Formally: let", m grps_, "be the", instanceSpace, "of a", searchProblem, "with", witnessSpace, m $ setsize grps_ <> ",", "the following", predicate, m spred_, "and the uniform instance distribution of", group, elements]
+        let x = "x"
+            w = "w"
+        ma $ (sol x w) ⇔ (g ^ w =: x)
+    nte $ do
+        s ["Note that the", discreteLogarithm, "for a given", group, and, base, "is also a", functionInversion, searchProblem]
+
+additiveDLEasy :: Note
+additiveDLEasy = thm $ do
+    let n = "n"
+    s [the, discreteLogarithm, "problem is trivially solvable in the", group, m $ intagrp n]
+    proof $ do
+        let z = "z"
+            a = "a"
+            g = "g"
+        s ["Recall that, for any element", m (z ∈ intmod n) <> ", we are looking for the integer", m $ integer a, "such that", m $ z =: g * a, "where", m g, "is a", generator, "of", m $ intagrp n]
+        s ["Luckily, ", m $ intagrp n, "gives rise to a", ring, m $ intring n, "as well"]
+        s ["This allows us to find", m a, "by dividing", m z, by, m g]
+        s ["More precicely: because", m g, "is a", generator, "means that", m g, "must have a multiplicative inverse in", m $ intring n, "otherwise no multiple of", m g, "would be equal to", m 1]
+        s ["Now the only thing we need to do is go through the", elements, "of", m $ intmod n, "multiply each of them by", m g, "in", m $ intring n, "and check if the result equals", m 1, "to find the multiplicative inverse", m $ rinv g, "of", m g, "in", m $ intring n]
+        s ["We then compute", m a, "by evaluating", m $ rinv g * z =: rinv g * g * a =: a]
+        s ["We could also use the extended Euclidean algorithm to find", m $ rinv g, "even more efficiently"]
+        refneeded "Extended Euclidean algorithm"
+
+dlReducable :: Note
+dlReducable = thm $ do
+    let g = "g"
+        h = "h"
+    s [the, discreteLogarithm, "problem in a", group, m grp_, "for a", generator, m g, "is reducable to the", discreteLogarithm, "problem in that same", group, "but for a different", generator]
+
+    proof $ do
+        let a = "A"
+        s ["Let", m a, "be an algorithm that solves the", discreteLogarithm, "problem for a", generator, m g]
+        s ["We construct an algorithm that solves the", discreteLogarithm, "problem for another", generator, m h, "of", m grp_, "as follows"]
+        let z = "z"
+            b = "b"
+            c = "c"
+        s ["Let", m z, "be the", group, element, "that we want the", discreteLogarithm, m b, "base", m h, "in", m grp_, "of"]
+        s ["There then exists a", m $ integer c, "such that", m c, "is the", discreteLogarithm, "base", m g, "in", m grp_, "of", m z]
+        ma $ z =: h ^ b =: g ^ c
+        let d = "d"
+        s ["Because", m h, "is an", element, "of", m grps_ <> ",", "there exists a", m $ integer d, "such that", m $ h =: g ^ d, "holds"]
+        ma $ z =: (pars $ g ^ d) ^ b =: g ^ c
+        s ["This means that we have the following equation for", m c, "in", m $ intring $ ord grps_]
+        ma $ d * b =: c
+        s ["The algorithm now uses", m a, "to find", m c, from, m z, and, m d, from, m h]
+        s ["It then computes the multiplicative inverse of", m d, "in", m $ intring $ ord grps_, "with the extended Euclidean algorithm and finally computes", m b, "by evaluating", m $ rinv d * c =: rinv d * d * b =: b]
+
+dlModTwoInEvenOrderGroup :: Note
+dlModTwoInEvenOrderGroup = thm $ do
+    let n = "n"
+    s ["Let", m grp_, beA, group, with, "an even", order, m $ ord grp_ =: 2 * n]
+    s ["There exists an efficient algorithm to compute whether the", discreteLogarithm, "of an", element, "is even or not"]
+
+    proof $ do
+        let x = "x"
+        s ["Let", m x, beAn, element, "of", m grps_]
+        let g = "g"
+            a = "a"
+        s ["For a given base", m g, "the task is to compute", m $ a `mod` 2, "such that", m $ x =: g ^ a, "holds"]
+        let q = "q"
+            r = "r"
+        s ["Define", m q, and, m r, "as the quotient and rest after division by", m 2, "of", m a]
+        s ["Observe first the following"]
+        ma $ x ^ n =: g ^ (a * n) =: g ^ ((pars $ 2 * q + r) * n) =: g ^ (2 * n * q) ** (g ^ (r * n) =: g ^ (r * n))
+        s ["This means that", m $ x ^ n, "will be equal to the", neutralElement, "if", m a, "is even and", m $ g ^ n, "(which cannot be the", neutralElement, "because", m g, "is a", generator, and, m grp_, "has", order, m (2 * n) <> ") if", m a, "is odd"]
+        s ["We only have to compare", m $ x ^ n, "to the", neutralElement, "to determine", m $ a `mod` 2]
 
 
+dlRepetitionBoosting :: Note
+dlRepetitionBoosting = thm $ do
+    let g = "g"
+        grp_ = grp (genby g) grpop_
+    s ["Let", m grp_, "be a", cyclic, group]
+    let sl = "S"
+        sl' = "S'"
+        a = alpha
+    s ["If there exists a", probabillisticSearchProblemSolver, m sl, for, m $ dlp grp_, with, successProbability, m a <> ",", "then it can be used to build a", probabillisticSearchProblemSolver, m sl', with, successProbability, "strictly greater than", m a]
 
-
-
-
-
-
+    toprove
 
 
 
@@ -595,6 +684,15 @@ decisionalDHProblemDefinition = de $ do
             s ["Here", csa [m a, m b, m c], "are", elements, "of", m grps_]
 
 
+reductionDlToCDH :: Note
+reductionDlToCDH = thm $ do
+    let g = "g"
+        grp_ = grp (genby g) grpop_
+    s ["For a given", cyclic, group, m grp_ <> ",", "the", discreteLogarithm, problem, m $ dlp grp_, is, reducible, "to the", computationalDiffieHellman, problem, m $ cdhp grp_]
+
+    toprove
+
+
 
 functionInversionDefinition :: Note
 functionInversionDefinition = de $ do
@@ -614,85 +712,6 @@ oneWayFunctionDefinition :: Note
 oneWayFunctionDefinition = de $ do
     s ["A", oneWayFunction', "is a", function, "such that its", functionInversion, searchProblem, "is computationally hard"]
 
-
-reductionDefinition :: Note
-reductionDefinition = do
-    let p = "p"
-        q = "q"
-    de $ do
-        lab reductionDefinitionLabel
-        lab reductionFunctionDefinitionLabel
-        lab performanceTranslationFunctionDefinitionLabel
-        s ["Let", m p, and, m q, "be two", problems, and , m $ solvs p, and, m $ solvs q, sets, "of", solvers]
-        let po = partord_
-        s ["Let", m $ perfs p, and, m $ perfs q, "be the", sets, "of", performanceValues, "associated with", m p, and, m q, "respectively"]
-        let pop = po !: p
-            poq = po !: q
-        s ["Let", m $ perfs p, and, m $ perfs q, "be equipped with the", partialOrders, m pop, and, m poq, "respectively"]
-        newline
-        let t_ = tau
-            t = fn t_
-            r_ = rho
-            r = fn r_
-            sl = "s"
-        s ["A", tReduction' t_, "of", m q, to, m p, "is a", function, m r_, "that maps a", solver, for, m p, "onto a", solver, for, m q, ".."]
-        ma $ func r_ (solvs p) (solvs q) sl (r sl)
-        s ["... such that", m t_, "is a", monotonic', function, "as follows"]
-        footnote $ s ["Monotonicity entails that a better", solver, "for", m p, "does not result in a worse", solver, "for", m q]
-        let a = "a"
-        ma $ func t_ (perfs p) (perfs q) a (t a)
-        s [m r_, "is called the", reductionFunction', and, m t_, "is called the", performanceTranslationFunction']
-        newline
-        s ["The following equation then characterizes this", reduction]
-        let (<<) = inposet poq
-        ma $ fa (sl ∈ solvs p) $ t (perf p sl) << perf q (r sl)
-    nte $ do
-        s ["We use a", reduction, "of", m q, to, m p, "to build a", solver, for, m q, "when we have a", solver, for, m p]
-    nte $ do
-        s ["The characteristic inequality of a reduction of", m q, to, m p, "can be interpreted as implying a lower bound on the performance of any solver for", m q, "in terms of", m p, "or as implying an upper bound on the performance for any solver for", m p, "in terms of", m q]
-
-
-compositionOfReductions :: Note
-compositionOfReductions = thm $ do
-    let p = "p"
-        q = "q"
-        r = "r"
-    s ["Let", csa [m p, m q, m r], "be three", problems, and, csa [m $ solvs p, m $ solvs q, m $ solvs r], sets, "of", solvers]
-    let po = partord_
-    s ["Let", csa [m $ perfs p, m $ perfs q, m $ perfs r], "be the", sets, "of", performanceValues, "associated with", csa [m p, m q, m r], "respectively"]
-    let pop = po !: p
-        poq = po !: q
-        por = po !: r
-    s ["Let", csa [m $ perfs p, m $ perfs q, m $ perfs r], "be equipped with the", partialOrders, csa [m pop, m poq, m por], "respectively"]
-    newline
-    let t1_ = tau !: 1
-        t1 = fn t1_
-        t2_ = tau !: 2
-        t2 = fn t2_
-        r1_ = rho !: 1
-        r1 = fn r1_
-        r2_ = rho !: 2
-        r2 = fn r2_
-        sl = "s"
-    s ["Let", m r1_, "be a", tReduction t1_, "of", m q, to, m p, "and let", m r2_, "be a", tReduction t2_, "of", m r, to, m q]
-    s ["Then", m $ r2_ ● r1_, "is a", tReduction $ pars $ t2_ ● t1_, "of", m r, to, m p]
-
-    proof $ do
-        s ["That", m r1_, "is a", tReduction t1_, "of", m q, to, m p, "means the following"]
-        let (<<) = inposet poq
-        ma $ fa (sl ∈ solvs p) $ t1 (perf p sl) << perf q (r1 sl)
-        let (<.) = inposet por
-        s ["Composing both sides with the", monotonic, function, m t2_, "gives us the following"]
-        ma $ fa (sl ∈ solvs p) $ t2 (t1 (perf p sl)) <. t2 (perf q (r1 sl))
-
-        s ["That", m r2_, "is a", tReduction t2_, "of", m r, to, m q, "means the following"]
-        ma $ fa (sl ∈ solvs q) $ t2 (perf q sl) <. perf r (r2 sl)
-
-        s ["Precomposing both sides with ", m r1_, "gives us the following"]
-        ma $ fa (sl ∈ solvs p) $ t2 (perf q (r1 sl)) <. perf r (r2 (r1 sl))
-
-        s ["Combining these two inequalities yields the theorem"]
-        ma $ fa (sl ∈ solvs p) $ t2 (t1 (perf p sl)) <. t2 (perf q (r1 sl)) <. perf r (r2 (r1 sl))
 
 
 

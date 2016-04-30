@@ -17,6 +17,7 @@ makeDefs
     , "reduction"
     , "reduction function"
     , "performance translation function"
+    , "reducible"
 
     , "deterministic game"
     , "probabillistic game"
