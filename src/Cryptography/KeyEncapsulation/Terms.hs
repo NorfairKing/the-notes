@@ -8,4 +8,5 @@ makeDefs
     , "key-pair distribution"
     , "encapsulation function"
     , "decapsulation function"
+    , "symmetric key"
     ]

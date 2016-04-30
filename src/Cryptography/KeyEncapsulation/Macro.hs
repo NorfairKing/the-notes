@@ -9,6 +9,10 @@ import           Macro.Tuple
 kem :: Note -> Note -> Note -> Note
 kem = triple
 
+-- | Keypair distribution
+kpdist_ :: Note
+kpdist_ = "D"
+
 -- | Encapsulation function
 encapf_ :: Note
 encapf_ = "E"
@@ -27,4 +31,4 @@ decap = fn2 decapf_
 
 -- | Concrete key encapsulation function
 kem_ :: Note
-kem_ = kem "D" encapf_ decapf_
+kem_ = kem kpdist_ encapf_ decapf_
