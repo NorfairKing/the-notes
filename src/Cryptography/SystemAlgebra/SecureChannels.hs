@@ -21,7 +21,6 @@ import           Cryptography.SymmetricCryptography.Terms         hiding
 import           Cryptography.SystemAlgebra.AbstractSystems.Macro
 import           Cryptography.SystemAlgebra.AbstractSystems.Terms
 import           Cryptography.SystemAlgebra.DiscreteSystems.Terms
-import           Cryptography.SystemAlgebra.Graph
 
 import           Cryptography.SystemAlgebra.SecureChannels.Macro
 import           Cryptography.SystemAlgebra.SecureChannels.Terms
@@ -29,16 +28,26 @@ import           Cryptography.SystemAlgebra.SecureChannels.Terms
 secureChannelsSS :: Note
 secureChannelsSS = subsection "Secure Channels" $ do
     todo "move this whole section to after computational problems"
-    channelDefinition
-    authenticatedChannelDefinition
-    secretChannelDefinition
-    secureChannelDefinition
-    keyChannelDefinition
-    unilateralKeyChannelDefinition
-    distinguisherDefinition
-    symmetricCryptoSystemsTransformer
-    secureFromAuthenticated
-    diffieHellmanDistinguisher
+    subsubsection "Communication Channel" $ do
+        channelDefinition
+        channelWithoutDeletionDefinition
+    subsubsection "Authenticated Channels" $ do
+        authenticatedChannelDefinition
+        authenticatedChannelWithoutDeletionDefinition
+    subsubsection "Secret Channels" $ do
+        secretChannelDefinition
+        secretChannelWithoutDeletionDefinition
+    subsubsection "Secure Channels" $ do
+        secureChannelDefinition
+        secureChannelWithoutDeletionDefinition
+    subsubsection "Key Channels" $ do
+        keyChannelDefinition
+        unilateralKeyChannelDefinition
+    subsubsection "Proving security properties of channels" $ do
+        distinguisherDefinition
+        symmetricCryptoSystemsTransformer
+        secureFromAuthenticated
+        diffieHellmanDistinguisher
 
 channelDefinition :: Note
 channelDefinition = do
@@ -48,15 +57,35 @@ channelDefinition = do
     de $ do
         lab channelDefinitionLabel
         lab communicationChannelDefinitionLabel
-        s ["A", communicationChannel', or, channel', m comC, "is a", nS 3, "with", interfaces, "labeled", csa [m a, m b, m e]]
-        tikzFig "Communication channel model" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/channelTikZ.tex|]
-        let sys = System "Channel" ["A", "B", "E"]
-        systemFig 4 sys $ s ["A", communicationChannel, "from the", systemAlgebra, "point of view"]
+        s ["A", communicationChannel', or, channel', "(with deletion)", m $ comCwd msp_, "with a", messageSpace, m msp_, "is a", nS 3, "with", interfaces, "labeled", csa [m a, m b, m e]]
+        tikzFig "Communication channel model" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/channelWDTikZ.tex|]
+        s ["It behaves as follows"]
+        itemize $ do
+            let m_ = "m"
+            item $ s ["It can receive a", message, m $ m_ ∈ msp_, at, interface, m a]
+            item $ s ["It outputs", m m_, at, interface, m e]
+            item $ s ["On input", m deliverM, at, interface, m e, "it outputs", m m_, at, interface, m b]
+            let m' = m_ <> "'"
+            item $ s ["On input", m $ m' ∈ ksp_, at, interface, m e, "it outputs", m m', at, interface, m b]
 
     nte $ do
-        s ["A", communicationChannel, "models the situation in which two", parties, "interact via", messages, "on the", interfaces, csa [m a, m b], "with the possible interference via", m e]
-        s ["On an insecure", communicationChannel <> ",", m e, "can read and modify any", message, "going from", m a, to, m b]
-        s ["We model the interaction to be one-way and model two-way communication using two channels"]
+        s ["A", communicationChannel, "models the situation in which a", party, "can send", messages, "over a", channel, "with a party", m b, "with the possible interference and deletion from", m e]
+    nte $ do
+        s ["Communication channels are considered single-use, we use multiple different", channels, "to model situations in which multiple", messages, "are considered"]
+    nte $ do
+        -- s ["On an insecure", communicationChannel <> ",", m e, "can read and modify any", message, "going from", m a, to, m b]
+        s ["We model the interaction to be one-way and model two-way communication using two different", channels]
+
+channelWithoutDeletionDefinition :: Note
+channelWithoutDeletionDefinition = de $ do
+    lab channelWithoutDeletionDefinitionLabel
+    let a = "A"
+        b = "B"
+        e = "E"
+    s ["A", channelWithoutDeletion, m $ comC msp_, "with a", messageSpace, m msp_, "is a", nS 3, "with", interfaces, "labeled", csa [m a, m b, m e]]
+    tikzFig "Communication channel without deleteion" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/channelTikZ.tex|]
+    s ["It models the fact that", m a, "can send a", message, to, m b, "with the guarantee that it cannot be deleted, but", m e, "can still change the", message, "before it arrives at", m b]
+    todo "does this need more formalizing?"
 
 authenticatedChannelDefinition :: Note
 authenticatedChannelDefinition = de $ do
@@ -64,8 +93,23 @@ authenticatedChannelDefinition = de $ do
     let a = "A"
         b = "B"
         e = "E"
-    s ["An", authenticatedChannel', m autC, "is a", communicationChannel, "where", m e, "cannot modify", messages, "going from", m a, to, m b]
-    tikzFig "Authenticated Communication Channel" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/autChannelTikZ.tex|]
+    s ["An", authenticatedChannel', m $ autCwd msp_, "with a", messageSpace, m msp_, "is a", communicationChannel, "where", m e, "cannot modify the", message, "going from", m a, to, m b]
+    tikzFig "Authenticated Communication Channel with deletion" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/autChannelWDTikZ.tex|]
+    s ["It behaves as follows"]
+    itemize $ do
+        let m_ = "m"
+        item $ s ["It can receive a", message, m $ m_ ∈ msp_, at, interface, m a]
+        item $ s ["It outputs", m m_, at, interface, m e]
+        item $ s ["On input", m deliverM, at, interface, m e, "it outputs", m m_, at, interface, m b]
+
+authenticatedChannelWithoutDeletionDefinition :: Note
+authenticatedChannelWithoutDeletionDefinition = de $ do
+    lab authenticatedChannelWithoutDeletionDefinitionLabel
+    let a = "A"
+        b = "B"
+        e = "E"
+    s ["An", authenticatedChannelWithoutDeletion', m $ autC msp_, "with a", messageSpace, m msp_, "is a", communicationChannelWithoutDeletion, "where", m e, "cannot modify the", message, "going from", m a, to, m b]
+    tikzFig "Authenticated Communication Channel without deletion" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/autChannelTikZ.tex|]
 
 secretChannelDefinition :: Note
 secretChannelDefinition = de $ do
@@ -74,17 +118,55 @@ secretChannelDefinition = de $ do
         b = "B"
         e = "E"
         f = "f"
-    s ["A", secretChannel', m secrC, "is a", communicationChannel, "where", m e, "cannot read", messages, "going from", m a, to, m b, "but will get a", function, m f, "of any transmitted", message]
-    tikzFig "Secret Communication Channel" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/secrChannelTikZ.tex|]
+    s ["A", secretChannel', m $ secrCwd msp_, "with a", messageSpace, m msp_, "is a", communicationChannel, "where", m e, "cannot read", messages, "going from", m a, to, m b, "but will get a", function, m f, "of any transmitted", message]
+    tikzFig "Secret Communication Channel" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/secrChannelWDTikZ.tex|]
     s ["Ideally", m f, "is of course the", unitFunction, m unitf_]
     s ["in that case the", secretChannel, "looks as follows"]
+    tikzFig "Secret Communication Channel with unit function leak" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/unitSecrChannelWDTikZ.tex|]
+    itemize $ do
+        let m_ = "m"
+        item $ s ["It can receive a", message, m $ m_ ∈ msp_, at, interface, m a]
+        item $ s ["It then outputs", m $ fn f m_, at, interface, m e]
+        item $ s ["On input", m deliverM, at, interface, m e, "it outputs", m m_, at, interface, m b]
+        let m' = m_ <> "'"
+        item $ s ["On input", m $ m' ∈ msp_, at, interface, m e, "it outputs", m m', at, interface, m b]
+
+secretChannelWithoutDeletionDefinition :: Note
+secretChannelWithoutDeletionDefinition = de $ do
+    lab secretChannelWithoutDeletionDefinitionLabel
+    let a = "A"
+        b = "B"
+        e = "E"
+        f = "f"
+    s ["A", secretChannel', m $ secrC msp_, "with a", messageSpace, m msp_, "is a", communicationChannelWithoutDeletion, "where", m e, "cannot read", messages, "going from", m a, to, m b, "but will get a", function, m f, "of any transmitted", message]
+    tikzFig "Secret Communication Channel" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/secrChannelTikZ.tex|]
+    s ["Ideally", m f, "is of course the", unitFunction, m unitf_]
+    s ["in that case the", secretChannelWithoutDeletion, "looks as follows"]
     tikzFig "Secret Communication Channel with unit function leak" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/unitSecrChannelTikZ.tex|]
 
 secureChannelDefinition :: Note
 secureChannelDefinition = de $ do
     lab secureChannelDefinitionLabel
+    let a = "A"
+        b = "B"
+        e = "E"
+        f = "f"
+    s ["A", secureChannel', m $ secuCwd msp_, "with a", messageSpace, m msp_, "provides both secrecy and authentication but leaks a", function, m f, "of the transmitted", message]
+    tikzFig "Secure Channel" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/secuChannelWDTikZ.tex|]
+    s ["Ideally", m f, "is of course the", unitFunction, m unitf_]
+    s ["in that case the", secureChannel, "looks as follows"]
+    tikzFig "Secure Channel" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/unitSecuChannelWDTikZ.tex|]
+    itemize $ do
+        let m_ = "m"
+        item $ s ["It can receive a", message, m $ m_ ∈ msp_, at, interface, m a]
+        item $ s ["It outputs", m $ fn f m_, at, interface, m e]
+        item $ s ["On input", m deliverM, at, interface, m e, "it outputs", m m_, at, interface, m b]
+
+secureChannelWithoutDeletionDefinition :: Note
+secureChannelWithoutDeletionDefinition = de $ do
+    lab secureChannelWithoutDeletionDefinitionLabel
     let f = "f"
-    s ["A", secureChannel', m secuC, "provides both secrecy and authentication but leaks a", function, m f, "of the transmitted", message]
+    s ["A", secureChannelWithoutDeletion', m $ secuC msp_, "with a", messageSpace, m msp_, "provides both secrecy and authentication but leaks a", function, m f, "of the transmitted", message]
     tikzFig "Secure Channel" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/secuChannelTikZ.tex|]
     s ["Ideally", m f, "is of course the", unitFunction, m unitf_]
     s ["in that case the", secureChannel, "looks as follows"]
@@ -101,13 +183,13 @@ keyChannelDefinition = de $ do
 
 unilateralKeyChannelDefinition :: Note
 unilateralKeyChannelDefinition = de $ do
-    s ["Let", m ksp_, "be a", keySpace]
-    s ["A", unilateralKeyChannel', m ukeyC, "is a", communicationChannel, "with the following properties"]
-    tikzFig "Key Channel" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/ukeyChannelTikZ.tex|]
-    s ["A", unilateralKeyChannel, "functions as follows"]
+    lab unilateralKeyChannelDefinitionLabel
     let a = "A"
         b = "B"
         e = "E"
+    s ["Let", m ksp_, "be a", keySpace]
+    s ["A", unilateralKeyChannel', m ukeyC, "is a", communicationChannel, "that functions as follows"]
+    tikzFig "Key Channel" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/ukeyChannelTikZ.tex|]
     itemize $ do
         let k = "k"
         item $ s ["First it chooses", m $ k ∈ ksp_, "uniformly at random"]
@@ -123,12 +205,13 @@ distinguisherDefinition = de $ do
     s ["Let", m p, and, m q, "be two", systems]
     s ["A", distinguisher', "is an algorithm that can access a", system, "(one of those two)", "and outputs a bit"]
     s [the, distinguisher <> "'s", advantage', "is defined as the", probability, "that the", distinguisher, "outputs a bit that correctly indicates which of the two", systems, "it has been accessing"]
+    todo "move this to the right place?"
 
 symmetricCryptoSystemsTransformer :: Note
 symmetricCryptoSystemsTransformer = de $ do
     let a = "A"
         b = "B"
-    s ["Let", m keyC, "be a", keyChannel, and, m comC, "a", communicationChannel]
+    s ["Let", m keyC, "be a", keyChannel, and, m comC_, "a", communicationChannel]
     s ["Let", m scs_, "be a", symmetricCryptosystem]
     s ["We define two transformers", m $ encT_ ^: a, and, m $ decT_ ^: b, "that are each", nSs 3, "to encrypt or decrypt, respectively, any passing message with the", key]
     tikzFig "Encryption Transformer" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/encTransformerTikZ.tex|]
@@ -136,12 +219,12 @@ symmetricCryptoSystemsTransformer = de $ do
 
 secureFromAuthenticated :: Note
 secureFromAuthenticated = ex $ do
-    s ["Let", m autC, "be a single-use", authenticatedChannel, and, "let", m secuC, "be a", secureChannel, "without deletion that leaks the length"]
+    s ["Let", m autC_, "be a single-use", authenticatedChannel, and, "let", m secuC_, "be a", secureChannel, "without deletion that leaks the length"]
     let mesg = "m"
         a = "A"
         b = "B"
         e = "E"
-    s ["More specifically, on an input", message, m $ mesg ∈ bitss "*", "at", interface, m a <> ",", m autC, "outputs", m mesg, "at", interfaces, m e, and, m b <> ",", and, m secuC, "outputs the length", m $ len mesg, "at", interface, m e]
+    s ["More specifically, on an input", message, m $ mesg ∈ bitss "*", "at", interface, m a <> ",", m autC_, "outputs", m mesg, "at", interfaces, m e, and, m b <> ",", and, m secuC_, "outputs the length", m $ len mesg, "at", interface, m e]
     let k = "k"
     s ["Further, let", m keyC, "be a shared secret", keyChannel, "that initially outputs a uniformly random", key, m $ k ∈ bitss kappa, "at", interfaces, m a, and, m b, "(and nothing at", interface, m e <> ")"]
 
@@ -165,7 +248,7 @@ secureFromAuthenticated = ex $ do
                 ss = "S"
                 gu = g $ "U" !: kappa
                 un = "U" !: n
-            s ["Now any", distinguisher, m d, "that can distinguish", m $ rr =: conv encT_ "A" (conv decT_ "B" (listofs [keyC, autC])), "from", m $ ss =: conv sigma "E" (listof secuC), with, advantage, m alpha, "can be used to distinguish", m gu, from, m un]
+            s ["Now any", distinguisher, m d, "that can distinguish", m $ rr =: conv encT_ "A" (conv decT_ "B" (listofs [keyC, autC_])), "from", m $ ss =: conv sigma "E" (listof secuC_), with, advantage, m alpha, "can be used to distinguish", m gu, from, m un]
 
             proof $ do
                 let d' = d <> "'"
@@ -196,9 +279,9 @@ diffieHellmanDistinguisher = thm $ do
     itemize $ do
         item $ do
             let mesg = "m"
-            s ["An", authenticatedChannel, m autC, "where the", interface, m a, "takes an input", m $ mesg ∈ grps_, "and outputs", m mesg, "at", interfaces, m b, and, m e]
+            s ["An", authenticatedChannel, m autC_, "where the", interface, m a, "takes an input", m $ mesg ∈ grps_, "and outputs", m mesg, "at", interfaces, m b, and, m e]
         item $ do
-            s ["An", authenticatedChannel, m autCB, "with the", interfaces, m a, and, m b, "exchanged"]
+            s ["An", authenticatedChannel, m autCB_, "with the", interfaces, m a, and, m b, "exchanged"]
         item $ do
             s [the, protocol, system, m dh, "as a", converter]
             s ["This", system, "first chooses a", group, element, m x, "uniformly at random and outputs it at its inside", interface]
@@ -210,7 +293,7 @@ diffieHellmanDistinguisher = thm $ do
             s ["A simulator", m sigma, "as a", converter, "of the", m e, interface, "that outputs two uniformly random", group, elements, m g1, and, m g2, "at its outside interface"]
     tikzFig "The situation" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/diffieHellmanSituationTikZ.tex|]
     let d = "D"
-    let s1 = conv dh a (conv dh b (listofs [autC, autCB]))
+    let s1 = conv dh a (conv dh b (listofs [autC_, autCB_]))
         s2 = conv sigma e keyC
     s ["In this setting, any", distinguisher, m d, for, m s1, and, m s2, "has a smaller", advantage, "than any solver for the", decisionalDiffieHellman, "problem"]
 
