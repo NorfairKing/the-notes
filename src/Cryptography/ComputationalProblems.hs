@@ -629,17 +629,48 @@ dlModTwoToTheKInDivGroup = thm $ do
 
 
 dlRepetitionBoosting :: Note
-dlRepetitionBoosting = thm $ do
-    let g = "g"
-        grp_ = grp (genby g) grpop_
-    s ["Let", m grp_, "be a", cyclic, group]
-    let sl = "S"
-        sl' = "S'"
-        a = alpha
-    s ["If there exists a", probabillisticSearchProblemSolver, m sl, for, m $ dlp grp_, with, successProbability, m a <> ",", "then it can be used to build a", probabillisticSearchProblemSolver, m sl', with, successProbability, "strictly greater than", m a]
+dlRepetitionBoosting = do
+    thm $ do
+        let g = "g"
+            grp_ = grp (genby g) grpop_
+            q = "q"
+        s ["Let", m grp_, "be a", cyclic, group, "of order", m q]
+        let sl = "S"
+            sl' = "S'"
+            a = alpha
+        s ["If there exists a", deterministicSearchProblemSolver, m sl, for, m $ dlp grp_, with, successProbability, m a <> ",", "then it can be used to build a", deterministicSearchProblemSolver, m sl', with, successProbability, "strictly greater than", m a]
+        s ["That is", m sl, "outputs the same result for the same arguments, but a randomly chosen", element, "will yield a correct result with", probability, m a]
 
-    toprove
-
+        proof $ do
+            s ["For a given result, it can be checked whether that result is correct, but since", m sl, "is deterministic, that will not get us any farther as-is"]
+            s ["The idea is to repeat the invocation of", m sl, on, elements, "of", m grps_, "that are different from, but related to the query in such a way that the would-be result for the original query can be derived from the results of the new elements"]
+            newline
+            let h = "h"
+                x = "x"
+                c = "c"
+            s ["Let", m $ h =: g ^ x ∈ grps_, "be an input for", m sl', and, m $ natural c, "a constant"]
+            s [m sl', "will operate as follows"]
+            let r = "r"
+            itemize $ do
+                item $ do
+                    s [m sl', "chooses", m $ r ∈ intmod q, "uniformly at random and invokes", m sl, "on", m $ h ** g ^ r =: g ^ (x + r)]
+                let y = "y"
+                    z = "z"
+                item $ do
+                    s [the, "output", m y, from, m sl, "is checked for correctness by checking that", m $ g ^ y, "equals", m $ h ** g ^ r]
+                item $ do
+                    s ["If the ouput from", m sl, "is correct for input", m $ h ** g ^ r, "then", m sl', "computes", m $ z =: y - r]
+                    s ["This must then equal", m x, "so", m sl', "outputs it"]
+                item $ do
+                    s ["If the output from", m sl, "is not correct, it tries again with another randomly chosen", element, from, m $ intmod q, "for at most", m c, "times, after which it will just output the last gotten output from", m a]
+            s ["Note that", m sl, "succeeds with", probability, m a, "because", m $ h ** g ^ r, "is a uniformly random element"]
+            s ["Hence, the success", probability, "of", m sl', "is bigger than that of", m sl]
+            ma $ 1 - (pars $ 1 - a) ^ c > a
+    nte $ do
+        s ["The crucial property of the above algorithm is that it invokes its subroutine each time on a uniformly random instance such that the output can be used to construct an output for the given query"]
+        s ["In general the output for an other uniformly random instance cannot be transformed back to a solution to the original instance."]
+        s ["Problems that allow this are called random self-reducible"]
+        todo "Defined random self-reducible formally and separately"
 
 
 diffieHellmanTripleDefinition :: Note
