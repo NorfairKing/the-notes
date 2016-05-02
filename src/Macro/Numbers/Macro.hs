@@ -9,6 +9,9 @@ import           Types
 natural :: Note -> Note
 natural n = n ∈ naturals
 
+nats0 :: Note
+nats0 = naturals !: 0
+
 integer :: Note -> Note
 integer n = n ∈ integers
 

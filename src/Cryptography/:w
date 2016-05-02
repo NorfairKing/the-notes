@@ -2,8 +2,6 @@ module Cryptography.Terms where
 
 import           Notes
 
-import           Cryptography.SymmetricCryptography.Terms
-
 makeDefs
     [ "algorithm"
 
@@ -16,7 +14,6 @@ makeDefs
     , "RSA"
 
     , "one-way function"
-    , "function inversion game"
 
     , "digital signature scheme"
     , "DSS"
@@ -29,8 +26,6 @@ makeDefs
     , "signing algorithm"
     , "signature verification algorithm"
     , "signature forgery game"
-    , "one-time signature scheme"
-    , "Lamport One-time signature scheme"
 
     , "full domain hash"
     , "FDH"
@@ -40,6 +35,3 @@ makeDefs
     , "collision-finding game"
     , "collision resistant"
     ]
-
-nMesg :: Note -> Note
-nMesg n = m n <> "-" <> message

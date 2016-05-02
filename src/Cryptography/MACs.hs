@@ -250,10 +250,3 @@ boundedAttackSuccessExamples = do
     todo "Similarly secure MAC over GF(2 ^ n/2)"
 
 
-
-
-
-
-
-
-

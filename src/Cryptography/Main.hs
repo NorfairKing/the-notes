@@ -52,6 +52,8 @@ cryptography = chapter "Cryptography" $ do
         digitalSignatureDefinition
         signatureForgeryGameDefinition
         digitalSignatureSecurity
+        lamportOneTimeSignatureSchemeDefinition
+        lamportSecureIfOneWayFunction
 
     keyEncapsulationS
 
@@ -327,25 +329,70 @@ digitalSignatureDefinition = de $ do
     lab signingAlgorithmDefinitionLabel
     lab signatureDefinitionLabel
     lab signatureVerificationAlgorithmDefinitionLabel
+    lab signatureSpaceDefinitionLabel
+    lab signingKeySpaceDefinitionLabel
+    lab verificationKeySpaceDefinitionLabel
+    s ["Let", m ssp_, "be a", signatureSpace' <> ",", m sigsp_, "a", signingKeySpace', and, m versp_, "a", verificationKeySpace']
+    newline
     s ["A", digitalSignatureScheme', "consists of three algorithms as follows"]
     itemize $ do
         item $ s ["A probabillistic", keyGenerator', "algorithm which generates a", keyPair <> ", consisting of a", signingKey', "(" <> secretKey <> ")", "and a", signatureVerificationKey', "(" <> publicKey <> ")"]
-        item $ s ["A probabillistic", signingAlgorithm', "that takes as inputs a", signingKey, anda, message, "and computes the", signature', "for the", message]
+        let sig = "s"
+        item $ s ["A probabillistic", signingAlgorithm', "that takes as inputs a", signingKey, anda, message, "and computes the", signature', m $ sig ∈ ssp_, "for the", message]
         item $ s ["A deterministic", signatureVerificationAlgorithm', "that takes as inputs a", signatureVerificationKey <> ", a", message, anda, signature, "and outputs a bit that can be interpreted as", dquoted "accept", or, dquoted "reject"]
     s ["For every", keyPair <> ", the", signatureVerificationAlgorithm, "must accept the signature computed by the", signingAlgorithm]
+
+    todo "formalize"
+
 
 signatureForgeryGameDefinition :: Note
 signatureForgeryGameDefinition = de $ do
     lab signatureForgeryGameDefinitionLabel
-    s [the, signatureForgeryGame', "between an", adversary, anda, challenger, "is played as follows"]
+    let t = "t"
+    s [the, m t <> "-" <> message, signatureForgeryGame', "between an", adversary, anda, challenger, "is played as follows"]
     enumerate $ do
         item $ s [the, challenger, "uses the", keyGenerator, "to generate a", keyPair, "and sends the", signatureVerificationKey, "to the", adversary]
-        item $ s [the, adversary, "can ask arbitrary", messages, "to be signed by the", challenger]
+        item $ s [the, adversary, "can ask up to", m t, "arbitrary", messages, "to be signed by the", challenger]
         item $ s [the, adversary, "chooses a", message, anda, signature, "and wins the game if the", signature, "is a valid", signature, "for the", message, "and the", message, "was not queried yet"]
 
 digitalSignatureSecurity :: Note
 digitalSignatureSecurity = de $ do
     s ["A", digitalSignatureScheme, "is said to be", dquoted "secure against existential forgery under a chosen-message attack", "if no feasible", adversary, "can win the", signatureForgeryGame, "with a non-negligible", probability]
+
+oneTimeSignatureSchemeDefinition :: Note
+oneTimeSignatureSchemeDefinition = de $ do
+    lab oneTimeSignatureSchemeDefinitionLabel
+    s ["A", oneTimeSignatureScheme', "is a", digitalSignatureScheme, "that is", m 1 <> "-" <> message, "secure in the", signatureForgeryGame]
+
+lamportOneTimeSignatureSchemeDefinition :: Note
+lamportOneTimeSignatureSchemeDefinition = de $ do
+    let xx = mathcal "X"
+        yy = mathcal "Y"
+        f_ = "f"
+        n = "n"
+    s ["Let", m $ fun f_ xx yy, "be a", function, and, m $ n ∈ nats0]
+    s ["Let", m $ msp_ =: bitss n, "be the", messageSpace <> ",", m $ ssp_ =: xx ^ n, "the", signatureSpace <> "," , m $ versp_ =: yy ^ (2 * n), "the", verificationKeySpace, and, m $ sigsp_ =: xx ^ (2 * n), "the", signingKeySpace]
+
+    newline
+    s ["The", lamportOneTimeSignatureScheme, "for", m f_, "is defined as follows"]
+
+    todo "define this"
+
+
+lamportSecureIfOneWayFunction :: Note
+lamportSecureIfOneWayFunction = thm $ do
+    let xx = mathcal "X"
+        yy = mathcal "Y"
+        f_ = "f"
+        n = "n"
+    s ["Let", m $ fun f_ xx yy, "be a", function, and, m $ n ∈ nats0]
+    s ["If", m f_, "is a", oneWayFunction <> ",", "then its", lamportOneTimeSignatureScheme, "is in fact a", oneTimeSignatureScheme]
+    let a = alpha
+    s ["More precicely, any", adversary, "that can win a", nMesg 1, signatureForgeryGame, with, advantage, m a, "can be used to build an algorithm that wins the", functionInversionGame, with, advantage, m $ a / (2 * n)]
+
+    toprove
+
+
 
 
 hashFunctionDefinition :: Note
