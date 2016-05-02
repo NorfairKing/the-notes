@@ -32,3 +32,8 @@ decap = fn2 decapf_
 -- | Concrete key encapsulation function
 kem_ :: Note
 kem_ = kem kpdist_ encapf_ decapf_
+
+-- | The empty value of the decapsulation function
+undef :: Note
+undef = comm0 "bot"
+

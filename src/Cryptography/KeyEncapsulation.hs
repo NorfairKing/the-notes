@@ -30,7 +30,7 @@ keyEncapsulationMechanismDefinition = do
         itemize $ do
             item $ s [m kpdist_ <> ": a" , probabilityDistribution, "on", m $ pksp_ ⨯ sksp_, "called the", keyPairDistribution']
             item $ s [m encapf_ <> ": a randomized", encapsulationFunction', m $ fun encapf_ pksp_ $ csp_ ⨯ ksp_]
-            item $ s [m decapf_ <> ": a", decapsulationFunction', m $ fun decapf_ (csp_ ⨯ ksp_) ksp_]
+            item $ s [m decapf_ <> ": a", decapsulationFunction', m $ fun decapf_ (csp_ ⨯ ksp_) $ ksp_ ⨯ setof undef]
         let p_ = "p"
             s_ = "s"
             c_ = "c"

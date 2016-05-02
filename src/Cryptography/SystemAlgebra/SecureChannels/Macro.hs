@@ -132,9 +132,9 @@ deliverM :: Note
 deliverM = "deliver"
 
 -- | KEM enc transformer
-kemEncT_ :: Note
-kemEncT_ = "enc"
+encapT_ :: Note
+encapT_ = "encap"
 
 -- | KEM dec transformer
-kemDecT_ :: Note
-kemDecT_ = "dec"
+decapT_ :: Note
+decapT_ = "decap"

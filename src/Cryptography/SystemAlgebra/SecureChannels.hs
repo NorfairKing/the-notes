@@ -10,6 +10,8 @@ import           Functions.Basics.Terms
 import           Groups.Macro
 import           Groups.Terms
 import           Logic.PropositionalLogic.Macro
+import           Probability.ConditionalProbability.Macro
+import           Probability.ProbabilityMeasure.Macro
 import           Probability.ProbabilityMeasure.Terms
 import           Sets.Basics.Terms
 
@@ -53,6 +55,7 @@ secureChannelsSS = subsection "Secure Channels" $ do
         secureFromAuthenticatedOTP
         secureFromAuthenticated
         diffieHellmanDistinguisher
+        keyEncapsulationTransformer
         unilateralKeyFromFromAuthenticatedAndInsecure
 
 channelDefinition :: Note
@@ -215,11 +218,9 @@ distinguisherDefinition = de $ do
 
 symmetricCryptoSystemsTransformer :: Note
 symmetricCryptoSystemsTransformer = de $ do
-    let a = "A"
-        b = "B"
     s ["Let", m keyC, "be a", keyChannel, and, m comC_, "a", communicationChannel]
     s ["Let", m scs_, "be a", symmetricCryptosystem]
-    s ["We define two transformers", m $ encT_ ^: a, and, m $ decT_ ^: b, "that are each", nSs 3, "to encrypt or decrypt, respectively, any passing message with the", key]
+    s ["We define two transformers", m encT_ , and, m decT_, "that are each", nSs 3, "to encrypt or decrypt, respectively, any passing message with the", key]
     tikzFig "Encryption Transformer" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/encTransformerTikZ.tex|]
     tikzFig "Decryption Transformer" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/decTransformerTikZ.tex|]
 
@@ -345,6 +346,25 @@ diffieHellmanDistinguisher = thm $ do
         s ["Distinguishing these two precicely corresponds to solving the", decisionalDiffieHellman, "problem for", m grp_]
 
 
+keyEncapsulationTransformer :: Note
+keyEncapsulationTransformer = de $ do
+    s ["Let", m kem_, beA, keyEncapsulationMechanism, with, messageSpace, m msp_, publicKeySpace, m pksp_ <> ",", secretKeySpace, m sksp_ <> ", symmetric", keySpace, m ksp_, and, ciphertextSpace, m csp_]
+    s ["We define two transformers", m encapT_, and, m decapT_, "that are each", nSs 3, "that works as follows"]
+    tikzFig "Encapsulation Transformer" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/encapTransformerTikZ.tex|]
+    tikzFig "Decapsulation Transformer" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/decapTransformerTikZ.tex|]
+    itemize $ do
+        let c = "c"
+            k = "k"
+        let pk = "p"
+            sk = "s"
+            kp = tuple pk sk
+        item $ do
+            s ["First", m decapT_, "samples a", keyPair, m kp, from, m kpdist_]
+            s ["It then sends", m pk, "out the top inside", interface, "and keeps", m sk, "for later"]
+            s ["Upon receival of a", message, m c, at, "the bottom inside", interface, "it computes", m $ k =: decap c sk, "and outputs", m k, "at its outside", interface, "if it differs from", m undef]
+        item $ do
+            s [m encapT_ <> ", upon receival of a", message, m p, "on its top inside", interface, "computes", m $ tuple k c =: encap pk, ", sends", m k, "to its outside", interface, and, m c, "to its bottom inside", interface]
+
 
 
 unilateralKeyFromFromAuthenticatedAndInsecure :: Note
@@ -353,28 +373,77 @@ unilateralKeyFromFromAuthenticatedAndInsecure = thm $ do
     let aut = autCB pksp_
     let insec = comCwd csp_
     let ukey = ukeyC ksp_
+    let pk = "p"
+        sk = "s"
+    let kp = tuple pk sk
+    let c = "c"
+        k = "k"
+    let c' = c <> "'"
+        k' = k <> "'"
     itemize $ do
         item $ s ["Let", m kem_, beA, keyEncapsulationMechanism, with, messageSpace, m msp_, publicKeySpace, m pksp_ <> ",", secretKeySpace, m sksp_ <> ", symmetric", keySpace, m ksp_, and, ciphertextSpace, m csp_]
-        item $ s ["Let", kemEncT_, and, kemDecT_, "its", converters]
+        item $ s ["Let", encapT_, and, decapT_, "its", converters]
         item $ s ["Let", m aut, "be an", authenticatedChannelWithoutDeletion, for, m pksp_]
         item $ s ["Let", m insec, "be an insecure", channelWithDeletion, for, m csp_]
         item $ s ["Let", m ukey, "be a", unilateralKeyChannel, for, m ksp_]
         item $ do
             let sim = sigma
             s ["let", m sim, "be a", converter, "as follows"]
-            let pk = "p"
-                sk = "s"
-            let kp = tuple pk sk
-            let c = "c"
-                k = "k"
             s [m sim, "samples a", keyPair, m $ kp ∈ pksp_ ⨯ sksp_, "according to", m kpdist_ <> ",", "computes", m $ tuple c k =: encap pk, and, "outputs", m $ tuple pk c, "at its outside", interface]
+            s ["On input", m c', "at its outside", interface, "it outputs, it outputs", m deliverM, "at its inside", interface, "if", m $ c' =: c, and, m $ k' =: decap c' sk, "if", m $ c' `neq` c, and, m $ k' `neq` undef]
     let d = "Dist"
         a = alpha
         ss = "S"
         rr = "R"
         ss_ = conv sigma "E" (listof ukey)
-        rr_ = conv kemEncT_ "A" (conv kemDecT_ "B" (listofs [aut, insec]))
+        rr_ = conv encapT_ "A" (conv decapT_ "B" (listofs [aut, insec]))
     s ["For every", distinguisher, m d, with, advantage, m a, "in distinguishing", m $ ss =: ss_, from, m $ rr =: rr_, "there exists an", adversary, with, advantage, m a, "in the", iNDCCA, game, "for the", keyEncapsulationMechanism]
 
-    toprove
+    tikzFig "The situation" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/unilateralKeyFromFromAuthenticatedAndInsecureTikZ.tex|]
 
+    proof $ do
+        s ["Let", m d, "be a", distinguisher, for, m rr_, and, m ss_, with, advantage, m a]
+        let adv = "A"
+            a = "A"
+            b = "B"
+            e = "E"
+        itemize $ do
+            item $ do
+                s ["We construct an", adversary, m adv, "for the", kEM, iNDCCA, game, with, advantage, m a]
+                s ["In the first stage of the game,", m a, "receives a triple", m $ triple pk c k ∈ (pksp_ ⨯ csp_ ⨯ ksp_)]
+                s ["Internally,", m a, "simulates", m d, "internally and gives", m pk, to, m d, at, interface, m e, "simulated as coming from the", authenticatedChannelWithoutDeletion]
+                s ["Then it gives", m c, to, m d, at, interface, m e, "as coming from the insecure", channelWithDeletion <> ", and it gives", m k, to, m d, at, interface, m a]
+                s ["When it receives", m $ c' ∈ csp_, from, m d, at, interface, m e]
+                s ["If", m $ c' =: c, "it hands", m k, to, m d, at, interface, m b]
+                s ["If", m (c' `neq` c) <> ",",  m a, "queries the", challenger, "to receive the", secretKey, m k', "corresponding to", m c']
+                s ["If", m (k' `neq` undef) <> ",", "the", key, m k', "is then given to", m d, at, interface, m b]
+                let b = "b"
+                    b' = b <> "'"
+                s ["When", m d, "outputs a bit", m b <> ",", m a, "outputs this bit as", m b']
+            item $ do
+                s ["We show that", m a, "has", advantage, m a, "in the", kEM, iNDCCA, game]
+
+                itemize $ do
+                    item $ do
+                        s ["First suppose that", m $ b =: 0, "in the", game]
+                        s ["In other words, that", m $ k =: decap c sk, "holds"]
+                        s ["In this case", csa [m pk, m c, m k], "which", m d, "receives, are exactly distributed as when", m d, "is connected to", m rr]
+                        s ["No matter whether", m d, "sends a", ciphertext, m c', "that is equal to", m c, "or not, the distribution of a", m k', "that", m d, "receives", at, interface, m b, "given", csa [m p, m c, m k, m c'], "is equal to the correspondisng distribution of when", m d, "is connected to", m rr]
+                        s ["Note that the case where", m $ c' =: c, "holds, follows from the correctness condition of the", kEM]
+                        s ["Therefore, in that case,", m d, "will always output that it senses", m rr, "in the case where", m $ "b'" =: 1, and, m $ "b" =: 0]
+                    item $ do
+                        s ["Next suppose that", m $ "b" =: 1, "so that", m k, "is independently uniformly random"]
+                        s ["Then", csa [m p, m c, m k], "are distributed as when", m d, "is connected to", m ss]
+                        s ["Also in this case, the distribution of", m k', "given", csa [m p, m c, m k, m c'], "is equal to the corresponding distribution when", m d, "is connected to", m ss]
+                        s ["Hence if", m "b", and, m "b'", "are both", m 1, "then", m d, "will output", m 1]
+
+                s ["We conclude the following"]
+                let b = "b"
+                    b' = b <> "'"
+                aligneqs (2 * (pars $ prob (b' =: b) - 1 / 2))
+                    [ 2 * pars ( (1 / 2) * cprob (b' =: 1) (b =: 1) + (1 / 2) * cprob (b' =: 0) (b =: 0) - (1 / 2))
+                    , cprob (b' =: 1) (b =: 1) - cprob (b' =: 1) (b =: 0)
+                    , prob (conv_ d ss =: 1) - prob (conv_ d rr =: 1)
+                    , a
+                    ]
+        todo "rewrite to be more clear about the bits"
