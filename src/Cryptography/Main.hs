@@ -1,7 +1,7 @@
 module Cryptography.Main where
 
 import           Notes                                    hiding (cyclic,
-                                                           inverse)
+                                                           inverse, sign)
 
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
@@ -13,10 +13,12 @@ import           Groups.Terms
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
 import           Probability.ProbabilityMeasure.Terms
+import           Probability.RandomVariable.Terms
 import           Relations.Orders.Macro
 import           Sets.Basics.Terms
 
 import           Cryptography.ComputationalProblems
+import           Cryptography.ComputationalProblems.Terms hiding (advantage)
 import           Cryptography.KeyAgreement
 import           Cryptography.KeyEncapsulation
 import           Cryptography.Macro
@@ -332,15 +334,16 @@ digitalSignatureDefinition = de $ do
     lab signatureSpaceDefinitionLabel
     lab signingKeySpaceDefinitionLabel
     lab verificationKeySpaceDefinitionLabel
+    lab keyPairDistributionDefinitionLabel
     s ["Let", m ssp_, "be a", signatureSpace' <> ",", m sigsp_, "a", signingKeySpace', and, m versp_, "a", verificationKeySpace']
     newline
     s ["A", digitalSignatureScheme', "consists of three algorithms as follows"]
     itemize $ do
-        item $ s ["A probabillistic", keyGenerator', "algorithm which generates a", keyPair <> ", consisting of a", signingKey', "(" <> secretKey <> ")", "and a", signatureVerificationKey', "(" <> publicKey <> ")"]
+        item $ s ["A probabillistic", keyGenerator', "algorithm which generates a", keyPair <> ", consisting of a", signingKey', "(" <> secretKey <> ")", anda, signatureVerificationKey', "(" <> publicKey <> ")", "according to some", keyPairDistribution', over, m $ sigsp_ ⨯ versp_]
         let sig = "s"
-        item $ s ["A probabillistic", signingAlgorithm', "that takes as inputs a", signingKey, anda, message, "and computes the", signature', m $ sig ∈ ssp_, "for the", message]
+        item $ s ["A probabillistic", signingAlgorithm', m signf_, "that takes as inputs a", signingKey, anda, message, "and computes the", signature', m $ sig ∈ ssp_, "for the", message]
         item $ s ["A deterministic", signatureVerificationAlgorithm', "that takes as inputs a", signatureVerificationKey <> ", a", message, anda, signature, "and outputs a bit that can be interpreted as", dquoted "accept", or, dquoted "reject"]
-    s ["For every", keyPair <> ", the", signatureVerificationAlgorithm, "must accept the signature computed by the", signingAlgorithm]
+    s ["For every", keyPair <> ", the", signatureVerificationAlgorithm, m verif_, "must accept the signature computed by the", signingAlgorithm]
 
     todo "formalize"
 
@@ -369,14 +372,58 @@ lamportOneTimeSignatureSchemeDefinition = de $ do
     let xx = mathcal "X"
         yy = mathcal "Y"
         f_ = "f"
+        f = fn f_
         n = "n"
     s ["Let", m $ fun f_ xx yy, "be a", function, and, m $ n ∈ nats0]
     s ["Let", m $ msp_ =: bitss n, "be the", messageSpace <> ",", m $ ssp_ =: xx ^ n, "the", signatureSpace <> "," , m $ versp_ =: yy ^ (2 * n), "the", verificationKeySpace, and, m $ sigsp_ =: xx ^ (2 * n), "the", signingKeySpace]
 
     newline
-    s ["The", lamportOneTimeSignatureScheme, "for", m f_, "is defined as follows"]
+    s ["The", lamportOneTimeSignatureScheme', "for", m f_, "is defined as follows"]
 
-    todo "define this"
+    itemize $ do
+        let i = "i"
+            b = "b"
+        let x i b = "x" !: cs [i, b]
+        let y i b = "y" !: cs [i, b]
+        let z = "z"
+            v = "v"
+        let mesg = "m"
+            m1 = mesg !: 1
+            m2 = mesg !: 2
+            mi = mesg !: i
+            mn = mesg !: n
+        let sig = "s"
+            s1 = sig !: 1
+            s2 = sig !: 2
+            si = sig !: i
+            sn = sig !: n
+        item $ do
+            s ["Let the", keyPairDistribution, "be the", probabilityDistribution, "induced as follows"]
+            s ["First the", keyGenerator, "chooses uniformly at random", m $ 2 * n, elements, from, m xx]
+            let xs = cs [x 0 1, x 1 1, x 0 2, x 1 2, dotsc, x 0 n, x 1 n]
+            ma $ xs ∈ xx
+            s ["Then it computes", m $ 2 * n, elements, "in", m yy, "from those", elements, "of", m xx]
+            let ys = cs [y 0 1, y 1 1, y 0 2, y 1 2, dotsc, y 0 n, y 1 n]
+            ma $ y i b =: f (x i b)
+            ma $ ys ∈ yy
+            s [the, signingKey, is, m $ z =: xs, "and the", verificationKey, is, m $ v =: ys]
+        item $ do
+            s [the, signingAlgorithm, "is deterministically defined as follows"]
+            s ["Let", m $ mesg =: veclist m1 m2 mn ∈ msp_, "be a", message]
+            ma $ sign mesg z =: veclist (x m1 1) (x m2 2) (x mn n) ∈ ssp_
+        item $ do
+            s [the, signatureVerificationAlgorithm, "is defined as follows"]
+            s ["Let", m $ sig =: veclist s1 s2 sn ∈ msp_, "be a", signature]
+            ma $ veri mesg sig v ⇔ fa (i ∈ setlist 1 2 n) (f (si) =: y mi i)
+
+        item $ do
+            s ["Note that this", digitalSignatureScheme, "is in fact correct"]
+            ma $ fa (i ∈ setlist 1 2 n) $ f (x mi i) =: y mi i
+            ma $ fa (cs [mesg ∈ msp_, v, z]) $ veri mesg (sign mesg z) v
+
+
+
+
 
 
 lamportSecureIfOneWayFunction :: Note

@@ -15,17 +15,16 @@ makeDefs
 
     , "RSA"
 
-    , "one-way function"
-    , "function inversion game"
-
     , "digital signature scheme"
     , "DSS"
     , "signing key"
+    , "verification key"
     , "signature verification key"
     , "signature"
     , "signature space"
     , "signing key space"
     , "verification key space"
+    , "key-pair distribution"
     , "signing algorithm"
     , "signature verification algorithm"
     , "signature forgery game"

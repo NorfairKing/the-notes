@@ -27,6 +27,7 @@ makeDefs
     , "winning condition"
 
     , "function inversion"
+    , "function inversion game"
     , "one-way function"
 
     , "advantage"
