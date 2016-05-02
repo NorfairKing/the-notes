@@ -101,8 +101,12 @@ keyC :: Note
 keyC = bullet <> negSpace 7 <> raw "=\\joinrel=\\joinrel=" <> negSpace 6 <> bullet
 
 -- | Unilateral key channel
-ukeyC :: Note
-ukeyC = raw "=\\joinrel=\\joinrel=" <> negSpace 6 <> bullet
+ukeyC :: Note -> Note
+ukeyC = withms ukeyC_
+
+-- | Unilateral key channel with implict message space
+ukeyC_ :: Note
+ukeyC_ = raw "=\\joinrel=\\joinrel=" <> negSpace 6 <> bullet
 
 
 -- | Encryption transformer
@@ -126,3 +130,11 @@ decT_ = decT "dec"
 -- | 'deliver' message
 deliverM :: Note
 deliverM = "deliver"
+
+-- | KEM enc transformer
+kemEncT_ :: Note
+kemEncT_ = "enc"
+
+-- | KEM dec transformer
+kemDecT_ :: Note
+kemDecT_ = "dec"

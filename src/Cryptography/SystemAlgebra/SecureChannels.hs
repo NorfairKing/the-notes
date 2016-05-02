@@ -14,6 +14,10 @@ import           Probability.ProbabilityMeasure.Terms
 import           Sets.Basics.Terms
 
 import           Cryptography.ComputationalProblems.Terms
+import           Cryptography.KeyEncapsulation.Macro
+import           Cryptography.KeyEncapsulation.Terms
+import           Cryptography.PublicKeyEncryption.Macro
+import           Cryptography.PublicKeyEncryption.Terms
 import           Cryptography.SymmetricCryptography.Macro
 import           Cryptography.SymmetricCryptography.Terms         hiding
                                                                    (advantage,
@@ -49,6 +53,7 @@ secureChannelsSS = subsection "Secure Channels" $ do
         secureFromAuthenticatedOTP
         secureFromAuthenticated
         diffieHellmanDistinguisher
+        unilateralKeyFromFromAuthenticatedAndInsecure
 
 channelDefinition :: Note
 channelDefinition = do
@@ -189,7 +194,7 @@ unilateralKeyChannelDefinition = de $ do
         b = "B"
         e = "E"
     s ["Let", m ksp_, "be a", keySpace]
-    s ["A", unilateralKeyChannel', m ukeyC, "is a", communicationChannel, "that functions as follows"]
+    s ["A", unilateralKeyChannel', m ukeyC_, "is a", communicationChannel, "that functions as follows"]
     tikzFig "Key Channel" [] $ raw $ [litFile|src/Cryptography/SystemAlgebra/ukeyChannelTikZ.tex|]
     itemize $ do
         let k = "k"
@@ -342,5 +347,34 @@ diffieHellmanDistinguisher = thm $ do
 
 
 
+unilateralKeyFromFromAuthenticatedAndInsecure :: Note
+unilateralKeyFromFromAuthenticatedAndInsecure = thm $ do
+    s ["A", unilateralKeyChannel, "can be constructed using a", keyEncapsulationMechanism, "from an", authenticatedChannelWithoutDeletion, anda, channelWithDeletion]
+    let aut = autCB pksp_
+    let insec = comCwd csp_
+    let ukey = ukeyC ksp_
+    itemize $ do
+        item $ s ["Let", m kem_, beA, keyEncapsulationMechanism, with, messageSpace, m msp_, publicKeySpace, m pksp_ <> ",", secretKeySpace, m sksp_ <> ", symmetric", keySpace, m ksp_, and, ciphertextSpace, m csp_]
+        item $ s ["Let", kemEncT_, and, kemDecT_, "its", converters]
+        item $ s ["Let", m aut, "be an", authenticatedChannelWithoutDeletion, for, m pksp_]
+        item $ s ["Let", m insec, "be an insecure", channelWithDeletion, for, m csp_]
+        item $ s ["Let", m ukey, "be a", unilateralKeyChannel, for, m ksp_]
+        item $ do
+            let sim = sigma
+            s ["let", m sim, "be a", converter, "as follows"]
+            let pk = "p"
+                sk = "s"
+            let kp = tuple pk sk
+            let c = "c"
+                k = "k"
+            s [m sim, "samples a", keyPair, m $ kp ∈ pksp_ ⨯ sksp_, "according to", m kpdist_ <> ",", "computes", m $ tuple c k =: encap pk, and, "outputs", m $ tuple pk c, "at its outside", interface]
+    let d = "Dist"
+        a = alpha
+        ss = "S"
+        rr = "R"
+        ss_ = conv sigma "E" (listof ukey)
+        rr_ = conv kemEncT_ "A" (conv kemDecT_ "B" (listofs [aut, insec]))
+    s ["For every", distinguisher, m d, with, advantage, m a, "in distinguishing", m $ ss =: ss_, from, m $ rr =: rr_, "there exists an", adversary, with, advantage, m a, "in the", iNDCCA, game, "for the", keyEncapsulationMechanism]
 
+    toprove
 
