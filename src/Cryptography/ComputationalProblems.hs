@@ -90,6 +90,7 @@ computationalProblemsS = section "Computational Problems" $ do
         additiveDLEasy
         dlReducable
         dlModTwoInEvenOrderGroup
+        dlModTwoToTheKInDivGroup
         dlNotation
         lsbProbNotation
         dlLSBHardness
@@ -616,6 +617,15 @@ dlModTwoInEvenOrderGroup = thm $ do
         ma $ x ^ n =: g ^ (a * n) =: g ^ ((pars $ 2 * q + r) * n) =: g ^ (2 * n * q) ** (g ^ (r * n) =: g ^ (r * n))
         s ["This means that", m $ x ^ n, "will be equal to the", neutralElement, "if", m a, "is even and", m $ g ^ n, "(which cannot be the", neutralElement, "because", m g, "is a", generator, and, m grp_, "has", order, m (2 * n) <> ") if", m a, "is odd"]
         s ["We only have to compare", m $ x ^ n, "to the", neutralElement, "to determine", m $ a `mod` 2]
+
+dlModTwoToTheKInDivGroup :: Note
+dlModTwoToTheKInDivGroup = thm $ do
+    let n = "n"
+        k = "k"
+    s ["Let", m grp_, beA, group, with, "an", order, m $ ord grp_ =: 2^k * n, "for some", m k]
+    s ["There exists an efficient algorithm to compute the", discreteLogarithm, "of an", element, "modulo", m $ 2^k]
+
+    toprove
 
 
 dlRepetitionBoosting :: Note
