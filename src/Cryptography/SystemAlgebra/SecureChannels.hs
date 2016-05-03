@@ -403,13 +403,13 @@ unilateralKeyFromFromAuthenticatedAndInsecure = thm $ do
 
     proof $ do
         s ["Let", m d, "be a", distinguisher, for, m rr_, and, m ss_, with, advantage, m a]
-        let adv = "A"
+        let adv = "Adv"
             a = "A"
             b = "B"
             e = "E"
         itemize $ do
             item $ do
-                s ["We construct an", adversary, m adv, "for the", kEM, iNDCCA, game, with, advantage, m a]
+                s ["We construct an", adversary, m adv, "for the", kEM, iNDCCA, game, with, advantage, m alpha]
                 s ["In the first stage of the game,", m a, "receives a triple", m $ triple pk c k ∈ (pksp_ ⨯ csp_ ⨯ ksp_)]
                 s ["Internally,", m a, "simulates", m d, "internally and gives", m pk, to, m d, at, interface, m e, "simulated as coming from the", authenticatedChannelWithoutDeletion]
                 s ["Then it gives", m c, to, m d, at, interface, m e, "as coming from the insecure", channelWithDeletion <> ", and it gives", m k, to, m d, at, interface, m a]
@@ -421,21 +421,25 @@ unilateralKeyFromFromAuthenticatedAndInsecure = thm $ do
                     b' = b <> "'"
                 s ["When", m d, "outputs a bit", m b <> ",", m a, "outputs this bit as", m b']
             item $ do
-                s ["We show that", m a, "has", advantage, m a, "in the", kEM, iNDCCA, game]
+                s ["We show that", m a, "has", advantage, m alpha, "in the", kEM, iNDCCA, game]
 
                 itemize $ do
                     item $ do
-                        s ["First suppose that", m $ b =: 0, "in the", game]
+                        s ["First suppose that", m $ "b" =: 0, "in the", game]
                         s ["In other words, that", m $ k =: decap c sk, "holds"]
+                        s [m adv, "should then output", m 0, "as well"]
                         s ["In this case", csa [m pk, m c, m k], "which", m d, "receives, are exactly distributed as when", m d, "is connected to", m rr]
                         s ["No matter whether", m d, "sends a", ciphertext, m c', "that is equal to", m c, "or not, the distribution of a", m k', "that", m d, "receives", at, interface, m b, "given", csa [m p, m c, m k, m c'], "is equal to the correspondisng distribution of when", m d, "is connected to", m rr]
                         s ["Note that the case where", m $ c' =: c, "holds, follows from the correctness condition of the", kEM]
                         s ["Therefore, in that case,", m d, "will always output that it senses", m rr, "in the case where", m $ "b'" =: 1, and, m $ "b" =: 0]
+                        ma $ prob (conv_ d rr =: 1) =: cprob ("b'" =: 1) ("b" =: 0)
                     item $ do
                         s ["Next suppose that", m $ "b" =: 1, "so that", m k, "is independently uniformly random"]
+                        s [m adv, "should then output", m 1, "as well"]
                         s ["Then", csa [m p, m c, m k], "are distributed as when", m d, "is connected to", m ss]
                         s ["Also in this case, the distribution of", m k', "given", csa [m p, m c, m k, m c'], "is equal to the corresponding distribution when", m d, "is connected to", m ss]
                         s ["Hence if", m "b", and, m "b'", "are both", m 1, "then", m d, "will output", m 1]
+                        ma $ prob (conv_ d ss =: 1) =: cprob ("b'" =: 1) ("b" =: 1)
 
                 s ["We conclude the following"]
                 let b = "b"
@@ -444,6 +448,5 @@ unilateralKeyFromFromAuthenticatedAndInsecure = thm $ do
                     [ 2 * pars ( (1 / 2) * cprob (b' =: 1) (b =: 1) + (1 / 2) * cprob (b' =: 0) (b =: 0) - (1 / 2))
                     , cprob (b' =: 1) (b =: 1) - cprob (b' =: 1) (b =: 0)
                     , prob (conv_ d ss =: 1) - prob (conv_ d rr =: 1)
-                    , a
+                    , alpha
                     ]
-        todo "rewrite to be more clear about the bits"

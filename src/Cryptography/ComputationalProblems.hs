@@ -423,9 +423,9 @@ distinguisherAdvantageDefinition = do
         let p = dprob s0 s1
             ad = dadv d s0 s1
         s [the, advantage', m ad, "of a", distinguisher, m d, "for a", distinctionProblem, m p, "in distinguishing", m s0, and, m s1, "is defined as follows"]
-        ma $ ad =: prob (conv_ s1 d =: 1) - prob (conv_ s0 d =: 1)
+        ma $ ad =: prob (conv_ d s1 =: 1) - prob (conv_ d s0 =: 1)
     nte $ do
-        s ["Note that", m $ prob (conv_ s1 d =: 1), and, m $ prob (conv_ s0 d =: 1), "are probabilities in different random experiments"]
+        s ["Note that", m $ prob (conv_ d s1 =: 1), and, m $ prob (conv_ d s0 =: 1), "are probabilities in different random experiments"]
         s ["In one experiment the", distinguisher, "is guessing the identity of", m s0, and, "in the other it's guessing the identity of", m s1]
     de $ do
         let dd = mathcal "D"
