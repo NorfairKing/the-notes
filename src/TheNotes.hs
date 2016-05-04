@@ -1,4 +1,4 @@
-module Main where
+module TheNotes where
 
 import           Prelude                as P
 
@@ -39,6 +39,7 @@ import           Groups.Main
 import           LinearAlgebra.Main
 import           Logic.Main
 import           MachineLearning.Main
+import           NumberTheory.Main
 import           Probability.Main
 import           ProgramAnalysis.Main
 import           Relations.Main
@@ -48,8 +49,8 @@ import           Statistics.Main
 import           Topology.Main
 
 
-main :: IO ()
-main = printTiming $ do
+theNotes :: IO ()
+theNotes = printTiming $ do
     printHeader
     outputSystemInfo
     checkDependencies
@@ -210,6 +211,7 @@ allNotes = do
     rings
     fields
     linearAlgebra
+    numberTheoryC
     geometry
     topology
     computability
