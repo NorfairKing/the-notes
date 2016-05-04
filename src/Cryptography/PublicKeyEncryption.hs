@@ -9,6 +9,7 @@ import           Groups.Macro
 import           Groups.Terms
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
+import           NumberTheory.Macro
 import           Probability.ConditionalProbability.Macro
 import           Probability.Independence.Terms
 import           Probability.ProbabilityMeasure.Macro

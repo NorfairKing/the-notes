@@ -8,6 +8,7 @@ import           Functions.Basics.Terms
 import           Functions.Distances.Terms
 import           Geometry.AffineSpaces.Terms
 import           Logic.FirstOrderLogic.Macro
+import           NumberTheory.Macro
 import           Probability.ConditionalProbability.Macro
 import           Probability.ProbabilityMeasure.Macro
 import           Probability.ProbabilityMeasure.Terms
@@ -226,7 +227,7 @@ lossFunctionInducesCostFunction = thm $ do
         n = "n"
         y = "y"
         z = "z"
-    s ["For any", m $ natural n, ", every symmetric", lossFunction, m lf_, "induces a", costFunction, m $ cf_ !: lf_]
+    s ["For any", m $ nat n, ", every symmetric", lossFunction, m lf_, "induces a", costFunction, m $ cf_ !: lf_]
     s [m $ cf_ !: lf_, "can be defined as any non-zero factor", m alpha, "of the sum of all losses over the dataset"]
     ma $ cost y z =: alpha * sumcmpr (i =: 1) n (loss (y !: i) (z !: i))
     s ["Often, ", m alpha, " is chosen to be ", m $ 1 /: n, ", that is, the cost is the average of all losses"]
@@ -285,7 +286,7 @@ conditionalExpectedRiskDefinition = de $ do
     s ["Given a", learningProblem, "with", measurementSpace, m mms_, ", a", hypothesis, m hyp_, "and a", lossFunction, m lf_]
     s ["Instead of looking at ", mmis_, and, mmos_," as ", sets, ", look at them now as ", randomVariables, " from which ", dataPoints, " are drawn"]
     s ["The ", conditionalExpectedRisk', " of ", m hyp_, " with respect to ", m lf_, ", for a given distribution ", m mmis_, " of the ", inputSpace, " is defined as follows"]
-    ma $ cer_ === int_ reals (loss mmos_ (pred mmis_) * cprob mmos_ mmis_) mmos_
+    ma $ cer_ === integ_ reals (loss mmos_ (pred mmis_) * cprob mmos_ mmis_) mmos_
     let (x, y) = ("x", "y")
     s ["For clarity: ", m $ cprob y x, " is the ", probability, " that a ", dataPoint, " has label ", m y, " given that it has ", inputFeatures, " ", m x]
     todo "Make this random variable transition more rigorous"
@@ -294,7 +295,7 @@ totalExpectedRiskDefinition :: Note
 totalExpectedRiskDefinition = de $ do
     lab totalExpectedRiskDefinitionLabel
     s [the, totalExpectedRisk', "of a", hypothesis, m hyp_, "with respect to a", lossFunction, m lf_, "is the", expectedValue, "of the", conditionalExpectedRisk, "over all possible", distributions, "of", mmis_]
-    ma $ ter_ === ev cer_ =: int_ mmis_ (cer_ * prob mmis_) mmis_
+    ma $ ter_ === ev cer_ =: integ_ mmis_ (cer_ * prob mmis_) mmis_
 
 errorSS :: Note
 errorSS = do

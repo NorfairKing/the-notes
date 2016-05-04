@@ -1,3 +1,9 @@
 module NumberTheory.Terms where
 
-import Notes
+import           Notes
+
+makeDefs
+    [ "natural number"
+    , "whole number"
+    , "integer"
+    ]

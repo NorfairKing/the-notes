@@ -16,6 +16,7 @@ import           Groups.Macro
 import           Groups.Terms
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
+import           NumberTheory.Macro
 import           Probability.Distributions.Macro
 import           Probability.ProbabilityMeasure.Macro
 import           Probability.ProbabilityMeasure.Terms
@@ -549,7 +550,7 @@ discreteLogarithmProblemDefinition = do
         let aa = "A"
             a = "a"
             g = "g"
-        s [the, discreteLogarithm', "(" <> dL' <> ")", searchProblem, "for a", cyclic_, group, m $ grp_ =: grp (genby g) grpop_, "is the problem of computing, for a given", group, element, m $ aa ∈ grps_, "the exponent", m $ integer a, " such that", m $ aa =: g ^ a, "holds"]
+        s [the, discreteLogarithm', "(" <> dL' <> ")", searchProblem, "for a", cyclic_, group, m $ grp_ =: grp (genby g) grpop_, "is the problem of computing, for a given", group, element, m $ aa ∈ grps_, "the exponent", m $ int a, " such that", m $ aa =: g ^ a, "holds"]
         s ["Formally: let", m grps_, "be the", instanceSpace, "of a", searchProblem, "with", witnessSpace, m $ setsize grps_ <> ",", "the following", predicate, m spred_, "and the uniform instance distribution of", group, elements]
         let x = "x"
             w = "w"
@@ -565,7 +566,7 @@ additiveDLEasy = thm $ do
         let z = "z"
             a = "a"
             g = "g"
-        s ["Recall that, for any element", m (z ∈ intmod n) <> ", we are looking for the integer", m $ integer a, "such that", m $ z =: g * a, "where", m g, "is a", generator, "of", m $ intagrp n]
+        s ["Recall that, for any element", m (z ∈ intmod n) <> ", we are looking for the integer", m $ int a, "such that", m $ z =: g * a, "where", m g, "is a", generator, "of", m $ intagrp n]
         s ["Luckily, ", m $ intagrp n, "gives rise to a", ring, m $ intring n, "as well"]
         s ["This allows us to find", m a, "by dividing", m z, by, m g]
         s ["More precicely: because", m g, "is a", generator, "means that", m g, "must have a multiplicative inverse in", m $ intring n, "otherwise no multiple of", m g, "would be equal to", m 1]
@@ -588,10 +589,10 @@ dlReducable = thm $ do
             b = "b"
             c = "c"
         s ["Let", m z, "be the", group, element, "that we want the", discreteLogarithm, m b, "base", m h, "in", m grp_, "of"]
-        s ["There then exists a", m $ integer c, "such that", m c, "is the", discreteLogarithm, "base", m g, "in", m grp_, "of", m z]
+        s ["There then exists a", m $ int c, "such that", m c, "is the", discreteLogarithm, "base", m g, "in", m grp_, "of", m z]
         ma $ z =: h ^ b =: g ^ c
         let d = "d"
-        s ["Because", m h, "is an", element, "of", m grps_ <> ",", "there exists a", m $ integer d, "such that", m $ h =: g ^ d, "holds"]
+        s ["Because", m h, "is an", element, "of", m grps_ <> ",", "there exists a", m $ int d, "such that", m $ h =: g ^ d, "holds"]
         ma $ z =: (pars $ g ^ d) ^ b =: g ^ c
         s ["This means that we have the following equation for", m c, "in", m $ intring $ ord grps_]
         ma $ d * b =: c
@@ -648,7 +649,7 @@ dlRepetitionBoosting = do
             let h = "h"
                 x = "x"
                 c = "c"
-            s ["Let", m $ h =: g ^ x ∈ grps_, "be an input for", m sl', and, m $ natural c, "a constant"]
+            s ["Let", m $ h =: g ^ x ∈ grps_, "be an input for", m sl', and, m $ nat c, "a constant"]
             s [m sl', "will operate as follows"]
             let r = "r"
             itemize $ do

@@ -6,6 +6,7 @@ import           Functions.Basics.Macro
 import           Functions.Basics.Terms
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
+import           NumberTheory.Macro
 import           Sets.Algebra.Complement.Terms
 import           Sets.Basics.Terms
 
@@ -60,7 +61,7 @@ probabilityMeasureDefinition = de $ do
             countableAdditivity'
             newline
             s ["Let ", m (sequ an "n"), " be a countably infinite ", sequence, " of pairwise disjunct sets"]
-            ma $ prob (setuncmp (natural "n") an) =: sumcmp (natural "n") (prob an)
+            ma $ prob (setuncmp (nat "n") an) =: sumcmp (nat "n") (prob an)
 
     s [m $ prob a, " is called the ", probability', " that ", m a, " happens"]
   where

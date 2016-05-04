@@ -2,7 +2,7 @@ module Macro.LinearAlgebra.Macro where
 
 import           Types
 
-import           Macro.Numbers.Macro
+import           NumberTheory.Macro
 
 import           Macro.Math
 import           Macro.MetaMacro

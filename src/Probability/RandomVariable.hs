@@ -344,7 +344,7 @@ probabilityDensityDistribution :: Note
 probabilityDensityDistribution = thm $ do
     prdsDec
     s ["Let ", m dsf_, " be the ", probabilityDensityFunction, " of ", m rv_]
-    ma $ prd a =: prob (x <= a) =: int minfty a (prds x) x
+    ma $ prd a =: prob (x <= a) =: integ minfty a (prds x) x
 
     toprove
   where
@@ -356,7 +356,7 @@ probabilityDensityDistributionBetween :: Note
 probabilityDensityDistributionBetween = thm $ do
     prdsDec
     s ["Let ", m dsf_, " be the ", probabilityDensityFunction, " of ", m rv_]
-    ma $ prd x - prd a =: prob (a < rv_ <= b) =: int a b (prds x) x
+    ma $ prd x - prd a =: prob (a < rv_ <= b) =: integ a b (prds x) x
 
     toprove
   where
@@ -413,7 +413,7 @@ expectedValueDefinition = de $ do
     lab expectedValueDefinitionLabel
     s ["Let ", m df_, " be a ", distributionFunction, " of a ", continuous, " ", randomVariable, m rv_, " in a ", probabilitySpace, m prsp_, " that is ", continuous, " with a ", continuous, derivative]
     s [the, expectedValue', " of ", m rv_, " is defined as follows"]
-    ma $ ev rv_ === int_ univ_ rv_ prm_ -- TODO two cases
+    ma $ ev rv_ === integ_ univ_ rv_ prm_ -- TODO two cases
     s ["For a ", discrete, randomVariable, m rv_, " this comes down to the following"]
     ma $ do
         let (i, p, x) = ("i", "p", "x")
@@ -421,7 +421,7 @@ expectedValueDefinition = de $ do
     s ["For a ", continuous, randomVariable, m rv_, " this comes down to the following"]
     ma $ do
         let x = "x"
-        ev rv_ =: int minfty pinfty (x * prds x) x
+        ev rv_ =: integ minfty pinfty (x * prds x) x
 
 expectationOfConstant :: Note
 expectationOfConstant = thm $ do

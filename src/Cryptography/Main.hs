@@ -12,6 +12,7 @@ import           Groups.Macro
 import           Groups.Terms
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
+import           NumberTheory.Macro
 import           Probability.ProbabilityMeasure.Terms
 import           Probability.RandomVariable.Terms
 import           Relations.Orders.Macro
@@ -118,7 +119,7 @@ ethRootComputation = do
         let e = "e"
             d = "d"
             gs = setsize grps_
-        s ["Let", m $ integer e, "be given exponent", relativelyPrime_, "to", m gs]
+        s ["Let", m $ int e, "be given exponent", relativelyPrime_, "to", m gs]
         let x = "x"
             y = "y"
         s [the, m e <> "-th root of an", element, m $ y ∈ grps_, "namely", m $ x ∈ grps_, "satisfying", m (x ^ e =: y) <> ", can be computed according to", m $ x =: y ^ d, "where", m $ d =: ginvm (intmgrp gs) e, "is the multiplicative inverse of", m e, "modulo", m gs]
@@ -450,7 +451,7 @@ hashFunctionDefinition = de $ do
     s ["A", hashFunction', "is a", function, m $ fun hshf_ d r, "where", m $ setsize d, "is (much) larger than", m $ setsize r]
     s ["Elements of", m d, "are called", hashes']
     let k = "k"
-    s ["Typically", m $ d =: bitss "*", and, m $ r =: bitss k, "for some suitable", m $ natural k]
+    s ["Typically", m $ d =: bitss "*", and, m $ r =: bitss k, "for some suitable", m $ nat k]
 
 collisionFindingGameDefinition :: Note
 collisionFindingGameDefinition = de $ do

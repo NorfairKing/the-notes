@@ -237,6 +237,8 @@ library
       Macro.Tuple
       Notes
       NumberTheory.Main
+      NumberTheory.Macro
+      NumberTheory.Terms
       Packages
       Parser
       Preface

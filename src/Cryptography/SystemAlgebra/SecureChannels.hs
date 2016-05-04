@@ -10,6 +10,7 @@ import           Functions.Basics.Terms
 import           Groups.Macro
 import           Groups.Terms
 import           Logic.PropositionalLogic.Macro
+import           NumberTheory.Macro
 import           Probability.ConditionalProbability.Macro
 import           Probability.ProbabilityMeasure.Macro
 import           Probability.ProbabilityMeasure.Terms
