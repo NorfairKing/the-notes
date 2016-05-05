@@ -2,6 +2,12 @@ module NumberTheory.Main where
 
 import           Notes
 
+import           Control.Monad                   (forM_)
+import           Data.List                       (nubBy, sort)
+import qualified Data.Text                       as T
+import qualified Prelude                         as P (Int, filter, map, mod,
+                                                       (++), (-), (==), (^))
+
 import           Functions.Basics.Macro
 import           Functions.BinaryOperation.Terms
 import           Functions.Jections.Terms
@@ -159,6 +165,7 @@ moduloS :: Note
 moduloS = do
     modularIntegersDefinition
     quadraticResidueDefinition
+    quadraticResidueExamples
 
 modularIntegersDefinition :: Note
 modularIntegersDefinition = de $ do
@@ -176,4 +183,35 @@ quadraticResidueDefinition = de $ do
     s ["A", quadraticResidue', "modulo an", integer, m n, "is an", integer, m x, "such that there exists an", integer, m y, "as follows"]
     ma $ eqmod n (y ^ 2) x
 
-
+quadraticResidueExamples :: Note
+quadraticResidueExamples = do
+    ex $ do
+        let n = "n"
+        s [m 0, and, m 1, "are always", quadraticResidues, "in", m $ intmod n, for, m $ n > 1, because, m $ eqmod n (0 ^ 2) 0, and, m $ eqmod n (1 ^ 2) 1]
+    ex $ do
+        s ["In", m (intmod 7) <> ",", m 2, "is a", quadraticResidue, because, m $ eqmod 7 (5 ^ 2) 2]
+    ex $ do
+        s ["In", m $ intmod 5, ", the", quadraticResidues, are, csa [m 0, m 1, m 4], because, csa [m $ eqmod 5 (0 ^ 2) 0, m $ eqmod 5 (1 ^ 2) 1, m $ eqmod 5 (2 ^ 2) 4]]
+    ex $ do
+        s ["In", m $ intmod 35, ", the", quadraticResidues, are, "the following", elements]
+        ma $ cs [0, 1, 4, 9, 11, 14, 15, 16, 21, 25, 29, 30]
+    ex $ do
+        s ["Here are the", quadraticResidues, "(different from", m 0, and, m 1 <> ") modulo some small", integers]
+        let residues :: P.Int -> [(P.Int, P.Int)]
+            residues n = P.filter (\(a, _) -> a /= 0 && a /= 1)
+                         $ sort
+                         $ nubBy (\(a, _) (b, _) -> a P.== b)
+                         $ P.map (\q -> (q P.^ (2 :: P.Int) `P.mod` n, q)) [0 .. (n P.- 1)]
+        let rawn :: P.Int -> Note
+            rawn = raw . T.pack . show
+        let renderResidues n = do
+                belowEachOther [CenterColumn, VerticalLine, LeftColumn] $
+                    [ comm3 "multicolumn" "2" "c" (eqmod (rawn n) ("q" ^ 2) "r")
+                    , hline <> "q" & "r"
+                    ]
+                    P.++
+                     (P.map (\(r, q) -> rawn q & rawn r) (residues n))
+                quad
+        ma $ forM_ [5..9] renderResidues
+        ma $ forM_ [10..14] renderResidues
+        ma $ forM_ [15..19] renderResidues

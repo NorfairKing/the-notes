@@ -6,8 +6,6 @@ import           Macro.Math
 import           Macro.MetaMacro
 import           Macro.Tuple
 
-import           NumberTheory.Macro
-
 -- * Magma
 
 -- | Magma
@@ -115,15 +113,6 @@ ginv = (^ "-1")
 -- | Inverse element in a given group
 ginvm :: Note -> Note -> Note
 ginvm g n = "" !: g <> n ^ "-1"
-
-
--- | Additive group of ints modulo n
-intagrp :: Note -> Note
-intagrp n = grp (intmod n) $ "" + ""
-
--- | Multiplicative group of ints modulo n
-intmgrp :: Note -> Note
-intmgrp n = grp (int0mod n) cdot_
 
 -- * Generated set
 

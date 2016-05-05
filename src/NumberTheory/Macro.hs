@@ -7,6 +7,7 @@ import           Macro.MetaMacro
 import           Macro.Tuple
 
 import           Functions.Application.Macro
+import           Groups.Macro
 import           Macro.Sets.Macro
 
 -- * Natural numbers
@@ -55,12 +56,6 @@ int n = n ∈ ints
 ints :: Note
 ints = mathbb "Z"
 
-intmod :: Note -> Note
-intmod n = ints !: n
-
-int0mod :: Note -> Note
-int0mod n = ints !: (0 <> "," <> n)
-
 wholen :: Note -> Note -> Note
 wholen = tuple
 
@@ -93,6 +88,21 @@ divZ_ = div_ `annotateOp` ints
 -- | Congruence modulo an integer
 eqmod :: Note -> Note -> Note -> Note
 eqmod n a b = (binop (comm0 "equiv") a b) <> pars (text "mod " <> n)
+
+intmod :: Note -> Note
+intmod n = ints !: n
+
+int0mod :: Note -> Note
+int0mod n = ints !: (0 <> "," <> n)
+
+-- | Additive group of ints modulo n
+intagrp :: Note -> Note
+intagrp n = grp (intmod n) $ "" + ""
+
+-- | Multiplicative group of ints modulo n
+intmgrp :: Note -> Note
+intmgrp n = grp (int0mod n) cdot_
+
 
 -- * Operations on numbers
 add_ :: Note
