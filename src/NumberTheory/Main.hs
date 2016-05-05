@@ -75,6 +75,10 @@ wholeNumbersS = do
     wholeNumbersDefinition
     wholeNumbersEquivalentDefinition
     naturalNumbersSubsetofWholeNumbersUnderInjection
+    wholeNumbersAddition
+    wholeNumbersSubtraction
+    wholeNumbersMultiplication
+    wholeNumbersDivision
 
 
 wholeNumbersDefinition :: Note
@@ -82,9 +86,9 @@ wholeNumbersDefinition = de $ do
     s [wholeNumbers', or, integers', m ints, "are defined as the", equivalenceClasses, "of", m $ naturals ^ 2, "with respect to the following", equivalenceRelation]
     let (a, b, c, d) = ("a", "b", "c", "d")
     -- b - a = d - c
-    ma $ tuple a b .~ tuple c d === b + c =: d + a
+    ma $ wholen a b .~ wholen c d === b + c =: d + a
     nte $ do
-        s ["Intuitively, an", element, m $ tuple a b, "represents", m $ b - a, "even if that", element, "does not exist in", m nats]
+        s ["Intuitively, an", element, m $ wholen a b, "represents", m $ b - a, "even if that", element, "does not exist in", m nats]
 
 wholeNumbersEquivalentDefinition :: Note
 wholeNumbersEquivalentDefinition = nte $ do
@@ -100,11 +104,38 @@ naturalNumbersSubsetofWholeNumbersUnderInjection = nte $ do
     let i = "i"
     s ["We regard the", set, "of", naturalNumbers, "as a", subset, "of the", wholeNumbers, "under the following", injection, m i]
     let a = "a"
-    ma $ func i nats ints a $ tuple 0 a
+    ma $ func i nats ints a $ wholen 0 a
 
+wholeNumbersAddition :: Note
+wholeNumbersAddition = de $ do
+    s [the, addition, m addZ_, "of", wholeNumbers, "is defined as the component-wise", addition, "of", naturalNumbers]
+    let (a, b, c, d) = ("a", "b", "c", "d")
+    ma $ wholen a b `addZ` wholen c d === wholen (a `addN` c) (b `addN` d)
+    s ["As such, we abbreviate", m $ wholen 0 a, "as", m a]
 
+wholeNumbersSubtraction :: Note
+wholeNumbersSubtraction = de $ do
+    s [the, subtraction', "of", wholeNumbers, "is a", binaryOperation, m subZ_, "defined in terms of", addition, "as follows"]
+    let a = "a"
+    let b = "b"
+    let c = "c"
+    s ["We say that", m $ a `subZ` b =: c, "holds if", m $ c `addZ` b =: a, "holds"]
 
+wholeNumbersMultiplication :: Note
+wholeNumbersMultiplication = de $ do
+    s [the, multiplication', "of", wholeNumbers, "is a", binaryOperation, m mulZ_, "defined in terms of", addition, "as follows"]
+    let n = "n"
+    ma $ n `mulZ` 0 === 0 === 0 `mulZ` n
+    ma $ n `mulZ` 1 === n === 1 `mulZ` n
+    let m = "m"
+    ma $ succ n `mulZ` m === m `addZ` (pars $ n `mulZ` m)
 
-
-
+wholeNumbersDivision :: Note
+wholeNumbersDivision = de $ do
+    s [the, division', "of", wholeNumbers, "is a", binaryOperation, m divN_, "defined in terms of", multiplication, "as follows"]
+    let a = "a"
+    let b = "b"
+    let c = "c"
+    s ["We say that", m $ a `divZ` b =: c, "holds if", m $ c `mulZ` b =: a, "holds"]
+    s [m $ a `divZ` b, "is often written as", m $ a / b]
 
