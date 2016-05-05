@@ -2,11 +2,10 @@ module NumberTheory.Main where
 
 import           Notes
 
-import           Control.Monad                   (forM_)
-import           Data.List                       (nubBy, sort)
+import           Data.List                       (concat, foldl, replicate)
 import qualified Data.Text                       as T
-import qualified Prelude                         as P (Int, filter, map, mod,
-                                                       (++), (-), (==), (^))
+import qualified Prelude                         as P (Int, map, mod, (+), (++),
+                                                       (-), (<), (^))
 
 import           Functions.Basics.Macro
 import           Functions.BinaryOperation.Terms
@@ -197,21 +196,17 @@ quadraticResidueExamples = do
         ma $ cs [0, 1, 4, 9, 11, 14, 15, 16, 21, 25, 29, 30]
     ex $ do
         s ["Here are the", quadraticResidues, "(different from", m 0, and, m 1 <> ") modulo some small", integers]
-        let residues :: P.Int -> [(P.Int, P.Int)]
-            residues n = P.filter (\(a, _) -> a /= 0 && a /= 1)
-                         $ sort
-                         $ nubBy (\(a, _) (b, _) -> a P.== b)
-                         $ P.map (\q -> (q P.^ (2 :: P.Int) `P.mod` n, q)) [0 .. (n P.- 1)]
         let rawn :: P.Int -> Note
             rawn = raw . T.pack . show
-        let renderResidues n = do
-                belowEachOther [CenterColumn, VerticalLine, LeftColumn] $
-                    [ comm3 "multicolumn" "2" "c" (eqmod (rawn n) ("q" ^ 2) "r")
-                    , hline <> "q" & "r"
-                    ]
-                    P.++
-                     (P.map (\(r, q) -> rawn q & rawn r) (residues n))
-                quad
-        ma $ forM_ [5..9] renderResidues
-        ma $ forM_ [10..14] renderResidues
-        ma $ forM_ [15..19] renderResidues
+        let n = 20
+        ma $ belowEachOther ((concat $ replicate (n P.+ 1) [VerticalLine, CenterColumn]) P.++ [VerticalLine]) $
+                (comm3 "multicolumn" (rawn (n P.- 1)) "c" ("q" ^ 2 `mod` "n")) :
+                (hline <> hline <> foldl (&) (raw "q\\setminus n") (P.map rawn [1 .. n])) :
+                P.map (\i -> do
+                    hline
+                    rawn i
+                    foldl (&) ""
+                        $ P.map (\j -> if j P.< (i P.+ 1) then (rawn $ j P.^ (2 :: P.Int) `P.mod` i) else mempty) [1 .. n]
+                    ) [0 .. (n P.- 1)]
+
+
