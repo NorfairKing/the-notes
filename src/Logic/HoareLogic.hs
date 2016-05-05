@@ -68,7 +68,7 @@ stateDefinition = do
         s ["A ",state', " is an assignment of values to abstract symbols"]
     nte $ do
         s ["In computers these values are typically finite strings of bits but they can be arbitrary values in theory"]
-        s ["In logical reasoning, the values are typically (unbounded) integers"]
+        s ["In logical reasoning, the values are typically (unbounded) ints"]
     ex $ do
         s [m $ cs ["a" .-> 4, "b" .-> 3], " could be a ", state]
 

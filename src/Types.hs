@@ -39,7 +39,7 @@ import           Text.LaTeX                   hiding (Label, alph_, article,
 import           Text.LaTeX.Base.Class
 import           Text.LaTeX.Base.Pretty
 import           Text.LaTeX.Base.Syntax
-import           Text.LaTeX.Packages.AMSFonts
+import           Text.LaTeX.Packages.AMSFonts hiding (integers)
 import           Text.LaTeX.Packages.AMSMath  hiding (bullet, div_, equation,
                                                mp, partial, pm, subset, to,
                                                (!:), (^:))

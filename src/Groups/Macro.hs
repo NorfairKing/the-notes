@@ -117,11 +117,11 @@ ginvm :: Note -> Note -> Note
 ginvm g n = "" !: g <> n ^ "-1"
 
 
--- | Additive group of integers modulo n
+-- | Additive group of ints modulo n
 intagrp :: Note -> Note
 intagrp n = grp (intmod n) $ "" + ""
 
--- | Multiplicative group of integers modulo n
+-- | Multiplicative group of ints modulo n
 intmgrp :: Note -> Note
 intmgrp n = grp (int0mod n) cdot_
 
@@ -137,3 +137,7 @@ genby = autoAngleBrackets
 -- | Order of a group
 ord :: Note -> Note
 ord = autoBrackets "|" "|"
+
+-- * Quotient
+qgrp :: Note -> Note -> Note
+qgrp = binop "/"

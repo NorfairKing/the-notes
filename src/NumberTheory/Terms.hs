@@ -10,4 +10,6 @@ makeDefs
     , "division"
     , "whole number"
     , "integer"
+    , "divisible"
+    , "quadratic residue"
     ]

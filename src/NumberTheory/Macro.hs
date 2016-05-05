@@ -2,6 +2,7 @@ module NumberTheory.Macro where
 
 import           Types
 
+import           Macro.Math
 import           Macro.MetaMacro
 import           Macro.Tuple
 
@@ -17,7 +18,7 @@ nat :: Note -> Note
 nat n = n ∈ naturals
 
 nats :: Note
-nats = naturals
+nats = mathbb "N"
 
 nats0 :: Note
 nats0 = nats !: 0
@@ -52,7 +53,7 @@ int :: Note -> Note
 int n = n ∈ ints
 
 ints :: Note
-ints = integers
+ints = mathbb "Z"
 
 intmod :: Note -> Note
 intmod n = ints !: n
@@ -86,6 +87,12 @@ divZ = binop divZ_
 
 divZ_ :: Note
 divZ_ = div_ `annotateOp` ints
+
+-- * Modular ints
+
+-- | Congruence modulo an integer
+eqmod :: Note -> Note -> Note -> Note
+eqmod n a b = (binop (comm0 "equiv") a b) <> pars (text "mod " <> n)
 
 -- * Operations on numbers
 add_ :: Note

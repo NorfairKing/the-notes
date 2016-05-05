@@ -8,6 +8,7 @@ import qualified Prelude                        as P
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
 import           Functions.Basics.Terms
+import           NumberTheory.Macro
 -- import Functions.Order.Macro
 import           Functions.Order.Terms
 import           Logic.FirstOrderLogic.Macro
@@ -31,8 +32,8 @@ intervalAbstraction = section "Interval abstraction" $ do
 
 abstractDomainForIntervalAbstraction :: Note
 abstractDomainForIntervalAbstraction = do
-    let zi = integers ^ infty
-    s ["Define", m zi, "as", m $ integers ∪ setofs [minfty, pinfty]]
+    let zi = ints ^ infty
+    s ["Define", m zi, "as", m $ ints ∪ setofs [minfty, pinfty]]
     let is = "I"
     let a = "a"
         b = "b"

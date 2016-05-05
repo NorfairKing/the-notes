@@ -187,7 +187,7 @@ rsaPKEExample = ex $ do
         c = "c"
     itemize $ do
         item $ do
-            s [the, keyGenerator, function, "generates two primes", m p, and, m q, "and computes", m $ n =: p * q, "as well as", m $ etot n =: (p - 1) * (q - 1), "and selects an", m $ e ∈ integers, "that is relatively prime to", m $ etot n, "to compute", m $ d =: ginv e `mod` etot n]
+            s [the, keyGenerator, function, "generates two primes", m p, and, m q, "and computes", m $ n =: p * q, "as well as", m $ etot n =: (p - 1) * (q - 1), "and selects an", m $ e ∈ ints, "that is relatively prime to", m $ etot n, "to compute", m $ d =: ginv e `mod` etot n]
             itemize $ do
                 item $ s [the, publicKey, "is then", m $ tuple n e]
                 item $ s [the, privateKey, "is", m d]
@@ -197,7 +197,7 @@ rsaPKEExample = ex $ do
             s [the, decryptionFunction, "computes the original", message, m $ mesg =: c ^ d `mod` n, "for a given", ciphertext, m c]
     s ["This is in fact a valid", publicKeyEncryptionScheme]
     proof $ do
-        s ["Let", m $ cs [p, q] ∈ integers, "be arbitrary and let", m $ mesg ∈ intmod n, "be an arbitrary", message]
+        s ["Let", m $ cs [p, q] ∈ ints, "be arbitrary and let", m $ mesg ∈ intmod n, "be an arbitrary", message]
         ma $ (pars $ mesg ^ d `mod` n) ^ e `mod` n
           =: (pars $ mesg ^ (ginv e `mod` etot n) `mod` n) ^ e `mod` n
           =: mesg ^ ((pars $ ginv e `mod` etot n) * e) `mod` n
@@ -217,7 +217,7 @@ rsaSmallEInsecure = thm $ do
         s ["For a small", m $ e ∈ intmod n, ", the subspace", m $ m0 =: setcmpr (mesg ∈ naturals) (mesg ^ e < n), "is considerably large (or at least non-negligible and increasing in size for increasing", m n <> ")"]
         s ["For any", message, m (mesg ∈ m0) <> ",", "the corresponding ciphertext equals", m $ c =: mesg ^ e `mod` n =: mesg ^ e]
         s ["In other words, ", m $ mesg ^ e, "is not reduced modulo", m n]
-        s ["This means that an", adversary, "can efficiently compute", m $ c ^ (1 /: e), "over the integers and recover", m mesg, "entirely"]
+        s ["This means that an", adversary, "can efficiently compute", m $ c ^ (1 /: e), "over the ints and recover", m mesg, "entirely"]
 
 rsaSmallEInsecure2 :: Note
 rsaSmallEInsecure2 = thm $ do
@@ -247,7 +247,7 @@ rsaSmallEInsecure2 = thm $ do
         ma $ c =: mesg ^ e `mod` (prodcmpr (i =: 1) e ni)
         s ["Because", m mesg, "is smaller than every", m ni <> ", it follows that", m $ mesg ^ e < (prodcmpr (i =: 1) e ni), "holds"]
         s ["In other words, ", m c, "is not reduced modulo", m (prodcmpr (i =: 1) e ni)]
-        s ["This means that an adversary can recover", m mesg, "entirely by computing the", m e <> "-th root of", m c, "in", m integers]
+        s ["This means that an adversary can recover", m mesg, "entirely by computing the", m e <> "-th root of", m c, "in", m ints]
 
 totientToFactorisation :: Note
 totientToFactorisation = thm $ do

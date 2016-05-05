@@ -9,6 +9,7 @@ import qualified Prelude                        as P
 
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
+import           NumberTheory.Macro
 import           Relations.Basics.Terms
 import           Relations.Orders.Hasse
 import           Relations.Orders.Macro
@@ -645,7 +646,7 @@ galoisConnectionExamples = do
             [(c1, fun1), (c2, fun2)]
     ex $ do
         s ["The following diagram shows a", galoisConnection, "between two", posets]
-        s ["One", poset, "is a", subset, "of the", powerset, "of", m integers]
+        s ["One", poset, "is a", subset, "of the", powerset, "of", m ints]
         s ["The other is the set of information we can have about the sign of an integer"]
         s ["top means it could be anything, bot means it's impossible for this situation to occur, + means that the sign is positive and - means that the sign is negative"]
         let hd1 = hasseDiagram [all1, pos1, neg1, zp1, zm1, zero1, none] [(none, zero1), (zero1, zm1), (zero1, zp1), (zp1, pos1), (zm1, neg1), (zero1, neg1), (zero1, pos1), (neg1, all1), (pos1, all1)]

@@ -5,6 +5,8 @@ import           Notes
 import           Functions.Basics.Macro
 import           Functions.BinaryOperation.Terms
 import           Functions.Jections.Terms
+import           Groups.Macro
+import           Groups.Terms
 import           Relations.Equivalence.Macro
 import           Relations.Equivalence.Terms
 import           Sets.Basics.Terms
@@ -16,6 +18,8 @@ numberTheoryC :: Note
 numberTheoryC = chapter "Number Theory" $ do
     naturalNumbersS
     wholeNumbersS
+    divisibilityS
+    moduloS
 
 naturalNumbersS :: Note
 naturalNumbersS = section "Natural numbers" $ do
@@ -138,4 +142,38 @@ wholeNumbersDivision = de $ do
     let c = "c"
     s ["We say that", m $ a `divZ` b =: c, "holds if", m $ c `mulZ` b =: a, "holds"]
     s [m $ a `divZ` b, "is often written as", m $ a / b]
+
+divisibilityS :: Note
+divisibilityS = section "Divisibilty" $ do
+    divisibilityDefinition
+
+divisibilityDefinition :: Note
+divisibilityDefinition = de $ do
+    todo "define divisibility more abstractly in integrity domains"
+    let a = "a"
+    let b = "b"
+    let c = "c"
+    s ["We define a", wholeNumber, m a, "to be", divisible', "by another", wholeNumber, m b, "if there exists a", wholeNumber, m c, "such that", m $ a `divZ` b =: c]
+
+moduloS :: Note
+moduloS = do
+    modularIntegersDefinition
+    quadraticResidueDefinition
+
+modularIntegersDefinition :: Note
+modularIntegersDefinition = de $ do
+    let n = "n"
+    s [the, integers, "modulo an", integer, m n, "are defined as the following", quotientGroup]
+    ma $ intmod n === qgrp ints (n <> ints)
+    todo "fully formalize once we have a good chapter on groups"
+
+quadraticResidueDefinition :: Note
+quadraticResidueDefinition = de $ do
+    lab quadraticResidueDefinitionLabel
+    let n = "n"
+        x = "x"
+        y = "y"
+    s ["A", quadraticResidue', "modulo an", integer, m n, "is an", integer, m x, "such that there exists an", integer, m y, "as follows"]
+    ma $ eqmod n (y ^ 2) x
+
 
