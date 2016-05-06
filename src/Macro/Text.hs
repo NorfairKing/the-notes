@@ -130,6 +130,9 @@ to = "to"
 at :: Note
 at = "at"
 
+but :: Note
+but = "but"
+
 because :: Note
 because = "because"
 

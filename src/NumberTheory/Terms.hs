@@ -12,12 +12,24 @@ makeDefs
     , "integer"
     , "divisible"
     , "divisor"
-    , "greatest common denominator"
+    , "divides"
+    , "quotient"
+    , "greatest common divisor"
     , "least common multiple"
     , "coprime"
     , "relatively prime"
     , "mutually prime"
     , "prime"
+    , "Bezout's Lemma"
     , "pairwise coprime"
     , "quadratic residue"
+    ]
+
+makeProps
+    [ "divides transitive"
+    , "divides multiples"
+    , "product divides"
+    , "coprime division cancels"
+    , "coprime divides product"
+    , "coprime compound"
     ]
