@@ -33,3 +33,7 @@ makeProps
     , "coprime divides product"
     , "coprime compound"
     ]
+
+makeThms
+    [ "Chinese remainder theorem"
+    ]

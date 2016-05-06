@@ -248,7 +248,7 @@ gcdDefinition = de $ do
         g = "g"
         c = "c"
     s [the, greatestCommonDivisor', m $ gcd a b, "of two", integers, m a, and, m b, "is defined as follow"]
-    ma $ g =: gcd a b  === (pars $ g .| a) ∧ (pars $ g .| b) ∧ (not $ pars $ te (c ∈ ints) $ (pars $ c .| a) ∧ (pars $ c .| b) ∧ (pars $ c .| g))
+    ma $ g =: gcd a b  === (pars $ g .| a) ∧ (pars $ g .| b) ∧ (not $ pars $ te (c ∈ ints) $ (pars $ c .| a) ∧ (pars $ c .| b) ∧ (pars $ c < g))
 
 lcmDefinition :: Note
 lcmDefinition = de $ do
@@ -257,7 +257,7 @@ lcmDefinition = de $ do
         l = "l"
         c = "c"
     s [the, leastCommonMultiple', m $ lcm a b, "of two", integers, m a, and, m b, "is defined as follow"]
-    ma $ l =: lcm a b  === (pars $ a .| l) ∧ (pars $ b .| l) ∧ (not $ pars $ te (c ∈ ints) $ (pars $ a .| c) ∧ (pars $ b .| c) ∧ (pars $ c .| l))
+    ma $ l =: lcm a b  === (pars $ a .| l) ∧ (pars $ b .| l) ∧ (not $ pars $ te (c ∈ ints) $ (pars $ a .| c) ∧ (pars $ b .| c) ∧ (pars $ c < l))
 
 
 bezoutIdentityLemma :: Note
@@ -425,18 +425,24 @@ gcdMultiplicative = prop $ do
         ga = gcd a c
         gb = gcd b c
         gab_ = ga * gb
+        g = "g"
     ma $ gab =: ga * gb
 
     proof $ do
         s ["We prove the three components of the", greatestCommonDivisor, "separately"]
+        s ["Define", m $ g =: gab_]
         itemize $ do
             item $ do
-                s [m gab_, divides, m ab, ref productDividesPropertyLabel]
+                s [m g, divides, m ab, ref productDividesPropertyLabel]
             item $ do
-                s [m gab_, divides, m c, ref coprimeDividesProductPropertyLabel]
+                s [m g, divides, m c, ref coprimeCompoundPropertyLabel, ref coprimeDividesProductPropertyLabel]
             item $ do
-                s [m gab_, "is the smallest", integer, "that does so"]
-            todo "not done here"
+                s [m g, "is the smallest", integer, "that does so"]
+                newline
+                let z = "z"
+                s ["Suppose there was an", integer, m z, "that divided both", m ab, and, m c]
+                toprove
+
 
 
 gcdMultiplicativeConsequence :: Note
