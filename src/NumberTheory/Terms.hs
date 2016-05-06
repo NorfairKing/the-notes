@@ -11,5 +11,13 @@ makeDefs
     , "whole number"
     , "integer"
     , "divisible"
+    , "divisor"
+    , "greatest common denominator"
+    , "least common multiple"
+    , "coprime"
+    , "relatively prime"
+    , "mutually prime"
+    , "prime"
+    , "pairwise coprime"
     , "quadratic residue"
     ]

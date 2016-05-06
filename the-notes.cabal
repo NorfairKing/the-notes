@@ -220,6 +220,7 @@ library
       Macro.LinearAlgebra.Macro
       Macro.Lists
       Macro.MachineLearning.Macro
+      Macro.MacroBuilders
       Macro.Math
       Macro.MetaMacro
       Macro.Note

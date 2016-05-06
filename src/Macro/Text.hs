@@ -52,17 +52,26 @@ commaSeparated = separated ", "
 cs :: [Note] -> Note
 cs = commaSeparated
 
-commaSeparatedAnd :: [Note] -> Note
-commaSeparatedAnd ns
+commaSeparatedWord :: Note -> [Note] -> Note
+commaSeparatedWord word ns
     | length ns < 2 = commaSeparated ns
     | otherwise = go ns
   where
     go [] = error "impossible as per three lines above"
-    go [n] = and <> " " <> n
+    go [n] = word <> " " <> n
     go (n:ns) = n <> ", " <> go ns
+
+commaSeparatedAnd :: [Note] -> Note
+commaSeparatedAnd = commaSeparatedWord and
+
+commaSeparatedOr :: [Note] -> Note
+commaSeparatedOr = commaSeparatedWord or
 
 csa :: [Note] -> Note
 csa = commaSeparatedAnd
+
+cso :: [Note] -> Note
+cso = commaSeparatedOr
 
 and :: Note
 and = "and"

@@ -9,5 +9,6 @@ the-notes \
   functions
   groups
   probability
+  number-theory
   cryptography
   "

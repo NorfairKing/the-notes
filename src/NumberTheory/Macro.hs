@@ -87,7 +87,7 @@ divZ_ = div_ `annotateOp` ints
 
 -- | Congruence modulo an integer
 eqmod :: Note -> Note -> Note -> Note
-eqmod n a b = (binop (comm0 "equiv") a b) <> pars (text "mod " <> n)
+eqmod n a b = (binop (comm0 "equiv") a b) <> raw "\\;" <> pars (text "mod " <> n)
 
 intmod :: Note -> Note
 intmod n = ints !: n
@@ -103,6 +103,21 @@ intagrp n = grp (intmod n) $ "" + ""
 intmgrp :: Note -> Note
 intmgrp n = grp (int0mod n) cdot_
 
+-- | Divides
+(.|) :: Note -> Note -> Note
+(.|) = binop $ comm0 "mid"
+
+-- | Greatest common divisor
+gcd :: Note -> Note -> Note
+gcd = fn2 "gcd"
+
+-- | Least common multiple
+lcm :: Note -> Note -> Note
+lcm = fn2 "lcm"
+
+-- | Coprime
+copr :: Note -> Note -> Note
+copr = binop $ comm0 "bot"
 
 -- * Operations on numbers
 add_ :: Note

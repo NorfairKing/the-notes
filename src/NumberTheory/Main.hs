@@ -2,16 +2,17 @@ module NumberTheory.Main where
 
 import           Notes
 
-import           Data.List                       (concat, foldl, replicate)
 import qualified Data.Text                       as T
-import qualified Prelude                         as P (Int, map, mod, (+), (++),
-                                                       (-), (<), (^))
+import qualified Prelude                         as P (Int, map, mod, (+), (<),
+                                                       (^))
 
 import           Functions.Basics.Macro
 import           Functions.BinaryOperation.Terms
 import           Functions.Jections.Terms
 import           Groups.Macro
 import           Groups.Terms
+import           Logic.FirstOrderLogic.Macro
+import           Logic.PropositionalLogic.Macro
 import           Relations.Equivalence.Macro
 import           Relations.Equivalence.Terms
 import           Sets.Basics.Terms
@@ -151,6 +152,10 @@ wholeNumbersDivision = de $ do
 divisibilityS :: Note
 divisibilityS = section "Divisibilty" $ do
     divisibilityDefinition
+    gcdDefinition
+    lcmDefinition
+    primeDefinition
+    coprimeDefinition
 
 divisibilityDefinition :: Note
 divisibilityDefinition = de $ do
@@ -159,12 +164,47 @@ divisibilityDefinition = de $ do
     let b = "b"
     let c = "c"
     s ["We define a", wholeNumber, m a, "to be", divisible', "by another", wholeNumber, m b, "if there exists a", wholeNumber, m c, "such that", m $ a `divZ` b =: c]
+    s ["We then call", m b, "a", divisor', "of", m a]
+    ma $ a .| b === te (c ∈ ints) (a * c =: b)
+
+gcdDefinition :: Note
+gcdDefinition = de $ do
+    let a = "a"
+        b = "b"
+        g = "g"
+        c = "c"
+    s [the, greatestCommonDenominator', m $ gcd a b, "of two", integers, m a, and, m b, "is defined as follow"]
+    ma $ g =: gcd a b  === (pars $ g .| a) ∧ (pars $ g .| b) ∧ (not $ pars $ te (c ∈ ints) $ (pars $ c .| a) ∧ (pars $ c .| b) ∧ (pars $ c > g))
+
+lcmDefinition :: Note
+lcmDefinition = de $ do
+    let a = "a"
+        b = "b"
+        l = "l"
+        c = "c"
+    s [the, leastCommonMultiple', m $ lcm a b, "of two", integers, m a, and, m b, "is defined as follow"]
+    ma $ l =: lcm a b  === (pars $ a .| l) ∧ (pars $ b .| l) ∧ (not $ pars $ te (c ∈ ints) $ (pars $ a .| c) ∧ (pars $ b .| c) ∧ (pars $ c < l))
+
+primeDefinition :: Note
+primeDefinition = de $ do
+    let a = "a"
+    s ["An", integer, m a, "is called", prime', "if it its largest", divisor <> ", different from", m a, "itself, is", m 1]
+
+coprimeDefinition :: Note
+coprimeDefinition = de $ do
+    let a = "a"
+        b = "b"
+    s ["Two", integers, m a, and, m b, "are considered", cso [coprime', relativelyPrime', mutuallyPrime], "if their", greatestCommonDenominator, "is one"]
+    ma $ a `copr` b === gcd a b =: 1
+    s ["Equivalently, their", leastCommonMultiple, is, m $ a * b]
+    toprove
 
 moduloS :: Note
-moduloS = do
+moduloS = section "Modular arithmetic" $ do
     modularIntegersDefinition
     quadraticResidueDefinition
     quadraticResidueExamples
+    chineseRemainderTheorem
 
 modularIntegersDefinition :: Note
 modularIntegersDefinition = de $ do
@@ -177,8 +217,8 @@ quadraticResidueDefinition :: Note
 quadraticResidueDefinition = de $ do
     lab quadraticResidueDefinitionLabel
     let n = "n"
-        x = "x"
-        y = "y"
+        x = "r"
+        y = "q"
     s ["A", quadraticResidue', "modulo an", integer, m n, "is an", integer, m x, "such that there exists an", integer, m y, "as follows"]
     ma $ eqmod n (y ^ 2) x
 
@@ -199,14 +239,41 @@ quadraticResidueExamples = do
         let rawn :: P.Int -> Note
             rawn = raw . T.pack . show
         let n = 20
-        ma $ belowEachOther ((concat $ replicate (n P.+ 1) [VerticalLine, CenterColumn]) P.++ [VerticalLine]) $
-                (comm3 "multicolumn" (rawn (n P.- 1)) "c" ("q" ^ 2 `mod` "n")) :
-                (hline <> hline <> foldl (&) (raw "q\\setminus n") (P.map rawn [1 .. n])) :
-                P.map (\i -> do
-                    hline
-                    rawn i
-                    foldl (&) ""
-                        $ P.map (\j -> if j P.< (i P.+ 1) then (rawn $ j P.^ (2 :: P.Int) `P.mod` i) else mempty) [1 .. n]
-                    ) [0 .. (n P.- 1)]
+        newline
+        hereFigure $ linedTable
+            ((raw "q\\setminus n") : P.map rawn [1 .. n])
+            ( P.map (\i -> do
+                rawn i : (P.map (\j -> if j P.< (i P.+ 1) then (rawn $ j P.^ (2 :: P.Int) `P.mod` i) else mempty) [1 .. n])
+                ) [0 .. n])
 
+chineseRemainderTheorem :: Note
+chineseRemainderTheorem = thm $ do
+    let n = "n"
+        k = "k"
+        a = "a"
+        (n1, n2, nk, ns) = buildList n k
+        (a1, a2, ak, as) = buildList a k
+    s ["Let", m ns, "be a list of", pairwiseCoprime, integers]
+    let x = "x"
+    s ["For any given list of", integers, m as <> ", there exists an", integer, m x, "as follows"]
+    ma $ centeredBelowEachOther $
+        [ eqmod n1 x a1
+        , eqmod n2 x a2
+        , vdots
+        , eqmod nk x ak
+        ]
+    let i = "i"
+    let ni = n !: i
+    s ["Furthermore, the solution is unique modulo", m $ prodcmp i ni]
+
+    proof $ do
+        let nn = "N"
+        s ["Let", m nn, "be the product", m $ prodcmpr (i =: 1) k ni]
+        let nni = nn !: i
+        s ["Define", m nni, "as", m $ nn / nk]
+        newline
+        s ["Because the", integers, m ns, are, pairwiseCoprime <> ",", m nni, and, m ni, "are also", coprime]
+        ma $ gcd nni ni =: 1
+        why
+        todo "Finish this proof"
 
