@@ -22,6 +22,10 @@ makeDefs
     , "prime"
     , "Bezout's Lemma"
     , "pairwise coprime"
+    , "congruent"
+    , "modulo"
+    , "linear congruence"
+    , "Chinese remainder theorem"
     , "quadratic residue"
     ]
 
@@ -37,7 +41,7 @@ makeProps
 
 makeThms
     [ "Solution of linear congruence"
-    , "Chinese remainder theorem"
+    , "Chinese remainder"
     ]
 
 makeLems

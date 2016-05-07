@@ -489,8 +489,8 @@ gcdMultiplicativeConsequence = con $ do
 moduloS :: Note
 moduloS = section "Modular arithmetic" $ do
     modularIntegersDefinition
-    chineseRemainderTheorem
     solutionOfLinearCongruenceTheorem
+    chineseRemainderTheoremPart
     quadraticResidueDefinition
     quadraticResidueExamples
 
@@ -499,6 +499,12 @@ modularIntegersDefinition = de $ do
     let n = "n"
     s [the, integers, "modulo an", integer, m n, "are defined as the following", quotientGroup]
     ma $ intmod n === qgrp ints (n <> ints)
+    let a = "a"
+        b = "b"
+        q = "q"
+
+    s ["We say that an", integer, m a, is, congruent', with, "an", integer, m b, "modulo an", integer, m n, "if there exists an", integer, m q, "such that", m $ a =: b + q * n, "holds"]
+    ma $ eqmod n a b === te (q ∈ ints) (a =: b + q * n)
     todo "fully formalize once we have a good chapter on groups"
 
 solutionOfLinearCongruenceTheorem :: Note
@@ -554,8 +560,10 @@ solutionOfLinearCongruenceTheorem = thm $ do
                 s ["We conclude that", m g, divides, m b, with, quotient, m $ p * x + q * f]
 
 
-chineseRemainderTheorem :: Note
-chineseRemainderTheorem = thm $ do
+chineseRemainderTheoremPart :: Note
+chineseRemainderTheoremPart = thm $ do
+    s [the, chineseRemainderTheorem']
+    newline
     let n = "n"
         k = "k"
         a = "a"
@@ -582,7 +590,27 @@ chineseRemainderTheorem = thm $ do
         newline
         s ["Because the", integers, m ns, are, pairwiseCoprime <> ",", m nni, and, m ni, "are also", coprime, ref gcdMultiplicativeConsequenceLabel]
         ma $ gcd nni ni =: 1
-        todo "Finish this proof"
+        let x = "x"
+            xi = x !: i
+        s ["This means that the", linearCongruence, m $ eqmod nk (nni * xi) 1, "has some unique solution", m xi, ref solutionOfLinearCongruenceTheoremLabel]
+        let ai = a !: i
+        s ["Define", m $ x =: sumcmpr (i =: 1) k (ai * nni * xi)]
+        s ["We will now prove that", m x, "satisfies all the", linearCongruences]
+        s ["Let", m i, "therefore be arbitrary"]
+        let j = "j"
+            nj = n !: j
+        s ["Note first that for any", m j, "different from", m i <> ",", m nj, divides, m nni]
+        ma $ eqmod ni nj 0
+        s ["We find that the following holds"]
+        ma $ eqmod ni x (ai * nni * xi)
+        s ["Finally, because", m $ nni * xi, "was found to be congruent with", m 1, "modulo", m ni, "we find that", m x, "is congruent with", m ai]
+        newline
+        s ["Now we only have to prove that this solution is unique modulo", m n]
+        let y = "y"
+        s ["Suppose that", m y, "was another solution of the system"]
+        s ["This means that each", m ni, divides, m $ y - x, "but because each of the moduli are", coprime, "we find that also", m nn, divides, m $ y - x, ref coprimeDividesProductPropertyLabel]
+        s ["That is,", m y, and, m x, are, congruent, modulo, m nn]
+
 
 
 quadraticResidueDefinition :: Note
