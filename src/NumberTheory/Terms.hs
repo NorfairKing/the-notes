@@ -36,7 +36,8 @@ makeProps
     ]
 
 makeThms
-    [ "Chinese remainder theorem"
+    [ "Solution of linear congruence"
+    , "Chinese remainder theorem"
     ]
 
 makeLems

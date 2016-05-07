@@ -489,9 +489,10 @@ gcdMultiplicativeConsequence = con $ do
 moduloS :: Note
 moduloS = section "Modular arithmetic" $ do
     modularIntegersDefinition
+    chineseRemainderTheorem
+    solutionOfLinearCongruenceTheorem
     quadraticResidueDefinition
     quadraticResidueExamples
-    chineseRemainderTheorem
 
 modularIntegersDefinition :: Note
 modularIntegersDefinition = de $ do
@@ -499,6 +500,90 @@ modularIntegersDefinition = de $ do
     s [the, integers, "modulo an", integer, m n, "are defined as the following", quotientGroup]
     ma $ intmod n === qgrp ints (n <> ints)
     todo "fully formalize once we have a good chapter on groups"
+
+solutionOfLinearCongruenceTheorem :: Note
+solutionOfLinearCongruenceTheorem = thm $ do
+    lab solutionOfLinearCongruenceTheoremLabel
+    let a = "a"
+        n = "n"
+        b = "b"
+    s ["Let", csa [m a, m b, m n], be, integers]
+    let x = "x"
+    s ["There exists an", integer, m x, "as follows if and only if", m $ gcd a n, divides, m b]
+    s [m b, "is unique if", m a, and, m n, are, coprime]
+    ma $ (pars $ gcd a n .| b) ⇔ (pars $ te (x ∈ ints) $ eqmod n (a * x) b)
+
+    proof $ do
+        s ["Proof of an equivalence"]
+        itemize $ do
+            item $ do
+                let y = "y"
+                s ["If", m $ gcd a n, divides, m b, "then there exists an", integer, m y, "as follows"]
+                ma $ gcd a n * y =: b
+                let p = "p"
+                    q = "q"
+                s [bezoutsLemma, "tells us that there exist", integers, m p, and, m q, "as follows"]
+                ma $ gcd a n =: a * p + n * q
+                s ["If we substitute this in the above equation, we get the following"]
+                ma $ a * p * y + n * q * y =: b
+                s ["If we now look at the second term on the left-hand side, we see that it's divisible by", m n, "so it dissappears when viewed modulo", m n]
+                ma $ eqmod n (a * p * y) b
+                s ["We find that", m $ p * y, "is a valid candidate for", m x]
+                newline
+                let u = "u"
+                s ["Now, assume", m a, and, m n, are, coprime, and, m u, "is another such", integer, "solution"]
+                s ["If", m n, "equals", m 1 <> ", then", m x, "is trivially unique, because it's always zero"]
+                s ["Otherwise, note that", m a, "cannot be zero because then the", greatestCommonDivisor, "of", m a, and, m n, "would be", m n, "instead of", m 1]
+                ma $ eqmod n (a * x) (a * u)
+                s ["We divide out", m a, "which we're allowed to do because", m a, "is not zero"]
+                s ["We find that", m x, and, m u, "are equal and therefore", m x, "is unique"]
+
+            item $ do
+                s ["Let", m x, "be an", integer, "as follows"]
+                ma $ eqmod n (a * x) b
+                let f = "f"
+                s ["This means that there exists an", integer, m f, "as follows"]
+                ma $ a * x + f * n =: b
+                let p = "p"
+                    q = "q"
+                    g = gcd a n
+                s ["Now,", m $ gcd a n, divides, m a, and, m n, "so there exist", integers, m p, and, m q, "as follows"]
+                ma $ g * p =: a <> qquad <> text and <> qquad <> g * q =: n
+                s ["After substitution, we find the following"]
+                ma $ g * p * x + g * q * f =: b
+                s ["We conclude that", m g, divides, m b, with, quotient, m $ p * x + q * f]
+
+
+chineseRemainderTheorem :: Note
+chineseRemainderTheorem = thm $ do
+    let n = "n"
+        k = "k"
+        a = "a"
+        (n1, n2, nk, ns) = buildList n k
+        (a1, a2, ak, as) = buildList a k
+    s ["Let", m ns, "be a list of", pairwiseCoprime, integers]
+    let x = "x"
+    s ["For any given list of", integers, m as <> ", there exists an", integer, m x, "as follows"]
+    ma $ centeredBelowEachOther $
+        [ eqmod n1 x a1
+        , eqmod n2 x a2
+        , vdots
+        , eqmod nk x ak
+        ]
+    let i = "i"
+    let ni = n !: i
+    s ["Furthermore, the solution is unique modulo", m $ prodcmp i ni]
+
+    proof $ do
+        let nn = "N"
+        s ["Let", m nn, "be the product", m $ prodcmpr (i =: 1) k ni]
+        let nni = nn !: i
+        s ["Define", m nni, "as", m $ nn / nk]
+        newline
+        s ["Because the", integers, m ns, are, pairwiseCoprime <> ",", m nni, and, m ni, "are also", coprime, ref gcdMultiplicativeConsequenceLabel]
+        ma $ gcd nni ni =: 1
+        todo "Finish this proof"
+
 
 quadraticResidueDefinition :: Note
 quadraticResidueDefinition = de $ do
@@ -532,34 +617,3 @@ quadraticResidueExamples = do
             ( P.map (\i -> do
                 rawn i : (P.map (\j -> if j P.< (i P.+ 1) then (rawn $ j P.^ (2 :: P.Int) `P.mod` i) else mempty) [1 .. n])
                 ) [0 .. n])
-
-chineseRemainderTheorem :: Note
-chineseRemainderTheorem = thm $ do
-    let n = "n"
-        k = "k"
-        a = "a"
-        (n1, n2, nk, ns) = buildList n k
-        (a1, a2, ak, as) = buildList a k
-    s ["Let", m ns, "be a list of", pairwiseCoprime, integers]
-    let x = "x"
-    s ["For any given list of", integers, m as <> ", there exists an", integer, m x, "as follows"]
-    ma $ centeredBelowEachOther $
-        [ eqmod n1 x a1
-        , eqmod n2 x a2
-        , vdots
-        , eqmod nk x ak
-        ]
-    let i = "i"
-    let ni = n !: i
-    s ["Furthermore, the solution is unique modulo", m $ prodcmp i ni]
-
-    proof $ do
-        let nn = "N"
-        s ["Let", m nn, "be the product", m $ prodcmpr (i =: 1) k ni]
-        let nni = nn !: i
-        s ["Define", m nni, "as", m $ nn / nk]
-        newline
-        s ["Because the", integers, m ns, are, pairwiseCoprime <> ",", m nni, and, m ni, "are also", coprime, ref gcdMultiplicativeConsequenceLabel]
-        ma $ gcd nni ni =: 1
-        todo "Finish this proof"
-

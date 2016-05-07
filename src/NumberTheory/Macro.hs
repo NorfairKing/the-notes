@@ -109,7 +109,7 @@ intmgrp n = grp (int0mod n) cdot_
 
 -- | Greatest common divisor
 gcd :: Note -> Note -> Note
-gcd = fn2 "gcd"
+gcd = fn2 $ comm0 "gcd"
 
 -- | Least common multiple
 lcm :: Note -> Note -> Note
