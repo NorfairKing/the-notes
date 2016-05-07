@@ -22,11 +22,16 @@ makeDefs
     , "prime"
     , "Bezout's Lemma"
     , "pairwise coprime"
+    , "prime factorization"
     , "congruent"
+    , "odd"
+    , "even"
     , "modulo"
     , "linear congruence"
     , "Chinese remainder theorem"
     , "quadratic residue"
+    , "Legendre symbol"
+    , "Jacobi symbol"
     ]
 
 makeProps

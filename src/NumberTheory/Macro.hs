@@ -133,6 +133,15 @@ div_ :: Note
 div_ = comm0 "div"
 
 
+-- * Legendre symbols
+
+leg :: Note -> Note -> Note
+leg a p = (.!: "L") $ pars $ a / p
+
+jac :: Note -> Note -> Note
+jac a p = (.!: "J") $ pars $ a / p
+
 -- | Utils
 annotateOp :: Note -> Note -> Note
 annotateOp op ann = raw "\\," <> op !: ann <> raw "\\;"
+

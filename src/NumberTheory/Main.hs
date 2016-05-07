@@ -488,11 +488,16 @@ gcdMultiplicativeConsequence = con $ do
 
 moduloS :: Note
 moduloS = section "Modular arithmetic" $ do
+    oddEvenDefinition
     modularIntegersDefinition
     solutionOfLinearCongruenceTheorem
     chineseRemainderTheoremPart
     quadraticResidueDefinition
     quadraticResidueExamples
+    legendreSymbolDefinition
+    legendreSymbolExamples
+    jacobiSymbolDefinition
+    jacobiSymbolExamples
 
 modularIntegersDefinition :: Note
 modularIntegersDefinition = de $ do
@@ -506,6 +511,11 @@ modularIntegersDefinition = de $ do
     s ["We say that an", integer, m a, is, congruent', with, "an", integer, m b, "modulo an", integer, m n, "if there exists an", integer, m q, "such that", m $ a =: b + q * n, "holds"]
     ma $ eqmod n a b === te (q ∈ ints) (a =: b + q * n)
     todo "fully formalize once we have a good chapter on groups"
+
+oddEvenDefinition :: Note
+oddEvenDefinition = de $ do
+    s ["An", integer, "is called", odd', "if it is", congruent, with, m 1, modulo, m 2]
+    s ["If it is instead", congruent, with, m 0, modulo, m 2 <> ", then we call it", even']
 
 solutionOfLinearCongruenceTheorem :: Note
 solutionOfLinearCongruenceTheorem = thm $ do
@@ -641,7 +651,66 @@ quadraticResidueExamples = do
         let n = 20
         newline
         hereFigure $ linedTable
-            ((raw "q\\setminus n") : P.map rawn [1 .. n])
+            ((raw "n\\setminus q") : P.map rawn [1 .. n])
             ( P.map (\i -> do
                 rawn i : (P.map (\j -> if j P.< (i P.+ 1) then (rawn $ j P.^ (2 :: P.Int) `P.mod` i) else mempty) [1 .. n])
                 ) [0 .. n])
+
+
+
+legendreSymbolDefinition :: Note
+legendreSymbolDefinition = de $ do
+    let a = "a"
+        p = "p"
+    s ["Let", m a, "be an", integer, and, m p, "an", odd, prime]
+    s [the, legendreSymbol', "of", m a, over, m p, "is defined as follows"]
+    ma $ (leg a p ===) $ cases $ do
+        1 & text "if " <> m a <> text (" is a " <> quadraticResidue <> " " <> modulo <> " ") <> m p <> text " and " <> neg (p .| a)
+        lnbk
+        (-1) & text "if " <> m a <> text (" is not a " <> quadraticResidue <> " " <> modulo <> " ") <> m p
+        lnbk
+        0 & text "if " <> p .| a
+
+legendreSymbolExamples :: Note
+legendreSymbolExamples = do
+    ex $ do
+        s ["Note that", m $ 4 ^ 2 =: 16, and, m $ eqmod 11 16 5]
+        ma $ leg 5 11 =: 1
+    ex $ do
+        ma $ leg 6 11 =: -1
+
+
+jacobiSymbolDefinition :: Note
+jacobiSymbolDefinition = de $ do
+    let a = "a"
+        n = "n"
+    s ["Let", m a, "be an", integer, and, m n, "an", odd, naturalNumber, "with the following", primeFactorization]
+    let p = "p"
+        t = "t"
+        (p1, p2, pt, _) = buildList p t
+        v = "v"
+        (v1, v2, vt, _) = buildList v t
+        i = "i"
+        pi = p !: i
+        vi = v !: i
+    let (^) = (.^:)
+    ma $ n =: p1 ^ v1 * p2 ^ v2 * dotsb * pt ^ vt =: prodcmpr (i =: 1) t (pi ^ vi)
+    s [the, jacobiSymbol', "of", m a, over, m p, "is defined as follows"]
+    ma $ jac a n === (leg a p1) ^ v1 * (leg a p2) ^ v2 * dotsb * (leg a pt) ^ vt =: prodcmpr (i =: 1) t ((leg a pi) ^ vi)
+
+
+jacobiSymbolExamples :: Note
+jacobiSymbolExamples = do
+    let (^) = (.^:)
+    ex $ do
+        ma $ jac 5 9 =: jac 5 (3 ^ 2) =: (leg 5 3) ^ 2 =: 1
+    ex $ do
+        ma $ jac 5 12 =: jac 5 (3 * 2 ^ 2) =: (leg 5 3) * (leg 5 2) ^ 2 =: -1
+
+
+
+
+
+
+
+
