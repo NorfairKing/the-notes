@@ -95,14 +95,16 @@ data Config = Config {
 
 data Label = MkLabel RefKind Text
 
-data RefKind = Definition
-             | Theorem
-             | Proposition
-             | Property
-             | Example
-             | Figure
-             | Note
-             | Lemma
+data RefKind
+    = Definition
+    | Theorem
+    | Proposition
+    | Property
+    | Example
+    | Figure
+    | Note
+    | Lemma
+    | Consequence
     deriving (Show, Eq)
 
 

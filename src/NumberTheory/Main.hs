@@ -262,6 +262,7 @@ lcmDefinition = de $ do
 
 bezoutIdentityLemma :: Note
 bezoutIdentityLemma = lem $ do
+    lab bezoutsIdentityLemmaLabel
     let a = "a"
         b = "b"
         x = "x"
@@ -394,7 +395,9 @@ coprimeDefinition = de $ do
     s ["Two", integers, m a, and, m b, "are considered", cso [coprime', relativelyPrime', mutuallyPrime], "if their", greatestCommonDivisor, "is one"]
     ma $ a `copr` b === gcd a b =: 1
     s ["Equivalently, their", leastCommonMultiple, is, m $ a * b]
+
     toprove
+
 
 coprimeCompound :: Note
 coprimeCompound = prop $ do
@@ -416,6 +419,7 @@ coprimeCompound = prop $ do
 
 gcdMultiplicative :: Note
 gcdMultiplicative = prop $ do
+    lab gcdMultiplicativePropertyLabel
     let a = "a"
         b = "b"
         c = "c"
@@ -441,19 +445,46 @@ gcdMultiplicative = prop $ do
                 newline
                 let z = "z"
                 s ["Suppose there was an", integer, m z, "that divided both", m ab, and, m c]
-                toprove
+                let x = "x"
+                    y = "y"
+                s ["That would mean that there exist integers", m x, and, m y]
+                ma $ z * x =: ab <> quad <> text and <> quad <> z * y =: c
+                let t = "t"
+                    u = "u"
+                    v = "v"
+                    w = "w"
+                s ["According to", bezoutsLemma, ref bezoutsIdentityLemmaLabel <> ", there must exist", integers, csa [m t, m u, m v, m w], "as follows"]
+                ma $ g =: (pars $ t * a + u * c) * (pars $ v * b + w * c)
+                s ["Now observe the following"]
+                aligneqs g
+                    [ t * a * v * b + t * a * w * c + u * c * v * b + u * c * w * c
+                    , z * x * t * v + z * y * t * a * w + z * y * u * v * b + z * y * u * c * w
+                    , z * (pars $ x * t * v + y * t * a * w + y * u * v * b + y * u * c * w)
+                    ]
+                s ["We conclude that", m z, divides, m g]
 
 
 
 gcdMultiplicativeConsequence :: Note
 gcdMultiplicativeConsequence = con $ do
+    lab gcdMultiplicativeConsequenceLabel
     let a = "a"
         b = "b"
         c = "c"
+        bc = b * c
     s ["Let", csa [m a, m b, m c], be, integers, "such that", m a, and, m b, are, coprime]
-    s [m a, and, m $ b * c, are, coprime, "if and only if both", m a, and, m b <> ",", and, m a, and, m c, are, coprime]
+    s [m a, and, m bc, are, coprime, "if and only if both", m a, and, m b <> ",", and, m a, and, m c, are, coprime]
 
-    toprove
+    proof $ do
+        s ["Proof of an equivalence"]
+        itemize $ do
+            item $ do
+                s ["If", m $ a `copr` bc, "holds, then", m $ gcd a c * gcd b c, "must be one", ref gcdMultiplicativePropertyLabel]
+                s ["Because they are", integers <> ", this means that both", m $ gcd a c, and, m $ gcd b c, "must be one and therefore, by definition,", m $ a `copr` c, and, m $ b `copr` c, "hold"]
+            item $ do
+                s ["If both", m $ a `copr` c, and, m $ b `copr` c, "hold, then the product of their", greatestCommonDivisors, "must be one and therefore", m a, and, m bc, coprime]
+
+
 
 moduloS :: Note
 moduloS = section "Modular arithmetic" $ do
@@ -528,8 +559,7 @@ chineseRemainderTheorem = thm $ do
         let nni = nn !: i
         s ["Define", m nni, "as", m $ nn / nk]
         newline
-        s ["Because the", integers, m ns, are, pairwiseCoprime <> ",", m nni, and, m ni, "are also", coprime]
+        s ["Because the", integers, m ns, are, pairwiseCoprime <> ",", m nni, and, m ni, "are also", coprime, ref gcdMultiplicativeConsequenceLabel]
         ma $ gcd nni ni =: 1
-        why
         todo "Finish this proof"
 

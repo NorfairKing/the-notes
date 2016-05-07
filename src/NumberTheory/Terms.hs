@@ -32,8 +32,17 @@ makeProps
     , "coprime division cancels"
     , "coprime divides product"
     , "coprime compound"
+    , "gcd multiplicative"
     ]
 
 makeThms
     [ "Chinese remainder theorem"
+    ]
+
+makeLems
+    [ "Bezouts identity"
+    ]
+
+makeCons
+    [ "gcd multiplicative"
     ]
