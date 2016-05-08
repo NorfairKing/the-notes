@@ -5,6 +5,7 @@ import           Notes
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
 import           Functions.Basics.Terms
+import           Functions.Distances.Terms
 import           Functions.Inverse.Macro
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
@@ -42,6 +43,7 @@ introS = subsection "Intro" $ do
     borealMesureDefinition
     randomVariableCondition
     borealMeasurableInducesProbabilityMeasure
+    probabillisticFunctionDefinition
 
 
 borealsDefinition :: Note
@@ -90,6 +92,16 @@ borealMeasurableInducesProbabilityMeasure = thm $ do
     b = "B"
     x = "X"
     px = fn (prm_ !: rv_)
+
+probabillisticFunctionDefinition :: Note
+probabillisticFunctionDefinition = de $ do
+    lab probabillisticFunctionDefinitionLabel
+    let x = "X"
+        y = "Y"
+    s ["Let", m x, and, m y, be, sets]
+    let ff = "F"
+        f = "f"
+    s ["A", probabillisticFunction', m ff, "is a", randomVariable, "over the", set, "of", functions, m $ fun f x y]
 
 distributionFunctionSS :: Note
 distributionFunctionSS = subsection "Cumulative distribution function" $ do
@@ -233,6 +245,7 @@ discreteRandomVariables = subsubsection "Discrete random variables" $ do
     discreteCumulativeDistribution
     discreteRandomVariableExamples
     statisticalDistanceDefinition
+    statisticalDistanceUnamplifiable
 
 discreteRandomVariableDefinition :: Note
 discreteRandomVariableDefinition = de $ do
@@ -303,6 +316,42 @@ statisticalDistanceDefinition = de $ do
     ma $ statd x y =: (1 / 2) * sumcmp (z ∈ zz) (abs $ prob (x =: z) - prob (y =: z))
     todo "Does Z need to be finite?"
 
+statisticalDistanceUnamplifiable :: Note
+statisticalDistanceUnamplifiable = thm $ do
+    lab statisticalDistanceUnamplifiableTheoremLabel
+    s ["A", probabillisticFunction, "cannot increase the", statisticalDistance, "of two", randomVariables]
+    newline
+    let x = mathcal "X"
+        x1 = "X" !: 1
+        x2 = "X" !: 2
+        y = mathcal "Y"
+        a_ = "A"
+        a = fn a_
+    s ["Let", m x1, and, m x2, be, randomVariables, over, m x]
+    s ["Let", m a_, "be a", randomVariable, "over the", set, "of", functions, m $ fun "" x y, "such that", m a_, and, m x1, are, independent, and, m a_, and, m x2, are, independent]
+    ma $ statd (a x1) (a x2) <= statd x1 x2
+
+    proof $ do
+        let u = "u"
+            v = "v"
+        aligneqs (statd (a x1) (a x2))
+            [  (1 / 2) * sumcmp (u ∈ y) (abs $ prob (a x1 =: u) - prob (a x2 =: u))
+            ,  (1 / 2) * sumcmp (u ∈ y) (abs $ sumcmp (v ∈ x) (prob (a v =: u ∧ x1 =: v)) - sumcmp (v ∈ x) (prob (a v =: u ∧ x2 =: v)))
+            ,  (1 / 2) * sumcmp (u ∈ y) (abs $ sumcmp (v ∈ x) (prob (a v =: u) * prob (x1 =: v)) - sumcmp (v ∈ x) (prob (a v =: u) * prob (x2 =: v)))
+            ,  (1 / 2) * sumcmp (u ∈ y) (abs $ sumcmp (v ∈ x) $ pars $ prob (a v =: u) * prob (x1 =: v) - prob (a v =: u) * prob (x2 =: v))
+            ,  (1 / 2) * sumcmp (u ∈ y) (abs $ sumcmp (v ∈ x) $ prob (a v =: u) * (pars $ prob (x1 =: v) - prob (x2 =: v)))
+            ]
+        s ["Note that we used that", m a_, is, independent, from, m x1, and, m x2, "in equation three"]
+        s ["Now we will use the", triangleInequality]
+        ma $ (1 / 2) * sumcmp (u ∈ y) (abs $ sumcmp (v ∈ x) $ prob (a v =: u) * (pars $ prob (x1 =: v) - prob (x2 =: v)))
+            <= (1 / 2) * sumcmp (u ∈ y) (sumcmp (v ∈ x) $ prob (a v =: u) * (abs $ prob (x1 =: v) - prob (x2 =: v)))
+        s ["Finally we use that", m a_, "takes exactly one value of", m y, "for every value of", m x]
+        aligneqs ((1 / 2) * sumcmp (u ∈ y) (sumcmp (v ∈ x) $ prob (a v =: u) * (abs $ prob (x1 =: v) - prob (x2 =: v))))
+            [ (1 / 2) * sumcmp (v ∈ x) (sumcmp (u ∈ y) $ prob (a v =: u) * (abs $ prob (x1 =: v) - prob (x2 =: v)))
+            , (1 / 2) * sumcmp (v ∈ x) ((abs $ prob (x1 =: v) - prob (x2 =: v)) * (sumcmp (u ∈ y) $ prob (a v =: u)))
+            , (1 / 2) * sumcmp (v ∈ x) ((abs $ prob (x1 =: v) - prob (x2 =: v)) * 1)
+            , statd x1 x2
+            ]
 
 continuousRandomVariables :: Note
 continuousRandomVariables = subsubsection "Continuous random variables" $ do

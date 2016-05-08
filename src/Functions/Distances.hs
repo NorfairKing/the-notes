@@ -28,13 +28,14 @@ distanceDefinition = de $ do
     lab distanceDefinitionLabel
     lab distanceFunctionDefinitionLabel
     lab pseudometricDefinitionLabel
+    lab triangleInequalityDefinitionLabel
     s ["Let ", m ss, " be a set"]
     s ["A ", distanceFunction', " ", m d, " for ", m ss, " is a function ", m (fun d tups realsp), " with the following four properties"]
     enumerate $ do
         item $ m $ fa rxy $ dxy =: 0
         item $ m $ fa rxy $ dxy =: dyx
         item $ do
-          s ["The ", defineTerm "triangle inequality"]
+          s [the, triangleInequality']
           ma $ fa (cs [x, y, z] ∈ reals) $ (d `fn` xy + d `fn` yz) <= (d `fn` xz)
     s ["A distance function is also called a ", defineTerm "pseudometric"]
   where
