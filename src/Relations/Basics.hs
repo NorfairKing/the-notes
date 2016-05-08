@@ -4,6 +4,7 @@ import           Notes
 
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
+import           NumberTheory.Macro
 import           Sets.CarthesianProduct.Terms
 
 import           Relations.Basics.Macro
@@ -59,7 +60,7 @@ relationExamples = do
         s [quoted "divides", "of integers is a binary", relation]
         ma $ do
             let (x, y, z) = ("x", "y", "z")
-            divSign === setcmpr (tuple x y) (cs [x, y] ∈ integers ∧ (te z $ z * x =: y))
+            divSign === setcmpr (tuple x y) (cs [x, y] ∈ ints ∧ (te z $ z * x =: y))
 
 unitRelationDefinition :: Note
 unitRelationDefinition = de $ do

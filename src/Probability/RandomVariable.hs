@@ -5,6 +5,7 @@ import           Notes
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
 import           Functions.Basics.Terms
+import           Functions.Distances.Terms
 import           Functions.Inverse.Macro
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
@@ -16,6 +17,7 @@ import           Probability.ProbabilityMeasure.Terms
 import           Probability.SigmaAlgebra.Macro
 import           Probability.SigmaAlgebra.Terms
 import           Relations.Domain.Terms
+import           Sets.Basics.Terms
 
 import           Probability.RandomVariable.Macro
 import           Probability.RandomVariable.Terms
@@ -41,6 +43,7 @@ introS = subsection "Intro" $ do
     borealMesureDefinition
     randomVariableCondition
     borealMeasurableInducesProbabilityMeasure
+    probabillisticFunctionDefinition
 
 
 borealsDefinition :: Note
@@ -89,6 +92,16 @@ borealMeasurableInducesProbabilityMeasure = thm $ do
     b = "B"
     x = "X"
     px = fn (prm_ !: rv_)
+
+probabillisticFunctionDefinition :: Note
+probabillisticFunctionDefinition = de $ do
+    lab probabillisticFunctionDefinitionLabel
+    let x = "X"
+        y = "Y"
+    s ["Let", m x, and, m y, be, sets]
+    let ff = "F"
+        f = "f"
+    s ["A", probabillisticFunction', m ff, "is a", randomVariable, "over the", set, "of", functions, m $ fun f x y]
 
 distributionFunctionSS :: Note
 distributionFunctionSS = subsection "Cumulative distribution function" $ do
@@ -231,6 +244,9 @@ discreteRandomVariables = subsubsection "Discrete random variables" $ do
     discreteDistributionDefinition
     discreteCumulativeDistribution
     discreteRandomVariableExamples
+    statisticalDistanceDefinition
+    statisticalDistanceUnamplifiable
+    statisticalDistanceSubsets
 
 discreteRandomVariableDefinition :: Note
 discreteRandomVariableDefinition = de $ do
@@ -291,6 +307,82 @@ discreteRandomVariableExamples = do
             lnbk
             fn x t =: 0
 
+statisticalDistanceDefinition :: Note
+statisticalDistanceDefinition = de $ do
+    let x = "X"
+        y = "Y"
+        zz = mathcal "Z"
+        z = "z"
+    s [the, statisticalDistance', "between two", randomVariables, m x, and, m y, "over a", finite, set, m zz, "is defined as follows"]
+    ma $ statd x y =: (1 / 2) * sumcmp (z ∈ zz) (abs $ prob (x =: z) - prob (y =: z))
+    todo "Does Z need to be finite?"
+
+statisticalDistanceUnamplifiable :: Note
+statisticalDistanceUnamplifiable = thm $ do
+    lab statisticalDistanceUnamplifiableTheoremLabel
+    s ["A", probabillisticFunction, "cannot increase the", statisticalDistance, "of two", randomVariables]
+    newline
+    let x = mathcal "X"
+        x1 = "X" !: 1
+        x2 = "X" !: 2
+        y = mathcal "Y"
+        a_ = "A"
+        a = fn a_
+    s ["Let", m x1, and, m x2, be, randomVariables, over, m x]
+    s ["Let", m a_, "be a", randomVariable, "over the", set, "of", functions, m $ fun "" x y, "such that", m a_, and, m x1, are, independent, and, m a_, and, m x2, are, independent]
+    ma $ statd (a x1) (a x2) <= statd x1 x2
+
+    proof $ do
+        let u = "u"
+            v = "v"
+        aligneqs (statd (a x1) (a x2))
+            [  (1 / 2) * sumcmp (u ∈ y) (abs $ prob (a x1 =: u) - prob (a x2 =: u))
+            ,  (1 / 2) * sumcmp (u ∈ y) (abs $ sumcmp (v ∈ x) (prob (a v =: u ∧ x1 =: v)) - sumcmp (v ∈ x) (prob (a v =: u ∧ x2 =: v)))
+            ,  (1 / 2) * sumcmp (u ∈ y) (abs $ sumcmp (v ∈ x) (prob (a v =: u) * prob (x1 =: v)) - sumcmp (v ∈ x) (prob (a v =: u) * prob (x2 =: v)))
+            ,  (1 / 2) * sumcmp (u ∈ y) (abs $ sumcmp (v ∈ x) $ pars $ prob (a v =: u) * prob (x1 =: v) - prob (a v =: u) * prob (x2 =: v))
+            ,  (1 / 2) * sumcmp (u ∈ y) (abs $ sumcmp (v ∈ x) $ prob (a v =: u) * (pars $ prob (x1 =: v) - prob (x2 =: v)))
+            ]
+        s ["Note that we used that", m a_, is, independent, from, m x1, and, m x2, "in equation three"]
+        s ["Now we will use the", triangleInequality]
+        ma $ (1 / 2) * sumcmp (u ∈ y) (abs $ sumcmp (v ∈ x) $ prob (a v =: u) * (pars $ prob (x1 =: v) - prob (x2 =: v)))
+            <= (1 / 2) * sumcmp (u ∈ y) (sumcmp (v ∈ x) $ prob (a v =: u) * (abs $ prob (x1 =: v) - prob (x2 =: v)))
+        s ["Finally we use that", m a_, "takes exactly one value of", m y, "for every value of", m x]
+        aligneqs ((1 / 2) * sumcmp (u ∈ y) (sumcmp (v ∈ x) $ prob (a v =: u) * (abs $ prob (x1 =: v) - prob (x2 =: v))))
+            [ (1 / 2) * sumcmp (v ∈ x) (sumcmp (u ∈ y) $ prob (a v =: u) * (abs $ prob (x1 =: v) - prob (x2 =: v)))
+            , (1 / 2) * sumcmp (v ∈ x) ((abs $ prob (x1 =: v) - prob (x2 =: v)) * (sumcmp (u ∈ y) $ prob (a v =: u)))
+            , (1 / 2) * sumcmp (v ∈ x) ((abs $ prob (x1 =: v) - prob (x2 =: v)) * 1)
+            , statd x1 x2
+            ]
+
+statisticalDistanceSubsets :: Note
+statisticalDistanceSubsets = thm $ do
+    let ii = "I"
+        jj = "J"
+    s ["Let", m ii, "be a", set, and, m jj, "a", subset, "of", m ii]
+    let x = "X"
+        y = "Y"
+    s ["Let", m x, and, m y, be, randomVariables, over, m ii, and, m jj, respectively]
+    ma $ statd x y =: 1 - (setsize jj / setsize ii)
+
+    proof $ do
+        let i = "i"
+            j = "j"
+        aligneqs (statd x y)
+            [ (1 / 2) * sumcmp (i ∈ ii) (abs $ prob (x =: i) - prob (y =: i))
+            , (1 / 2) * (pars $ sumcmp (i ∈ (ii \\ jj)) (abs $ prob (x =: i) - prob (y =: i)) + sumcmp (j ∈ jj) (abs $ prob (x =: j) - prob (y =: j)))
+            , (1 / 2) * (pars $ sumcmp (i ∈ (ii \\ jj)) (abs $ (1 / setsize ii) - 0) + sumcmp (j ∈ jj) (abs $ (1 / setsize ii) - (1 / setsize jj)))
+            , (1 / 2) * (pars $ sumcmp (i ∈ (ii \\ jj)) (1 / setsize ii) + sumcmp (j ∈ jj) (abs $ (1 / setsize jj) - (1 / setsize ii)))
+            , (1 / 2) * (pars $ sumcmp (i ∈ (ii \\ jj)) (1 / setsize ii) + sumcmp (j ∈ jj) (pars $ (1 / setsize jj) - (1 / setsize ii)))
+            , (1 / 2) * (pars $ sumcmp (i ∈ (ii \\ jj)) (1 / setsize ii) + sumcmp (j ∈ jj) (pars $ (1 / setsize jj) - (1 / setsize ii)))
+            , (1 / 2) * (pars $ sumcmp (i ∈ (ii \\ jj)) (1 / setsize ii) + sumcmp (j ∈ jj) (1 / setsize jj) - sumcmp (j ∈ jj) (1 / setsize ii))
+            , (1 / 2) * (pars $ ((setsize ii - setsize jj) / setsize ii) + (setsize jj / setsize jj) - (setsize jj / setsize ii))
+            , (1 / 2) * (pars $ (setsize ii / setsize ii) - (2 * (setsize jj) / setsize ii) + (setsize jj / setsize jj))
+            , (1 / 2) * (pars $ 2 - (2 * (setsize jj) / setsize ii))
+            , 1 - (setsize jj) / (setsize ii)
+            ]
+
+
+
 continuousRandomVariables :: Note
 continuousRandomVariables = subsubsection "Continuous random variables" $ do
     continuousRandomVariableDefinition
@@ -331,7 +423,7 @@ probabilityDensityDistribution :: Note
 probabilityDensityDistribution = thm $ do
     prdsDec
     s ["Let ", m dsf_, " be the ", probabilityDensityFunction, " of ", m rv_]
-    ma $ prd a =: prob (x <= a) =: int minfty a (prds x) x
+    ma $ prd a =: prob (x <= a) =: integ minfty a (prds x) x
 
     toprove
   where
@@ -343,7 +435,7 @@ probabilityDensityDistributionBetween :: Note
 probabilityDensityDistributionBetween = thm $ do
     prdsDec
     s ["Let ", m dsf_, " be the ", probabilityDensityFunction, " of ", m rv_]
-    ma $ prd x - prd a =: prob (a < rv_ <= b) =: int a b (prds x) x
+    ma $ prd x - prd a =: prob (a < rv_ <= b) =: integ a b (prds x) x
 
     toprove
   where
@@ -400,7 +492,7 @@ expectedValueDefinition = de $ do
     lab expectedValueDefinitionLabel
     s ["Let ", m df_, " be a ", distributionFunction, " of a ", continuous, " ", randomVariable, m rv_, " in a ", probabilitySpace, m prsp_, " that is ", continuous, " with a ", continuous, derivative]
     s [the, expectedValue', " of ", m rv_, " is defined as follows"]
-    ma $ ev rv_ === int_ univ_ rv_ prm_ -- TODO two cases
+    ma $ ev rv_ === integ_ univ_ rv_ prm_ -- TODO two cases
     s ["For a ", discrete, randomVariable, m rv_, " this comes down to the following"]
     ma $ do
         let (i, p, x) = ("i", "p", "x")
@@ -408,7 +500,7 @@ expectedValueDefinition = de $ do
     s ["For a ", continuous, randomVariable, m rv_, " this comes down to the following"]
     ma $ do
         let x = "x"
-        ev rv_ =: int minfty pinfty (x * prds x) x
+        ev rv_ =: integ minfty pinfty (x * prds x) x
 
 expectationOfConstant :: Note
 expectationOfConstant = thm $ do

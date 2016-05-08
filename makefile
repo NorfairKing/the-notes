@@ -27,7 +27,7 @@ pedantic:
 				-fno-warn-orphans"
 doc: $(SOURCES)
 	cabal configure --package-db=clear --package-db=global --package-db=$(SPSPDB) --package-db=$(SPLPDB)
-	cabal haddock --executables --haddock-options="--no-warnings --no-print-missing-docs"
+	cabal haddock --haddock-options="--no-warnings --no-print-missing-docs"
 
 test:
 	stack test --jobs=8

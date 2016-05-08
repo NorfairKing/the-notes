@@ -14,6 +14,7 @@ makeDefs
     , "cyclic"
     , "generator"
     , "order"
+    , "quotient group"
     ]
 
 

@@ -154,3 +154,7 @@ clon :: Note -- Random variable
      -> Note -- Power
      -> Note
 clon x q = x ^: (sqbrac q)
+
+-- * Statistical distance
+statd :: Note -> Note -> Note
+statd = fn2 delta

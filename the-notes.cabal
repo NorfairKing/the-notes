@@ -15,7 +15,14 @@ extra-source-files:  README.md
 cabal-version:       >=1.10
 
 executable the-notes
-  main-is:             Main.hs
+  main-is:                Main.hs
+  ghc-options:            -threaded -rtsopts -with-rtsopts=-N
+  hs-source-dirs:         app
+  default-language:       Haskell2010
+  build-depends:          base                  >= 4.6       && < 4.10
+                        , the-notes
+
+library
   other-extensions:    FlexibleInstances, MultiParamTypeClasses, UndecidableInstances, QuasiQuotes, TemplateHaskell
   build-depends:          base                  >= 4.6       && < 4.10
                         , HaTeX                 >= 3.16.2    && < 3.17
@@ -41,6 +48,7 @@ executable the-notes
                         , safe                  >= 0.3       && < 0.4
                         , time                  >= 1.5       && < 1.6
                         , hostname              >= 1.0       && < 1.1
+                        , deepseq               >= 1.4       && < 1.5
   ghc-options:        -Wall
                       -fwarn-unused-imports
                       -fwarn-incomplete-patterns
@@ -53,7 +61,7 @@ executable the-notes
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   hs-source-dirs:      src
   default-language:    Haskell2010
-  other-modules: 
+  exposed-modules:
       Computability.FiniteStateAutomata
       Computability.FiniteStateAutomata.Graph
       Computability.FiniteStateAutomata.Macro
@@ -74,6 +82,11 @@ executable the-notes
       Cryptography.ComputationalProblems
       Cryptography.ComputationalProblems.Macro
       Cryptography.ComputationalProblems.Terms
+      Cryptography.KeyAgreement
+      Cryptography.KeyAgreement.Terms
+      Cryptography.KeyEncapsulation
+      Cryptography.KeyEncapsulation.Macro
+      Cryptography.KeyEncapsulation.Terms
       Cryptography.MACs
       Cryptography.MACs.Macro
       Cryptography.MACs.Terms
@@ -81,6 +94,9 @@ executable the-notes
       Cryptography.Main
       Cryptography.ManyTimePadAttack
       Cryptography.OTP.Impl
+      Cryptography.PublicKeyEncryption
+      Cryptography.PublicKeyEncryption.Macro
+      Cryptography.PublicKeyEncryption.Terms
       Cryptography.SymmetricCryptography
       Cryptography.SymmetricCryptography.Macro
       Cryptography.SymmetricCryptography.Terms
@@ -133,6 +149,9 @@ executable the-notes
       Functions.Order.Diagrams
       Functions.Order.Macro
       Functions.Order.Terms
+      Functions.Product
+      Functions.Product.Macro
+      Functions.Product.Terms
       Functions.SetFunctions
       Functions.SetFunctions.Terms
       Geometry.AffineSpaces
@@ -201,6 +220,7 @@ executable the-notes
       Macro.LinearAlgebra.Macro
       Macro.Lists
       Macro.MachineLearning.Macro
+      Macro.MacroBuilders
       Macro.Math
       Macro.MetaMacro
       Macro.Note
@@ -217,6 +237,9 @@ executable the-notes
       Macro.Topology.Macro
       Macro.Tuple
       Notes
+      NumberTheory.Main
+      NumberTheory.Macro
+      NumberTheory.Terms
       Packages
       Parser
       Preface
@@ -309,6 +332,7 @@ executable the-notes
       TH.Label
       TH.LitFile
       TH.MetaLabel
+      TheNotes
       Titlepage
       Topology.Main
       Topology.MetricSpace
@@ -321,14 +345,20 @@ executable the-notes
 
 test-suite the-notes-test
   type:                exitcode-stdio-1.0
-  hs-source-dirs:      src, test
+  hs-source-dirs:      test
   main-is:             MainTest.hs
+  other-modules:       
+    TestUtils
+    UtilsSpec
+    Logic.PropositionalLogic.ResolutionSpec
+    Logic.PropositionalLogic.SentenceSpec
   build-depends:       base
                      , hspec
                      , QuickCheck
                      , checkers
                      , text
                      , quickcheck-text
+                     , the-notes
 
                      , HaTeX                 >= 3.16.2    && < 3.17
                      , lambdatex             >= 0.1.0.3   && < 0.2
@@ -349,6 +379,7 @@ test-suite the-notes-test
                      , gitrev                >= 1.2       && < 1.3
                      , random                >= 1.1       && < 1.2
                      , hostname              >= 1.0       && < 1.1
+                     , deepseq               >= 1.4       && < 1.5
   default-extensions: OverloadedStrings
                       NoImplicitPrelude
                       TemplateHaskell

@@ -1,8 +1,25 @@
 module Functions.Order.Macro where
 
 import           Functions.Application.Macro (fn)
+import           Macro.Math
 import           Macro.MetaMacro
 import           Types
+
+-- * Conjunctive order
+
+cordsign :: Note -> Note
+cordsign = overset bullet
+
+cord :: Note -- ^ The order sign
+     -> Note
+     -> Note
+     -> Note
+cord o = binop $ cordsign o
+
+(<=-) :: Note -> Note -> Note
+(<=-) = cord $ comm0 "leqslant"
+
+
 
 -- * Regions
 

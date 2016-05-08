@@ -14,6 +14,7 @@ import           Macro.Framed                as X
 import           Macro.Graphviz              as X
 import           Macro.Index                 as X
 import           Macro.Lists                 as X
+import           Macro.MacroBuilders         as X
 import           Macro.Math                  as X
 import           Macro.MetaMacro             as X
 import           Macro.Note                  as X

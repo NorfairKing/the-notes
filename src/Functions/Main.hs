@@ -9,13 +9,16 @@ import           Functions.Distances       (distances)
 import           Functions.Inverse         (inverseS)
 import           Functions.Jections        (jectionsS)
 import           Functions.Order           (order)
+import           Functions.Product         (productFunctionS)
 import           Functions.SetFunctions    (setFunctionsS)
+
 
 
 functions :: Note
 functions = chapter "Functions" $ do
     basics
     application
+    productFunctionS
     jectionsS
     inverseS
     binaryOperations

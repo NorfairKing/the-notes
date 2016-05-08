@@ -33,6 +33,22 @@ nS n = m n <> "-" <> system
 nSs :: Note -> Note
 nSs n = m n <> "-" <> systems
 
+-- | N-probabillistic system
+nPS :: Note -> Note
+nPS n = m n <> "-" <> probabillisticSystem
+
+-- | N-probabillistic systems
+nPSs :: Note -> Note
+nPSs n = m n <> "-" <> probabillisticSystems
+
+-- | N-deterministic system
+nDS :: Note -> Note
+nDS n = m n <> "-" <> deterministicSystem
+
+-- | N-deterministic systems
+nDSs :: Note -> Note
+nDSs n = m n <> "-" <> deterministicSystems
+
 -- | X,Y-system
 xyS :: Note -> Note -> Note
 xyS x y = nS $ tuple x y

@@ -15,6 +15,8 @@ wordOf Proposition    = "proposition"
 wordOf Example        = "example"
 wordOf Figure         = "figure"
 wordOf Note           = "note"
+wordOf Lemma          = "lemma"
+wordOf Consequence    = "consequence"
 
 refKind :: Label -> RefKind
 refKind (MkLabel kind _) = kind

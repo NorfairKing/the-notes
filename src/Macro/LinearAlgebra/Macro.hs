@@ -2,7 +2,7 @@ module Macro.LinearAlgebra.Macro where
 
 import           Types
 
-import           Macro.Numbers.Macro
+import           NumberTheory.Macro
 
 import           Macro.Math
 import           Macro.MetaMacro
@@ -30,10 +30,10 @@ realVecSpace p = reals ^: p
 
 -- Operations on Vector of numbers
 realVecAddition :: Note
-realVecAddition = addition
+realVecAddition = add_
 
 realVecScalarMultiplication :: Note
-realVecScalarMultiplication = multiplication
+realVecScalarMultiplication = mul_
 
 -- Linear Algebra Set
 laset :: Note

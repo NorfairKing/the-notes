@@ -4,6 +4,7 @@ import           Types
 
 import           Text.LaTeX.Packages.AMSThm (theorem)
 
+-- | TODO TH these.
 de :: Note -> Note
 de = theorem "de"
 
@@ -24,6 +25,9 @@ con = theorem "con"
 
 prop :: Note -> Note
 prop = theorem "prop"
+
+lem :: Note -> Note
+lem = theorem "lem"
 
 
 newtheorem' :: LaTeXC l => String -> l -> l

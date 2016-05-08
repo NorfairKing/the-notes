@@ -4,6 +4,12 @@ import           Types
 
 import           Macro.Index
 
+leastSignificantBit :: Note
+leastSignificantBit = ix "least significant bit"
+
+base :: Note
+base = ix "base"
+
 infinite :: Note
 infinite = ix "infinite"
 
@@ -99,9 +105,6 @@ projection = ix "projection"
 closed :: Note
 closed = ix "closed"
 
-algorithm :: Note
-algorithm = ix "algorithm"
-
 transformation :: Note
 transformation = ix "transformation"
 
@@ -126,14 +129,3 @@ smallest = ix "smallest"
 -- Groups
 cyclic :: Note
 cyclic = ix "cyclic"
-
--- * Number theory
-
-relativelyPrime_ :: Note
-relativelyPrime_ = ix "relatively prime"
-
-primes :: Note
-primes = ix "primes"
-
-chineseRemainderTheorem_ :: Note
-chineseRemainderTheorem_ = ix "Chinese remainder theorem"

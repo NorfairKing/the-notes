@@ -9,6 +9,7 @@ import qualified Prelude                        as P
 
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
+import           NumberTheory.Macro
 import           Relations.Basics.Terms
 import           Relations.Orders.Hasse
 import           Relations.Orders.Macro
@@ -30,6 +31,7 @@ import           Functions.Order.Terms
 
 order :: Note
 order = section "Functions and orders" $ do
+    conjunctiveOrderDefinition
     subsection "Monotonic functions" $ do
         monotonicDefinition
         monotonicFunctionsClosedUnderComposition
@@ -98,6 +100,24 @@ approximationS = subsection "Approximations" $ do
     leastFixedPointApproximationTheorem
     leastFixedPointApproximationTheoremWithoutGalois
 
+
+conjunctiveOrderDefinition :: Note
+conjunctiveOrderDefinition = de $ do
+    lab conjunctiveOrderDefinitionLabel
+    let a = "A"
+        b = "B"
+        po = partord_
+    s ["Let", m po, "be a", partialOrder, "on a", set, m b, and, "let", m a, "be a", set, "as well"]
+    let f_ = "f"
+        f = fn f_
+        co = cordsign partord_
+    s [the, conjunctiveOrder', m co, "on the", set, "of", functions, m $ setcmpr f_ (fun f_ a b), "is defined as follows"]
+    let g_ = "g"
+        g = fn g_
+        (<.) = inposet po
+        (<<) = cord partord_
+        x = "x"
+    ma $ (f_ << g_) === (fa (x ∈ a) (f x <. g x))
 
 monotonicDefinition :: Note
 monotonicDefinition = de $ do
@@ -626,7 +646,7 @@ galoisConnectionExamples = do
             [(c1, fun1), (c2, fun2)]
     ex $ do
         s ["The following diagram shows a", galoisConnection, "between two", posets]
-        s ["One", poset, "is a", subset, "of the", powerset, "of", m integers]
+        s ["One", poset, "is a", subset, "of the", powerset, "of", m ints]
         s ["The other is the set of information we can have about the sign of an integer"]
         s ["top means it could be anything, bot means it's impossible for this situation to occur, + means that the sign is positive and - means that the sign is negative"]
         let hd1 = hasseDiagram [all1, pos1, neg1, zp1, zm1, zero1, none] [(none, zero1), (zero1, zm1), (zero1, zp1), (zp1, pos1), (zm1, neg1), (zero1, neg1), (zero1, pos1), (neg1, all1), (pos1, all1)]

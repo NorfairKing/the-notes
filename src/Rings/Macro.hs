@@ -4,8 +4,9 @@ import           Types
 
 import           Macro.Math
 import           Macro.MetaMacro
-import           Macro.Numbers.Macro
 import           Macro.Tuple
+
+import           NumberTheory.Macro
 
 -- * Rings
 

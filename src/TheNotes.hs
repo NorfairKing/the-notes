@@ -1,15 +1,18 @@
-module Main where
+module TheNotes where
 
-import           Prelude              as P
+import           Prelude                as P
 
-import qualified Data.Text            as T
+import qualified Data.Text              as T
 
-import           Control.Monad.Reader (asks)
-import           System.Directory     (copyFile, withCurrentDirectory)
-import           System.Exit          (ExitCode (..), die)
-import           System.Process       (CreateProcess (..),
-                                       readCreateProcessWithExitCode, shell)
-import           System.Random        (mkStdGen)
+import           Control.DeepSeq        (force)
+import           Control.Exception.Base (evaluate)
+import           Control.Monad          (void)
+import           Control.Monad.Reader   (asks)
+import           System.Directory       (copyFile, withCurrentDirectory)
+import           System.Exit            (ExitCode (..), die)
+import           System.Process         (CreateProcess (..),
+                                         readCreateProcessWithExitCode, shell)
+import           System.Random          (mkStdGen)
 import           Utils
 
 import           Notes
@@ -36,6 +39,7 @@ import           Groups.Main
 import           LinearAlgebra.Main
 import           Logic.Main
 import           MachineLearning.Main
+import           NumberTheory.Main
 import           Probability.Main
 import           ProgramAnalysis.Main
 import           Relations.Main
@@ -45,8 +49,8 @@ import           Statistics.Main
 import           Topology.Main
 
 
-main :: IO ()
-main = do
+theNotes :: IO ()
+theNotes = printTiming $ do
     printHeader
     outputSystemInfo
     checkDependencies
@@ -69,6 +73,12 @@ main = do
             makeDir outdir
             withCurrentDirectory tmpdir $ do
                 printGenerationHeader
+
+                let mn = conf_texFileName cf ++ ".tex"
+
+                beforeHash <- hashContent <$> (liftIO $ readFileSafely mn)
+                void $ evaluate $ force beforeHash
+
                 -- This is where the magic happens
                 (eet, _) <- buildNote entireDocument cf pconf startState
 
@@ -81,10 +91,20 @@ main = do
                     Right () -> return ()
 
                 putStrLn ""
+
+                afterHash <- hashContent <$> (liftIO $ readFileSafely mn)
+                void $ evaluate $ force afterHash
+
                 printCompilationHeader
-                (ec, out, err) <- liftIO $ readCreateProcessWithExitCode
-                                            (latexMkJob cf)
-                                            ""
+                (dur, (ec, out, err)) <-
+                    liftIO $ timeIO $ do
+                        result <- readCreateProcessWithExitCode (latexMkJob cf) ""
+                        evaluate $ force result
+
+                if beforeHash == afterHash
+                then liftIO $ putStrLn $ "LaTeX compilation was done already."
+                else liftIO $ putStrLn $ unwords ["LaTeX compilation took", show dur, "seconds."]
+
                 let outputAnyway = do
                       putStrLn out
                       putStrLn err
@@ -96,6 +116,7 @@ main = do
                         -- Copy output file from temp dir to output dir
                         let file = conf_pdfFileName cf ++ ".pdf"
                         copyFile file (outdir ++ "/" ++ file)
+                        putStrLn "Compilation success.\n"
 
             return ()
 
@@ -156,26 +177,27 @@ entireDocument = do
     header
 
     document $ do
-        myTitlePage
-        myPreface
+        slow $ do
+            myTitlePage
+            myPreface
 
-        -- Ensure that pdf numbers coincide with the page numbers in the document
-        comm2 "addtocounter" "page" "1"
+            -- Ensure that pdf numbers coincide with the page numbers in the document
+            comm2 "addtocounter" "page" "1"
 
-        renderConfig
-        license
-        renderContributors
+            renderConfig
+            license
+            renderContributors
+            tableofcontents
 
-        tableofcontents
         allNotes
 
-        bibfn <- asks conf_bibFileName
-        comm1 "bibliographystyle" "plain"
-        comm1 "bibliography" $ raw $ T.pack bibfn
+        slow $ do
+            bibfn <- asks conf_bibFileName
+            comm1 "bibliographystyle" "plain"
+            comm1 "bibliography" $ raw $ T.pack bibfn
+            printindex
 
-        printindex
-
-        listoftodos
+            listoftodos
 
 
 allNotes :: Note
@@ -189,6 +211,7 @@ allNotes = do
     rings
     fields
     linearAlgebra
+    numberTheoryC
     geometry
     topology
     computability
@@ -199,3 +222,4 @@ allNotes = do
     formalMethods
     machineLearning
     dataMining
+

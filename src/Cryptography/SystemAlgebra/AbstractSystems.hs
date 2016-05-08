@@ -14,30 +14,29 @@ import           Cryptography.SystemAlgebra.AbstractSystems.Terms
 import           Cryptography.SystemAlgebra.Graph
 
 abstractSystemsSS :: Note
-abstractSystemsSS = section "System Algebra" $ do
-    subsection "Abstract systems" $ do
-        abstractSystemAlgebraDefinition
-        abstractSystemAlgebraDefinitionNote
-        systemAlgebraExamples
+abstractSystemsSS = subsection "Abstract systems" $ do
+    abstractSystemAlgebraDefinition
+    abstractSystemAlgebraDefinitionNote
+    systemAlgebraExamples
 
-        subsubsection "Merging interfaces" $ do
-            mergingInterfaces
-            mergingInterfacesExamples
+    subsubsection "Merging interfaces" $ do
+        mergingInterfaces
+        mergingInterfacesExamples
 
-        subsubsection "2-systems" $ do
-            twoSystemCompositionDefinition
-            compositionOfTwoSystemsIsATwoSystem
-            twoSystemCompositionAssociative
+    subsubsection "2-systems" $ do
+        twoSystemCompositionDefinition
+        compositionOfTwoSystemsIsATwoSystem
+        twoSystemCompositionAssociative
 
-        subsubsection "Parallel composition" $ do
-            parallelCompositionDefinition
-            parallelCompositionExamples
-            parallelCompositionOfTwoSystemsIsTwoSystem
+    subsubsection "Parallel composition" $ do
+        parallelCompositionDefinition
+        parallelCompositionExamples
+        parallelCompositionOfTwoSystemsIsTwoSystem
 
-        subsubsection "Resources and converters" $ do
-            resourceDefinition
-            converterDefinition
-            converterExamples
+    subsubsection "Resources and converters" $ do
+        resourceDefinition
+        converterDefinition
+        converterExamples
 
 abstractSystemAlgebraDefinition :: Note
 abstractSystemAlgebraDefinition = de $ do

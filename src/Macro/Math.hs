@@ -228,11 +228,11 @@ deriv :: Note -> Note -> Note
 deriv top to = ("d" <> commS ";" <> top) /: ("d" <> to)
 
 -- * Integrals
-int :: Note -> Note -> Note -> Note -> Note
-int a b c dx = commS "int" .!: a .^: b <> c <> commS "," <> "d" <> dx
+integ :: Note -> Note -> Note -> Note -> Note
+integ a b c dx = commS "int" .!: a .^: b <> c <> commS "," <> "d" <> dx
 
-int_ :: Note -> Note -> Note -> Note
-int_ a = int a ""
+integ_ :: Note -> Note -> Note -> Note
+integ_ a = integ a ""
 
 -- | Cases
 cases :: LaTeXC l => l -> l
@@ -310,10 +310,10 @@ mathfrak n = do
 -- * Logarithms
 
 log :: Note -> Note
-log n = commS "log" <> n
+log n = comm0 "log" <> n
 
 logn :: Note -> Note -> Note
-logn n m = commS "log" !: n <> m
+logn n m = comm0 "log" !: n <> m
 
 -- * Cdot
 
@@ -340,3 +340,16 @@ cdot_ = comm0 "cdot"
 -- | Underscore (as in, ignoring this argument)
 unmatched :: Note
 unmatched = comm1 "text" "_"
+
+-- * Rounding
+-- Round down
+roundd :: Note -> Note
+roundd = autoBrackets lfloor rfloor
+
+-- Round up
+roundu :: Note -> Note
+roundu = autoBrackets lceil rceil
+
+-- * Bullet
+bullet :: Note
+bullet = comm0 "bullet"

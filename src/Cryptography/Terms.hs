@@ -2,23 +2,15 @@ module Cryptography.Terms where
 
 import           Notes
 
-makeDefs
-    [ "Diffie-Hellman"
-    , "DH"
-    , "halfkey"
+import           Cryptography.SymmetricCryptography.Terms
 
-    , "public-key encryption scheme"
-    , "PKE"
-    , "key generator"
-    , "key pair"
-    , "public key"
-    , "secret key"
-    , "private key"
-    , "ElGamal"
+makeDefs
+    [ "algorithm"
 
     , "trapdoor one-way permutation"
     , "TWOP"
     , "trapdoor generator"
+    , "trapdoor function"
     , "trapdoor"
 
     , "RSA"
@@ -26,11 +18,18 @@ makeDefs
     , "digital signature scheme"
     , "DSS"
     , "signing key"
+    , "verification key"
     , "signature verification key"
     , "signature"
+    , "signature space"
+    , "signing key space"
+    , "verification key space"
+    , "key-pair distribution"
     , "signing algorithm"
     , "signature verification algorithm"
     , "signature forgery game"
+    , "one-time signature scheme"
+    , "Lamport One-time signature scheme"
 
     , "full domain hash"
     , "FDH"
@@ -40,3 +39,6 @@ makeDefs
     , "collision-finding game"
     , "collision resistant"
     ]
+
+nMesg :: Note -> Note
+nMesg n = m n <> "-" <> message

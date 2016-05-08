@@ -7,6 +7,7 @@ import           Functions.BinaryOperation.Terms
 import           Groups.Macro
 import           Groups.Terms
 import           Logic.FirstOrderLogic.Macro
+import           NumberTheory.Macro
 import           Sets.Basics.Terms
 
 import           LinearAlgebra.VectorSpaces.Terms
@@ -74,5 +75,5 @@ euclideanVectorSpaceDefinition = de $ do
     lab euclideanVectorSpaceDefinitionLabel
     lab euclideanVectorDefinitionLabel
     let p = "p"
-    s ["A ", euclideanVectorSpace', " is a ", vectorSpace, " of the form ", m $ realVectorsSpace p, " with ", m $ natural p]
+    s ["A ", euclideanVectorSpace', " is a ", vectorSpace, " of the form ", m $ realVectorsSpace p, " with ", m $ nat p]
     s ["An element of ", m $ reals ^ p, " is called a ", euclideanVector']

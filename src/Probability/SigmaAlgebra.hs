@@ -4,6 +4,7 @@ import           Notes
 
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
+import           NumberTheory.Macro
 import           Sets.Algebra.Complement.Terms
 import           Sets.Algebra.Difference.Terms
 import           Sets.Basics.Terms
@@ -51,7 +52,7 @@ sigmaAlgebraDefinition = de $ do
     enumerate $ do
         item $ m $ univ_ ∈ sa_
         item $ m $ fa "A" $ ("A" ∈ sa_) ⇒ (setc "A" ∈ sa_)
-        item $ m $ (fa (natural "n") (an ∈ sa_)) ⇒ ((setuncmp (natural "n") an) ∈ an)
+        item $ m $ (fa (nat "n") (an ∈ sa_)) ⇒ ((setuncmp (nat "n") an) ∈ an)
     s ["The elements of a", salgebra, "are called", events']
 
   where
@@ -105,9 +106,9 @@ sigmaAlgebraInfiniteIntersection :: Note
 sigmaAlgebraInfiniteIntersection = thm $ do
     lab sigmaAlgebraInfiniteIntersectionTheoremLabel
     s ["Let ", m sa_, " be a ", sigmaAlgebra]
-    ma $ pars (fa (natural "n") (an ∈ sa_))
+    ma $ pars (fa (nat "n") (an ∈ sa_))
          ⇒
-         setuncmp (natural "n") an ∈ sa_
+         setuncmp (nat "n") an ∈ sa_
 
     proof $ s ["The first axiom", ref sigmaAlgebraDefinitionLabel, ", together with the finite union of events of a ", sa, ref sigmaAlgebraFiniteUnionTheoremLabel, " and the second law of De Morgan", ref secondLawOfDeMorganTheoremLabel, " give the proof"]
 
@@ -202,7 +203,7 @@ generatedSigmaAlgebraExists = thm $ do
                 s ["This means that ", m sb, " must also contains ", m (setc b)]
 
             item $ do
-                m $ (pars $ fa (natural "n") (bn ∈ sb)) ⇒ ((setuncmp (natural "n") bn) ∈ sb)
+                m $ (pars $ fa (nat "n") (bn ∈ sb)) ⇒ ((setuncmp (nat "n") bn) ∈ sb)
                 newline
                 "The reasoning for this part is analogous to the reasoning for the previous part."
 

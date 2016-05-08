@@ -1,0 +1,18 @@
+\tikzstyle{block}=[rectangle, fill=white, draw=black, minimum height=1em, minimum width=2em, fill opacity=1, text opacity=1]
+\tikzstyle{bg}=[fill=gray, fill opacity = 0.1]
+
+\begin{scope}
+  \node (title) at (2.75, 0) {$w$};
+  \draw[bg] (2, -0.75) rectangle (3.5, 0.75);
+\end{scope}
+
+\begin{scope}
+  \node (title) at (1, 0) {$g$};
+  \draw[bg] (0, -1) rectangle (2, 1);
+
+  \node[block] (l) at (0, 0) {$L$};
+  \node[block] (r) at (2, 0) {$R$};
+
+  \node (o) at (-1.5, 0) {$\left\{0, 1\right\}$};
+  \draw[arrows={-latex}] (l) -- (o);
+\end{scope}

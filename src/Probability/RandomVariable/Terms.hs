@@ -5,6 +5,7 @@ import           Notes
 makeDefs [
       "random variable"
     , "stochastic variable"
+    , "probabillistic function"
     , "measure"
     , "Borel-measure"
     , "cumulative distribution function"
@@ -20,6 +21,7 @@ makeDefs [
     , "clone"
     , "discrete"
     , "discrete distribution"
+    , "statistical distance"
     , "continuous"
     , "continuous distribution"
     , "probability density function"
@@ -38,4 +40,5 @@ makeThms [
       "Expectation of constant"
     , "Linearity of expectation"
     , "Variance in terms of expectation"
+    , "statistical distance unamplifiable"
     ]

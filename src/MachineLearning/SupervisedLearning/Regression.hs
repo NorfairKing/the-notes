@@ -7,6 +7,7 @@ import           Functions.Basics.Macro
 import           Functions.Basics.Terms
 import           Geometry.AffineSpaces.Terms
 import           LinearAlgebra.VectorSpaces.Terms
+import           NumberTheory.Macro
 import           Probability.ConditionalProbability.Macro
 import           Probability.Distributions.Terms
 import           Probability.Independence.Terms
@@ -39,7 +40,7 @@ intro = do
         f = "f"
     s ["Regression is a", supervisedLearning, "technique"]
     let p = "p"
-    s ["It assumes that the", inputSpace, is, m $ realVecSpace p, "for some", m $ natural p, "and the", outputSpace, is, m reals]
+    s ["It assumes that the", inputSpace, is, m $ realVecSpace p, "for some", m $ nat p, "and the", outputSpace, is, m reals]
     s ["It also assumes that there exists a", function, m f, " such that labels can be predicted perfectly using", m f, "as follows"]
     ma $ do
         let x = "x"
@@ -78,7 +79,7 @@ optimalRegressionSS = subsubsection "Optimal estimate" $ do
     let x = "x"
         y = "y"
     ma $ fn y x =: ev (y <> mid <> mlmes =: x)
-                =: int_ univ_ (y * cprob y (mlmes =: x)) y
+                =: integ_ univ_ (y * cprob y (mlmes =: x)) y
     toprove_ "Formulated like this, this would have to hold for _any_ loss function"
     s ["However, that assumes we know ", m $ cprob y (mlmes =: x)]
 

@@ -6,6 +6,7 @@ makeDefs [
       "distance"
     , "distance function"
     , "pseudometric"
+    , "triangle inequality"
     , "metric"
 
     , "Jaccard similarity"

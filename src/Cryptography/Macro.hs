@@ -4,27 +4,39 @@ import           Types
 
 import           Functions.Application.Macro
 
--- * Public-key encryption
+-- | Least significant bit
+lsb :: Note -> Note
+lsb = fn "LSB"
 
-sksp_ :: Note
-sksp_ = "s" <> mathcal "K"
+-- * Digital signatures
 
-pksp_ :: Note
-pksp_ = "p" <> mathcal "K"
+-- | Signature space
+ssp_ :: Note
+ssp_ = mathcal "S"
 
-aenc_ :: Note
-aenc_ = "aenk"
+-- | Signing key spacke
+sigsp_ :: Note
+sigsp_ = mathcal "Z"
 
-aenc :: Note -> Note -> Note -> Note
-aenc = fn3 aenc_
+-- | Verification key spacke
+versp_ :: Note
+versp_ = mathcal "V"
 
-adec_ :: Note
-adec_ = "adec"
+-- | Signing algorithm
+signf_ :: Note
+signf_ = sigma
 
-adec :: Note -> Note -> Note
-adec = fn2 adec_
+-- | The signature of a message given a signing key
+sign :: Note -> Note -> Note
+sign = fn2 signf_
 
+-- | Verification algorithm
+verif_ :: Note
+verif_ = tau
 
+-- | The verification of a message given a signature and a verification key
+veri :: Note -> Note -> Note -> Note
+veri = fn3 verif_
 
 -- * Hash function
 
