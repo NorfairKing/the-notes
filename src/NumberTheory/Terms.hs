@@ -31,6 +31,7 @@ makeDefs
     , "Chinese remainder theorem"
     , "quadratic residue"
     , "Legendre symbol"
+    , "Euler's criterion"
     , "Jacobi symbol"
     ]
 
@@ -47,6 +48,7 @@ makeProps
 makeThms
     [ "Solution of linear congruence"
     , "Chinese remainder"
+    , "Euler criterion"
     ]
 
 makeLems

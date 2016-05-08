@@ -93,7 +93,7 @@ intmod :: Note -> Note
 intmod n = ints !: n
 
 int0mod :: Note -> Note
-int0mod n = ints !: (0 <> "," <> n)
+int0mod n = ints .!: n .^: "*"
 
 -- | Additive group of ints modulo n
 intagrp :: Note -> Note

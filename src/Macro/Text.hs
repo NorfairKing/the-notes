@@ -139,6 +139,9 @@ because = "because"
 respectively :: Note
 respectively = "respectively"
 
+define :: Note
+define = "define"
+
 kul :: Note
 kul = "KU Leuven"
 

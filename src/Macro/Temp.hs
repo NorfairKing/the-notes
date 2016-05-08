@@ -129,14 +129,3 @@ smallest = ix "smallest"
 -- Groups
 cyclic :: Note
 cyclic = ix "cyclic"
-
--- * Number theory
-
-relativelyPrime_ :: Note
-relativelyPrime_ = ix "relatively prime"
-
-primes :: Note
-primes = ix "primes"
-
-chineseRemainderTheorem_ :: Note
-chineseRemainderTheorem_ = ix "Chinese remainder theorem"

@@ -13,6 +13,7 @@ import           Groups.Terms
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
 import           NumberTheory.Macro
+import           NumberTheory.Terms
 import           Probability.ProbabilityMeasure.Terms
 import           Probability.RandomVariable.Terms
 import           Relations.Orders.Macro

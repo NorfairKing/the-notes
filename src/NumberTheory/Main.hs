@@ -162,10 +162,10 @@ divisibilityS = section "Divisibilty" $ do
     todo "lcmExistence"
     bezoutIdentityLemma
     lcmGcdProduct
-    coprimeDivisionCancels
-    coprimeDividesProduct
     primeDefinition
     coprimeDefinition
+    coprimeDivisionCancels
+    coprimeDividesProduct
     coprimeCompound
     gcdMultiplicative
     gcdMultiplicativeConsequence
@@ -390,6 +390,8 @@ primeDefinition = de $ do
 
 coprimeDefinition :: Note
 coprimeDefinition = de $ do
+    lab coprimeDefinitionLabel
+    lab relativelyPrimeDefinitionLabel
     let a = "a"
         b = "b"
     s ["Two", integers, m a, and, m b, "are considered", cso [coprime', relativelyPrime', mutuallyPrime], "if their", greatestCommonDivisor, "is one"]
@@ -494,8 +496,11 @@ moduloS = section "Modular arithmetic" $ do
     chineseRemainderTheoremPart
     quadraticResidueDefinition
     quadraticResidueExamples
+    quadraticResiduesInPrimeGroup
+    oneFourthQuadraticResidues
     legendreSymbolDefinition
     legendreSymbolExamples
+    eulerCriterionLegendreSymbol
     jacobiSymbolDefinition
     jacobiSymbolExamples
 
@@ -572,6 +577,8 @@ solutionOfLinearCongruenceTheorem = thm $ do
 
 chineseRemainderTheoremPart :: Note
 chineseRemainderTheoremPart = thm $ do
+    lab chineseRemainderTheoremLabel
+    lab chineseRemainderTheoremDefinitionLabel
     s [the, chineseRemainderTheorem']
     newline
     let n = "n"
@@ -656,7 +663,45 @@ quadraticResidueExamples = do
                 rawn i : (P.map (\j -> if j P.< (i P.+ 1) then (rawn $ j P.^ (2 :: P.Int) `P.mod` i) else mempty) [1 .. n])
                 ) [0 .. n])
 
+quadraticResiduesInPrimeGroup :: Note
+quadraticResiduesInPrimeGroup = thm $ do
+    let p = "p"
+        a = "a"
+    s ["Let", m p, "be an", odd, prime, and, m a, "an", integer, "that is not", divisible, by, m p]
+    let g = "g"
+    s ["Let", m g, "be a", generator, "of", m $ intmgrp p]
+    let q = "q"
+    itemize $ do
+        item $ do
+            s [m a, "is a", quadraticResidue, modulo, m p, "if and only if there exists an", integer, m q, "such that", m $ eqmod p a (g ^ (2 * q)), "holds"]
+        item $ do
+            s [m a, "is not a", quadraticResidue, modulo, m p, "if and only if there exists an", integer, m q, "such that", m $ eqmod p a (g ^ (2 * q + 1)), "holds"]
 
+    proof $ do
+        s ["Because", m a, "is not", divisible, by, m p <> ",", m a, "is an", element, "of", m $ int0mod p]
+        itemize $ do
+            item $ do
+                let x = "x"
+                s ["Suppose", m a, "is a", quadraticResidue, modulo, m p, "then there exists an", integer, m x, "as follows"]
+                ma $ eqmod p (x^2) a
+                s [m x, "must then be an", element, "of", m $ int0mod p]
+                s ["Because", m g, "is a", generator, for, m (intmgrp p) <> ", there must exist an", integer, m q, "as follows"]
+                ma $ eqmod p x (g ^ q)
+                s ["This means that we have found the", m q, "that we were looking for"]
+                ma $ eqmod p a (g ^ (2 * q))
+                s ["The other direction is trivial"]
+            item $ do
+                toprove
+
+oneFourthQuadraticResidues :: Note
+oneFourthQuadraticResidues = thm $ do
+    let p = "p"
+        q = "q"
+        n = "n"
+    s ["Let", m p, and, m q, "be two", odd, primes, and, define, m $ n =: p * q]
+    s [m $ 1 / 4, "of the", elements, "in", m $ int0mod n, are, quadraticResidues, modulo, m n]
+
+    toprove
 
 legendreSymbolDefinition :: Note
 legendreSymbolDefinition = de $ do
@@ -678,6 +723,37 @@ legendreSymbolExamples = do
         ma $ leg 5 11 =: 1
     ex $ do
         ma $ leg 6 11 =: -1
+
+
+eulerCriterionLegendreSymbol :: Note
+eulerCriterionLegendreSymbol = thm $ do
+    s [eulersCriterion', for, legendreSymbols]
+    let a = "a"
+        p = "p"
+    s ["Let", m a, "be an", integer, and, m p, "an", integer, odd, prime]
+    let l = leg a p
+        ap = a ^ ((p - 1) / 2)
+    ma $ eqmod p l ap
+
+    proof $ do
+        s ["We have to prove three cases:"]
+        itemize $ do
+            item $ do
+                s [m ap, is, m 0, modulo, m p, "if and only if", m $ leg a p, is, m 0]
+                newline
+                let n = "n"
+                s ["if", m p, divides, m a, "then there exists an", m n, "as follows"]
+                ma $ (n * p) ^ ((p - 1) / 2)
+                s ["This is clearly", divisible, by, m p, "and therefore the following holds"]
+                ma $ eqmod p ap 0
+            item $ do
+                s [m ap, is, m 1, modulo, m p, "if and only if", m a, "is a", quadraticResidue, modulo, m p]
+                newline
+                toprove
+            item $ do
+                s [m ap, is, m (-1), modulo, m p, "if and only if", m a, "is not a", quadraticResidue, modulo, m p]
+                newline
+                toprove
 
 
 jacobiSymbolDefinition :: Note
