@@ -246,6 +246,7 @@ discreteRandomVariables = subsubsection "Discrete random variables" $ do
     discreteRandomVariableExamples
     statisticalDistanceDefinition
     statisticalDistanceUnamplifiable
+    statisticalDistanceSubsets
 
 discreteRandomVariableDefinition :: Note
 discreteRandomVariableDefinition = de $ do
@@ -352,6 +353,35 @@ statisticalDistanceUnamplifiable = thm $ do
             , (1 / 2) * sumcmp (v ∈ x) ((abs $ prob (x1 =: v) - prob (x2 =: v)) * 1)
             , statd x1 x2
             ]
+
+statisticalDistanceSubsets :: Note
+statisticalDistanceSubsets = thm $ do
+    let ii = "I"
+        jj = "J"
+    s ["Let", m ii, "be a", set, and, m jj, "a", subset, "of", m ii]
+    let x = "X"
+        y = "Y"
+    s ["Let", m x, and, m y, be, randomVariables, over, m ii, and, m jj, respectively]
+    ma $ statd x y =: 1 - (setsize jj / setsize ii)
+
+    proof $ do
+        let i = "i"
+            j = "j"
+        aligneqs (statd x y)
+            [ (1 / 2) * sumcmp (i ∈ ii) (abs $ prob (x =: i) - prob (y =: i))
+            , (1 / 2) * (pars $ sumcmp (i ∈ (ii \\ jj)) (abs $ prob (x =: i) - prob (y =: i)) + sumcmp (j ∈ jj) (abs $ prob (x =: j) - prob (y =: j)))
+            , (1 / 2) * (pars $ sumcmp (i ∈ (ii \\ jj)) (abs $ (1 / setsize ii) - 0) + sumcmp (j ∈ jj) (abs $ (1 / setsize ii) - (1 / setsize jj)))
+            , (1 / 2) * (pars $ sumcmp (i ∈ (ii \\ jj)) (1 / setsize ii) + sumcmp (j ∈ jj) (abs $ (1 / setsize jj) - (1 / setsize ii)))
+            , (1 / 2) * (pars $ sumcmp (i ∈ (ii \\ jj)) (1 / setsize ii) + sumcmp (j ∈ jj) (pars $ (1 / setsize jj) - (1 / setsize ii)))
+            , (1 / 2) * (pars $ sumcmp (i ∈ (ii \\ jj)) (1 / setsize ii) + sumcmp (j ∈ jj) (pars $ (1 / setsize jj) - (1 / setsize ii)))
+            , (1 / 2) * (pars $ sumcmp (i ∈ (ii \\ jj)) (1 / setsize ii) + sumcmp (j ∈ jj) (1 / setsize jj) - sumcmp (j ∈ jj) (1 / setsize ii))
+            , (1 / 2) * (pars $ ((setsize ii - setsize jj) / setsize ii) + (setsize jj / setsize jj) - (setsize jj / setsize ii))
+            , (1 / 2) * (pars $ (setsize ii / setsize ii) - (2 * (setsize jj) / setsize ii) + (setsize jj / setsize jj))
+            , (1 / 2) * (pars $ 2 - (2 * (setsize jj) / setsize ii))
+            , 1 - (setsize jj) / (setsize ii)
+            ]
+
+
 
 continuousRandomVariables :: Note
 continuousRandomVariables = subsubsection "Continuous random variables" $ do
