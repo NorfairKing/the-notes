@@ -538,31 +538,30 @@ dlLSBHardness = do
         let d = delta
             e = epsilon
             sol = "S"
-            lp = spac $ lsbp grp_
+            lp = lsbp grp_
+            lpa = spac lp
+            lpw = spwc lp
             dp = dlpw grp_
             q = "Q"
-        center $ s [m dp, is, reducible, to, m lp]
-        s ["More formally: For any", m $ cs [d, e] ∈ ccint 0 1, "and for any", solver, m sol, for, m lp, with, performance, "greater than", m e <> ",", "there exists a solver", m q, "for", m dp, with, performance, "at least", m $ 1 - d, "which invokes", m sol, "a polynomial number of times (with respect to", csa [m $ log (1 / d), m $ 1 / e, m $ log o] <> ")", "and otherwise performs only a few simple operations"]
+        center $ s [m dp, is, reducible, to, m lpa]
+        s ["More formally: For any", m $ cs [d, e] ∈ ccint 0 1, "and for any", solver, m sol, for, m lpa, with, performance, "greater than", m e <> ",", "there exists a solver", m q, "for", m dp, with, performance, "at least", m $ 1 - d, "which invokes", m sol, "a polynomial number of times (with respect to", csa [m $ log (1 / d), m $ 1 / e, m $ log o] <> ")", "and otherwise performs only a few simple operations"]
         newline
         newline
-        s ["In other words: If, for some", m (d < 1) <> ", there exists no polynomial-time algorithm for solving", m dp, with, performance, "at least", m (1 - d) <> ", then there exists no algorithm for solving", m lp, "with non-negligible", performance]
+        s ["In other words: If, for some", m (d < 1) <> ", there exists no polynomial-time algorithm for solving", m dp, with, performance, "at least", m (1 - d) <> ", then there exists no algorithm for solving", m lpa, "with non-negligible", performance]
 
         proof $ do
-            s ["We prove this via a", reduction, from, m dp, to, m lp]
+            s ["We prove this via a", reduction, from, m dp, to, m lpa]
             s ["In fact, we will use multiple", reductions]
-            s ["The composition of these", reductions, "will complete the reduction from", m dp, to, m lp, ref compositionOfReductionsTheoremLabel]
+            s ["The composition of these", reductions, "will complete the reduction from", m dp, to, m lpa, ref compositionOfReductionsTheoremLabel]
             let reduced = "reduced"
             let i = "I"
             let dpi = dp `restrictedTo` i
-            let lsbi = lp `restrictedTo` i
+            let liw = lpw `restrictedTo` i
             let j_ = "J"
                 j = fn j_
                 x = "x"
-            let lsbjx = lp `restrictedTo` (j x)
+            let lsbjx = lpa `restrictedTo` (j x)
             newline
-            let x = "x"
-                y = "y"
-            s ["Let", m $ y =: h ^ x, "be a query"]
             let n = "n"
             s ["Let", m n, "be a fixed", integer, "parameter"]
             s ["We divide the", integer, "interval", m $ ccint 0 (o - 1), "into segments of length", m $ roundu (o / n), "( where the last segment can be shorter)"]
@@ -571,20 +570,48 @@ dlLSBHardness = do
             let p = "p"
             s ["Define", m (p `restrictedTo` i), "as the problem", m p, "where the", instanceSpace, "is restricted to", m i]
             s ["We complete the proof with the following five reductions"]
-            enumerate $ do
-                item $ s [m dp, is, reduced, to, m dpi]
-                item $ s [m dpi, is, reduced, to, m lsbi]
-                item $ s [m lsbi, is, reduced, to, "itself to amplify the", performance]
-                item $ s [m lsbi, is, reduced, to, m lsbjx]
-                item $ s [m lsbjx, is, reduced, to, m lp]
-                toprove
+            let (<-.) = binop $ comm0 "mapsfrom"
+            hereFigure $ linedTable
+                ["from", "to", "performance", "calls"]
+                [ [dp   , dpi  , (1 - d) <-. (1 - d), n     ]
+                , [dpi  , liw  , "TODO"             , "TODO"]
+                , [liw  , liw  , "TODO"             , "TODO"]
+                , [liw  , lsbjx, "TODO"             , "TODO"]
+                , [lsbjx, lpa  , "TODO"             , "TODO"]
+                ]
 
             s ["We construct each", reduction, "separately as follows"]
             enumerate $ do
                 item $ do
                     s ["In the first", reduction, m dp, is, reduced, to, m dpi]
                     newline
-                    s []
+                    -- let t = "t"
+                    -- s ["Let", m t, "be the number of bits necessary to represent the", discreteLogarithm, "of an", element, "of", m i]
+                    -- ma $ (t =:) $ roundu $ logn 2 $ (roundd $ o / n) + 1
+                    let sl = "S"
+                        si = sl !: i
+                        sh = sl !: grps_
+                        a = alpha
+                    s ["Let", m si, "be a", solver, for, m dpi, with, performance, m a]
+                    s ["We construct a", solver, m sh, for, m dp, "as follows"]
+                    newline
+                    let x = "x"
+                        y = "y"
+                    s ["Let", m $ y =: h ^ x, "be a query where", m $ y ∈ i, "holds"]
+                    let l = "l"
+                        y' = ((y <> "'") .!:)
+                    s ["For each", m l, "in", m (setlist 0 1 (n - 1)) <> ",", m sh, "first computes", m $ y' l, "as follows"]
+                    ma $ y' l =: y ** h ^ (- l * roundu (o / n)) =: h ^ (x - l * roundu (o / n))
+                    let x' = ((x <> "'") .!:)
+                    s [m sh, "then invokes", m sl, on, m $ y' l, "to obtain", m $ x' l]
+                    s ["Note that for one of the values of", m l <> ",", m $ y' l, "will be in", m i]
+                    s [m sh, "checkes that", m $ x' l, "is a correct solution by checking the following equation"]
+                    ma $ y' l =: h ^ (x' l)
+                    s ["If", m $ x' l, "is a valid solution, then the solution for the query", m y, "is calculated as follows"]
+                    ma $ x =: x' l + l * roundu (o / n)
+                    s ["This means that", m sh, "needs to invoke", m si, "at most", m n, "times and has", performance, m a]
+                item $ do
+                    s ["In the second", reduction, m dpi, is, reduced, to, m liw]
             toprove
 
     nte $ do

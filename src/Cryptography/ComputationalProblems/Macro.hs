@@ -148,7 +148,7 @@ spdc dis = (.!: dis)
 
 -- | Average-case of a problem"
 spac :: Note -> Note
-spac = (.!: "ac")
+spac = (.!: "av")
 
 -- | Discrete logarithm problem for given group in the worst-case.
 dlpw :: Note -> Note
