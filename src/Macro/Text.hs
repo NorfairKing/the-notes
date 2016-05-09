@@ -142,6 +142,9 @@ respectively = "respectively"
 define :: Note
 define = "define"
 
+equals :: Note
+equals = "equals"
+
 kul :: Note
 kul = "KU Leuven"
 

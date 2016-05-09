@@ -248,6 +248,7 @@ reductionDefinition = do
 
 compositionOfReductions :: Note
 compositionOfReductions = thm $ do
+    lab compositionOfReductionsTheoremLabel
     let p = "p"
         q = "q"
         r = "r"
@@ -534,10 +535,40 @@ dlLSBHardness = do
             p = spac $ lsbp n
             dp = dlpw $ grp (intmod n) $ "" `cdot` ""
             q = "Q"
-        s ["For any", m $ cs [d, e] ∈ ccint 0 1, "and for any", solver, m sol, for, m p, with, performance, "greater than", m e <> ",", "there exists a solver", m q, "for", m dp, with, performance, "at least", m $ 1 - d, "which invokes", m sol, "a polynomial number of times (with respect to", csa [m $ log (1 / d), m $ 1 / e, m $ log n] <> ")", "and otherwise performs only a few simple operations"]
+        s [m dp, is, reducible, to, m p]
+        newline
+        s ["More formally: For any", m $ cs [d, e] ∈ ccint 0 1, "and for any", solver, m sol, for, m p, with, performance, "greater than", m e <> ",", "there exists a solver", m q, "for", m dp, with, performance, "at least", m $ 1 - d, "which invokes", m sol, "a polynomial number of times (with respect to", csa [m $ log (1 / d), m $ 1 / e, m $ log n] <> ")", "and otherwise performs only a few simple operations"]
+        newline
+        s ["In other words: If, for some", m (d < 1) <> ", there exists no polynomial-time algorithm for solving", m dp, with, performance, "at least", m (1 - d) <> ", then there exists no algorithm for solving", m p, "with non-negligible", performance]
 
-        toprove_ "The proof for this will make use of other theorems that still need to be written up on"
-    nte $ s ["This theorem is usually worded via its contraposition"]
+        proof $ do
+            s ["We prove this via a", reduction, from, m dp, to, m p]
+            s ["In fact, we will use multiple", reductions]
+            s ["The composition of these", reductions, "will complete the reduction from", m dp, to, m p, ref compositionOfReductionsTheoremLabel]
+            let reduced = "reduced"
+            let i = "I"
+            let dpi = dp `restrictedTo` i
+            let lsbi = p `restrictedTo` i
+            let j_ = "J"
+                j = fn j_
+                x = "x"
+            let lsbjx = p `restrictedTo` (j x)
+            enumerate $ do
+                item $ s [m dp, is, reduced, to, m dpi]
+                item $ s [m dpi, is, reduced, to, m lsbi]
+                item $ s [m lsbi, is, reduced, to, "itself to amplify the", performance]
+                item $ s [m lsbi, is, reduced, to, m lsbjx]
+                item $ s [m lsbjx, is, reduced, to, m p]
+                toprove
+
+            s ["We construct each", reduction, "separately as follows"]
+            enumerate $ do
+                item $ do
+                    s ["In the first", reduction, m dp, is, reduced, to, m dpi]
+            toprove
+
+
+
 
 
 

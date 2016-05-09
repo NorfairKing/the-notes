@@ -89,3 +89,7 @@ dProblem d = m d <> "-" <> problem
 
 dProblem' :: Note -> Note
 dProblem' d = m d <> "-" <> problem'
+
+makeThms
+    [ "composition of reductions"
+    ]

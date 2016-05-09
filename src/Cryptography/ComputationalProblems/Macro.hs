@@ -169,3 +169,8 @@ dlpa = spac . dlp
 -- | Least significant bit of the discrete logarithm in a given intmod group.
 lsbp :: Note -> Note
 lsbp n = ("LSB" !: n)
+
+
+-- | Problem with restricted instance space
+restrictedTo :: Note -> Note -> Note
+restrictedTo = (!:)

@@ -1,18 +1,19 @@
 module Groups.Main where
 
-import           Notes                           hiding (inverse)
+import           Notes                           hiding (cyclic, inverse)
 
 import           Functions.Basics.Macro
 import           Functions.BinaryOperation.Terms
 import           Logic.FirstOrderLogic.Macro
 import           NumberTheory.Macro
+import           NumberTheory.Terms
 import           Sets.Basics.Terms
 
 import           Groups.Macro
 import           Groups.Terms
 
-groups :: Note
-groups = chapter "Groups" $ do
+groupsC :: Note
+groupsC = chapter "Groups" $ do
     magmaDefinition
     semigroupDefinition
     monoidDefinition
@@ -32,6 +33,11 @@ groups = chapter "Groups" $ do
     groupOrderDefinition
     orderDefinition
     elementOrderDividesGroupOrder
+
+    decreasePowerInGroup
+    squareRootDefinition
+    squareRootUniqueInFiniteOddGroup
+    finiteOddGroupRootComputation
 
 magmaDefinition :: Note
 magmaDefinition = de $ do
@@ -173,4 +179,75 @@ elementOrderDividesGroupOrder = thm $ do
     todo "write out"
     s [the, order, "of every", element, "divides the", group, order]
     todo "What was the name of this theorem"
+
+decreasePowerInGroup :: Note
+decreasePowerInGroup = do
+    let g = "g"
+    thm $ do
+        s ["Let", m grp_, "be a", group]
+        let a = "a"
+            x = "x"
+            y = "y"
+        s ["For a given", element, m x <> ", if it can be described as", m (x =: g ^ a) <> ", we can compute", m $ y =: g ^ (a - 1), "given the", inverse, "of", m g]
+        ma $ y =: x ** ginv g
+        proof $ do
+            ma $ x ** ginv g =: g ^ a ** ginv g =: g ^ (a - 1) =: y
+    nte $ do
+        s ["For this computation to be efficient, only the computation of", m grpop_, "and the", inverse, "of an", element, "(specifically", m g <> ") needs to be efficient"]
+
+squareRootDefinition :: Note
+squareRootDefinition = de $ do
+    s ["Let", m grp_, "be a", group]
+    let a = "a"
+        b = "b"
+    s ["A", square', "is a", group, element, m a, "such that there exists an", element, m b, "as follows"]
+    ma $ b ** b =: a
+    s [m b, "is then called the", squareRoot', "of", m a]
+
+squareRootUniqueInFiniteOddGroup :: Note
+squareRootUniqueInFiniteOddGroup = thm $ do
+    lab squareRootUniqueInFiniteOddGroupTheoremLabel
+    s ["All", squareRoots, "in", finite, groups, "of an", odd, order, "are unique"]
+
+    proof $ do
+        let o = "o"
+            k = "k"
+            e = "e"
+        s ["Let", m grp_, "be a", finite, group, with, order, m $ o =: 2 * k - 1, and, neutralElement, m e]
+        let x = "x"
+            y = "y"
+            z = "z"
+        s ["Let", m z, "be an", element, "of", m grps_, "that has a", squareRoot, m y]
+        ma $ y ** y =: z
+        s ["Assume that there existed another", squareRoot, m x, "of", m z]
+        ma $ x ** x =: z
+        s ["We show that", m x, and, m y, "must then be equal"]
+        aligneqs x
+            [ e ** x
+            , x ^ (2 * k - 1) ** x
+            , x ^ (2 * k)
+            , x ^ 2 ^ k
+            , y ^ 2 ^ k
+            , y ^ (2 * k)
+            , y ^ (2 * k - 1) ** y
+            , y
+            ]
+
+finiteOddGroupRootComputation :: Note
+finiteOddGroupRootComputation = do
+    thm $ do
+        let o = "o"
+            e = "e"
+        s ["Let", m grp_, "be a", finite, group, with, odd, order, m o, and, neutralElement, m e]
+        let z = "z"
+            y = "y"
+        s [the, "unique" <> ref squareRootUniqueInFiniteOddGroupTheoremLabel,  squareRoot, m z, "of an", element, m y, "can be computed as follows"]
+        ma $ z =: y ^ ((o + 1) / 2)
+
+        proof $ do
+            ma $ (y ^ ((o + 1) / 2)) ** (y ^ ((o + 1) / 2)) =: y ^ (o + 1) =: y ** y ^ o =: y ** e =: y
+    nte $ do
+        s ["For this computation to be efficient, only the computation of", m grpop_, "needs to be efficient"]
+
+
 

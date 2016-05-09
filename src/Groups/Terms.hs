@@ -14,6 +14,10 @@ makeDefs
     , "cyclic"
     , "generator"
     , "order"
+
+    , "square"
+    , "square root"
+
     , "quotient group"
     ]
 
@@ -25,4 +29,5 @@ makeThms
     , "generated set is group"
     , "trivial subgroups"
     , "element order divides group order"
+    , "square root unique in finite odd group"
     ]

@@ -207,7 +207,7 @@ allNotes = do
     relations
     functions
     graphTheory
-    groups
+    groupsC
     rings
     fields
     linearAlgebra
