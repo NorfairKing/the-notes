@@ -6,7 +6,6 @@ import           Functions.Application.Macro
 import           Groups.Macro
 import           Macro.MetaMacro
 import           Macro.Tuple
-import           Probability.Distributions.Macro
 
 -- * Problems
 
@@ -123,11 +122,11 @@ gadv = fn "A"
 
 -- | Computational Diffie-Hellman problem for a given group. (Use this with the <generator>, operation notation of groups).
 cdhp :: Note -> Note
-cdhp = ("CDH" .!:)
+cdhp = ("CDH" .^:)
 
 -- | Decisional Diffie-Hellman problem for a given group.
 ddhp :: Note -> Note
-ddhp = ("DDH" .!:)
+ddhp = ("DDH" .^:)
 
 -- * Discrete logarithms
 
@@ -137,19 +136,19 @@ dlgrp_ = grp (genby "g") grpop_
 
 -- | Discrete logarithm problem for given group. (Use this with the <generator>, operation notation of groups).
 dlp :: Note -> Note
-dlp = ("DL" .!:)
+dlp = ("DL" .^:)
 
 -- | Worst-case of a problem
 spwc :: Note -> Note
-spwc = (.^: "*")
+spwc = (.!: "wc")
 
 -- | Problem in case of the given distribution
 spdc :: Note -> Note -> Note
-spdc dis = (.^: dis)
+spdc dis = (.!: dis)
 
 -- | Average-case of a problem"
 spac :: Note -> Note
-spac = spdc uniformD_
+spac = (.!: "ac")
 
 -- | Discrete logarithm problem for given group in the worst-case.
 dlpw :: Note -> Note
@@ -166,9 +165,9 @@ dlpa :: Note -> Note
 dlpa = spac . dlp
 
 
--- | Least significant bit of the discrete logarithm in a given intmod group.
+-- | Least significant bit of the discrete logarithm in a given finite cyclic group
 lsbp :: Note -> Note
-lsbp n = ("LSB" !: n)
+lsbp = ("LSB" .^:)
 
 
 -- | Problem with restricted instance space

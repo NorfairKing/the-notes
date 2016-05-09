@@ -92,4 +92,5 @@ dProblem' d = m d <> "-" <> problem'
 
 makeThms
     [ "composition of reductions"
+    , "DL mod two in even order group"
     ]
