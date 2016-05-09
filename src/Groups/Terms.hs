@@ -30,4 +30,5 @@ makeThms
     , "trivial subgroups"
     , "element order divides group order"
     , "square root unique in finite odd group"
+    , "finite odd group root computation"
     ]

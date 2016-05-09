@@ -236,6 +236,7 @@ squareRootUniqueInFiniteOddGroup = thm $ do
 finiteOddGroupRootComputation :: Note
 finiteOddGroupRootComputation = do
     thm $ do
+        lab finiteOddGroupRootComputationTheoremLabel
         let o = "o"
             e = "e"
         s ["Let", m grp_, "be a", finite, group, with, odd, order, m o, and, neutralElement, m e]
