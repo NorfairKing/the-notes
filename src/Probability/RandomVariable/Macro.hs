@@ -86,9 +86,11 @@ prq :: Note -> Note
 prq = app prqf
 
 -- * Expected value
+
+-- | Expected value
 ev :: Note -> Note
 ev n = "E" <> sqbrac n
--- FIXME move this?
+-- FIXME move this? to statistics
 
 -- | Mean
 mn :: Note -> Note

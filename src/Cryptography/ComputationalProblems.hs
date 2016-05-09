@@ -28,6 +28,7 @@ import           Relations.Orders.Terms                           hiding (order)
 import           Rings.Macro
 import           Rings.Terms
 import           Sets.Basics.Terms
+import           Sets.Partition.Terms
 
 import           Cryptography.SymmetricCryptography.Macro
 import           Cryptography.SystemAlgebra.AbstractSystems.Macro
@@ -192,20 +193,88 @@ probCaseNotation = de $ do
 
 averageCasePerformanceDifference :: Note
 averageCasePerformanceDifference = lem $ do
-    let p = mathcal "P"
-        q = mathcal "Q"
+    let pp = mathcal "P"
+        p = "P"
+        q = "Q"
         d = ("D" !:)
         dp = d p
         dq = d q
         oo = perfs ""
-    s ["Let", m p, and, m q, "be two", weightedAverageCaseProblems, with, probabilityDistributions, m dp, and, m dq, respectively, "with the same", set, "of", performances, m $ oo ⊆ reals]
+    s ["Let", m pp, "be a set of", problems]
+    s ["Let", m p, and, m q, "be the", weightedAverageCaseProblems, over, m dp, and, m dq, "respectively"]
+    s ["Let their", performances, "be", m $ oo ⊆ reals]
+    -- s ["Let", m p, and, m q, "be two", weightedAverageCaseProblems, with, probabilityDistributions, m dp, and, m dq, respectively, "with the same", set, "of", performances, m $ oo ⊆ reals]
     let o = "o"
         o1 = o !: 1
         o2 = o !: 2
         sl = "s"
     ma $ fa sl $ perf p sl <= perf q sl + (pars $ max (cs [o1, o2] ∈ oo) (abs $ o1 - o2)) * statd p q
 
-    toprove
+    proof $ do
+        let a = "a"
+            b = "b"
+        s ["Let", m $ ccint a b, "be any interval that is a superset of", m oo]
+        ma $ oo ⊆ ccint a b
+        s ["We will prove this by showing that the following inequality holds, which implies the theorem, because", m $ b - a >= (pars $ max (cs [o1, o2] ∈ oo) (abs $ o1 - o2)), "holds"]
+        ma $ perf p sl - perf q sl <= (pars $ b - a) * statd p q
+        s ["Consider the following two", sets, "of", problem, "instances"]
+        let pr = "p"
+            ppl = pp ^ "+"
+        ma $ ppl =: setcmpr (pr ∈ p) (perf p pr >= perf q pr)
+        let pmn = pp ^ "-"
+        ma $ pmn =: setcmpr (pr ∈ q) (perf p pr <  perf q pr)
+        s ["Note that", m ppl, and, m pmn, "form a", partition, "of", m pp]
+        s ["Therefore, we note the following first"]
+        aligneqs
+            ( sumcmp (pr ∈ ppl) (pars $ prob (p =: pr) - prob (q =: pr))
+            + sumcmp (pr ∈ pmn) (pars $ prob (p =: pr) - prob (q =: pr))
+            )
+            [ sumcmp (pr ∈ pp) (pars $ prob (p =: pr) - prob (q =: pr))
+            , sumcmp (pr ∈ pp) (prob (p =: pr))
+            - sumcmp (pr ∈ pp) (prob (q =: pr))
+            , 1 - 1
+            , 0
+            ]
+        s ["This is equivalent with the following equation"]
+        ma $ sumcmp (pr ∈ ppl) (pars $ prob (p =: pr) - prob (q =: pr)) =: - sumcmp (pr ∈ pmn) (pars $ prob (p =: pr) - prob (q =: pr))
+        s ["We now write the", statisticalDistance, "between", m p, and, m q, "in terms of that equation"]
+        aligneqs
+            (statd p q)
+            [ (1 / 2) * sumcmp (pr ∈ pp) (abs $ prob (p =: pr) - prob (q =: pr))
+            , (1 / 2) * (pars $
+                sumcmp (pr ∈ ppl) (abs $ prob (p =: pr) - prob (q =: pr))
+              + sumcmp (pr ∈ pmn) (abs $ prob (p =: pr) - prob (q =: pr)))
+            , (1 / 2) * (pars $
+                sumcmp (pr ∈ ppl) (prob (p =: pr) - prob (q =: pr))
+              - sumcmp (pr ∈ pmn) (prob (p =: pr) - prob (q =: pr)))
+            , (1 / 2) * (pars $
+                sumcmp (pr ∈ ppl) (prob (p =: pr) - prob (q =: pr))
+              + sumcmp (pr ∈ ppl) (prob (p =: pr) - prob (q =: pr)))
+            , sumcmp (pr ∈ ppl) (pars $ prob (p =: pr) - prob (q =: pr))
+            ]
+        s ["Now we use this formula for the statistical distance to finally prove the inequality stated above"]
+        aligneqs
+            (perf p sl - perf q sl)
+            [ sumcmp (pr ∈ pp) (prob (p =: pr) * perf pr sl)
+            - sumcmp (pr ∈ pp) (prob (q =: pr) * perf pr sl)
+            , sumcmp (pr ∈ pp) (pars $ prob (p =: pr) * perf pr sl - prob (q =: pr) * perf pr sl)
+            , sumcmp (pr ∈ pp) ((pars $ prob (p =: pr) - prob (q =: pr)) * perf pr sl)
+            , sumcmp (pr ∈ ppl) ((pars $ prob (p =: pr) - prob (q =: pr)) * perf pr sl)
+            + sumcmp (pr ∈ pmn) ((pars $ prob (p =: pr) - prob (q =: pr)) * perf pr sl)
+            ]
+        s ["Now we use that", m $ perf pr sl, "is less than, or equal to", m b, "and that", m $ perf pr sl, "is greater than, or equal to,", m a]
+        ma $ "" <= b * sumcmp (pr ∈ ppl) (pars $ prob (p =: pr) - prob (q =: pr))
+                 + a * sumcmp (pr ∈ pmn) (pars $ prob (p =: pr) - prob (q =: pr))
+        s ["We finish by noting that the first term in the rigth-hand side of this inequality, is the", statisticalDistance, "between", m p, and, m q, "while the second term is the exact opposite of that"]
+        ma $ "" =: b * statd p q - a * statd p q =: (pars $ b - a) * statd p q
+
+
+
+
+
+
+
+
 
 reductionDefinition :: Note
 reductionDefinition = do
