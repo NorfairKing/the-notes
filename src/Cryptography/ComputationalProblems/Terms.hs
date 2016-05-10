@@ -19,12 +19,16 @@ makeDefs
     , "performance translation function"
     , "reducible"
 
+    , "game instance"
     , "deterministic game"
+    , "winning condition"
     , "probabillistic game"
     , "game"
     , "player"
     , "winner"
-    , "winning condition"
+    , "deterministic winner"
+    , "probabillistic winner"
+    , "multi-game"
 
     , "function inversion"
     , "function inversion game"

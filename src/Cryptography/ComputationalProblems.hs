@@ -10,7 +10,6 @@ import           Functions.Basics.Macro
 import           Functions.Basics.Terms
 import           Functions.Composition.Macro
 import           Functions.Distances.Terms
-import           Functions.Jections.Terms
 import           Functions.Order.Terms
 import           Groups.Macro
 import           Groups.Terms
@@ -62,8 +61,10 @@ computationalProblemsS = section "Computational Problems" $ do
 
     subsection "Games" $ do
         deterministicGameDefinition
+        performanceOfADeterministicGame
         probabillisticGameDefinition
-        performanceOfAGame
+        performanceOfAProbabillisticGame
+        multigameDefinition
 
         subsubsection "Distinction problems" $ do
             distinctionProblemDefinition
@@ -370,32 +371,89 @@ deterministicGameDefinition = do
         lab playerDefinitionLabel
         let g = gme_
             w = plr_
-        s ["A", deterministicGame', m g, "is a", nS 2, "which can at one", interface, "be connected to a", nS 1, m w, "called a", player, or, winner, "and at the other", interface, "outputs a bit (indicating whether or not the game is won)"]
-        tikzFig "Deterministic Game System" [] $ raw $ [litFile|src/Cryptography/ComputationalProblems/GameTikZ.tex|]
-    nte $ do
-        s ["Because a combined", deterministicGame, "-", player, system, "is entirely deterministic, we sometimes view these combined systems under the", injection, "that maps them to the output bit"]
+            win_ = omega !: g
+            win = fn win_
+        let dd = mathcal "W"
+        s ["A", deterministicGame', m g, or, gameInstance', "is an abstract object such that there exits a", set, m dd, "of so-called", cso [players', winners'], for, m g, "and a", function, m win_, "called the", winningCondition', "as follows"]
+        ma $ fun win_ w bits
+        s ["If, for a given", player, m w <> ",", m $ win w, equals, m 1 <> ", we say that", m w, "wins the", game, m g]
+        newline
+        let gg = mathcal "G"
+        s ["For a given", set, m gg, "of", games, anda, set, m dd, "of", solvers, "for all the", games, "in", m gg <> ", we define the", winningCondition', "in terms of all these", games, "as follows"]
+        let wins_ = omega
+            wins = fn2 wins_
+        ma $ func2 wins_ gg dd bits g w (wins g w =: win w)
+        -- s ["A",
+        -- s ["A", deterministicGame', m g, "is a", nS 2, "which can at one", interface, "be connected to a", nS 1, m w, "called a", player, or, winner, "and at the other", interface, "outputs a bit (indicating whether or not the game is won)"]
+        -- tikzFig "Deterministic Game System" [] $ raw $ [litFile|src/Cryptography/ComputationalProblems/GameTikZ.tex|]
+    -- nte $ do
+    --     s ["Because a combined", deterministicGame, "-", player, system, "is entirely deterministic, we sometimes view these combined systems under the", injection, "that maps them to the output bit"]
+
+performanceOfADeterministicGame :: Note
+performanceOfADeterministicGame = de $ do
+    let g = gme_
+        w = plr_
+    let dd = mathcal "W"
+    s [the, performanceFunction, "of a", deterministicGame, m g, "is defined by viewing its", players, "as solvers"]
+    s [the, set, "of", performanceValues, "is", m bits, "and the", performanceFunction, "is defined by whether a", player, "wins the", deterministicGame]
+    let win_ = omega !: g
+        win = fn win_
+    ma $ func (perff g) dd bits w $ win w
+
 
 probabillisticGameDefinition :: Note
 probabillisticGameDefinition = do
     de $ do
-        lab probabillisticGameDefinitionLabel
-        let g = gmev_
-            w = plrv_
-        s ["A", probabillisticGame', m g, "is a", nPS 2, "which can at one", interface, "be connected to a", nPS 1, m w, "called a", player, or, winner, "and at the other", interface, "outputs a bit (indicating whether or not the game is won)"]
-    nte $ do
-        s ["Because the combination of a", probabillisticGame, anda, player, "can be thought of as a", randomVariable, "in itself, we often view the output bit as a", randomVariable, "as well"]
+        let gg = mathcal "G"
+        s ["Let", m gg, "be a", set, "of", deterministicGames]
+        s ["A", probabillisticGame', "is a", xRv gg]
+        let dd = mathcal "W"
+        s ["Let", m dd, "be a", set, "of", solvers, "for all the", games, "in", m gg]
+        s ["A", probabillisticWinner, "is a", xRv dd]
+        s ["A", probabillisticGame', "can be played by either a", deterministicWinner, "or a", probabillisticWinner]
+        -- lab probabillisticGameDefinitionLabel
+        -- let g = gmev_
+        --     w = plrv_
+        -- s ["A", probabillisticGame', m g, "is a", nPS 2, "which can at one", interface, "be connected to a", nPS 1, m w, "called a", player, or, winner, "and at the other", interface, "outputs a bit (indicating whether or not the game is won)"]
+    -- nte $ do
+        -- s ["Because the combination of a", probabillisticGame, anda, player, "can be thought of as a", randomVariable, "in itself, we often view the output bit as a", randomVariable, "as well"]
 
-performanceOfAGame :: Note
-performanceOfAGame = de $ do
-    s [the, performanceFunction, "of a", deterministicGame, "is defined by viewing its", players, "as solvers"]
-    s [the, set, "of", performanceValues, "is", m bits, "and the", performanceFunction, "is defined by whether a", player, "wins the", deterministicGame]
+performanceOfAProbabillisticGame :: Note
+performanceOfAProbabillisticGame = de $ do
+    let w = plr_
+    let gg = mathcal "G"
+        gr = "G"
+    let dd = mathcal "W"
+        ww = "W"
+    s ["Let", m gg, "be a", set, "of", games, and, m dd, "a", set, "of", solvers, "for all the", games, "in", m gg]
+    s ["Let", m gr, "be a", probabillisticGame <> ", then we define the", performanceFunction, with, performanceValues, "in", m $ ccint 0 1, for, deterministicWinners, "as follows"]
+    let wins_ = omega
+        wins = fn2 wins_
+    ma $ func (perff gr) dd (ccint 0 1) w $ prob (wins gr w =: 1)
+    s ["Let", m ww, "be a", probabillisticWinner <> ", then we define the", performanceFunction, with, performanceValues, "in", m $ ccint 0 1, "as follows"]
+    ma $ perf gg ww =: prob (wins gr ww =: 1)
+    clarify "Is that a function over a set of random variables?"
+
+    -- s [the, performanceFunction, "of a", probabillisticGame, "is defined with", m $ ccint 0 1, "as the set of", performanceValues, "as the", performanceFunction, "of the", weightedAverageCaseProblem]
+    -- let gg = gmev_
+    --     ww = plrv_
+    -- ma $ func (perff gg) (solvs ww) bits ww $ (ev $ conv_ gg ww) =: prob (conv_ gg ww =: 1)
+
+
+multigameDefinition :: Note
+multigameDefinition = de $ do
     let g = gme_
         w = plr_
-    ma $ func (perff g) (solvs g) bits w $ conv_ g w
-    s [the, performanceFunction, "of a", probabillisticGame, "is defined with", m $ ccint 0 1, "as the set of", performanceValues, "as the", performanceFunction, "of the", weightedAverageCaseProblem]
-    let gg = gmev_
-        ww = plrv_
-    ma $ func (perff gg) (solvs ww) bits ww $ (ev $ conv_ gg ww) =: prob (conv_ gg ww =: 1)
+    let gg = mathcal "G"
+    let dd = mathcal "W"
+    s ["Let", m gg, "be a", set, "of", games, and, m dd, "a", set, "of", solvers, "for all the", games, "in", m gg]
+    let i = "i"
+        wins_ i = omega !: i
+        wins i = fn2 $ wins_ i
+    s ["Consider the scenario in which there are multiple", winningConditions, m $ wins_ i]
+    ma $ fun2 (wins_ i) gg dd bits
+    s [m $ wins i g w, "is interpreted as", dquoted $ s [m w, "wins the", m i <> "-th subgame of", m g]]
+    s ["We then call this a", multiGame']
 
 searchProblemDefinition :: Note
 searchProblemDefinition = do
