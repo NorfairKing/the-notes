@@ -632,8 +632,6 @@ bitGuessingPerformanceAmplification = thm $ do
         s ["Hence the success probability of", m st, "is at least", m $ 1 - delta / 2, "and the", performance, "of", m st, "is at least", m $ 1 - delta]
 
 
-
-
 dlNotation :: Note
 dlNotation = de $ do
     s ["We use", m $ dlp dlgrp_, "to denote the", discreteLogarithm, searchProblem, "in the", group, m dlgrp_]
