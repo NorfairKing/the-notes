@@ -101,8 +101,17 @@ probl_ = "p"
 
 -- * Distinction problems
 
+objs_ :: Note
+objs_ = mathcal "O"
+
 dprob :: Note -> Note -> Note
 dprob s1 s2 = autoBrackets langle rangle $ s1 <> comm0 "mid" <> s2
+
+guess_ :: Note
+guess_ = kappa
+
+guess :: Note -> Note -> Note
+guess = fn2 guess_
 
 -- | A given Distinguisher's advantage
 dadv :: Note -> Note -> Note -> Note

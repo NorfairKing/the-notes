@@ -36,7 +36,11 @@ makeDefs
 
     , "advantage"
 
+    , "deterministic distinction problem"
+    , "probabillistic distinction problem"
     , "distinction problem"
+    , "deterministic distinguisher"
+    , "probabillistic distinguisher"
     , "distinguisher"
     , "deterministic distinction game"
     , "distinction game"
