@@ -31,6 +31,7 @@ randomVariableS = section "Random Variables" $ do
     copiesOfRandomVariablesSS
     typesOfRandomVariables
     momentsOfRandomVariables
+    inequalitiesSS
 
 psDec :: Note
 psDec = s ["Let ", m prsp_, " be a ", probabilitySpace]
@@ -484,7 +485,6 @@ momentsOfRandomVariables = subsection "Moments of random variables" $ do
         productOfRandomVariablesIsRandomVariableTheorem
         expectedValueOfProductTheorem
 
-    subsubsection "Inequalities involving random variables" $ todo "TODO"
     subsubsection "Higher moments" $ todo "TODO"
 
 expectedValueDefinition :: Note
@@ -634,6 +634,70 @@ expectedValueOfProductTheorem = thm $ do
         y = "Y"
     s ["Let ", m x, and, m y, "be", independent, randomVariables, "in a", probabilitySpace, m prsp_]
     ma $ ev (x * y) =: ev x * ev y
+
+
+inequalitiesSS :: Note
+inequalitiesSS = subsection "Inequalities" $ do
+    empiricalMeanDefinition
+    hoeffdingsInequalityTheorem
+
+-- TODO move this?
+empiricalMeanDefinition :: Note
+empiricalMeanDefinition = de $ do
+    lab empiricalMeanDefinitionLabel
+    lab sampleMeanDefinitionLabel
+    let x = "X"
+        n = "n"
+        i = "i"
+        (_, _, _, xi, xs) = buildiList x n i
+        xx = mathcal x
+    s ["Let", m xs, "be", xRvs xx]
+    s [the, empiricalMean', or, sampleMean', m $ emean x, "of", m xs, "is defined as follows"]
+    ma $ emean x =: sumcmpr (i =: 1) n xi
+
+hoeffdingsInequalityTheorem :: Note
+hoeffdingsInequalityTheorem = do
+    let x = "X"
+        n = "n"
+        i = "i"
+        (_, _, _, xi, xs) = buildiList x n i
+        a = "a"
+        (_, _, _, ai, as) = buildiList a n i
+        b = "b"
+        (_, _, _, bi, bs) = buildiList b n i
+    let t = "t"
+    thm $ do
+        lab hoeffdingsInequalityTheoremLabel
+        s ["Let", m xs, be, independent, randomVariables <> ", each", m xi, "bounded by an interval", m $ ccint ai bi, "for real numbers", m as, and, m bs]
+        ma $ prob ((pars $ emean x - ev (emean x)) >= t) <= exp (- (2 * n ^ 2 * t ^ 2) / (sumcmpr (i =: 1) n ((pars $ bi - ai) ^ 2)))
+        ma $ prob ((abs  $ emean x - ev (emean x)) >= t) <= 2 * exp (- (2 * n ^ 2 * t ^ 2) / (sumcmpr (i =: 1) n ((pars $ bi - ai) ^ 2)))
+        s ["These inequalities can also be expressed in terms of the sum of", m xs, "as follows"]
+        let sn = "S" !: n
+        ma $ sn =: sumcmpr (i =: 1) n xi
+        ma $ prob ((pars $ sn - ev sn) >= t) <= exp (- (2 * t ^ 2) / (sumcmpr (i =: 1) n ((pars $ bi - ai) ^ 2)))
+        ma $ prob ((abs  $ sn - ev sn) >= t) <= 2 * exp (- (2 * t ^ 2) / (sumcmpr (i =: 1) n ((pars $ bi - ai) ^ 2)))
+
+        s ["Where these inequalities are valid for positive values of", m t]
+        toprove_ "Maybe don't prove it myself, just reference the paper?"
+    con $ do
+        s ["If all", m ai, are, m 0, "and all", m bi, "are", m 1, "then we have the following more specific inequality"]
+        ma $ prob ((pars $ emean x - ev (emean x)) >= t) <= exp (- 2 * n * t ^ 2)
+        toprove_ "Maybe don't prove it myself, just reference the paper? But definitely have a separate proof"
+    con $ do
+        let a = alpha
+        s ["Let", m $ a ∈ ooint 0 1, "and let", m xs, be, independent, and, "identically distributed", xRvs $ setofs [0, 1], "as follows"]
+        let p = "p"
+        ma $ fa i $ prob (xi =: 1) =: p
+        s [hoeffdingsInequality, "then finds us the following bounds"]
+        ma $ prob (sumcmpr (i =: 1) n xi <= (pars $ p - a) * n) <= exp (- 2 * a ^ 2 * n)
+        ma $ prob (sumcmpr (i =: 1) n xi >= (pars $ p + a) * n) <= exp (- 2 * a ^ 2 * n)
+
+
+
+
+
+
+
 
 
 

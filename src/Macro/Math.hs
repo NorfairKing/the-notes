@@ -318,6 +318,10 @@ logn n m = comm0 "log" !: n <> m
 log2 :: Note -> Note
 log2 = logn 2
 
+-- | Natural logarithm
+ln :: Note -> Note
+ln = logn "e"
+
 -- * Cdot
 
 cdot_ :: Note

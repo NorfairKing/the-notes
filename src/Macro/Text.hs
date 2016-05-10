@@ -145,6 +145,9 @@ define = "define"
 equals :: Note
 equals = "equals"
 
+holds :: Note
+holds = "holds"
+
 kul :: Note
 kul = "KU Leuven"
 

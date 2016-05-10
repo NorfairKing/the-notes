@@ -160,3 +160,11 @@ clon x q = x ^: (sqbrac q)
 -- * Statistical distance
 statd :: Note -> Note -> Note
 statd = fn2 delta
+
+-- * Empirical
+
+-- | Empirical mean
+emean :: Note -> Note
+emean = comm1 "overline"
+
+-- TODO Empirical variance

@@ -41,7 +41,7 @@ import           Text.LaTeX.Base.Pretty
 import           Text.LaTeX.Base.Syntax
 import           Text.LaTeX.Packages.AMSFonts hiding (integers)
 import           Text.LaTeX.Packages.AMSMath  hiding (bullet, div_, equation,
-                                               mp, partial, pm, subset, to,
+                                               ln, mp, partial, pm, subset, to,
                                                (!:), (^:))
 import           Text.LaTeX.Packages.AMSThm   hiding (TheoremStyle (..), proof,
                                                theorem)

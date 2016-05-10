@@ -34,6 +34,9 @@ makeDefs [
     , "correlation"
     , "variance"
     , "standard deviation"
+    , "empirical mean"
+    , "sample mean"
+    , "Hoeffding's inequality"
     ]
 
 makeThms [
@@ -41,4 +44,11 @@ makeThms [
     , "Linearity of expectation"
     , "Variance in terms of expectation"
     , "statistical distance unamplifiable"
+    , "Hoeffding's inequality"
     ]
+
+xRv :: Note -> Note
+xRv x = m x <> "-" <> randomVariable
+
+xRvs :: Note -> Note
+xRvs x = m x <> "-" <> randomVariable

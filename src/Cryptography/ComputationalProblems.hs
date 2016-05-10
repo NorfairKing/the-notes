@@ -19,6 +19,7 @@ import           Logic.PropositionalLogic.Macro
 import           NumberTheory.Macro
 import           NumberTheory.Terms
 import           Probability.Distributions.Macro
+import           Probability.Independence.Terms
 import           Probability.ProbabilityMeasure.Macro
 import           Probability.ProbabilityMeasure.Terms
 import           Probability.RandomVariable.Macro
@@ -78,6 +79,7 @@ computationalProblemsS = section "Computational Problems" $ do
             bitGuesserAdvantageDefinition
             bitGuessingGameDefinition
             distinctionBitGuessingEquivalenceLemma
+            bitGuessingPerformanceAmplification
 
         subsubsection "Search problems" $ do
             searchProblemDefinition
@@ -584,6 +586,52 @@ distinctionBitGuessingEquivalenceLemma = lem $ do
             b = "B"
         s ["We prove this by showing that for any", distinctionProblem, m d, "there exists a", bitGuessingProblem, m b, "such that every", distinguisher, "for", m d, "can be used to construct a", bitGuesser, for, m b, "with the same (or better)", advantage]
         toprove
+
+bitGuessingPerformanceAmplification :: Note
+bitGuessingPerformanceAmplification = thm $ do
+    let pp = mathcal "P"
+        p = spwc pp
+    s ["Let", m pp, "be a", set, "of", bitGuessingProblems, and, "let", m p, "be their", worstCaseProblem]
+    let sl = "S"
+        e = epsilon
+    s ["Let", m sl, "be a", solver, with, performance, m e, on, m p]
+    ma $ perf p sl =: e
+    let st = "T"
+        q = "n"
+    s ["Let", m $ nat q, "be an", odd, naturalNumber, "and let", m st, "be the", solver, "that invokes", m sl, "exactly", m q, "times (each time which fresh and independent randomness) and then outputs the majority-voted bit"]
+    let d = delta
+    s ["Let", m $ d ∈ ooint 0 1, "be a real number"]
+    let qb = 2 / e ^ 2 * ln (2 / delta)
+    s ["For", m st, "to have a", performance, "greater than, or equal to", m (1 - delta) <> ", it needs to call", m sl, "at least", m qb, "times"]
+    ma $ q >= qb ⇒ perf p st >= (1 - delta)
+
+    proof $ do
+        let x = "X"
+            i = "i"
+            (_, _, _, xi, xs) = buildiList x q i
+        let p = "p"
+        s ["Let", m xs, "be the", xRvs bits, "that represent whether the bit that", m sl, "outputs was correct in each of", m q, "rounds"]
+        s ["Because", m sl, "has", performance, m e, "we find the following"]
+        ma $ p =: prob (xi =: 1) =: (1 / 2) + (e / 2)
+        s ["Now note that all", m xi, are, independent, "and that", m st, "outputs the wrong bit if and only if", m sl, "outputs more wrong bits than correct bits"]
+        s ["This that", m st, "outputs the wrong bit with the following", probability]
+        ma $ prob (sumcmpr (i =: 1) q xi < (q / 2))
+        let a = alpha
+        s ["Define", m a, "as", m $ (e / 2) =: p - (1 / 2), "such that", m $ (pars $ p - a) * q =: (q / 2), holds]
+        s ["We now use", hoeffdingsInequality, ref hoeffdingsInequalityTheoremLabel, "to obtain the following bound in this probability"]
+        ma $ prob (sumcmpr (i =: 1) q xi < (pars $ p - a) * q) <= exp (-2 * a ^ 2 * q)
+            =: exp (- (q * e ^ 2) / 2)
+        s ["Let", m q, "now be greater than, or equal to", m qb, "and use that the exponential function is", monotonic]
+        refneeded "proof that exp is monotonic"
+        ma $ exp (- (q * e ^ 2) / 2)
+            <= exp (- ((2 / e ^ 2 * ln (2 / delta)) * e ^ 2) / 2)
+            =: exp (- ((2 * ln (2 / delta))) / 2)
+            =: exp (- (ln (2 / delta)))
+            =: 1 / (2 / delta)
+            =: (delta / 2)
+        s ["Hence the success probability of", m st, "is at least", m $ 1 - delta / 2, "and the", performance, "of", m st, "is at least", m $ 1 - delta]
+
+
 
 
 dlNotation :: Note
