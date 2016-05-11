@@ -75,6 +75,7 @@ computationalProblemsS = section "Computational Problems" $ do
             bestDistinguisherAdvantage
             distinctionAdvantagePseudoMetric
             distinctionAdvantageRandomVariables
+            splittingDistinctionProblem
 
         subsubsection "Bit guessing problems" $ do
             bitGuessingProblemDefinition
@@ -595,6 +596,7 @@ bestDistinguisherAdvantage = de $ do
     s [the, advantage, "of the best", distinguisher, "is defined as follows"]
     let d = "D"
     ma $ dadv ds oo0 oo1 =: supcomp (d ∈ ds) (dadv d oo0 oo1)
+    s ["We use", m $ dadvs oo0 oo1, "to mean the", advantage, "of the best", distinguisher, "out of all possible", distinguishers]
     todo "probabillistic distinguishers are not better than deterministic ones"
 
 distinctionAdvantagePseudoMetric :: Note
@@ -612,10 +614,25 @@ distinctionAdvantageRandomVariables :: Note
 distinctionAdvantageRandomVariables = lem $ do
     let x = "X"
         y = "Y"
-        dom = "A"
-    s ["Let", m x, and, m y, "be two", nPSs 1, "that each output only a single value in some", set, m dom, "(and can therefore be thought of as", randomVariables <> ")"]
-    s ["The best", distinguisher, "for the", distinctionProblem, m $ dprob x y, "has", advantage, m $ statd x y]
+    s ["Let", m x, and, m y, "be two", xRvs reals]
+    s [the, advantage, "of the best", distinguisher, "for", m $ dprob x y, "is the", statisticalDistance, m $ statd x y]
+    ma $ dadvs x y =: statd x y
+    toprove
     todo "Does there really exist such a distinguisher or it just an upper bound?"
+
+splittingDistinctionProblem :: Note
+splittingDistinctionProblem = lem $ do
+    let o = "O"
+        k = "k"
+        i = "i"
+        (o1, o2, ok, os) = buildList o k
+        oo = mathcal "O"
+    s ["Let", m os, "be objects in (or", randomVariables, "over) a", set, m oo]
+    s [m $ dprob o1 ok, "can be reduced to the combination of the problems", m $ dprob (o !: i) (o !: (i + 1))]
+    s ["Then we find the following"]
+    let d = "D"
+    ma $ fa d $ dadv d o1 ok =: dadv d o1 o2 + dadv d o2 (o !: 3) + dotsb + dadv d (o !: (k - 1)) ok
+    toprove
 
 
 bitGuessingProblemDefinition :: Note
