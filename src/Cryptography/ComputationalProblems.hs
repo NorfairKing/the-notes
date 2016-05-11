@@ -31,7 +31,6 @@ import           Sets.Basics.Terms
 import           Sets.Partition.Terms
 
 import           Cryptography.SymmetricCryptography.Macro
-import           Cryptography.SystemAlgebra.AbstractSystems.Macro
 import           Cryptography.SystemAlgebra.AbstractSystems.Terms
 import           Cryptography.SystemAlgebra.DiscreteSystems.Terms
 
@@ -73,6 +72,7 @@ computationalProblemsS = section "Computational Problems" $ do
             probabillisticDistinguisherDefinition
             distinguisherAdvantageDefinition
             -- distinctionGameDefinition
+            bestDistinguisherAdvantage
             distinctionAdvantagePseudoMetric
             distinctionAdvantageRandomVariables
 
@@ -470,8 +470,8 @@ deterministicDistinctionProblemDefinition = de $ do
     s ["Let", m objs_, "be an abstract set of objects"]
     s ["A", deterministicDistinctionProblem', "is the", problem, "of distinguishing between two fixed objects from a set", m objs_]
     let o = "o"
-        o1 = o !: 1
-        o2 = o !: 2
+        o1 = o !: 0
+        o2 = o !: 1
         p = dprob o1 o2
     s ["A", deterministicDistinctionProblem, "consists of a pair", m $ tuple o1 o2, "of objects from", m objs_, "and is denoted as", m p]
     -- let ss = "S"
@@ -485,9 +485,9 @@ deterministicDistinguisherDefinition = do
     de $ do
         lab distinguisherDefinitionLabel
         let o = "o"
+            o0 = o !: 0
             o1 = o !: 1
-            o2 = o !: 2
-            p = dprob o1 o2
+            p = dprob o0 o1
         s ["Let", m p, "be a", distinctionProblem]
         let ds = mathcal "D"
         s ["A", solver, "which, in this case, is called", distinguisher', "is supposed to guess which of the two objects it is given access to"]
@@ -510,42 +510,62 @@ probabillisticDistinctionProblemDefinition :: Note
 probabillisticDistinctionProblemDefinition = de $ do
     s ["Let", m objs_, "be a set of objects"]
     let o = "O"
+        o0 = o !: 0
         o1 = o !: 1
-        o2 = o !: 2
-        p = dprob o1 o2
-    s ["If", m o1, and, m o2, are, xRvs objs_, "then we call", m p, "a", probabillisticDistinctionProblem']
+        p = dprob o0 o1
+    s ["If", m o0, and, m o1, are, xRvs objs_, "then we call", m p, "a", probabillisticDistinctionProblem']
 
 
 probabillisticDistinguisherDefinition :: Note
 probabillisticDistinguisherDefinition = de $ do
     let o = "o"
+        o0 = o !: 0
         o1 = o !: 1
-        o2 = o !: 2
-        p = dprob o1 o2
+        p = dprob o0 o1
     let ds = mathcal "D"
     s ["let", m p, "be a", distinctionProblem, and, m ds, "a", set, "of", deterministicDistinguishers]
     s ["A", probabillisticDistinguisher', "is a", xRv ds]
 
 distinguisherAdvantageDefinition :: Note
-distinguisherAdvantageDefinition = do
-    todo "Rework with each of the four options"
-    let ss = "S"
-        s0 = ss !: 0
-        s1 = ss !: 1
-        d = "D"
-    de $ do
-        let p = dprob s0 s1
-            ad = dadv d s0 s1
-        s [the, advantage', m ad, "of a", distinguisher, m d, "for a", distinctionProblem, m p, "in distinguishing", m s0, and, m s1, "is defined as follows"]
-        ma $ ad =: prob (conv_ d s1 =: 1) - prob (conv_ d s0 =: 1)
-    nte $ do
-        s ["Note that", m $ prob (conv_ d s1 =: 1), and, m $ prob (conv_ d s0 =: 1), "are probabilities in different random experiments"]
-        s ["In one experiment the", distinguisher, "is guessing the identity of", m s0, and, "in the other it's guessing the identity of", m s1]
-    de $ do
-        let dd = mathcal "D"
-        s ["We define the", advantage, "of a", set, m dd, "of", distinguishers, "as the", supremum, "of all the individual", distinguishers]
-        ma $ dadv dd s0 s1 =: supcomp (d ∈ dd) (dadv d s0 s1)
-        s ["Moreover, we denote the", advantage, "of the", set, "of all possible", distinguishers, "as", m $ dadvs s0 s1]
+distinguisherAdvantageDefinition = de $ do
+    let o = "o"
+        o0 = o !: 0
+        o1 = o !: 1
+        p = dprob o0 o1
+        d = "d"
+    s ["Let", m p, "be a", deterministicDistinctionProblem, and, m d, "a", deterministicDistinguisher]
+    s ["We define the", advantage', m $ dadv d o0 o1, "of", m d, "as follows"]
+    ma $ dadv d o0 o1 =: prob (guess d o1 =: 1) - prob (guess d o0 =: 1)
+    let dd = "D"
+    s ["If", m dd, "is a", probabillisticDistinguisher, "then we define the", advantage, "as follows"]
+    ma $ dadv dd o0 o1 =: prob (guess dd o1 =: 1) - prob (guess dd o0 =: 1)
+    let oo = "O"
+        oo0 = oo !: 0
+        oo1 = oo !: 1
+        pp = dprob oo0 oo1
+    s ["If", m pp, "is a", probabillisticDistinctionProblem, "then we define the", advantage, "as follows"]
+    ma $ dadv d oo0 oo1 =: prob (guess d oo1 =: 1) - prob (guess d oo0 =: 1)
+    s [the, advantage, "of a", probabillisticDistinguisher, m dd, "in a", probabillisticDistinctionProblem, m pp, "is defined as follows"]
+    ma $ dadv dd oo0 oo1 =: prob (guess dd oo1 =: 1) - prob (guess dd oo0 =: 1)
+    todo "Rewrite these in function definition (with sets) notation"
+
+    -- let ss = "S"
+    --     s0 = ss !: 0
+    --     s1 = ss !: 1
+    --     d = "D"
+    -- de $ do
+    --     let p = dprob s0 s1
+    --         ad = dadv d s0 s1
+    --     s [the, advantage', m ad, "of a", distinguisher, m d, "for a", distinctionProblem, m p, "in distinguishing", m s0, and, m s1, "is defined as follows"]
+    --     ma $ ad =: prob (conv_ d s1 =: 1) - prob (conv_ d s0 =: 1)
+    -- nte $ do
+    --     s ["Note that", m $ prob (conv_ d s1 =: 1), and, m $ prob (conv_ d s0 =: 1), "are probabilities in different random experiments"]
+    --     s ["In one experiment the", distinguisher, "is guessing the identity of", m s0, and, "in the other it's guessing the identity of", m s1]
+    -- de $ do
+    --     let dd = mathcal "D"
+    --     s ["We define the", advantage, "of a", set, m dd, "of", distinguishers, "as the", supremum, "of all the individual", distinguishers]
+    --     ma $ dadv dd s0 s1 =: supcomp (d ∈ dd) (dadv d s0 s1)
+    --     s ["Moreover, we denote the", advantage, "of the", set, "of all possible", distinguishers, "as", m $ dadvs s0 s1]
 
 -- distinctionGameDefinition :: Note
 -- distinctionGameDefinition = de $ do
@@ -563,6 +583,19 @@ distinguisherAdvantageDefinition = do
 --     s [the, performanceValues, "of such a", solver, "lie in the interval", m $ ccint (-1) 1]
 --     newline
 --     s [the, performanceFunction, "is then defined as mapping a", distinguisher, "to its", advantage]
+
+bestDistinguisherAdvantage :: Note
+bestDistinguisherAdvantage = de $ do
+    let oo = "O"
+        oo0 = oo !: 0
+        oo1 = oo !: 1
+        pp = dprob oo0 oo1
+    let ds = mathcal "D"
+    s ["Let", m ds, "be a", set, "of", distinguishers, "for a", distinctionProblem, m pp]
+    s [the, advantage, "of the best", distinguisher, "is defined as follows"]
+    let d = "D"
+    ma $ dadv ds oo0 oo1 =: supcomp (d ∈ ds) (dadv d oo0 oo1)
+    todo "probabillistic distinguishers are not better than deterministic ones"
 
 distinctionAdvantagePseudoMetric :: Note
 distinctionAdvantagePseudoMetric = lem $ do
