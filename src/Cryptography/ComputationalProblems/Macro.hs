@@ -4,6 +4,7 @@ import           Types
 
 import           Functions.Application.Macro
 import           Groups.Macro
+import           Macro.Math
 import           Macro.MetaMacro
 import           Macro.Tuple
 
@@ -122,6 +123,9 @@ dadvs :: Note -> Note -> Note
 dadvs = fn2 $ comm0 "Delta"
 
 -- * Bit guessing problems
+
+bgprob :: Note -> Note -> Note
+bgprob s z = sqbrac $ s <> "; " <> z
 
 -- Guesser's advantage
 gadv :: Note -> Note

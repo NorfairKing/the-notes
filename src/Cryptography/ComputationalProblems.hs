@@ -81,17 +81,20 @@ computationalProblemsS = section "Computational Problems" $ do
             bitGuessingProblemDefinition
             bitGuesserDefinition
             bitGuesserAdvantageDefinition
-            bitGuessingGameDefinition
+            -- bitGuessingGameDefinition
             distinctionBitGuessingEquivalenceLemma
             bitGuessingPerformanceAmplification
 
         subsubsection "Search problems" $ do
             searchProblemDefinition
             searchProblemSolverDefinition
-            searchProblemGameDefinition
+            -- searchProblemGameDefinition
             searchProblemSolverRepetition
             functionInversionDefinition
             oneWayFunctionDefinition
+
+        subsubsection "Discrete games" $ do
+            discreteGameDefinition
 
 
     subsection "Discrete Logarithms" $ do
@@ -638,35 +641,46 @@ splittingDistinctionProblem = lem $ do
 bitGuessingProblemDefinition :: Note
 bitGuessingProblemDefinition = de $ do
     lab bitGuessingProblemDefinitionLabel
-    s ["A", bitGuessingProblem', "is a", nS 1, "that outputs a single bit"]
+    s ["A", bitGuessingProblem', "is the abstract problem of guessing a hidden bit from a given object"]
+    let o = "o"
+        oo = mathcal "O"
+        z = "z"
+    s ["Concretely: Let", m o, "be an objects from a", set, m oo, "of objects", and, m $ z ∈ bits, "a bit"]
+    s [m $ bgprob o z, "is then the problem of guessing", m z, from, m o]
+    todo "Split into deterministic and probabillistic"
 
 bitGuesserDefinition :: Note
 bitGuesserDefinition = de $ do
     lab bitGuesserDefinitionLabel
-    s ["A", bitGuesser', "is a", nS 1, "that outputs a single bit at its", interface]
+    let ds = "D"
+        oo = mathcal "O"
+    s ["Let", m ds, "be a", set, "of so-called", bitGuessers, "for a", bitGuessingProblem, "for the objects in", m oo]
+    s ["A", bitGuesser', "is an abstract object in", m ds, "such that there exists a so-called guessing-function", m guess_, "as follows"]
+    ma $ fun2 guess_ ds oo bits
+    let d = "d"
+        o = "o"
+        z = "z"
+    s [m $ guess d o =: z, "can be interpreted as the statement that", m d, "guesses the bit", m z, "upon receiving object", m o]
 
 bitGuesserAdvantageDefinition :: Note
 bitGuesserAdvantageDefinition = de $ do
-    let g = "G"
-        b = "B"
-    s [the, advantage, "of a", bitGuesser, m g, advantage', "in a", bitGuessingProblem, m b, "is defined as follows"]
-    let z = "z"
-        zg = z !: g
-        zb = z !: b
-    s ["Let", m zg, "be the bit output by", m g, and, m zb, "the bit output by", m b]
-    ma $ gadv g =: 2 * (pars $ prob (zg =: zb) - (1 / 2))
+    let gg = "G"
+        oo = "O"
+        zz = "Z"
+    s [the, advantage, "of a", bitGuesser, m gg, advantage', "in a", bitGuessingProblem, m $ bgprob oo zz, "is defined as follows"]
+    ma $ gadv gg =: 2 * (pars $ prob (guess gg oo =: zz) - (1 / 2))
     s ["The value of the", advantage, "lies in the interval", m $ ccint (-1) 1]
 
-bitGuessingGameDefinition :: Note
-bitGuessingGameDefinition = de $ do
-    let b = "B"
-    s ["A", deterministicBitGuessingGame', "for a", bitGuessingGame, m b, "(deterministically) has", m b, "output its bit and receives a bit at its inside interface from a", player]
-    s ["It then outputs a set bit (win) if the two bits equal"]
-    newline
-    s ["A (probabillistic)", bitGuessingGame', "for a", bitGuessingProblem, m b, "is", game, "is a", randomVariable, "over the deterministic", bitGuessingGames, for, m b]
-    s ["A", solver, "for a", bitGuessingGame, "for a", bitGuessingProblem, m b, "is a", bitGuesser, for, m b]
-    s [the, performanceValues, "of such a", solver, "lie in the interval", m $ ccint (-1) 1]
-    s [the, performanceFunction, "is then defined as mapping a", bitGuesser, "to its", advantage]
+-- bitGuessingGameDefinition :: Note
+-- bitGuessingGameDefinition = de $ do
+--     let b = "B"
+--     s ["A", deterministicBitGuessingGame', "for a", bitGuessingGame, m b, "(deterministically) has", m b, "output its bit and receives a bit at its inside interface from a", player]
+--     s ["It then outputs a set bit (win) if the two bits equal"]
+--     newline
+--     s ["A (probabillistic)", bitGuessingGame', "for a", bitGuessingProblem, m b, "is", game, "is a", randomVariable, "over the deterministic", bitGuessingGames, for, m b]
+--     s ["A", solver, "for a", bitGuessingGame, "for a", bitGuessingProblem, m b, "is a", bitGuesser, for, m b]
+--     s [the, performanceValues, "of such a", solver, "lie in the interval", m $ ccint (-1) 1]
+--     s [the, performanceFunction, "is then defined as mapping a", bitGuesser, "to its", advantage]
 
 distinctionBitGuessingEquivalenceLemma :: Note
 distinctionBitGuessingEquivalenceLemma = lem $ do
@@ -742,27 +756,27 @@ searchProblemSolverDefinition = do
     nte $ do
         s ["The output of a", probabillisticSearchProblemSolver, "for a given instance is a", randomVariable, "over the", witnessSpace, m wsp_]
 
-searchProblemGameDefinition :: Note
-searchProblemGameDefinition = de $ do
-    lab searchProblemGameDefinitionLabel
-    s ["Let", m $ probl_ =: sprob_, "be a", searchProblem]
-    let x = "x"
-        w = "w"
-    s ["A", deterministicSearchProblemGame, for, m probl_, anda, "given instance", m x, "(deterministically) outputs", m x, "at its inside", interface, "and receives a", witness, m w, "at that same", interface]
-    s ["It then outputs a set bit (win) if", m $ sol x w, "holds"]
-    s ["For a", deterministicSearchProblemGame, "the", performanceValues, "are", m bits]
-    newline
-    let g = "G"
-    s ["A", probabillisticSearchProblemGame, m g, for, m probl_, "is a", randomVariable, "over the", deterministicSearchProblemGames, for, m probl_]
-    let sl = "S"
-    s ["A solver is then a", probabillisticSearchProblemSolver, m sl]
-    s [the, performanceValues, "lie in the interval", m $ ccint 0 1, "and the", performanceFunction, "is defined as follows"]
-    let xx = "X"
-    ma $ perf g sl =: prob (sol xx (fn sl xx))
-    s ["Here", m xx, "is the", randomVariable, "corresponding to the input to the", searchProblemSolver]
-    s ["In other words, the", performance, "of a", searchProblemSolver, "is the", probability, "that it finds a valid", witness]
-
-    todo "define advantage independently of game, just for a solver?"
+-- searchProblemGameDefinition :: Note
+-- searchProblemGameDefinition = de $ do
+--     lab searchProblemGameDefinitionLabel
+--     s ["Let", m $ probl_ =: sprob_, "be a", searchProblem]
+--     let x = "x"
+--         w = "w"
+--     s ["A", deterministicSearchProblemGame, for, m probl_, anda, "given instance", m x, "(deterministically) outputs", m x, "at its inside", interface, "and receives a", witness, m w, "at that same", interface]
+--     s ["It then outputs a set bit (win) if", m $ sol x w, "holds"]
+--     s ["For a", deterministicSearchProblemGame, "the", performanceValues, "are", m bits]
+--     newline
+--     let g = "G"
+--     s ["A", probabillisticSearchProblemGame, m g, for, m probl_, "is a", randomVariable, "over the", deterministicSearchProblemGames, for, m probl_]
+--     let sl = "S"
+--     s ["A solver is then a", probabillisticSearchProblemSolver, m sl]
+--     s [the, performanceValues, "lie in the interval", m $ ccint 0 1, "and the", performanceFunction, "is defined as follows"]
+--     let xx = "X"
+--     ma $ perf g sl =: prob (sol xx (fn sl xx))
+--     s ["Here", m xx, "is the", randomVariable, "corresponding to the input to the", searchProblemSolver]
+--     s ["In other words, the", performance, "of a", searchProblemSolver, "is the", probability, "that it finds a valid", witness]
+--
+--     todo "define advantage independently of game, just for a solver?"
 
 searchProblemSolverRepetition :: Note
 searchProblemSolverRepetition = thm $ do
@@ -1144,7 +1158,21 @@ oneWayFunctionDefinition = de $ do
     s ["A", oneWayFunction', "is a", function, "such that its", functionInversion, searchProblem, "is computationally hard"]
 
 
+discreteGameDefinition :: Note
+discreteGameDefinition = de $ do
+    let xx = mathcal "X"
+        yy = mathcal "Y"
+    s ["A", deterministicDiscreteGame', or, dDS', "can be described as a", xyS xx yy, "in addition to outputing an", element, "of", m yy, "upon receival of an input", element, "of", m xx, "it also outputs a bit indicating whether the game has been won"]
+    s ["The bit is monotone in the sense that it is initally set to", m 0 <> ", changes to", m 1, "once the game is won and never changes back"]
+    s ["For", xyDS xx (yy ⨯ bits) <> ", the binary component of the output is called a", monotoneBinaryOutput', or, mBO']
+    s ["Such a", deterministicDiscreteSystem, "with a", monotoneBinaryOutput, "is called an", xyDDG xx yy]
 
+discreteGameWinnerDefinition :: Note
+discreteGameWinnerDefinition = de $ do
+    let xx = mathcal "X"
+        yy = mathcal "Y"
+    s ["A", deterministicDiscreteWinner', or, dDW', yxDDW yy xx, "for a", xyDDG xx yy, "is a", yxDE yy xx]
+    s ["A", dDW, "is generally understood not to receive the 'wins' bit"]
 
 
 

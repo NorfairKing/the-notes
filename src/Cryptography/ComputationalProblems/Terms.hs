@@ -63,6 +63,13 @@ makeDefs
     , "search problem game"
     , "success probability"
 
+    , "deterministic discrete game"
+    , "DDS"
+    , "monotone binary output"
+    , "MBO"
+    , "deterministic discrete winner"
+    , "DDW"
+
     , "discrete logarithm"
     , "DL"
 
@@ -97,6 +104,12 @@ dProblem d = m d <> "-" <> problem
 
 dProblem' :: Note -> Note
 dProblem' d = m d <> "-" <> problem'
+
+xyDDG :: Note -> Note -> Note
+xyDDG x y = m (tuple x y) <> "-" <> deterministicDiscreteGame
+
+yxDDW :: Note -> Note -> Note
+yxDDW x y = m (tuple y x) <> "-" <> deterministicDiscreteWinner
 
 makeThms
     [ "composition of reductions"

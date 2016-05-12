@@ -7,6 +7,7 @@ import           Cryptography.SystemAlgebra.AbstractSystems.Terms
 makeDefs
     [ "source"
     , "beacon"
+    , "deterministic discrete system"
     , "synchronous parallel composition"
     , "asynchronous parallel composition"
     , "deterministic environment"
