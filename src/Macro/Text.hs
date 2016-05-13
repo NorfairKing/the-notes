@@ -7,6 +7,7 @@ import           Types
 
 import           Data.List (intersperse)
 import           Prelude   (error, length, otherwise, sequence_, (++), (<))
+import           TH
 
 -- Polyvariadic version of 's'.
 p :: NoteArgs args => args
@@ -34,6 +35,40 @@ s :: [Note] -> Note
 s ns = do
     sequence_ $ intersperse " " ns
     ". "
+
+makeStrs
+    [ "holds"
+    , "equals"
+    , "define"
+    , "respectively"
+    , "because"
+    , "but"
+    , "at"
+    , "to"
+    , "from"
+    , "be"
+    , "with"
+    , "for"
+    , "on"
+    , "by"
+    , "over"
+    , "are"
+    , "is"
+    , "or"
+    , "and"
+    , "The"
+    ]
+
+makeAbbrs
+    [ ("anda", "and a")
+    , ("andan", "and an")
+    , ("wrt", "with respect to")
+    , ("beA", "be a")
+    , ("beAn", "be an")
+
+    , ("kul", "KU Leuven")
+    , ("eth", "ETH")
+    ]
 
 quoted :: Note -> Note
 quoted n = "`" <> n <> "'"
@@ -72,85 +107,3 @@ csa = commaSeparatedAnd
 
 cso :: [Note] -> Note
 cso = commaSeparatedOr
-
-and :: Note
-and = "and"
-
-anda :: Note
-anda = "and a"
-
-andan :: Note
-andan = "and an"
-
-or :: Note
-or = "or"
-
-is :: Note
-is = "is"
-
-are :: Note
-are = "are"
-
-the :: Note
-the = "The"
-
-by :: Note
-by = "by"
-
-on :: Note
-on = "on"
-
-over :: Note
-over = "over"
-
-wrt :: Note
-wrt = "with respect to"
-
-for :: Note
-for = "for"
-
-with :: Note
-with = "with"
-
-be :: Note
-be = "be"
-
-beA :: Note
-beA = "be a"
-
-beAn :: Note
-beAn = "be an"
-
-from :: Note
-from = "from"
-
-to :: Note
-to = "to"
-
-at :: Note
-at = "at"
-
-but :: Note
-but = "but"
-
-because :: Note
-because = "because"
-
-respectively :: Note
-respectively = "respectively"
-
-define :: Note
-define = "define"
-
-equals :: Note
-equals = "equals"
-
-holds :: Note
-holds = "holds"
-
-kul :: Note
-kul = "KU Leuven"
-
-eth :: Note
-eth = "ETH"
-

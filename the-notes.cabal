@@ -330,6 +330,7 @@ library
       TH.Command
       TH.Definition
       TH.Label
+      TH.Literal
       TH.LitFile
       TH.MetaLabel
       TheNotes
