@@ -55,6 +55,7 @@ computationalProblemsS = section "Computational Problems" $ do
 
     subsection "Reductions" $ do
         reductionDefinition
+        reductionReeinterpretation
         compositionOfReductions
         todo "generalised reductions for lists of problems"
 
@@ -141,17 +142,20 @@ aSolverDefinition = de $ do
     let a = "a"
     s ["A", solver, "for which the following holds is called an", nSolver' a, "for", m probl_, "if the following holds"]
     let sl = "s"
-    ma $ fa (sl ∈ solvs_) (perf_ sl ⊇: a)
+    ma $ fa (sl ∈ solvs_) (a ⊆: perf_ sl)
 
 informationTheoreticalHardness :: Note
-informationTheoreticalHardness = de $ do
-    s ["Let", m probl_, "be a", searchProblem, and, m solvs_, "a", set, "of", solvers, for, m probl_]
-    let po = partord_
-    s ["Let", m perfs_, "be the", set, performanceValues, "associated with", m probl_, "such that", m perfs_, "is equipped with a", partialOrder, m po]
-    let sl = "s"
-        e = epsilon
-    s ["If every", solver, m sl, "has a", performance, "smaller than some", m e <> ", we call", m probl_, "information-theoreticall", or, "unconditionally", eHard' e]
-    ma $ fa (sl ∈ solvs_) (perf_ sl ⊆: e)
+informationTheoreticalHardness = do
+    de $ do
+        s ["Let", m probl_, "be a", searchProblem, and, m solvs_, "a", set, "of", solvers, for, m probl_]
+        let po = partord_
+        s ["Let", m perfs_, "be the", set, performanceValues, "associated with", m probl_, "such that", m perfs_, "is equipped with a", partialOrder, m po]
+        let sl = "s"
+            e = epsilon
+        s ["If every", solver, m sl, "has a", performance, "smaller than some", m e <> ", we call", m probl_, "information-theoreticall", or, "unconditionally", eHard' e]
+        ma $ fa (sl ∈ solvs_) (perf_ sl ⊆: e)
+    nte $ do
+        s ["A statement like this is often called information-theoretic or unconditional hardness because it holds for any solver, independently of its complexity"]
 
 worstCaseDefinition :: Note
 worstCaseDefinition = de $ do
@@ -274,7 +278,7 @@ averageCasePerformanceDifference = lem $ do
         s ["Now we use that", m $ perf pr sl, "is less than, or equal to", m b, "and that", m $ perf pr sl, "is greater than, or equal to,", m a]
         ma $ "" <= b * sumcmp (pr ∈ ppl) (pars $ prob (p =: pr) - prob (q =: pr))
                  + a * sumcmp (pr ∈ pmn) (pars $ prob (p =: pr) - prob (q =: pr))
-        s ["We finish by noting that the first term in the rigth-hand side of this inequality, is the", statisticalDistance, "between", m p, and, m q, "while the second term is the exact opposite of that"]
+        s ["We finish by noting that the second factor of the first term in the rigth-hand side of this inequality, is the", statisticalDistance, "between", m p, and, m q, "while the second factor of the second term is the exact opposite of that"]
         ma $ "" =: b * statd p q - a * statd p q =: (pars $ b - a) * statd p q
 
 
@@ -293,6 +297,8 @@ reductionDefinition = do
         lab reductionDefinitionLabel
         lab reductionFunctionDefinitionLabel
         lab performanceTranslationFunctionDefinitionLabel
+        s ["A", reduction', from, m q, to, m p]
+        newline
         s ["Let", m p, and, m q, "be two", problems, and , m $ solvs p, and, m $ solvs q, sets, "of", solvers]
         let po = partord_
         s ["Let", m $ perfs p, and, m $ perfs q, "be the", sets, "of", performanceValues, "associated with", m p, and, m q, "respectively"]
@@ -320,14 +326,48 @@ reductionDefinition = do
         s ["We use a", reduction, "of", m q, to, m p, "to build a", solver, for, m q, "when we have a", solver, for, m p]
     nte $ do
         s ["The characteristic inequality of a reduction of", m q, to, m p, "can be interpreted as implying a lower bound on the performance of any solver for", m q, "in terms of", m p, "or as implying an upper bound on the performance for any solver for", m p, "in terms of", m q]
+    nte $ do
+        s ["That", m tau, "needs to be", monotonic, "entails that a better", solver, for, m p, "won't make for a worse", solver, for, m q]
     de $ do
         lab reducibleDefinitionLabel
         s ["A", problem, m p, "is said to be", reducible, "to another", problem, m q, "if there exists a", reduction, "of", m p, to, m q]
+
+reductionReeinterpretation :: Note
+reductionReeinterpretation = thm $ do
+    let p = "p"
+        q = "q"
+    let t_ = tau
+        t = fn t_
+        r_ = rho
+        r = fn r_
+        sl = "s"
+    s ["A", tReduction t_, m r_, "of a", problem, m p, "to a", problem, m q, "can equivalently be interpreted as follows"]
+    newline
+    let l_ = lambda
+        l = fn l_
+    s ["Let", m $ fun l_ (perfs q) (perfs p), "be a", monotone, function, "satisfying the following inequality"]
+    let (⊆:) = inposet $ partord_ !: p
+    let a = "a"
+    ma $ fa (a ∈ perfs p) $ a ⊆: l (t (a))
+    s [the, reduction, "inequality can then be rephrased as follows"]
+    ma $ fa (sl ∈ solvs p) $ perf p sl ⊆: l (perf q (r sl))
+
+    proof $ do
+
+        let (<<) = inposet $ partord_ !: q
+        ma $ centeredBelowEachOther
+            [ fa (sl ∈ solvs p) $ t (perf p sl) << perf q (r sl)
+            , fa (sl ∈ solvs p) $ l (t (perf p sl)) ⊆: l (perf q (r sl))
+            , fa (sl ∈ solvs p) $ perf p sl ⊆: l (perf q (r sl))
+            ]
+
 
 
 compositionOfReductions :: Note
 compositionOfReductions = thm $ do
     lab compositionOfReductionsTheoremLabel
+    textbf $ s [the, composition, "of", reductions]
+    newline
     let p = "p"
         q = "q"
         r = "r"
@@ -367,6 +407,7 @@ compositionOfReductions = thm $ do
 
         s ["Combining these two inequalities yields the theorem"]
         ma $ fa (sl ∈ solvs p) $ t2 (t1 (perf p sl)) <. t2 (perf q (r1 sl)) <. perf r (r2 (r1 sl))
+    todo "Proof with inequality from the reinterpretation"
 
 
 deterministicGameDefinition :: Note

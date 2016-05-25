@@ -32,6 +32,11 @@ vrv :: Note -> Note
 vrv = fn rv_
 -- FIXME fix variable name
 
+-- * Set of probability distributions of Y-rvs
+prdss :: Note -> Note
+prdss = (^ "pd")
+
+
 -- * Distribution function
 dfsign_ :: Note
 dfsign_ = "F"

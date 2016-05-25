@@ -45,6 +45,8 @@ introS = subsection "Intro" $ do
     randomVariableCondition
     borealMeasurableInducesProbabilityMeasure
     probabillisticFunctionDefinition
+    setOfProbabilityDistributionsDefinition
+
 
 
 borealsDefinition :: Note
@@ -59,7 +61,7 @@ randomVariableDefinition = de $ do
     s ["A real ", function, " as follows is called a ", randomVariable', or, stochasticVariable']
     -- FIXME use realFunction instead of function once that's defined.
     ma $ rvfunc_
-    ma $ fa (b ∈ boreals) $ inv x `fn` b =: setcmpr omega (x `fn` omega ∈ b)
+    ma $ fa (b ∈ boreals) $ inv x `fn` b =: setcmpr omega (x `fn` omega ∈ b) ⊆ sa_
 
   where
     b = "B"
@@ -84,10 +86,12 @@ randomVariableCondition = thm $ do
     x = "X"
 
 borealMeasurableInducesProbabilityMeasure :: Note
-borealMeasurableInducesProbabilityMeasure = thm $ do
-    s ["A Borel-measurable function induces a ", probabilityMeasure, " ", m (prm_ !: rv_), on, m boreals, " in ", m prbsp, " as follows"]
-    ma $ px b =: prob (x ∈ b) =: prob (inv x `fn` b)
-    ma $ px b =: prob (setcmpr (omega ∈ univ_) (vrv omega ∈ b))
+borealMeasurableInducesProbabilityMeasure = de $ do
+    let pp = prm_ !: rv_
+    s ["Let", m prsp_, "be a", probabilitySpace]
+    s ["A", randomVariable, m rvfunc_, "induces a ", probabilityMeasure, " ", m pp, on, m boreals, " in ", m prbsp, " as follows"]
+    ma $ px b =: prob (x ∈ b) =: prob (inv x `fn` b) =: prob (setcmpr (omega ∈ univ_) (vrv omega ∈ b))
+    s [m pp, "is called the", probabilityDistribution', "of", m rv_, "in", m prsp_]
     toprove
   where
     b = "B"
@@ -103,6 +107,14 @@ probabillisticFunctionDefinition = de $ do
     let ff = "F"
         f = "f"
     s ["A", probabillisticFunction', m ff, "is a", randomVariable, "over the", set, "of", functions, m $ fun f x y]
+
+setOfProbabilityDistributionsDefinition :: Note
+setOfProbabilityDistributionsDefinition = de $ do
+    let y = mathcal "Y"
+    s ["We use the notation", m $ prdss y, "to mean the set of", m y <> "-" <> randomVariables]
+    todo "Define y-rv correctly above"
+
+
 
 distributionFunctionSS :: Note
 distributionFunctionSS = subsection "Cumulative distribution function" $ do
@@ -122,7 +134,7 @@ cumulativeDistributionFunctionDefinition = de $ do
     s ["Let ", m rvfunc_, " be a ", randomVariable]
     s ["The ", cumulativeDistributionFunction', " (", cDF', "), ", distributionFunction', or, probabilityDistribution," as follows"]
     ma $ func df_ reals reals a $ prd (ocint minfty a) =: prob (setcmpr o (vrv o)) =: prob (rv_ <= a)
-    s ["Sometimes the defineTerm ", distribution', " is also used as-is"]
+    s ["Sometimes the", distribution', " is also used as-is"]
   where
     a = "a"
     o = omega
