@@ -25,8 +25,6 @@ sigmaAlgebraBasics :: Note
 sigmaAlgebraBasics = subsection "Basics" $ do
     sigmaAlgebraDefinition
     trivialSigmaAlgebraDefinition
-    measurableSpaceDefinition
-    trivialMeasurableSpaceDefinition
     discreteSigmaAlgebraDefinition
     emptysetInSigmaAlgebra
     sigmaAlgebraFiniteUnion
@@ -62,17 +60,6 @@ trivialSigmaAlgebraDefinition :: Note
 trivialSigmaAlgebraDefinition = de $ do
     lab trivialSigmaAlgebraDefinitionLabel
     s [m $ setofs[emptyset, univ_], " is called the ", trivialSigmaAlgebra]
-
-measurableSpaceDefinition :: Note
-measurableSpaceDefinition = de $ do
-    s ["Let ", m univ_, " be the ", universe, " of a ", stochasticExperiment, " and let ", m sa_, " be a ", sa]
-    s [m mspace_, " is called a ", measurableSpace']
-
-
-trivialMeasurableSpaceDefinition :: Note
-trivialMeasurableSpaceDefinition = de $ do
-    lab trivialMeasurableSpaceDefinitionLabel
-    s [m $ mspace univ_ $ setofs [emptyset, univ_], " is called the ", trivialMeasurableSpace]
 
 discreteSigmaAlgebraDefinition :: Note
 discreteSigmaAlgebraDefinition = de $ do
@@ -214,10 +201,6 @@ generatedSigmaAlgebraExists = thm $ do
     gsa = mathcal "C"
     b = "B"
     bn = b !: "n"
-
-
-
-
 
 
 

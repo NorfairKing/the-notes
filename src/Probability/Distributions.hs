@@ -7,12 +7,12 @@ import           Logic.FirstOrderLogic.Macro
 
 import           Probability.Intro.Macro
 import           Probability.Intro.Terms
+import           Probability.MeasurableSpace.Macro
+import           Probability.MeasurableSpace.Terms
 import           Probability.ProbabilityMeasure.Macro
 import           Probability.ProbabilityMeasure.Terms
 import           Probability.RandomVariable.Macro
 import           Probability.RandomVariable.Terms
-import           Probability.SigmaAlgebra.Macro
-import           Probability.SigmaAlgebra.Terms
 
 import           Probability.Distributions.Macro
 import           Probability.Distributions.Terms

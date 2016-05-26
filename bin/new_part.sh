@@ -1,6 +1,11 @@
 source bin/lib.sh
 
 partname="${*}"
+if [[ "${partname}" == "" ]]
+then
+  echo "supply the part's module name as an argument"
+  exit -1
+fi
 
 tofile () {
   file=$(echo "${1}" | sed -e 's/\./\//g')

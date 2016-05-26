@@ -267,6 +267,9 @@ library
       Probability.LanguageModel.Macro
       Probability.LanguageModel.Terms
       Probability.Main
+      Probability.MeasurableSpace
+      Probability.MeasurableSpace.Macro
+      Probability.MeasurableSpace.Terms
       Probability.ProbabilityMeasure
       Probability.ProbabilityMeasure.Macro
       Probability.ProbabilityMeasure.Terms

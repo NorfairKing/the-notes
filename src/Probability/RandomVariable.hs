@@ -12,6 +12,8 @@ import           Logic.PropositionalLogic.Macro
 import           Probability.Independence.Terms
 import           Probability.Intro.Macro
 import           Probability.Intro.Terms
+import           Probability.MeasurableSpace.Macro
+import           Probability.MeasurableSpace.Terms
 import           Probability.ProbabilityMeasure.Macro
 import           Probability.ProbabilityMeasure.Terms
 import           Probability.SigmaAlgebra.Macro

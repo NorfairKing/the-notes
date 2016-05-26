@@ -12,6 +12,8 @@ import           Sets.Basics.Terms
 
 import           Probability.Intro.Macro
 import           Probability.Intro.Terms
+import           Probability.MeasurableSpace.Macro
+import           Probability.MeasurableSpace.Terms
 import           Probability.SigmaAlgebra.Macro
 import           Probability.SigmaAlgebra.Terms
 
