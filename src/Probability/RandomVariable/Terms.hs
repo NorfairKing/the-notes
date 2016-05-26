@@ -37,6 +37,7 @@ makeDefs [
     , "empirical mean"
     , "sample mean"
     , "Hoeffding's inequality"
+    , "conditional probability distribution"
     ]
 
 makeThms [

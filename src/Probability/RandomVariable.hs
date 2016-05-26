@@ -46,8 +46,8 @@ introS = subsection "Intro" $ do
     borealMesureDefinition
     randomVariableCondition
     randomVariableInducesProbabilityMeasure
-    probabillisticFunctionDefinition
     setOfProbabilityDistributionsDefinition
+    probabillisticFunctionDefinition
 
 
 
@@ -100,32 +100,36 @@ randomVariableInducesProbabilityMeasure = do
     de $ do
         s ["Let ", m $ prsp a aa prm_, " be a ", probabilitySpace, and, m $ mspace b bb, a, measurableSpace]
         s ["A", randomVariable, m $ fun rv_ a b, "induces a", probabilityMeasure, m pp, on, m bb, "in", m $ prsp b bb pp]
-        ma $ fn pp b =: prob (inv rv_ `fn` b)--  =: prob (setcmpr (omega ∈ univ_) (vrv omega ∈ b))
-        s [m pp, "is called the", probabilityDistribution', "of", m rv_, "in", m prsp_]
+        ma $ fn pp b =: prob (inv rv_ `fn` b)
+        s [m pp, "is called the", probabilityDistribution', "of", m rv_, "in", m $ prsp a aa prm_]
         toprove_ "prove that this is in fact a random variable"
     nte $ do
-        s ["If we interpret ", m $ prob a, "as the probability that an event", m a, "occurs, then we can interpret", m $ fn pp b, "as the probability that", m $ fn rv_ a, "occurs"]
+        s ["If we interpret ", m $ prob a, "as the probability that an event", m a, "occurs, then we can interpret", m $ fn pp b, "as the probability that", m $ b =: fn rv_ a, "occurs"]
     nte $ do
         s ["Sometimes notation is the notation (ab)used such that when we write", m $ prob (rv_ ⊆ b), "we really mean", m $ fn pp b]
+    let b_ = "b"
     nte $ do
-        let b_ = "b"
         s ["We then further abuse this notation such that when we write", m (prob (rv_ =: b_)) <> ", it really means", m $ prob (rv_ ⊆ setof b_)]
+    nte $ do
+        s ["In the case of an", yRv reals, "we further abuse", m $ prob (rv_ <= b_), "to mean", m $ prob (rv_ ⊆ ocint minfty b_)]
 
 probabillisticFunctionDefinition :: Note
-probabillisticFunctionDefinition = de $ do
-    lab probabillisticFunctionDefinitionLabel
-    let x = "X"
-        y = "Y"
-    s ["Let", m x, and, m y, be, sets]
-    let ff = "F"
-        f = "f"
-    s ["A", probabillisticFunction', m ff, "is a", randomVariable, "over the", set, "of", functions, m $ fun f x y]
+probabillisticFunctionDefinition = do
+    de $ do
+        lab probabillisticFunctionDefinitionLabel
+        let x = "X"
+            y = "Y"
+        s ["Let", m x, and, m y, be, sets]
+        let ff = "F"
+            f = "f"
+        s ["A", probabillisticFunction', m ff, "is a", randomVariable, "over the", set, "of", functions, m $ fun f x y]
+    nte $ do
+        s ["Sometimes the phrase", quoted probabillisticFunction, "is also used to mean", conditionalProbabilityDistribution, "but since that name was taken (eventhough it's arguably a more sensible definition), we will stick to this definition"]
 
 setOfProbabilityDistributionsDefinition :: Note
 setOfProbabilityDistributionsDefinition = de $ do
     let y = mathcal "Y"
-    s ["We use the notation", m $ prdss y, "to mean the set of", m y <> "-" <> randomVariables]
-    todo "Define y-rv correctly above"
+    s ["We use the notation", m $ prdss y, "to mean the", set, "of", probabilityDistributions, "of", yRvs y]
 
 
 
@@ -235,6 +239,7 @@ independentCopyDefinition = de $ do
         xq = x !: q
     ma $ icop x q =: tuplelist x1 x2 xq
     s ["More precicely,", m $ list x1 x2 xq, "are", independent, "and have the same", probabilityDistribution, "as", m x]
+    todo "More precise definition, see the definition of a random variable by itself"
 
 
 cloneDefinition :: Note
@@ -244,11 +249,8 @@ cloneDefinition = de $ do
     s ["Let", m x, "be a", randomVariable]
     let q = "q"
     s ["We denote by", m $ clon x q, the, randomVariable, "consisting of", m q, clones', "of", m x]
-    let x1 = x !: 1
-        x2 = x !: 2
-        xq = x !: q
-    ma $ clon x q =: tuplelist x1 x2 xq
-    s ["More precicely,", m $ list x1 x2 xq, "are identical"]
+    ma $ clon x q =: tuplelist x x x
+    todo "More precise definition, see the definition of a random variable by itself"
 
 
 copyVsCloneExample :: Note
