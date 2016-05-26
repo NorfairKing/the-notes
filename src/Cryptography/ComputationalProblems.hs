@@ -451,7 +451,7 @@ probabillisticWinnerDefinition = de $ do
         win_ = omega !: g
         win = fn win_
         ww = "W"
-    s ["A", probabillisticWinner', m $ prdis_ ww, "is a", probabilityDistribution, "of a", xRv dd]
+    s ["A", probabillisticWinner', m $ prdis_ ww, "is a", probabilityDistribution, "of a", yRv dd]
     s ["Let", m ww, "be a", probabillisticWinner <> ", then we define the", performanceFunction, with, performanceValues, "in", m $ ccint 0 1, "as follows"]
     ma $ func (perff g) (prdss ww) (ccint 0 1) (prdis_ ww) (perf g (prdis_ ww) =: prdis ww (win (ww) =: 1))
 
@@ -460,7 +460,7 @@ probabillisticGameDefinition = do
     de $ do
         let gg = mathcal "G"
         s ["Let", m gg, "be a", set, "of", deterministicGames]
-        s ["A", probabillisticGame', "is a", xRv gg]
+        s ["A", probabillisticGame', "is a", yRv gg]
         let dd = mathcal "W"
         s ["Let", m dd, "be a", set, "of", solvers, "for all the", games, "in", m gg]
         s ["Both", probabillisticGames, and, deterministicGames, "can be played by either a", deterministicWinner, "or a", probabillisticWinner]
@@ -554,7 +554,7 @@ probabillisticDistinctionProblemDefinition = de $ do
         o0 = o !: 0
         o1 = o !: 1
         p = dprob o0 o1
-    s ["If", m o0, and, m o1, are, xRvs objs_, "then we call", m p, "a", probabillisticDistinctionProblem']
+    s ["If", m o0, and, m o1, are, yRvs objs_, "then we call", m p, "a", probabillisticDistinctionProblem']
 
 
 probabillisticDistinguisherDefinition :: Note
@@ -565,7 +565,7 @@ probabillisticDistinguisherDefinition = de $ do
         p = dprob o0 o1
     let ds = mathcal "D"
     s ["let", m p, "be a", distinctionProblem, and, m ds, "a", set, "of", deterministicDistinguishers]
-    s ["A", probabillisticDistinguisher', "is a", xRv ds]
+    s ["A", probabillisticDistinguisher', "is a", yRv ds]
 
 distinguisherAdvantageDefinition :: Note
 distinguisherAdvantageDefinition = de $ do
@@ -654,7 +654,7 @@ distinctionAdvantageRandomVariables :: Note
 distinctionAdvantageRandomVariables = lem $ do
     let x = "X"
         y = "Y"
-    s ["Let", m x, and, m y, "be two", xRvs reals]
+    s ["Let", m x, and, m y, "be two", yRvs reals]
     s [the, advantage, "of the best", distinguisher, "for", m $ dprob x y, "is the", statisticalDistance, m $ statd x y]
     ma $ dadvs x y =: statd x y
     toprove
@@ -751,7 +751,7 @@ bitGuessingPerformanceAmplification = thm $ do
             i = "i"
             (_, _, _, xi, xs) = buildiList x q i
         let p = "p"
-        s ["Let", m xs, "be the", xRvs bits, "that represent whether the bit that", m sl, "outputs was correct in each of", m q, "rounds"]
+        s ["Let", m xs, "be the", yRvs bits, "that represent whether the bit that", m sl, "outputs was correct in each of", m q, "rounds"]
         s ["Because", m sl, "has", performance, m e, "we find the following"]
         ma $ p =: prob (xi =: 1) =: (1 / 2) + (e / 2)
         s ["Now note that all", m xi, are, independent, "and that", m st, "outputs the wrong bit if and only if", m sl, "outputs more wrong bits than correct bits"]

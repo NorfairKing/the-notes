@@ -47,8 +47,17 @@ makeThms [
     , "Hoeffding's inequality"
     ]
 
-xRv :: Note -> Note
-xRv x = m x <> "-" <> randomVariable
+xyRv :: Note -> Note -> Note
+xyRv x y = m (tuple x y) <> "-" <> randomVariable
 
-xRvs :: Note -> Note
-xRvs x = m x <> "-" <> randomVariable
+xyRv' :: Note -> Note -> Note
+xyRv' x y = m (tuple x y) <> "-" <> randomVariable'
+
+xyRvs :: Note -> Note -> Note
+xyRvs x y = m (tuple x y) <> "-" <> randomVariables
+
+yRv :: Note -> Note
+yRv x = m x <> "-" <> randomVariable
+
+yRvs :: Note -> Note
+yRvs x = m x <> "-" <> randomVariable

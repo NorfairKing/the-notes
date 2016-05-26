@@ -57,6 +57,7 @@ makeStrs
     , "or"
     , "and"
     , "The"
+    , "a"
     ]
 
 makeAbbrs

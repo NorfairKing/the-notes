@@ -32,29 +32,30 @@ basics = subsection "Basics" $ do
     conditionalProbabilityEventGivenItself
     conditionalProbabilityEventGivenUniverse
 
-a,b,ai :: Note
-a = "A"
-b = "B"
-ai = a ∈ sa_
-
 psDec :: Note
 psDec = s ["Let ", m prsp_, " be a ", probabilitySpace]
 
 conditionalProbabilityDefinition :: Note
 conditionalProbabilityDefinition = de $ do
     lab conditionalProbabilityDefinitionLabel
+    let a = "A"
+        b = "B"
 
     s [the, conditionalProbability', " of an ", event, m (a ∈ sa_), " given an ", event, m (b ∈ sa_), " with ", m (prob b /=: 0), " is denoted as ", m (cprob a b), ""]
     ma $ cprob a b === (prob (a ∩ b) /: prob b)
 
 conditionalProbabilityEventGivenItself :: Note
 conditionalProbabilityEventGivenItself = prop $ do
+    let a = "A"
+        ai = a ∈ sa_
     psDec
     ma $ fa ai $ cprob a a =: 1
     proof $ ma $ fa ai $ cprob a a =: (prob (a ∩ a) /: prob a) =: (prob a /: prob a) =: 1
 
 conditionalProbabilityEventGivenUniverse :: Note
 conditionalProbabilityEventGivenUniverse = prop $ do
+    let a = "A"
+        ai = a ∈ sa_
     psDec
     ma $ fa ai $ cprob a univ_ =: prob a
     s ["We say that every event is independent of the ", universe]
@@ -109,12 +110,15 @@ chainRule = subsection "Chain rule" $ do
 
 psAndPartDec :: Note
 psAndPartDec = do
+    let a = "A"
     psDec
     s ["Let ", m x, " be a ", partition, " of ", m univ_, " in which ", m (fa (a ∈ x) $ prob a > 0), " holds"]
   where x = "X"
 
 totalProbability :: Note
 totalProbability = subsection "Law of total probability" $ do
+    let a = "A"
+        b = "B"
     thm $ do
         lab lawOfTotalProbabilityTheoremLabel
         examq kul "Probability" "August 2013"
@@ -136,8 +140,6 @@ totalProbability = subsection "Law of total probability" $ do
 
   where
     x = "X"
-    a = "A"
-    b = "B"
 
 bayesTheorem :: Note
 bayesTheorem = subsection "Bayes' theorem" $ do

@@ -35,6 +35,7 @@ trivialMeasurableSpaceDefinition = de $ do
 
 measurableFunctionDefinition :: Note
 measurableFunctionDefinition = de $ do
+    lab measurableDefinitionLabel
     lab measurableFunctionDefinitionLabel
     let a = "A"
         b = "B"
@@ -45,6 +46,7 @@ measurableFunctionDefinition = de $ do
     s ["A", measurableFunction', "is a", function, m $ fun f_ a b, "such that the", preimage, "of every", subset, "of", m b, "in", m bb, "is in", m aa]
     let e = "E"
     ma $ fa (e ∈ bb) $ preim f_ e ∈ aa
+    s ["If", m aa, and, m bb, "are unclear from context, we sometimes explicitly say that", m f_, is, abMeasurable aa bb]
 
 
 

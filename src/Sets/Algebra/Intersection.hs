@@ -24,8 +24,8 @@ setIntersection = subsection "Intersection" $ do
     distributionLaws
 
 
-a, b, c, x, y :: Note
-a = "A"
+-- TODO make these local, also the a's!!
+b, c, x, y :: Note
 b = "B"
 c = "C"
 x = "x"
