@@ -4,7 +4,6 @@ import           Notes
 
 makeDefs [
       "probability measure"
-    , "countable additivity"
     , "probability"
     , "probability space"
     , "uniforme probability measure"

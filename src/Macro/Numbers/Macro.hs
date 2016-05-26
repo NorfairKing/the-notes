@@ -1,15 +1,27 @@
 module Macro.Numbers.Macro where
 
-import           Functions.Application.Macro
-import           Macro.MetaMacro
-
 import           Types
+
+import           Functions.Application.Macro
+import           Macro.Math
+import           Macro.MetaMacro
+import           Macro.Sets.Macro
+
 
 realsp :: Note
 realsp = reals ^: "+"
 
 realsn :: Note
 realsn = reals ^: "n"
+
+ereals :: Note
+ereals = reals ∪ (setofs [minfty, pinfty])
+
+erealsp :: Note
+erealsp = realsp ∪ (setof pinfty)
+
+erealsm :: Note
+erealsm = realsn ∪ (setof pinfty)
 
 -- Complex conjugate
 conj :: Note -> Note

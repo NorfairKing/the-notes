@@ -7,6 +7,11 @@ makeDefs
     , "measurable"
     , "measurable function"
     , "trivial measurable space"
+    , "measure"
+    , "non-negativity"
+    , "null empty set"
+    , "countable additivity"
+    , "measure space"
     ]
 
 abMeasurable :: Note -> Note -> Note

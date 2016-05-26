@@ -5,6 +5,8 @@ import           Notes
 import           Functions.Basics.Macro
 import           Functions.Basics.Terms
 import           Logic.FirstOrderLogic.Macro
+import           NumberTheory.Macro
+import           Sets.Algebra.Intersection.Terms
 import           Sets.Basics.Terms
 
 import           Probability.Intro.Macro
@@ -21,6 +23,8 @@ measurableSpaceS = section "Measurable spaces" $ do
     measurableSpaceDefinition
     trivialMeasurableSpaceDefinition
     measurableFunctionDefinition
+    measureDefinition
+    measureSpaceDefinition
 
 measurableSpaceDefinition :: Note
 measurableSpaceDefinition = de $ do
@@ -48,8 +52,32 @@ measurableFunctionDefinition = de $ do
     ma $ fa (e ∈ bb) $ preim f_ e ∈ aa
     s ["If", m aa, and, m bb, "are unclear from context, we sometimes explicitly say that", m f_, is, abMeasurable aa bb]
 
+measureDefinition :: Note
+measureDefinition = de $ do
+    lab countableAdditivityDefinitionLabel
+    s ["Let", m mspace_, "be a", measurableSpace]
+    s ["A", measure', "is a", function, m $ fun meas_ univ_ ereals, "with the following three properties"]
+    enumerate $ do
+        item $ do
+            nonNegativity'
+            let x = "x"
+            ma $ fa (x ∈ univ_) $ meas x >= 0
+        item $ do
+            nullEmptySet'
+            ma $ meas emptyset =: 0
+        item $ do
+            countableAdditivity'
+            newline
+            let a = "A"
+                n = "n"
+                an = a !: n
+            s ["Let", m (sequ an n), "be a", sequence, "of", pairwiseDisjunct, sets]
+            ma $ meas (setuncmp (nat n) an) =: sumcmp (nat n) (meas an)
 
 
+measureSpaceDefinition :: Note
+measureSpaceDefinition = de $ do
+    s ["Let", m mspace_, "be a", measurableSpace, "and let", m meas_, "be a", measure, "then we call", m measp_, "a", measureSpace']
 
 
 

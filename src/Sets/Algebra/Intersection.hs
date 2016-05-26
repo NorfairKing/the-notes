@@ -3,9 +3,11 @@ module Sets.Algebra.Intersection where
 import           Notes
 
 import           Functions.BinaryOperation.Terms
+import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
 
 import           Sets.Algebra.Union.Terms
+import           Sets.Basics.Terms
 
 import           Sets.Algebra.Intersection.Terms
 
@@ -20,6 +22,7 @@ setIntersection = subsection "Intersection" $ do
     intersectionIdentityLaw
     intersectionDominationLaw
     disjunctDefinition
+    pairwiseDisjunctDefinition
     absorptionLaws
     distributionLaws
 
@@ -129,9 +132,16 @@ intersectionDominationLaw = thm $ do
 
 disjunctDefinition :: Note
 disjunctDefinition = de $ do
-    s ["Two sets ", m a, and, m b, " are ", defineTerm "disjunct", " if they have no elements in common"]
+    s ["Two", sets, m a, and, m b, are, "called", disjunct', "if they have no", elements, "in common"]
     ma $ a ∩ b =§= emptyset
 
+pairwiseDisjunctDefinition :: Note
+pairwiseDisjunctDefinition = de $ do
+    let aa = "A"
+        a = "a"
+        b = "b"
+    s ["A", set, m aa, "of", sets, "is called", pairwiseDisjunct', "if all pairs of its", sets, are, disjunct]
+    ma $ fa (a ∈ aa) $ fa (b ∈ (aa \\ setof a)) $ a ∩ b =§= emptyset
 
 absorptionLaws :: Note
 absorptionLaws = do

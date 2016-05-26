@@ -6,7 +6,6 @@ import           Functions.Basics.Macro
 import           Functions.Basics.Terms
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
-import           NumberTheory.Macro
 import           Sets.Algebra.Complement.Terms
 import           Sets.Basics.Terms
 
@@ -24,6 +23,7 @@ probabilityMeasureS :: Note
 probabilityMeasureS = section "Probability Measures" $ do
     probabilityMeasureDefinition
     probabilityMeasureExample
+    todo "go through the following theorems and figure out whether they also hold for measures more generally"
     probabilitySpaceDefinition
     probabilityMeasureFiniteAdditivity
     probabilitySpaceProbabilityOfComplement
@@ -51,24 +51,12 @@ probabilityMeasureDefinition = de $ do
     lab probabilityMeasureDefinitionLabel
     lab countableAdditivityDefinitionLabel
     lab probabilityDefinitionLabel
-
-    msDec
-    s ["A ", probabilityMeasure', " is a ", function_, " ", m prm_, " with the following three properties:"]
-    ma $ fun prm_ sa_ $ ccint 0 1
-
-    enumerate $ do
-        item $ m $ (prob univ_) =: 1
-        item $ m $ fa ("A" ∈ sa_) ((prob "A") >=: 0)
-        item $ do
-            countableAdditivity'
-            newline
-            s ["Let ", m (sequ an "n"), " be a countably infinite ", sequence, " of pairwise disjunct sets"]
-            ma $ prob (setuncmp (nat "n") an) =: sumcmp (nat "n") (prob an)
-
-    s [m $ prob a, " is called the ", probability', " that ", m a, " happens"]
-  where
-    a = "A"
-    an = "A" !: "n"
+    s ["A", probabilityMeasure', m prm_, "is a", measure, "as follows.."]
+    let a = "A"
+    ma $ func prm_ sa_ (ccint 0 1) a (prob a)
+    s ["... with the following additional property"]
+    ma $ prob univ_ =: 1
+    s [m $ prob a, "is often called (and interpreted as) the", probability', "of", m a, "occuring"]
 
 probabilityMeasureExample :: Note
 probabilityMeasureExample = ex $ do
