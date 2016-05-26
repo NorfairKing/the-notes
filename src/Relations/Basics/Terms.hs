@@ -6,6 +6,7 @@ makeDefs [
       "relation"
     , "unit relation"
     , "inverse relation"
+    , "binary relation"
 
     , "reflexive"
     , "transitive"

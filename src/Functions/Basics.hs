@@ -2,6 +2,7 @@ module Functions.Basics where
 
 import           Notes
 
+import           Functions.Application.Macro
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
 import           Relations.Basics.Terms         hiding (total, total')
@@ -17,6 +18,7 @@ basics :: Note
 basics = section "Basics" $ do
     partialFunctionDefinition
     totalFunctionDefinition
+    preimageDefinition
     surjectiveDefinition
     totalFunctionNote
     binaryFunctionDefinition
@@ -38,6 +40,15 @@ partialFunctionDefinition = de $ do
     x = "x"
     y n = "y" !: n
     t = (triple fun_ dom_ img_)
+
+preimageDefinition :: Note
+preimageDefinition = de $ do
+    s ["Let", m $ fun fun_ dom_ img_, "be a", function]
+    let c = "C"
+    s [the, preimage', "of a", subset, m c, "of", m img_, "is the following", subset, "of", m dom_]
+    let x = "x"
+    ma $ preim fun_ c === setcmpr (x ∈ dom_) (fn fun_ x ∈ c)
+
 
 totalFunctionDefinition :: Note
 totalFunctionDefinition = de $ do

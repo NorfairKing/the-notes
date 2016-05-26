@@ -110,6 +110,9 @@ unitf = (unitf_ !:)
 unitf_ :: Note
 unitf_ = mathcal "U"
 
+-- * Preimage
+preim :: Note -> Note -> Note
+preim f = fn (f ^: (-1))
 
 -- * Misc functions
 -- | Arcsin

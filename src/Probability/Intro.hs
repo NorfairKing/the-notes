@@ -12,6 +12,7 @@ intro = note "intro" introBody
 
 introBody :: Note
 introBody = do
+    todo "Remove the entire intro? this is not very mathematical..."
     note "experiment" $ do
         experimentDefinition
         bernoulliExperimentDefinition

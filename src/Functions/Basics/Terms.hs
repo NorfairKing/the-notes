@@ -7,6 +7,7 @@ makeDefs [
     , "partial function"
     , "corange"
     , "codomain"
+    , "preimage"
     , "total"
     , "binary function"
     , "ternary function"
