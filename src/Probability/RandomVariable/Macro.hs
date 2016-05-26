@@ -32,28 +32,41 @@ vrv :: Note -> Note
 vrv = fn rv_
 -- FIXME fix variable name
 
--- * Set of probability distributions of Y-rvs
+-- * Probability distribution
+-- | Set of probability distributions of Y-rvs
 prdss :: Note -> Note
 prdss = (^ "pd")
 
+-- | Probability distribution given the random variable that it is of
+--
+-- > prdis_ "X"
+-- >>> Pr_{X}
+prdis_ :: Note -> Note
+prdis_ x = prm_ !: x
 
--- * Distribution function
+-- | The application of such a probability distribution
+-- > prdis "X" "a"
+-- >>> Pr_{X}(a)
+prdis :: Note -> Note -> Note
+prdis x = prm (prm_ !: x)
+
+-- * Cumulative distribution function
 dfsign_ :: Note
 dfsign_ = "F"
 
--- | A distribution function given a random varable
+-- | A cumulative distribution function given a random varable
 df :: Note -> Note
 df n = dfsign_ !: n
 
--- | A concrete distribution function
+-- | A concrete cumulative distribution function
 df_ :: Note
 df_ = df rv_  -- probability distribution function
 
--- | Probability distribution at point argument with modified symbol
+-- | Cumulative distribution at point argument with modified symbol
 prdm :: Note -> Note -> Note
 prdm = fn
 
--- | The probability distribution at point argument
+-- | The cumulative distribution at point argument
 prd :: Note -> Note
 prd = prdm df_
 

@@ -132,7 +132,7 @@ cumulativeDistributionFunctionDefinition = de $ do
     lab probabilityDistributionDefinitionLabel
     psDec
     s ["Let ", m rvfunc_, " be a ", randomVariable]
-    s ["The ", cumulativeDistributionFunction', " (", cDF', "), ", distributionFunction', or, probabilityDistribution," as follows"]
+    s ["The ", cumulativeDistributionFunction', " (" <> cDF' <> "),", distributionFunction', "as follows"]
     ma $ func df_ reals reals a $ prd (ocint minfty a) =: prob (setcmpr o (vrv o)) =: prob (rv_ <= a)
     s ["Sometimes the", distribution', " is also used as-is"]
   where
