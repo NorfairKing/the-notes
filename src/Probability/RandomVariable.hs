@@ -45,7 +45,7 @@ introS = subsection "Intro" $ do
     saMeasureDefinition
     borealMesureDefinition
     randomVariableCondition
-    borealMeasurableInducesProbabilityMeasure
+    randomVariableInducesProbabilityMeasure
     probabillisticFunctionDefinition
     setOfProbabilityDistributionsDefinition
 
@@ -69,8 +69,7 @@ randomVariableDefinition = do
         s ["An", xyRv' a b, m rv_, "is a", measurableFunction_, m $ fun rv_ a b]
         s ["Often we call a", xyRv a b, "also a", yRv b, "when we leave out the", universe, m a, "or even just", quoted randomVariable]
     nte $ do
-        todo "Note about notational abuse EVERYWHERE"
-        s ["Usually when", m b, "is left out in", dquoted (yRv b) <> ", we mean a", yRv reals]
+        s ["Usually when", m b, "is left out in", dquoted (yRv b) <> ", we mean an", yRv reals]
 
 saMeasureDefinition :: Note
 saMeasureDefinition = de $ do
@@ -91,18 +90,26 @@ randomVariableCondition = thm $ do
     a = "A"
     x = "X"
 
-borealMeasurableInducesProbabilityMeasure :: Note
-borealMeasurableInducesProbabilityMeasure = de $ do
-    let pp = prm_ !: rv_
-    s ["Let", m prsp_, "be a", probabilitySpace]
-    s ["A", randomVariable, m rvfunc_, "induces a ", probabilityMeasure, " ", m pp, on, m boreals, " in ", m prbsp, " as follows"]
-    ma $ px b =: prob (x ∈ b) =: prob (inv x `fn` b) =: prob (setcmpr (omega ∈ univ_) (vrv omega ∈ b))
-    s [m pp, "is called the", probabilityDistribution', "of", m rv_, "in", m prsp_]
-    toprove
-  where
-    b = "B"
-    x = "X"
-    px = fn (prm_ !: rv_)
+randomVariableInducesProbabilityMeasure :: Note
+randomVariableInducesProbabilityMeasure = do
+    let a = "A"
+        b = "B"
+    let aa = mathcal "A"
+        bb = mathcal "B"
+    let pp = prdis_ rv_
+    de $ do
+        s ["Let ", m $ prsp a aa prm_, " be a ", probabilitySpace, and, m $ mspace b bb, a, measurableSpace]
+        s ["A", randomVariable, m $ fun rv_ a b, "induces a", probabilityMeasure, m pp, on, m bb, "in", m $ prsp b bb pp]
+        ma $ fn pp b =: prob (inv rv_ `fn` b)--  =: prob (setcmpr (omega ∈ univ_) (vrv omega ∈ b))
+        s [m pp, "is called the", probabilityDistribution', "of", m rv_, "in", m prsp_]
+        toprove_ "prove that this is in fact a random variable"
+    nte $ do
+        s ["If we interpret ", m $ prob a, "as the probability that an event", m a, "occurs, then we can interpret", m $ fn pp b, "as the probability that", m $ fn rv_ a, "occurs"]
+    nte $ do
+        s ["Sometimes notation is the notation (ab)used such that when we write", m $ prob (rv_ ⊆ b), "we really mean", m $ fn pp b]
+    nte $ do
+        let b_ = "b"
+        s ["We then further abuse this notation such that when we write", m (prob (rv_ =: b_)) <> ", it really means", m $ prob (rv_ ⊆ setof b_)]
 
 probabillisticFunctionDefinition :: Note
 probabillisticFunctionDefinition = de $ do
