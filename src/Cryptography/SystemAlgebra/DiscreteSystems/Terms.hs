@@ -13,9 +13,9 @@ makeDefs
     , "deterministic environment"
     , "environment"
     , "transcript"
-    , "probabillistic system"
-    , "probabillistic environment"
-    , "probabillistic transcript"
+    , "probabilistic system"
+    , "probabilistic environment"
+    , "probabilistic transcript"
     , "behaviour"
     , "random function"
     , "random permutation"
@@ -34,13 +34,13 @@ nS n = m n <> "-" <> system
 nSs :: Note -> Note
 nSs n = m n <> "-" <> systems
 
--- | N-probabillistic system
+-- | N-probabilistic system
 nPS :: Note -> Note
-nPS n = m n <> "-" <> probabillisticSystem
+nPS n = m n <> "-" <> probabilisticSystem
 
--- | N-probabillistic systems
+-- | N-probabilistic systems
 nPSs :: Note -> Note
-nPSs n = m n <> "-" <> probabillisticSystems
+nPSs n = m n <> "-" <> probabilisticSystems
 
 -- | N-deterministic system
 nDS :: Note -> Note
@@ -75,10 +75,10 @@ yxDEs y x = m (tuple y x) <> "-" <> deterministicEnvironments
 
 -- | Probabillistic environment for X,Y-system
 yxPE :: Note -> Note -> Note
-yxPE y x = m (tuple y x) <> "-" <> probabillisticEnvironment
+yxPE y x = m (tuple y x) <> "-" <> probabilisticEnvironment
 
 yxPEs :: Note -> Note -> Note
-yxPEs y x = m (tuple y x) <> "-" <> probabillisticEnvironments
+yxPEs y x = m (tuple y x) <> "-" <> probabilisticEnvironments
 
 xyDS :: Note -> Note -> Note
 xyDS x y = m (tuple x y) <> "-" <> deterministicSystem
@@ -87,10 +87,10 @@ xyDSs :: Note -> Note -> Note
 xyDSs x y = m (tuple x y) <> "-" <> deterministicSystems
 
 xyPS :: Note -> Note -> Note
-xyPS x y = m (tuple x y) <> "-" <> probabillisticSystem
+xyPS x y = m (tuple x y) <> "-" <> probabilisticSystem
 
 xyPSs :: Note -> Note -> Note
-xyPSs x y = m (tuple x y) <> "-" <> probabillisticSystems
+xyPSs x y = m (tuple x y) <> "-" <> probabilisticSystems
 
 -- | Y-beacon
 yB :: Note -> Note

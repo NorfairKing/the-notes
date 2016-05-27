@@ -9,17 +9,6 @@ import           Functions.Application.Macro
 import           Probability.Intro.Macro
 import           Probability.SigmaAlgebra.Macro
 
--- * Borel
-borelsign :: Note
-borelsign = mathcal "B"
-
-borel :: Note -> Note
-borel = app borelsign
-
-boreals :: Note
-boreals = borel reals
-
-
 -- * Probability space
 
 -- | Probabilty space given a universe, sigma algebra and probability measure

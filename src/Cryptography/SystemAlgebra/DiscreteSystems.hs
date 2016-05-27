@@ -259,29 +259,29 @@ transcriptDefinition = de $ do
 
 probabillisticSystemDefinition :: Note
 probabillisticSystemDefinition = de $ do
-    lab probabillisticSystemDefinitionLabel
+    lab probabilisticSystemDefinitionLabel
     let x = mathcal "X"
         y = mathcal "Y"
-    s ["A", probabillisticSystem', "(an " <> xyPS x y <> ")", "is a", randomVariable, "over the", set, "of", xyDSs x y]
+    s ["A", probabilisticSystem', "(an " <> xyPS x y <> ")", "is a", randomVariable, "over the", set, "of", xyDSs x y]
 
 
 
 probabillisticEnvironmentDefinition :: Note
 probabillisticEnvironmentDefinition = de $ do
-    lab probabillisticEnvironmentDefinitionLabel
+    lab probabilisticEnvironmentDefinitionLabel
     let x = mathcal "X"
         y = mathcal "Y"
-    s ["A", probabillisticEnvironment', "(an " <> yxPE x y <> ")", "is a", randomVariable, "over the", set, "of", yxDEs x y]
+    s ["A", probabilisticEnvironment', "(an " <> yxPE x y <> ")", "is a", randomVariable, "over the", set, "of", yxDEs x y]
 
 probabillisticTranscriptDefinition :: Note
 probabillisticTranscriptDefinition = de $ do
-    lab probabillisticEnvironmentDefinitionLabel
+    lab probabilisticEnvironmentDefinitionLabel
     let x = mathcal "X"
         y = mathcal "Y"
         a = "A"
         e = "E"
     s ["Let", m a, "be an", xyPS x y, and, m e, "a", yxPE x y]
-    s [the, probabillisticTranscript, m $ transcr a e, "of", m a, and, m e, "is the", sequence, "of", randomVariables, "as defined for the deterministic case in", rawRef transcriptDefinitionLabel]
+    s [the, probabilisticTranscript, m $ transcr a e, "of", m a, and, m e, "is the", sequence, "of", randomVariables, "as defined for the deterministic case in", rawRef transcriptDefinitionLabel]
 
 
 behaviourDefinition :: Note

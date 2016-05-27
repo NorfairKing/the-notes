@@ -451,8 +451,8 @@ probabillisticWinnerDefinition = de $ do
         win_ = omega !: g
         win = fn win_
         ww = "W"
-    s ["A", probabillisticWinner', m $ prdis_ ww, "is a", probabilityDistribution, "of a", yRv dd]
-    s ["Let", m ww, "be a", probabillisticWinner <> ", then we define the", performanceFunction, with, performanceValues, "in", m $ ccint 0 1, "as follows"]
+    s ["A", probabilisticWinner', m $ prdis_ ww, "is a", probabilityDistribution, "of a", xRv dd]
+    s ["Let", m ww, "be a", probabilisticWinner <> ", then we define the", performanceFunction, with, performanceValues, "in", m $ ccint 0 1, "as follows"]
     ma $ func (perff g) (prdss ww) (ccint 0 1) (prdis_ ww) (perf g (prdis_ ww) =: prdis ww (win (ww) =: 1))
 
 probabillisticGameDefinition :: Note
@@ -460,10 +460,10 @@ probabillisticGameDefinition = do
     de $ do
         let gg = mathcal "G"
         s ["Let", m gg, "be a", set, "of", deterministicGames]
-        s ["A", probabillisticGame', "is a", yRv gg]
+        s ["A", probabilisticGame', "is a", xRv gg]
         let dd = mathcal "W"
         s ["Let", m dd, "be a", set, "of", solvers, "for all the", games, "in", m gg]
-        s ["Both", probabillisticGames, and, deterministicGames, "can be played by either a", deterministicWinner, "or a", probabillisticWinner]
+        s ["Both", probabilisticGames, and, deterministicGames, "can be played by either a", deterministicWinner, "or a", probabilisticWinner]
 
 
 performanceOfAProbabillisticGame :: Note
@@ -474,16 +474,16 @@ performanceOfAProbabillisticGame = de $ do
     let dd = mathcal "W"
         ww = "W"
     s ["Let", m gg, "be a", set, "of", games, and, m dd, "a", set, "of", solvers, "for all the", games, "in", m gg]
-    s ["Let", m gr, "be a", probabillisticGame <> ", then we define the", performanceFunction, with, performanceValues, "in", m $ ccint 0 1, for, deterministicWinners, "as follows"]
+    s ["Let", m gr, "be a", probabilisticGame <> ", then we define the", performanceFunction, with, performanceValues, "in", m $ ccint 0 1, for, deterministicWinners, "as follows"]
     let wins_ = omega
         wins = fn2 wins_
     ma $ func (perff gr) dd (ccint 0 1) w $ prob (wins gr w =: 1)
     newline
-    s ["Let", m ww, "be a", probabillisticWinner <> ", then we define the", performanceFunction, with, performanceValues, "in", m $ ccint 0 1, "as follows"]
+    s ["Let", m ww, "be a", probabilisticWinner <> ", then we define the", performanceFunction, with, performanceValues, "in", m $ ccint 0 1, "as follows"]
     ma $ perf gg ww =: prob (wins gr ww =: 1)
     clarify "Is that a function over a set of random variables?"
 
-    -- s [the, performanceFunction, "of a", probabillisticGame, "is defined with", m $ ccint 0 1, "as the set of", performanceValues, "as the", performanceFunction, "of the", weightedAverageCaseProblem]
+    -- s [the, performanceFunction, "of a", probabilisticGame, "is defined with", m $ ccint 0 1, "as the set of", performanceValues, "as the", performanceFunction, "of the", weightedAverageCaseProblem]
     -- let gg = gmev_
     --     ww = plrv_
     -- ma $ func (perff gg) (solvs ww) bits ww $ (ev $ conv_ gg ww) =: prob (conv_ gg ww =: 1)
@@ -545,7 +545,7 @@ deterministicDistinguisherDefinition = do
         --     p = dprob s0 s1
         -- s ["A", distinguisher', "for a", distinctionProblem, m p, "is a", nS 2, "which at one", interface, "connects to a", system, m ss, "(either", m s0, or, m s1 <> ")", "and at the other", interface, "outputs a bit"]
     -- nte $ do
-        -- s ["A", distinguisher, "can be both deterministic or probabillistic and is therefore usually assumed to be probabillistic"]
+        -- s ["A", distinguisher, "can be both deterministic or probabilistic and is therefore usually assumed to be probabilistic"]
 
 probabillisticDistinctionProblemDefinition :: Note
 probabillisticDistinctionProblemDefinition = de $ do
@@ -554,7 +554,7 @@ probabillisticDistinctionProblemDefinition = de $ do
         o0 = o !: 0
         o1 = o !: 1
         p = dprob o0 o1
-    s ["If", m o0, and, m o1, are, yRvs objs_, "then we call", m p, "a", probabillisticDistinctionProblem']
+    s ["If", m o0, and, m o1, are, xRvs objs_, "then we call", m p, "a", probabilisticDistinctionProblem']
 
 
 probabillisticDistinguisherDefinition :: Note
@@ -565,7 +565,7 @@ probabillisticDistinguisherDefinition = de $ do
         p = dprob o0 o1
     let ds = mathcal "D"
     s ["let", m p, "be a", distinctionProblem, and, m ds, "a", set, "of", deterministicDistinguishers]
-    s ["A", probabillisticDistinguisher', "is a", yRv ds]
+    s ["A", probabilisticDistinguisher', "is a", xRv ds]
 
 distinguisherAdvantageDefinition :: Note
 distinguisherAdvantageDefinition = de $ do
@@ -578,15 +578,15 @@ distinguisherAdvantageDefinition = de $ do
     s ["We define the", advantage', m $ dadv d o0 o1, "of", m d, "as follows"]
     ma $ dadv d o0 o1 =: prob (guess d o1 =: 1) - prob (guess d o0 =: 1)
     let dd = "D"
-    s ["If", m dd, "is a", probabillisticDistinguisher, "then we define the", advantage, "as follows"]
+    s ["If", m dd, "is a", probabilisticDistinguisher, "then we define the", advantage, "as follows"]
     ma $ dadv dd o0 o1 =: prob (guess dd o1 =: 1) - prob (guess dd o0 =: 1)
     let oo = "O"
         oo0 = oo !: 0
         oo1 = oo !: 1
         pp = dprob oo0 oo1
-    s ["If", m pp, "is a", probabillisticDistinctionProblem, "then we define the", advantage, "as follows"]
+    s ["If", m pp, "is a", probabilisticDistinctionProblem, "then we define the", advantage, "as follows"]
     ma $ dadv d oo0 oo1 =: prob (guess d oo1 =: 1) - prob (guess d oo0 =: 1)
-    s [the, advantage, "of a", probabillisticDistinguisher, m dd, "in a", probabillisticDistinctionProblem, m pp, "is defined as follows"]
+    s [the, advantage, "of a", probabilisticDistinguisher, m dd, "in a", probabilisticDistinctionProblem, m pp, "is defined as follows"]
     ma $ dadv dd oo0 oo1 =: prob (guess dd oo1 =: 1) - prob (guess dd oo0 =: 1)
     todo "Rewrite these in function definition (with sets) notation"
 
@@ -618,7 +618,7 @@ distinguisherAdvantageDefinition = de $ do
 --     s ["A", deterministicDistinctionGame', "for a", distinctionProblem, m p, "(deterministically) outputs either", m s0, or, m s1, "at one", interface, "and receives a bit at that same", interface]
 --     s ["It then outputs a set bit if the bit that it receives matches the index of the", system, "it outputted before"]
 --     newline
---     s ["A (probabillistic)", distinctionGame', "for a", distinctionProblem, m p, "is a", randomVariable, "over the", deterministicDistinctionGames, "for", m p]
+--     s ["A (probabilistic)", distinctionGame', "for a", distinctionProblem, m p, "is a", randomVariable, "over the", deterministicDistinctionGames, "for", m p]
 --
 --     s ["A", solver, "for a", distinctionGame, "for a", distinctionProblem, m p, "is a", distinguisher, "for", m p]
 --     s [the, performanceValues, "of such a", solver, "lie in the interval", m $ ccint (-1) 1]
@@ -637,7 +637,7 @@ bestDistinguisherAdvantage = de $ do
     let d = "D"
     ma $ dadv ds oo0 oo1 =: supcomp (d ∈ ds) (dadv d oo0 oo1)
     s ["We use", m $ dadvs oo0 oo1, "to mean the", advantage, "of the best", distinguisher, "out of all possible", distinguishers]
-    todo "probabillistic distinguishers are not better than deterministic ones"
+    todo "probabilistic distinguishers are not better than deterministic ones"
 
 distinctionAdvantagePseudoMetric :: Note
 distinctionAdvantagePseudoMetric = lem $ do
@@ -654,7 +654,7 @@ distinctionAdvantageRandomVariables :: Note
 distinctionAdvantageRandomVariables = lem $ do
     let x = "X"
         y = "Y"
-    s ["Let", m x, and, m y, "be two", yRvs reals]
+    s ["Let", m x, and, m y, "be two", xRvs reals]
     s [the, advantage, "of the best", distinguisher, "for", m $ dprob x y, "is the", statisticalDistance, m $ statd x y]
     ma $ dadvs x y =: statd x y
     toprove
@@ -684,7 +684,7 @@ bitGuessingProblemDefinition = de $ do
         z = "z"
     s ["Concretely: Let", m o, "be an objects from a", set, m oo, "of objects", and, m $ z ∈ bits, "a bit"]
     s [m $ bgprob o z, "is then the problem of guessing", m z, from, m o]
-    todo "Split into deterministic and probabillistic"
+    todo "Split into deterministic and probabilistic"
 
 bitGuesserDefinition :: Note
 bitGuesserDefinition = de $ do
@@ -714,7 +714,7 @@ bitGuesserAdvantageDefinition = de $ do
 --     s ["A", deterministicBitGuessingGame', "for a", bitGuessingGame, m b, "(deterministically) has", m b, "output its bit and receives a bit at its inside interface from a", player]
 --     s ["It then outputs a set bit (win) if the two bits equal"]
 --     newline
---     s ["A (probabillistic)", bitGuessingGame', "for a", bitGuessingProblem, m b, "is", game, "is a", randomVariable, "over the deterministic", bitGuessingGames, for, m b]
+--     s ["A (probabilistic)", bitGuessingGame', "for a", bitGuessingProblem, m b, "is", game, "is a", randomVariable, "over the deterministic", bitGuessingGames, for, m b]
 --     s ["A", solver, "for a", bitGuessingGame, "for a", bitGuessingProblem, m b, "is a", bitGuesser, for, m b]
 --     s [the, performanceValues, "of such a", solver, "lie in the interval", m $ ccint (-1) 1]
 --     s [the, performanceFunction, "is then defined as mapping a", bitGuesser, "to its", advantage]
@@ -751,7 +751,7 @@ bitGuessingPerformanceAmplification = thm $ do
             i = "i"
             (_, _, _, xi, xs) = buildiList x q i
         let p = "p"
-        s ["Let", m xs, "be the", yRvs bits, "that represent whether the bit that", m sl, "outputs was correct in each of", m q, "rounds"]
+        s ["Let", m xs, "be the", xRvs bits, "that represent whether the bit that", m sl, "outputs was correct in each of", m q, "rounds"]
         s ["Because", m sl, "has", performance, m e, "we find the following"]
         ma $ p =: prob (xi =: 1) =: (1 / 2) + (e / 2)
         s ["Now note that all", m xi, are, independent, "and that", m st, "outputs the wrong bit if and only if", m sl, "outputs more wrong bits than correct bits"]
@@ -789,9 +789,9 @@ searchProblemSolverDefinition = do
         lab searchProblemSolverDefinitionLabel
         s ["Let", m $ probl_ =: sprob_, "be a", searchProblem]
         s ["A", deterministicSearchProblemSolver', "is a", function, m $ funt isp_ wsp_]
-        s ["A", probabillisticSearchProblemSolver', "is a", randomVariable, "over all the", deterministicSearchProblemSolvers, "for the same", searchProblem]
+        s ["A", probabilisticSearchProblemSolver', "is a", randomVariable, "over all the", deterministicSearchProblemSolvers, "for the same", searchProblem]
     nte $ do
-        s ["The output of a", probabillisticSearchProblemSolver, "for a given instance is a", randomVariable, "over the", witnessSpace, m wsp_]
+        s ["The output of a", probabilisticSearchProblemSolver, "for a given instance is a", randomVariable, "over the", witnessSpace, m wsp_]
 
 -- searchProblemGameDefinition :: Note
 -- searchProblemGameDefinition = de $ do
@@ -806,7 +806,7 @@ searchProblemSolverDefinition = do
 --     let g = "G"
 --     s ["A", probabillisticSearchProblemGame, m g, for, m probl_, "is a", randomVariable, "over the", deterministicSearchProblemGames, for, m probl_]
 --     let sl = "S"
---     s ["A solver is then a", probabillisticSearchProblemSolver, m sl]
+--     s ["A solver is then a", probabilisticSearchProblemSolver, m sl]
 --     s [the, performanceValues, "lie in the interval", m $ ccint 0 1, "and the", performanceFunction, "is defined as follows"]
 --     let xx = "X"
 --     ma $ perf g sl =: prob (sol xx (fn sl xx))
@@ -817,13 +817,13 @@ searchProblemSolverDefinition = do
 
 searchProblemSolverRepetition :: Note
 searchProblemSolverRepetition = thm $ do
-    s ["Simply repeatedly applying the same", probabillisticSearchProblemSolver, "to a given instance of a", searchProblem, "does not necessarily boost the success", probability]
+    s ["Simply repeatedly applying the same", probabilisticSearchProblemSolver, "to a given instance of a", searchProblem, "does not necessarily boost the success", probability]
     newline
     let sl = "S"
         sl' = "S'"
         a = alpha
-    s ["More formally, let", m sl, "be a", probabillisticSearchProblemSolver, "for a", searchProblem, m sprob_, with, successProbability, m $ a ∈ ocint 0 1, "such that", m spred_, "can be efficiently computed"]
-    s ["Let", m sl', "be a", probabillisticSearchProblemSolver, "defined as follows"]
+    s ["More formally, let", m sl, "be a", probabilisticSearchProblemSolver, "for a", searchProblem, m sprob_, with, successProbability, m $ a ∈ ocint 0 1, "such that", m spred_, "can be efficiently computed"]
+    s ["Let", m sl', "be a", probabilisticSearchProblemSolver, "defined as follows"]
     let x = "x"
         w = "w"
     s ["Given an instance", m $ x ∈ isp_, "it first invokes", m sl, "on input", m x, "to obtain", m w]
@@ -834,7 +834,7 @@ searchProblemSolverRepetition = thm $ do
 
     proof $ do
         s ["It is easy to see that", m sl', "has", successProbability, "at least", m a]
-        s ["Now it suffices to show that there exists a", searchProblem, m sprob_, anda, probabillisticSearchProblemSolver, m sl, "such that", m sl', "has", successProbability, m a, for]
+        s ["Now it suffices to show that there exists a", searchProblem, m sprob_, anda, probabilisticSearchProblemSolver, m sl, "such that", m sl', "has", successProbability, m a, for]
         let x0 = x !: 0
             x1 = x !: 1
         s ["Consider a", searchProblem, "with only two possible instances", m $ wsp_ =: setofs [x0, x1]]

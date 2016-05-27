@@ -48,10 +48,10 @@ publicKeyEncryptionSchemeDefinition = de $ do
     itemize $ do
         item $ do
             s ["A", keyGenerator', function]
-            s ["This is a probabillistic", function, "that generates a", keyPair', m (tuple pk sk) <> ",", "of a", publicKey', m $ pk ∈ pksp_, anda, secretKey', "(" <> privateKey' <> ")", m $ sk ∈ sksp_]
+            s ["This is a probabilistic", function, "that generates a", keyPair', m (tuple pk sk) <> ",", "of a", publicKey', m $ pk ∈ pksp_, anda, secretKey', "(" <> privateKey' <> ")", m $ sk ∈ sksp_]
         item $ do
             s ["An", encryptionFunction', m aenc_]
-            s ["This is a probabillistic", function, "that takes as inputs a", publicKey, m (pk ∈ pksp_) <> ",", plaintext, m $ sk ∈ sksp_, anda, "fresh randomness value", m $ r ∈ rsp_, "and computes the", ciphertext, m $ c =: aenc mesg pk r ∈ csp_]
+            s ["This is a probabilistic", function, "that takes as inputs a", publicKey, m (pk ∈ pksp_) <> ",", plaintext, m $ sk ∈ sksp_, anda, "fresh randomness value", m $ r ∈ rsp_, "and computes the", ciphertext, m $ c =: aenc mesg pk r ∈ csp_]
         item $ do
             s ["A", decryptionFunction', m adec_]
             s ["This is a deterministic", function, "that takes as inputs a", secretKey, m (sk ∈ sksp_), anda, ciphertext, m $ c ∈ csp_, "and computes the", plaintext, m $ mesg =: adec c sk ∈ msp_]

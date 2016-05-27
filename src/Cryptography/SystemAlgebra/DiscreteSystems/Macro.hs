@@ -33,7 +33,7 @@ asyncomp a b = sqbrac $ cs [a, b]
 transcr :: Note -> Note -> Note
 transcr = fn2 "tr"
 
--- | Behaviour of a probabillistic X,Y-system
+-- | Behaviour of a probabilistic X,Y-system
 bhv :: Note -> Note
 bhv = fn "b"
 
@@ -41,7 +41,7 @@ bhv = fn "b"
 firstOf :: Note -> Note -> Note
 firstOf n sys = sqbrac n <> sys
 
--- | Behaviour of given in step i probabillistic X,Y-system
+-- | Behaviour of given in step i probabilistic X,Y-system
 bhvs_ :: Note -- ^ The system
      -> Note -- ^ The step i
      -> Note

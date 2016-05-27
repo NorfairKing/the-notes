@@ -82,7 +82,7 @@ trapdoorOneWayPermutationDefinition = de $ do
         y = mathcal "Y"
     let f_ = "F"
         d_ = "D"
-    s ["A", trapdoorOneWayPermutation', "(" <> tWOP <> ")", "is and efficient probabillistic algorithm, the", trapdoorGenerator', "which generates descriptions of two", algorithms, m f_, and, m d_, "and two", sets, m x, and, m y]
+    s ["A", trapdoorOneWayPermutation', "(" <> tWOP <> ")", "is and efficient probabilistic algorithm, the", trapdoorGenerator', "which generates descriptions of two", algorithms, m f_, and, m d_, "and two", sets, m x, and, m y]
     let g_ = "g"
         g = fn g_
     itemize $ do
@@ -341,9 +341,9 @@ digitalSignatureDefinition = de $ do
     newline
     s ["A", digitalSignatureScheme', "consists of three algorithms as follows"]
     itemize $ do
-        item $ s ["A probabillistic", keyGenerator', "algorithm which generates a", keyPair <> ", consisting of a", signingKey', "(" <> secretKey <> ")", anda, signatureVerificationKey', "(" <> publicKey <> ")", "according to some", keyPairDistribution', over, m $ sigsp_ ⨯ versp_]
+        item $ s ["A probabilistic", keyGenerator', "algorithm which generates a", keyPair <> ", consisting of a", signingKey', "(" <> secretKey <> ")", anda, signatureVerificationKey', "(" <> publicKey <> ")", "according to some", keyPairDistribution', over, m $ sigsp_ ⨯ versp_]
         let sig = "s"
-        item $ s ["A probabillistic", signingAlgorithm', m signf_, "that takes as inputs a", signingKey, anda, message, "and computes the", signature', m $ sig ∈ ssp_, "for the", message]
+        item $ s ["A probabilistic", signingAlgorithm', m signf_, "that takes as inputs a", signingKey, anda, message, "and computes the", signature', m $ sig ∈ ssp_, "for the", message]
         item $ s ["A deterministic", signatureVerificationAlgorithm', "that takes as inputs a", signatureVerificationKey <> ", a", message, anda, signature, "and outputs a bit that can be interpreted as", dquoted "accept", or, dquoted "reject"]
     s ["For every", keyPair <> ", the", signatureVerificationAlgorithm, m verif_, "must accept the signature computed by the", signingAlgorithm]
 

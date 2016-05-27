@@ -5,7 +5,7 @@ import           Notes
 makeDefs [
       "random variable"
     , "stochastic variable"
-    , "probabillistic function"
+    , "probabilistic function"
     , "Borel-measure"
     , "cumulative distribution function"
     , "CDF"
@@ -56,8 +56,8 @@ xyRv' x y = m (tuple x y) <> "-" <> randomVariable'
 xyRvs :: Note -> Note -> Note
 xyRvs x y = m (tuple x y) <> "-" <> randomVariables
 
-yRv :: Note -> Note
-yRv x = m x <> "-" <> randomVariable
+xRv :: Note -> Note
+xRv x = m x <> "-" <> randomVariable
 
-yRvs :: Note -> Note
-yRvs x = m x <> "-" <> randomVariable
+xRvs :: Note -> Note
+xRvs x = m x <> "-" <> randomVariable

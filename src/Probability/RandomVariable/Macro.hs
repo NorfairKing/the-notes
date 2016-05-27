@@ -7,6 +7,7 @@ import           Prelude                                  (error)
 import           Macro.Math
 import           Macro.MetaMacro
 import           Macro.Text
+import           Macro.Tuple
 
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
@@ -49,6 +50,10 @@ prdis_ x = prm_ !: x
 -- >>> Pr_{X}(a)
 prdis :: Note -> Note -> Note
 prdis x = prm (prm_ !: x)
+
+-- * Random variable tuple
+rtup :: Note -> Note -> Note
+rtup = tuple
 
 -- * Cumulative distribution function
 dfsign_ :: Note
