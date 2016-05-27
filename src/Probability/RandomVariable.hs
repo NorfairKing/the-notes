@@ -44,6 +44,7 @@ introS = subsection "Intro" $ do
     setOfProbabilityDistributionsDefinition
     probabillisticFunctionDefinition
     tupleOfRandomVariablesTheorem
+    tupleOfRandomVariablesDistributionDefinition
 
 
 
@@ -69,6 +70,7 @@ randomVariableInducesProbabilityMeasure = do
         bb = mathcal "B"
     let pp = prdis_ rv_
     de $ do
+        lab probabilityDistributionDefinitionLabel
         s ["Let ", m $ prsp a aa prm_, " be a ", probabilitySpace, and, m $ mspace b bb, a, measurableSpace]
         s ["A", randomVariable, m $ fun rv_ a b, "induces a", probabilityMeasure, m pp, on, m bb, "in", m $ prsp b bb pp]
         ma $ fn pp b =: prob (inv rv_ `fn` b)
@@ -112,9 +114,11 @@ tupleOfRandomVariablesTheorem = thm $ do
         bb = mathcal "B"
         cc = mathcal "C"
         dd = mathcal "D"
-    let pra = prm_ ^: a
-        prb = prm_ ^: b
-    s ["Let ", m $ prsp a aa pra, and, m $ prsp b bb prb, "be", probabilitySpaces, and, m $ mspace c cc, and, m $ mspace d dd, measurableSpaces]
+    let pra = prm_ !: a
+        prb = prm_ !: b
+        prspa = prsp a aa pra
+        prspb = prsp b bb prb
+    s ["Let ", m prspa, and, m prspb, "be", probabilitySpaces, and, m $ mspace c cc, and, m $ mspace d dd, measurableSpaces]
     let x = "X"
         y = "Y"
     s ["Let", m $ fun x a c, and, m $ fun y b d, "be two", randomVariables]
@@ -123,6 +127,7 @@ tupleOfRandomVariablesTheorem = thm $ do
     let a_ = "a"
         b_ = "b"
     ma $ func t_ (a ⨯ b) (c ⨯ d) (tuple a_ b_) (tuple (fn x a_) (fn y b_))
+    s ["This function is called a", randomVector, "if", m prspa, "equals", m prspb ]
     proof $ do
         let cs = "C"
             ds = "D"
@@ -141,6 +146,41 @@ tupleOfRandomVariablesTheorem = thm $ do
             , setcmpr a_ (fn x a_ ∈ cs) ⨯ setcmpr b_ (fn y b_ ∈ ds)
             , preim x cs ⨯ preim y ds ⊆ aa ⨯ bb
             ]
+
+tupleOfRandomVariablesDistributionDefinition :: Note
+tupleOfRandomVariablesDistributionDefinition = de $ do
+    let a = mathbb "A"
+        b = mathbb "B"
+        c = mathbb "C"
+        d = mathbb "D"
+    let aa = mathcal "A"
+        bb = mathcal "B"
+        cc = mathcal "C"
+        dd = mathcal "D"
+    let pra = prm_ ^: a
+        prb = prm_ ^: b
+        prspa = prsp a aa pra
+        prspb = prsp b bb prb
+    s ["Let ", m prspa, and, m prspb, "be", probabilitySpaces, and, m $ mspace c cc, and, m $ mspace d dd, measurableSpaces]
+    let x = mathcal "X"
+        y = mathcal "Y"
+    s ["Let", m $ fun x a c, and, m $ fun y b d, "be two", randomVariables]
+    let xy = rtup x y
+    s [the, randomVariable, m xy, "again induces a", probabilityMeasure, m $ prdis_ xy, "on", m $ mspace (c ⨯ d) (cc ⨯ dd), ref probabilityDistributionDefinitionLabel]
+    s ["In this context, we often use the following notation abuse"]
+    ma $ prdis_ (x <> y) === prdis_ xy
+    let xx_ = "X"
+        yy_ = "Y"
+    ma $ fn2 (prdis_ (x <> y)) xx_ yy_ === prdis xy (tuple xx_ yy_)
+    let x_ = "x"
+        y_ = "y"
+    ma $ fn2 (prdis_ (x <> y)) x_ y_ === prdis xy (tuple (setof x_) (setof y_))
+    let c_ = "c"
+        d_ = "d"
+        cd = tuple c_ d_
+    ma $ prob (x =: x_ ∧ y =: y_) === prdis xy (setcmpr (cd ∈ c ⨯ d) (fn xy cd =: tuple x_ y_))
+
+
 
 distributionFunctionSS :: Note
 distributionFunctionSS = subsection "Cumulative distribution function" $ do

@@ -43,7 +43,7 @@ prdss = (^ "pd")
 -- > prdis_ "X"
 -- >>> Pr_{X}
 prdis_ :: Note -> Note
-prdis_ x = prm_ !: x
+prdis_ x = prm_ ^: x
 
 -- | The application of such a probability distribution
 -- > prdis "X" "a"

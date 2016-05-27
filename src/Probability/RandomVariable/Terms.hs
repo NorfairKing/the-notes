@@ -6,7 +6,7 @@ makeDefs [
       "random variable"
     , "stochastic variable"
     , "probabilistic function"
-    , "Borel-measure"
+    , "random vector"
     , "cumulative distribution function"
     , "CDF"
     , "distribution function"
