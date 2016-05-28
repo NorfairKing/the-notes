@@ -29,6 +29,7 @@ makeDefs
     , "deterministic winner"
     , "probabilistic winner"
     , "multi-game"
+    , "subgame"
 
     , "function inversion"
     , "function inversion game"

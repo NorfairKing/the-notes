@@ -49,7 +49,14 @@ prdis_ x = prm_ ^: x
 -- > prdis "X" "a"
 -- >>> Pr_{X}(a)
 prdis :: Note -> Note -> Note
-prdis x = prm (prm_ !: x)
+prdis = prm . prdis_
+
+-- Probability distribution given the random variables that it is of
+prdiss_ :: [Note] -> Note
+prdiss_ = prdis_ . cs
+
+prdiss :: [Note] -> Note -> Note
+prdiss = prm . prdiss_
 
 -- * Random variable tuple
 rtup :: Note -> Note -> Note

@@ -61,11 +61,14 @@ computationalProblemsS = section "Computational Problems" $ do
 
     subsection "Games" $ do
         deterministicGameDefinition
-        performanceOfADeterministicGame
+        performanceOfDeterministicWinnerInDeterministicGame
         probabillisticWinnerDefinition
+        performanceOfProbabilisticWinnerInDeterministicGame
         probabillisticGameDefinition
-        performanceOfAProbabillisticGame
+        performanceOfDeterministicWinnerInProbabillisticGame
+        performanceOfProbabilisticWinnerInProbabillisticGame
         multigameDefinition
+        multiGameOrAndAndDefinition
 
         subsubsection "Distinction problems" $ do
             deterministicDistinctionProblemDefinition
@@ -433,8 +436,8 @@ deterministicGameDefinition = do
         ma $ func2 wins_ gg dd bits g w (wins g w =: win w)
 
 
-performanceOfADeterministicGame :: Note
-performanceOfADeterministicGame = de $ do
+performanceOfDeterministicWinnerInDeterministicGame :: Note
+performanceOfDeterministicWinnerInDeterministicGame = de $ do
     let g = gme_
         w = plr_
     let dd = mathcal "W"
@@ -446,47 +449,51 @@ performanceOfADeterministicGame = de $ do
 
 probabillisticWinnerDefinition :: Note
 probabillisticWinnerDefinition = de $ do
+    let dd = mathcal "W"
+        ww = "W"
+    s ["A", probabilisticWinner', m $ prdis_ ww, "is a", probabilityDistribution, "of a", xRv dd]
+
+performanceOfProbabilisticWinnerInDeterministicGame :: Note
+performanceOfProbabilisticWinnerInDeterministicGame = de $ do
+    let dd = mathcal "W"
     let g = gme_
-        dd = mathcal "W"
         win_ = omega !: g
         win = fn win_
         ww = "W"
-    s ["A", probabilisticWinner', m $ prdis_ ww, "is a", probabilityDistribution, "of a", xRv dd]
-    s ["Let", m ww, "be a", probabilisticWinner <> ", then we define the", performanceFunction, with, performanceValues, "in", m $ ccint 0 1, "as follows"]
+    s ["Let", m dd, "be a set of", deterministicWinners, "for a", deterministicGame, m g]
+    s ["Let", m ww, "be a", probabilisticWinner, over, m dd <> ", then we define the", performanceFunction, with, performanceValues, "in", m $ ccint 0 1]
     ma $ func (perff g) (prdss ww) (ccint 0 1) (prdis_ ww) (perf g (prdis_ ww) =: prdis ww (win (ww) =: 1))
 
 probabillisticGameDefinition :: Note
-probabillisticGameDefinition = do
-    de $ do
-        let gg = mathcal "G"
-        s ["Let", m gg, "be a", set, "of", deterministicGames]
-        s ["A", probabilisticGame', "is a", xRv gg]
-        let dd = mathcal "W"
-        s ["Let", m dd, "be a", set, "of", solvers, "for all the", games, "in", m gg]
-        s ["Both", probabilisticGames, and, deterministicGames, "can be played by either a", deterministicWinner, "or a", probabilisticWinner]
+probabillisticGameDefinition = de $ do
+    let gg = mathcal "G"
+    s ["Let", m gg, "be a", set, "of", deterministicGames]
+    let gr = "G"
+    s ["A", probabilisticGame', m $ prdis_ gr, over, m gg, "is a", probabilityDistribution, "of a", randomVariable, m gr, over, m gg]
 
-
-performanceOfAProbabillisticGame :: Note
-performanceOfAProbabillisticGame = de $ do
+performanceOfDeterministicWinnerInProbabillisticGame :: Note
+performanceOfDeterministicWinnerInProbabillisticGame = de $ do
     let w = plr_
     let gg = mathcal "G"
         gr = "G"
     let dd = mathcal "W"
-        ww = "W"
     s ["Let", m gg, "be a", set, "of", games, and, m dd, "a", set, "of", solvers, "for all the", games, "in", m gg]
-    s ["Let", m gr, "be a", probabilisticGame <> ", then we define the", performanceFunction, with, performanceValues, "in", m $ ccint 0 1, for, deterministicWinners, "as follows"]
+    s ["Let", m $ prdis_ gr, "be a", probabilisticGame, over, m gg <> ", then we define the", performanceFunction, with, performanceValues, "in", m $ ccint 0 1, for, deterministicWinners, m w, "as follows"]
     let wins_ = omega
         wins = fn2 wins_
-    ma $ func (perff gr) dd (ccint 0 1) w $ prob (wins gr w =: 1)
-    newline
-    s ["Let", m ww, "be a", probabilisticWinner <> ", then we define the", performanceFunction, with, performanceValues, "in", m $ ccint 0 1, "as follows"]
-    ma $ perf gg ww =: prob (wins gr ww =: 1)
-    clarify "Is that a function over a set of random variables?"
+    ma $ func (perff gr) dd (ccint 0 1) w $ prdis gr (wins gr w =: 1)
 
-    -- s [the, performanceFunction, "of a", probabilisticGame, "is defined with", m $ ccint 0 1, "as the set of", performanceValues, "as the", performanceFunction, "of the", weightedAverageCaseProblem]
-    -- let gg = gmev_
-    --     ww = plrv_
-    -- ma $ func (perff gg) (solvs ww) bits ww $ (ev $ conv_ gg ww) =: prob (conv_ gg ww =: 1)
+performanceOfProbabilisticWinnerInProbabillisticGame :: Note
+performanceOfProbabilisticWinnerInProbabillisticGame = de $ do
+    let gg = mathcal "G"
+        gr = "G"
+    let dd = mathcal "W"
+        ww = "W"
+    let wins_ = omega
+        wins = fn2 wins_
+    s ["Let", m gg, "be a", set, "of", games, and, m dd, "a", set, "of", solvers, "for all the", games, "in", m gg]
+    s ["Let", m $ prdis_ gr, "be a", probabilisticGame, over, m gg <> ", then we define the", performanceFunction, with, performanceValues, "in", m $ ccint 0 1, for, probabilisticWinners, m $ prdis_ ww, over, m dd, "as follows"]
+    ma $ func (perff gr) (prdss ww) (ccint 0 1) (prdis_ ww) $ perf gr (prdis_ ww) =: prdiss [ww, gr] (wins gr ww =: 1)
 
 
 multigameDefinition :: Note
@@ -501,8 +508,20 @@ multigameDefinition = de $ do
         wins i = fn2 $ wins_ i
     s ["Consider the scenario in which there are multiple", winningConditions, m $ wins_ i]
     ma $ fun2 (wins_ i) gg dd bits
-    s [m $ wins i g w, "is interpreted as", dquoted $ s [m w, "wins the", m i <> "-th subgame of", m g]]
+    s [m $ wins i g w, "is interpreted as", dquoted $ s [m w, "wins the", m i <> "-th", subgame', "of", m g]]
     s ["We then call this a", multiGame']
+    todo "That's really vague, is there really no better way to state this?"
+
+multiGameOrAndAndDefinition :: Note
+multiGameOrAndAndDefinition = de $ do
+    let g = gme_
+        w = plr_
+        k = "k"
+    s ["Let", m g, "be a", multiGame, with, m k, subgames]
+    s ["We denote by", m $ orgame g, and, m $ andgame g, "the logical or and the logical and, respectively, of the", m k, "subgames"]
+    let i = "i"
+    ma $ wins (orgame g) w =: orcompr (i =: 1) k (winsub i g w)
+    ma $ wins (andgame g) w =: andcompr (i =: 1) k (winsub i g w)
 
 deterministicDistinctionProblemDefinition :: Note
 deterministicDistinctionProblemDefinition = de $ do
