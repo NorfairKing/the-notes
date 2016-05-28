@@ -78,6 +78,19 @@ func2 :: Note -- ^ Name
       -> Note
 func2 m n1 n2 o p1 p2 = func m (n1 ⨯ n2) o (tuple p1 p2)
 
+-- | Longhand function definition with set of triples as corange
+func3 :: Note -- ^ Name
+      -> Note -- ^ Corange, part 1
+      -> Note -- ^ Corange, part 2
+      -> Note -- ^ Corange, part 3
+      -> Note -- ^ Codomain
+      -> Note -- ^ Element, part 1
+      -> Note -- ^ Element, part 2
+      -> Note -- ^ Element, part 3
+      -> Note -- ^ Image
+      -> Note
+func3 m n1 n2 n3 o p1 p2 p3 = func m (n1 ⨯ n2 ⨯ n3) o (triple p1 p2 p3)
+
 -- * Function comprehension
 funcomp :: [(Note, Note)] -> Note
 funcomp tups = setofs $ P.map (\(a,b) -> a <> mapsto <> b) tups

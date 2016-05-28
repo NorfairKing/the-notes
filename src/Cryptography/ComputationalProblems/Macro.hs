@@ -137,13 +137,17 @@ guess_ = kappa
 guess :: Note -> Note -> Note
 guess = fn2 guess_
 
+-- ** Distinguisher's advantage
 -- | A given Distinguisher's advantage
+dadv_ :: Note
+dadv_ = comm0 "Delta"
+
 dadv :: Note -> Note -> Note -> Note
-dadv d = fn2 $ comm0 "Delta" ^: d
+dadv d = fn2 $ dadv_ ^: d
 
 -- | Distinguishers' advantage
 dadvs :: Note -> Note -> Note
-dadvs = fn2 $ comm0 "Delta"
+dadvs = fn2 $ dadv_
 
 -- * Bit guessing problems
 

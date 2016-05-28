@@ -73,14 +73,17 @@ computationalProblemsS = section "Computational Problems" $ do
         subsubsection "Distinction problems" $ do
             deterministicDistinctionProblemDefinition
             deterministicDistinguisherDefinition
-            probabillisticDistinctionProblemDefinition
             probabillisticDistinguisherDefinition
-            distinguisherAdvantageDefinition
-            -- distinctionGameDefinition
+            probabillisticDistinctionProblemDefinition
+            distinguisherDeterministicDPDeterministicDistinguinger
+            distinguisherDeterministicDPProbabilisticDistinguinger
+            distinguisherProbabilisticDPDeterministicDistinguinger
+            distinguisherProbabilisticDPProbabilisticDistinguinger
             bestDistinguisherAdvantage
             distinctionAdvantagePseudoMetric
             distinctionAdvantageRandomVariables
             splittingDistinctionProblem
+            probabillisticDistinguishersAreNoBetterThanDeterministicDistinguishersTheorem
 
         subsubsection "Bit guessing problems" $ do
             bitGuessingProblemDefinition
@@ -451,7 +454,7 @@ probabillisticWinnerDefinition :: Note
 probabillisticWinnerDefinition = de $ do
     let dd = mathcal "W"
         ww = "W"
-    s ["A", probabilisticWinner', m $ prdis_ ww, "is a", probabilityDistribution, "of a", xRv dd]
+    s ["A", probabilisticWinner', m $ prdis_ ww, "is a", probabilityDistribution, "of a", xRv dd, m ww]
 
 performanceOfProbabilisticWinnerInDeterministicGame :: Note
 performanceOfProbabilisticWinnerInDeterministicGame = de $ do
@@ -469,7 +472,7 @@ probabillisticGameDefinition = de $ do
     let gg = mathcal "G"
     s ["Let", m gg, "be a", set, "of", deterministicGames]
     let gr = "G"
-    s ["A", probabilisticGame', m $ prdis_ gr, over, m gg, "is a", probabilityDistribution, "of a", randomVariable, m gr, over, m gg]
+    s ["A", probabilisticGame', m $ prdis_ gr, over, m gg, "is a", probabilityDistribution, "of a", xRv gg, m gr]
 
 performanceOfDeterministicWinnerInProbabillisticGame :: Note
 performanceOfDeterministicWinnerInProbabillisticGame = de $ do
@@ -550,99 +553,99 @@ deterministicDistinguisherDefinition = do
             p = dprob o0 o1
         s ["Let", m p, "be a", distinctionProblem]
         let ds = mathcal "D"
-        s ["A", solver, "which, in this case, is called", distinguisher', "is supposed to guess which of the two objects it is given access to"]
+        s ["A", solver, "which, in this case, is called a", distinguisher', ",is supposed to guess which of the two objects it is given access to"]
         s ["Let", m ds, "be a", set, "of such abstract", distinguishers]
         let d = "d"
             o = "o"
         s ["A", function, m guess_, "as follows determines the guess of a given", distinguisher, m d, "when given access to a given object", m o]
-        ma $ fun2 guess_ ds objs_ bits
+        ma $ func2 guess_ ds (setofs [o0, o1]) bits d o $ guess d o
         let i = "i"
         s [m $ guess d o =: i, "is interpreted as", dquoted $ s [m d, "guesses that it sees", m $ o !: i, "when given", m o]]
-        -- let ss = "S"
-        --     s0 = ss !: 0
-        --     s1 = ss !: 1
-        --     p = dprob s0 s1
-        -- s ["A", distinguisher', "for a", distinctionProblem, m p, "is a", nS 2, "which at one", interface, "connects to a", system, m ss, "(either", m s0, or, m s1 <> ")", "and at the other", interface, "outputs a bit"]
-    -- nte $ do
-        -- s ["A", distinguisher, "can be both deterministic or probabilistic and is therefore usually assumed to be probabilistic"]
-
-probabillisticDistinctionProblemDefinition :: Note
-probabillisticDistinctionProblemDefinition = de $ do
-    s ["Let", m objs_, "be a set of objects"]
-    let o = "O"
-        o0 = o !: 0
-        o1 = o !: 1
-        p = dprob o0 o1
-    s ["If", m o0, and, m o1, are, xRvs objs_, "then we call", m p, "a", probabilisticDistinctionProblem']
-
 
 probabillisticDistinguisherDefinition :: Note
 probabillisticDistinguisherDefinition = de $ do
-    let o = "o"
+    let ds = mathcal "D"
+    s ["Let", m ds, "be a", set, "of", deterministicDistinguishers]
+    let dd = "D"
+    s ["A", probabilisticDistinguisher', "is a", probabilityDistribution, m $ prdis_ dd, "of a", xRv ds]
+
+    -- let o = "o"
+    --     o0 = o !: 0
+    --     o1 = o !: 1
+    --     p = dprob o0 o1
+    -- s ["A", function, m guess_, "as follows determines the guess of a given", probabilisticDistinguisher, m $ prdis_ dd, "when given access to a given object", m o, "in a", deterministicDistinctionProblem, m p]
+    -- ma $ func2 guess_ (prdss ds) (setofs [o0, o1]) bits (prdis_ dd) o $ guess (prdis_ dd) o
+
+probabillisticDistinctionProblemDefinition :: Note
+probabillisticDistinctionProblemDefinition = do
+    let o = "O"
         o0 = o !: 0
         o1 = o !: 1
-        p = dprob o0 o1
-    let ds = mathcal "D"
-    s ["let", m p, "be a", distinctionProblem, and, m ds, "a", set, "of", deterministicDistinguishers]
-    s ["A", probabilisticDistinguisher', "is a", xRv ds]
+    let p = dprob (prdis_ o0) (prdis_ o1)
+    de $ do
+        s ["Let", m objs_, "be a set of objects"]
+        s ["Let", m $ prdis_ o0, and, m $ prdis_ o1, be, probabilityDistributions, "of", xRvs objs_, m o0, and, m o1]
+        s [m p, "is then called a", probabilisticDistinctionProblem']
 
-distinguisherAdvantageDefinition :: Note
-distinguisherAdvantageDefinition = de $ do
+    nte $ do
+        s ["Sometimes", m p, "is also denoted as", m $ dprob o0 o1, "but that is notation abuse"]
+
+distinguisherDeterministicDPDeterministicDistinguinger :: Note
+distinguisherDeterministicDPDeterministicDistinguinger = de $ do
     let o = "o"
         o0 = o !: 0
         o1 = o !: 1
         p = dprob o0 o1
         d = "d"
-    s ["Let", m p, "be a", deterministicDistinctionProblem, and, m d, "a", deterministicDistinguisher]
-    s ["We define the", advantage', m $ dadv d o0 o1, "of", m d, "as follows"]
-    ma $ dadv d o0 o1 =: prob (guess d o1 =: 1) - prob (guess d o0 =: 1)
+        ds = mathcal "D"
+    s ["Let", m p, "be a", deterministicDistinctionProblem, and, m d, "a", deterministicDistinguisher, "from a set", m ds]
+    s ["We define the", advantage', m $ dadv d o0 o1, "of", m d, "in", m p, "as follows"]
+    ma $ dadv d o0 o1 =: guess d o1 - guess d o0
+
+distinguisherDeterministicDPProbabilisticDistinguinger :: Note
+distinguisherDeterministicDPProbabilisticDistinguinger = do
+    let o = "o"
+        o0 = o !: 0
+        o1 = o !: 1
+        p = dprob o0 o1
     let dd = "D"
-    s ["If", m dd, "is a", probabilisticDistinguisher, "then we define the", advantage, "as follows"]
-    ma $ dadv dd o0 o1 =: prob (guess dd o1 =: 1) - prob (guess dd o0 =: 1)
+        ds = mathcal dd
+    de $ do
+        s ["Let", m p, "be a", deterministicDistinctionProblem, and, m $ prdis_ dd, "a", probabilisticDistinguisher, over, m "a", set, m ds, "of", deterministicDistinguishers]
+        s ["We define the", advantage', m $ dadv (prdis_ dd) o0 o1, "of", m $ prdis_ dd, "as follows"]
+        ma $ dadv (prdis_ dd) o0 o1 =: prdis dd (guess dd o1 =: 1) - prdis dd (guess dd o0 =: 1)
+    nte $ do
+        s ["Sometimes", m $ dadv (prdis_ dd) o0 o1, "is also denoted as", m $ dadv dd o0 o1, "but that is notation abuse"]
+
+distinguisherProbabilisticDPDeterministicDistinguinger :: Note
+distinguisherProbabilisticDPDeterministicDistinguinger = do
     let oo = "O"
         oo0 = oo !: 0
         oo1 = oo !: 1
-        pp = dprob oo0 oo1
-    s ["If", m pp, "is a", probabilisticDistinctionProblem, "then we define the", advantage, "as follows"]
-    ma $ dadv d oo0 oo1 =: prob (guess d oo1 =: 1) - prob (guess d oo0 =: 1)
-    s [the, advantage, "of a", probabilisticDistinguisher, m dd, "in a", probabilisticDistinctionProblem, m pp, "is defined as follows"]
-    ma $ dadv dd oo0 oo1 =: prob (guess dd oo1 =: 1) - prob (guess dd oo0 =: 1)
-    todo "Rewrite these in function definition (with sets) notation"
+        pp = dprob (prdis_ oo0) (prdis_ oo1)
+        d = "d"
+    de $ do
+        s ["Let", m pp, "be a", probabilisticDistinctionProblem, "for a set of objects", m objs_, "and let", m d, "be a", deterministicDistinguisher, for, m pp]
+        s ["We define the", advantage', m $ dadv d (prdis_ oo0) (prdis_ oo1), "of", m d, "as follows"]
+        ma $ dadv d (prdis_ oo0) (prdis_ oo1) =: prdis oo1 (guess d oo1 =: 1) - prdis oo0 (guess d oo0 =: 1)
+    nte $ do
+        s ["Sometimes", m $ dadv d (prdis_ oo0) (prdis_ oo1), "is also denoted as", m $ dadv d oo0 oo1, "but that is notation abuse"]
 
-    -- let ss = "S"
-    --     s0 = ss !: 0
-    --     s1 = ss !: 1
-    --     d = "D"
-    -- de $ do
-    --     let p = dprob s0 s1
-    --         ad = dadv d s0 s1
-    --     s [the, advantage', m ad, "of a", distinguisher, m d, "for a", distinctionProblem, m p, "in distinguishing", m s0, and, m s1, "is defined as follows"]
-    --     ma $ ad =: prob (conv_ d s1 =: 1) - prob (conv_ d s0 =: 1)
-    -- nte $ do
-    --     s ["Note that", m $ prob (conv_ d s1 =: 1), and, m $ prob (conv_ d s0 =: 1), "are probabilities in different random experiments"]
-    --     s ["In one experiment the", distinguisher, "is guessing the identity of", m s0, and, "in the other it's guessing the identity of", m s1]
-    -- de $ do
-    --     let dd = mathcal "D"
-    --     s ["We define the", advantage, "of a", set, m dd, "of", distinguishers, "as the", supremum, "of all the individual", distinguishers]
-    --     ma $ dadv dd s0 s1 =: supcomp (d ∈ dd) (dadv d s0 s1)
-    --     s ["Moreover, we denote the", advantage, "of the", set, "of all possible", distinguishers, "as", m $ dadvs s0 s1]
-
--- distinctionGameDefinition :: Note
--- distinctionGameDefinition = de $ do
---     lab distinctionGameDefinitionLabel
---     let ss = "S"
---         s0 = ss !: 0
---         s1 = ss !: 1
---         p = dprob s0 s1
---     s ["A", deterministicDistinctionGame', "for a", distinctionProblem, m p, "(deterministically) outputs either", m s0, or, m s1, "at one", interface, "and receives a bit at that same", interface]
---     s ["It then outputs a set bit if the bit that it receives matches the index of the", system, "it outputted before"]
---     newline
---     s ["A (probabilistic)", distinctionGame', "for a", distinctionProblem, m p, "is a", randomVariable, "over the", deterministicDistinctionGames, "for", m p]
---
---     s ["A", solver, "for a", distinctionGame, "for a", distinctionProblem, m p, "is a", distinguisher, "for", m p]
---     s [the, performanceValues, "of such a", solver, "lie in the interval", m $ ccint (-1) 1]
---     newline
---     s [the, performanceFunction, "is then defined as mapping a", distinguisher, "to its", advantage]
+distinguisherProbabilisticDPProbabilisticDistinguinger :: Note
+distinguisherProbabilisticDPProbabilisticDistinguinger = do
+    let oo = "O"
+        oo0 = oo !: 0
+        oo1 = oo !: 1
+        pp = dprob (prdis_ oo0) (prdis_ oo1)
+    let ds = mathcal "D"
+        dd = "D"
+    de $ do
+        s ["Let", m pp, "be a", probabilisticDistinctionProblem, "for a set of objects", m objs_]
+        s ["Let", m ds, "be a", set, "of", deterministicDistinguishers, and, m $ prdis_ dd, a, probabilisticDistinguisher, for, m pp, on, m ds]
+        s ["We define the", advantage', m $ dadv (prdis_ dd) (prdis_ oo0) (prdis_ oo1), "of", m $ prdis_ dd, "as follows"]
+        ma $ dadv (prdis_ dd) (prdis_ oo0) (prdis_ oo1) =: prdiss [dd, oo1] (guess dd oo1 =: 1) - prdiss [dd, oo0] (guess dd oo0 =: 1)
+    nte $ do
+        s ["Sometimes", m $ dadv (prdis_ dd) (prdis_ oo0) (prdis_ oo1), "is also denoted as", m $ dadv dd oo0 oo1, "but that is notation abuse"]
 
 bestDistinguisherAdvantage :: Note
 bestDistinguisherAdvantage = de $ do
@@ -656,7 +659,6 @@ bestDistinguisherAdvantage = de $ do
     let d = "D"
     ma $ dadv ds oo0 oo1 =: supcomp (d ∈ ds) (dadv d oo0 oo1)
     s ["We use", m $ dadvs oo0 oo1, "to mean the", advantage, "of the best", distinguisher, "out of all possible", distinguishers]
-    todo "probabilistic distinguishers are not better than deterministic ones"
 
 distinctionAdvantagePseudoMetric :: Note
 distinctionAdvantagePseudoMetric = lem $ do
@@ -693,6 +695,15 @@ splittingDistinctionProblem = lem $ do
     ma $ fa d $ dadv d o1 ok =: dadv d o1 o2 + dadv d o2 (o !: 3) + dotsb + dadv d (o !: (k - 1)) ok
     toprove
 
+probabillisticDistinguishersAreNoBetterThanDeterministicDistinguishersTheorem :: Note
+probabillisticDistinguishersAreNoBetterThanDeterministicDistinguishersTheorem = thm $ do
+    s ["For any", distinctionProblem <> ", the best", probabilisticDistinguisher, is, "as powerful as the best", deterministicDistinguisher]
+    let ds = mathcal "D"
+        dspd = prdss ds
+        o = "o"
+        o0 = o !: 0
+        o1 = o !: 1
+    ma $ dadv ds o0 o1 =: dadv dspd o0 o1
 
 bitGuessingProblemDefinition :: Note
 bitGuessingProblemDefinition = de $ do
