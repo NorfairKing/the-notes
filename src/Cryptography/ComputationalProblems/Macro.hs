@@ -154,9 +154,12 @@ dadvs = fn2 $ dadv_
 bgprob :: Note -> Note -> Note
 bgprob s z = sqbrac $ s <> "; " <> z
 
--- Guesser's advantage
-gadv :: Note -> Note
-gadv = fn "A"
+-- Guesser's advantage in given bit guessing problem
+gadvf :: Note -> Note
+gadvf = ("A" !:)
+
+gadv :: Note -> Note -> Note
+gadv p = fn $ gadvf p
 
 -- * Diffie-Hellman
 

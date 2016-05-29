@@ -84,19 +84,24 @@ computationalProblemsS = section "Computational Problems" $ do
             distinctionAdvantageRandomVariables
             splittingDistinctionProblem
             probabillisticDistinguishersAreNoBetterThanDeterministicDistinguishersTheorem
+            distinguisherPerformanceDefinition
 
         subsubsection "Bit guessing problems" $ do
-            bitGuessingProblemDefinition
-            bitGuesserDefinition
-            bitGuesserAdvantageDefinition
-            -- bitGuessingGameDefinition
+            s ["A", bitGuessingProblem', "is the abstract problem of guessing a hidden bit from a given object"]
+            deterministicBitGuessingProblemDefinition
+            deterministicBitGuesserDefinition
+            advantageOfDeterministicBGInDeterministicBGP
+            probabilisticBitGuesserDefinition
+            advantageOfProbabilisticBGInDeterministicBGP
+            probabilisticBitGuessingProblemDefinition
+            advantageOfDeterministicBGInProbabilisticBGP
+            advantageOfProbabilisticBGInProbabilisticBGP
             distinctionBitGuessingEquivalenceLemma
             bitGuessingPerformanceAmplification
 
         subsubsection "Search problems" $ do
             searchProblemDefinition
             searchProblemSolverDefinition
-            -- searchProblemGameDefinition
             searchProblemSolverRepetition
             functionInversionDefinition
             oneWayFunctionDefinition
@@ -705,38 +710,119 @@ probabillisticDistinguishersAreNoBetterThanDeterministicDistinguishersTheorem = 
         o1 = o !: 1
     ma $ dadv ds o0 o1 =: dadv dspd o0 o1
 
-bitGuessingProblemDefinition :: Note
-bitGuessingProblemDefinition = de $ do
-    lab bitGuessingProblemDefinitionLabel
-    s ["A", bitGuessingProblem', "is the abstract problem of guessing a hidden bit from a given object"]
+distinguisherPerformanceDefinition :: Note
+distinguisherPerformanceDefinition = de $ do
+    let ds = mathcal "D"
+        dd = "D"
+        o = "O"
+        o0 = o !: 0
+        o1 = o !: 1
+        p = dprob o0 o1
+    s ["In the context of a", distinctionProblem, m p, "we can view it as a", game, with, distinguishers, m dd, as, solvers]
+    s [the, performanceValues, "are then in", m $ ccint (-1) 1, "and the", performanceFunction, "is defined as follows"]
+    ma $ func (perff p) ds (ccint (-1) 1) dd $ perf p dd =: dadv dd o0 o1
+
+deterministicBitGuessingProblemDefinition :: Note
+deterministicBitGuessingProblemDefinition = de $ do
     let o = "o"
-        oo = mathcal "O"
         z = "z"
-    s ["Concretely: Let", m o, "be an objects from a", set, m oo, "of objects", and, m $ z ∈ bits, "a bit"]
-    s [m $ bgprob o z, "is then the problem of guessing", m z, from, m o]
-    todo "Split into deterministic and probabilistic"
+    s ["Let", m o, "be some object and", m $ z ∈ bits, "a bit"]
+    s ["We then call", m $ bgprob o z, a, deterministicBitGuessingProblem']
 
-bitGuesserDefinition :: Note
-bitGuesserDefinition = de $ do
-    lab bitGuesserDefinitionLabel
+deterministicBitGuesserDefinition :: Note
+deterministicBitGuesserDefinition = de $ do
+    let o = "o"
+        z = "z"
+    s ["A", bitGuesser, "is an abstract object that, given an object", m o, ", is supposed to guess the hidden bit in a", bitGuessingGame]
     let ds = "D"
-        oo = mathcal "O"
-    s ["Let", m ds, "be a", set, "of so-called", bitGuessers, "for a", bitGuessingProblem, "for the objects in", m oo]
-    s ["A", bitGuesser', "is an abstract object in", m ds, "such that there exists a so-called guessing-function", m guess_, "as follows"]
-    ma $ fun2 guess_ ds oo bits
-    let d = "d"
-        o = "o"
-        z = "z"
-    s [m $ guess d o =: z, "can be interpreted as the statement that", m d, "guesses the bit", m z, "upon receiving object", m o]
+        d = "d"
+    s ["Let", m ds, "be a", set, "of such abstract", bitGuessers, "then a function", m guess_, "determines the guess of a given", deterministicBitGuesser']
+    ma $ func guess_ ds bits d $ guess d o
+    s [m $ guess d o =: z, "can be interpreted as the statement that the", deterministicBitGuesser, m d, "guesses the bit", m z, "upon receiving object", m o]
 
-bitGuesserAdvantageDefinition :: Note
-bitGuesserAdvantageDefinition = de $ do
-    let gg = "G"
+advantageOfDeterministicBGInDeterministicBGP :: Note
+advantageOfDeterministicBGInDeterministicBGP = de $ do
+    let o = "o"
+        z = "z"
+        d = "d"
+        ds = mathcal "D"
+        p = bgprob o z
+    s ["Let", m p, "be a", deterministicBitGuessingProblem, and, m d, a, deterministicBitGuesser, for, m p, from, a, set, m ds]
+    s ["We define the", advantage', m $ gadv p d, "of", m d, "in", m p, "as follows"]
+    ma $ func (gadvf p) ds (ccint (-1) 1) d $ gadv p d =: 2 * (pars $ (pars $ 1 - abs (guess d o - z)) - (1 / 2))
+    s ["Note that", m $ 1 - abs (guess d o - z), is, m 1, "if", m $ guess d o, equals, m z, and, m 0, otherwise]
+
+probabilisticBitGuesserDefinition :: Note
+probabilisticBitGuesserDefinition = de $ do
+    let ds = mathcal "D"
+        dd = "D"
+    s ["Let", m ds, "be a", set, "of", deterministicBitGuessers]
+    s ["A", probabilisticBitGuesser', m $ prdis_ dd, "is a", probabilityDistribution, "of a", xRv ds, m dd]
+
+advantageOfProbabilisticBGInDeterministicBGP :: Note
+advantageOfProbabilisticBGInDeterministicBGP = do
+    let o = "o"
+        z = "z"
+        ds = mathcal "D"
+        dd = "D"
+        p = bgprob o z
+    de $ do
+        s ["Let", m $ bgprob o z, "be a", deterministicBitGuessingProblem]
+        s ["Let", m ds, "be a", set, "of", deterministicBitGuessers, and, m $ prdis_ dd, a, probabilisticBitGuesser, over, m ds]
+        s ["We define the", advantage', m $ gadv p (prdis_ dd), "of", m $ prdis_ dd, "in", m p, "as follows"]
+        ma $ func (gadvf p) (prdss ds) (ccint (-1) 1) (prdis_ dd) $ gadv p (prdis_ dd) =: 2 * (pars $ (prdis dd $ guess dd o =: z) - (1 / 2))
+    nte $ do
+        s ["Often", m $ gadv p (prdis_ dd), "is also written as", m $ gadv p dd, "but that is notation abuse"]
+
+probabilisticBitGuessingProblemDefinition :: Note
+probabilisticBitGuessingProblemDefinition = do
+    let os = objs_
         oo = "O"
         zz = "Z"
-    s [the, advantage, "of a", bitGuesser, m gg, advantage', "in a", bitGuessingProblem, m $ bgprob oo zz, "is defined as follows"]
-    ma $ gadv gg =: 2 * (pars $ prob (guess gg oo =: zz) - (1 / 2))
-    s ["The value of the", advantage, "lies in the interval", m $ ccint (-1) 1]
+    de $ do
+        s ["Let", m os, "be a", set, "of objects"]
+        s ["A", probabilisticBitGuessingProblem', "is the combination of a", probabilityDistribution, m $ prdis_ oo, "of a", xRv os, m oo, anda, probabilityDistribution, m $ prdis_ zz, "of a", xRv bits, m zz]
+        s ["It is often written as", m $ bgprob (prdis_ oo) (prdis_ zz)]
+    nte $ do
+        s ["Often this is also written as", m $ bgprob oo zz, "but that is notation abuse"]
+
+advantageOfDeterministicBGInProbabilisticBGP :: Note
+advantageOfDeterministicBGInProbabilisticBGP = do
+    let oo = "O"
+        zz = "Z"
+        ds = mathcal "D"
+        d = "d"
+        pp = bgprob (prdis_ oo) (prdis_ zz)
+    de $ do
+        s ["Let", m pp, "be a", probabilisticBitGuessingProblem, "and let", m d, beA, deterministicBitGuesser, from, a, set, m ds]
+        s ["We define the", advantage', m $ gadv pp d, "of", m d, "in", m pp, "as follows"]
+        ma $ func (gadvf pp) ds (ccint (-1) 1) d $ gadv pp d =: 2 * (pars $ (prdiss [oo, zz] $ guess d oo =: zz) - (1 / 2))
+    nte $ do
+        s ["Often", m $ gadv pp d, "is also written as", m $ gadv (bgprob oo zz) d, "but that is notation abuse"]
+
+advantageOfProbabilisticBGInProbabilisticBGP :: Note
+advantageOfProbabilisticBGInProbabilisticBGP = do
+    let ds = mathcal "D"
+        dd = "D"
+        oo = "O"
+        zz = "Z"
+        pp = bgprob (prdis_ oo) (prdis_ zz)
+    de $ do
+        s ["Let", m pp, "be a", probabilisticBitGuessingProblem, "and let", m $ prdis_ dd, beA, probabilisticBitGuesser]
+        s ["We define the", advantage', m $ gadv pp (prdis_ dd), "of", m $ prdis_ dd, "in", m pp, "as follows"]
+        ma $ func (gadvf pp) (prdss ds) (ccint (-1) 1) (prdis_ dd) $ gadv pp (prdis_ dd) =: 2 * (pars $ (prdiss [oo, zz, dd] $ guess dd oo =: zz) - (1 / 2))
+    nte $ do
+        s ["Often", m $ gadv pp (prdis_ dd), "is also written as", m $ gadv (bgprob oo zz) dd, "but that is notation abuse"]
+
+
+-- bitGuesserAdvantageDefinition :: Note
+-- bitGuesserAdvantageDefinition = de $ do
+--     let gg = "G"
+--         oo = "O"
+--         zz = "Z"
+--     s [the, advantage, "of a", bitGuesser, m gg, advantage', "in a", bitGuessingProblem, m $ bgprob oo zz, "is defined as follows"]
+--     ma $ gadv gg =: 2 * (pars $ prob (guess gg oo =: zz) - (1 / 2))
+--     s ["The value of the", advantage, "lies in the interval", m $ ccint (-1) 1]
 
 -- bitGuessingGameDefinition :: Note
 -- bitGuessingGameDefinition = de $ do

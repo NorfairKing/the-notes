@@ -6,7 +6,8 @@ module Macro.Text where
 import           Types
 
 import           Data.List (intersperse)
-import           Prelude   (error, length, otherwise, sequence_, (++), (<))
+import           Prelude   (error, length, sequence_, (++), (<))
+import qualified Prelude   as P (otherwise)
 import           TH
 
 -- Polyvariadic version of 's'.
@@ -58,6 +59,8 @@ makeStrs
     , "and"
     , "The"
     , "a"
+    , "as"
+    , "otherwise"
     ]
 
 makeAbbrs
@@ -91,7 +94,7 @@ cs = commaSeparated
 commaSeparatedWord :: Note -> [Note] -> Note
 commaSeparatedWord word ns
     | length ns < 2 = commaSeparated ns
-    | otherwise = go ns
+    | P.otherwise = go ns
   where
     go [] = error "impossible as per three lines above"
     go [n] = word <> " " <> n
