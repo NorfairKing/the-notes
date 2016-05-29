@@ -829,11 +829,33 @@ bitGuessingGamePerformanceDefinition = de $ do
 distinctionBitGuessingEquivalenceLemma :: Note
 distinctionBitGuessingEquivalenceLemma = lem $ do
     s [distinctionProblems, "can be regarded as a special case of", bitGuessingProblems, "where the bit is uniform"]
+    let os = objs_
+        ds = mathcal "D"
+    s ["Let", m os, "be a", set, "of objects", and, m ds, a, set, "of", distinguishers]
+    let oo = "O"
+        o0 = oo !: 0
+        o1 = oo !: 1
+        dp = dprob o0 o1
+    s ["Let", m dp, "be a", probabilisticDistinctionProblem]
+    let uu = "U"
+    s ["Let", m uu, "be a", xRv bits, "such that its", probabilityDistribution, "is uniform", m uniformD_]
+    let ou = oo !: uu
+    let bp = bgprob ou uu
+    s ["Let", m bp, "be the", bitGuessingProblem, "of guessing", m uu, from, m ou]
+    let dd = "D"
+    ma $ fa dd $ perf bp dd =: perf dp dd
     proof $ do
-        let d = "D"
-            b = "B"
-        s ["We prove this by showing that for any", distinctionProblem, m d, "there exists a", bitGuessingProblem, m b, "such that every", distinguisher, "for", m d, "can be used to construct a", bitGuesser, for, m b, "with the same (or better)", advantage]
-        toprove
+        s ["Let", m dd, "be an arbitrary", distinguisher]
+        aligneqs (perf bp dd)
+            [ gadv bp dd
+            , 2 * (pars $ (prdiss [ou, uu, dd] $ guess dd ou =: uu) - (1 / 2))
+            , 2 * (pars $ (pars $ (1 / 2) * (prdiss [o0, dd] (guess dd o0 =: 0)) + (1 / 2) * (prdiss [o1, dd] (guess dd o1 =: 1))) - (1 / 2))
+            , 2 * (pars $ (pars $ (1 / 2) * (pars $ 1 - prdiss [o0, dd] (guess dd o0 =: 1)) + (1 / 2) * (prdiss [o1, dd] (guess dd o1 =: 1))) - (1 / 2))
+            , 2 * (pars $ (pars $ (1 / 2) - (1 / 2) * (prdiss [o0, dd] (guess dd o0 =: 1)) + (1 / 2) * (prdiss [o1, dd] (guess dd o1 =: 1))) - (1 / 2))
+            , prdiss [o1, dd] (guess dd o1 =: 1) - prdiss [o0, dd] (guess dd o0 =: 1)
+            , dadv dd o0 o1
+            , perf dp dd
+            ]
 
 bitGuessingPerformanceAmplification :: Note
 bitGuessingPerformanceAmplification = thm $ do
