@@ -96,6 +96,7 @@ computationalProblemsS = section "Computational Problems" $ do
             probabilisticBitGuessingProblemDefinition
             advantageOfDeterministicBGInProbabilisticBGP
             advantageOfProbabilisticBGInProbabilisticBGP
+            bitGuessingGamePerformanceDefinition
             distinctionBitGuessingEquivalenceLemma
             bitGuessingPerformanceAmplification
 
@@ -814,26 +815,16 @@ advantageOfProbabilisticBGInProbabilisticBGP = do
     nte $ do
         s ["Often", m $ gadv pp (prdis_ dd), "is also written as", m $ gadv (bgprob oo zz) dd, "but that is notation abuse"]
 
-
--- bitGuesserAdvantageDefinition :: Note
--- bitGuesserAdvantageDefinition = de $ do
---     let gg = "G"
---         oo = "O"
---         zz = "Z"
---     s [the, advantage, "of a", bitGuesser, m gg, advantage', "in a", bitGuessingProblem, m $ bgprob oo zz, "is defined as follows"]
---     ma $ gadv gg =: 2 * (pars $ prob (guess gg oo =: zz) - (1 / 2))
---     s ["The value of the", advantage, "lies in the interval", m $ ccint (-1) 1]
-
--- bitGuessingGameDefinition :: Note
--- bitGuessingGameDefinition = de $ do
---     let b = "B"
---     s ["A", deterministicBitGuessingGame', "for a", bitGuessingGame, m b, "(deterministically) has", m b, "output its bit and receives a bit at its inside interface from a", player]
---     s ["It then outputs a set bit (win) if the two bits equal"]
---     newline
---     s ["A (probabilistic)", bitGuessingGame', "for a", bitGuessingProblem, m b, "is", game, "is a", randomVariable, "over the deterministic", bitGuessingGames, for, m b]
---     s ["A", solver, "for a", bitGuessingGame, "for a", bitGuessingProblem, m b, "is a", bitGuesser, for, m b]
---     s [the, performanceValues, "of such a", solver, "lie in the interval", m $ ccint (-1) 1]
---     s [the, performanceFunction, "is then defined as mapping a", bitGuesser, "to its", advantage]
+bitGuessingGamePerformanceDefinition :: Note
+bitGuessingGamePerformanceDefinition = de $ do
+    let ds = mathcal "D"
+        dd = "D"
+        oo = "O"
+        zz = "Z"
+        pp = bgprob oo zz
+    s ["In the context of a", bitGuessingGame, m pp, "we can view it as a", game, with, bitGuessers, m dd, as, solvers]
+    s [the, performanceValues, "are then in", m $ ccint (-1) 1, "and the", performanceFunction, "is defined as follows"]
+    ma $ func (perff pp) ds (ccint (-1) 1) dd $ perf pp dd =: gadv pp dd
 
 distinctionBitGuessingEquivalenceLemma :: Note
 distinctionBitGuessingEquivalenceLemma = lem $ do
