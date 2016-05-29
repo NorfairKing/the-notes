@@ -1,12 +1,11 @@
 SOURCES = $(shell find $(SRC_DIR) -type f -name '*.hs')
 
-all: bin
+all: install
 	the-notes
 	./bin/all_preselects.sh
 
 build: $(SOURCES)
 	stack build --jobs=8
-
 
 SPSPDB=$(shell stack path --snapshot-pkg-db)
 SPLPDB=$(shell stack path --local-pkg-db)
