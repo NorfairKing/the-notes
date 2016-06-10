@@ -26,7 +26,7 @@ library
   other-extensions:    FlexibleInstances, MultiParamTypeClasses, UndecidableInstances, QuasiQuotes, TemplateHaskell
   build-depends:          base                  >= 4.6       && < 4.10
                         , HaTeX                 >= 3.16.2    && < 3.17
-                        , lambdatex             >= 0.1.0.3   && < 0.2
+                        , lambdatex             >= 0.1.0.4   && < 0.2
                         , mtl                   >= 2.2       && < 2.3
                         , process               >= 1.2       && < 1.5
                         , text                  >= 1.2       && < 1.3

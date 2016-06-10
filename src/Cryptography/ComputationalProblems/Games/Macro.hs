@@ -120,3 +120,13 @@ gadvf = ("A" !:)
 
 gadv :: Note -> Note -> Note
 gadv p = fn $ gadvf p
+
+
+-- * Discrete games
+
+-- ** Stop symbol for discrete distinguishers
+stopsym_ :: Note
+stopsym_ = comm0 "dashv"
+
+stopsym :: Note -> Note
+stopsym = (stopsym_ !:)

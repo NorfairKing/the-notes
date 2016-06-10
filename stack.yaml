@@ -35,7 +35,7 @@ extra-deps:
 - hspec-core-2.2.1
 - hspec-discover-2.2.1
 - hspec-expectations-0.7.2
-- lambdatex-0.1.0.3
+- lambdatex-0.1.0.4
 - loop-0.3.0
 - matrix-0.3.4.4
 - mtl-2.2.1
