@@ -1,8 +1,6 @@
 module Cryptography.ComputationalProblems where
 
-import           Notes                                               hiding
-                                                                      (cyclic,
-                                                                      inverse)
+import           Notes                                                              hiding (cyclic, inverse)
 
 import           Functions.Application.Macro
 import           Groups.Macro
@@ -23,6 +21,7 @@ import           Cryptography.ComputationalProblems.Abstract
 import           Cryptography.ComputationalProblems.Abstract.Macro
 import           Cryptography.ComputationalProblems.Abstract.Terms
 import           Cryptography.ComputationalProblems.Games
+import           Cryptography.ComputationalProblems.Games.DistinctionProblems.Macro
 import           Cryptography.ComputationalProblems.Games.Macro
 import           Cryptography.ComputationalProblems.Games.Terms
 import           Cryptography.ComputationalProblems.Reductions

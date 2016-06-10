@@ -80,12 +80,24 @@ library
       Contributors
       Cryptography.BlockCipherECBAttack
       Cryptography.ComputationalProblems
-      Cryptography.ComputationalProblems.Games
-      Cryptography.ComputationalProblems.Games.Macro
-      Cryptography.ComputationalProblems.Games.Terms
       Cryptography.ComputationalProblems.Abstract
       Cryptography.ComputationalProblems.Abstract.Macro
       Cryptography.ComputationalProblems.Abstract.Terms
+      Cryptography.ComputationalProblems.Games
+      Cryptography.ComputationalProblems.Games.Abstract
+      Cryptography.ComputationalProblems.Games.Abstract.Macro
+      Cryptography.ComputationalProblems.Games.Abstract.Terms
+      Cryptography.ComputationalProblems.Games.BitGuessingProblems
+      Cryptography.ComputationalProblems.Games.BitGuessingProblems.Macro
+      Cryptography.ComputationalProblems.Games.BitGuessingProblems.Terms
+      Cryptography.ComputationalProblems.Games.DiscreteGames
+      Cryptography.ComputationalProblems.Games.DiscreteGames.Macro
+      Cryptography.ComputationalProblems.Games.DiscreteGames.Terms
+      Cryptography.ComputationalProblems.Games.DistinctionProblems
+      Cryptography.ComputationalProblems.Games.DistinctionProblems.Macro
+      Cryptography.ComputationalProblems.Games.DistinctionProblems.Terms
+      Cryptography.ComputationalProblems.Games.Macro
+      Cryptography.ComputationalProblems.Games.Terms
       Cryptography.ComputationalProblems.Macro
       Cryptography.ComputationalProblems.Reductions
       Cryptography.ComputationalProblems.Reductions.Macro
