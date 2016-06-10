@@ -49,7 +49,6 @@ packages = do
     packageDep ["hidelinks"] "hyperref"
 
     packageDep_ "listings"
-    packageDep_ "minted"
 
     -- For a nicer code font
     packageDep_ "courier"
@@ -59,9 +58,6 @@ packages = do
 
     -- For colored text
     packageDep_ "color"
-
-    -- To cancel terms in math
-    packageDep_ "cancel"
 
     -- For fancy logic proofs
     packageDep_ "bussproofs"

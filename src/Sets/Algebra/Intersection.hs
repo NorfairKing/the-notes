@@ -2,15 +2,17 @@ module Sets.Algebra.Intersection where
 
 import           Notes
 
-import           Functions.BinaryOperation       (associative_)
+import           Functions.BinaryOperation.Terms
+import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
+
 import           Sets.Algebra.Union.Terms
+import           Sets.Basics.Terms
 
 import           Sets.Algebra.Intersection.Terms
 
 setIntersection :: Note
-setIntersection = note "intersection" $ do
-    subsection "Set intersection"
+setIntersection = subsection "Intersection" $ do
     intersectionDefinition
     intersectionAssociative
     intersectionCommutative
@@ -20,12 +22,13 @@ setIntersection = note "intersection" $ do
     intersectionIdentityLaw
     intersectionDominationLaw
     disjunctDefinition
+    pairwiseDisjunctDefinition
     absorptionLaws
     distributionLaws
 
 
-a, b, c, x, y :: Note
-a = "A"
+-- TODO make these local, also the a's!!
+b, c, x, y :: Note
 b = "B"
 c = "C"
 x = "x"
@@ -36,12 +39,9 @@ intersectionDefinition = de $ do
     s [the, intersection', " ", m (a ∪ b), " of two sets ", m a, " and ", m b, " is the set of all elements of both ", m a, " and ", m b]
     ma $ a ∪ b =§= setcmpr x ((x ∈ a) ∧ (x ∈ b))
 
-intersectionAssociativityLabel :: Label
-intersectionAssociativityLabel = Label Property "intersection-associative"
-
 intersectionAssociative :: Note
 intersectionAssociative = prop $ do
-    lab intersectionAssociativityLabel
+    lab intersectionAssociativityPropertyLabel
     s ["The set ", intersection, " is ", associative_]
     ma $ a ∩ (pars $ b ∩ c) =§= (pars $ a ∩ b) ∩ c
 
@@ -107,7 +107,7 @@ intersectionSubsetDefinition = thm $ do
 
 intersectionIdentityLaw :: Note
 intersectionIdentityLaw = thm $ do
-    s [the, term "identity law", " for the set ", intersection]
+    s [the, defineTerm "identity law", " for the set ", intersection]
     ma $ a ∩ setuniv =§= a
 
     proof $ do
@@ -119,7 +119,7 @@ intersectionIdentityLaw = thm $ do
 
 intersectionDominationLaw :: Note
 intersectionDominationLaw = thm $ do
-    s [the, term "domination law", " for the set ", intersection]
+    s [the, defineTerm "domination law", " for the set ", intersection]
     ma $ a ∩ setuniv =§= a
 
     proof $ do
@@ -132,9 +132,16 @@ intersectionDominationLaw = thm $ do
 
 disjunctDefinition :: Note
 disjunctDefinition = de $ do
-    s ["Two sets ", m a, and, m b, " are ", term "disjunct", " if they have no elements in common"]
+    s ["Two", sets, m a, and, m b, are, "called", disjunct', "if they have no", elements, "in common"]
     ma $ a ∩ b =§= emptyset
 
+pairwiseDisjunctDefinition :: Note
+pairwiseDisjunctDefinition = de $ do
+    let aa = "A"
+        a = "a"
+        b = "b"
+    s ["A", set, m aa, "of", sets, "is called", pairwiseDisjunct', "if all pairs of its", sets, are, disjunct]
+    ma $ fa (a ∈ aa) $ fa (b ∈ (aa \\ setof a)) $ a ∩ b =§= emptyset
 
 absorptionLaws :: Note
 absorptionLaws = do
@@ -143,7 +150,7 @@ absorptionLaws = do
 
 absorptionLaw1 :: Note
 absorptionLaw1 = thm $ do
-    s ["The first ", term "absorption law"]
+    s ["The first ", defineTerm "absorption law"]
     ma $ a ∪ (pars $ a ∩ b) =§= a
 
     proof $ do
@@ -161,7 +168,7 @@ absorptionLaw1 = thm $ do
 
 absorptionLaw2 :: Note
 absorptionLaw2 = thm $ do
-    s ["The second ", term "absorption law"]
+    s ["The second ", defineTerm "absorption law"]
     ma $ a ∩ (pars $ a ∪ b) =§= a
 
     proof $ do
@@ -181,12 +188,9 @@ distributionLaws = do
     distributionLaw1
     distributionLaw2
 
-distributionLaw1Label :: Label
-distributionLaw1Label = Label Theorem "dristribution-law-1"
-
 distributionLaw1 :: Note
 distributionLaw1 = thm $ do
-    lab distributionLaw1Label
+    lab distributionLaw1TheoremLabel
     s ["The set ", intersection, is, distributive, " with respect to the set ", union]
     ma $ a ∩ (pars $ b ∪ c) =§= (pars $ a ∪ b) ∩ (pars $ a ∪ c)
 
@@ -203,12 +207,9 @@ distributionLaw1 = thm $ do
               , "" & "" =§= (pars $ a ∪ b) ∩ (pars $ a ∪ c)
             ]
 
-distributionLaw2Label :: Label
-distributionLaw2Label = Label Theorem "dristribution-law-2"
-
 distributionLaw2 :: Note
 distributionLaw2 = thm $ do
-    lab distributionLaw2Label
+    lab distributionLaw2TheoremLabel
     s ["The set ", union, is, distributive, " with respect to the set ", intersection]
     ma $ a ∪ (pars $ b ∩ c) =§= (pars $ a ∩ b) ∪ (pars $ a ∩ c)
 

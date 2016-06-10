@@ -1,11 +1,11 @@
 module Macro.Reference where
 
-import           Control.Monad        (when)
+import           Types
+
+import           Control.Monad        (mapM_, when)
 import           Control.Monad.Reader (asks)
 
 import qualified Text.LaTeX.LambdaTeX as T (label, pageref, ref)
-
-import           Types
 
 wordOf :: RefKind -> Text
 wordOf Definition     = "definition"
@@ -14,32 +14,43 @@ wordOf Property       = "property"
 wordOf Proposition    = "proposition"
 wordOf Example        = "example"
 wordOf Figure         = "figure"
+wordOf Note           = "note"
+wordOf Lemma          = "lemma"
+wordOf Consequence    = "consequence"
 
 refKind :: Label -> RefKind
-refKind (Label kind _) = kind
+refKind (MkLabel kind _) = kind
 
 wordFor :: Label -> Text
 wordFor = wordOf . refKind
 
 labelOf :: Label -> Text
-labelOf (Label _ n) = n
+labelOf (MkLabel _ n) = n
 
 labelFor :: Label -> Text
 labelFor l = wordFor l <> ":" <> labelOf l
+
+rawRef :: Label -> Note
+rawRef l = do
+    let ll = labelFor l
+    fromLaTeX $ TeXRaw $ wordFor l
+    " "
+    T.ref ll
 
 ref :: Label -> Note
 ref l = footnote $ do
     debug <- asks conf_visualDebug
     let ll = labelFor l
     "See "
-    fromLaTeX $ TeXRaw $ wordFor l
-    " "
-    T.ref ll
+    rawRef l
     " on page "
     T.pageref ll
     "."
     " "
     when debug $ labelBox l
+
+refs :: [Label] -> Note
+refs rs = (<> newline) $ mapM_ ref rs
 
 labelBox :: Label -> Note
 labelBox l = colorbox (ModColor $ RGB 0.5 0.5 0.5) $ textcolor (ModColor $ RGB 0 1 0) ll
@@ -51,18 +62,3 @@ lab l = do
     let ll = labelFor l
     when debug $ labelBox l <> lnbk
     T.label ll
-
-delab :: Text -> Label
-delab = Label Definition
-
-thmlab :: Text -> Label
-thmlab = Label Theorem
-
-proplab :: Text -> Label
-proplab = Label Property
-
-prolab :: Text -> Label
-prolab = Label Proposition
-
-figlab :: Text -> Label
-figlab = Label Figure

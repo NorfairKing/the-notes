@@ -2,15 +2,22 @@ module TH.Command where
 
 import           Prelude
 
+import           Types
+import           Utils
+
 import           Language.Haskell.TH
-import           System.Process      (readProcess)
 
-embedOutput :: String -> Q Exp
-embedOutput str = do
-    out <- runIO $ readProcess cmd args "" -- input
-    return $ LitE . StringL $ out
-  where (cmd:args) = words str
+comm :: Int -> String -> Q [Dec]
+comm n c = comm_ n c c
 
-commitHash :: Q Exp
-commitHash = embedOutput "git rev-parse HEAD"
-
+comm_ :: Int -> String -> String -> Q [Dec]
+comm_ n c c' = return [sig, fun]
+  where
+    name = mkName . camelCase . sanitize $ c'
+    sig = SigD name (ConT ''Note)
+    fun = FunD name
+            [ Clause
+                []
+                (NormalB $ AppE (VarE $ mkName $ "comm" ++ show n) (LitE $ StringL $ c))
+                []
+            ]

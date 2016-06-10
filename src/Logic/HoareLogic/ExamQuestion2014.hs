@@ -41,7 +41,7 @@ examQuestion2014 = ex $ do
                             ⇔ true
                         s ["Thus we have the following triple"]
                         ma $ htrip true init_ inv1_
-                        let figlabel = figlab "fig:consequence-in-this-exam-thingy1"
+                        let figlabel = MkLabel Figure "fig:consequence-in-this-exam-thingy1"
                         s $ ["Because anything implies true, we can use the rule of consequence", ref figlabel]
                         sidewaysFigure $ do
                             prooftree $ do
@@ -67,7 +67,7 @@ examQuestion2014 = ex $ do
                             ]
                         s ["This gives us the following triple"]
                         ma $ htrip true init_ inv2_
-                        let figlabel = figlab "fig:consequence-in-this-exam-thingy2"
+                        let figlabel = MkLabel Figure "fig:consequence-in-this-exam-thingy2"
                         s ["Once more we use the rule of consequence to use this triple to proof the given triple", ref figlabel]
                         sidewaysFigure $ do
                             prooftree $ do
@@ -131,7 +131,7 @@ examQuestion2014 = ex $ do
                                 s ["... and the fourth elemnt implies the second element of the postcondition by itself"]
                                 ma $ icond_ ⇒ sep_'
                                 todo "Can this be more rigorous?"
-                                let figlabel = figlab "fig:consequence-in-this-exam-thingy2b"
+                                let figlabel = MkLabel Figure "fig:consequence-in-this-exam-thingy2b"
                                 s ["The rule of consequence can now be used to prove this triple", ref figlabel]
                                 sidewaysFigure $ do
                                     prooftree $ do
@@ -154,7 +154,7 @@ examQuestion2014 = ex $ do
                                 s ["If we strip the unnecessary as follows, it becomes intuitively clear that this implication holds"]
                                 ma $ centeredBelowEachOther [inv2_, "" ∧ nicond_, "" ⇒ inb2_]
                                 todo "can this be done more rigorously?"
-                                let figlabel = figlab "fig:consequence-in-this-exam-thingy2c"
+                                let figlabel = MkLabel Figure "fig:consequence-in-this-exam-thingy2c"
                                 s ["The rule of consequence can now be used to prove this triple", ref figlabel]
                                 sidewaysFigure $ do
                                     prooftree $ do
@@ -168,14 +168,14 @@ examQuestion2014 = ex $ do
                     item $ do
                         noindent
                         framed $ ma $ htrip_ inb_ body2_ inv_
-                        let figlabel = figlab "fig:consequence-in-this-exam-thingy3"
+                        let figlabel = MkLabel Figure "fig:consequence-in-this-exam-thingy3"
                         s ["First we'll use the rule of constancy to get rid of the first part of each condition", ref figlabel]
                         sidewaysFigure $ do
                             prooftree $ do
                                 constancy
                                     (assumption $ m $ htrip_ inv2e_ body2_ inv2_)
                                     (assumption $ m $ centeredBelowEachOther
-                                        [freevars inv1_, "" ∩ "", modifies body2_, "" =§= emptyset])
+                                        [freevars inv1_, "" ∩ "", mods body2_, "" =§= emptyset])
                                     (m $ htrip_ inb_ body2_ inv_)
                             lab figlabel
                             caption "Application of the rule of constancy"

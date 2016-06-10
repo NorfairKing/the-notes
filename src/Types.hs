@@ -26,26 +26,33 @@ import           Prelude                      as P (Double, Eq (..), FilePath,
                                                     Fractional (..), IO,
                                                     Maybe (..), Num (..),
                                                     Show (..), mempty, ($),
-                                                    (&&), (++), (.))
+                                                    (&&), (.))
 
 import           Debug.Trace
+import           System.Random
 
 import           Text.LaTeX                   hiding (Label, alph_, article,
-                                               cite, item, label, pageref, ref,
-                                               ref, rule, usepackage)
+                                               chapter, cite, item, label,
+                                               pageref, paragraph, ref, ref,
+                                               rule, section, subsection,
+                                               subsubsection, usepackage)
 import           Text.LaTeX.Base.Class
 import           Text.LaTeX.Base.Pretty
 import           Text.LaTeX.Base.Syntax
-import           Text.LaTeX.Packages.AMSFonts
-import           Text.LaTeX.Packages.AMSMath  hiding (subset, (!:), (^:))
+import           Text.LaTeX.Packages.AMSFonts hiding (integers)
+import           Text.LaTeX.Packages.AMSMath  hiding (bullet, div_, equation,
+                                               ln, mp, partial, pm, subset, to,
+                                               (!:), (^:))
 import           Text.LaTeX.Packages.AMSThm   hiding (TheoremStyle (..), proof,
                                                theorem)
 import           Text.LaTeX.Packages.Color
 import           Text.LaTeX.Packages.Fancyhdr
 import           Text.LaTeX.Packages.Graphicx
 
+import           Control.DeepSeq              (NFData (..))
 import           Control.Monad.Reader         (ReaderT)
 import           Control.Monad.State          (StateT)
+import           System.Exit                  (ExitCode (..))
 
 import           Text.LaTeX.LambdaTeX         hiding (label, note, pageref, ref)
 
@@ -53,10 +60,13 @@ type Note  = Note' ()
 type Note' = ΛTeXT (StateT State (ReaderT Config IO))
 
 data State = State
+    { state_rng :: StdGen
+    }
 
 data Args = Args {
       args_selectionString       :: String
     , args_visualDebug           :: Bool
+    , args_fast                  :: Bool
     , args_verbose               :: Bool
     , args_ignoreReferenceErrors :: Bool
     , args_todos                 :: Bool
@@ -65,11 +75,13 @@ data Args = Args {
     , args_bibFileName           :: String
     , args_pdfFileName           :: String
     , args_tempDir               :: FilePath
+    , args_outDir                :: FilePath
     } deriving (Show, Eq)
 
 data Config = Config {
       conf_selection             :: Selection
     , conf_visualDebug           :: Bool
+    , conf_fast                  :: Bool
     , conf_verbose               :: Bool
     , conf_ignoreReferenceErrors :: Bool
     , conf_todos                 :: Bool
@@ -78,14 +90,28 @@ data Config = Config {
     , conf_bibFileName           :: FilePath
     , conf_pdfFileName           :: FilePath
     , conf_tempDir               :: FilePath
+    , conf_outDir                :: FilePath
     } deriving (Show, Eq)
 
-data Label = Label RefKind Text
+data Label = MkLabel RefKind Text
 
-data RefKind = Definition
-             | Theorem
-             | Proposition
-             | Property
-             | Example
-             | Figure
+data RefKind
+    = Definition
+    | Theorem
+    | Proposition
+    | Property
+    | Example
+    | Figure
+    | Note
+    | Lemma
+    | Consequence
     deriving (Show, Eq)
+
+
+
+-- TODO: keep Until Deepseq 1.4.2.0
+-- |/Since: 1.4.2.0/
+instance NFData ExitCode where
+    rnf (ExitFailure n) = rnf n
+    rnf ExitSuccess     = ()
+

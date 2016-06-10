@@ -5,13 +5,14 @@ import           Notes
 makeDefs [
       "set"
     , "element"
+    , "singleton"
     , "subset"
     , "predicate"
     ]
 
-sets :: Note
-sets = index "set" <> "sets"
+makeThm "Every set is a subset of the universe"
+makeDe "Set equality"
 
-subsets :: Note
-subsets = index "subset" <> "subsets"
 
+asetof :: Note
+asetof = "a " <> set <> " of"

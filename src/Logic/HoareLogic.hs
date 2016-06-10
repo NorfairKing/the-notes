@@ -14,8 +14,7 @@ import           Logic.HoareLogic.Macro
 import           Logic.HoareLogic.Terms
 
 hoareLogicS :: Note
-hoareLogicS = note "hoare-logic" $ do
-    section "Hoare Logic"
+hoareLogicS = section "Hoare Logic" $ do
     s [hoareLogic', " is used to reason about imperative computer programs in abstract machines that have a ", state]
 
     stateDefinition
@@ -50,12 +49,11 @@ hoareLogicS = note "hoare-logic" $ do
 
     note "exam-question-2014" examQuestion2014
 
-a, b, c, i, p, q, r, e, x, y, z :: Note
-a = "A"
+-- TODO make these local
+b, c, i, q, r, e, x, y, z :: Note
 b = "B"
 c = "c"
 i = "I"
-p = "P"
 q = "Q"
 r = "R"
 e = "e"
@@ -70,7 +68,7 @@ stateDefinition = do
         s ["A ",state', " is an assignment of values to abstract symbols"]
     nte $ do
         s ["In computers these values are typically finite strings of bits but they can be arbitrary values in theory"]
-        s ["In logical reasoning, the values are typically (unbounded) integers"]
+        s ["In logical reasoning, the values are typically (unbounded) ints"]
     ex $ do
         s [m $ cs ["a" .-> 4, "b" .-> 3], " could be a ", state]
 
@@ -128,6 +126,7 @@ hoareLogicDefinition = do
         lab postconditionDefinitionLabel
         lab partialCorrectnessDefinitionLabel
         lab totalCorrectnessDefinitionLabel
+        let a = "A"
         s [hoareLogic', " is a ", theory]
         s ["In ", hoareLogic, ", well-formed ", formula, "e are ", hoareTriple', "s"]
         ma $ htrip p a q
@@ -140,6 +139,7 @@ hoareLogicDefinition = do
 
 hoareTripleNote :: Note
 hoareTripleNote = nte $ do
+    let a = "A"
     s ["An employee that needs to implement correct programs for given pre- and postconditions should look for the strongest preconditions and the weakest postconditions"]
     s ["Specifications as such will leave him with the least amount of work to do"]
     s ["The following Hoare specification would give him the best job in the world"]
@@ -155,6 +155,7 @@ ruleOfConsequenceDefinition :: Note
 ruleOfConsequenceDefinition = do
     de $ do
         lab consequenceDefinitionLabel
+        let a = "A"
         s [the, " rule of ", consequence, " is an ", inference, " in ", hoareLogic]
         ma $ linf [htrip p a q, p' ⇒ p, q ⇒ q'] (htrip p' a q')
         s ["A precondition can be replaced with a stronger precondition and a postcondition can be replaced by a weaker postcondition"]
@@ -170,20 +171,22 @@ ruleOfConsequenceDefinition = do
 ruleOfConjunctionDefinition :: Note
 ruleOfConjunctionDefinition = do
     de $ do
+        let a = "A"
         lab conjunctionDefinitionLabel
         s [the, " rule of ", conjunction', " is an ", inference, " in ", hoareLogic]
         ma $ linf [htrip p a q, htrip p a r] $ htrip p a (q ∧ r)
 
     ex $ ma $ linf [t1, t2] t3
   where
-    t1 = htrip (true) (x =:= 3) (x > 2)
-    t2 = htrip (true) (x =:= 3) (x < 4)
-    t3 = htrip (true) (x =:= 3) (x > 2 ∧ x > 4)
+    t1 = htrip true (x =:= 3) (x > 2)
+    t2 = htrip true (x =:= 3) (x < 4)
+    t3 = htrip true (x =:= 3) (x > 2 ∧ x > 4)
 
 
 sequentialCompositionDefinition :: Note
 sequentialCompositionDefinition = do
     de $ do
+        let a = "A"
         lab sequentialCompositionDefinitionLabel
         s [the, " rule of ", sequentialComposition', " is an ", inference, " in ", hoareLogic ]
         ma $ linf [htrip p a q, htrip q b r] $ htrip p (a ؛ b) r
@@ -241,9 +244,6 @@ assignmentDefinition = do
         s ["It is assumed that the assigned expression is side-effect-free"]
         s ["This always holds in mathematics, but infrequently in real machines"]
 
-forwardAssignmentDefinitionLabel :: Label
-forwardAssignmentDefinitionLabel = Label Definition "forward-assignment"
-
 forwardAssignmentDefinition :: Note
 forwardAssignmentDefinition = de $ do
     lab forwardAssignmentDefinitionLabel
@@ -263,16 +263,18 @@ freeVariableDefinition = de $ do
 modifiesDefinition :: Note
 modifiesDefinition = de $ do
     lab modifyDefinitionLabel
+    let a = "A"
     s ["A program ", m a, " is said to ", modify', " a variable ", m x, " if at any point, ", m a, " assigns to ", m x]
     newline
-    s [m (modifies a), " is the set of all variables that ", m a, " modifies"]
+    s [m (mods a), " is the set of all variables that ", m a, " mods"]
 
 ruleOfConstancy :: Note
 ruleOfConstancy = do
+    let a = "A"
     de $ do
-        s [the, term "rule of constancy", " is an ", inference, " in Hoare Logic"]
+        s [the, defineTerm "rule of constancy", " is an ", inference, " in Hoare Logic"]
         s ["Let ", m r, " be an assertion"]
-        ma $ linf [htrip p a q, (freevars r) ∩ (modifies a) =§= emptyset] (htrip (p ∧ r) a (q ∧ r))
+        ma $ linf [htrip p a q, (freevars r) ∩ (mods a) =§= emptyset] (htrip (p ∧ r) a (q ∧ r))
         s ["This is known as ", dquoted (s ["Whatever ", m a, " doesn't modify, stays the same"])]
 
     ex $ ma $ e1
@@ -283,18 +285,19 @@ ruleOfConstancy = do
     e1 = linf [t1, t2] t3
       where
         t1 = htrip (x =: 0) (x =:= x + 1) (x =: 1)
-        t2 = (freevars $ y =: 3) ∩ (modifies $ x =:= x + 1) =§= emptyset
+        t2 = (freevars $ y =: 3) ∩ (mods $ x =:= x + 1) =§= emptyset
         t3 = htrip (x =: 0 ∧ y =: 3) (x =:= x + 1) (x =: 1 ∧ y =: 3)
     e2 = linf [t1, t2] t3
       where
         t1 = htrip (x =: 4) (x =:= sqrt y) (z =: 2)
-        t2 = (freevars $ y =: 3) ∩ (modifies $ x =:= sqrt y) =§= emptyset
+        t2 = (freevars $ y =: 3) ∩ (mods $ x =:= sqrt y) =§= emptyset
         t3 = htrip (x =: 4 ∧ y =: 3) (x =:= sqrt y) (z =: 2 ∧ y =: 3)
 
 conditionalRule :: Note
 conditionalRule = do
+    let a = "A"
     de $ do
-        s [the, term "conditional rule", " is an ", inference, " in Hoare Logic"]
+        s [the, defineTerm "conditional rule", " is an ", inference, " in Hoare Logic"]
         ma $ linf [htrip (p ∧ c) a q, htrip (p ∧ not c) b q] $ htrip p (ifThenElse c a b) q
 
     ex $ ma $ e
@@ -307,16 +310,13 @@ conditionalRule = do
 conditionalRuleGcdProof :: Note
 conditionalRuleGcdProof = todo "gcd proof"
 
-loopRuleExampleLabel :: Label
-loopRuleExampleLabel = Label Example "loop-rule-example"
-
 loopRuleDefinition :: Note
 loopRuleDefinition = do
     de $ do
         lab loopRuleDefinitionLabel
         s [the, loopRule', " is an ", inference, " in Hoare Logic"]
         ma $ linf [htrip p a i, htrip (i ∧ not c) b i] $ htrip p (fromUntilLoop a c b) (i ∧ c)
-        s ["The first triple is called the ", term "initiation", and, " the second is called the ", term "consecution", or, term "inductiveness"]
+        s ["The first triple is called the ", defineTerm "initiation", and, " the second is called the ", defineTerm "consecution", or, defineTerm "inductiveness"]
         s ["This rule is also sometimes written as follows"]
         raw "\n"
         prooftree $
@@ -331,6 +331,7 @@ loopRuleDefinition = do
         ma e
     todo "Loop rule with do while instead of just while."
   where
+    a = "A"
     e = linf [t1, t2, t3] t4
     t1 = htrip p_ a_ i_
     t2 = htrip (i_ ∧ (pars $ not c_)) b_ i_
@@ -347,8 +348,7 @@ loopRuleDefinition = do
     i_ = y > 3 + i
 
 termination :: Note
-termination = do
-    subsection "Termination"
+termination = subsection "Termination" $ do
     s ["To show total correctness, rather than just partial correctness, termination must also be proven"]
     s ["Termination is asserted for all but the loop triples if all the antecedents terminate"]
 
@@ -361,6 +361,7 @@ loopTermination = de $ do
     s ["There must exist a set ", m ss, " with a total ordering ", m ("" <= ""), " such that ", m ss, " has a least element ", m bot, " with respect to ", m ("" <= "")]
     s ["Three more conditions must hold"]
 
+    let a = "A"
     enumerate $ do
         item $ m $ htrip p a (v >= bot)
         item $ do
@@ -371,6 +372,7 @@ loopTermination = de $ do
             ma $ fa v0 ((v <> "<" <> v0) ⇒ (htrip ((v =: v0) ∧ not c) b (v <> "<" <> v0)))
 
   where
+    p = "P"
     ss = "S"
     v = "v"
     v0 = "v'"

@@ -2,21 +2,16 @@ module Macro.Arrows where
 
 import           Types
 
-leftRightarrow :: Note
-leftRightarrow = comm0 "Leftrightarrow"
+import           TH.Command
 
-leftrightarrow :: Note
-leftrightarrow = comm0 "leftrightarrow"
+comm 0 "leftrightarrow"
+comm_ 0 "Leftrightarrow" "leftRightarrow"
 
-leftarrow :: Note
-leftarrow = comm0 "leftarrow"
+comm 0 "leftarrow"
+comm_ 0 "Leftarrow" "leftArrow"
 
-leftArrow :: Note
-leftArrow = comm0 "Leftarrow"
+comm 0 "rightarrow"
+comm_ 0 "Rightarrow" "rightArrow"
 
-rightarrow :: Note
-rightarrow = comm0 "rightarrow"
-
-rightArrow :: Note
-rightArrow = comm0 "Rightarrow"
-
+comm 0 "longleftarrow"
+comm 0 "longrightarrow"

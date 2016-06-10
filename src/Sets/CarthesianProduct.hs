@@ -1,17 +1,13 @@
-module Sets.CarthesianProduct (
-          carthesianProducts
-
-        , carthesianProduct, carthesianProduct_, carthesianProductDefinitionLabel
-    ) where
+module Sets.CarthesianProduct where
 
 import           Notes
 
 import           Logic.PropositionalLogic.Macro
 
-makeDefs ["Carthesian product"]
+import           Sets.CarthesianProduct.Terms
 
 carthesianProducts :: Note
-carthesianProducts = note "carthesian-products" $ do
+carthesianProducts = section "carthesian-products" $ do
     carthesianProductDefinition
 
 carthesianProductDefinition :: Note

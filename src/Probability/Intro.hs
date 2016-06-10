@@ -12,10 +12,13 @@ intro = note "intro" introBody
 
 introBody :: Note
 introBody = do
-    experimentDefinition
-    universeDefinition
-    eventDefinition
-    bernoulliExperimentDefinition
+    todo "Remove the entire intro? this is not very mathematical..."
+    note "experiment" $ do
+        experimentDefinition
+        bernoulliExperimentDefinition
+    note "universe" $ do
+        universeDefinition
+        universeExamples
 
 
 experimentDefinition :: Note
@@ -25,12 +28,14 @@ experimentDefinition = de $ do
 universeDefinition :: Note
 universeDefinition = de $ do
     lab universeDefinitionLabel
-    s ["The ", universe', " of a ", stochasticExperiment', " is the set of all possible outcomes"]
+    s ["The ", universe', " of a ", stochasticExperiment', " is the", set, "of all possible outcomes"]
     s ["It is denoted as ", m univ_]
 
-eventDefinition :: Note
-eventDefinition = de $ do
-    s ["An ", event', " of a ", stochasticExperiment', " is a ", subset, " of the ", universe]
+universeExamples :: Note
+universeExamples = ex $ do
+    let h = "Heads"
+        t = "Tails"
+    s ["In the", stochasticExperiment, "of flipping up a single coin, the", universe, "is", m $ setofs [h,t]]
 
 bernoulliExperimentDefinition :: Note
 bernoulliExperimentDefinition = de $ do

@@ -2,15 +2,17 @@ module Macro.Math where
 
 import           Types
 
+import qualified Prelude         as P
+
 import           Macro.Arrows
-import           Macro.Index
 import           Macro.MetaMacro
 import           Macro.Text      (commaSeparated)
 
-m :: Note -> Note
+
+m :: LaTeXC l => l -> l
 m = math
 
-ma :: Note -> Note
+ma :: LaTeXC l => l -> l
 ma = mathDisplay
 
 pars :: Note -> Note
@@ -31,8 +33,8 @@ mid = comm0 "mid"
 divSign :: Note
 divSign = mid
 
-mdiv :: Note -> Note -> Note
-mdiv = binop divSign
+div :: Note -> Note -> Note
+div = binop divSign
 
 defineasSign :: Note
 defineasSign = quad <> comm0 "equiv" <> quad
@@ -58,7 +60,7 @@ underset = comm2 "underset"
 
 -- Intervals
 interval :: LaTeXC l => [TeXArg] -> l -> l -> l
-interval args = liftL2 $ (\l1 l2 -> TeXComm "interval" (args ++ [FixArg l1, FixArg l2]))
+interval args = liftL2 $ (\l1 l2 -> TeXComm "interval" (args P.++ [FixArg l1, FixArg l2]))
 
 ooint :: LaTeXC l => l -> l -> l
 ooint = interval [OptArg "open"]
@@ -146,24 +148,6 @@ exp n = "e" ^: n
 text :: Note -> Note
 text = comm1 "text"
 
-commutative :: Note
-commutative = ix "commutative"
-
-idempotent :: Note
-idempotent = ix "idempotent"
-
-distributive :: Note
-distributive = ix "distributive"
-
-sequence :: Note
-sequence = ix "sequence"
-
-finite :: Note
-finite = ix "finite"
-
-infinite :: Note
-infinite = ix "infinite"
-
 -- Proofs
 proof :: Note -> Note
 proof = liftL $ TeXEnv "proof" []
@@ -191,9 +175,29 @@ sqrt = tsqrt Nothing
 nrt :: Note -> Note -> Note
 nrt n = tsqrt (Just n)
 
--- Extrema
+-- * Extrema
+-- | Maximum accross value
 max :: Note -> Note -> Note
-max sub body = commS "max" !: sub <> body
+max sub body = commS "max" .!: sub <> body
+
+-- | Maximum of
+maxof :: Note -> Note
+maxof body = comm0 "max" <> body
+
+-- | Minimum accross value
+min :: Note -> Note -> Note
+min sub body = commS "min" .!: sub <> body
+
+-- | Minimum of
+minof :: Note -> Note
+minof body = comm0 "min" <> body
+
+-- | Arguments at minumum
+argmax :: Note -> Note -> Note
+argmax arg body = underset arg ("arg" <> commS "!" <> commS "max") <> commS " " <> body
+
+argmin :: Note -> Note -> Note
+argmin arg body = underset arg ("arg" <> commS "!" <> commS "min") <> commS " " <> body
 
 -- Infinity
 minfty :: Note
@@ -204,7 +208,10 @@ pinfty = "+" <> infty
 
 -- Limits
 lim :: Note -> Note -> Note -> Note
-lim m n o = (commS "lim" !: (m → n)) <> o
+lim m n o = (commS "lim" .!: (m → n)) <> o
+
+lim2 :: Note -> Note -> Note -> Note -> Note -> Note
+lim2 a x b y c = (commS "lim" .!: (commaSeparated [a → x, b → y])) <> c
 
 -- C-k ->
 (→) :: Note -> Note ->Note
@@ -220,26 +227,136 @@ llim m n o = (commS "lim" !: (m <> overset "<" rightarrow) <> n) <> o
 deriv :: Note -> Note -> Note
 deriv top to = ("d" <> commS ";" <> top) /: ("d" <> to)
 
--- Integrals
-int :: Note -> Note -> Note -> Note -> Note
-int a b c dx = commS "int" !: a ^: b <> c <> commS "," <> dx
+-- * Integrals
+integ :: Note -> Note -> Note -> Note -> Note
+integ a b c dx = commS "int" .!: a .^: b <> c <> commS "," <> "d" <> dx
 
--- Cases
--- | Environment of unordered lists. Use 'item' to start each list item.
+integ_ :: Note -> Note -> Note -> Note
+integ_ a = integ a ""
+
+-- | Cases
 cases :: LaTeXC l => l -> l
 cases = liftL $ TeXEnv "cases" []
 
--- Lists
+-- | Lists
 lst :: Note -> Note -> Note
 lst n m = commaSeparated [n, dotsc, m]
 
 list :: Note -> Note -> Note -> Note
 list n m o = commaSeparated [n, m, dotsc, o]
 
--- Combinatorics
+-- | Combination
 choose :: Note -> Note -> Note
 choose = comm2 "binom"
 
 -- | Pi
 pi :: Note
 pi = comm0 "pi"
+
+-- | Sign
+sign :: Note -> Note
+sign n = "sign" <> autoParens n
+
+-- | Plus-or-minus
+pm :: Note -> Note
+pm n = comm0 "pm" <> n
+
+-- | Plus-or-minus
+mp :: Note -> Note
+mp n = comm0 "mp" <> n
+
+-- | Gradient
+grad :: Note -> Note
+grad n = comm0 "nabla" <> n
+
+-- | Nicely aligned equalities
+aligns :: (Note -> Note -> Note) -> Note -> [Note] -> Note
+aligns _ f [] = f
+aligns eq f (r:rs) = align_ $ (f & eq "" r) : P.map (\n -> "" & eq "" n) rs
+
+aligneqs :: Note -> [Note] -> Note
+aligneqs = aligns (=:)
+
+
+-- | Cancel out an expression
+cancel :: Note -> Note
+cancel n = do
+    packageDep_ "cancel"
+    comm1 "cancel" n
+
+
+-- * Partial derivatives
+partial' :: Note
+partial' = comm0 "partial"
+
+-- | Shorthand partial derivative
+partd :: Note -> Note -> Note
+partd a b = (partial' <> a) /: (partial' <> b)
+
+-- | Longhand partial derivative
+partiald :: Note -> Note -> Note
+partiald a b = (partial' /: (partial' <> b)) <> a
+
+
+
+
+-- * Math font
+mathfrak :: Note -> Note
+mathfrak n = do
+    packageDep_ "eufrak"
+    comm1 "mathfrak" n
+
+
+-- * Logarithms
+
+log :: Note -> Note
+log n = comm0 "log" <> n
+
+logn :: Note -> Note -> Note
+logn n m = comm0 "log" !: n <> m
+
+log2 :: Note -> Note
+log2 = logn 2
+
+-- | Natural logarithm
+ln :: Note -> Note
+ln = logn "e"
+
+-- * Cdot
+
+cdot_ :: Note
+cdot_ = comm0 "cdot"
+
+-- * Standard operations
+(<=) :: Note -> Note -> Note
+(<=) = (<=:)
+
+(>=) :: Note -> Note -> Note
+(>=) = (>=:)
+
+(>) :: Note -> Note -> Note
+(>) = (>:)
+
+(<) :: Note -> Note -> Note
+(<) = (<:)
+
+(^) :: Note -> Note -> Note
+(^) = (^:)
+
+
+-- | Underscore (as in, ignoring this argument)
+unmatched :: Note
+unmatched = comm1 "text" "_"
+
+-- * Rounding
+-- Round down
+roundd :: Note -> Note
+roundd = autoBrackets lfloor rfloor
+
+-- Round up
+roundu :: Note -> Note
+roundu = autoBrackets lceil rceil
+
+-- * Bullet
+bullet :: Note
+bullet = comm0 "bullet"

@@ -39,4 +39,6 @@ tuplelst x1 xn = pars $ lst x1 xn
 tuplelist :: Note -> Note -> Note -> Note
 tuplelist x1 x2 xn = pars $ list x1 x2 xn
 
-
+-- | Tuple of arbitrary list of notes
+tupleOfs :: [Note] -> Note
+tupleOfs = pars . cs

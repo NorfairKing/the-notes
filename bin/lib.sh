@@ -30,22 +30,20 @@ good () {
 }
 
 check () {
-  set +x
   name="$1"
   shift
   command="$*"
   echo -n "Check: ${name}... "
   OUT=/tmp/out.txt
   ERR=/tmp/err.txt
-  $command > $OUT 2> $ERR
+  ${command} > $OUT 2> $ERR
   if [[ "$?" == "0" ]]; then
     print_colored_text GREEN "Success\n"
   else
     print_colored_text RED "Failure\n"
-    echo $command
+    echo ${command}
     cat $OUT
     cat $ERR
-    set -x
     return -1
   fi
 }

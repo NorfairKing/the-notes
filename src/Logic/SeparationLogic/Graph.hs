@@ -1,6 +1,7 @@
 module Logic.SeparationLogic.Graph where
 
-import           Notes                              hiding (sequence, (=:))
+import           Notes                              hiding (directed, sequence,
+                                                     (=:))
 
 import           Prelude
 

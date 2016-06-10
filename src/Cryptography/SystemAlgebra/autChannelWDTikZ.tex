@@ -1,0 +1,21 @@
+\usetikzlibrary{arrows}
+\tikzstyle{block}=[rectangle, fill=white, draw=black, minimum height=1em, minimum width=2em, fill opacity=1, text opacity=1]
+
+\node (title) at (2, 0.5) {$Authenticated$};
+\draw (0, -1) rectangle (4, 1);
+
+\node[block] (a) at (0, 0) {$A$};
+\node[block] (b) at (4, 0) {$B$};
+\coordinate (i) at (2, 0) {};
+\node[block] (e) at (2, -1) {$E$};
+
+\node[block, minimum width=1em] (m1) at (1.5, 0) {};
+\node[block, minimum width=1em] (m2) at (2.5, 0) {};
+
+\draw[arrows={-latex}] (a) -- (m1);
+\draw[arrows={-latex}] (m1) -- (e);
+\draw[arrows={-latex}] (m1) -- (m2);
+\draw[arrows={-o}] (e) -- (m2);
+\draw[arrows={-latex}] (m2) -- (b);
+
+

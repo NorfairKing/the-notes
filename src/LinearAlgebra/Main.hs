@@ -2,11 +2,10 @@ module LinearAlgebra.Main where
 
 import           Notes
 
-import           LinearAlgebra.InproductSpaces (inproductSpaces)
-import           LinearAlgebra.VectorSpaces    (vectorSpaces)
+import           LinearAlgebra.InproductSpaces
+import           LinearAlgebra.VectorSpaces
 
 linearAlgebra :: Note
-linearAlgebra = note  "linear-algebra" $ do
-    chapter "Linear Algebra"
+linearAlgebra = chapter "Linear Algebra" $ do
     vectorSpaces
     inproductSpaces

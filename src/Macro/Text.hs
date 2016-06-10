@@ -1,15 +1,78 @@
+{-# LANGUAGE FlexibleInstances    #-}
+{-# LANGUAGE TypeFamilies         #-}
+{-# LANGUAGE TypeSynonymInstances #-}
 module Macro.Text where
 
 import           Types
 
-import           Prelude (sequence_)
+import           Data.List (intersperse)
+import           Prelude   (error, length, sequence_, (++), (<))
+import qualified Prelude   as P (otherwise)
+import           TH
+
+-- Polyvariadic version of 's'.
+p :: NoteArgs args => args
+p = noteArgs []
+
+class NoteArgs t where
+    noteArgs :: [Note] -> t
+
+instance NoteArgs Note where
+    -- noteArgs :: [Note] -> Note
+    noteArgs = s
+
+-- The equality constraint Note ~ note is what makes it all work.
+-- Otherwise the type checker wouldn't have been able to figure out that
+-- String literals should be interpreted as Note's.
+instance (Note ~ note, NoteArgs r) => NoteArgs (note -> r) where
+    -- noteArgs :: [Note] -> ([Note] -> r)
+    noteArgs ns n = noteArgs $ ns ++ [n]
+
+-- FIXME find a way to add an instance for NoteArgs ([note] -> r), then the old 's' will work.
 
 -- Shorter than sequence_
 -- To model a sentence.
 s :: [Note] -> Note
 s ns = do
-    sequence_ ns
+    sequence_ $ intersperse " " ns
     ". "
+
+makeStrs
+    [ "holds"
+    , "equals"
+    , "define"
+    , "respectively"
+    , "because"
+    , "but"
+    , "at"
+    , "to"
+    , "from"
+    , "be"
+    , "with"
+    , "for"
+    , "on"
+    , "by"
+    , "over"
+    , "are"
+    , "is"
+    , "or"
+    , "and"
+    , "The"
+    , "a"
+    , "as"
+    , "otherwise"
+    ]
+
+makeAbbrs
+    [ ("anda", "and a")
+    , ("andan", "and an")
+    , ("wrt", "with respect to")
+    , ("beA", "be a")
+    , ("beAn", "be an")
+
+    , ("kul", "KU Leuven")
+    , ("eth", "ETH")
+    ]
 
 quoted :: Note -> Note
 quoted n = "`" <> n <> "'"
@@ -28,38 +91,23 @@ commaSeparated = separated ", "
 cs :: [Note] -> Note
 cs = commaSeparated
 
-and :: Note
-and = " and "
+commaSeparatedWord :: Note -> [Note] -> Note
+commaSeparatedWord word ns
+    | length ns < 2 = commaSeparated ns
+    | P.otherwise = go ns
+  where
+    go [] = error "impossible as per three lines above"
+    go [n] = word <> " " <> n
+    go (n:ns) = n <> ", " <> go ns
 
-or :: Note
-or = " or "
+commaSeparatedAnd :: [Note] -> Note
+commaSeparatedAnd = commaSeparatedWord and
 
-is :: Note
-is = " is "
+commaSeparatedOr :: [Note] -> Note
+commaSeparatedOr = commaSeparatedWord or
 
-the :: Note
-the = "The "
+csa :: [Note] -> Note
+csa = commaSeparatedAnd
 
-by :: Note
-by = " by "
-
-on :: Note
-on = " on "
-
-over :: Note
-over = " over "
-
-wrt :: Note
-wrt = " with respect to "
-
-for :: Note
-for = " for "
-
-with :: Note
-with = " with "
-
-kul :: Note
-kul = "KU Leuven"
-
-eth :: Note
-eth = "ETH"
+cso :: [Note] -> Note
+cso = commaSeparatedOr

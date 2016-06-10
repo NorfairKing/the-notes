@@ -4,7 +4,7 @@ import           Notes
 
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
-import           Sets.Partition                           (partition)
+import           Sets.Partition.Terms
 
 import           Probability.Intro.Macro
 import           Probability.Intro.Terms
@@ -18,8 +18,7 @@ import           Probability.ConditionalProbability.Terms
 
 
 conditionalProbabilityS :: Note
-conditionalProbabilityS = note "conditional-probability" $ do
-    section "Conditional probibility"
+conditionalProbabilityS = section "Conditional probibility" $ do
     basics
     chainRule
     totalProbability
@@ -28,16 +27,10 @@ conditionalProbabilityS = note "conditional-probability" $ do
 
 
 basics :: Note
-basics = do
-    subsection "Basics"
+basics = subsection "Basics" $ do
     conditionalProbabilityDefinition
     conditionalProbabilityEventGivenItself
     conditionalProbabilityEventGivenUniverse
-
-a,b,ai :: Note
-a = "A"
-b = "B"
-ai = a ∈ sa_
 
 psDec :: Note
 psDec = s ["Let ", m prsp_, " be a ", probabilitySpace]
@@ -45,18 +38,24 @@ psDec = s ["Let ", m prsp_, " be a ", probabilitySpace]
 conditionalProbabilityDefinition :: Note
 conditionalProbabilityDefinition = de $ do
     lab conditionalProbabilityDefinitionLabel
+    let a = "A"
+        b = "B"
 
     s [the, conditionalProbability', " of an ", event, m (a ∈ sa_), " given an ", event, m (b ∈ sa_), " with ", m (prob b /=: 0), " is denoted as ", m (cprob a b), ""]
     ma $ cprob a b === (prob (a ∩ b) /: prob b)
 
 conditionalProbabilityEventGivenItself :: Note
 conditionalProbabilityEventGivenItself = prop $ do
+    let a = "A"
+        ai = a ∈ sa_
     psDec
     ma $ fa ai $ cprob a a =: 1
     proof $ ma $ fa ai $ cprob a a =: (prob (a ∩ a) /: prob a) =: (prob a /: prob a) =: 1
 
 conditionalProbabilityEventGivenUniverse :: Note
 conditionalProbabilityEventGivenUniverse = prop $ do
+    let a = "A"
+        ai = a ∈ sa_
     psDec
     ma $ fa ai $ cprob a univ_ =: prob a
     s ["We say that every event is independent of the ", universe]
@@ -65,8 +64,7 @@ conditionalProbabilityEventGivenUniverse = prop $ do
 
 
 chainRule :: Note
-chainRule = do
-    subsection "Chain rule"
+chainRule = subsection "Chain rule" $ do
     thm $ do
         psDec
         s ["Let ", m (setlist (a 1) (a 2) (a k)), " be more than one event in ", m sa_]
@@ -112,18 +110,17 @@ chainRule = do
 
 psAndPartDec :: Note
 psAndPartDec = do
+    let a = "A"
     psDec
     s ["Let ", m x, " be a ", partition, " of ", m univ_, " in which ", m (fa (a ∈ x) $ prob a > 0), " holds"]
   where x = "X"
 
-totalProbabilityLabel :: Label
-totalProbabilityLabel = Label Theorem "law-of-total-probability"
-
 totalProbability :: Note
-totalProbability = do
-    subsection "Law of total probability"
+totalProbability = subsection "Law of total probability" $ do
+    let a = "A"
+        b = "B"
     thm $ do
-        lab totalProbabilityLabel
+        lab lawOfTotalProbabilityTheoremLabel
         examq kul "Probability" "August 2013"
         psAndPartDec
         ma $ fa (b ∈ sa_) $ prob b =: sumcmp (a ∈ x) (prob a * cprob b a)
@@ -143,12 +140,9 @@ totalProbability = do
 
   where
     x = "X"
-    a = "A"
-    b = "B"
 
 bayesTheorem :: Note
-bayesTheorem = do
-    subsection "Bayes' theorem"
+bayesTheorem = subsection "Bayes' theorem" $ do
     thm $ do
         psAndPartDec
         s ["Let ", m b, " be an event in ", m sa_, " for which ", m (prob b > 0), " holds"]
@@ -164,7 +158,7 @@ bayesTheorem = do
               , "" & "" =: prob (a ∩ b) /: prob b
               , "" & "" =: cprob a b
               ]
-            s ["Note that the first equation holds by the law of total probability", ref totalProbabilityLabel]
+            s ["Note that the first equation holds by the law of total probability", ref lawOfTotalProbabilityTheoremLabel]
 
   where
     x = "X"
@@ -173,8 +167,7 @@ bayesTheorem = do
     c = "C"
 
 handyRules :: Note
-handyRules = do
-    subsection "Handy rules of computation"
+handyRules = subsection "Handy rules of computation" $ do
 
     thm $ do
         psDec

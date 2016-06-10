@@ -3,32 +3,27 @@ module Relations.Domain where
 import           Notes
 
 import           Logic.FirstOrderLogic.Macro
-import           Relations.Basics            (relation)
+import           Sets.Basics.Terms
 
 import           Relations.Basics.Macro
-import           Relations.Domain.Macro
+import           Relations.Basics.Terms
 
-makeDefs [
-      "domain"
-    , "image"
-    ]
+import           Relations.Domain.Macro
+import           Relations.Domain.Terms
 
 
 domainAndImage :: Note
-domainAndImage = note "domain-and-image" $ do
-    subsection "Domain and Image"
-
+domainAndImage = subsection "Domain and Image" $ do
     domainDefinition
     imageDefinition
 
     domainIsInversesImage
     imageIsInversesDomain
 
-
 domainDefinition :: Note
 domainDefinition = de $ do
     lab domainDefinitionLabel
-    s [the, domain', " of a binary relation ", m rel_, " between sets ", m a, and, m b, " is the following subset of ", m a]
+    s [the, domain', "of a", binaryRelation, m rel_, "between", sets, m a, and, m b, "is the following", subset, "of", m a]
     ma $ setcmpr x (te y $ tuple x y ∈ rel_)
   where
     a = "A"
@@ -40,7 +35,8 @@ domainDefinition = de $ do
 imageDefinition :: Note
 imageDefinition = de $ do
     lab imageDefinitionLabel
-    s [the, image', or, term "range", " of a binary relation ", m rel_, " between sets ", m a, and, m b, " is the following subset of ", m b]
+    lab rangeDefinitionLabel
+    s [the, image', or, range', "of a", binaryRelation, m rel_, "between", sets, m a, and, m b, "is the following", subset, "of", m b]
     ma $ setcmpr y (te x $ tuple x y ∈ rel_)
   where
     a = "A"
@@ -81,5 +77,3 @@ imageIsInversesDomain = thm $ do
   where
     x = "x"
     y = "y"
-
-

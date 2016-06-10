@@ -10,6 +10,8 @@ h () {
   --ignore "Use import/export shortcut"  \
   --ignore "Use ." \
   --ignore "Move brackets to avoid $" \
+  --ignore "Evaluate" \
+  --ignore "Use 1" \
   -XFlexibleInstances \
   -XMultiParamTypeClasses \
   -XUndecidableInstances \

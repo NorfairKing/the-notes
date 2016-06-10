@@ -15,10 +15,10 @@ then
   exit 0
 fi
 
-if ! git diff --exit-code --quiet
-then
-  error "Refactor requires clean git status. Commit current changes first."
-fi
+# if ! git diff --exit-code --quiet
+# then
+#   error "Refactor requires clean git status. Commit current changes first."
+# fi
 
 # Check if the string already exists somewhere
 grep --color=auto --line-number --word-regexp "$to" --recursive --include \*.hs

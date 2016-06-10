@@ -1,13 +1,15 @@
 module Functions.Basics.Macro where
 
+import qualified Prelude                     as P (map)
 import           Types
 
 import           Macro.Arrows
+import           Macro.MetaMacro
+import           Macro.Sets.Macro
 import           Macro.Tuple
 
 import           Functions.Application.Macro
-import           Macro.Sets.CarthesianProduct
-import qualified Relations.Domain.Macro       as R (dom, img)
+import qualified Relations.Domain.Macro      as R (dom, img)
 
 -- * Functions
 -- | Standard symbol for the underlying relation of a function
@@ -39,6 +41,23 @@ fun m n o = m <> negspace <> ":" <> raw "\\, " <> funt n o
     negspace :: Note
     negspace = commS "kern" <> raw "-2pt"
 
+-- | Shorthand function definition
+fun2 :: Note -- ^ Name
+     -> Note -- ^ Corange, part 1
+     -> Note -- ^ Corange, part 2
+     -> Note -- ^ Codomain
+     -> Note
+fun2 m n1 n2 = fun m (n1 ⨯ n2)
+
+-- | Shorthand function definition
+fun3 :: Note -- ^ Name
+     -> Note -- ^ Corange, part 1
+     -> Note -- ^ Corange, part 2
+     -> Note -- ^ Corange, part 3
+     -> Note -- ^ Codomain
+     -> Note
+fun3 m n1 n2 n3 = fun m (n1 ⨯ n2 ⨯ n3)
+
 -- | Longhand function definition
 func :: Note -- ^ Name
      -> Note -- ^ Corange
@@ -57,7 +76,24 @@ func2 :: Note -- ^ Name
       -> Note -- ^ Element, part 2
       -> Note -- ^ Image
       -> Note
-func2  m n1 n2 o p1 p2 = func m (n1 ⨯ n2) o (tuple p1 p2)
+func2 m n1 n2 o p1 p2 = func m (n1 ⨯ n2) o (tuple p1 p2)
+
+-- | Longhand function definition with set of triples as corange
+func3 :: Note -- ^ Name
+      -> Note -- ^ Corange, part 1
+      -> Note -- ^ Corange, part 2
+      -> Note -- ^ Corange, part 3
+      -> Note -- ^ Codomain
+      -> Note -- ^ Element, part 1
+      -> Note -- ^ Element, part 2
+      -> Note -- ^ Element, part 3
+      -> Note -- ^ Image
+      -> Note
+func3 m n1 n2 n3 o p1 p2 p3 = func m (n1 ⨯ n2 ⨯ n3) o (triple p1 p2 p3)
+
+-- * Function comprehension
+funcomp :: [(Note, Note)] -> Note
+funcomp tups = setofs $ P.map (\(a,b) -> a <> mapsto <> b) tups
 
 -- * Domain
 
@@ -79,6 +115,17 @@ img_ = "B"
 img :: Note -> Note
 img = R.img
 
+-- | The unit function for a given domain
+unitf :: Note -> Note
+unitf = (unitf_ !:)
+
+-- | A general unit function
+unitf_ :: Note
+unitf_ = mathcal "U"
+
+-- * Preimage
+preim :: Note -> Note -> Note
+preim f = fn (f ^: (-1))
 
 -- * Misc functions
 -- | Arcsin

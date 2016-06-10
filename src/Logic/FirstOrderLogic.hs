@@ -5,6 +5,8 @@ import           Notes
 import qualified Prelude                              as P (map)
 
 import           Functions.Application.Macro
+import           Sets.Basics.Terms
+
 import           Logic.AbstractLogic.Macro
 import           Logic.AbstractLogic.Terms
 import           Logic.PropositionalLogic.Macro
@@ -12,15 +14,13 @@ import           Logic.PropositionalLogic.Resolution
 import           Logic.PropositionalLogic.Sentence
 import           Logic.PropositionalLogic.Terms
 import           Logic.PropositionalLogic.TruthTables
-import           Sets.Basics.Terms
 
 import           Logic.FirstOrderLogic.Macro
 import           Logic.FirstOrderLogic.Terms
 
 
 firstOrderLogicS :: Note
-firstOrderLogicS = note "first-order-logic" $ do
-    section "First Order Logic"
+firstOrderLogicS = section "First Order Logic" $ do
     firstOrderLogicDefinition
     termDefinition
     atomicSentence
@@ -42,7 +42,7 @@ firstOrderLogicDefinition = de $ do
 
 termDefinition :: Note
 termDefinition = do
-    de $ s ["A ", term "term", " in first order logic is either a constant symbol, a variable or a ", m "k", "-ary function symbol applied to terms"]
+    de $ s ["A ", defineTerm "defineTerm", " in first order logic is either a constant symbol, a variable or a ", m "k", "-ary function symbol applied to terms"]
 
     ex $ s [cs $ P.map (dquoted . m) [1, 2, 3, x, f x], " are terms in first order logic"]
   where
@@ -62,8 +62,7 @@ atomicSentence = do
 
 
 quantifiers :: Note
-quantifiers = note "quantifiers" $ do
-    subsection "Quantifiers"
+quantifiers = subsection "Quantifiers" $ do
     s ["Quantifiers bind free variables"]
     existentialQuantifierDefinition
     universalQuantifierDefinition
@@ -73,13 +72,12 @@ quantifiers = note "quantifiers" $ do
 
     propertiesOfQuantifiers
 
-x, y, p :: Note
+x, y :: Note
 x = "x"
 y = "y"
-p = "P"
 
 pp :: Note -> Note
-pp = fn p
+pp = fn "P"
 
 ppp :: Note -> Note -> Note
 ppp x y = fn p $ cs [x, y]
@@ -118,8 +116,7 @@ compositeSentenceExamples = do
 
 
 propertiesOfQuantifiers :: Note
-propertiesOfQuantifiers = note "properties" $ do
-    subsubsection "Properties of quantifiers"
+propertiesOfQuantifiers = subsubsection "Properties of quantifiers" $ do
     switchExistentials
     switchUniversals
     switchMixed
@@ -192,8 +189,7 @@ translationExamples = do
 
 
 situationalCalculusSS :: Note
-situationalCalculusSS = do
-    subsection "Situational Calculus"
+situationalCalculusSS = subsection "Situational Calculus" $ do
     s ["The use of ", situationalCalculus', " is to model situations"]
     s ["In situational calculus, facts hold at a certain moment and/or in a certain situation"]
     s ["This is modeled by adding a situational argument to every non-eternal ", predicate]
@@ -204,8 +200,7 @@ situationalCalculusSS = do
     planning
 
 frameProblem :: Note
-frameProblem = do
-    subsubsection "The frame problem"
+frameProblem = subsubsection "The frame problem" $ do
     s ["Now that we can model situations using frames, there is a need for so called ", effectAxiom', "s that model changes due to actions"]
     s ["In addition to modeling change, one must also model non-change"]
     s ["The frame problem is that the number of frame axioms can be become large and even infinite"]
@@ -214,17 +209,14 @@ frameProblem = do
     s ["These successor state axioms model the fact that a predicate is true if and only if an action made it true or it was already true and no action made it false"]
 
 planning :: Note
-planning = do
-    subsubsection "Planning using first order logic"
+planning = subsubsection "Planning using first order logic" $ do
     s ["First order logic can be used to plan actions based on a knowledge base of known facts"]
     s ["The idea is to decide what the goal situation is and to model it"]
     s ["Then, automated inference can be used to find out whether the given knowledge base entails the goal situation"]
 
 
 inferenceInFOL :: Note
-inferenceInFOL = do
-    subsection "Inference in first order logic"
-
+inferenceInFOL = subsection "Inference in first order logic" $ do
     s ["Inference in first order logic is more complicated than inference in ", propositionalLogic]
     s ["In general, there are two approaches: Propositionalisation and ", dquoted "lifted", " inference"]
 
@@ -232,11 +224,10 @@ inferenceInFOL = do
     liftedInferenceSS
 
 propositionalisationSS :: Note
-propositionalisationSS = note "propositionalisation" $ do
-    subsubsection "propositionalisation"
+propositionalisationSS = subsubsection "propositionalisation" $ do
     de $ do
         s [propositionalisation', " is an ", inference, " in first order logic"]
-        s ["It consists of replacing all quantified variables with so called ", groundingVariable', "s using each possible term"]
+        s ["It consists of replacing all quantified variables with so called ", groundingVariable', "s using each possible defineTerm"]
         s ["This turns the problem into a propositional logic problem and it can then be solved as discussed before"]
     s ["The problem with proportionalisation is that the solver may need to create a lot of unnecessary symbols"]
     s ["Even worse, the amount of created symbols could be infinite"]
@@ -401,8 +392,7 @@ herbrandTheorem = thm $ do
     cite herbrandReference
 
 liftedInferenceSS :: Note
-liftedInferenceSS = note "lifted-inferences" $ do
-    subsubsection "Lifted inference"
+liftedInferenceSS = subsubsection "Lifted inference" $ do
     s [the, liftedInference', "s are a ", set, " of ", inference, "s in first order logic"]
     s ["It consists of trying to infer sentences ", emph "without", " instantiating variables at all using propositional inference by lifting its inferences"]
 

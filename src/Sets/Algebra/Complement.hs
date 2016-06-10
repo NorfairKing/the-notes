@@ -3,7 +3,8 @@ module Sets.Algebra.Complement where
 import           Notes
 
 import           Logic.PropositionalLogic.Macro
-import           Sets.Algebra.Difference
+
+import           Sets.Algebra.Difference.Terms
 import           Sets.Algebra.Intersection.Terms
 import           Sets.Algebra.Union.Terms
 import           Sets.Basics.Terms
@@ -11,8 +12,7 @@ import           Sets.Basics.Terms
 import           Sets.Algebra.Complement.Terms
 
 setComplement :: Note
-setComplement = note "complement" $ do
-    subsection "Set complement"
+setComplement = subsection "Complement" $ do
     complementDefinition
     doubleComplement
     complementaryLawUnion
@@ -27,7 +27,7 @@ complementDefinition = de $ do
     s [the, complement', " of a ", set, " ", m a, " relative to a set ", m b, " is the set of all elements of ", m b, " that are not in ", m a]
     ma $ setrelc b a === b \\ a
 
-    s ["When ", m b, " is clear from the context (i.e. there is a universe in play), we just speak about the ", term "complement"]
+    s ["When ", m b, " is clear from the context (i.e. there is a universe in play), we just speak about the ", defineTerm "complement"]
     ma $ setc a === setrelc setuniv a
 
 
@@ -52,13 +52,10 @@ doubleComplement = thm $ do
             , "" & "" =§= a
             ]
 
-unionComplementaryLawLabel :: Label
-unionComplementaryLawLabel = thmlab "complementary-law-union"
-
 complementaryLawUnion :: Note
 complementaryLawUnion = thm $ do
-    lab unionComplementaryLawLabel
-    s [the, term "complementary law", " for the set ", union]
+    lab unionComplementaryLawTheoremLabel
+    s [the, defineTerm "complementary law", " for the set ", union]
     let (a, b, x, y) = ("A", "B", "x", "y")
     s ["Let ", m a, and, m b, " be sets"]
     ma $ a ∪ setc a =§= setuniv
@@ -78,7 +75,7 @@ complementaryLawUnion = thm $ do
 
 complementaryLawIntersection :: Note
 complementaryLawIntersection = thm $ do
-    s [the, term "complementary law", " for the set ", intersection]
+    s [the, defineTerm "complementary law", " for the set ", intersection]
     let (a, b, x, y) = ("A", "B", "x", "y")
     s ["Let ", m a, and, m b, " be sets"]
     ma $ a ∩ setc a =§= emptyset
@@ -96,13 +93,10 @@ complementaryLawIntersection = thm $ do
               , "" & "" =§= emptyset
             ]
 
-firstLawOfDeMorganLabel :: Label
-firstLawOfDeMorganLabel = thmlab "first-law-of-de-morgan"
-
 firstLawOfDeMorgan :: Note
 firstLawOfDeMorgan = thm $ do
-    lab firstLawOfDeMorganLabel
-    s [the, term "first law of De Morgan"]
+    lab firstLawOfDeMorganTheoremLabel
+    s [the, defineTerm "first law of De Morgan"]
 
     let (a, b, x, y) = ("A", "B", "x", "y")
     ma $ setc (pars $ a ∪ b) =§= setc a ∩ setc b
@@ -120,13 +114,10 @@ firstLawOfDeMorgan = thm $ do
             , "" & "" =§= setc a ∩ setc b
             ]
 
-secondLawOfDeMorganLabel :: Label
-secondLawOfDeMorganLabel = thmlab "second-law-of-de-morgan"
-
 secondLawOfDeMorgan :: Note
 secondLawOfDeMorgan = thm $ do
-    lab secondLawOfDeMorganLabel
-    s [the, term "second law of De Morgan"]
+    lab secondLawOfDeMorganTheoremLabel
+    s [the, defineTerm "second law of De Morgan"]
 
     let (a, b, x, y) = ("A", "B", "x", "y")
     ma $ setc (pars $ a ∩ b) =§= setc a ∪ setc b
@@ -145,12 +136,9 @@ secondLawOfDeMorgan = thm $ do
             ]
 
 
-setDifferenceEquivalentDefinitionLabel :: Label
-setDifferenceEquivalentDefinitionLabel = thmlab "set-difference-equivalent-definition"
-
 setDifferenceEquivalentDefinition :: Note
 setDifferenceEquivalentDefinition = thm $ do
-    lab setDifferenceEquivalentDefinitionLabel
+    lab setDifferenceEquivalentDefinitionTheoremLabel
     let (a, b) = ("A", "B")
     s ["Let ", m a, and, m b, " be sets"]
 
@@ -158,4 +146,4 @@ setDifferenceEquivalentDefinition = thm $ do
 
     proof $ do
         m $ a \\ b =§= a ∩ (setuniv \\ b) =§= a \\ b
-        ref intersectionOverDifferenceLabel
+        ref intersectionOverDifferenceTheoremLabel

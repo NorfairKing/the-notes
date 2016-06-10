@@ -1,0 +1,28 @@
+
+\tikzstyle{block}=[rectangle, fill=white, draw=black, minimum height=1em, minimum width=2em, fill opacity=1, text opacity=1]
+\tikzstyle{fun}=[circle, draw=black]
+
+\draw (-2.5, -0.5) rectangle (0.5, 2.5);
+\node (title) at (-1.75, 1) {$decap$};
+
+\node[fun] (r) at (0, 2) {$\$$};
+
+\node[block] (bk) at (-2.5, 2) {$B$};
+\node[block] (bd) at (0.5, 0) {$B$};
+\coordinate (bi) at (-1, 2) {};
+\node[fun] (dec) at (-1, 0) {$d$};
+\node[block] (bn) at (-2.5, 0) {$B$};
+
+\node (pksk) at (0, 1.5) {$(p,s)$};
+\node (pksk) at (-0.75, 1.5) {$s$};
+\node (pksk) at (-1.75, 1.75) {$p$};
+\node (pksk) at (-1.7, 0.3) {$c$};
+\node (pksk) at (-0.3, 0.3) {$k$};
+
+\draw (r) -- (bi);
+\draw[arrows={-latex}] (bi) -- (bk);
+\draw[arrows={-latex}] (bi) -- (dec);
+\draw[arrows={-latex}] (dec) -- (bd);
+\draw[arrows={-latex}] (bn) -- (dec);
+
+

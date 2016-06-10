@@ -4,9 +4,11 @@ import           Notes
 
 makeDefs [
       "discrete uniform distribution"
+    , "empirical distribution"
     , "Bernouilli distribution"
     , "Gaussian distribution"
-    , "Normal distribution"
+    , "normal distribution"
     , "probability of success"
     , "binomial distribution"
+    , "identically distributed"
     ]

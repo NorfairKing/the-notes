@@ -9,4 +9,5 @@ makeDefs [
     , "negative dependence"
     , "pairwise independent"
     , "mutually independent"
+    , "conditionally independent"
     ]

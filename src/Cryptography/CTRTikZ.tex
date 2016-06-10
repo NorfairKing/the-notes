@@ -1,0 +1,55 @@
+%%% Commom TiKZ Library
+\usetikzlibrary{positioning}
+
+\begin{scope}
+\node[draw,thick,minimum width=2em,minimum height=2em] (e) {$F(\cdot, k)$} ;
+\node[thick,below = 2em of e] (xor) {$\bigoplus$};
+\node[above = 2em of e] (iv) {$IV \mid \langle 1 \rangle$};
+\node[below = 2em of xor] (c) {$c_{1}$};
+\node[left = 2em of xor] (m) {$m_{1}$};
+\draw[->] (iv) -- (e);
+\draw[->] (e) -- (xor);
+\draw[->] (m) -- (xor);
+\draw[->] (xor) -- (c);
+\end{scope}
+
+\begin{scope}[xshift=4em]
+\node[draw,thick,minimum width=2em,minimum height=2em] (e) {$F(\cdot, k)$} ;
+\node[thick,below = 2em of e] (xor) {$\bigoplus$};
+\node[above = 2em of e] (iv) {$IV \mid \langle 2 \rangle$};
+\node[below = 2em of xor] (c) {$c_{2}$};
+\node[left = 2em of xor] (m) {$m_{2}$};
+\draw[->] (iv) -- (e);
+\draw[->] (e) -- (xor);
+\draw[->] (m) -- (xor);
+\draw[->] (xor) -- (c);
+\end{scope}
+
+\begin{scope}[xshift=8em]
+\node[draw,thick,minimum width=2em,minimum height=2em] (e) {$F(\cdot, k)$} ;
+\node[thick,below = 2em of e] (xor) {$\bigoplus$};
+\node[above = 2em of e] (iv) {$IV \mid \langle 3 \rangle$};
+\node[below = 2em of xor] (c) {$c_{3}$};
+\node[left = 2em of xor] (m) {$m_{3}$};
+\draw[->] (iv) -- (e);
+\draw[->] (e) -- (xor);
+\draw[->] (m) -- (xor);
+\draw[->] (xor) -- (c);
+\end{scope}
+
+\begin{scope}[xshift=11em]
+\node at (0,0) {$\cdots\cdots$};
+\end{scope}
+
+\begin{scope}[xshift=14em]
+\node[draw,thick,minimum width=2em,minimum height=2em] (e) {$F(\cdot, k)$} ;
+\node[thick,below = 2em of e] (xor) {$\bigoplus$};
+\node[above = 2em of e] (iv) {$IV \mid \langle l \rangle$};
+\node[below = 2em of xor] (c) {$c_{l}$};
+\node[left = 2em of xor] (m) {$m_{l}$};
+\draw[->] (iv) -- (e);
+\draw[->] (e) -- (xor);
+\draw[->] (m) -- (xor);
+\draw[->] (xor) -- (c);
+\end{scope}
+

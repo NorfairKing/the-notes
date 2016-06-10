@@ -4,41 +4,30 @@ import           Notes
 
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
-import           Sets.CarthesianProduct         (carthesianProduct_)
+import           NumberTheory.Macro
+import           Sets.CarthesianProduct.Terms
 
 import           Relations.Basics.Macro
-
-makeDefs [
-      "relation"
-    , "unit relation"
-    , "inverse relation"
-
-    , "reflexive"
-    , "transitive"
-    , "symmetric"
-    , "total"
-    ]
+import           Relations.Basics.Terms
 
 basicDefinitions :: Note
-basicDefinitions = note "definitions" $ do
-    section "Basics"
-
+basicDefinitions = section "Basics" $ do
     relationDefinition
     binaryRelationDefinition
     ternaryRelationDefinition
+    relationExamples
     unitRelationDefinition
     inverseRelationDefinition
 
     inverseOfInverseIsNormal
 
-    subsection "Properties of relations"
+    subsection "Properties of relations" $ do
+        reflexiveDefinition
+        transitiveDefinition
+        symmetricDefinition
+        totalDefinition
 
-    reflexiveDefinition
-    transitiveDefinition
-    symmetricDefinition
-    totalDefinition
-
-    totalityImpliesReflexivity
+        totalityImpliesReflexivity
 
 
 relationDefinition :: Note
@@ -48,6 +37,8 @@ relationDefinition = de $ do
   where
     n = "n"
     x i = "X" !: i
+
+
 
 binaryRelationDefinition :: Note
 binaryRelationDefinition = de $ do
@@ -61,6 +52,15 @@ binaryRelationDefinition = de $ do
 
 ternaryRelationDefinition :: Note
 ternaryRelationDefinition = de $ s ["A ternary ", relation, " is a relation between three sets"]
+
+relationExamples :: Note
+relationExamples = do
+    ex $ do
+        lab dividesIsRelationExampleLabel
+        s [quoted "divides", "of integers is a binary", relation]
+        ma $ do
+            let (x, y, z) = ("x", "y", "z")
+            divSign === setcmpr (tuple x y) (cs [x, y] ∈ ints ∧ (te z $ z * x =: y))
 
 unitRelationDefinition :: Note
 unitRelationDefinition = de $ do
@@ -84,12 +84,9 @@ inverseRelationDefinition = de $ do
     x = "x"
     y = "y"
 
-inverseOfInverseIsNormalLabel :: Label
-inverseOfInverseIsNormalLabel = Label Theorem "inverse-of-inverse-relation-is-normal"
-
 inverseOfInverseIsNormal :: Note
 inverseOfInverseIsNormal = thm $ do
-    lab inverseOfInverseIsNormalLabel
+    lab inverseOfInverseRelationIsNormalTheoremLabel
     s ["Let ", m rel_, " be a binary relation on the sets ", m a, and, m b]
     ma $ inv (inv rel_) =: rel_
 

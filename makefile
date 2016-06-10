@@ -1,51 +1,46 @@
-NAME = the-notes
-
-SRC_EXT = hs
-
-BIN = $(NAME)
-
-SRC_DIR = src
-MAIN_SRC_NAME = Main
-MAIN_SRC = $(SRC_DIR)/$(MAIN_SRC_NAME).$(SRC_EXT)
-
 SOURCES = $(shell find $(SRC_DIR) -type f -name '*.hs')
 
-GHC = ghc
-GHC_FLAGS = \
-	-j8 \
-	-XOverloadedStrings \
-	-XNoImplicitPrelude \
-	-XTemplateHaskell
-
-GHC_SRC_DIRS = \
-	-i$(SRC_DIR)
-GHC_OPTIONS = \
-	$(GHC_FLAGS) \
-	$(GHC_SRC_DIRS)
-
-all: bin
-	./the-notes --tmp-dir out
+all: install
+	the-notes
 	./bin/all_preselects.sh
 
-bin: $(SOURCES)
-	$(GHC) $(GHC_OPTIONS) -o $(BIN) --make $(MAIN_SRC)
+build: $(SOURCES)
+	stack build --jobs=8
 
-WARNINGS = \
-	-Wall -Werror \
-	-fwarn-unused-imports \
-	-fwarn-incomplete-patterns \
-	-fwarn-unused-do-bind \
-	-fno-warn-name-shadowing \
-	-fno-warn-orphans \
-
+SPSPDB=$(shell stack path --snapshot-pkg-db)
+SPLPDB=$(shell stack path --local-pkg-db)
 pedantic:
-	$(GHC) $(GHC_OPTIONS) $(WARNINGS) -fforce-recomp -o $(BIN) --make $(MAIN_SRC)
-
+	stack clean
+	stack build \
+		--pedantic \
+		--fast \
+		--jobs=8 \
+		--ghc-options="\
+				-fforce-recomp \
+				-Wall \
+				-Werror \
+				-fwarn-unused-imports \
+				-fwarn-incomplete-patterns \
+				-fwarn-unused-do-bind \
+				-fno-warn-name-shadowing \
+				-fno-warn-orphans"
 doc: $(SOURCES)
-	cabal haddock --executables --haddock-options="--no-warnings --no-print-missing-docs --pretty-html"
+	cabal configure --package-db=clear --package-db=global --package-db=$(SPSPDB) --package-db=$(SPLPDB)
+	cabal haddock --haddock-options="--no-warnings --no-print-missing-docs"
 
-graph:
-	graphmod $(MAIN_SRC) -q -p -i $(SRC_DIR) > graph.dot
+test:
+	stack test --jobs=8
+
+install:
+	stack install
+
+fast:
+	stack install \
+		--fast \
+		--jobs=8 \
+		--ghc-options="\
+				-O0 \
+				"
 
 love:
 	@echo "not war"

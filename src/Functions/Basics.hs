@@ -2,40 +2,30 @@ module Functions.Basics where
 
 import           Notes
 
+import           Functions.Application.Macro
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
-import           Relations.Basics               (relation_)
-import           Relations.Domain               (domain_, image_)
+import           Relations.Basics.Terms         hiding (total, total')
+import           Relations.Domain.Terms
 import           Sets.Basics.Terms
 
+import           Functions.Jections.Terms
 
-import           Functions.Application.Macro
 import           Functions.Basics.Macro
-
-makeDefs [
-      "function"
-    , "partial function"
-    , "corange"
-    , "codomain"
-    , "total"
-    , "surjective"
-    , "binary function"
-    , "ternary function"
-    , "member-wise application"
-    ]
+import           Functions.Basics.Terms
 
 basics :: Note
-basics = note "basics" $ do
-    section "Basics"
-
+basics = section "Basics" $ do
     partialFunctionDefinition
     totalFunctionDefinition
+    preimageDefinition
     surjectiveDefinition
     totalFunctionNote
     binaryFunctionDefinition
     ternaryFunctionDefinition
 
-    memberwiseApplication
+    predicateEquivalentDefinition
+    unitFunctionDefinition
 
 
 partialFunctionDefinition :: Note
@@ -43,7 +33,6 @@ partialFunctionDefinition = de $ do
     lab functionDefinitionLabel
     lab partialFunctionDefinitionLabel
     s ["A ", partialFunction', or, function', " ", m fun_, " is a triple ", m t , " where ", m dom_, and, img_, " are sets and ", m fun_, " is a single-valued binary ", relation_, " between ", m dom_, and, m img_]
-    s ["Each of the sets ", m dom_, and, img_, " have an equivalence relation defined on them, both written as ", m (eqsign)]
     ma $ fa (cs [x, y 1, y 2]) $ (pars $ tuple x (y 1) ∈ fun_ ∧ tuple x (y 2) ∈ fun_) ⇒ (y 1 =: y 2)
     s ["The triple ", m t, " is often written as ", m $ fun fun_ dom_ img_]
     s [m dom_, " is called the ", corange', ", ", m img_, " is called the ", codomain']
@@ -51,6 +40,15 @@ partialFunctionDefinition = de $ do
     x = "x"
     y n = "y" !: n
     t = (triple fun_ dom_ img_)
+
+preimageDefinition :: Note
+preimageDefinition = de $ do
+    s ["Let", m $ fun fun_ dom_ img_, "be a", function]
+    let c = "C"
+    s [the, preimage', "of a", subset, m c, "of", m img_, "is the following", subset, "of", m dom_]
+    let x = "x"
+    ma $ preim fun_ c === setcmpr (x ∈ dom_) (fn fun_ x ∈ c)
+
 
 totalFunctionDefinition :: Note
 totalFunctionDefinition = de $ do
@@ -76,11 +74,31 @@ ternaryFunctionDefinition = de $ do
     lab ternaryFunctionDefinitionLabel
     s ["A ", ternaryFunction', " is a function ", m (fun fun_ dom_ img_), " where ", m dom_, " is a set of triples"]
 
-memberwiseApplication :: Note
-memberwiseApplication = de $ do
-    s ["Let ", m funfunc_, " be a ", function]
-    s [the, memberWiseApplication', " of ", m funfunc_, " to a ", subset, " ", m ss, " of ", m dom_, " is the set of all applications of ", m fun_, " to members of ", m ss, " and is denoted as ", m (fun_ `mwfn` ss)]
-    ma $ fun_ `mwfn` ss === setcmpr (fun_ `fn` e) (e ∈ ss)
-  where
-    ss = "S"
-    e = "s"
+predicateEquivalentDefinition :: Note
+predicateEquivalentDefinition = thm $ do
+    let p_ = "P"
+        a = "A"
+    s ["A", predicate_, m p_, "on a", set, m a, "can equivalently be defined as a", function, m $ fun p_ a (setofs [false, true]), "that deides whether the", predicate, "holds for an", element]
+
+    toprove
+
+
+unitFunctionDefinition :: Note
+unitFunctionDefinition = do
+    de $ do
+        lab unitFunctionDefinitionLabel
+        let a = "A"
+            e = comm0 "bullet"
+        s ["For a given", domain, m a, "the", unitFunction', "is the", total, function, "that maps every", element, "of", m a, "to a", quoted "dummy", element, m e]
+        let x = "x"
+        ma $ unitf a =: setcmpr (tuple x e) (x ∈ a)
+    nte $ do
+        s ["This dummy", element, "just signifies that all information is lost in this", unitFunction]
+
+
+
+
+
+
+
+

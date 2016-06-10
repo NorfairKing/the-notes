@@ -4,29 +4,27 @@ import           Notes
 
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
-import           Probability.Intro.Terms
-import           Sets.Algebra.Main              (secondLawOfDeMorganLabel, symmetricDifferenceITOUnionAndIntersectionLabel)
-import           Sets.Basics
+import           NumberTheory.Macro
+import           Sets.Algebra.Complement.Terms
+import           Sets.Algebra.Difference.Terms
 import           Sets.Basics.Terms
 import           Sets.Powerset.Terms
 
 import           Probability.Intro.Macro
+import           Probability.Intro.Terms
 
 import           Probability.SigmaAlgebra.Macro
 import           Probability.SigmaAlgebra.Terms
 
 sigmaAlgebraS :: Note
-sigmaAlgebraS = note "sigma-algebra" $ do
-    section "Sigma Algebra's"
+sigmaAlgebraS = section "Sigma Algebra's" $ do
     sigmaAlgebraBasics
     generatedSigmaAlgebra
 
 sigmaAlgebraBasics :: Note
-sigmaAlgebraBasics = note "basics" $ do
+sigmaAlgebraBasics = subsection "Basics" $ do
     sigmaAlgebraDefinition
     trivialSigmaAlgebraDefinition
-    measurableSpaceDefinition
-    trivialMeasurableSpaceDefinition
     discreteSigmaAlgebraDefinition
     emptysetInSigmaAlgebra
     sigmaAlgebraFiniteUnion
@@ -36,48 +34,39 @@ sigmaAlgebraBasics = note "basics" $ do
     unionIsNotSigmaAlgebraExample
 
 generatedSigmaAlgebra :: Note
-generatedSigmaAlgebra = note "generated-sigma-algebra" $ do
-    subsection $ "Generating " <> sa <> "s"
+generatedSigmaAlgebra = subsection "Generating sigma algebra's" $ do
     generatedSigmaAlgebraDefinition
     generatedSigmaAlgebraIsUnique
     generatedSigmaAlgebraExists
+    borealsDefinition
 
 
 
 
 sigmaAlgebraDefinition :: Note
-sigmaAlgebraDefinition = de $ do
-    lab sigmaAlgebraDefinitionLabel
-    s ["A ", sigmaAlgebra', " or ", term salgebra, " ", m sa_, " is a ", set, " of subsets of the ", universe_, " of a ", stochasticExperiment, " with the following three properties"]
-
-    enumerate $ do
-        item $ m $ univ_ ∈ sa_
-        item $ m $ fa "A" $ ("A" ∈ sa_) ⇒ (setc "A" ∈ sa_)
-        item $ m $ (fa (natural "n") (an ∈ sa_)) ⇒ ((setuncmp (natural "n") an) ∈ an)
-
-  where
-    an = "A" !: "n"
+sigmaAlgebraDefinition = do
+    de $ do
+        lab sigmaAlgebraDefinitionLabel
+        lab eventDefinitionLabel
+        lab measurableSetDefinitionLabel
+        let an = "A" !: "n"
+        s ["A", sigmaAlgebra', or, defineTerm salgebra, m sa_, "on a", set, m univ_, "is a", set, "of", subsets, "of", m univ_, "with the following three properties"]
+        enumerate $ do
+            item $ m $ univ_ ∈ sa_
+            item $ m $ fa "A" $ ("A" ∈ sa_) ⇒ (setc "A" ∈ sa_)
+            item $ m $ (fa (nat "n") (an ∈ sa_)) ⇒ ((setuncmp (nat "n") an) ∈ an)
+        s [m univ_, "is called a", universe']
+        s [the, elements, "of a", salgebra, "are called", events', or, measurableSets']
 
 trivialSigmaAlgebraDefinition :: Note
 trivialSigmaAlgebraDefinition = de $ do
     lab trivialSigmaAlgebraDefinitionLabel
     s [m $ setofs[emptyset, univ_], " is called the ", trivialSigmaAlgebra]
 
-measurableSpaceDefinition :: Note
-measurableSpaceDefinition = de $ do
-    s ["Let ", m univ_, " be the ", universe, " of a ", stochasticExperiment, " and let ", m sa_, " be a ", sa]
-    s [m mspace_, " is called a ", measurableSpace']
-
-
-trivialMeasurableSpaceDefinition :: Note
-trivialMeasurableSpaceDefinition = de $ do
-    lab trivialMeasurableSpaceDefinitionLabel
-    s [m $ mspace univ_ $ setofs [emptyset, univ_], " is called the ", trivialMeasurableSpace]
-
 discreteSigmaAlgebraDefinition :: Note
 discreteSigmaAlgebraDefinition = de $ do
     lab discreteSigmaAlgebraDefinitionLabel
-    s ["The ", powerset_, " of a ", universe_ , " is called the ", discreteSigmaAlgebra]
+    s ["The ", powerset_, " of a ", universe, " is called the ", discreteSigmaAlgebra]
 
 
 emptysetInSigmaAlgebra :: Note
@@ -88,12 +77,9 @@ emptysetInSigmaAlgebra = thm $ do
     proof $ do
         s ["The first two axioms", ref sigmaAlgebraDefinitionLabel, " together with ", m (setc univ_ =§= emptyset), " give the theorem"]
 
-sigmaAlgebraFiniteUnionLabel :: Label
-sigmaAlgebraFiniteUnionLabel = thmlab "sigma-algebra-finite-union"
-
 sigmaAlgebraFiniteUnion :: Note
 sigmaAlgebraFiniteUnion = thm $ do
-    lab sigmaAlgebraFiniteUnionLabel
+    lab sigmaAlgebraFiniteUnionTheoremLabel
     s ["Let ", m sa_, " be a ", sigmaAlgebra]
     ma $ pars (fa iInList $ ai ∈ sa_)
          ⇒
@@ -105,35 +91,29 @@ sigmaAlgebraFiniteUnion = thm $ do
     ai = "A" !: "i"
     iInList = "i" ∈ (setlst "1" "n")
 
-sigmaAlgebraInfiniteIntersectionLabel :: Label
-sigmaAlgebraInfiniteIntersectionLabel = thmlab "sigma-algebra-infinite-intersection"
-
 sigmaAlgebraInfiniteIntersection :: Note
 sigmaAlgebraInfiniteIntersection = thm $ do
-    lab sigmaAlgebraInfiniteIntersectionLabel
+    lab sigmaAlgebraInfiniteIntersectionTheoremLabel
     s ["Let ", m sa_, " be a ", sigmaAlgebra]
-    ma $ pars (fa (natural "n") (an ∈ sa_))
+    ma $ pars (fa (nat "n") (an ∈ sa_))
          ⇒
-         setuncmp (natural "n") an ∈ sa_
+         setuncmp (nat "n") an ∈ sa_
 
-    proof $ s ["The first axiom", ref sigmaAlgebraDefinitionLabel, ", together with the finite union of events of a ", sa, ref sigmaAlgebraFiniteUnionLabel, " and the second law of De Morgan", ref secondLawOfDeMorganLabel, " give the proof"]
+    proof $ s ["The first axiom", ref sigmaAlgebraDefinitionLabel, ", together with the finite union of events of a ", sa, ref sigmaAlgebraFiniteUnionTheoremLabel, " and the second law of De Morgan", ref secondLawOfDeMorganTheoremLabel, " give the proof"]
 
   where
     an = "A" !: "n"
 
-sigmaAlgebraFiniteIntersectionLabel :: Label
-sigmaAlgebraFiniteIntersectionLabel = thmlab "sigma-algebra-finite-intersection"
-
 sigmaAlgebraFiniteIntersection :: Note
 sigmaAlgebraFiniteIntersection = thm $ do
-    lab sigmaAlgebraFiniteIntersectionLabel
+    lab sigmaAlgebraFiniteIntersectionTheoremLabel
     s ["Let ", m sa_, " be a ", sigmaAlgebra]
 
     ma $ pars (fa iInList $ ai ∈ sa_)
          ⇒
          (setincmp iInList ai) ∈ sa_
 
-    proof $ s ["Use the infinite intersection of events in a ", sa , ref sigmaAlgebraInfiniteIntersectionLabel, " where only ", m "n", " sets ", m ai, " are not ", m univ_]
+    proof $ s ["Use the infinite intersection of events in a ", sa , ref sigmaAlgebraInfiniteIntersectionTheoremLabel, " where only ", m "n", " sets ", m ai, " are not ", m univ_]
 
   where
     ai = "A" !: "i"
@@ -146,13 +126,8 @@ sigmaAlgebraSetDifference = thm $ do
     ma $ fa ("A, B" ∈ sa_) (("A" `setsdiff` "B") ∈ sa_)
 
     proof $ do
-        "The symmetric difference "
-        m $ "A" \\ "B"
-        " is equal to "
-        m $ pars ("A" ∪ setc "B") ∩ pars (setc "A" ∪ "B")
-        "."
-        ref symmetricDifferenceITOUnionAndIntersectionLabel
-        s ["Now use the finite union", ref sigmaAlgebraFiniteUnionLabel, " and the finite intersection", ref sigmaAlgebraFiniteIntersectionLabel, " of sets in a ", sa, " together with the second axiom", ref sigmaAlgebraDefinitionLabel]
+        s ["The symmetric difference ", m $ "A" \\ "B", " is equal to ", m $ pars ("A" ∪ setc "B") ∩ pars (setc "A" ∪ "B"), ref symmetricDifferenceInTermsOfUnionAndIntersectionTheoremLabel]
+        s ["Now use the finite union", ref sigmaAlgebraFiniteUnionTheoremLabel, " and the finite intersection", ref sigmaAlgebraFiniteIntersectionTheoremLabel, " of sets in a ", sa, " together with the second axiom", ref sigmaAlgebraDefinitionLabel]
 
 unionIsNotSigmaAlgebraExample :: Note
 unionIsNotSigmaAlgebraExample = cex $ do
@@ -168,7 +143,7 @@ unionIsNotSigmaAlgebraExample = cex $ do
         s ["The union of ", m "B", " and ", m "C", " is ", emph "not", " a ", sa]
         ma $ "B" ∪ "C" =§= setof (emptyset <> ", " <> setof "0" <> ", " <> setof "1" <> ", " <> setof "0,2" <> ", " <> setof "1,2" <> ", " <> setof "0,1,2")
 
-        s ["The union of ", m (setof "0"), " and ", m (setof "1"), ", for example, is not in ", m ("B" ∪ "C"), ".", ref sigmaAlgebraFiniteUnionLabel]
+        s ["The union of ", m (setof "0"), " and ", m (setof "1"), ", for example, is not in ", m ("B" ∪ "C"), ".", ref sigmaAlgebraFiniteUnionTheoremLabel]
 
 
 sagb :: Note
@@ -177,7 +152,7 @@ sagb = ix $ salgebra <> " generated by "
 generatedSigmaAlgebraDefinition :: Note
 generatedSigmaAlgebraDefinition = de $ do
     lab sigmaAlgebraGeneratedByDefinitionLabel
-    s ["Let ", m (gsa ⊆ univ_), " be a ", set, " of subsets of a ", universe]
+    s ["Let ", m (gsa ⊆ powset univ_), " be a ", set, " of subsets of a ", universe]
     s ["The ", sigmaAlgebraGeneratedBy', " ", m gsa, " is the smallest ", sa, " that contains ", m gsa]
   where gsa = mathcal "C"
 
@@ -217,7 +192,7 @@ generatedSigmaAlgebraExists = thm $ do
                 s ["This means that ", m sb, " must also contains ", m (setc b)]
 
             item $ do
-                m $ (pars $ fa (natural "n") (bn ∈ sb)) ⇒ ((setuncmp (natural "n") bn) ∈ sb)
+                m $ (pars $ fa (nat "n") (bn ∈ sb)) ⇒ ((setuncmp (nat "n") bn) ∈ sb)
                 newline
                 "The reasoning for this part is analogous to the reasoning for the previous part."
 
@@ -230,11 +205,10 @@ generatedSigmaAlgebraExists = thm $ do
     bn = b !: "n"
 
 
-
-
-
-
-
+borealsDefinition :: Note
+borealsDefinition = de $ do
+    s [m boreals, " is the ", m sigma, "-algebra generated by ", m (setcmpr (ocint (minfty) a) (minfty < a < pinfty))]
+  where a = "a"
 
 
 

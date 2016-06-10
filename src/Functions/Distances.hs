@@ -2,49 +2,42 @@ module Functions.Distances where
 
 import           Notes
 
-import           Functions.Application.Macro
-import           Functions.Basics.Macro
 import           Logic.FirstOrderLogic.Macro
 import           Logic.PropositionalLogic.Macro
 
+import           Functions.Application.Macro
+import           Functions.Basics.Macro
+
 import           Functions.Distances.Macro
-
-makeDefs [
-      "distance"
-    , "pseudometric"
-    , "metric"
-
-    , "Jaccard similarity"
-    , "Jaccard distance"
-    ]
+import           Functions.Distances.Terms
 
 distances :: Note
-distances = note "distances" $ do
-    section "Distances"
+distances = section "Distances" $ do
+    subsection "Pseudometrics" $ do
+        distanceDefinition
+        distanceExamples
+        jaccardSimilarityDefinition
+        jaccardSimilarityEquivalentDefinition
 
-    subsection "Pseudometrics"
-    distanceDefinition
-    distanceExamples
-    jaccardSimilarityDefinition
-    jaccardSimilarityEquivalentDefinition
-
-    subsection "Metrics"
-    metricDefinition
-    metricExamples
+    subsection "Metrics" $ do
+        metricDefinition
+        metricExamples
 
 distanceDefinition :: Note
 distanceDefinition = de $ do
     lab distanceDefinitionLabel
+    lab distanceFunctionDefinitionLabel
     lab pseudometricDefinitionLabel
+    lab triangleInequalityDefinitionLabel
     s ["Let ", m ss, " be a set"]
-    s ["A ", term "distance function", " ", m d, " for ", m ss, " is a function ", m (fun d tups realsp), " with the following four properties"]
+    s ["A ", distanceFunction', " ", m d, " for ", m ss, " is a function ", m (fun d tups realsp), " with the following four properties"]
     enumerate $ do
         item $ m $ fa rxy $ dxy =: 0
         item $ m $ fa rxy $ dxy =: dyx
         item $ do
-          s ["The ", term "triangle inequality"]
+          s [the, triangleInequality']
           ma $ fa (cs [x, y, z] ∈ reals) $ (d `fn` xy + d `fn` yz) <= (d `fn` xz)
-    s ["A distance function is also called a ", term "pseudometric"]
+    s ["A distance function is also called a ", defineTerm "pseudometric"]
   where
     x = "x"
     y = "y"
@@ -63,7 +56,7 @@ distanceDefinition = de $ do
 distanceExamples :: Note
 distanceExamples = do
     ex $ do
-        s [the, term "cosine distance"]
+        s [the, defineTerm "cosine distance"]
         s ["Let ", m q, " be a natural numbers"]
         ma $ func2 cd rq rq realsp v w $ arccos_ $ (trans v * w) /: (n2 v * n2 w)
 

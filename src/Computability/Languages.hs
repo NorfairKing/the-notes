@@ -4,19 +4,17 @@ import           Notes
 
 import           Computability.Languages.Macro
 import           Computability.Languages.Terms
-import           Functions.BinaryOperation     (associative_)
+import           Functions.BinaryOperation.Terms
 import           Sets.Algebra.Union.Terms
 import           Sets.Basics.Terms
 
 import           Computability.Symbols.Macro
-import           Computability.Symbols.Terms   hiding (concatenation,
-                                                concatenation',
-                                                concatenationDefinitionLabel)
+import           Computability.Symbols.Terms     hiding (concatenation,
+                                                  concatenation',
+                                                  concatenationDefinitionLabel)
 
 languages :: Note
-languages = note "languages" $ do
-    section "Languages"
-
+languages = section "Languages" $ do
     languageDefinition
     languageConcatenationDefinition
     concatenationAssociative

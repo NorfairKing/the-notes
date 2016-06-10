@@ -1,2 +1,2 @@
 source bin/lib.sh
-check "Generate" ./the-notes
+check "Generate" the-notes

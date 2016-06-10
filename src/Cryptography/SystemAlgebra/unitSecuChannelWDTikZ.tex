@@ -1,0 +1,17 @@
+\usetikzlibrary{arrows}
+\tikzstyle{block}=[rectangle, fill=white, draw=black, minimum height=1em, minimum width=2em, fill opacity=1, text opacity=1]
+\tikzstyle{fun}=[circle, draw=black]
+
+\node (title) at (2, 0.5) {$Secure$};
+\draw (0, -1) rectangle (4, 1);
+
+\node[block] (a) at (0, 0) {$A$};
+\node[block] (b) at (4, 0) {$B$};
+\coordinate (i) at (2, 0) {};
+\node[block] (e) at (2, -1) {$E$};
+
+\node[block, minimum width=1em] (m) at (2, 0) {};
+
+\draw (a) -- (m);
+\draw[arrows={-latex}] (m) -- (b);
+\draw[arrows={-o}] (e) -- (m);

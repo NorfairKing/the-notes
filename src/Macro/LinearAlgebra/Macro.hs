@@ -2,7 +2,7 @@ module Macro.LinearAlgebra.Macro where
 
 import           Types
 
-import           Macro.Numbers.Macro
+import           NumberTheory.Macro
 
 import           Macro.Math
 import           Macro.MetaMacro
@@ -30,10 +30,10 @@ realVecSpace p = reals ^: p
 
 -- Operations on Vector of numbers
 realVecAddition :: Note
-realVecAddition = addition
+realVecAddition = add_
 
 realVecScalarMultiplication :: Note
-realVecScalarMultiplication = multiplication
+realVecScalarMultiplication = mul_
 
 -- Linear Algebra Set
 laset :: Note
@@ -63,6 +63,13 @@ laadd = bm "+"
 
 (<+>) :: Note -> Note -> Note
 (<+>) = binop laadd
+
+-- Linear Algebra Vector Space Substraction
+lasub :: Note
+lasub = bm "-"
+
+(<->) :: Note -> Note -> Note
+(<->) = binop lasub
 
 -- Linear Algebra Vector Space Scalar Multiplication
 lamul :: Note
@@ -100,6 +107,15 @@ lain v w = autoBrackets langle rangle $ cs [v, w]
 realVectorInproduct :: Note
 realVectorInproduct = lainprod
 
+-- | Dotproduct
+(/.\) :: Note -> Note -> Note
+(/.\) = binop $ negsp <> comm0 "cdot" <> negsp
+  where negsp = commS "kern" <> raw "-2px"
+
+-- | Addition of euclidean vectors
+(/+\) :: Note -> Note -> Note
+(/+\) = (<+>)
+
 
 -- Linear Algebra Inner Product Space
 laips :: Note
@@ -116,3 +132,17 @@ laips_ = quintuple
 euclideanInnerProductSpace :: Note -> Note
 euclideanInnerProductSpace p = laips_ reals (reals ^: p) realVecAddition realVecScalarMultiplication lainprod
 
+
+-- Identity matrix
+id :: Note -> Note
+id n = mathbb "I" !: n
+
+id_ :: Note
+id_ = mathbb "I"
+
+
+-- | Times, in the context of matrix dimensions
+--
+-- > C-k *X
+(×) :: Note -> Note -> Note
+(×) = binop $ comm0 "times"

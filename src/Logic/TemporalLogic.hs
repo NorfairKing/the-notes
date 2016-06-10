@@ -13,10 +13,7 @@ import           Logic.TemporalLogic.Macro
 import           Logic.TemporalLogic.Terms
 
 temporalLogicS :: Note
-temporalLogicS = note "temporal-logic" $ do
-    section "Temporal Logic"
-    subsection "Linear temporal logic"
-
+temporalLogicS = section "Temporal Logic" $ subsection "Linear temporal logic" $ do
     temporalLogicDefinition
 
     eventuallySemantics

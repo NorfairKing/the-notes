@@ -2,9 +2,7 @@ module Probability.SigmaAlgebra.Macro where
 
 import           Types
 
-import           Macro.Tuple
-
-import           Probability.Intro.Macro
+import           Functions.Application.Macro
 
 -- * Sigma algebra
 
@@ -13,13 +11,13 @@ sa_ :: Note
 sa_ = mathcal "A"
 
 
--- * Measurable space
+-- * Borel
+borelsign :: Note
+borelsign = mathcal "B"
 
--- | Measurable space given a universe and sigma algebra
-mspace :: Note -> Note -> Note
-mspace = tuple
+borel :: Note -> Note
+borel = fn borelsign
 
--- | Concrete measurable space
-mspace_ :: Note
-mspace_ = mspace univ_ sa_
+boreals :: Note
+boreals = borel reals
 

@@ -7,7 +7,7 @@ import qualified Prelude       as P
 
 import           Macro.Math
 
--- | The 'tabular' environment can be used to typeset tables with optional horizontal and vertical lines.
+-- | The 'tabular' defineEnvironment can be used to typeset tables with optional horizontal and vertical lines.
 array :: LaTeXC l =>
     Maybe Pos       -- ^ This optional parameter can be used to specify the vertical position of the table.
                     --   Defaulted to 'Center'.

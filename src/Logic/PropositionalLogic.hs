@@ -4,8 +4,8 @@ import           Notes
 
 import           Prelude                              (map)
 
-import           Functions.Basics
-import           Functions.BinaryOperation
+import           Functions.Basics.Terms
+import           Functions.BinaryOperation.Terms
 
 import           Logic.AbstractLogic.Macro
 import           Logic.AbstractLogic.Terms
@@ -17,8 +17,7 @@ import           Logic.PropositionalLogic.Terms
 import           Logic.PropositionalLogic.TruthTables
 
 propositionalLogicS :: Note
-propositionalLogicS = note "propositional-logic" $ do
-    section "Propositional Logic"
+propositionalLogicS = section "Propositional Logic" $ do
     propositionalLogicDefinition
     note "world" $ do
         worldDefinition
@@ -42,10 +41,10 @@ propositionalLogicS = note "propositional-logic" $ do
         logicallyEquivalentExample
 
     truthTables
-    equivalences
+    equivalenceSS
 
     normalForms
-    inferences
+    inferenceSS
 
 propositionalLogicDefinition :: Note
 propositionalLogicDefinition = do
@@ -187,8 +186,7 @@ logicallyEquivalentExample = ex $ do
     s ["The sentences ", m $ p ⇒ q, " and ", m $ neg q ⇒ neg p, " are ", logicallyEquivalent]
 
 truthTables :: Note
-truthTables = note "truth-tables" $ do
-    subsection "Truth tables"
+truthTables = subsection "Truth tables" $ do
     s ["Truth tables are a very common and naive way of reasoning about sentences propositional logic"]
     s ["A cell in a truth table represents the value of the subexpression in the column for the a values of the symbols in that row"]
     s ["The validity of a proposition can be checked by building the truth table for the sentence and checking whether all the values in the column for the sentence are true"]
@@ -215,8 +213,8 @@ truthTables = note "truth-tables" $ do
             truthTableOf $ Equiv (Implies p q) (Implies (Not r) (Not s))
             caption "Truth tables quickly become very large"
 
-equivalences :: Note
-equivalences =  note "equivalences" $ do
+equivalenceSS :: Note
+equivalenceSS =  note "equivalences" $ do
     andCommutativity
     andAssociativity
     orCommutativity
@@ -267,19 +265,19 @@ doubleNegationElimination = thm $ do
 
 contraposition :: Note
 contraposition = thm $ do
-    s [term "Contraposition"]
+    s [defineTerm "Contraposition"]
     let (a, b) = ("A", "B")
     equivalenceProof (Implies a b) (Implies (Not b) (Not a))
 
 deMorgan1 :: Note
 deMorgan1 = thm $ do
-    s ["First law of ", term "De Morgan"]
+    s ["First law of ", defineTerm "De Morgan"]
     let (a, b) = ("A", "B")
     equivalenceProof (Not $ Or a b) (And (Not a) (Not b))
 
 deMorgan2 :: Note
 deMorgan2 = thm $ do
-    s ["Second law of ", term "De Morgan"]
+    s ["Second law of ", defineTerm "De Morgan"]
     let (a, b) = ("A", "B")
     equivalenceProof (Not $ And a b) (Or (Not a) (Not b))
 
@@ -296,19 +294,17 @@ distributivityAndOr = thm $ do
     equivalenceProof (And a (Or b c)) (Or (And a b) (And a c))
 
 normalForms :: Note
-normalForms = do
-    subsection "Normal forms"
+normalForms = subsection "Normal forms" $ do
     conjunctiveNormalFormS
 
 conjunctiveNormalFormS :: Note
-conjunctiveNormalFormS = note "cnf" $ do
-    subsubsection "Conjunctive Normal Form"
+conjunctiveNormalFormS = subsubsection "Conjunctive Normal Form" $ do
     de $ do
         lab conjunctiveNormalFormDefinitionLabel
-        s ["A sentence in propositional logic is said to be in ", conjunctiveNormalForm', or, term "clausal normal form", " (", term "CNF", ") if it is a conjunction of clauses where a clause is a disjunction of literals"]
+        s ["A sentence in propositional logic is said to be in ", conjunctiveNormalForm', or, defineTerm "clausal normal form", " (", defineTerm "CNF", ") if it is a conjunction of clauses where a clause is a disjunction of literals"]
     thm $ do
         s ["Every sentence propositional logic can be converted into an equivalent formula that is in CNF"]
-        s ["There is a famous transformation called the ", term "Tseitin transformation", cite tseitinTransformation, " that does exactly this"]
+        s ["There is a famous transformation called the ", defineTerm "Tseitin transformation", cite tseitinTransformation, " that does exactly this"]
 
         s ["The Tseitin transformation works by applying the following steps"]
         enumerate $ do
@@ -377,9 +373,8 @@ tseitinTransformation = Reference article "tseitin68" $
     , ("year", "1968")
     ]
 
-inferences :: Note
-inferences = note "inference" $ do
-    subsection "Inference in propositional logic"
+inferenceSS :: Note
+inferenceSS = subsection "Inference in propositional logic" $ do
     modusPonensInProp
     resolution
 
@@ -398,7 +393,7 @@ resolution = note "resolution" $ do
 
 resolutionDefinition :: Note
 resolutionDefinition = de $ do
-    s ["The ", inference, " ", term "rule of resolution", " is an ", inference, " in proposition logic"]
+    s ["The ", inference, " ", defineTerm "rule of resolution", " is an ", inference, " in proposition logic"]
     s ["It assumes that sentences are in ", conjunctiveNormalForm]
     s ["Let ", m a, and, m b, " be propositional formulae in CNF."]
     ma $ do
@@ -410,7 +405,7 @@ resolutionDefinition = de $ do
         linf [vsep [a !: 1, a !: 2, dotsc, a !: k], vsep [b !: 1, b !: 2, dotsc, b !: l]] $
             vsep $
               [a !: 1, a !: 2, dotsc, a !: (i - 1), a !: (i + 1), dotsc, a !: k]
-              ++
+              <>
               [b !: 1, b !: 2, dotsc, b !: (j - 1), b !: (j + 1), dotsc, b !: k]
   where
     vsep = separated lorsign

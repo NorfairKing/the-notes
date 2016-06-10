@@ -1,7 +1,254 @@
 module Groups.Main where
 
-import           Notes
+import           Notes                           hiding (cyclic, inverse)
 
-groups :: Note
-groups = note "groups" $ do
-    chapter "Groups"
+import           Functions.Basics.Macro
+import           Functions.BinaryOperation.Terms
+import           Logic.FirstOrderLogic.Macro
+import           NumberTheory.Macro
+import           NumberTheory.Terms
+import           Sets.Basics.Terms
+
+import           Groups.Macro
+import           Groups.Terms
+
+groupsC :: Note
+groupsC = chapter "Groups" $ do
+    magmaDefinition
+    semigroupDefinition
+    monoidDefinition
+    groupDefinition
+
+    inverseUniqueTheorem
+    inverseOfAppliedOperationTheorem
+
+    subgroupDefinition
+    subgroupSameIdentity
+    trivialSubgroupsDT
+
+    generatedSetDefinition
+    generatedSetIsGroup
+    cyclicGroupDefinition
+
+    groupOrderDefinition
+    orderDefinition
+    elementOrderDividesGroupOrder
+
+    decreasePowerInGroup
+    squareRootDefinition
+    squareRootUniqueInFiniteOddGroup
+    finiteOddGroupRootComputation
+
+magmaDefinition :: Note
+magmaDefinition = de $ do
+    lab magmaDefinitionLabel
+    s ["A", magma', m mgm_, "is a", set <> ", equipped with a", binaryOperation]
+    ma $ fun2 (pars $ "" · "") mgms_ mgms_ mgms_
+
+semigroupDefinition :: Note
+semigroupDefinition = de $ do
+    lab semigroupDefinitionLabel
+    s ["A", magma, m sgrp_, "is called a", semigroup', "if its operation", m $ "" ˙ "", "is", associative_]
+
+monoidDefinition :: Note
+monoidDefinition = de $ do
+    lab monoidDefinitionLabel
+    lab identityDefinitionLabel
+    lab neutralElementDefinitionLabel
+    s ["A", semigroup, m mnd_, "is called a", monoid', "if it has an", identity_, m mid_]
+
+groupDefinition :: Note
+groupDefinition = de $ do
+    lab groupDefinitionLabel
+    lab inverseDefinitionLabel
+    lab neutralElementDefinitionLabel
+    s ["A", monoid, m grp_, "is called a", group', "if every", element, "has an", inverse', "with respect to the", identity, m gid_]
+    let a = "a"
+        ai = ginv a
+    ma $ fa (a ∈ grps_) $ te (ai ∈ grps_) $ a ** ai =: gid_ =: ai ** a
+    s ["In a", group, "the", identity, "is sometimes called the", neutralElement']
+
+inverseUniqueTheorem :: Note
+inverseUniqueTheorem = thm $ do
+    lab inverseUniqueTheoremLabel
+    s ["Let", m grp_, "be a", group]
+    s ["For every", element, "of", m grps_, "there exists exactly one", inverse, element]
+
+    proof $ do
+        let x = "x"
+            y = "y"
+            z = "z"
+        s ["Suppose that an", element, m x, "has two", inverses, m y, and, m z, "in a", group, m grp_, "with", identity, m gid_]
+        aligneqs y
+            [ y ** gid_
+            , y ** pars (x ** z)
+            , pars (y ** x) ** z
+            , gid_ ** z
+            , z
+            ]
+
+inverseOfAppliedOperationTheorem :: Note
+inverseOfAppliedOperationTheorem = thm $ do
+    lab inverseOfAppliedOperationTheoremLabel
+    s ["Let", m grp_, "be a", group]
+    let x = "x"
+        y = "y"
+    ma $ fa (cs [x, y] ∈ grps_) $ ginv (pars $ x ** y) =: ginv y ** ginv x
+
+    proof $ do
+        s ["Let", m x, and, m y, "be", elements, "of", m grps_, and, "let", m gid_, "be the", identity, "of the", group, m gid_]
+        aligneqs (ginv $ pars $ x ** y)
+            [ (ginv $ pars $ x ** y) ** gid_
+            , (ginv $ pars $ x ** y) ** (pars $ x ** ginv x)
+            , (ginv $ pars $ x ** y) ** (pars $ (pars $ x ** gid_) ** ginv x)
+            , (ginv $ pars $ x ** y) ** (pars $ (pars $ x ** (pars $ y ** ginv y)) ** ginv x)
+            , (ginv $ pars $ x ** y) ** (pars $ (pars $ pars (x ** y) ** ginv y) ** ginv x)
+            , pars ((ginv $ pars $ x ** y) ** (pars $ pars (x ** y) ** ginv y)) ** ginv x
+            , pars (pars ((ginv $ pars $ x ** y) ** (pars (x ** y))) ** ginv y) ** ginv x
+            , pars (gid_ ** ginv y) ** ginv x
+            , ginv y ** ginv x
+            ]
+
+
+subgroupDefinition :: Note
+subgroupDefinition = de $ do
+    lab subgroupDefinitionLabel
+    let h = "H"
+    s ["Let", m grp_, "be a", group, "and let", m h, "be a subset of", m grps_]
+    s ["If", m $ grp h grpop_, "is a", group, "in and of itself, it is called a", subgroup', "of", m grp_]
+
+subgroupSameIdentity :: Note
+subgroupSameIdentity = thm $ do
+    lab subgroupSameIdentityTheoremLabel
+    let h = "H"
+        sg = grp h grpop_
+    s ["Let", m grp_, "be a", group, "and let", m sg, "be a", subgroup, "of", m grp_]
+    s [m grp_, and, m sg, "have the same", neutralElement]
+
+    toprove
+
+trivialSubgroupsDT :: Note
+trivialSubgroupsDT = thm $ do
+    s ["Let", m grp_, "be a", group]
+    s [m grp_, and, m $ grp (setof gid_) grpop_, "are subgroups of", m grp_]
+    s ["They are called the", trivialSubgroups', "of", m grp_]
+
+    toprove
+
+generatedSetDefinition :: Note
+generatedSetDefinition = de $ do
+    let x = "x"
+    s ["Let", m grp_, "be a", group, "and let", m x, "be an", element, "of", grps_]
+    s [the, set, m $ genby x, "generated by", m x, "is defined as follows"]
+    let s = "s"
+    ma $ genby x === setcmpr (x ^ s) (s ∈ ints)
+
+generatedSetIsGroup :: Note
+generatedSetIsGroup = thm $ do
+    lab generatedSetIsGroupTheoremLabel
+    let x = "x"
+    s ["Let", m grp_, "be a", group, "and let", m x, "be an", element, "of", grps_]
+    s [m $ grp (genby x) grpop_, "is a", group]
+    s ["It is called the", group, "generated by", m x]
+
+    toprove
+
+cyclicGroupDefinition :: Note
+cyclicGroupDefinition = de $ do
+    lab cyclicDefinitionLabel
+    lab generatorDefinitionLabel
+    s ["A", cyclic', group, "is a group that is generated by a single element"]
+    s ["That element is then called the", generator']
+
+groupOrderDefinition :: Note
+groupOrderDefinition = de $ do
+    s [the, order, "of a", group, m $ grp_, "is defined as the size", m $ setsize grps_, "of", m grps_]
+
+orderDefinition :: Note
+orderDefinition = de $ do
+    lab orderDefinitionLabel
+    s ["Let", m grp_, "be a", group, "with", neutralElement, m gid_]
+    let x = "x"
+        o = "o"
+    s [the, order', "of an element", m x, "in", m grps_, "is defined as the smallest integer", m o, "that satisfies the following equation"]
+    ma $ x ^ o =: gid_
+
+elementOrderDividesGroupOrder :: Note
+elementOrderDividesGroupOrder = thm $ do
+    lab elementOrderDividesGroupOrderTheoremLabel
+    todo "write out"
+    s [the, order, "of every", element, "divides the", group, order]
+    todo "What was the name of this theorem"
+
+decreasePowerInGroup :: Note
+decreasePowerInGroup = do
+    let g = "g"
+    thm $ do
+        s ["Let", m grp_, "be a", group]
+        let a = "a"
+            x = "x"
+            y = "y"
+        s ["For a given", element, m x <> ", if it can be described as", m (x =: g ^ a) <> ", we can compute", m $ y =: g ^ (a - 1), "given the", inverse, "of", m g]
+        ma $ y =: x ** ginv g
+        proof $ do
+            ma $ x ** ginv g =: g ^ a ** ginv g =: g ^ (a - 1) =: y
+    nte $ do
+        s ["For this computation to be efficient, only the computation of", m grpop_, "and the", inverse, "of an", element, "(specifically", m g <> ") needs to be efficient"]
+
+squareRootDefinition :: Note
+squareRootDefinition = de $ do
+    s ["Let", m grp_, "be a", group]
+    let a = "a"
+        b = "b"
+    s ["A", square', "is a", group, element, m a, "such that there exists an", element, m b, "as follows"]
+    ma $ b ** b =: a
+    s [m b, "is then called the", squareRoot', "of", m a]
+
+squareRootUniqueInFiniteOddGroup :: Note
+squareRootUniqueInFiniteOddGroup = thm $ do
+    lab squareRootUniqueInFiniteOddGroupTheoremLabel
+    s ["All", squareRoots, "in", finite, groups, "of an", odd, order, "are unique"]
+
+    proof $ do
+        let o = "o"
+            k = "k"
+            e = "e"
+        s ["Let", m grp_, "be a", finite, group, with, order, m $ o =: 2 * k - 1, and, neutralElement, m e]
+        let x = "x"
+            y = "y"
+            z = "z"
+        s ["Let", m z, "be an", element, "of", m grps_, "that has a", squareRoot, m y]
+        ma $ y ** y =: z
+        s ["Assume that there existed another", squareRoot, m x, "of", m z]
+        ma $ x ** x =: z
+        s ["We show that", m x, and, m y, "must then be equal"]
+        aligneqs x
+            [ e ** x
+            , x ^ (2 * k - 1) ** x
+            , x ^ (2 * k)
+            , x ^ 2 ^ k
+            , y ^ 2 ^ k
+            , y ^ (2 * k)
+            , y ^ (2 * k - 1) ** y
+            , y
+            ]
+
+finiteOddGroupRootComputation :: Note
+finiteOddGroupRootComputation = do
+    thm $ do
+        lab finiteOddGroupRootComputationTheoremLabel
+        let o = "o"
+            e = "e"
+        s ["Let", m grp_, "be a", finite, group, with, odd, order, m o, and, neutralElement, m e]
+        let z = "z"
+            y = "y"
+        s [the, "unique" <> ref squareRootUniqueInFiniteOddGroupTheoremLabel,  squareRoot, m z, "of an", element, m y, "can be computed as follows"]
+        ma $ z =: y ^ ((o + 1) / 2)
+
+        proof $ do
+            ma $ (y ^ ((o + 1) / 2)) ** (y ^ ((o + 1) / 2)) =: y ^ (o + 1) =: y ** y ^ o =: y ** e =: y
+    nte $ do
+        s ["For this computation to be efficient, only the computation of", m grpop_, "needs to be efficient"]
+
+
+

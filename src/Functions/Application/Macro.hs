@@ -10,7 +10,7 @@ app :: Note -> Note -> Note
 app n m = n <> negspace <> pars m
   where
     negspace :: Note
-    negspace = commS "kern" <> raw "-2pt"
+    negspace = commS "kern" <> raw "-2px"
 
 -- |
 -- > fn = app
@@ -41,7 +41,7 @@ fn3 = app3
 
 -- * Member wise function application
 mwapp :: Note -> Note -> Note
-mwapp m n = m <> commS "," <> comm0 "square" <> commS "," <> n
+mwapp m n = overset m (comm0 "square") <> commS "," <> n
 
 -- |
 -- > mwfn = mwfunapp

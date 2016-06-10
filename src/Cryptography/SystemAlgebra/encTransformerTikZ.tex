@@ -1,0 +1,20 @@
+\tikzstyle{block}=[rectangle, fill=white, draw=black, minimum height=1em, minimum width=2em, fill opacity=1, text opacity=1]
+\tikzstyle{fun}=[circle, draw=black]
+
+\node (title) at (-1.5, 2) {$Enc$};
+\draw (-2, -0.5) rectangle (0, 2.5);
+
+
+\node[block] (ak) at (0, 2) {$A$};
+\node[block] (ac) at (0, 0) {$A$};
+\coordinate (ai) at (-1, 2) {};
+\node[fun] (enc) at (-1, 0) {$enc$};
+\node[block] (an) at (-2, 0) {$A$};
+
+\draw (ak) -- (ai);
+\draw (ai) -- (enc);
+\draw[arrows={-latex}] (ai) -- (enc);
+\draw[arrows={-latex}] (enc) -- (ac);
+\draw[arrows={-latex}] (an) -- (enc);
+
+

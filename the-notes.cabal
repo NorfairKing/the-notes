@@ -15,25 +15,40 @@ extra-source-files:  README.md
 cabal-version:       >=1.10
 
 executable the-notes
-  main-is:             Main.hs
+  main-is:                Main.hs
+  ghc-options:            -threaded -rtsopts -with-rtsopts=-N
+  hs-source-dirs:         app
+  default-language:       Haskell2010
+  build-depends:          base                  >= 4.6       && < 4.10
+                        , the-notes
+
+library
   other-extensions:    FlexibleInstances, MultiParamTypeClasses, UndecidableInstances, QuasiQuotes, TemplateHaskell
   build-depends:          base                  >= 4.6       && < 4.10
                         , HaTeX                 >= 3.16.2    && < 3.17
-                        , lambdatex             >= 0.1.0.3   && < 0.2
+                        , lambdatex             >= 0.1.0.4   && < 0.2
                         , mtl                   >= 2.2       && < 2.3
                         , process               >= 1.2       && < 1.5
                         , text                  >= 1.2       && < 1.3
-                        , directory             >= 1.2       && < 1.3
+                        , directory             >= 1.2.3     && < 1.3
                         , optparse-applicative  >= 0.11      && < 0.12
                         , template-haskell      >= 2.8       && < 2.12
                         , containers            >= 0.5       && < 0.6
                         , blaze-html            >= 0.8       && < 0.9
                         , blaze-markup          >= 0.7       && < 0.8
-                        , haphviz               >= 0.1.0.1   && < 0.2
+                        , haphviz               >= 0.2       && < 0.3
                         , filepath              >= 1.4       && < 1.5
                         , base16-bytestring     >= 0.1       && < 0.2
                         , bytestring            >= 0.10      && < 0.11
                         , cryptohash            >= 0.11      && < 0.12
+                        , gitrev                >= 1.2       && < 1.3
+                        , random                >= 1.1       && < 1.2
+                        , JuicyPixels           >= 3.2       && < 3.3
+                        , file-embed            >= 0.0.9     && < 0.1
+                        , safe                  >= 0.3       && < 0.4
+                        , time                  >= 1.5       && < 1.6
+                        , hostname              >= 1.0       && < 1.1
+                        , deepseq               >= 1.4       && < 1.5
   ghc-options:        -Wall
                       -fwarn-unused-imports
                       -fwarn-incomplete-patterns
@@ -46,17 +61,329 @@ executable the-notes
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   hs-source-dirs:      src
   default-language:    Haskell2010
+  exposed-modules:
+      Computability.FiniteStateAutomata
+      Computability.FiniteStateAutomata.Graph
+      Computability.FiniteStateAutomata.Macro
+      Computability.FiniteStateAutomata.Terms
+      Computability.Languages
+      Computability.Languages.Macro
+      Computability.Languages.Terms
+      Computability.Main
+      Computability.RegularExpressions
+      Computability.RegularExpressions.Macro
+      Computability.RegularExpressions.Terms
+      Computability.Symbols
+      Computability.Symbols.Macro
+      Computability.Symbols.Terms
+      Config
+      Contributors
+      Cryptography.BlockCipherECBAttack
+      Cryptography.ComputationalProblems
+      Cryptography.ComputationalProblems.Abstract
+      Cryptography.ComputationalProblems.Abstract.Macro
+      Cryptography.ComputationalProblems.Abstract.Terms
+      Cryptography.ComputationalProblems.Games
+      Cryptography.ComputationalProblems.Games.Abstract
+      Cryptography.ComputationalProblems.Games.Abstract.Macro
+      Cryptography.ComputationalProblems.Games.Abstract.Terms
+      Cryptography.ComputationalProblems.Games.BitGuessingProblems
+      Cryptography.ComputationalProblems.Games.BitGuessingProblems.Macro
+      Cryptography.ComputationalProblems.Games.BitGuessingProblems.Terms
+      Cryptography.ComputationalProblems.Games.DiscreteGames
+      Cryptography.ComputationalProblems.Games.DiscreteGames.Macro
+      Cryptography.ComputationalProblems.Games.DiscreteGames.Terms
+      Cryptography.ComputationalProblems.Games.DistinctionProblems
+      Cryptography.ComputationalProblems.Games.DistinctionProblems.Macro
+      Cryptography.ComputationalProblems.Games.DistinctionProblems.Terms
+      Cryptography.ComputationalProblems.Games.Macro
+      Cryptography.ComputationalProblems.Games.Terms
+      Cryptography.ComputationalProblems.Macro
+      Cryptography.ComputationalProblems.Reductions
+      Cryptography.ComputationalProblems.Reductions.Macro
+      Cryptography.ComputationalProblems.Reductions.Terms
+      Cryptography.ComputationalProblems.Terms
+      Cryptography.KeyAgreement
+      Cryptography.KeyAgreement.Terms
+      Cryptography.KeyEncapsulation
+      Cryptography.KeyEncapsulation.Macro
+      Cryptography.KeyEncapsulation.Terms
+      Cryptography.MACs
+      Cryptography.MACs.Macro
+      Cryptography.MACs.Terms
+      Cryptography.Macro
+      Cryptography.Main
+      Cryptography.ManyTimePadAttack
+      Cryptography.OTP.Impl
+      Cryptography.PublicKeyEncryption
+      Cryptography.PublicKeyEncryption.Macro
+      Cryptography.PublicKeyEncryption.Terms
+      Cryptography.SymmetricCryptography
+      Cryptography.SymmetricCryptography.Macro
+      Cryptography.SymmetricCryptography.Terms
+      Cryptography.SystemAlgebra
+      Cryptography.SystemAlgebra.AbstractSystems
+      Cryptography.SystemAlgebra.AbstractSystems.Macro
+      Cryptography.SystemAlgebra.AbstractSystems.Terms
+      Cryptography.SystemAlgebra.DiscreteSystems
+      Cryptography.SystemAlgebra.DiscreteSystems.Macro
+      Cryptography.SystemAlgebra.DiscreteSystems.Terms
+      Cryptography.SystemAlgebra.Graph
+      Cryptography.SystemAlgebra.SecureChannels
+      Cryptography.SystemAlgebra.SecureChannels.Macro
+      Cryptography.SystemAlgebra.SecureChannels.Terms
+      Cryptography.Terms
+      DataMining.ApproximateRetrieval
+      DataMining.ExamQuestions
+      DataMining.LargeScaleLearning
+      DataMining.LargeScaleLearning.Macro
+      DataMining.LargeScaleLearning.Terms
+      DataMining.Main
+      DataMining.MapReduce
+      DataMining.MapReduce.Terms
+      Dependencies
+      Fields.Main
+      FormalMethods.Macro
+      FormalMethods.Main
+      FormalMethods.Terms
+      Functions.Application
+      Functions.Application.Macro
+      Functions.Application.Terms
+      Functions.Basics
+      Functions.Basics.Macro
+      Functions.Basics.Terms
+      Functions.BinaryOperation
+      Functions.BinaryOperation.Macro
+      Functions.BinaryOperation.Terms
+      Functions.Composition.Macro
+      Functions.Composition.Terms
+      Functions.Distances
+      Functions.Distances.Macro
+      Functions.Distances.Terms
+      Functions.Inverse
+      Functions.Inverse.Macro
+      Functions.Inverse.Terms
+      Functions.Jections
+      Functions.Jections.Terms
+      Functions.Main
+      Functions.Order
+      Functions.Order.Diagrams
+      Functions.Order.Macro
+      Functions.Order.Terms
+      Functions.Product
+      Functions.Product.Macro
+      Functions.Product.Terms
+      Functions.SetFunctions
+      Functions.SetFunctions.Terms
+      Geometry.AffineSpaces
+      Geometry.AffineSpaces.Macro
+      Geometry.AffineSpaces.Terms
+      Geometry.Main
+      GraphTheory.Macro
+      GraphTheory.Main
+      GraphTheory.Terms
+      Groups.Macro
+      Groups.Main
+      Groups.Terms
+      Header
+      License
+      LinearAlgebra.InproductSpaces
+      LinearAlgebra.InproductSpaces.Terms
+      LinearAlgebra.Main
+      LinearAlgebra.VectorSpaces
+      LinearAlgebra.VectorSpaces.Terms
+      Logic.AbstractLogic
+      Logic.AbstractLogic.Macro
+      Logic.AbstractLogic.Terms
+      Logic.FirstOrderLogic
+      Logic.FirstOrderLogic.Macro
+      Logic.FirstOrderLogic.Terms
+      Logic.HoareLogic
+      Logic.HoareLogic.ExamQuestion2014
+      Logic.HoareLogic.Macro
+      Logic.HoareLogic.Terms
+      Logic.Main
+      Logic.PropositionalLogic
+      Logic.PropositionalLogic.Macro
+      Logic.PropositionalLogic.Resolution
+      Logic.PropositionalLogic.Sentence
+      Logic.PropositionalLogic.Terms
+      Logic.PropositionalLogic.TruthTables
+      Logic.SeparationLogic
+      Logic.SeparationLogic.Graph
+      Logic.SeparationLogic.Macro
+      Logic.SeparationLogic.Terms
+      Logic.TemporalLogic
+      Logic.TemporalLogic.Macro
+      Logic.TemporalLogic.Terms
+      MachineLearning.Main
+      MachineLearning.SupervisedLearning.Macro
+      MachineLearning.SupervisedLearning.Main
+      MachineLearning.SupervisedLearning.Regression
+      MachineLearning.SupervisedLearning.Regression.Macro
+      MachineLearning.SupervisedLearning.Regression.Terms
+      MachineLearning.SupervisedLearning.SupportVectorMachines
+      MachineLearning.SupervisedLearning.SupportVectorMachines.Macro
+      MachineLearning.SupervisedLearning.SupportVectorMachines.Terms
+      MachineLearning.SupervisedLearning.Terms
+      MachineLearning.UnsupervisedLearning
+      Macro
+      Macro.Algorithm
+      Macro.Array
+      Macro.Arrows
+      Macro.BussProofs
+      Macro.Code
+      Macro.Fields.Macro
+      Macro.Figure
+      Macro.Framed
+      Macro.Graphviz
+      Macro.Index
+      Macro.LinearAlgebra.Macro
+      Macro.Lists
+      Macro.MachineLearning.Macro
+      Macro.MacroBuilders
+      Macro.Math
+      Macro.MetaMacro
+      Macro.Note
+      Macro.Numbers.Macro
+      Macro.Reference
+      Macro.Section
+      Macro.Sets.CarthesianProduct
+      Macro.Sets.Macro
+      Macro.Temp
+      Macro.Text
+      Macro.Theorem
+      Macro.Tikz
+      Macro.Todo
+      Macro.Topology.Macro
+      Macro.Tuple
+      Notes
+      NumberTheory.Main
+      NumberTheory.Macro
+      NumberTheory.Terms
+      Packages
+      Parser
+      Preface
+      Probability.BayesianNetwork
+      Probability.BayesianNetwork.Graph
+      Probability.BayesianNetwork.Terms
+      Probability.BivariateDistributions
+      Probability.BivariateDistributions.Terms
+      Probability.ConditionalProbability
+      Probability.ConditionalProbability.Macro
+      Probability.ConditionalProbability.Terms
+      Probability.Convergence
+      Probability.Convergence.Macro
+      Probability.Convergence.Terms
+      Probability.Distributions
+      Probability.Distributions.Macro
+      Probability.Distributions.Terms
+      Probability.Independence
+      Probability.Independence.Macro
+      Probability.Independence.Terms
+      Probability.Intro
+      Probability.Intro.Macro
+      Probability.Intro.Terms
+      Probability.LanguageModel
+      Probability.LanguageModel.Macro
+      Probability.LanguageModel.Terms
+      Probability.Main
+      Probability.MeasurableSpace
+      Probability.MeasurableSpace.Macro
+      Probability.MeasurableSpace.Terms
+      Probability.ProbabilityMeasure
+      Probability.ProbabilityMeasure.Macro
+      Probability.ProbabilityMeasure.Terms
+      Probability.RandomVariable
+      Probability.RandomVariable.Macro
+      Probability.RandomVariable.Terms
+      Probability.SigmaAlgebra
+      Probability.SigmaAlgebra.Macro
+      Probability.SigmaAlgebra.Terms
+      ProgramAnalysis.Main
+      Relations.Basics
+      Relations.Basics.Macro
+      Relations.Basics.Terms
+      Relations.Composite.Macro
+      Relations.Domain
+      Relations.Domain.Macro
+      Relations.Domain.Terms
+      Relations.Equivalence
+      Relations.Equivalence.Macro
+      Relations.Equivalence.Terms
+      Relations.Main
+      Relations.Orders
+      Relations.Orders.Hasse
+      Relations.Orders.Macro
+      Relations.Orders.Terms
+      Relations.Preorders
+      Relations.Preorders.Macro
+      Relations.Preorders.Terms
+      Rings.Macro
+      Rings.Main
+      Rings.Terms
+      Sets.Algebra.Complement
+      Sets.Algebra.Complement.Terms
+      Sets.Algebra.Difference
+      Sets.Algebra.Difference.Terms
+      Sets.Algebra.Intersection
+      Sets.Algebra.Intersection.Terms
+      Sets.Algebra.Main
+      Sets.Algebra.Union
+      Sets.Algebra.Union.Terms
+      Sets.Basics
+      Sets.Basics.Macro
+      Sets.Basics.Terms
+      Sets.CarthesianProduct
+      Sets.CarthesianProduct.Terms
+      Sets.Main
+      Sets.Multiset
+      Sets.Multiset.Macro
+      Sets.Multiset.Terms
+      Sets.Partition
+      Sets.Partition.Terms
+      Sets.PointedSets
+      Sets.PointedSets.Macro
+      Sets.PointedSets.Terms
+      Sets.Powerset
+      Sets.Powerset.Terms
+      Statistics.Macro
+      Statistics.Main
+      Statistics.Terms
+      TH
+      TH.Command
+      TH.Definition
+      TH.Label
+      TH.Literal
+      TH.LitFile
+      TH.MetaLabel
+      TheNotes
+      Titlepage
+      Topology.Main
+      Topology.MetricSpace
+      Topology.MetricSpace.Terms
+      Topology.TopologicalSpace
+      Topology.TopologicalSpace.Terms
+      Types
+      Utils
+
 
 test-suite the-notes-test
   type:                exitcode-stdio-1.0
-  hs-source-dirs:      src, test
+  hs-source-dirs:      test
   main-is:             MainTest.hs
+  other-modules:       
+    TestUtils
+    UtilsSpec
+    Logic.PropositionalLogic.ResolutionSpec
+    Logic.PropositionalLogic.SentenceSpec
   build-depends:       base
                      , hspec
                      , QuickCheck
                      , checkers
                      , text
                      , quickcheck-text
+                     , the-notes
 
                      , HaTeX                 >= 3.16.2    && < 3.17
                      , lambdatex             >= 0.1.0.3   && < 0.2
@@ -69,11 +396,15 @@ test-suite the-notes-test
                      , containers            >= 0.5       && < 0.6
                      , blaze-html            >= 0.8       && < 0.9
                      , blaze-markup          >= 0.7       && < 0.8
-                     , haphviz               >= 0.1.0.1   && < 0.2
+                     , haphviz               >= 0.2       && < 0.3
                      , filepath              >= 1.4       && < 1.5
                      , base16-bytestring     >= 0.1       && < 0.2
                      , bytestring            >= 0.10      && < 0.11
                      , cryptohash            >= 0.11      && < 0.12
+                     , gitrev                >= 1.2       && < 1.3
+                     , random                >= 1.1       && < 1.2
+                     , hostname              >= 1.0       && < 1.1
+                     , deepseq               >= 1.4       && < 1.5
   default-extensions: OverloadedStrings
                       NoImplicitPrelude
                       TemplateHaskell
