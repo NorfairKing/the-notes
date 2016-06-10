@@ -1,8 +1,8 @@
 {-# LANGUAGE QuasiQuotes #-}
 module Cryptography.SystemAlgebra.SecureChannels where
 
-import           Notes                                            hiding
-                                                                   (cyclic)
+import           Notes                                             hiding
+                                                                    (cyclic)
 
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
@@ -16,15 +16,17 @@ import           Probability.ProbabilityMeasure.Macro
 import           Probability.ProbabilityMeasure.Terms
 import           Sets.Basics.Terms
 
+import           Cryptography.ComputationalProblems.Abstract.Terms
+import           Cryptography.ComputationalProblems.Games.Terms
 import           Cryptography.ComputationalProblems.Terms
 import           Cryptography.KeyEncapsulation.Macro
 import           Cryptography.KeyEncapsulation.Terms
 import           Cryptography.PublicKeyEncryption.Macro
 import           Cryptography.PublicKeyEncryption.Terms
 import           Cryptography.SymmetricCryptography.Macro
-import           Cryptography.SymmetricCryptography.Terms         hiding
-                                                                   (advantage,
-                                                                   advantage')
+import           Cryptography.SymmetricCryptography.Terms          hiding
+                                                                    (advantage,
+                                                                    advantage')
 import           Cryptography.SystemAlgebra.AbstractSystems.Macro
 import           Cryptography.SystemAlgebra.AbstractSystems.Terms
 import           Cryptography.SystemAlgebra.DiscreteSystems.Terms

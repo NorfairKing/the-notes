@@ -80,7 +80,16 @@ library
       Contributors
       Cryptography.BlockCipherECBAttack
       Cryptography.ComputationalProblems
+      Cryptography.ComputationalProblems.Games
+      Cryptography.ComputationalProblems.Games.Macro
+      Cryptography.ComputationalProblems.Games.Terms
+      Cryptography.ComputationalProblems.Abstract
+      Cryptography.ComputationalProblems.Abstract.Macro
+      Cryptography.ComputationalProblems.Abstract.Terms
       Cryptography.ComputationalProblems.Macro
+      Cryptography.ComputationalProblems.Reductions
+      Cryptography.ComputationalProblems.Reductions.Macro
+      Cryptography.ComputationalProblems.Reductions.Terms
       Cryptography.ComputationalProblems.Terms
       Cryptography.KeyAgreement
       Cryptography.KeyAgreement.Terms

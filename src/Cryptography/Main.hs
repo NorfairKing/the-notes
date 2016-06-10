@@ -1,7 +1,7 @@
 module Cryptography.Main where
 
-import           Notes                                    hiding (cyclic,
-                                                           inverse, sign)
+import           Notes                                          hiding (cyclic,
+                                                                 inverse, sign)
 
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
@@ -20,7 +20,7 @@ import           Relations.Orders.Macro
 import           Sets.Basics.Terms
 
 import           Cryptography.ComputationalProblems
-import           Cryptography.ComputationalProblems.Terms hiding (advantage)
+import           Cryptography.ComputationalProblems.Games.Terms
 import           Cryptography.KeyAgreement
 import           Cryptography.KeyEncapsulation
 import           Cryptography.Macro

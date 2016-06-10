@@ -15,8 +15,7 @@ import           Probability.Independence.Terms
 import           Probability.ProbabilityMeasure.Macro
 import           Probability.ProbabilityMeasure.Terms
 
-import           Cryptography.ComputationalProblems.Terms hiding (advantage,
-                                                           advantage')
+import           Cryptography.ComputationalProblems.Terms
 import           Cryptography.KeyAgreement.Terms
 import           Cryptography.SymmetricCryptography.Macro
 import           Cryptography.SymmetricCryptography.Terms
