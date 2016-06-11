@@ -3,10 +3,12 @@ module Cryptography.ComputationalProblems.Games.DiscreteGames.Terms where
 import           Notes
 
 makeDefs
-    [ "deterministic discrete game"
+    [ "discrete game"
+    , "deterministic discrete game"
     , "DDS"
     , "monotone binary output"
     , "MBO"
+    , "discrete winner"
     , "deterministic discrete winner"
     , "DDW"
     , "probabilistic discrete game"
@@ -17,6 +19,18 @@ makeDefs
     , "DDD"
     , "stop symbol"
     ]
+
+xyDG :: Note -> Note -> Note
+xyDG x y = m (tuple x y) <> "-" <> discreteGame
+
+xyDGs :: Note -> Note -> Note
+xyDGs x y = m (tuple x y) <> "-" <> discreteGames
+
+yxDW :: Note -> Note -> Note
+yxDW y x = m (tuple y x) <> "-" <> discreteWinners
+
+yxDWs :: Note -> Note -> Note
+yxDWs y x = m (tuple y x) <> "-" <> discreteWinners
 
 xyDDG :: Note -> Note -> Note
 xyDDG x y = m (tuple x y) <> "-" <> deterministicDiscreteGame

@@ -1,9 +1,17 @@
 \tikzstyle{block}=[rectangle, fill=white, draw=black, minimum height=1em, minimum width=2em, fill opacity=1, text opacity=1]
 \tikzstyle{bg}=[fill=gray, fill opacity = 0.1]
 
+\begin{scope}[xshift=2.5cm]
+  \node (title) at (3, 0) {Winner};
+  \draw[bg] (2, -0.75) rectangle (4, 0.75);
+\end{scope}
+
 \begin{scope}
-  \node (title) at (2.75, 0) {Winner};
-  \draw[bg] (2, -0.75) rectangle (3.5, 0.75);
+  \node (title) at (3.25, 0) {Reduction};
+  \draw[bg] (2, -0.5) rectangle (4.5, 0.5);
+
+  \node[block] (lr) at (2, 0) {$R$};
+  \node[block] (rr) at (4.5, 0) {$R$};
 \end{scope}
 
 \begin{scope}

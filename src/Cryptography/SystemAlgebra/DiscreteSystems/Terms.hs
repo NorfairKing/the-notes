@@ -11,6 +11,8 @@ makeDefs
     , "synchronous parallel composition"
     , "asynchronous parallel composition"
     , "deterministic environment"
+    , "deterministic converter"
+    , "probabilistic converter"
     , "environment"
     , "transcript"
     , "probabilistic system"
@@ -91,6 +93,13 @@ xyPS x y = m (tuple x y) <> "-" <> probabilisticSystem
 
 xyPSs :: Note -> Note -> Note
 xyPSs x y = m (tuple x y) <> "-" <> probabilisticSystems
+
+-- | ((U,V), (X, Y)) converter
+uvxyC :: Note -> Note -> Note -> Note -> Note
+uvxyC u v x y = m (tuple (tuple u v) (tuple x y)) <> "-" <> converter
+
+uvxyC' :: Note -> Note -> Note -> Note -> Note
+uvxyC' u v x y = m (tuple (tuple u v) (tuple x y)) <> "-" <> converter'
 
 -- | Y-beacon
 yB :: Note -> Note

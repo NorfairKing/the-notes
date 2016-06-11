@@ -40,6 +40,7 @@ discreteSystemsSS = subsection "Discrete Single-Interface Systems" $ do
         synchronousParallelCompositionDefinition
         asynchronousParallelCompositionDefinition
         restrictedSystemDefinition
+        uvxyConverterDefinition
     subsubsection "Environments" $ do
         environmentDefinition
         restrictedEnvironmentDefinition
@@ -200,6 +201,15 @@ restrictedSystemDefinition = de $ do
         y = mathcal "Y"
     s ["Let", m sys, "be an", xyS x y]
     s [m $ firstOf n sys, "is the", xyS x (y ∪ setof emptyset), "that behaves like", m sys <> ", restricted to the first", m n, "inputs (and outputs)"]
+
+uvxyConverterDefinition :: Note
+uvxyConverterDefinition = de $ do
+    let u = mathcal "U"
+        v = mathcal "V"
+        x = mathcal "X"
+        y = mathcal "Y"
+    s ["A", uvxyC u v x y, "transforms a", xyS x y, into, a, xyS u v]
+
 
 environmentDefinition :: Note
 environmentDefinition = de $ do

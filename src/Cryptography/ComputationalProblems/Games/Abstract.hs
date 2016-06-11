@@ -10,9 +10,10 @@ import           Probability.RandomVariable.Macro
 import           Probability.RandomVariable.Terms
 import           Sets.Basics.Terms
 
+import           Cryptography.SymmetricCryptography.Macro
+
 import           Cryptography.ComputationalProblems.Abstract.Macro
 import           Cryptography.ComputationalProblems.Abstract.Terms
-import           Cryptography.SymmetricCryptography.Macro
 
 import           Cryptography.ComputationalProblems.Games.Abstract.Macro
 import           Cryptography.ComputationalProblems.Games.Abstract.Terms

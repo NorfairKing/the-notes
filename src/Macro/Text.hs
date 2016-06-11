@@ -61,6 +61,8 @@ makeStrs
     , "a"
     , "as"
     , "otherwise"
+    , "into"
+    , "onto"
     ]
 
 makeAbbrs
