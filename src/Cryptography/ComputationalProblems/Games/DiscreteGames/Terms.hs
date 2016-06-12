@@ -18,6 +18,9 @@ makeDefs
     , "deterministic discrete distinguisher"
     , "DDD"
     , "stop symbol"
+    , "reduction system"
+    , "clonable"
+    , "random self-reducible"
     ]
 
 xyDG :: Note -> Note -> Note
@@ -43,3 +46,9 @@ xyPDG x y = m (tuple x y) <> "-" <> probabilisticDiscreteGame
 
 yxPDW :: Note -> Note -> Note
 yxPDW x y = m (tuple y x) <> "-" <> probabilisticDiscreteWinner
+
+qClonable :: Note -> Note
+qClonable q = m q <> "-" <> clonable
+
+qClonable' :: Note -> Note
+qClonable' q = m q <> "-" <> clonable'

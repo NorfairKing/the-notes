@@ -63,3 +63,7 @@ bhvsi_ sys i = bhvs sys i (y !: i) (x ^ i) (y ^ (i - 1))
   where
     x = "x"
     y = "y"
+
+-- | Equivalent systems
+eqsys :: Note -> Note -> Note
+eqsys = binop $ comm0 "equiv"

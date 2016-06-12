@@ -35,3 +35,10 @@ mred_ = (pars cdot_ ^)
 mred :: Note -> Note -> Note
 mred = (^)
 
+-- | 1 - (1 - x) ^ q
+psiq :: Note -> Note -> Note
+psiq q = fn $ psi !: q
+
+-- | 1 - (1 - x) ^ (1 / q)
+chiq :: Note -> Note -> Note
+chiq q = fn $ chi !: q
