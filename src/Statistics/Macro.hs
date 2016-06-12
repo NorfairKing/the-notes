@@ -51,11 +51,6 @@ mse = fn "MSE"
 probm :: Note -> Note -> Note
 probm n = prm (prm_ !: n)
 
--- | Expected value given a parameter
-evm :: Note -> Note -> Note
-evm n m = "E" !: n <> sqbrac m
-
-
 -- | Variance given a parameter
 varm :: Note -> Note -> Note
 varm n m = "Var" !: n <> sqbrac m

@@ -716,6 +716,7 @@ inequalitiesSS :: Note
 inequalitiesSS = subsection "Inequalities" $ do
     empiricalMeanDefinition
     hoeffdingsInequalityTheorem
+    lemmaOnMultiArgumentProbabilities
 
 -- TODO move this?
 empiricalMeanDefinition :: Note
@@ -754,11 +755,13 @@ hoeffdingsInequalityTheorem = do
         ma $ prob ((abs  $ sn - ev sn) >= t) <= 2 * exp (- (2 * t ^ 2) / (sumcmpr (i =: 1) n ((pars $ bi - ai) ^ 2)))
 
         s ["Where these inequalities are valid for positive values of", m t]
-        toprove_ "Maybe don't prove it myself, just reference the paper?"
+        toprove_ "Maybe don't prove it myself, just reference a paper?"
+
     con $ do
         s ["If all", m ai, are, m 0, "and all", m bi, "are", m 1, "then we have the following more specific inequality"]
         ma $ prob ((pars $ emean x - ev (emean x)) >= t) <= exp (- 2 * n * t ^ 2)
         toprove_ "Maybe don't prove it myself, just reference the paper? But definitely have a separate proof"
+
     con $ do
         let a = alpha
         s ["Let", m $ a ∈ ooint 0 1, "and let", m xs, be, independent, and, "identically distributed", xRvs $ setofs [0, 1], "as follows"]
@@ -770,8 +773,79 @@ hoeffdingsInequalityTheorem = do
 
 
 
+lemmaOnMultiArgumentProbabilities :: Note
+lemmaOnMultiArgumentProbabilities = lem $ do
+    let sss = mathcal "S"
+        ttt = mathcal "T"
+        xxx = mathcal "X"
+    s ["Let", m sss, and, m ttt, be, finite, sets, and, define, m $ xxx =: sss ⨯ ttt]
+    let ss = "S"
+        tt = "T"
+    s ["Let", m $ prdis_ ss, and, m $ prdis_ tt, "be two", probabilityDistributions, "of", an, xRv ss, and, xRv tt, respectively]
+    newline
+    let m_ = mu
+        mm = fn2 m_
+        e = epsilon
+        es = e !: ss
+        et = e !: tt
+    s ["For every", m $ es ∈ (ccint 0 1), and, m $ et ∈ (ccint 0 1), "and every", function, m $ fun m_ (sss ⨯ ttt) (ccint 0 1), "the following holds"]
+    ma $ evms [ss, tt] (mm ss tt) <= prdis ss (evm tt (mm ss tt) >= es) + prdis tt (evm ss (mm ss tt) >= et) + es + et
 
-
+    proof $ do
+        let s' = sss <> "'"
+            t' = ttt <> "'"
+            s_ = "s"
+            t_ = "t"
+        s ["Let", m s', and, m t', "be two", sets, "defined as follows"]
+        ma $ s' =: setcmpr (s_ ∈ sss) (evm tt (mm ss tt) >= es)
+        ma $ t' =: setcmpr (t_ ∈ ttt) (evm ss (mm ss tt) >= et)
+        let s'' = sss <> "''"
+            t'' = ttt <> "''"
+        s ["Also define", m $ s'' =: sss \\ s', and, m $ t'' =: ttt \\ t']
+        s ["Now note the following", set, "equality"]
+        ma $ sss ⨯ ttt =§= (pars $ s' ⨯ t') ∪ (pars $ s'' ⨯ ttt) ⨯ (pars $ sss ⨯ t'')
+        s ["We will bound the expression", m $ evms [ss, tt] (mm ss tt), "using the above equality, but first recall what it means"]
+        ma $ evms [ss, tt] (mm ss tt) =: sumcmp (tuple s_ t_ ∈ (sss ⨯ ttt)) ((prdis ss $ ss =: s_) * (prdis tt $ tt =: t_) * (mm s_ t_))
+        s ["First observe the following three equations"]
+        enumerate $ do
+            item $ do
+                ma $ leftBelowEachOther
+                    [ sumcmp (tuple s_ t_ ∈ (s' ⨯ t')) ((prdis ss $ ss =: s_) * (prdis tt $ tt =: t_) * (mm s_ t_))
+                    , "" <= sumcmp (tuple s_ t_ ∈ (s' ⨯ t')) ((prdis ss $ ss =: s_) * (prdis tt $ tt =: t_))
+                    , "" =: sumcmp (s_ ∈ s') (prdis ss $ ss =: s_) * sumcmp (t_ ∈ t') (prdis tt $ tt =: t_)
+                    , "" =: prdis ss (ss ∈ s') * prdis tt (tt ∈ t')
+                    , "" =: (prdis ss (evm tt (mm ss tt) >= es) * prdis tt (evm ss (mm ss tt) >= et))
+                    ]
+                s ["This equality holds because", m $ mm s_ t_, "is upper-bounded by", m 1, "for every", m $ s_ ∈ sss, and, m $ t_ ∈ ttt]
+            item $ do
+                ma $ leftBelowEachOther
+                    [ sumcmp (tuple s_ t_ ∈ (s'' ⨯ ttt)) ((prdis ss $ ss =: s_) * (prdis tt $ tt =: t_) * (mm s_ t_))
+                    , "" =: sumcmp (s_ ∈ s'') (pars $ (prdis ss $ ss =: s_) * sumcmp (t_ ∈ ttt) ((prdis tt $ tt =: t_) * (mm s_ t_)))
+                    , "" =: sumcmp (s_ ∈ s'') (pars $ (prdis ss $ ss =: s_) * evm tt (mm s_ tt))
+                    , "" <= prdis ss (ss ∈ s'') * es
+                    , "" <= es
+                    ]
+                s ["Note that the third step is valid because of how", m s'', "is defined"]
+                s ["The following equation holds analogously"]
+            item $ do
+                ma $ leftBelowEachOther
+                    [ sumcmp (tuple s_ t_ ∈ (sss ⨯ t'')) ((prdis ss $ ss =: s_) * (prdis tt $ tt =: t_) * (mm s_ t_))
+                    , "" =: sumcmp (t_ ∈ t'') (pars $ (prdis tt $ tt =: t_) * sumcmp (s_ ∈ sss) ((prdis ss $ ss =: s_) * (mm s_ t_)))
+                    , "" =: sumcmp (t_ ∈ t'') (pars $ (prdis tt $ tt =: t_) * evm ss (mm ss t_))
+                    , "" <= prdis tt (tt ∈ t'') * et
+                    , "" <= et
+                    ]
+                s ["Note that the third step is valid because of how", m t'', "is defined"]
+        s ["Combining these inequalities completes the proof"]
+        ma $ leftBelowEachOther
+            [ evms [ss, tt] (mm ss tt)
+            , "" =: sumcmp (tuple s_ t_ ∈ (sss ⨯ ttt)) ((prdis ss $ ss =: s_) * (prdis tt $ tt =: t_) * (mm s_ t_))
+            , "" =: sumcmp (tuple s_ t_ ∈ (s'  ⨯ t' )) ((prdis ss $ ss =: s_) * (prdis tt $ tt =: t_) * (mm s_ t_))
+            , ""  + sumcmp (tuple s_ t_ ∈ (s'' ⨯ ttt)) ((prdis ss $ ss =: s_) * (prdis tt $ tt =: t_) * (mm s_ t_))
+            , ""  + sumcmp (tuple s_ t_ ∈ (sss ⨯ t'')) ((prdis ss $ ss =: s_) * (prdis tt $ tt =: t_) * (mm s_ t_))
+            , "" <= (prdis ss (evm tt (mm ss tt) >= es) * prdis tt (evm ss (mm ss tt) >= et))
+                  + es + et
+            ]
 
 
 

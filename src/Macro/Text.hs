@@ -38,38 +38,39 @@ s ns = do
     ". "
 
 makeStrs
-    [ "holds"
-    , "equals"
-    , "define"
-    , "respectively"
+    [ "The"
+    , "a"
+    , "an"
+    , "and"
+    , "are"
+    , "as"
+    , "at"
+    , "be"
     , "because"
     , "but"
-    , "at"
-    , "to"
-    , "from"
-    , "be"
-    , "with"
-    , "for"
-    , "on"
     , "by"
-    , "over"
-    , "are"
-    , "is"
-    , "or"
-    , "and"
-    , "The"
-    , "a"
-    , "as"
-    , "otherwise"
+    , "define"
+    , "equals"
+    , "for"
+    , "from"
+    , "holds"
     , "into"
+    , "is"
+    , "on"
     , "onto"
+    , "or"
+    , "otherwise"
+    , "over"
+    , "respectively"
+    , "to"
+    , "with"
     ]
 
 makeAbbrs
     [ ("anda", "and a")
     , ("andan", "and an")
     , ("wrt", "with respect to")
-    , ("beA", "be a")
+    , ("beA", "be a") -- TODO convert these to lower letters and search/replace all occurences of plain text.
     , ("beAn", "be an")
 
     , ("kul", "KU Leuven")

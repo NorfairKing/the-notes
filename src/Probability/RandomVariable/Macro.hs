@@ -2,7 +2,7 @@ module Probability.RandomVariable.Macro where
 
 import           Types
 
-import           Prelude                                  (error)
+import           Prelude                                  (error, sequence_)
 
 import           Macro.Math
 import           Macro.MetaMacro
@@ -120,6 +120,14 @@ prq = app prqf
 -- | Expected value
 ev :: Note -> Note
 ev n = "E" <> sqbrac n
+
+-- | Expected value over given random variable
+evm :: Note -> Note -> Note
+evm m n = "E" !: m <> sqbrac n
+
+-- | Expected value over given random variables
+evms :: [Note] -> Note -> Note
+evms ms = evm (sequence_ ms)
 -- FIXME move this? to statistics
 
 -- | Mean
