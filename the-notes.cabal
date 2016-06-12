@@ -96,6 +96,9 @@ library
       Cryptography.ComputationalProblems.Games.DistinctionProblems
       Cryptography.ComputationalProblems.Games.DistinctionProblems.Macro
       Cryptography.ComputationalProblems.Games.DistinctionProblems.Terms
+      Cryptography.ComputationalProblems.Games.HardnessAmplification
+      Cryptography.ComputationalProblems.Games.HardnessAmplification.Macro
+      Cryptography.ComputationalProblems.Games.HardnessAmplification.Terms
       Cryptography.ComputationalProblems.Games.Macro
       Cryptography.ComputationalProblems.Games.Terms
       Cryptography.ComputationalProblems.Macro

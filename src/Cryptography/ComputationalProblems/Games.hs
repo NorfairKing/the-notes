@@ -1,6 +1,6 @@
 module Cryptography.ComputationalProblems.Games where
 
-import           Notes                                                        hiding (cyclic, inverse)
+import           Notes                                                          hiding (cyclic, inverse)
 
 import           Functions.Application.Macro
 import           Functions.Basics.Macro
@@ -19,6 +19,7 @@ import           Cryptography.ComputationalProblems.Games.Abstract
 import           Cryptography.ComputationalProblems.Games.BitGuessingProblems
 import           Cryptography.ComputationalProblems.Games.DiscreteGames
 import           Cryptography.ComputationalProblems.Games.DistinctionProblems
+import           Cryptography.ComputationalProblems.Games.HardnessAmplification
 
 import           Cryptography.ComputationalProblems.Games.Macro
 import           Cryptography.ComputationalProblems.Games.Terms
@@ -38,6 +39,7 @@ gamesSS = subsection "Games" $ do
         oneWayFunctionDefinition
 
     discreteGamesSSS
+    hardnessAmplificationSSS
 
 searchProblemDefinition :: Note
 searchProblemDefinition = do
