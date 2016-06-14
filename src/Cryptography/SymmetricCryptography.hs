@@ -238,7 +238,7 @@ additiveStreamCipherDefinition = de $ do
         f = fn f_
     s ["Let ", m f_, "be a", keyStreamGenerator]
     todo "define keystreamgenerator"
-    s [the, additiveStreamCipher, "is a", cipher, "with the following", encryptionFunction, and, decryptionFunction]
+    s [the, additiveStreamCipher', "is a", cipher, "with the following", encryptionFunction, and, decryptionFunction]
 
     let mesg = "m"
         k = "k"
@@ -277,7 +277,7 @@ indcpaDefinition = de $ do
         item $ s ["The challenger chooses a uniformly random bit", m b <> ", computes the encryption of ", m $ c =: enc mb k r, "for a fresh and independent randomness value", m $ r ∈ rsp_, "and returns it to the adversary"]
         item $ s ["The adversary can again choose up to", m t, messages, "as in step 2, but the total number is limited by", m t]
         item $ s ["The adversary issues his guess", m b', "for", m b]
-    s [the, advantage', "of the adversary in this game is defined as", m $ abs $ 2 * (pars $ prob (b' =: b) - 1 /: 2)]
+    s [the, advantage', "of the adversary in this game is defined as", m $ 2 * (pars $ prob (b' =: b) - 1 /: 2)]
 
 advantageNote :: Note
 advantageNote = nte $ do

@@ -188,7 +188,7 @@ rsaPKEExample = ex $ do
         c = "c"
     itemize $ do
         item $ do
-            s [the, keyGenerator, function, "generates two primes", m p, and, m q, "and computes", m $ n =: p * q, "as well as", m $ etot n =: (p - 1) * (q - 1), "and selects an", m $ e ∈ ints, "that is relatively prime to", m $ etot n, "to compute", m $ d =: ginv e `mod` etot n]
+            s [the, keyGenerator, function, "generates two primes", m p, and, m q, "and computes", m $ n =: p * q, "as well as", m $ etot n =: (pars $ p - 1) * (pars $ q - 1), "and selects an", m $ e ∈ ints, "that is relatively prime to", m $ etot n, "to compute", m $ d =: ginv e `mod` etot n]
             itemize $ do
                 item $ s [the, publicKey, "is then", m $ tuple n e]
                 item $ s [the, privateKey, "is", m d]

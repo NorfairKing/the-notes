@@ -127,11 +127,11 @@ elGamalSchemeDefinition :: Note
 elGamalSchemeDefinition = do
     de $ do
         lab elGamalDefinitionLabel
-        s ["A", publicKeyEncryptionScheme, "based on the", diffieHellman, protocol, "where the", symmetricCryptosystem, "is", the, oneTimePad, "is called the", elGamal', publicKeyEncryptionScheme]
-    nte $ do
-        let q = "q"
-        s ["Note that we implicitly use the fact every cyclic group of", finite, order, m q, "is isomorphic to", m $ intmod q]
-        refneeded "prove this in the group chapter"
+        s ["A", publicKeyEncryptionScheme, "based on the", diffieHellman, protocol, "where the", symmetricCryptosystem, "is the", oneTimePad, "is called the", elGamal', publicKeyEncryptionScheme]
+    -- nte $ do
+    --     let q = "q"
+    --     s ["Note that we implicitly use the fact every cyclic group of", finite, order, m q, "is isomorphic to", m $ intmod q]
+    --     refneeded "prove this in the group chapter"
 
 elGamalSchemeCPASecure :: Note
 elGamalSchemeCPASecure = thm $ do
