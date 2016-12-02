@@ -2,11 +2,12 @@ module Macro.Math where
 
 import           Types
 
-import qualified Prelude         as P
+import qualified Prelude                      as P
 
 import           Macro.Arrows
 import           Macro.MetaMacro
-import           Macro.Text      (commaSeparated)
+import           Macro.Text                   (commaSeparated)
+import qualified Text.LaTeX.Packages.AMSFonts as H (mathfrak)
 
 
 m :: LaTeXC l => l -> l
@@ -144,10 +145,6 @@ not n = notsign <> n
 exp :: Note -> Note
 exp n = "e" ^: n
 
---[ Text
-text :: Note -> Note
-text = comm1 "text"
-
 -- Proofs
 proof :: Note -> Note
 proof = liftL $ TeXEnv "proof" []
@@ -234,10 +231,6 @@ integ a b c dx = commS "int" .!: a .^: b <> c <> commS "," <> "d" <> dx
 integ_ :: Note -> Note -> Note -> Note
 integ_ a = integ a ""
 
--- | Cases
-cases :: LaTeXC l => l -> l
-cases = liftL $ TeXEnv "cases" []
-
 -- | Lists
 lst :: Note -> Note -> Note
 lst n m = commaSeparated [n, dotsc, m]
@@ -304,7 +297,7 @@ partiald a b = (partial' /: (partial' <> b)) <> a
 mathfrak :: Note -> Note
 mathfrak n = do
     packageDep_ "eufrak"
-    comm1 "mathfrak" n
+    H.mathfrak n
 
 
 -- * Logarithms

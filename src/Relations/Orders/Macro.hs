@@ -54,9 +54,7 @@ totord = comm0 "le"
 top :: Note
 top = comm0 "top"
 
--- | Minimal element
-bot :: Note
-bot = comm0 "bot"
+-- | Minimal element (bot) in HaTeX
 
 -- * Bounds
 
