@@ -14,11 +14,6 @@ addons:
 # change flags or use --stack-yaml to point to a different file.
 matrix:
   include:
-    - env: ARGS=""
-    - env: ARGS="--resolver lts-3"
-    - env: ARGS="--resolver lts"
-    - env: ARGS="--resolver nightly"
-  allow_failures: 
     - env: ARGS="--resolver nightly"
   fast_finish: true
 

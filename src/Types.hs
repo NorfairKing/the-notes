@@ -49,10 +49,8 @@ import           Text.LaTeX.Packages.Color
 import           Text.LaTeX.Packages.Fancyhdr
 import           Text.LaTeX.Packages.Graphicx
 
-import           Control.DeepSeq              (NFData (..))
 import           Control.Monad.Reader         (ReaderT)
 import           Control.Monad.State          (StateT)
-import           System.Exit                  (ExitCode (..))
 
 import           Text.LaTeX.LambdaTeX         hiding (label, note, pageref, ref)
 

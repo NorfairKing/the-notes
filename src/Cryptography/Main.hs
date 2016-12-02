@@ -16,7 +16,6 @@ import           NumberTheory.Macro
 import           NumberTheory.Terms
 import           Probability.ProbabilityMeasure.Terms
 import           Probability.RandomVariable.Terms
-import           Relations.Orders.Macro
 import           Sets.Basics.Terms
 
 import           Cryptography.ComputationalProblems
