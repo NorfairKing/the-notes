@@ -39,7 +39,7 @@ import           Text.LaTeX                   hiding (Label, alph_, article,
 import           Text.LaTeX.Base.Class
 import           Text.LaTeX.Base.Pretty
 import           Text.LaTeX.Base.Syntax
-import           Text.LaTeX.Packages.AMSFonts hiding (integers)
+import           Text.LaTeX.Packages.AMSFonts hiding (integers, mathfrak)
 import           Text.LaTeX.Packages.AMSMath  hiding (bullet, div_, equation,
                                                ln, mp, partial, pm, subset, to,
                                                (!:), (^:))
@@ -49,10 +49,8 @@ import           Text.LaTeX.Packages.Color
 import           Text.LaTeX.Packages.Fancyhdr
 import           Text.LaTeX.Packages.Graphicx
 
-import           Control.DeepSeq              (NFData (..))
 import           Control.Monad.Reader         (ReaderT)
 import           Control.Monad.State          (StateT)
-import           System.Exit                  (ExitCode (..))
 
 import           Text.LaTeX.LambdaTeX         hiding (label, note, pageref, ref)
 
@@ -106,12 +104,3 @@ data RefKind
     | Lemma
     | Consequence
     deriving (Show, Eq)
-
-
-
--- TODO: keep Until Deepseq 1.4.2.0
--- |/Since: 1.4.2.0/
-instance NFData ExitCode where
-    rnf (ExitFailure n) = rnf n
-    rnf ExitSuccess     = ()
-
